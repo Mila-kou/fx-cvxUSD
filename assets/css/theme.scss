@@ -1,0 +1,22 @@
+body {
+  color: #fff;
+  background: #090a0d;
+
+  --primary-color: #2e2eff;
+  --seconed-text-color: #606060;
+
+  --main-text-color: #fff;
+  --mian-title-color: #606060;
+  --disable-text-color: #606060;
+  --background-color: #1b1c1e;
+
+  &[data-theme='default'] {
+    color: #000;
+    background: #e1e6ef;
+
+    --main-text-color: #000;
+    --mian-title-color: #97a3b2;
+    --disable-text-color: #a8a8a8;
+    --background-color: #fff;
+  }
+}

@@ -1,0 +1,112 @@
+@import '../../assets/css/mixins.scss';
+
+.appHeader {
+  background: #1f2123;
+}
+
+.logo {
+  width: 120px;
+}
+
+.connectedWrapper {
+  position: relative;
+  z-index: 1000000000;
+  &:hover {
+    .menus {
+      display: block;
+    }
+  }
+  .menus {
+    display: none;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    color: #41b6e4;
+    text-align: center;
+    .menu {
+      background: #062a72;
+      padding: 12px 0;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.03s;
+      &:hover {
+        background: #1a4caf;
+      }
+    }
+  }
+}
+
+.faqBtn {
+  background: $blue;
+}
+
+.link {
+  color: #606060;
+  font-size: 18px;
+  &.active,
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li {
+    display: inline-block;
+    margin-right: 24px;
+    font-weight: 100;
+  }
+}
+
+@media (max-width: 992px) {
+  .link {
+    font-size: 16px;
+  }
+  .logo {
+    width: 100px;
+  }
+  .ul {
+    li {
+      margin-right: 8px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .link {
+    font-size: 14px;
+  }
+  .ul {
+    li {
+      margin-right: 8px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .link {
+    font-size: 12px;
+  }
+  .ul {
+    li {
+      margin-right: 2px;
+    }
+  }
+}
+
+div[class='default'] {
+  .appHeader {
+    background: #ffffff;
+    box-shadow: 0px 0px 19px 10px rgba(236, 236, 236, 0.26);
+  }
+  .link {
+    color: #a8a8a8;
+    &.active,
+    &:hover {
+      color: $black;
+    }
+  }
+}

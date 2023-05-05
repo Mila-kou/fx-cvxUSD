@@ -1,0 +1,12 @@
+@import './theme';
+@import './global';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$backgroundColor: #2ecc71;
+
+.app {
+  background-color: $backgroundColor;
+}

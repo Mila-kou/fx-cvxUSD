@@ -1,0 +1,286 @@
+// @import 'components/kit/vendors/antd/style';
+@import './mixins.scss';
+
+@font-face {
+  font-family: 'gothic';
+  font-weight: 400;
+  src: url('../gothic/regular.ttf');
+}
+
+@font-face {
+  font-family: 'gothic';
+  font-weight: 800;
+  src: url('../gothic/bold.ttf');
+}
+
+@font-face {
+  font-family: 'museo';
+  font-weight: 100;
+  src: url('../museo/MuseoSans-100.otf');
+}
+
+@font-face {
+  font-family: 'museo';
+  font-weight: 300;
+  src: url('../museo/MuseoSans-300.otf');
+}
+
+@font-face {
+  font-family: 'museo';
+  font-weight: 500;
+  src: url('../museo/MuseoSans-500.otf');
+}
+
+@font-face {
+  font-family: 'museo';
+  font-weight: 700;
+  src: url('../museo/MuseoSans-700.otf');
+}
+
+@font-face {
+  font-family: 'museo';
+  font-weight: 900;
+  src: url('../museo/MuseoSans-900.otf');
+}
+
+html body {
+  font-family: 'gothic', 'museo', sans-serif;
+  font-weight: 400;
+  margin: 0;
+}
+
+div.default {
+  color: #000;
+  background: #e1e6ef;
+}
+
+div.dark {
+  color: #606060;
+  background: #090a0d;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: $blue;
+}
+
+img {
+  max-width: 100%;
+}
+
+svg {
+  touch-action: auto;
+}
+
+.color-blue {
+  color: $blue;
+}
+
+.token-bg {
+  background: #c0c0c0;
+  padding: 6px;
+  border-radius: 100%;
+}
+
+.ant-picker.datePicker {
+  color: #fff;
+  width: 100%;
+  background: rgba(16, 19, 22, 1);
+  border: none;
+  width: 100%;
+  height: 44px;
+  input {
+    color: #fff;
+    &::placeholder {
+      color: #353535;
+    }
+  }
+}
+
+.form-label {
+  color: #606060;
+  font-family: 'gothic';
+}
+
+.question {
+  font-family: 'sans-serif';
+}
+
+div[class='default'] {
+  .form-label {
+    color: #000;
+  }
+  .ant-picker.datePicker {
+    color: #000;
+    background: #f3f4f7;
+    border: 1px solid #eaeaea;
+    input {
+      color: #000;
+    }
+  }
+}
+
+.highcharts-background {
+  fill: #000;
+}
+
+.highcharts-plot-background {
+  fill: #000;
+}
+
+div[class='default'] {
+  .highcharts-background {
+    fill: #fff;
+  }
+
+  .highcharts-plot-background {
+    fill: #fff;
+  }
+}
+
+.datePickerDropdown {
+  z-index: 1000000000000000;
+}
+
+.ant-switch {
+  background-color: #555 !important;
+  &.ant-switch-checked {
+    background-color: $blue !important;
+  }
+}
+// div[class="default"]{
+//   .ant-switch{
+//     background-color: #333 !important;
+//     &.ant-switch-checked{
+//       background-color: $blue !important;
+//     }
+//   }
+// }
+// .color-light-blue {
+//   color: #5ad0ff;
+// }
+.long-tooltip {
+  .ant-tooltip-content {
+    width: 500px;
+  }
+}
+
+.color-white {
+  color: #fff;
+}
+
+div[class='default'] {
+  .color-white {
+    color: #000;
+  }
+}
+
+.container {
+  width: 100%;
+  padding-right: 16px;
+  padding-left: 16px;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+  .ant-alert {
+    margin: 24px 0 32px;
+  }
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1300px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1500px;
+  }
+}
+
+.web3modal-modal-lightbox {
+  z-index: 999 !important;
+}
+
+.ant-notification {
+  z-index: 99999999999999 !important;
+}
+
+// .ant-form-item-label > label > .anticon {
+//   color: #595c97 !important;
+// }
+
+// .ant-form-item-label > label {
+//   color: #969696 !important;
+// }
+
+.ant-tag.wrong-network-tag {
+  font-size: 15px !important;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.web3modal-provider-container {
+  &:hover {
+    background: rgb(20, 20, 20);
+  }
+}
+
+.visible-tablet {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .visible-pc {
+    display: none;
+  }
+  .visible-tablet {
+    display: block;
+  }
+}
+
+@media (max-width: 576px) {
+  .visible-tablet {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .balance-tag {
+    display: none;
+  }
+  .logo-wrapper {
+    height: 60px;
+  }
+}
