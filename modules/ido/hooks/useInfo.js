@@ -108,7 +108,7 @@ export const useInfo = (refreshTrigger) => {
                 saleTime,
                 capAmount,
                 totalSoldAmount,
-                totalFundsRaised: cBN(100000).shiftedBy(18),
+                totalFundsRaised: totalFundsRaised,// cBN(100000).shiftedBy(18),
                 timeObj
             }
         } catch (error) {

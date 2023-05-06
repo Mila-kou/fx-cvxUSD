@@ -3,18 +3,25 @@ import styles from './styles.module.scss'
 import useIDO from './controller/useIDO'
 
 export default function IdoPage() {
-  const PageDate = useIDO()
+  const PageData = useIDO()
+  console.log(PageData)
   return (
     <div>
       f(x) Auction
       <br />
-      100,000 f(x)
+      {PageData.capAmount} f(x)
+      <br />
       Auction Amount
       <br />
-      0.01 ETH
+      {PageData.currentPrice} ETH
+      <br />
       Initial Price
+      <br />
+      Total Funds Raised: {PageData.totalFundsRaised}ETH
 
-      Total Funds Raised: 3,000ETH
+      <br />
+      {PageData.baseInfo?.timeObj.saleStatus}
+
     </div>
   )
 }
