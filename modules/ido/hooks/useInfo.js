@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 import { useQueries } from '@tanstack/react-query'
-import useWeb3 from '@/hooks/useWeb3'
+import moment from 'moment'
 import { useContract } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
-import abis from 'config/abi'
-import config from 'config'
-import moment from 'moment'
-import { cBN, fb4 } from 'utils'
+import abis from '@/config/abi'
+import config from '@/config/index'
+import useWeb3 from '@/hooks/useWeb3'
+import { cBN, fb4 } from '@/utils/index'
 
 const momentFormatStr = 'YYYY-MM-DD HH:mm'
 
@@ -114,7 +114,7 @@ export const useInfo = (refreshTrigger) => {
             console.log(error)
             return {}
         }
-    }, [IdoSaleContract, erc20Contract, multiCallsV2, _currentAccount])
+    }, [IdoSaleContract, erc20Contract, multiCallsV2, _currentAccount, web3])
 
 
 
