@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <meta
           name="description"
-          content="Aladdin concentrator is a platform that boosts rewards for Curve & Convex stakers and liquidity providers alike, all in a simple and easy to use interface."
+          content="AladdinDAO is the platform introduces DeFi projects (DApps) to investors, creates values from information collection, classification, and assessment. It hopes to Identify the m ost valuable projects from their early phases and prompts them to the society as early as possible."
         />
         <link rel="shortcut icon" href="/images/favicon.ico" />
       </Head>

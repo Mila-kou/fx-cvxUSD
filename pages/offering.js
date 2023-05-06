@@ -6,7 +6,7 @@ export default function Farming() {
   return (
     <React.Fragment>
       <Head>
-        <title>fxETH - IDO</title>
+        <title>f(x)ETH - IDO</title>
       </Head>
       <IdoPage />
     </React.Fragment>
