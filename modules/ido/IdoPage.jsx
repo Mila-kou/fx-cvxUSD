@@ -22,6 +22,12 @@ export default function IdoPage() {
       <br />
       {PageData.baseInfo?.timeObj.saleStatus}
 
+
+
+      <br />
+      <br />
+      <br />
+      myShares: {PageData.myShares}
     </div>
   )
 }

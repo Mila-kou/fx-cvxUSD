@@ -11,12 +11,16 @@ export const useIDO = () => {
         const _capAmount = checkNotZoroNumOption(baseInfo.capAmount, fb4(baseInfo.capAmount))
         const _totalFundsRaised = checkNotZoroNumOption(baseInfo.totalFundsRaised, fb4(baseInfo.totalFundsRaised))
         const _totalSoldAmount = checkNotZoroNumOption(baseInfo.totalSoldAmount, fb4(baseInfo.totalSoldAmount))
+
+        const _myShares = checkNotZoroNumOption(userInfo.myShares, fb4(userInfo.myShares))
         return {
             ...info,
             currentPrice: _currentPrice,
             capAmount: _capAmount,
             totalFundsRaised: _totalFundsRaised,
             totalSoldAmount: _totalSoldAmount,
+            
+            myShares:_myShares
         }
     }, [IDOInfo])
     return pageData
