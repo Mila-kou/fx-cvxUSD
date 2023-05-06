@@ -109,17 +109,11 @@ export const useToken = (address, contractType, lpInfo) => {
       } else {
         let _contractAddress
         switch (contractType) {
-          case 'gauge':
-            _contractAddress = lpInfo.lpGaugeAddress
-            break
-          case 'gaugeZAP':
-            _contractAddress = config.contracts.aladdinAllInOneGateway
-            break
-          case 'cveCRV':
-            _contractAddress = config.contracts.CurveLockerProxy
+          case 'ido':
+            _contractAddress = config.contracts.idoSale
             break
           default:
-            _contractAddress = lpInfo.lpGaugeAddress
+            _contractAddress = config.contracts.idoSale
             break
         }
         const tokenContract = erc20Contract(address)
