@@ -1,112 +1,94 @@
-@import '../../assets/css/mixins.scss';
+@import '../../assets/css/mixin.scss';
 
-.appHeader {
-  background: #1f2123;
-}
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 24px 0;
 
-.logo {
-  width: 120px;
-}
+  .logo {
+  }
 
-.connectedWrapper {
-  position: relative;
-  z-index: 1000000000;
-  &:hover {
-    .menus {
-      display: block;
+  .right {
+    display: flex;
+    justify-content: flex-end;
+    .account {
+      background: var(--background-color);
+      margin-right: 20px;
+      padding: 0 24px;
+      height: 42px;
+      border-radius: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .menu {
+      background: var(--background-color);
+      height: 42px;
+      width: 42px;
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
   }
-  .menus {
-    display: none;
+}
+
+.accountPanel {
+  @include overlay;
+  .content {
+    padding: 24px;
     position: absolute;
-    top: 48px;
-    left: 0;
-    right: 0;
-    color: #41b6e4;
-    text-align: center;
-    .menu {
-      background: #062a72;
-      padding: 12px 0;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.03s;
-      &:hover {
-        background: #1a4caf;
+    top: 85px;
+    right: 54px;
+    border-radius: 8px;
+    background: var(--background-color);
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .assetItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 9px;
+      @include card;
+      margin-bottom: 10px;
+      .logo {
+        margin-right: 10px;
+        width: 25px;
+        height: 25px;
+        background: red;
+      }
+
+      .main {
+        flex: 1;
+      }
+
+      .usd {
+        padding-left: 20px;
       }
     }
-  }
-}
 
-.faqBtn {
-  background: $blue;
-}
-
-.link {
-  color: #606060;
-  font-size: 18px;
-  &.active,
-  &:hover {
-    color: #ffffff;
-  }
-}
-
-.ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  li {
-    display: inline-block;
-    margin-right: 24px;
-    font-weight: 100;
-  }
-}
-
-@media (max-width: 992px) {
-  .link {
-    font-size: 16px;
-  }
-  .logo {
-    width: 100px;
-  }
-  .ul {
-    li {
-      margin-right: 8px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .link {
-    font-size: 14px;
-  }
-  .ul {
-    li {
-      margin-right: 8px;
-    }
-  }
-}
-
-@media (max-width: 576px) {
-  .link {
-    font-size: 12px;
-  }
-  .ul {
-    li {
-      margin-right: 2px;
-    }
-  }
-}
-
-div[class='default'] {
-  .appHeader {
-    background: #ffffff;
-    box-shadow: 0px 0px 19px 10px rgba(236, 236, 236, 0.26);
-  }
-  .link {
-    color: #a8a8a8;
-    &.active,
-    &:hover {
-      color: $black;
+    .disBtn {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto 0;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid #ff0000;
+      color: #f90606;
+      box-shadow: 0px 4px 7px 0px rgba(251, 194, 194, 0.5);
+      border-radius: 4px;
+      padding: 11px 0;
+      width: 180px;
+      cursor: pointer;
     }
   }
 }

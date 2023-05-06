@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-// import { ChakraProvider } from '@chakra-ui/react'
 import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { Web3OnboardProvider } from '@web3-onboard/react'
+import 'antd/dist/antd.css'
 import '../assets/css/styles.scss'
 import Layout from '@/components/Layout'
 import ThemeProvider from '@/contexts/ThemeProvider'

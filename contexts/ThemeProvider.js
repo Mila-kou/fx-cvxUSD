@@ -10,7 +10,7 @@ import React, {
 const ThemeContext = createContext(null)
 
 function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('dark')
+  const [theme, setTheme] = useState('default')
 
   const handleTheme = useCallback(
     (_theme) => {

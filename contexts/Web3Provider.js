@@ -47,6 +47,7 @@ function Web3ContextProvider({ children }) {
 
   const provider = useMemo(() => {
     if (typeof window !== 'undefined' && wallet) {
+      console.log('wallet---', wallet)
       if (wallet?.provider) return wallet.provider
     }
     return ethProvider(config.devRpcurl[1])

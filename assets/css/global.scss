@@ -1,26 +1,18 @@
-// @import 'components/kit/vendors/antd/style';
-@import './mixins.scss';
-
 html body {
   // font-family: 'gothic', 'museo', sans-serif;
   font-weight: 400;
   margin: 0;
 }
 
-div.default {
-  color: #000;
-  background: #e1e6ef;
-}
-
-div.dark {
-  color: #606060;
-  background: #090a0d;
+p,
+span {
+  margin: 0;
+  padding: 0;
 }
 
 a {
   cursor: pointer;
   text-decoration: none;
-  color: $blue;
 }
 
 img {
@@ -29,10 +21,6 @@ img {
 
 svg {
   touch-action: auto;
-}
-
-.color-blue {
-  color: $blue;
 }
 
 .token-bg {
@@ -104,33 +92,13 @@ div[class='default'] {
 .ant-switch {
   background-color: #555 !important;
   &.ant-switch-checked {
-    background-color: $blue !important;
+    background-color: red !important;
   }
 }
-// div[class="default"]{
-//   .ant-switch{
-//     background-color: #333 !important;
-//     &.ant-switch-checked{
-//       background-color: $blue !important;
-//     }
-//   }
-// }
-// .color-light-blue {
-//   color: #5ad0ff;
-// }
+
 .long-tooltip {
   .ant-tooltip-content {
     width: 500px;
-  }
-}
-
-.color-white {
-  color: #fff;
-}
-
-div[class='default'] {
-  .color-white {
-    color: #000;
   }
 }
 
@@ -189,14 +157,6 @@ div[class='default'] {
 .ant-notification {
   z-index: 99999999999999 !important;
 }
-
-// .ant-form-item-label > label > .anticon {
-//   color: #595c97 !important;
-// }
-
-// .ant-form-item-label > label {
-//   color: #969696 !important;
-// }
 
 .ant-tag.wrong-network-tag {
   font-size: 15px !important;
