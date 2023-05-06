@@ -86,7 +86,7 @@ export const useInfo = (refreshTrigger) => {
 
     const fetchBaseInfo = useCallback(async () => {
         const { getPrice, saleTimeData, cap, totalSold } = IdoSaleContract.methods
-        const rewardErc20 = erc20Contract(config.tokens.idoRewardToken)
+        const rewardErc20 = erc20Contract(config.contracts.idoRewardToken)
         try {
             const saleCalls = [
                 getPrice(),
@@ -95,6 +95,7 @@ export const useInfo = (refreshTrigger) => {
                 totalSold(),
                 // rewardErc20.methods.balanceOf(config.contracts.idoSale)
             ]
+            console.log('getPrice')
             const [currentPrice, saleTime, capAmount, totalSoldAmount] = await multiCallsV2(saleCalls)
             const totalFundsRaised = await rewardErc20.methods.balanceOf(config.contracts.idoSale).call()
             const isEnd = cBN(capAmount).isEqualTo(cBN(totalSoldAmount)) ? true : false;
@@ -114,7 +115,7 @@ export const useInfo = (refreshTrigger) => {
             console.log(error)
             return {}
         }
-    }, [IdoSaleContract, erc20Contract, multiCallsV2, _currentAccount])
+    }, [IdoSaleContract, erc20Contract, _currentAccount])
 
 
 
@@ -131,7 +132,7 @@ export const useInfo = (refreshTrigger) => {
             console.log(error)
             return {}
         }
-    }, [IdoSaleContract, multiCallsV2, _currentAccount])
+    }, [IdoSaleContract, _currentAccount])
 
 
     const [
