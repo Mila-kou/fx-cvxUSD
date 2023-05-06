@@ -78,23 +78,25 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
 
 export const useInfo = (refreshTrigger) => {
     const { _currentAccount, web3, blockNumber } = useWeb3()
-    const { getContract, erc20Contract } = useContract()
+    const { erc20Contract } = useContract()
     const multiCallsV2 = useMutiCallV2()
 
-    const IdoSaleContract = getContract(config.contracts.idoSale, abis.IdoSale)
-    const rewardErc20 = erc20Contract(config.tokens.idoRewardToken)
+    const { contract: IdoSaleContract } = useContract(config.contracts.idoSale, abis.IdoSale)
+
 
     const fetchBaseInfo = useCallback(async () => {
         const { getPrice, saleTimeData, cap, totalSold } = IdoSaleContract.methods
+        const rewardErc20 = erc20Contract(config.tokens.idoRewardToken)
         try {
             const saleCalls = [
                 getPrice(),
                 saleTimeData(),
                 cap(),
                 totalSold(),
-                rewardErc20.methods.balanceOf(config.contracts.idoSale)
+                // rewardErc20.methods.balanceOf(config.contracts.idoSale)
             ]
-            const [currentPrice, saleTime, capAmount, totalSoldAmount, totalFundsRaised] = await multiCallsV2(saleCalls)
+            const [currentPrice, saleTime, capAmount, totalSoldAmount] = await multiCallsV2(saleCalls)
+            const totalFundsRaised = await rewardErc20.methods.balanceOf(config.contracts.idoSale).call()
             const isEnd = cBN(capAmount).isEqualTo(cBN(totalSoldAmount)) ? true : false;
             const timeObj = await calcSaleTime(saleTime, web3, isEnd)
             console.log("useInfo ===>", fb4(currentPrice), saleTime, capAmount, totalSoldAmount, totalFundsRaised, timeObj)
@@ -112,7 +114,7 @@ export const useInfo = (refreshTrigger) => {
             console.log(error)
             return {}
         }
-    }, [getContract, multiCallsV2, _currentAccount])
+    }, [IdoSaleContract, erc20Contract, multiCallsV2, _currentAccount])
 
 
 
@@ -129,7 +131,7 @@ export const useInfo = (refreshTrigger) => {
             console.log(error)
             return {}
         }
-    }, [getContract, multiCallsV2, _currentAccount])
+    }, [IdoSaleContract, multiCallsV2, _currentAccount])
 
 
     const [
