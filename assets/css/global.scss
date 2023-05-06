@@ -1,50 +1,8 @@
 // @import 'components/kit/vendors/antd/style';
 @import './mixins.scss';
 
-@font-face {
-  font-family: 'gothic';
-  font-weight: 400;
-  src: url('../gothic/regular.ttf');
-}
-
-@font-face {
-  font-family: 'gothic';
-  font-weight: 800;
-  src: url('../gothic/bold.ttf');
-}
-
-@font-face {
-  font-family: 'museo';
-  font-weight: 100;
-  src: url('../museo/MuseoSans-100.otf');
-}
-
-@font-face {
-  font-family: 'museo';
-  font-weight: 300;
-  src: url('../museo/MuseoSans-300.otf');
-}
-
-@font-face {
-  font-family: 'museo';
-  font-weight: 500;
-  src: url('../museo/MuseoSans-500.otf');
-}
-
-@font-face {
-  font-family: 'museo';
-  font-weight: 700;
-  src: url('../museo/MuseoSans-700.otf');
-}
-
-@font-face {
-  font-family: 'museo';
-  font-weight: 900;
-  src: url('../museo/MuseoSans-900.otf');
-}
-
 html body {
-  font-family: 'gothic', 'museo', sans-serif;
+  // font-family: 'gothic', 'museo', sans-serif;
   font-weight: 400;
   margin: 0;
 }

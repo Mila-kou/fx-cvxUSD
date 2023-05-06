@@ -12,7 +12,6 @@ import ThemeProvider from '@/contexts/ThemeProvider'
 import Web3Provider from '@/contexts/Web3Provider'
 import GlobalProvider from '@/contexts/GlobalProvider'
 import { initWeb3Onboard } from '@/config/wallet.config'
-import TipContent from '@/components/TipContent'
 
 function noop() {}
 
@@ -34,7 +33,6 @@ function App({ Component, pageProps }) {
               <Hydrate state={pageProps.dehydratedState}>
                 <Layout>
                   <Component {...pageProps} />
-                  <TipContent />
                 </Layout>
               </Hydrate>
             </GlobalProvider>
