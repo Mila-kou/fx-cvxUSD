@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { checkNotZoroNum } from "@/utils/index";
+import useWeb3 from "@/hooks/useWeb3";
 
 export default function StakeEndsCountdown({ endTime, onCompleted }) {
+  const { _currentAccount, web3, blockNumber } = useWeb3()
   const [countdownTimer, setCountdownTimer] = useState(null);
   const [countdown, setCountdown] = useState({
     days: "-",
@@ -10,8 +12,9 @@ export default function StakeEndsCountdown({ endTime, onCompleted }) {
     seconds: "-",
   });
 
-  const calculateCountdown = (time) => {
-    const timeGap = Math.floor((time - new Date().valueOf()) / 1000);
+  const calculateCountdown = async (time) => {
+    const { timestamp } = { timestamp: new Date().valueOf() } //await web3.eth.getBlock('latest') || 
+    const timeGap = Math.floor((time - timestamp * 1000) / 1000);
     if (timeGap === 0) {
       onCompleted && onCompleted()
     }

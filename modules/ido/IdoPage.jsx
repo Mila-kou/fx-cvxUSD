@@ -9,19 +9,23 @@ import { cBN } from '@/utils/index'
 import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
+import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 export default function IdoPage() {
   const PageData = useIDO()
   const { _currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
-  const [auctionAmount, setAuctionAmount] = useState('')
-  const [slippage, setSlippage] = useState(3)
+  const [slippage, setSlippage] = useState(0.3)
   const [depositAmount, setDepositAmount] = useState('')
   const [inputVal, setInputVal] = useState('')
+  const [minAmount, setMinAmount] = useState(0)
+  const [buying, setBuying] = useState(false)
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const [selectedToken, setSelectedToken] = useState('')
   console.log('tokensList----', tokensList)
+  const { IdoSaleContract } = PageData
+
   const [depositTokenInfo, setDepositTokenInfo] = useState(
     tokensList.depositTokens[0]
   )
@@ -49,17 +53,14 @@ export default function IdoPage() {
 
 
   const canPay =
-    cBN(auctionAmount).isGreaterThan(0) &&
-    cBN(balance).isGreaterThanOrEqualTo(
-      cBN(auctionAmount).shiftedBy(auctionTokenInfo.decimals)
-    ) &&
+    cBN(depositAmount).isGreaterThan(0) &&
+    cBN(selectTokenInfo?.balance).isGreaterThanOrEqualTo(depositAmount) &&
     [2].includes(PageData.saleStatus) &&
     !cBN(PageData.baseInfo.capAmount).isEqualTo(
       PageData.baseInfo.totalSoldAmount
     )
 
   const handleClaim = async () => {
-    const { IdoSaleContract } = PageData
     try {
       setClaiming(true)
       const apiCall = IdoSaleContract.methods.claim()
@@ -84,22 +85,21 @@ export default function IdoPage() {
 
   const getMinAmount = async () => {
     let _minOut = 0
-    const payAmountInWei = cBN(auctionAmount || 0)
-      .shiftedBy(auctionTokenInfo.decimals)
+    const payAmountInWei = cBN(depositAmount || 0)
       .toFixed(0, 1)
       .toString()
     if (canPay && !cBN(payAmountInWei).isZero()) {
       const shares = await IdoSaleContract.methods
-        .buy(auctionTokenInfo.address, payAmountInWei, 0)
+        .buy(depositTokenInfo.address, payAmountInWei, 0)
         .call({
           from: _currentAccount,
           value:
-            config.zeroAddress == auctionTokenInfo.address ? payAmountInWei : 0,
+            config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0,
         })
       const _slippage = slippage
       _minOut = (cBN(shares) || cBN(0))
         .multipliedBy(cBN(1).minus(cBN(_slippage).dividedBy(100)))
-        .toFixed(0)
+        .toFixed(0, 1)
     }
     setMinAmount(_minOut)
     return _minOut
@@ -113,20 +113,20 @@ export default function IdoPage() {
 
     const minOut = await getMinAmount()
 
-    const payAmountInWei = cBN(auctionAmount || 0)
-      .shiftedBy(auctionTokenInfo.decimals)
+    const payAmountInWei = cBN(depositAmount || 0)
+      .shiftedBy(depositTokenInfo.decimals ?? 18)
       .toFixed(0, 1)
       .toString()
 
     try {
       setBuying(true)
       const apiCall = IdoSaleContract.methods.buy(
-        auctionTokenInfo.address,
+        depositTokenInfo.address,
         payAmountInWei,
-        isETH ? 0 : minOut
+        0
       )
       const callValue =
-        config.zeroAddress == auctionTokenInfo.address ? payAmountInWei : 0
+        config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
         value: callValue,
@@ -140,7 +140,7 @@ export default function IdoPage() {
           action: 'buy',
         }
       )
-      setAuctionAmount('')
+      setDepositAmount('')
       setBuying(false)
       setRefreshTrigger((prev) => prev + 1)
     } catch (error) {
