@@ -1,6 +1,11 @@
 body {
-  background: rgb(143, 65, 65);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
   color: #231f20;
+
+  background-image: url(../../public/images/blue-bg.webp);
 
   --background-color: rgba(255, 255, 255, 0.8);
   --main-text-color: #231f20;
@@ -8,7 +13,9 @@ body {
   --primary-color: #1f14ed;
   --box-shadow-color: rgba(183, 169, 235, 0.5);
 
-  &[data-theme='default'] {
+  &[data-theme='red'] {
+    background-image: url(../../public/images/red-bg.webp);
+
     --primary-color: #fa2454;
     --box-shadow-color: rgba(251, 194, 194, 0.5);
   }

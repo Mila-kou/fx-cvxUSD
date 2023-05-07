@@ -103,7 +103,7 @@ function AcceleratorInput(props) {
                 <div>{selectedToken}</div>
                 <img
                   src={
-                    theme === 'default'
+                    theme === 'red'
                       ? '/assets/arrow-down-default.svg'
                       : '/assets/arrow-down-dark.svg'
                   }
