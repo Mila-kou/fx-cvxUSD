@@ -40,13 +40,13 @@ function Web3ContextProvider({ children }) {
       window.localStorage.setItem('selectedWallet', wallet.label)
       // return ['0x741be0a7f5f373d31c70a7a655c174162fb38657', wallet.chains[0].id]
       // return ['0x9a27B56cf576E45ad10D8d3Cf26Dbe207463e813', wallet.chains[0].id]
-      return [wallet.accounts[0].address, wallet.chains[0].id]
+      return [wallet.accounts[0].address, wallet.chains[0].id?.toString()]
     }
     return ['', config.CHAIN_ID]
   }, [wallet])
 
   const isRightChain = useMemo(
-    () => currentChainId === config.CHAIN_ID,
+    () => Web3.utils.hexToNumber(currentChainId) == config.CHAIN_ID,
     [currentChainId]
   )
 
