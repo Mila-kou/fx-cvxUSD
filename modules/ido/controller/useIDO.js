@@ -12,6 +12,9 @@ export const useIDO = () => {
         const _totalFundsRaised = checkNotZoroNumOption(baseInfo.totalFundsRaised, fb4(baseInfo.totalFundsRaised))
         const _totalSoldAmount = checkNotZoroNumOption(baseInfo.totalSoldAmount, fb4(baseInfo.totalSoldAmount))
         const _saleStatus = baseInfo?.timeObj?.saleStatus
+        const _countdown = baseInfo?.timeObj?.countdown || 0
+        const _countdownTitle = baseInfo?.timeObj?.title || ""
+
 
         const _myShares = checkNotZoroNumOption(userInfo.myShares, fb4(userInfo.myShares))
 
@@ -25,6 +28,8 @@ export const useIDO = () => {
             saleStatus: _saleStatus,
 
             myShares: _myShares,
+            countdown: _countdown,
+            countdownTitle:_countdownTitle
 
         }
     }, [IDOInfo])

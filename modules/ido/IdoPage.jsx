@@ -1,10 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Button, Input } from 'antd'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Button } from 'antd'
+import Input from '@/components/AcceleratorInput'
 import styles from './styles.module.scss'
 import useIDO from './controller/useIDO'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN } from '@/utils/index'
+import Countdown from './Countdown/index'
+import { useToken } from '@/hooks/useTokenInfo'
+import { tokensList } from '@/config/ido'
 
 export default function IdoPage() {
   const PageData = useIDO()
@@ -12,18 +16,37 @@ export default function IdoPage() {
   const [claiming, setClaiming] = useState(false)
   const [auctionAmount, setAuctionAmount] = useState('')
   const [slippage, setSlippage] = useState(3)
+  const [depositAmount, setDepositAmount] = useState('')
   const [inputVal, setInputVal] = useState('')
-  console.log(PageData)
+
+  const [clearInputTrigger, setClearInputTrigger] = useState(0)
+  const [selectedToken, setSelectedToken] = useState('')
+  console.log('tokensList----', tokensList)
+  const [depositTokenInfo, setDepositTokenInfo] = useState(
+    tokensList.depositTokens[0]
+  )
+
+  const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
+  console.log('selectTokenInfo-----', selectTokenInfo)
+
   const auctionTokenInfo = {
     decimals: 18,
     address: config.zeroAddress,
   }
+
+  const isShowBuy = useMemo(() => {
+    if ([2].indexOf(PageData.saleStatus * 1) > -1) {
+      return true;
+    }
+    return true
+  }, [PageData])
 
   const canClaim = useMemo(() => {
     PageData.saleStatus === 3 &&
       PageData.myShares * 1 &&
       !PageData.userInfo?.isClaimed
   }, [PageData])
+
 
   const canPay =
     cBN(auctionAmount).isGreaterThan(0) &&
@@ -81,6 +104,7 @@ export default function IdoPage() {
     setMinAmount(_minOut)
     return _minOut
   }
+
   const doPay = async () => {
     if (PageData.saleStatus == 1 && !PageData.userInfo?.isWhitelisted) {
       setErrMsg('!Account not eligible for invest')
@@ -138,12 +162,25 @@ export default function IdoPage() {
     setInputVal(value || '')
   }
 
+  const updateSetPropsRefreshTrigger = useCallback(() => {
+    console.log("conCompleted----")
+  })
+
+  useEffect(() => {
+    try {
+      const _tokenInfo =
+        tokensList.depositTokens.find((i) => i.symbol == selectedToken) ||
+        tokensList.depositTokens[0]
+      setSelectedToken(_tokenInfo.symbol)
+      setDepositTokenInfo(_tokenInfo)
+    } catch (error) { }
+  }, [selectedToken, tokensList.depositTokens])
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <p className={styles.title}>f(x) Auction</p>
-        <p className={styles.num}>23:58:12</p>
-        <p className={styles.title}>Starting at 2023/5/20 20:00 UTC</p>
+        <div className={styles.num}><Countdown endTime={PageData.countdown} onCompleted={updateSetPropsRefreshTrigger} /></div>
+        <p className={styles.title}>{PageData.countdownTitle}</p>
         <p className={styles.num}>{PageData.capAmount} f(x)</p>
         <p className={styles.title}>Auction Amount</p>
         <div className={styles.bottomWrap}>
@@ -155,31 +192,46 @@ export default function IdoPage() {
           </p>
         </div>
       </div>
-      <div className={styles.card}>
-        <p className={styles.title}>Invest</p>
-        <div className={styles.inputWrap}>
-          <div>ETH</div>
-          <Input
-            value={inputVal}
-            className={styles.input}
-            bordered={false}
-            onChange={handleChange}
-          />
-        </div>
+      {isShowBuy &&
+        <div className={styles.card}>
+          <p className={styles.title}>Invest</p>
+          <div className={styles.inputWrap}>
+            <div>ETH</div>
+            <Input
+              placeholder=""
+              hidePercent
+              showMax
+              options={tokensList.depositTokens.map((i) => i.symbol)}
+              maxAmount={selectTokenInfo?.balance}
+              decimals={depositTokenInfo.decimals}
+              selectedChange={(token) => setSelectedToken(token)}
+              selectedToken={selectedToken}
+              clearTrigger={clearInputTrigger}
+              onChange={setDepositAmount}
+            />
+            {/* <Input
+              value={inputVal}
+              className={styles.input}
+              bordered={false}
+              onChange={handleChange}
 
-        {PageData.saleStatus}
+            /> */}
+          </div>
 
-        <Button onClick={doPay}>Buy</Button>
-        <Button onClick={handleClaim}>Claim</Button>
-        <div className={styles.bottomWrap}>
-          <p className={styles.title}>
-            myShares: <span>{PageData.myShares}</span>
-          </p>
-          <p className={styles.title}>
-            Claim opening at: <span>2023/5/25 20:00 UTC</span>
-          </p>
+          {PageData.saleStatus}
+
+          <Button onClick={doPay}>Buy</Button>
+          <Button onClick={handleClaim}>Claim</Button>
+          <div className={styles.bottomWrap}>
+            <p className={styles.title}>
+              myShares: <span>{PageData.myShares}</span>
+            </p>
+            <p className={styles.title}>
+              Claim opening at: <span>2023/5/25 20:00 UTC</span>
+            </p>
+          </div>
         </div>
-      </div>
+      }
     </div>
   )
 }

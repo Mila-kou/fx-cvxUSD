@@ -1,0 +1,168 @@
+@import '../../assets/css/mixin.scss';
+.reverse {
+  transform: rotate(180deg);
+}
+.inputWrapper {
+  margin: 16px auto;
+  width: 100%;
+  position: relative;
+  &.error {
+    input {
+      color: #a40000;
+      border: 1px solid #a40000;
+    }
+  }
+  .inputContent {
+    margin-bottom: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  input {
+    height: 60px;
+    color: #fff;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    outline: none;
+    padding-left: 20px;
+    box-sizing: border-box;
+    &::placeholder {
+      color: #434242;
+    }
+  }
+
+  .max {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    color: $blue;
+    text-decoration: underline;
+  }
+  .errMsg {
+    color: #a40000;
+  }
+  .moreInfoItem {
+    // color: $blue;
+    font-size: 14px;
+    margin: 4px 0;
+  }
+
+  .selectBox {
+    min-width: 164px;
+    background: rgba(0, 0, 0, 0.4);
+    height: 60px;
+    padding: 0 12px;
+    position: relative;
+  }
+
+  .select {
+    cursor: pointer;
+    position: relative;
+    color: #fff;
+    width: 100%;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    appearance: none;
+    height: 60px;
+    cursor: pointer;
+    // &::after {
+    //   content: "";
+    //   display: block;
+    //   position: absolute;
+    //   right: -16px;
+    //   height: 40px;
+    //   background: $blue;
+    //   width: 1px;
+    // }
+  }
+
+  .divider {
+    display: block;
+    // position: absolute;
+    // right: -16px;
+    height: 40px;
+    background: $blue;
+    width: 1px;
+  }
+  .options {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    z-index: 500;
+    transition: opacity 0.03s;
+    opacity: 0;
+    visibility: hidden;
+    background: $blue;
+    padding: 4px 6px;
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  .option {
+    &:not(:first-child) {
+      border-top: 1px solid #000014;
+    }
+    color: #fff;
+    padding: 8px 8px;
+    background: $blue;
+    transition: background 0.03s;
+    &:hover {
+      background: #1a4caf;
+    }
+  }
+  @media (max-width: 768px) {
+    .selectBox {
+      padding: 0 8px;
+    }
+    input {
+      font-size: 12px;
+      padding-left: 4px;
+    }
+    .inputWrapper {
+      margin-top: 8px;
+    }
+    .max {
+      font-size: 14px;
+      right: 12px;
+      top: 70px;
+    }
+  }
+}
+
+div[class='default'] {
+  .inputWrapper {
+    input {
+      color: #353535;
+      background: #f2f4f7;
+    }
+  }
+  .inputContent {
+    border: 1px solid #e0e0e0;
+  }
+
+  .selectBox {
+    background: #f2f4f7;
+  }
+
+  .select {
+    color: #353535;
+  }
+  .options {
+    background: #f2f4f7;
+  }
+  .option {
+    &:not(:first-child) {
+      border-top: 1px solid #000014;
+    }
+    color: #000;
+    background: #f2f4f7;
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+}

@@ -1,7 +1,15 @@
 import tokens from "./tokens"
 
-const tokensList = {
-  eth: tokens.tokens.eth
+export const tokensList = {
+  depositTokens: [
+    {
+      symbol: 'ETH',
+      // icon: clevUSDFraxBpLpIcon,
+      address: tokens.tokens.eth,
+      needZap: false,
+      isLp: false,
+    }
+  ],
 }
 
 export default {
