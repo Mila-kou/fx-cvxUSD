@@ -9,6 +9,7 @@ import { cBN } from '@/utils/index'
 import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
+import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 export default function IdoPage() {
   const PageData = useIDO()
@@ -18,6 +19,7 @@ export default function IdoPage() {
   const [depositAmount, setDepositAmount] = useState('')
   const [inputVal, setInputVal] = useState('')
   const [minAmount, setMinAmount] = useState(0)
+  const [buying, setBuying] = useState(false)
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const [selectedToken, setSelectedToken] = useState('')
@@ -112,7 +114,7 @@ export default function IdoPage() {
     const minOut = await getMinAmount()
 
     const payAmountInWei = cBN(depositAmount || 0)
-      .shiftedBy(depositTokenInfo.decimals)
+      .shiftedBy(depositTokenInfo.decimals ?? 18)
       .toFixed(0, 1)
       .toString()
 
@@ -121,7 +123,7 @@ export default function IdoPage() {
       const apiCall = IdoSaleContract.methods.buy(
         depositTokenInfo.address,
         payAmountInWei,
-        isETH ? 0 : minOut
+        0
       )
       const callValue =
         config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0
