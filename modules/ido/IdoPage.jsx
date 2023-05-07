@@ -10,6 +10,7 @@ import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import { getGas } from '@/utils/gas'
 
 export default function IdoPage() {
   const PageData = useIDO()
@@ -25,6 +26,7 @@ export default function IdoPage() {
   const [selectedToken, setSelectedToken] = useState('')
   console.log('tokensList----', tokensList)
   const { IdoSaleContract } = PageData
+  const minGas = 527336
 
   const [depositTokenInfo, setDepositTokenInfo] = useState(
     tokensList.depositTokens[0]
@@ -85,9 +87,21 @@ export default function IdoPage() {
 
   const getMinAmount = async () => {
     let _minOut = 0
-    const payAmountInWei = cBN(depositAmount || 0)
-      .toFixed(0, 1)
-      .toString()
+    const getGasPrice = await getGas()
+    const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+    console.log('gasFee--', gasFee, getGasPrice)
+    let payAmountInWei
+    if ((cBN(depositAmount).plus(gasFee)).isGreaterThan(selectTokenInfo.balance)) {
+      payAmountInWei = cBN(selectTokenInfo.balance)
+        .minus(gasFee)
+        .toFixed(0, 1)
+        .toString()
+    } else {
+      payAmountInWei = cBN(depositAmount || 0)
+        // .shiftedBy(depositTokenInfo.decimals ?? 18)
+        .toFixed(0, 1)
+        .toString()
+    }
     if (canPay && !cBN(payAmountInWei).isZero()) {
       const shares = await IdoSaleContract.methods
         .buy(depositTokenInfo.address, payAmountInWei, 0)
@@ -111,12 +125,22 @@ export default function IdoPage() {
       return
     }
 
+    const getGasPrice = await getGas()
     const minOut = await getMinAmount()
-
-    const payAmountInWei = cBN(depositAmount || 0)
-      .shiftedBy(depositTokenInfo.decimals ?? 18)
-      .toFixed(0, 1)
-      .toString()
+    const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+    console.log('gasFee--', gasFee, getGasPrice)
+    let payAmountInWei
+    if ((cBN(depositAmount).plus(gasFee)).isGreaterThan(selectTokenInfo.balance)) {
+      payAmountInWei = cBN(selectTokenInfo.balance)
+        .minus(gasFee)
+        .toFixed(0, 1)
+        .toString()
+    } else {
+      payAmountInWei = cBN(depositAmount || 0)
+        // .shiftedBy(depositTokenInfo.decimals ?? 18)
+        .toFixed(0, 1)
+        .toString()
+    }
 
     try {
       setBuying(true)

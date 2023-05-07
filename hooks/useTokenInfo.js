@@ -99,7 +99,6 @@ export const useToken = (address, contractType, lpInfo) => {
   const fetchUserInfo = useCallback(async () => {
     try {
       // console.log('fetchUserInfo----', address)
-      debugger;
       if (address === config.zeroAddress) {
         const ethBalance = await web3.eth.getBalance(_currentAccount)
         setToken({
