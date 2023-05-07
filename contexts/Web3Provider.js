@@ -45,13 +45,18 @@ function Web3ContextProvider({ children }) {
     return ['', config.CHAIN_ID]
   }, [wallet])
 
+  const isRightChain = useMemo(
+    () => currentChainId === config.CHAIN_ID,
+    [currentChainId]
+  )
+
   const provider = useMemo(() => {
-    if (typeof window !== 'undefined' && wallet) {
+    if (typeof window !== 'undefined' && wallet && isRightChain) {
       console.log('wallet---', wallet)
       if (wallet?.provider) return wallet.provider
     }
     return ethProvider(config.devRpcurl[1])
-  }, [wallet])
+  }, [wallet, isRightChain])
 
   const web3 = useMemo(() => {
     const _web3 = new Web3(provider)
@@ -69,8 +74,8 @@ function Web3ContextProvider({ children }) {
   }, [provider])
 
   const isAllReady = useMemo(() => {
-    return !!(currentAccount && web3 && currentChainId == config.CHAIN_ID)
-  }, [web3, currentAccount, currentChainId])
+    return !!(currentAccount && web3 && isRightChain)
+  }, [web3, currentAccount, isRightChain])
 
   const [{ data: blockNumber }, { data: blockTime }] = useQueries({
     queries: [
