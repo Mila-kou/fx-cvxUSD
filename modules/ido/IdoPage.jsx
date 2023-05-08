@@ -5,7 +5,7 @@ import styles from './styles.module.scss'
 import useIDO from './controller/useIDO'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN } from '@/utils/index'
+import { cBN, fb4 } from '@/utils/index'
 import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
@@ -34,18 +34,6 @@ export default function IdoPage() {
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
   console.log('selectTokenInfo-----', selectTokenInfo)
-
-  const auctionTokenInfo = {
-    decimals: 18,
-    address: config.zeroAddress,
-  }
-
-  const isShowBuy = useMemo(() => {
-    if ([2].indexOf(PageData.saleStatus * 1) > -1) {
-      return true;
-    }
-    return true
-  }, [PageData])
 
   const canClaim = useMemo(() => {
     PageData.saleStatus === 3 &&
@@ -166,7 +154,7 @@ export default function IdoPage() {
       )
       setDepositAmount('')
       setBuying(false)
-      setRefreshTrigger((prev) => prev + 1)
+      setClearInputTrigger((prev) => prev + 1)
     } catch (error) {
       console.log(error)
       setBuying(false)
@@ -174,17 +162,6 @@ export default function IdoPage() {
     }
   }
 
-  const handleChange = (e) => {
-    let { value } = e.target
-
-    const charReg = /[^\d.]/g
-
-    if (charReg.test(value)) {
-      value = value.replace(charReg, '')
-    }
-
-    setInputVal(value || '')
-  }
 
   const updateSetPropsRefreshTrigger = useCallback(() => {
     console.log("conCompleted----")
@@ -199,24 +176,81 @@ export default function IdoPage() {
       setDepositTokenInfo(_tokenInfo)
     } catch (error) { }
   }, [selectedToken, tokensList.depositTokens])
-  return (
-    <div className={styles.container}>
+
+  useEffect(() => {
+    try {
+      getMinAmount()
+    } catch (error) { }
+  }, [selectedToken, depositAmount])
+
+
+  const InitialRender = () => {
+    return (<div className={styles.container}>
       <div className={styles.card}>
         <p className={styles.title}>f(x) Auction</p>
         <div className={styles.num}><Countdown endTime={PageData.countdown} onCompleted={updateSetPropsRefreshTrigger} /></div>
         <p className={styles.title}>{PageData.countdownTitle}</p>
         <p className={styles.num}>{PageData.capAmount} f(x)</p>
         <p className={styles.title}>Auction Amount</p>
+        <p className={styles.title}>
+          <span>{PageData.currentPrice} ETH</span><br />
+          Initial Price
+        </p>
+      </div>
+
+    </div>)
+  }
+
+  const CompletedRender = () => {
+    return (<div className={styles.container}>
+      <div className={styles.card}>
+        <p className={styles.title}>f(x) Auction</p>
+        <p className={styles.title}>Completed!</p>
+        <p className={styles.num}>{PageData.capAmount} f(x)</p>
+        <p className={styles.title}>Auction Amount</p>
         <div className={styles.bottomWrap}>
-          <p className={styles.title}>
-            Initial Price: <span>{PageData.currentPrice} ETH</span>
-          </p>
           <p className={styles.title}>
             Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
           </p>
         </div>
       </div>
-      {isShowBuy &&
+
+      <div className={styles.card}>
+        <p className={styles.title}>Invest</p>
+        <div className={styles.bottomWrap}>
+          <p className={styles.title}>
+            myShares: <span>{PageData.myShares} f(x)ETH</span>
+          </p>
+          <p className={styles.title}>
+            Claim opening at: <span>2023/5/25 20:00 UTC</span>
+          </p>
+        </div>
+        <Button onClick={handleClaim} disabled={canClaim} loading={claiming}>Claim</Button>
+      </div>
+
+    </div>)
+  }
+
+  const DoingRender = () => {
+    return (
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <p className={styles.title}>f(x) Auction</p>
+          <div className={styles.num}><Countdown endTime={PageData.countdown} onCompleted={updateSetPropsRefreshTrigger} /></div>
+          <p className={styles.title}>{PageData.countdownTitle}</p>
+          <p className={styles.num}>{PageData.totalSoldAmount}/{PageData.capAmount} f(x)</p>
+          <p className={styles.title}>Remaining/Auction Amount</p>
+
+          <div className={styles.bottomWrap}>
+            <p className={styles.title}>
+              Current Price: <span>{PageData.currentPrice} ETH</span>
+            </p>
+            <p className={styles.title}>
+              Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
+            </p>
+          </div>
+        </div>
+
         <div className={styles.card}>
           <p className={styles.title}>Invest</p>
           <div className={styles.inputWrap}>
@@ -232,30 +266,30 @@ export default function IdoPage() {
               selectedToken={selectedToken}
               clearTrigger={clearInputTrigger}
               onChange={setDepositAmount}
+              moreInfo={[`for ${fb4(minAmount)} f(x)`]}
             />
-            {/* <Input
-              value={inputVal}
-              className={styles.input}
-              bordered={false}
-              onChange={handleChange}
-
-            /> */}
           </div>
 
-          {PageData.saleStatus}
+          <Button onClick={doPay} disabled={canPay} loading={buying}>Buy</Button>
 
-          <Button onClick={doPay}>Buy</Button>
-          <Button onClick={handleClaim}>Claim</Button>
           <div className={styles.bottomWrap}>
             <p className={styles.title}>
-              myShares: <span>{PageData.myShares}</span>
+              myShares: <span>{PageData.myShares} f(x)</span>
             </p>
             <p className={styles.title}>
               Claim opening at: <span>2023/5/25 20:00 UTC</span>
             </p>
           </div>
         </div>
-      }
-    </div>
+
+      </div>
+    )
+  }
+  return (
+    <>
+      {!!(PageData.saleStatus == 1) && <InitialRender />}
+      {!!(PageData.saleStatus == 2) && <DoingRender />}
+      {!!(PageData.saleStatus == 3) && <CompletedRender />}
+    </>
   )
 }
