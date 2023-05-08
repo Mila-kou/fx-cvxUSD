@@ -22,6 +22,7 @@ const assets = [
     symbol: 'ETH',
     amount: '3.6',
     usd: '6480.98',
+    icon: '/tokens/crypto-icons-stack.svg#eth',
   },
   // {
   //   name: 'Fractional ETH',
@@ -108,7 +109,7 @@ export default function AppHeader() {
               {assets.map((item) => (
                 <div className={styles.assetItem}>
                   <div className={styles.logo}>
-                    <img src="/images/x-logo.webp" />
+                    <img src={item.icon} />
                   </div>
                   <div className={styles.main}>
                     <div>{item.name}</div>

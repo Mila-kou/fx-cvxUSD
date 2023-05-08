@@ -74,13 +74,13 @@
       align-items: center;
       justify-content: space-between;
       padding: 14px 9px;
+      min-width: 300px;
       @include card;
       margin-bottom: 10px;
       .logo {
         margin-right: 10px;
         width: 25px;
         height: 25px;
-        background: var(--red-color);
       }
 
       .main {

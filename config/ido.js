@@ -4,7 +4,7 @@ export const tokensList = {
   depositTokens: [
     {
       symbol: 'ETH',
-      // icon: clevUSDFraxBpLpIcon,
+      icon: '/tokens/crypto-icons-stack.svg',
       address: tokens.tokens.eth,
       needZap: false,
       isLp: false,
