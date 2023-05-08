@@ -60,5 +60,7 @@ module.exports = {
     'no-param-reassign': 0,
     'no-unused-vars': 1,
     'no-nested-ternary': 0,
+    'react/no-unstable-nested-components': 0,
+    'react/function-component-definition': 0,
   },
 }

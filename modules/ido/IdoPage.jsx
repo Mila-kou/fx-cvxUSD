@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from 'antd'
-import Input from '@/components/AcceleratorInput'
+import SimpleInput from '@/components/SimpleInput'
 import styles from './styles.module.scss'
 import useIDO from './controller/useIDO'
 import useWeb3 from '@/hooks/useWeb3'
@@ -12,43 +12,43 @@ import { tokensList } from '@/config/ido'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 
+const depositTokenInfo = tokensList.depositTokens[0]
+
 export default function IdoPage() {
   const PageData = useIDO()
   const { _currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [slippage, setSlippage] = useState(0.3)
   const [depositAmount, setDepositAmount] = useState('')
-  const [inputVal, setInputVal] = useState('')
   const [minAmount, setMinAmount] = useState(0)
   const [buying, setBuying] = useState(false)
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
-  const [selectedToken, setSelectedToken] = useState('')
-  console.log('tokensList----', tokensList)
   const { IdoSaleContract } = PageData
   const minGas = 527336
 
-  const [depositTokenInfo, setDepositTokenInfo] = useState(
-    tokensList.depositTokens[0]
+  const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
+  // console.log('selectTokenInfo-----', selectTokenInfo)
+
+  const canClaim = useMemo(
+    () =>
+      PageData.saleStatus === 3 &&
+      PageData.myShares * 1 &&
+      !PageData.userInfo?.isClaimed,
+    [PageData]
   )
 
-  const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
-  console.log('selectTokenInfo-----', selectTokenInfo)
-
-  const canClaim = useMemo(() => {
-    PageData.saleStatus === 3 &&
-      PageData.myShares * 1 &&
-      !PageData.userInfo?.isClaimed
-  }, [PageData])
-
-
-  const canPay =
-    cBN(depositAmount).isGreaterThan(0) &&
-    cBN(selectTokenInfo?.balance).isGreaterThanOrEqualTo(depositAmount) &&
-    [2].includes(PageData.saleStatus) &&
-    !cBN(PageData.baseInfo.capAmount).isEqualTo(
-      PageData.baseInfo.totalSoldAmount
-    )
+  console.log('PageData---', PageData)
+  const canPay = useMemo(
+    () =>
+      cBN(depositAmount).isGreaterThan(0) &&
+      cBN(selectTokenInfo?.balance).isGreaterThanOrEqualTo(depositAmount) &&
+      [2].includes(PageData.saleStatus) &&
+      !cBN(PageData.baseInfo.capAmount).isEqualTo(
+        PageData.baseInfo.totalSoldAmount
+      ),
+    [depositAmount, selectTokenInfo]
+  )
 
   const handleClaim = async () => {
     try {
@@ -79,7 +79,9 @@ export default function IdoPage() {
     const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
     console.log('gasFee--', gasFee, getGasPrice)
     let payAmountInWei
-    if ((cBN(depositAmount).plus(gasFee)).isGreaterThan(selectTokenInfo.balance)) {
+    if (
+      cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
+    ) {
       payAmountInWei = cBN(selectTokenInfo.balance)
         .minus(gasFee)
         .toFixed(0, 1)
@@ -103,6 +105,7 @@ export default function IdoPage() {
         .multipliedBy(cBN(1).minus(cBN(_slippage).dividedBy(100)))
         .toFixed(0, 1)
     }
+    console.log('setMinAmount----', _minOut)
     setMinAmount(_minOut)
     return _minOut
   }
@@ -118,7 +121,9 @@ export default function IdoPage() {
     const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
     console.log('gasFee--', gasFee, getGasPrice)
     let payAmountInWei
-    if ((cBN(depositAmount).plus(gasFee)).isGreaterThan(selectTokenInfo.balance)) {
+    if (
+      cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
+    ) {
       payAmountInWei = cBN(selectTokenInfo.balance)
         .minus(gasFee)
         .toFixed(0, 1)
@@ -162,89 +167,49 @@ export default function IdoPage() {
     }
   }
 
-
   const updateSetPropsRefreshTrigger = useCallback(() => {
-    console.log("conCompleted----")
+    console.log('conCompleted----')
   })
 
   useEffect(() => {
     try {
-      const _tokenInfo =
-        tokensList.depositTokens.find((i) => i.symbol == selectedToken) ||
-        tokensList.depositTokens[0]
-      setSelectedToken(_tokenInfo.symbol)
-      setDepositTokenInfo(_tokenInfo)
-    } catch (error) { }
-  }, [selectedToken, tokensList.depositTokens])
-
-  useEffect(() => {
-    try {
       getMinAmount()
-    } catch (error) { }
-  }, [selectedToken, depositAmount])
-
+    } catch (error) {}
+  }, [depositAmount])
 
   const InitialRender = () => {
-    return (<div className={styles.container}>
-      <div className={styles.card}>
-        <p className={styles.title}>f(x) Auction</p>
-        <div className={styles.num}><Countdown endTime={PageData.countdown} onCompleted={updateSetPropsRefreshTrigger} /></div>
-        <p className={styles.title}>{PageData.countdownTitle}</p>
-        <p className={styles.num}>{PageData.capAmount} f(x)</p>
-        <p className={styles.title}>Auction Amount</p>
-        <p className={styles.title}>
-          <span>{PageData.currentPrice} ETH</span><br />
-          Initial Price
-        </p>
-      </div>
-
-    </div>)
-  }
-
-  const CompletedRender = () => {
-    return (<div className={styles.container}>
-      <div className={styles.card}>
-        <p className={styles.title}>f(x) Auction</p>
-        <p className={styles.title}>Completed!</p>
-        <p className={styles.num}>{PageData.capAmount} f(x)</p>
-        <p className={styles.title}>Auction Amount</p>
-        <div className={styles.bottomWrap}>
-          <p className={styles.title}>
-            Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
-          </p>
-        </div>
-      </div>
-
-      <div className={styles.card}>
-        <p className={styles.title}>Invest</p>
-        <div className={styles.bottomWrap}>
-          <p className={styles.title}>
-            myShares: <span>{PageData.myShares} f(x)ETH</span>
-          </p>
-          <p className={styles.title}>
-            Claim opening at: <span>2023/5/25 20:00 UTC</span>
-          </p>
-        </div>
-        <Button onClick={handleClaim} disabled={canClaim} loading={claiming}>Claim</Button>
-      </div>
-
-    </div>)
-  }
-
-  const DoingRender = () => {
     return (
       <div className={styles.container}>
         <div className={styles.card}>
           <p className={styles.title}>f(x) Auction</p>
-          <div className={styles.num}><Countdown endTime={PageData.countdown} onCompleted={updateSetPropsRefreshTrigger} /></div>
+          <div className={styles.num}>
+            <Countdown
+              endTime={PageData.countdown}
+              onCompleted={updateSetPropsRefreshTrigger}
+            />
+          </div>
           <p className={styles.title}>{PageData.countdownTitle}</p>
-          <p className={styles.num}>{PageData.totalSoldAmount}/{PageData.capAmount} f(x)</p>
-          <p className={styles.title}>Remaining/Auction Amount</p>
+          <p className={styles.num}>{PageData.capAmount} f(x)</p>
+          <p className={styles.title}>Auction Amount</p>
+          <p className={styles.title}>
+            <span>{PageData.currentPrice} ETH</span>
+            <br />
+            Initial Price
+          </p>
+        </div>
+      </div>
+    )
+  }
 
+  const CompletedRender = () => {
+    return (
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <p className={styles.title}>f(x) Auction</p>
+          <p className={styles.title}>Completed!</p>
+          <p className={styles.num}>{PageData.capAmount} f(x)</p>
+          <p className={styles.title}>Auction Amount</p>
           <div className={styles.bottomWrap}>
-            <p className={styles.title}>
-              Current Price: <span>{PageData.currentPrice} ETH</span>
-            </p>
             <p className={styles.title}>
               Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
             </p>
@@ -253,42 +218,92 @@ export default function IdoPage() {
 
         <div className={styles.card}>
           <p className={styles.title}>Invest</p>
-          <div className={styles.inputWrap}>
-            <div>ETH</div>
-            <Input
-              placeholder=""
-              hidePercent
-              showMax
-              options={tokensList.depositTokens.map((i) => i.symbol)}
-              maxAmount={selectTokenInfo?.balance}
-              decimals={depositTokenInfo.decimals}
-              selectedChange={(token) => setSelectedToken(token)}
-              selectedToken={selectedToken}
-              clearTrigger={clearInputTrigger}
-              onChange={setDepositAmount}
-              moreInfo={[`for ${fb4(minAmount)} f(x)`]}
-            />
-          </div>
-
-          <Button onClick={doPay} disabled={canPay} loading={buying}>Buy</Button>
-
           <div className={styles.bottomWrap}>
             <p className={styles.title}>
-              myShares: <span>{PageData.myShares} f(x)</span>
+              myShares: <span>{PageData.myShares} f(x)ETH</span>
             </p>
             <p className={styles.title}>
               Claim opening at: <span>2023/5/25 20:00 UTC</span>
             </p>
           </div>
+          <Button onClick={handleClaim} disabled={canClaim} loading={claiming}>
+            Claim
+          </Button>
         </div>
-
       </div>
     )
   }
+
+  const hanldeAmountChanged = (v) => {
+    setDepositAmount(v)
+  }
+
   return (
     <>
       {!!(PageData.saleStatus == 1) && <InitialRender />}
-      {!!(PageData.saleStatus == 2) && <DoingRender />}
+      {!!(PageData.saleStatus == 2) && (
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <p className={styles.title}>f(x) Auction</p>
+            <div className={styles.num}>
+              <Countdown
+                endTime={PageData.countdown}
+                onCompleted={updateSetPropsRefreshTrigger}
+              />
+            </div>
+            <p className={styles.title}>{PageData.countdownTitle}</p>
+            <p className={styles.num}>
+              {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
+            </p>
+            <p className={styles.title}>Remaining/Auction Amount</p>
+
+            <div className={styles.bottomWrap}>
+              <p className={styles.title}>
+                Current Price: <span>{PageData.currentPrice} ETH</span>
+              </p>
+              <p className={styles.title}>
+                Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.card}>
+            <p className={styles.title}>Invest</p>
+            <SimpleInput
+              placeholder=""
+              hidePercent
+              showMax
+              symbol="ETH"
+              maxAmount={selectTokenInfo?.balance}
+              decimals={depositTokenInfo.decimals}
+              onChange={hanldeAmountChanged}
+              clearTrigger={clearInputTrigger}
+              className={styles.input}
+            />
+            <p className={styles.forWrap}>
+              For: <span>{fb4(minAmount)} f(x)</span>
+            </p>
+
+            <div
+              className={styles.buy}
+              onClick={doPay}
+              disabled={canPay}
+              loading={buying}
+            >
+              Purchase
+            </div>
+
+            <div className={styles.bottomWrap}>
+              <p className={styles.title}>
+                myShares: <span>{PageData.myShares} f(x)</span>
+              </p>
+              <p className={styles.title}>
+                Claim opening at: <span>2023/5/25 20:00 UTC</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       {!!(PageData.saleStatus == 3) && <CompletedRender />}
     </>
   )

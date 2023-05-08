@@ -1,4 +1,4 @@
-import tokens from "./tokens"
+import tokens from './tokens'
 
 export const tokensList = {
   depositTokens: [
@@ -8,7 +8,7 @@ export const tokensList = {
       address: tokens.tokens.eth,
       needZap: false,
       isLp: false,
-    }
+    },
   ],
 }
 

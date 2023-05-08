@@ -60,7 +60,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-weight: 500;
+      margin-bottom: 10px;
     }
 
     .assetItem {

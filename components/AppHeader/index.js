@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react'
+import React, { useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -22,18 +22,18 @@ const assets = [
     amount: '3.6',
     usd: '6480.98',
   },
-  {
-    name: 'Fractional ETH',
-    symbol: 'fETH',
-    amount: '2.9',
-    usd: '4480.98',
-  },
-  {
-    name: 'Leveraged ETH',
-    symbol: 'xETH',
-    amount: '1.6',
-    usd: '1480.98',
-  },
+  // {
+  //   name: 'Fractional ETH',
+  //   symbol: 'fETH',
+  //   amount: '2.9',
+  //   usd: '4480.98',
+  // },
+  // {
+  //   name: 'Leveraged ETH',
+  //   symbol: 'xETH',
+  //   amount: '1.6',
+  //   usd: '1480.98',
+  // },
 ]
 
 export default function AppHeader() {
@@ -59,6 +59,14 @@ export default function AppHeader() {
     }
   }, [refAccount, refAccountPanel])
 
+  const _account = useMemo(
+    () =>
+      currentAccount
+        ? `${currentAccount.slice(0, 6)}...${currentAccount.slice(-6)}`
+        : '',
+    [currentAccount]
+  )
+
   const handleDisconnect = () => {
     disconnect()
     toggleShowAccountPanel()
@@ -76,9 +84,7 @@ export default function AppHeader() {
       <div className={styles.right}>
         <div className={styles.account} ref={refAccount}>
           {currentAccount ? (
-            <div onClick={toggleShowAccountPanel}>
-              {currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}
-            </div>
+            <div onClick={toggleShowAccountPanel}>{_account}</div>
           ) : (
             <div onClick={handleConnect}>Connect Wallet</div>
           )}
@@ -95,6 +101,8 @@ export default function AppHeader() {
               <p>Account</p>
               <CloseOutlined onClick={toggleShowAccountPanel} />
             </div>
+            <p className={styles.title}>{_account}</p>
+            <p className={styles.title}>Assets</p>
             {assets.map((item) => (
               <div className={styles.assetItem}>
                 <div className={styles.logo}>

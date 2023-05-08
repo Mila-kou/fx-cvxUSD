@@ -1,0 +1,150 @@
+@import '../../assets/css/mixin.scss';
+.reverse {
+  transform: rotate(180deg);
+}
+
+.inputWrapper {
+  padding: 0;
+  &.error {
+    input {
+      color: #a40000;
+      border: 1px solid #a40000;
+    }
+  }
+
+  .inputContent {
+    box-shadow: 0px 4px 7px 0px var(--box-shadow-color);
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    justify-content: space-between;
+    padding-right: 10px;
+    .symbol {
+      display: flex;
+      align-items: center;
+      border-right: 1px solid #e5e5e5;
+      height: 43px;
+      padding: 0 18px;
+      font-weight: 500;
+    }
+
+    input {
+      flex: 1;
+      height: 43px;
+      border: none;
+      outline: none;
+      padding-left: 20px;
+      box-sizing: border-box;
+      background-color: #fff;
+      color: #aca6a6;
+      &::placeholder {
+        color: #434242;
+      }
+    }
+
+    .max {
+      color: var(--primary-color);
+      text-decoration: underline;
+      font-size: 12px;
+    }
+  }
+
+  .errMsg {
+    color: #a40000;
+  }
+  .moreInfoItem {
+    // color: $blue;
+    font-size: 14px;
+    margin: 4px 0;
+  }
+
+  .divider {
+    display: block;
+    // position: absolute;
+    // right: -16px;
+    height: 40px;
+    background: $blue;
+    width: 1px;
+  }
+  .options {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    z-index: 500;
+    transition: opacity 0.03s;
+    opacity: 0;
+    visibility: hidden;
+    background: $blue;
+    padding: 4px 6px;
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  .option {
+    &:not(:first-child) {
+      border-top: 1px solid #000014;
+    }
+    color: #fff;
+    padding: 8px 8px;
+    background: $blue;
+    transition: background 0.03s;
+    &:hover {
+      background: #1a4caf;
+    }
+  }
+  @media (max-width: 768px) {
+    .selectBox {
+      padding: 0 8px;
+    }
+    input {
+      font-size: 12px;
+      padding-left: 4px;
+    }
+    .inputWrapper {
+      margin-top: 8px;
+    }
+    .max {
+      font-size: 14px;
+      right: 12px;
+      top: 70px;
+    }
+  }
+}
+
+div[class='red'] {
+  .inputWrapper {
+    input {
+      color: #353535;
+      background: #f2f4f7;
+    }
+  }
+  .inputContent {
+    border: 1px solid #e0e0e0;
+  }
+
+  .selectBox {
+    background: #f2f4f7;
+  }
+
+  .select {
+    color: #353535;
+  }
+  .options {
+    background: #f2f4f7;
+  }
+  .option {
+    &:not(:first-child) {
+      border-top: 1px solid #000014;
+    }
+    color: #000;
+    background: #f2f4f7;
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+}

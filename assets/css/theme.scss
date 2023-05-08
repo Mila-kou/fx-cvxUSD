@@ -19,7 +19,7 @@ body {
   &[data-theme='red'] {
     background-image: url(../../public/images/red-bg.webp);
 
-    --primary-color: $fa2454;
+    --primary-color: #fa2454;
     --box-shadow-color: rgba(251, 194, 194, 0.5);
   }
 }

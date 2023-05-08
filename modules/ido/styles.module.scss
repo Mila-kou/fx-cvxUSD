@@ -12,19 +12,32 @@
 
   .card {
     @include card;
-    min-width: 357px;
     height: 380px;
     flex-shrink: 0;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    padding: 42px 60px;
+    padding: 42px 44px;
 
     .title {
       font-size: 17px;
       span {
         color: var(--primary-color);
       }
+    }
+    .input {
+      margin-top: 24px;
+    }
+    .forWrap {
+      font-size: 16px;
+      margin-top: 10px;
+      span {
+        color: var(--primary-color);
+      }
+    }
+    .buy {
+      @include colorful-button;
+      margin-top: 24px;
     }
     .num {
       margin-top: 24px;
@@ -43,26 +56,5 @@
     margin-top: 50px;
     flex-direction: column;
     row-gap: 32px;
-  }
-}
-
-.inputWrap {
-  box-shadow: 0px 4px 7px 0px var(--box-shadow-color);
-  border: 1px solid #e5e5e5;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  border-radius: 6px;
-  div {
-    display: flex;
-    align-items: center;
-    border-right: 1px solid #e5e5e5;
-    height: 43px;
-    padding: 0 18px;
-    font-weight: 500;
-  }
-  .input {
-    height: 43px;
   }
 }
