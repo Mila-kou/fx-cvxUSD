@@ -166,7 +166,7 @@ export default function IdoPage() {
       )
       setDepositAmount('')
       setBuying(false)
-      setRefreshTrigger((prev) => prev + 1)
+      setClearInputTrigger((prev) => prev + 1)
     } catch (error) {
       console.log(error)
       setBuying(false)
