@@ -111,6 +111,7 @@ function Web3ContextProvider({ children }) {
       blockTime,
       isAllReady,
       _currentAccount: currentAccount || config.defaultAddress,
+      isRightChain,
     }),
     [
       web3,
@@ -124,6 +125,7 @@ function Web3ContextProvider({ children }) {
       current,
       blockTime,
       isAllReady,
+      isRightChain,
     ]
   )
 

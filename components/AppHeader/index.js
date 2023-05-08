@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import useWeb3 from '@/hooks/useWeb3'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
+import config from '@/config/index'
 
 const assets = [
   {
@@ -38,7 +39,7 @@ const assets = [
 
 export default function AppHeader() {
   const { theme, toggleTheme } = useGlobal()
-  const { connect, disconnect, currentAccount } = useWeb3()
+  const { connect, disconnect, currentAccount, isRightChain } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
@@ -165,7 +166,12 @@ export default function AppHeader() {
           </div>
         ) : null}
       </div>
-      <p className={styles.network}>Please switch your network to Mainnet</p>
+      {isRightChain ? null : (
+        <p className={styles.network}>
+          Please switch your network to{' '}
+          {config.CHAIN_MAPPING[config.CHAIN_ID] || 'mainnet-fork'}
+        </p>
+      )}
     </div>
   )
 }
