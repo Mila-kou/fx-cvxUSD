@@ -101,6 +101,7 @@ export const useToken = (address, contractType, lpInfo) => {
       // console.log('fetchUserInfo----', address)
       if (address === config.zeroAddress) {
         const ethBalance = await web3.eth.getBalance(_currentAccount)
+        console.log('ethBalance----', ethBalance)
         setToken({
           address,
           balance: ethBalance,

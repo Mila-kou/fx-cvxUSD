@@ -15,35 +15,46 @@ import useWeb3 from '@/hooks/useWeb3'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import config from '@/config/index'
-
-const assets = [
-  {
-    name: 'Ethereum',
-    symbol: 'ETH',
-    amount: '3.6',
-    usd: '6480.98',
-    icon: '/tokens/crypto-icons-stack.svg#eth',
-  },
-  // {
-  //   name: 'Fractional ETH',
-  //   symbol: 'fETH',
-  //   amount: '2.9',
-  //   usd: '4480.98',
-  // },
-  // {
-  //   name: 'Leveraged ETH',
-  //   symbol: 'xETH',
-  //   amount: '1.6',
-  //   usd: '1480.98',
-  // },
-]
+import { cBN, fb4 } from '@/utils/index'
 
 export default function AppHeader() {
   const { theme, toggleTheme } = useGlobal()
-  const { connect, disconnect, currentAccount, isRightChain } = useWeb3()
+  const { web3, connect, disconnect, currentAccount, isRightChain } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
+
+  const [ethBalance, setEthBalance] = useState(0)
+
+  useEffect(() => {
+    if (currentAccount) {
+      web3.eth.getBalance(currentAccount).then((res) => {
+        setEthBalance(fb4(res, false))
+      })
+    }
+  }, [currentAccount, showAccountPanel])
+
+  const assets = [
+    {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      amount: ethBalance,
+      usd: '6480.98',
+      icon: '/tokens/crypto-icons-stack.svg#eth',
+    },
+    // {
+    //   name: 'Fractional ETH',
+    //   symbol: 'fETH',
+    //   amount: '2.9',
+    //   usd: '4480.98',
+    // },
+    // {
+    //   name: 'Leveraged ETH',
+    //   symbol: 'xETH',
+    //   amount: '1.6',
+    //   usd: '1480.98',
+    // },
+  ]
 
   const refMenu = useRef(null)
   const refMenuPanel = useRef(null)
@@ -117,7 +128,7 @@ export default function AppHeader() {
                       {item.amount} {item.symbol}
                     </div>
                   </div>
-                  <div className={styles.usd}>~ ${item.usd}</div>
+                  {/* <div className={styles.usd}>~ ${item.usd}</div> */}
                 </div>
               ))}
               <div className={styles.disBtn} onClick={handleDisconnect}>
