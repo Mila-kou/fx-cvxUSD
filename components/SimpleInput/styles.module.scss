@@ -48,6 +48,7 @@
       color: var(--primary-color);
       text-decoration: underline;
       font-size: 12px;
+      cursor: pointer;
     }
   }
 
@@ -83,68 +84,6 @@
     &.visible {
       opacity: 1;
       visibility: visible;
-    }
-  }
-  .option {
-    &:not(:first-child) {
-      border-top: 1px solid #000014;
-    }
-    color: #fff;
-    padding: 8px 8px;
-    background: $blue;
-    transition: background 0.03s;
-    &:hover {
-      background: #1a4caf;
-    }
-  }
-  @media (max-width: 768px) {
-    .selectBox {
-      padding: 0 8px;
-    }
-    input {
-      font-size: 12px;
-      padding-left: 4px;
-    }
-    .inputWrapper {
-      margin-top: 8px;
-    }
-    .max {
-      font-size: 14px;
-      right: 12px;
-      top: 70px;
-    }
-  }
-}
-
-div[class='red'] {
-  .inputWrapper {
-    input {
-      color: #353535;
-      background: #f2f4f7;
-    }
-  }
-  .inputContent {
-    border: 1px solid #e0e0e0;
-  }
-
-  .selectBox {
-    background: #f2f4f7;
-  }
-
-  .select {
-    color: #353535;
-  }
-  .options {
-    background: #f2f4f7;
-  }
-  .option {
-    &:not(:first-child) {
-      border-top: 1px solid #000014;
-    }
-    color: #000;
-    background: #f2f4f7;
-    &:hover {
-      background: #f0f0f0;
     }
   }
 }
