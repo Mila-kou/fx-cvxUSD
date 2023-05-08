@@ -48,8 +48,8 @@ export const initWeb3Onboard = init({
   ],
   appMetadata: {
     name: 'fxETH',
-    // icon: '/assets/logo-onbroad.svg',
-    // logo: '/assets/logo-onbroad.svg',
+    icon: '/images/onbroad-logo.png',
+    logo: '/images/onbroad-logo.png',
     description:
       'AladdinDAO is the platform introduces DeFi projects (DApps) to investors',
     recommendedInjectedWallets: [
