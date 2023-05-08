@@ -48,7 +48,9 @@ export default function AppHeader() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.logo}>Logo</div>
+      <div className={styles.logo}>
+        <img src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.webp`} />
+      </div>
       <div className={styles.right}>
         <div className={styles.account}>
           {currentAccount ? (
@@ -73,7 +75,9 @@ export default function AppHeader() {
             </div>
             {assets.map((item) => (
               <div className={styles.assetItem}>
-                <div className={styles.logo}></div>
+                <div className={styles.logo}>
+                  <img src="/images/x-logo.webp" />
+                </div>
                 <div className={styles.main}>
                   <div>{item.name}</div>
                   <div>
