@@ -19,7 +19,7 @@ export default function IdoPage() {
   const { _currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [slippage, setSlippage] = useState(0.3)
-  const [depositAmount, setDepositAmount] = useState('')
+  const [depositAmount, setDepositAmount] = useState(0)
   const [minAmount, setMinAmount] = useState(0)
   const [buying, setBuying] = useState(false)
 
@@ -38,7 +38,6 @@ export default function IdoPage() {
     [PageData]
   )
 
-  console.log('PageData---', PageData)
   const canPay = useMemo(
     () =>
       cBN(depositAmount).isGreaterThan(0) &&
@@ -287,7 +286,7 @@ export default function IdoPage() {
             <Button
               className={styles.buy}
               onClick={doPay}
-              disabled={canPay}
+              disabled={!canPay}
               loading={buying}
             >
               Purchase
