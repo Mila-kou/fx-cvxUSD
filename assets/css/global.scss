@@ -90,9 +90,9 @@ div[class='red'] {
 }
 
 .ant-switch {
-  background-color: #555 !important;
+  // background-color: #555 !important;
   &.ant-switch-checked {
-    background-color: red !important;
+    background-color: #1f14ed !important;
   }
 }
 

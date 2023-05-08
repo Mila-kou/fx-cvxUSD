@@ -74,7 +74,7 @@
         margin-right: 10px;
         width: 25px;
         height: 25px;
-        background: red;
+        background: var(--red-color);
       }
 
       .main {
@@ -99,6 +99,57 @@
       padding: 11px 0;
       width: 180px;
       cursor: pointer;
+    }
+  }
+}
+
+.menuPanel {
+  @include overlay;
+  .content {
+    padding: 24px;
+    width: 300px;
+    position: absolute;
+    top: 85px;
+    right: 54px;
+    border-radius: 8px;
+    background: var(--background-color);
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+
+      span {
+        margin-right: 6px;
+      }
+
+      .btns {
+        display: flex;
+
+        div {
+          opacity: 0.5;
+          padding: 4px 8px;
+          font-weight: 500;
+          cursor: pointer;
+        }
+
+        .red {
+          margin-left: 20px;
+          color: var(--red-color);
+        }
+
+        .blue {
+          color: var(--blue-color);
+        }
+
+        .active {
+          opacity: 1;
+          background: #ffffff;
+          border-radius: 4px;
+          box-shadow: 0px 4px 4px 0px rgba(183, 169, 235, 0.5);
+        }
+      }
     }
   }
 }

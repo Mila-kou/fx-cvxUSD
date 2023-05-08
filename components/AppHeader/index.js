@@ -1,10 +1,15 @@
-import React, { useContext, useCallback, useState, useEffect } from 'react'
+import React, { useRef, useCallback, useState, useEffect } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Button } from 'antd'
-import { useToggle } from 'ahooks'
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
+import { Button, Switch } from 'antd'
+import { useToggle, useClickAway } from 'ahooks'
+import {
+  MenuOutlined,
+  CloseOutlined,
+  LineChartOutlined,
+  SkinOutlined,
+} from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import useWeb3 from '@/hooks/useWeb3'
 import useGlobal from '@/hooks/useGlobal'
@@ -36,6 +41,23 @@ export default function AppHeader() {
   const { connect, disconnect, currentAccount } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
+  const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
+
+  const refMenu = useRef(null)
+  const refMenuPanel = useRef(null)
+  useClickAway(() => {
+    if (showMenuPanel) {
+      toggleShowMenuPanel()
+    }
+  }, [refMenu, refMenuPanel])
+
+  const refAccount = useRef(null)
+  const refAccountPanel = useRef(null)
+  useClickAway(() => {
+    if (showAccountPanel) {
+      toggleShowAccountPanel()
+    }
+  }, [refAccount, refAccountPanel])
 
   const handleDisconnect = () => {
     disconnect()
@@ -52,7 +74,7 @@ export default function AppHeader() {
         <img src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.webp`} />
       </div>
       <div className={styles.right}>
-        <div className={styles.account}>
+        <div className={styles.account} ref={refAccount}>
           {currentAccount ? (
             <div onClick={toggleShowAccountPanel}>
               {currentAccount.slice(0, 6)}...{currentAccount.slice(-6)}
@@ -62,13 +84,13 @@ export default function AppHeader() {
           )}
         </div>
         <div className={styles.menu}>
-          <MenuOutlined />
+          <MenuOutlined ref={refMenu} onClick={toggleShowMenuPanel} />
         </div>
       </div>
 
       {showAccountPanel ? (
         <div className={styles.accountPanel}>
-          <div className={styles.content}>
+          <div ref={refAccountPanel} className={styles.content}>
             <div className={styles.header}>
               <p>Account</p>
               <CloseOutlined onClick={toggleShowAccountPanel} />
@@ -89,6 +111,46 @@ export default function AppHeader() {
             ))}
             <div className={styles.disBtn} onClick={handleDisconnect}>
               Disconnect Wallet
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {showMenuPanel ? (
+        <div className={styles.menuPanel}>
+          <div ref={refMenuPanel} className={styles.content}>
+            <div className={styles.item}>
+              <div>
+                <LineChartOutlined />
+                System Statistics
+              </div>
+              <Switch />
+            </div>
+            <div className={styles.item}>
+              <div>
+                <SkinOutlined />
+                Theme
+              </div>
+              <div className={styles.btns}>
+                <div
+                  className={cn(
+                    styles.blue,
+                    theme === 'blue' ? styles.active : ''
+                  )}
+                  onClick={toggleTheme}
+                >
+                  Dark
+                </div>
+                <div
+                  className={cn(
+                    styles.red,
+                    theme === 'red' ? styles.active : ''
+                  )}
+                  onClick={toggleTheme}
+                >
+                  Light
+                </div>
+              </div>
             </div>
           </div>
         </div>
