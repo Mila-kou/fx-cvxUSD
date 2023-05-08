@@ -284,14 +284,14 @@ export default function IdoPage() {
               For: <span>{fb4(minAmount)} f(x)</span>
             </p>
 
-            <div
+            <Button
               className={styles.buy}
               onClick={doPay}
               disabled={canPay}
               loading={buying}
             >
               Purchase
-            </div>
+            </Button>
 
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
