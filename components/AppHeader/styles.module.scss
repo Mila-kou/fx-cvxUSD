@@ -21,6 +21,7 @@
   .right {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     .account {
       background: var(--background-color);
       margin-right: 20px;
@@ -157,4 +158,13 @@
       }
     }
   }
+}
+
+.network {
+  color: #fff;
+  padding: 4px;
+  font-size: 12px;
+  background: var(--red-color);
+  margin-top: 10px;
+  text-align: center;
 }

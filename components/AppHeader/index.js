@@ -77,92 +77,95 @@ export default function AppHeader() {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.logo}>
-        <img src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.webp`} />
-      </div>
-      <div className={styles.right}>
-        <div className={styles.account} ref={refAccount}>
-          {currentAccount ? (
-            <div onClick={toggleShowAccountPanel}>{_account}</div>
-          ) : (
-            <div onClick={handleConnect}>Connect Wallet</div>
-          )}
+    <div>
+      <div className={styles.container}>
+        <div className={styles.logo}>
+          <img src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.webp`} />
         </div>
-        <div className={styles.menu}>
-          <MenuOutlined ref={refMenu} onClick={toggleShowMenuPanel} />
+        <div className={styles.right}>
+          <div className={styles.account} ref={refAccount}>
+            {currentAccount ? (
+              <div onClick={toggleShowAccountPanel}>{_account}</div>
+            ) : (
+              <div onClick={handleConnect}>Connect Wallet</div>
+            )}
+          </div>
+          <div className={styles.menu}>
+            <MenuOutlined ref={refMenu} onClick={toggleShowMenuPanel} />
+          </div>
         </div>
-      </div>
 
-      {showAccountPanel ? (
-        <div className={styles.accountPanel}>
-          <div ref={refAccountPanel} className={styles.content}>
-            <div className={styles.header}>
-              <p>Account</p>
-              <CloseOutlined onClick={toggleShowAccountPanel} />
-            </div>
-            <p className={styles.title}>{_account}</p>
-            <p className={styles.title}>Assets</p>
-            {assets.map((item) => (
-              <div className={styles.assetItem}>
-                <div className={styles.logo}>
-                  <img src="/images/x-logo.webp" />
+        {showAccountPanel ? (
+          <div className={styles.accountPanel}>
+            <div ref={refAccountPanel} className={styles.content}>
+              <div className={styles.header}>
+                <p>Account</p>
+                <CloseOutlined onClick={toggleShowAccountPanel} />
+              </div>
+              <p className={styles.title}>{_account}</p>
+              <p className={styles.title}>Assets</p>
+              {assets.map((item) => (
+                <div className={styles.assetItem}>
+                  <div className={styles.logo}>
+                    <img src="/images/x-logo.webp" />
+                  </div>
+                  <div className={styles.main}>
+                    <div>{item.name}</div>
+                    <div>
+                      {item.amount} {item.symbol}
+                    </div>
+                  </div>
+                  <div className={styles.usd}>~ ${item.usd}</div>
                 </div>
-                <div className={styles.main}>
-                  <div>{item.name}</div>
-                  <div>
-                    {item.amount} {item.symbol}
+              ))}
+              <div className={styles.disBtn} onClick={handleDisconnect}>
+                Disconnect Wallet
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {showMenuPanel ? (
+          <div className={styles.menuPanel}>
+            <div ref={refMenuPanel} className={styles.content}>
+              <div className={styles.item}>
+                <div>
+                  <LineChartOutlined />
+                  System Statistics
+                </div>
+                <Switch />
+              </div>
+              <div className={styles.item}>
+                <div>
+                  <SkinOutlined />
+                  Theme
+                </div>
+                <div className={styles.btns}>
+                  <div
+                    className={cn(
+                      styles.blue,
+                      theme === 'blue' ? styles.active : ''
+                    )}
+                    onClick={toggleTheme}
+                  >
+                    Dark
+                  </div>
+                  <div
+                    className={cn(
+                      styles.red,
+                      theme === 'red' ? styles.active : ''
+                    )}
+                    onClick={toggleTheme}
+                  >
+                    Light
                   </div>
                 </div>
-                <div className={styles.usd}>~ ${item.usd}</div>
-              </div>
-            ))}
-            <div className={styles.disBtn} onClick={handleDisconnect}>
-              Disconnect Wallet
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {showMenuPanel ? (
-        <div className={styles.menuPanel}>
-          <div ref={refMenuPanel} className={styles.content}>
-            <div className={styles.item}>
-              <div>
-                <LineChartOutlined />
-                System Statistics
-              </div>
-              <Switch />
-            </div>
-            <div className={styles.item}>
-              <div>
-                <SkinOutlined />
-                Theme
-              </div>
-              <div className={styles.btns}>
-                <div
-                  className={cn(
-                    styles.blue,
-                    theme === 'blue' ? styles.active : ''
-                  )}
-                  onClick={toggleTheme}
-                >
-                  Dark
-                </div>
-                <div
-                  className={cn(
-                    styles.red,
-                    theme === 'red' ? styles.active : ''
-                  )}
-                  onClick={toggleTheme}
-                >
-                  Light
-                </div>
               </div>
             </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
+      <p className={styles.network}>Please switch your network to Mainnet</p>
     </div>
   )
 }
