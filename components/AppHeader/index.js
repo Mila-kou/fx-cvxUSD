@@ -18,13 +18,20 @@ import config from '@/config/index'
 import { cBN, fb4 } from '@/utils/index'
 
 export default function AppHeader() {
-  const { theme, toggleTheme } = useGlobal()
+  const {
+    theme,
+    toggleTheme,
+    showSystemStatistics,
+    toggleShowSystemStatistics,
+  } = useGlobal()
   const { web3, connect, disconnect, currentAccount, isRightChain } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
 
   const [ethBalance, setEthBalance] = useState(0)
+
+  const showSwitch = useMemo(() => route === '/home', [route])
 
   useEffect(() => {
     if (currentAccount) {
@@ -141,13 +148,18 @@ export default function AppHeader() {
         {showMenuPanel ? (
           <div className={styles.menuPanel}>
             <div ref={refMenuPanel} className={styles.content}>
-              <div className={styles.item}>
-                <div>
-                  <LineChartOutlined />
-                  System Statistics
+              {showSwitch ? (
+                <div className={styles.item}>
+                  <div>
+                    <LineChartOutlined />
+                    System Statistics
+                  </div>
+                  <Switch
+                    checked={showSystemStatistics}
+                    onChange={toggleShowSystemStatistics}
+                  />
                 </div>
-                <Switch />
-              </div>
+              ) : null}
               <div className={styles.item}>
                 <div>
                   <SkinOutlined />
