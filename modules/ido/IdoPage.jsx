@@ -30,12 +30,11 @@ export default function IdoPage() {
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
 
   const canClaim = useMemo(
-    () =>
-      !!(PageData.saleStatus === 3 &&
-        PageData.userInfo.myShares * 1 &&
-        !PageData.userInfo?.isClaimed)
-      [PageData]
+    () => {
+      return (PageData.saleStatus == 3 && (PageData.userInfo.myShares * 1) && (!PageData.userInfo?.isClaimed))
+    }, [PageData]
   )
+  console.log('PageData.saleStatus-', PageData.saleStatus, PageData.userInfo.myShares, PageData.userInfo?.isClaimed, canClaim)
 
   const canPay = useMemo(
     () =>
