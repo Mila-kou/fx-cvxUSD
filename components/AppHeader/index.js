@@ -100,7 +100,7 @@ export default function AppHeader() {
     <div>
       <div className={styles.container}>
         <div className={styles.logo}>
-          <img src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.webp`} />
+          <img src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`} />
         </div>
         <div className={styles.right}>
           <div className={styles.account} ref={refAccount}>

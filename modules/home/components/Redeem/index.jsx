@@ -37,7 +37,7 @@ export default function Redeem() {
         placeholder="0"
         balance="122.34"
         symbol="fETH"
-        icon="/images/f-s-logo.webp"
+        icon={`/images/f-s-logo${selected !== 1 ? '-white' : ''}.svg`}
         color={selected !== 1 ? 'blue' : undefined}
         type={selected == 1 ? 'select' : ''}
         className={styles.inputItem}
@@ -49,7 +49,7 @@ export default function Redeem() {
         balance="36.16"
         symbol="xETH"
         tip="Bonus+"
-        icon="/images/x-s-logo.webp"
+        icon={`/images/x-s-logo${selected !== 0 ? '-white' : ''}.svg`}
         color={selected !== 0 ? 'red' : undefined}
         selectColor="red"
         type={selected == 0 ? 'select' : ''}

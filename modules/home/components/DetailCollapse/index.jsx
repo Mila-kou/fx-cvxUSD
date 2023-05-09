@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from 'antd'
-import { DownOutlined } from '@ant-design/icons'
+import { DownOutlined, LeftOutlined } from '@ant-design/icons'
 import { useToggle, useClickAway } from 'ahooks'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -17,7 +17,7 @@ export default function DetailCollapse({ title, detail }) {
     <div className={styles.container}>
       <div className={styles.header} onClick={toggle}>
         {title}
-        <DownOutlined />
+        {showContent ? <DownOutlined /> : <LeftOutlined />}
       </div>
 
       {showContent ? (

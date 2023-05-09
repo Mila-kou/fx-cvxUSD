@@ -12,7 +12,8 @@ import styles from './styles.module.scss'
 export default function SystemStatistics() {
   return (
     <div className={styles.container}>
-      <div className={styles.item}>1</div>
+      <div></div>
+      <div className={styles.item}></div>
 
       <div className={styles.item}>2</div>
     </div>

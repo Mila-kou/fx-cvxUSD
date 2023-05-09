@@ -47,7 +47,7 @@ export default function Mint() {
       <Tabs selecedIndex={tab} onChange={(v) => setTab(v)} />
       <BalanceInput
         symbol="fETH"
-        icon="/images/f-s-logo.webp"
+        icon={`/images/f-s-logo${selected !== 1 ? '-white' : ''}.svg`}
         color={selected !== 1 ? 'blue' : undefined}
         placeholder="300"
         disabled
@@ -59,7 +59,7 @@ export default function Mint() {
       <BalanceInput
         symbol="xETH"
         tip="Bonus+"
-        icon="/images/x-s-logo.webp"
+        icon={`/images/x-s-logo${selected !== 0 ? '-white' : ''}.svg`}
         color={selected !== 0 ? 'red' : undefined}
         selectColor="red"
         placeholder="300"
