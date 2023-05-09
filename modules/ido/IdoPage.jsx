@@ -25,7 +25,7 @@ export default function IdoPage() {
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const { IdoSaleContract } = PageData
-  const minGas = 527336
+  const minGas = 527336 * 1.2
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
   // console.log('selectTokenInfo-----', selectTokenInfo)
