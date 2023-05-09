@@ -172,7 +172,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) {}
+    } catch (error) { }
   }, [depositAmount])
 
   const InitialRender = () => {
@@ -243,7 +243,7 @@ export default function IdoPage() {
 
   return (
     <>
-      {!!(PageData.saleStatus == 1) && <InitialRender />}
+      {!!([0, 1].indexOf(PageData.saleStatus) > -1 || !PageData.saleStatus) && <InitialRender />}
       {!!(PageData.saleStatus == 2) && (
         <div className={styles.container}>
           <div className={styles.card}>
