@@ -63,7 +63,6 @@ export default function IdoPage() {
         },
         () => {
           setClaiming(false)
-          refresh()
         }
       )
     } catch (error) {

@@ -8,10 +8,15 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  padding: 42px 44px;
+  padding: 20px 24px;
 
-  .cell {
-    width: 307px;
-    background: red;
+  .tabs {
+    display: flex;
+    column-gap: 20px;
+    margin-bottom: 8px;
+    .tab {
+      @include troggle-button;
+      padding: 4px 16px;
+    }
   }
 }

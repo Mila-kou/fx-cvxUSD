@@ -1,0 +1,89 @@
+@import '../../assets/css/mixin.scss';
+.reverse {
+  transform: rotate(180deg);
+}
+
+.inputWrapper {
+  padding: 0;
+  &.error {
+    input {
+      color: #a40000;
+      border: 1px solid #a40000;
+    }
+  }
+
+  .inputContent {
+    box-shadow: 0px 4px 7px 0px var(--box-shadow-color);
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    justify-content: space-between;
+    padding-right: 10px;
+    .symbol {
+      display: flex;
+      align-items: center;
+      border-right: 1px solid #e5e5e5;
+      height: 43px;
+      padding: 0 18px;
+      font-weight: 500;
+    }
+
+    input {
+      flex: 1;
+      height: 43px;
+      border: none;
+      outline: none;
+      padding-left: 20px;
+      box-sizing: border-box;
+      background-color: #fff;
+      color: #aca6a6;
+      &::placeholder {
+        color: #434242;
+      }
+    }
+
+    .max {
+      color: var(--primary-color);
+      text-decoration: underline;
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
+
+  .errMsg {
+    color: #a40000;
+  }
+  .moreInfoItem {
+    // color: $blue;
+    font-size: 14px;
+    margin: 4px 0;
+  }
+
+  .divider {
+    display: block;
+    // position: absolute;
+    // right: -16px;
+    height: 40px;
+    background: $blue;
+    width: 1px;
+  }
+  .options {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    z-index: 500;
+    transition: opacity 0.03s;
+    opacity: 0;
+    visibility: hidden;
+    background: $blue;
+    padding: 4px 6px;
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

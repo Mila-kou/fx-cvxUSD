@@ -167,20 +167,16 @@ export default function AppHeader() {
                 </div>
                 <div className={styles.btns}>
                   <div
-                    className={cn(
-                      styles.blue,
-                      theme === 'blue' ? styles.active : ''
-                    )}
+                    className={styles.blue}
                     onClick={toggleTheme}
+                    data-active={theme === 'blue'}
                   >
                     Dark
                   </div>
                   <div
-                    className={cn(
-                      styles.red,
-                      theme === 'red' ? styles.active : ''
-                    )}
+                    className={styles.red}
                     onClick={toggleTheme}
+                    data-active={theme === 'red'}
                   >
                     Light
                   </div>
