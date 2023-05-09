@@ -16,7 +16,10 @@
   &[data-color] {
     opacity: 0.9;
     color: #fff;
-    --main-second-color: rgba(255, 255, 255, 0.5);
+    --second-text-color: rgba(255, 255, 255, 0.5);
+    .max {
+      color: #fff !important;
+    }
   }
   &[data-color='blue'] {
     background: linear-gradient(0deg, #1f14ed 0%, #165ddf 100%);
@@ -35,6 +38,7 @@
   .symbolWrap {
     flex-shrink: 0;
     flex: 1;
+    min-width: 100px;
     .symbol {
       font-size: 13px;
       .icon {
@@ -49,7 +53,7 @@
     }
     .usd {
       font-size: 11px;
-      color: var(--main-second-color);
+      color: var(--second-text-color);
     }
   }
 
@@ -57,7 +61,7 @@
     .balanceWrap {
       font-size: 11px;
       text-align: end;
-      color: var(--main-second-color);
+      color: var(--second-text-color);
       .max {
         @include max-button;
         margin-left: 10px;

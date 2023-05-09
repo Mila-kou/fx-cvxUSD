@@ -1,0 +1,34 @@
+@import '../../../../assets/css/mixin.scss';
+
+.container {
+  @include card;
+  background: #fff;
+  padding: 16px;
+  font-size: 11px;
+  line-height: 14px;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    svg {
+      width: 10px;
+    }
+    cursor: pointer;
+  }
+
+  .content {
+    margin-top: 10px;
+    color: var(--second-text-color);
+
+    span {
+      color: var(--main-text-color);
+    }
+
+    .result {
+      margin-top: 10px;
+      .green {
+        color: var(--green-color);
+      }
+    }
+  }
+}

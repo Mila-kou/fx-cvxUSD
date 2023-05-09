@@ -9,11 +9,20 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import Tabs from '../Tabs'
+import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 
 export default function Mint() {
   const [tab, setTab] = useState(0)
   const [selected, setSelected] = useState(0)
+  const [fee, setFee] = useState(0.01)
+  const [feeUsd, setFeeUsd] = useState(10)
+  const [detail, setDetail] = useState({
+    bonus: 75,
+    bonusRatio: 2.1,
+    fETH: 2,
+    xETH: 3,
+  })
 
   useEffect(() => {
     if (tab) {
@@ -60,6 +69,13 @@ export default function Mint() {
         usd="1,10"
         onSelected={() => setSelected(1)}
       />
+
+      <DetailCollapse
+        title={`Mint Fee: ${fee}ETH ~ $${feeUsd}`}
+        detail={detail}
+      />
+
+      <Button className={styles.btn}>Mint</Button>
     </div>
   )
 }

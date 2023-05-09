@@ -7,19 +7,14 @@
     width: 10px;
     margin: 10px auto;
   }
-
-  .tabs {
-    display: flex;
-    margin-bottom: 14px;
-    .tab {
-      flex: 1;
-      @include troggle-button;
-      padding: 8px;
-      color: var(--main-second-color);
-    }
-  }
-
+  
   .inputItem {
     margin-bottom: 10px;
+  }
+
+  .btn {
+    @include colorful-button;
+    width: 100%;
+    margin-top: 16px;
   }
 }
