@@ -25,17 +25,16 @@ export default function IdoPage() {
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const { IdoSaleContract } = PageData
-  const minGas = 527336
+  const minGas = 527336 * 1.2
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
-  // console.log('selectTokenInfo-----', selectTokenInfo)
 
   const canClaim = useMemo(
     () =>
-      PageData.saleStatus === 3 &&
-      PageData.myShares * 1 &&
-      !PageData.userInfo?.isClaimed,
-    [PageData]
+      !!(PageData.saleStatus === 3 &&
+        PageData.userInfo.myShares * 1 &&
+        !PageData.userInfo?.isClaimed)
+      [PageData]
   )
 
   const canPay = useMemo(
@@ -172,7 +171,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) {}
+    } catch (error) { }
   }, [depositAmount])
 
   const InitialRender = () => {
@@ -227,7 +226,7 @@ export default function IdoPage() {
           <Button
             className={styles.buy}
             onClick={handleClaim}
-            disabled={canClaim}
+            disabled={!canClaim}
             loading={claiming}
           >
             Claim
@@ -243,7 +242,7 @@ export default function IdoPage() {
 
   return (
     <>
-      {!!(PageData.saleStatus == 1) && <InitialRender />}
+      {!!([0, 1].indexOf(PageData.saleStatus) > -1 || !PageData.saleStatus) && <InitialRender />}
       {!!(PageData.saleStatus == 2) && (
         <div className={styles.container}>
           <div className={styles.card}>
