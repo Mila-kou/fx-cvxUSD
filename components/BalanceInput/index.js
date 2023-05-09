@@ -16,19 +16,23 @@ export const useClearInput = () => {
 
 function BalanceInput(props) {
   const {
-    title,
     balance,
-    available,
+    usd = '-',
     placeholder,
     clearTrigger,
     decimals,
     changeValue,
     maxAmount,
-    errMsg,
-    symbol,
     className = '',
     icon,
+    symbol,
+    tip,
+    disabled,
+    type,
+    color,
+    selectColor,
     onChange = () => {},
+    onSelected = () => {},
   } = props
   const { theme } = useGlobal()
 
@@ -64,38 +68,45 @@ function BalanceInput(props) {
   }, [clearTrigger])
 
   return (
-    <div className={cn(styles.inputWrapper, errMsg && styles.error, className)}>
-      {(title || balance || available) && (
-        <div className="flex items-center justify-between mb-2 color-white">
-          {title && <div className="">{title}</div>}
-          {balance && (
-            <div>
-              Balance: <span className="color-blue">{balance}</span>
-            </div>
-          )}
-          {available && (
-            <div>
-              Available: <span className="color-blue">{available}</span>
-            </div>
-          )}
-        </div>
-      )}
-
-      <div className={styles.inputContent}>
-        <img src={icon} />
-        {symbol ? <div className={styles.symbol}>{symbol}</div> : null}
-        <input
-          onChange={handleInputChange}
-          value={val}
-          placeholder={placeholder}
-        />
-
-        <div className={styles.max} onClick={setMax}>
-          MAX
-        </div>
+    <div className={cn(styles.inputContent, className)} data-color={color}>
+      <div className={styles.left}>
+        <img src="/tokens/crypto-icons-stack.svg#eth" />
       </div>
-
-      {errMsg && <div className={styles.errMsg}>{errMsg}</div>}
+      <div className={styles.symbolWrap}>
+        <p className={styles.symbol}>
+          {icon && <img className={styles.icon} src={icon} />}
+          {symbol} <span className={styles.tip}>{tip}</span>
+        </p>
+        <p className={styles.usd}>(~${usd})</p>
+      </div>
+      <div className={styles.right}>
+        {type == 'select' ? (
+          <div
+            className={styles.select}
+            onClick={onSelected}
+            data-color={selectColor}
+          >
+            Select
+          </div>
+        ) : (
+          <>
+            {balance && (
+              <p className={styles.balanceWrap}>
+                Balance: {balance}
+                <span className={styles.max} onClick={setMax}>
+                  MAX
+                </span>
+              </p>
+            )}
+            <input
+              onChange={handleInputChange}
+              value={val}
+              placeholder={placeholder}
+              disabled={disabled}
+            />
+          </>
+        )}
+      </div>
     </div>
   )
 }

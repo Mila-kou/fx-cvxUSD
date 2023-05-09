@@ -1,0 +1,13 @@
+@import '../../../../assets/css/mixin.scss';
+
+.tabs {
+  display: flex;
+  margin-bottom: 12px;
+  --primary-color: var(--blue-color);
+  .tab {
+    flex: 1;
+    @include troggle-button;
+    padding: 8px;
+    color: var(--main-second-color);
+  }
+}
