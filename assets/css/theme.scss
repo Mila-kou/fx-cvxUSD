@@ -7,20 +7,24 @@ body {
 
   --blue-color: #1f14ed;
   --red-color: #fa2454;
+  --yellow-color: #EEBA04;
 
   background-image: url(../../public/images/blue-bg.webp);
 
   --background-color: rgba(255, 255, 255, 0.8);
   --panel-background-color: rgba(255, 255, 255, 0.9);
   --main-text-color: #231f20;
+  --main-second-color: #a6a6ae;
 
   --primary-color: #1f14ed;
+  --adverse-primary-color: #fa2454;
   --box-shadow-color: rgba(183, 169, 235, 0.5);
 
   &[data-theme='red'] {
     background-image: url(../../public/images/red-bg.webp);
 
     --primary-color: #fa2454;
+    --adverse-primary-color: #1f14ed;
     --box-shadow-color: rgba(251, 194, 194, 0.5);
   }
 }

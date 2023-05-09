@@ -147,6 +147,8 @@ export const useToken = (address, contractType, lpInfo) => {
   useEffect(() => {
     if (isAllReady && address) {
       fetchUserInfo()
+    } else {
+      setToken({ balance: 0, allowance: 0 })
     }
   }, [web3, blockNumber, isAllReady, address])
 

@@ -45,10 +45,7 @@
     }
 
     .max {
-      color: var(--primary-color);
-      text-decoration: underline;
-      font-size: 12px;
-      cursor: pointer;
+      @include max-button;
     }
   }
 

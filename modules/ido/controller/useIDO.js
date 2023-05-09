@@ -9,7 +9,7 @@ const useIDO = () => {
     const { baseInfo, userInfo } = info
     const _currentPrice = checkNotZoroNumOption(
       baseInfo.currentPrice,
-      fb4(baseInfo.currentPrice, true)
+      fb4(baseInfo.currentPrice)
     )
     const _capAmount = checkNotZoroNumOption(
       baseInfo.capAmount,
