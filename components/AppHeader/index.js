@@ -99,9 +99,10 @@ export default function AppHeader() {
   return (
     <div>
       <div className={styles.container}>
-        <div className={styles.logo}>
-          <img src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`} />
-        </div>
+        <img
+          className={styles.logo}
+          src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
+        />
         <div className={styles.right}>
           <div className={styles.account} ref={refAccount}>
             {currentAccount ? (
