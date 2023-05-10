@@ -70,11 +70,10 @@ function BalanceInput(props) {
   return (
     <div className={cn(styles.inputContent, className)} data-color={color}>
       <div className={styles.left}>
-        <img src="/tokens/crypto-icons-stack.svg#eth" />
+        <img src={icon || '/tokens/crypto-icons-stack.svg#eth'} />
       </div>
       <div className={styles.symbolWrap}>
         <p className={styles.symbol}>
-          {icon && <img className={styles.icon} src={icon} />}
           {symbol} <span className={styles.tip}>{tip}</span>
         </p>
         <p className={styles.usd}>(~${usd})</p>
