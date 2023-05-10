@@ -57,13 +57,10 @@ export default function Chart({ color, icon, symbol }) {
     <div className={styles.container} data-color={color}>
       <div className={styles.header}>
         <div className={styles.left}>
-          <img src="/tokens/crypto-icons-stack.svg#eth" />
+          <img src={icon} />
         </div>
         <div className={styles.content}>
-          <div>
-            <img src={icon} />
-            {symbol}
-          </div>
+          <div>{symbol}</div>
           <p className={styles.second}>Net Assets Value</p>
         </div>
         <div className={styles.right}>
@@ -80,7 +77,7 @@ export default function Chart({ color, icon, symbol }) {
 
       <div className={styles.footer}>
         <div>
-          <img src={icon} />
+          {/* <img src={icon} /> */}
           {symbol} Total Supply:
         </div>
         <div>8,000,000 (0.35)</div>
