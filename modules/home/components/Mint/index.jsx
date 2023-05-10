@@ -8,12 +8,10 @@ import { cBN, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
-import Tabs from '../Tabs'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 
 export default function Mint() {
-  const [tab, setTab] = useState(0)
   const [selected, setSelected] = useState(0)
   const [fee, setFee] = useState(0.01)
   const [feeUsd, setFeeUsd] = useState(10)
@@ -24,13 +22,7 @@ export default function Mint() {
     xETH: 3,
   })
 
-  useEffect(() => {
-    if (tab) {
-      setSelected(2)
-    } else {
-      setSelected(0)
-    }
-  }, [tab])
+  const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   return (
     <div className={styles.container}>
@@ -44,14 +36,13 @@ export default function Mint() {
         <DownOutlined />
       </div>
 
-      <Tabs selecedIndex={tab} onChange={(v) => setTab(v)} />
       <BalanceInput
         symbol="fETH"
-        icon={`/images/f-s-logo${selected !== 1 ? '-white' : ''}.svg`}
-        color={selected !== 1 ? 'blue' : undefined}
+        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
+        color={isF ? 'blue' : undefined}
         placeholder="300"
         disabled
-        type={selected == 1 ? 'select' : ''}
+        type={isF ? '' : 'select'}
         className={styles.inputItem}
         usd="1,10"
         onSelected={() => setSelected(0)}
@@ -59,12 +50,12 @@ export default function Mint() {
       <BalanceInput
         symbol="xETH"
         tip="Bonus+"
-        icon={`/images/x-s-logo${selected !== 0 ? '-white' : ''}.svg`}
-        color={selected !== 0 ? 'red' : undefined}
+        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
+        color={isX ? 'red' : undefined}
         selectColor="red"
         placeholder="300"
         disabled
-        type={selected == 0 ? 'select' : ''}
+        type={isX ? '' : 'select'}
         className={styles.inputItem}
         usd="1,10"
         onSelected={() => setSelected(1)}
