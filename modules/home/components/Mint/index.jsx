@@ -10,6 +10,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
+import usefxETH from '../../controller/usefxETH'
 
 export default function Mint() {
   const [selected, setSelected] = useState(0)
@@ -21,6 +22,7 @@ export default function Mint() {
     fETH: 2,
     xETH: 3,
   })
+  const PageData = usefxETH();
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 

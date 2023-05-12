@@ -39,7 +39,7 @@ export const useFETH = () => {
 }
 
 export const useXETH = () => {
-  const address = config.contracts.fETH
+  const address = config.contracts.xETH
   const { getContract } = useContract()
   return useMemo(
     () => ({
