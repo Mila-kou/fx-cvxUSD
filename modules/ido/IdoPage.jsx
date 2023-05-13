@@ -29,6 +29,14 @@ export default function IdoPage() {
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
 
+  const isEndSale = useMemo(() => {
+    if (PageData.saleStatus == 3 ||
+      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(PageData.baseInfo.totalSoldAmount)) {
+      return true
+    }
+    return false
+  }, [PageData])
+
   const canClaim = useMemo(
     () => {
       return (PageData.saleStatus == 3 && (PageData.userInfo.myShares * 1) && (!PageData.userInfo?.isClaimed))
@@ -305,7 +313,7 @@ export default function IdoPage() {
           </div>
         </div>
       )}
-      {!!(PageData.saleStatus == 3) && <CompletedRender />}
+      {!!(isEndSale) && <CompletedRender />}
     </>
   )
 }
