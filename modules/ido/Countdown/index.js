@@ -14,7 +14,7 @@ export default function StakeEndsCountdown({ endTime, onCompleted }) {
 
   const calculateCountdown = async (time) => {
     const { timestamp } = { timestamp: new Date().valueOf() } //await web3.eth.getBlock('latest') || 
-    const timeGap = Math.floor((time - timestamp * 1000) / 1000);
+    const timeGap = Math.floor((time - timestamp) / 1000);
     if (timeGap === 0) {
       onCompleted && onCompleted()
     }
@@ -32,6 +32,7 @@ export default function StakeEndsCountdown({ endTime, onCompleted }) {
       Math.floor(((timeGap % 86400) % 3600) % 60)
     ).padStart(2, "0");
 
+    console.log('days---', days, hours, minutes, seconds)
     setCountdown({
       days,
       hours,
@@ -61,7 +62,7 @@ export default function StakeEndsCountdown({ endTime, onCompleted }) {
   }, [endTime]);
 
   return (
-    <div>
+    <div style={{ fontSize: '48px' }}>
       {countdown.days * 1 > 0 ? `${countdown.days} Days ` : ''}{countdown.hours}:{countdown.minutes}:{countdown.seconds}
     </div>
   );

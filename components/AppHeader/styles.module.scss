@@ -3,10 +3,10 @@
 .container {
   display: flex;
   justify-content: space-between;
-  padding: 25px 24px 0;
+  padding: 30px 36px 0;
 
   .logo {
-    width: 32px;
+    width: 46px;
   }
 
   .right {
@@ -16,9 +16,9 @@
     .account {
       background: var(--background-color);
       margin-right: 20px;
-      padding: 0 24px;
-      height: 42px;
-      border-radius: 21px;
+      padding: 0 32px;
+      height: 46px;
+      border-radius: 23px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -27,8 +27,8 @@
 
     .menu {
       background: var(--background-color);
-      height: 42px;
-      width: 42px;
+      height: 46px;
+      width: 46px;
       border-radius: 100%;
       display: flex;
       align-items: center;
@@ -41,7 +41,7 @@
 .accountPanel {
   @include overlay;
   .content {
-    padding: 24px;
+    padding: 30px 36px;
     position: absolute;
     top: 85px;
     right: 54px;
@@ -52,7 +52,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
 
     .title {
@@ -64,18 +64,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 9px;
-      min-width: 300px;
+      padding: 20px 13px;
+      min-width: 348px;
       @include card;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
       .logo {
-        margin-right: 10px;
-        width: 25px;
-        height: 25px;
+        margin-right: 14px;
+        width: 35px;
+        height: 35px;
       }
 
       .main {
         flex: 1;
+        .amount {
+          color: var(--second-text-color);
+          font-size: 16px;
+        }
       }
 
       .usd {
@@ -86,15 +90,14 @@
     .disBtn {
       display: flex;
       justify-content: center;
-      margin: 20px auto 0;
-      font-size: 13px;
+      margin: 28px auto 0;
       background: #ffffff;
       border: 1px solid #ff0000;
       color: #f90606;
-      box-shadow: 0px 4px 7px 0px rgba(251, 194, 194, 0.5);
-      border-radius: 4px;
-      padding: 11px 0;
-      width: 180px;
+      box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
+      border-radius: 6px;
+      padding: 16px 0;
+      width: 215px;
       cursor: pointer;
     }
   }
@@ -103,8 +106,8 @@
 .menuPanel {
   @include overlay;
   .content {
-    padding: 24px;
-    width: 300px;
+    padding: 32px;
+    width: 418px;
     position: absolute;
     top: 85px;
     right: 54px;
@@ -115,10 +118,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 24px;
 
       span {
-        margin-right: 6px;
+        margin-right: 9px;
       }
 
       .btns {
@@ -143,9 +146,9 @@
 
 .network {
   color: #fff;
-  padding: 6px 0 2px;
-  font-size: 12px;
+  padding: 10px 0;
   background: var(--red-color);
+  font-size: 16px;
   margin-top: 10px;
   text-align: center;
 }

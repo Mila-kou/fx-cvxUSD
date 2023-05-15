@@ -3,7 +3,7 @@
   transform: rotate(180deg);
 }
 .inputWrapper {
-  margin: 16px auto;
+  margin: 20px auto;
   width: 100%;
   position: relative;
   &.error {
@@ -25,7 +25,7 @@
     background: rgba(0, 0, 0, 0.4);
     border: none;
     outline: none;
-    padding-left: 20px;
+    padding-left: 22px;
     box-sizing: border-box;
     &::placeholder {
       color: #434242;
@@ -34,8 +34,8 @@
 
   .max {
     position: absolute;
-    right: 14px;
-    top: 14px;
+    right: 16px;
+    top: 16px;
     color: $blue;
     text-decoration: underline;
   }
@@ -44,7 +44,7 @@
   }
   .moreInfoItem {
     // color: $blue;
-    font-size: 14px;
+    font-size: 16px;
     margin: 4px 0;
   }
 

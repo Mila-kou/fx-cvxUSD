@@ -3,21 +3,21 @@
 .container {
   @include card;
   background: #fff;
-  padding: 16px;
-  font-size: 11px;
-  line-height: 14px;
+  padding: 30px 20px;
+  font-size: 16px;
+  line-height: 20px;
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     svg {
-      width: 10px;
+      width: 14px;
     }
     cursor: pointer;
   }
 
   .content {
-    margin-top: 10px;
+    margin-top: 16px;
     color: var(--second-text-color);
 
     span {
@@ -25,7 +25,7 @@
     }
 
     .result {
-      margin-top: 10px;
+      margin-top: 16px;
       .green {
         color: var(--green-color);
       }
