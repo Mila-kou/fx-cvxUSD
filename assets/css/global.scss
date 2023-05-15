@@ -21,6 +21,9 @@ p,
 span,
 a {
   font-size: 18px;
+  @media (max-width: 474px) {
+    font-size: 16px;
+  }
 }
 
 a {
