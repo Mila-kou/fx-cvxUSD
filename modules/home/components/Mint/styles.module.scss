@@ -2,7 +2,7 @@
 
 .container {
   position: relative;
-  min-width: 430px;
+  width: 408px;
   .arrow {
     width: 10px;
     margin: 10px auto;
@@ -16,5 +16,11 @@
     @include colorful-button;
     width: 100%;
     margin-top: 16px;
+  }
+}
+
+@media (max-width: 474px) {
+  .container {
+    width: calc(100vw - 60px) !important;
   }
 }

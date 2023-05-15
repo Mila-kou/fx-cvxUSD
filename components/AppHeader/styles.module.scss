@@ -47,6 +47,7 @@
     right: 54px;
     border-radius: 8px;
     background: var(--panel-background-color);
+    max-width: 100vw;
 
     .header {
       display: flex;
@@ -109,6 +110,7 @@
     padding: 32px;
     width: 418px;
     position: absolute;
+    max-width: 100vw;
     top: 85px;
     right: 54px;
     border-radius: 8px;
@@ -151,4 +153,17 @@
   font-size: 16px;
   margin-top: 10px;
   text-align: center;
+}
+
+@media (max-width: 474px) {
+  .accountPanel {
+    .content {
+      right: 0;
+    }
+  }
+  .menuPanel {
+    .content {
+      right: 0;
+    }
+  }
 }

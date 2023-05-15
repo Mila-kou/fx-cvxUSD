@@ -3,7 +3,7 @@
 $radius: 10px;
 
 .container {
-  padding: 30px 30px 10px;
+  padding: 30px 24px 10px;
   @include card;
   border-radius: $radius;
   h2 {
@@ -36,7 +36,7 @@ $radius: 10px;
 
     .item {
       flex: 1;
-      min-width: 368px;
+      width: 408px;
       .card {
         @include card;
         background: #fff;
@@ -125,7 +125,15 @@ $radius: 10px;
   }
 }
 
-@media (max-width: 820px) {
+@media (min-width: 1280px) and (max-width: 1420px) {
+  .wrap {
+    .item {
+      width: 348px !important;
+    }
+  }
+}
+
+@media (max-width: 1280px) {
   .modeContent {
     flex-direction: column;
     row-gap: 10px;
@@ -133,5 +141,16 @@ $radius: 10px;
   .wrap {
     flex-direction: column;
     row-gap: 23px;
+    .item {
+      width: 408px !important;
+    }
+  }
+}
+
+@media (max-width: 474px) {
+  .wrap {
+    .item {
+      width: calc(100vw - 60px) !important;
+    }
   }
 }
