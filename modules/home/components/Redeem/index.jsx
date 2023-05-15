@@ -8,11 +8,13 @@ import { cBN, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
+import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 
 export default function Redeem() {
   const [selected, setSelected] = useState(0)
+  const { tokens } = useGlobal()
   const [fee, setFee] = useState(0.01)
   const [feeUsd, setFeeUsd] = useState(10)
   const [detail, setDetail] = useState({
@@ -27,18 +29,19 @@ export default function Redeem() {
     <div className={styles.container}>
       <BalanceInput
         placeholder="0"
-        balance="122.34"
+        balance={fb4(tokens.fETH.balance, false)}
         symbol="fETH"
         icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
         color={isF ? 'blue' : undefined}
         type={isF ? '' : 'select'}
         className={styles.inputItem}
-        usd="1,10"
+        usd={tokens.fETH.usd}
+        maxAmount={tokens.fETH.balance}
         onSelected={() => setSelected(0)}
       />
       <BalanceInput
         placeholder="0"
-        balance="36.16"
+        balance={fb4(tokens.xETH.balance, false)}
         symbol="xETH"
         tip="Bonus+"
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
@@ -46,7 +49,8 @@ export default function Redeem() {
         selectColor="red"
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd="1,10"
+        usd={tokens.xETH.usd}
+        maxAmount={tokens.xETH.balance}
         onSelected={() => setSelected(1)}
       />
       <div className={styles.arrow}>

@@ -150,7 +150,7 @@ export const useToken = (address, contractType, lpInfo) => {
     } else {
       setToken({ balance: 0, allowance: 0 })
     }
-  }, [web3, blockNumber, isAllReady, address])
+  }, [web3, blockNumber, _currentAccount, isAllReady, address])
 
   return token
 }

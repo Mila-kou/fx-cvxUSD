@@ -8,6 +8,7 @@ import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
+import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
@@ -15,6 +16,7 @@ import usefxETH from '../../controller/usefxETH'
 export default function Mint() {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
+  const { tokens } = useGlobal()
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
   const [ETHtAmount, setETHtAmount] = useState(0)
@@ -32,8 +34,8 @@ export default function Mint() {
     marketContract,
     treasuryContract,
     _mintFETHFee,
-    _mintXETHFee
-  } = usefxETH();
+    _mintXETHFee,
+  } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -61,7 +63,9 @@ export default function Mint() {
   const handleGetMinAmount = async () => {
     console.log('ETHtAmount----', ETHtAmount)
     try {
-      const minout = await marketContract.methods.mintFToken(ETHtAmount, _currentAccount, 0).call()
+      const minout = await marketContract.methods
+        .mintFToken(ETHtAmount, _currentAccount, 0)
+        .call()
       console.log('minout---', minout)
     } catch (e) {
       console.log(e)
@@ -72,7 +76,9 @@ export default function Mint() {
   const handleGetAllMinAmount = async () => {
     console.log('ETHtAmount----', ETHtAmount)
     try {
-      const minout = await marketContract.methods.mint(ETHtAmount, _currentAccount, 0, 0).call()
+      const minout = await marketContract.methods
+        .mint(ETHtAmount, _currentAccount, 0, 0)
+        .call()
       console.log('minout---', minout)
     } catch (e) {
       console.log(e)
@@ -90,8 +96,9 @@ export default function Mint() {
       <BalanceInput
         placeholder="0"
         symbol="ETH"
-        balance="124.3"
-        usd="1800.24"
+        balance={fb4(tokens.ETH.balance, false)}
+        usd={tokens.ETH.usd}
+        maxAmount={tokens.ETH.balance}
         onChange={hanldeETHAmountChanged}
       />
       <div className={styles.arrow}>
@@ -121,7 +128,6 @@ export default function Mint() {
         type={isX ? '' : 'select'}
         className={styles.inputItem}
         usd="1,10"
-
         onSelected={() => setSelected(1)}
       />
 

@@ -22,6 +22,7 @@ const usefxETH = () => {
   }
 
   const pageData = useMemo(() => {
+    try {
     const _fnav = checkNotZoroNumOption(fxInfo.baseInfo.fETHNav, fb4(fxInfo.baseInfo.fETHNav))
     const _xnav = checkNotZoroNumOption(fxInfo.baseInfo.xETHNav, fb4(fxInfo.baseInfo.xETHNav))
     const _fETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.fETHTotalSupply, fb4(fxInfo.baseInfo.fETHTotalSupply))
@@ -45,6 +46,9 @@ const usefxETH = () => {
       _mintXETHFee,
       _redeemFETHFee, _redeemXETHFee
     }
+  } catch (error) {
+    
+  }
   }, [fxInfo])
   return {
     ...fxInfo,

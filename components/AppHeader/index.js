@@ -23,45 +23,41 @@ export default function AppHeader() {
     toggleTheme,
     showSystemStatistics,
     toggleShowSystemStatistics,
+    tokens,
   } = useGlobal()
-  const { web3, connect, disconnect, currentAccount, isRightChain } = useWeb3()
+  const { connect, disconnect, currentAccount, isRightChain } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
 
-  const [ethBalance, setEthBalance] = useState(0)
+  const assets = useMemo(
+    () => [
+      {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        amount: fb4(tokens.ETH.balance, false),
+        icon: '/tokens/crypto-icons-stack.svg#eth',
+        usd: tokens.ETH.usd,
+      },
+      {
+        name: 'Fractional ETH',
+        symbol: 'fETH',
+        amount: fb4(tokens.fETH.balance, false),
+        icon: '/images/f-logo.svg',
+        usd: 0,
+      },
+      {
+        name: 'Leveraged ETH',
+        symbol: 'xETH',
+        amount: fb4(tokens.xETH.balance, false),
+        icon: '/images/x-logo.svg',
+        usd: 0,
+      },
+    ],
+    [tokens]
+  )
 
   const showSwitch = useMemo(() => route === '/home', [route])
-
-  useEffect(() => {
-    if (currentAccount) {
-      web3.eth.getBalance(currentAccount).then((res) => {
-        setEthBalance(fb4(res, false))
-      })
-    }
-  }, [currentAccount, showAccountPanel])
-
-  const assets = [
-    {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      amount: ethBalance,
-      usd: '6480.98',
-      icon: '/tokens/crypto-icons-stack.svg#eth',
-    },
-    // {
-    //   name: 'Fractional ETH',
-    //   symbol: 'fETH',
-    //   amount: '2.9',
-    //   usd: '4480.98',
-    // },
-    // {
-    //   name: 'Leveraged ETH',
-    //   symbol: 'xETH',
-    //   amount: '1.6',
-    //   usd: '1480.98',
-    // },
-  ]
 
   const refMenu = useRef(null)
   const refMenuPanel = useRef(null)
@@ -136,7 +132,9 @@ export default function AppHeader() {
                       {item.amount} {item.symbol}
                     </div>
                   </div>
-                  {/* <div className={styles.usd}>~ ${item.usd}</div> */}
+                  <div className={styles.usd}>
+                    {item.usd ? `~${item.usd}` : '-'}
+                  </div>
                 </div>
               ))}
               <div className={styles.disBtn} onClick={handleDisconnect}>
