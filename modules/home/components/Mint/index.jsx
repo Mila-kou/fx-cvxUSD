@@ -16,15 +16,38 @@ export default function Mint() {
   const [selected, setSelected] = useState(0)
   const [fee, setFee] = useState(0.01)
   const [feeUsd, setFeeUsd] = useState(10)
+  const [ETHtAmount, setETHtAmount] = useState(0)
+  const [FETHtAmount, setFETHtAmount] = useState(0)
+  const [XETHtAmount, setXETHtAmount] = useState(0)
   const [detail, setDetail] = useState({
     bonus: 75,
     bonusRatio: 2.1,
     fETH: 2,
     xETH: 3,
   })
-  const PageData = usefxETH();
+  const {
+    fETHContract,
+    xETHContract,
+    marketContract,
+    treasuryContract
+  } = usefxETH();
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
+
+  const hanldeETHAmountChanged = (v) => {
+    setETHtAmount(v)
+  }
+  const hanldeFETHAmountChanged = (v) => {
+    setFETHtAmount(v)
+  }
+
+  const hanldeXETHAmountChanged = (v) => {
+    setXETHtAmount(v)
+  }
+
+  const handleGetMinAmount = () => {
+
+  }
 
   return (
     <div className={styles.container}>
@@ -33,6 +56,7 @@ export default function Mint() {
         symbol="ETH"
         balance="124.3"
         usd="1800.24"
+        onChange={hanldeETHAmountChanged}
       />
       <div className={styles.arrow}>
         <DownOutlined />
@@ -47,6 +71,7 @@ export default function Mint() {
         type={isF ? '' : 'select'}
         className={styles.inputItem}
         usd="1,10"
+        onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
       <BalanceInput
@@ -60,6 +85,7 @@ export default function Mint() {
         type={isX ? '' : 'select'}
         className={styles.inputItem}
         usd="1,10"
+
         onSelected={() => setSelected(1)}
       />
 
