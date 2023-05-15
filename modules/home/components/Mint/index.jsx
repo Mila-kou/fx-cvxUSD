@@ -4,7 +4,7 @@ import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -36,7 +36,7 @@ export default function Mint() {
   } = usefxETH();
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
-  
+
   const [fee, feeUsd] = useMemo(() => {
     const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee)
     const _feeUsd = cBN(_fee).multipliedBy(1000)
@@ -44,8 +44,11 @@ export default function Mint() {
   }, [ETHtAmount])
 
   const hanldeETHAmountChanged = (v) => {
-    console.log('vv------', v.toString(10))
-    setETHtAmount(v.toString(10))
+    console.log(v)
+    if (checkNotZoroNum(v)) {
+      console.log('vv------', v.toString(10))
+      setETHtAmount(v.toString(10))
+    }
   }
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -66,8 +69,20 @@ export default function Mint() {
     }
   }
 
+  const handleGetAllMinAmount = async () => {
+    console.log('ETHtAmount----', ETHtAmount)
+    try {
+      const minout = await marketContract.methods.mint(ETHtAmount, _currentAccount, 0, 0).call()
+      console.log('minout---', minout)
+    } catch (e) {
+      console.log(e)
+      return 0
+    }
+  }
+
   useEffect(() => {
-    handleGetMinAmount()
+    // handleGetMinAmount()
+    handleGetAllMinAmount()
   }, [selected, ETHtAmount])
 
   return (
