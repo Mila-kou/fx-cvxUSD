@@ -10,9 +10,11 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
+import usefxETH from '../../controller/usefxETH'
 
 export default function DetailCollapse({ title, detail }) {
   const [showContent, { toggle }] = useToggle()
+  const PageData = usefxETH()
   return (
     <div className={styles.container}>
       <div className={styles.header} onClick={toggle}>
@@ -22,14 +24,14 @@ export default function DetailCollapse({ title, detail }) {
 
       {showContent ? (
         <div className={styles.content}>
-          <p>
+          {/* <p>
             fETH Collecteral Ratio will be: <span>220%</span>
+          </p> */}
+          <p>
+            fETH Net Asset Value: <span>${PageData.fnav}</span>
           </p>
           <p>
-            fETH Net Asset Value: <span>$1.01</span>
-          </p>
-          <p>
-            xETH Net Asset Value: <span>$1.01</span>
+            xETH Net Asset Value: <span>${PageData.xnav}</span>
           </p>
 
           <div className={styles.result}>

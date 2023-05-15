@@ -13,9 +13,10 @@ import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 
 export default function Mint() {
+  const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
-  const [fee, setFee] = useState(0.01)
-  const [feeUsd, setFeeUsd] = useState(10)
+  // const [fee, setFee] = useState(0.01)
+  // const [feeUsd, setFeeUsd] = useState(10)
   const [ETHtAmount, setETHtAmount] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
@@ -29,25 +30,45 @@ export default function Mint() {
     fETHContract,
     xETHContract,
     marketContract,
-    treasuryContract
+    treasuryContract,
+    _mintFETHFee,
+    _mintXETHFee
   } = usefxETH();
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
+  
+  const [fee, feeUsd] = useMemo(() => {
+    const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee)
+    const _feeUsd = cBN(_fee).multipliedBy(1000)
+    return [fb4(_fee), fb4(_feeUsd)]
+  }, [ETHtAmount])
 
   const hanldeETHAmountChanged = (v) => {
-    setETHtAmount(v)
+    console.log('vv------', v.toString(10))
+    setETHtAmount(v.toString(10))
   }
   const hanldeFETHAmountChanged = (v) => {
-    setFETHtAmount(v)
+    setFETHtAmount(v.toString(10))
   }
 
   const hanldeXETHAmountChanged = (v) => {
-    setXETHtAmount(v)
+    setXETHtAmount(v.toString(10))
   }
 
-  const handleGetMinAmount = () => {
-
+  const handleGetMinAmount = async () => {
+    console.log('ETHtAmount----', ETHtAmount)
+    try {
+      const minout = await marketContract.methods.mintFToken(ETHtAmount, _currentAccount, 0).call()
+      console.log('minout---', minout)
+    } catch (e) {
+      console.log(e)
+      return 0
+    }
   }
+
+  useEffect(() => {
+    handleGetMinAmount()
+  }, [selected, ETHtAmount])
 
   return (
     <div className={styles.container}>
