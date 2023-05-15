@@ -249,8 +249,7 @@ export default function IdoPage() {
 
   return (
     <>
-      {!!([0, 1].indexOf(PageData.saleStatus) > -1 || !PageData.saleStatus) && <InitialRender />}
-      {!!(PageData.saleStatus == 2) && (
+      {!(PageData.saleStatus == 2) && (
         <div className={styles.container}>
           <div className={styles.card}>
             <p className={styles.title}>f(x) Auction</p>

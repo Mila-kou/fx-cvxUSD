@@ -54,10 +54,18 @@
   }
 }
 
-@media (max-width: 780px) {
+@media (max-width: 1055px) {
   .container {
     margin-top: 50px;
     flex-direction: column;
     row-gap: 32px;
+  }
+}
+
+@media (max-width: 506px) {
+  .card {
+    height: auto !important;
+    min-width: calc(100vw - 20px) !important;
+    padding: 20px 28px !important;
   }
 }
