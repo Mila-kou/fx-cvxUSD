@@ -4,13 +4,13 @@
 }
 
 .inputContent {
-  padding: 10px 14px;
-  box-shadow: 0px 4px 7px 0px var(--box-shadow-color);
+  padding: 14px 18px;
+  box-shadow: 0px 5px 10px 1px var(--box-shadow-color);
   display: flex;
   align-items: center;
   border-radius: 6px;
   justify-content: space-between;
-  column-gap: 10px;
+  column-gap: 14px;
   background: rgba(255, 255, 255, 0.5);
 
   &[data-color] {
@@ -23,16 +23,16 @@
   }
   &[data-color='blue'] {
     background: linear-gradient(0deg, #1f14ed 0%, #165ddf 100%);
-    box-shadow: 0px 4px 7px 0px rgba(122, 84, 251, 0.5);
+    box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.5);
   }
   &[data-color='red'] {
     background: linear-gradient(0deg, #ff086b 0%, #f05a29 100%);
-    box-shadow: 0px 4px 7px 0px rgba(247, 130, 130, 0.5);
+    box-shadow: 0px 5px 10px 1px rgba(247, 130, 130, 0.5);
   }
 
   .left {
     flex-shrink: 0;
-    width: 25px;
+    width: 35px;
   }
 
   .symbolWrap {
@@ -40,26 +40,20 @@
     flex: 1;
     min-width: 100px;
     .symbol {
-      font-size: 13px;
-      .icon {
-        width: 10px;
-        margin-right: 4px;
-        margin-top: -2px;
-      }
       .tip {
         color: var(--yellow-color);
-        font-size: 11px;
+        font-size: 16px;
       }
     }
     .usd {
-      font-size: 11px;
+      font-size: 16px;
       color: var(--second-text-color);
     }
   }
 
   .right {
     .balanceWrap {
-      font-size: 11px;
+      font-size: 16px;
       text-align: end;
       color: var(--second-text-color);
       .max {
@@ -68,7 +62,7 @@
       }
     }
     .select {
-      font-size: 17px;
+      font-size: 24px;
       cursor: pointer;
       color: var(--blue-color);
       &[data-color='red'] {
@@ -78,7 +72,7 @@
   }
 
   input {
-    height: 20px;
+    height: 24px;
     width: 100%;
     border: none;
     outline: none;

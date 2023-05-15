@@ -62,7 +62,7 @@ export default function StakeEndsCountdown({ endTime, onCompleted }) {
   }, [endTime]);
 
   return (
-    <div>
+    <div style={{ fontSize: '48px' }}>
       {countdown.days * 1 > 0 ? `${countdown.days} Days ` : ''}{countdown.hours}:{countdown.minutes}:{countdown.seconds}
     </div>
   );

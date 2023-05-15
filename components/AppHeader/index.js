@@ -132,7 +132,7 @@ export default function AppHeader() {
                   </div>
                   <div className={styles.main}>
                     <div>{item.name}</div>
-                    <div>
+                    <div className={styles.amount}>
                       {item.amount} {item.symbol}
                     </div>
                   </div>

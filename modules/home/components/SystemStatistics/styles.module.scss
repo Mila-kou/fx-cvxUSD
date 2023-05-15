@@ -3,14 +3,14 @@
 $radius: 10px;
 
 .container {
-  padding: 20px 24px 8px;
+  padding: 30px 30px 10px;
   @include card;
   border-radius: $radius;
   h2 {
     font-size: bold;
-    font-size: 17px;
+    font-size: 24px;
     span {
-      margin-right: 8px;
+      margin-right: 10px;
     }
   }
 
@@ -32,30 +32,30 @@ $radius: 10px;
     display: flex;
     justify-content: center;
     position: relative;
-    column-gap: 23px;
+    column-gap: 32px;
 
     .item {
       flex: 1;
-      min-width: 308px;
+      min-width: 368px;
       .card {
         @include card;
         background: #fff;
-        padding: 16px 16px 10px;
+        padding: 22px 16px 10px;
         border-radius: $radius;
         .title {
-          font-size: 10px;
+          font-size: 14px;
         }
         .nums {
-          margin-top: 10px;
+          margin-top: 14px;
           display: flex;
           justify-content: space-between;
           align-items: flex-end;
-          font-size: 17px;
+          font-size: 24px;
           b {
             margin: 0;
             color: var(--blue-color);
-            font-size: 26px;
-            line-height: 26px;
+            font-size: 36px;
+            line-height: 36px;
             font-weight: 400;
           }
         }
@@ -70,10 +70,10 @@ $radius: 10px;
           }
           span {
             color: red;
-            font-size: 17px;
+            font-size: 24px;
           }
           p:last-child {
-            font-size: 10px;
+            font-size: 14px;
           }
         }
       }
@@ -81,8 +81,8 @@ $radius: 10px;
       .chart {
         @include card;
         border-radius: $radius;
-        margin-top: 18px;
-        padding: 16px;
+        margin-top: 24px;
+        padding: 20px 16px;
         &[data-color='blue'] {
           background: var(--blue-color);
         }
@@ -92,8 +92,8 @@ $radius: 10px;
       }
 
       .details {
-        margin-top: 16px;
-        font-size: 9px;
+        margin-top: 32px;
+        font-size: 12px;
         &[data-color='blue'] {
           p {
             color: var(--blue-color);
@@ -119,9 +119,9 @@ $radius: 10px;
 
   .updateAt {
     color: var(--second-text-color);
-    font-size: 9px;
+    font-size: 12px;
     text-align: end;
-    margin-top: 10px;
+    margin-top: 16px;
   }
 }
 

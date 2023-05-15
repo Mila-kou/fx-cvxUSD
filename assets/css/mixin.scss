@@ -18,12 +18,12 @@ $blockBgLight: #fff;
 
 @mixin card {
   background: var(--background-color);
-  box-shadow: 0px 4px 7px 0px var(--box-shadow-color);
-  border-radius: 4px;
+  box-shadow: 0px 5px 10px 1px var(--box-shadow-color);
+  border-radius: 6px;
 }
 
 @mixin colorful-button {
-  height: 43px;
+  height: 60px;
   background: linear-gradient(
     90deg,
     #165dff 0%,
@@ -31,14 +31,14 @@ $blockBgLight: #fff;
     #1f14ed 1%,
     #f05a29 100%
   );
-  box-shadow: 0px 4px 7px 0px rgba(122, 84, 251, 0.5);
-  border-radius: 4px;
+  box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.5);
+  border-radius: 6px;
   border: none;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
-  font-size: 16px;
+  font-size: 24px;
   cursor: pointer;
   &[disabled] {
     opacity: 0.6;
@@ -61,22 +61,22 @@ $blockBgLight: #fff;
     background: #ffffff;
     border-radius: 4px;
     color: var(--primary-color);
-    box-shadow: 0px 4px 4px 0px rgba(183, 169, 235, 0.5);
+    box-shadow: 0px 5px 10px 1px rgba(183, 169, 235, 0.5);
   }
 }
 
 @mixin tag {
   display: inline-block;
   padding: 4px 8px;
-  font-size: 10px;
+  font-size: 14px;
   background: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0px 4px 4px 0px rgba(183, 169, 235, 0.5);
+  border-radius: 5px;
+  box-shadow: 0px 5px 5px 0px rgba(183, 169, 235, 0.5);
 }
 
 @mixin max-button {
   color: var(--primary-color);
   text-decoration: underline;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
 }
