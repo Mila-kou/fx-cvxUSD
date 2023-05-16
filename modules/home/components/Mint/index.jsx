@@ -35,15 +35,17 @@ export default function Mint() {
     treasuryContract,
     _mintFETHFee,
     _mintXETHFee,
+    ethPrice
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   const [fee, feeUsd] = useMemo(() => {
     const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee)
-    const _feeUsd = cBN(_fee).multipliedBy(1000)
+    const _feeUsd = cBN(_fee).multipliedBy(1 || 1)
+    console.log('ETHtAmount---_newETHPrice--', _fee.toString(10), _feeUsd.toString(10), ethPrice)
     return [fb4(_fee), fb4(_feeUsd)]
-  }, [ETHtAmount])
+  }, [ETHtAmount, ethPrice])
 
   const hanldeETHAmountChanged = (v) => {
     console.log(v)

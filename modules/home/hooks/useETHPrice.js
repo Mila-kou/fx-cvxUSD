@@ -12,9 +12,6 @@ const useETHPrice = () => {
     const { _currentAccount, web3, blockNumber } = useWeb3()
     const { erc20Contract } = useContract()
     const multiCallsV2 = useMutiCallV2()
-    const { contract: fETHContract } = useFETH()
-    const { contract: xETHContract } = useXETH()
-    const { contract: marketContract } = useFX_Market()
     const { contract: treasuryContract } = useFX_Treasury()
 
     const fetchInfo = useCallback(async () => {
@@ -22,21 +19,23 @@ const useETHPrice = () => {
         const { twapCache, cacheTwap, beta, lastPermissionedPrice } = treasuryContract.methods
         try {
             const apiCalls = [
-                cacheTwap(),
+                // cacheTwap(),
                 twapCache(),
                 beta(),
                 lastPermissionedPrice()
             ]
-            const [, twapCacheRes, betaRes, lastPermissionedPriceRes] =
+            const [twapCacheRes, betaRes, lastPermissionedPriceRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
                 'ETHPrceBaseInfo ===>',
-                twapCacheRes
+                twapCacheRes,
+                lastPermissionedPriceRes
             )
 
             return {
-                twapCacheRes
+                twapCacheRes,
+                lastPermissionedPriceRes
             }
         } catch (error) {
             console.log('baseInfoError==>', error)
@@ -52,12 +51,12 @@ const useETHPrice = () => {
     }
 
     const [
-        { data: baseInfo, refetch: refetchBaseInfo },
+        { data: ETHPrceInfo, refetch: refetchBaseInfo },
         // { data: userInfo, refetch: refetchUserInfo },
     ] = useQueries({
         queries: [
             {
-                queryKey: ['baseInfo'],
+                queryKey: ['ETHPrceInfo'],
                 queryFn: () => fetchInfo(),
                 initialData: {},
             },
@@ -75,7 +74,7 @@ const useETHPrice = () => {
     }, [_currentAccount, blockNumber])
 
     return {
-        ...baseInfo,
+        ...ETHPrceInfo,
     }
 }
 export default useETHPrice

@@ -20,6 +20,7 @@ const useInfo = () => {
     const fetchBaseInfo = useCallback(async () => {
         const { nav: fETHNavFn, totalSupply: fETHTotalSupplyFn } = fETHContract.methods
         const { nav: xETHNavFn, totalSupply: xETHTotalSupplyFn } = xETHContract.methods
+        const { twapCache, cacheTwap, beta, lastPermissionedPrice } = treasuryContract.methods
         const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio } = marketContract.methods
         try {
             const apiCalls = [
@@ -31,21 +32,23 @@ const useInfo = () => {
                 fTokenMintFeeRatio(),
                 fTokenRedeemFeeRatio(),
                 xTokenMintFeeRatio(),
-                xTokenRedeemFeeRatio()
+                xTokenRedeemFeeRatio(),
+
+                beta(),
             ]
             const [fETHNav, fETHTotalSupply, xETHNav, xETHTotalSupply,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes] =
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
                 'BaseInfo ===>',
                 fETHNav, fETHTotalSupply, xETHNav, xETHTotalSupply,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
             )
 
             return {
                 fETHNav, fETHTotalSupply, xETHNav, xETHTotalSupply,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
             }
         } catch (error) {
             console.log('baseInfoError==>', error)
