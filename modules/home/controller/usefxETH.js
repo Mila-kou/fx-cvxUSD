@@ -2,9 +2,11 @@ import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import useInfo from '../hooks/useInfo'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useFETH, useXETH, useFX_Market, useFX_Treasury } from '@/hooks/useContracts'
+import useETHPrice from '../hooks/useETHPrice'
 
 const usefxETH = () => {
   const fxInfo = useInfo()
+  const ethPrice = useETHPrice()
   const { contract: fETHContract } = useFETH
   const { contract: xETHContract } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -27,11 +29,11 @@ const usefxETH = () => {
     const _xnav = checkNotZoroNumOption(fxInfo.baseInfo.xETHNav, fb4(fxInfo.baseInfo.xETHNav))
     const _fETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.fETHTotalSupply, fb4(fxInfo.baseInfo.fETHTotalSupply))
     const _xETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.xETHTotalSupply, fb4(fxInfo.baseInfo.xETHTotalSupply))
-    
-    const _mintFETHFee = (checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes.extraFeeRatio)) ? cBN(fxInfo.baseInfo.fTokenMintFeeRatioRes.defaultFeeRatio).plus(fxInfo.baseInfo.fTokenMintFeeRatioRes.extraFeeRatio).toString(10) : 0
-    const _mintXETHFee = (checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes.extraFeeRatio)) ? cBN(fxInfo.baseInfo.xTokenMintFeeRatioRes.defaultFeeRatio).plus(fxInfo.baseInfo.xTokenMintFeeRatioRes.extraFeeRatio).toString(10) : 0
-    const _redeemFETHFee = (checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes.extraFeeRatio)) ? cBN(fxInfo.baseInfo.fTokenRedeemFeeRatioRes.defaultFeeRatio).plus(fxInfo.baseInfo.fTokenRedeemFeeRatioRes.extraFeeRatio).toString(10) : 0
-    const _redeemXETHFee = (checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes.extraFeeRatio)) ? cBN(fxInfo.baseInfo.xTokenRedeemFeeRatioRes.defaultFeeRatio).plus(fxInfo.baseInfo.xTokenRedeemFeeRatioRes.extraFeeRatio).toString(10) : 0
+
+    const _mintFETHFee = (checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio).toString(10) : 0
+    const _mintXETHFee = (checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio).toString(10) : 0
+    const _redeemFETHFee = (checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio).toString(10) : 0
+    const _redeemXETHFee = (checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio).toString(10) : 0
 
     console.log('_fnav-_xnav-_fETHTotalSupply-_xETHTotalSupply-', fxInfo.baseInfo, _fnav, _xnav, _fETHTotalSupply, _xETHTotalSupply)
 
