@@ -25,12 +25,12 @@ const useFxCommon = () => {
         fNav: '',//单个fETH的NAV
         n_x: '',//xETH的数量
         xNav: '',//单个xETH的NAV        
-        ρ_f: '',//fETH的比例 RHO
-        ρ_x: '',//xETH的比例
+        p_f: '',//fETH的比例 RHO
+        p_x: '',//xETH的比例
         r: '', //区间收益率,
 
         λ_f: '', //激励比例λ_f,λ_f > 0合约设置
-        Max_n_s: '', //最大追加抵押品占比Δn_s/n=(ρ-ρ_s)/(ρ_s+λ_f)
+        Max_n_s: '', //最大追加抵押品占比Δn_s/n=(p-p_s)/(p_s+λ_f)
         r_f1: '', //fETH付的稳定费率为
     })
 
@@ -44,8 +44,8 @@ const useFxCommon = () => {
         fNav: '',//单个fETH的NAV
         n_x: '',//xETH的数量
         xNav: '',//单个xETH的NAV        
-        ρ_f: '',//fETH的比例 RHO
-        ρ_x: '',//xETH的比例
+        p_f: '',//fETH的比例 RHO
+        p_x: '',//xETH的比例
         r: '', //区间收益率,
 
         m_n: "",//质押ETH数量
@@ -62,24 +62,46 @@ const useFxCommon = () => {
         const _x = getR(systemInfo)
     }
     const getR = (params) => {
-        return params.s / params.s0 - 1
+        return cBN(params.s).div(params.s0).minus(1).toString(10)
     }
 
     const getFNav = (params) => {
-        return (1 + params.f_ß * params.r) * params.initFNav
+        //(1 + params.f_ß * params.r) * params.initFNav
+        return cBN(1).plus(cBN(params.f_ß).times(params.r)).times(params.initFNav).toString(10)
+    }
+
+    const getN_F = (params) => {
+        //(params.n * params.s0) * params.p_f / params.fNav
+        console.log('params.n,params.s0,params.p_f,params.fNav-', params.n, params.s0, params.p_f, params.fNav)
+        return cBN(params.n).times(params.s0).times(params.p_f).div(params.fNav).toString(10)
     }
 
     const getXNav = (params) => {
-        return (params.s * params.n - params.fNav * params.n_f) / params.n_x
+        //(1 + (1 - params.f_ß) * params.r) * params.initXNav
+        return (1 + (1 - params.f_ß) * params.r) * params.initXNav
+        // return (params.s * params.n - params.fNav * params.n_f) / params.n_x
     }
 
-    const getρ_f = (params) => {
+    const getN_X = (params) => {
+        return (params.n * params.s0) * (1 - params.p_f) / params.xNav
+    }
+
+    const getP_F = (params) => {
+        if (params.fNav == 1) {
+            return 0.5
+        }
+        console.log("params.fNav,params.n_f,params.s,params.n--", params.fNav, params.n_f, params.s, params.n)
         return params.fNav * params.n_f / (params.s * params.n)
     }
 
-    const getρ_x = (params) => {
+    const getp_x = (params) => {
         return params.xNav * params.n_x / (params.s * params.n)
     }
+
+    const get_fETH_Collecteral_Ratio = (params) => {
+        return 1 / params.p_f
+    }
+
 
     const getM_NF = (params) => {
         return params.m_n * params.s * params.m_r / params.fNav
@@ -91,13 +113,13 @@ const useFxCommon = () => {
 
     ///////////////////////// 稳定机制 //////////////////////////////////
     /**
-     * 最大追加抵押品占比Δn_s/n=(ρ-ρ_s)/(ρ_s+λ_f)
+     * 最大追加抵押品占比Δn_s/n=(p-p_s)/(p_s+λ_f)
      * @param {*} params 
      * @returns 
      */
     const getMax_n_s = (params) => {
         const limitCollecteralRatio = 1.3055;
-        const _max_n_s = (params.ρ_f - 1 / limitCollecteralRatio) / (1 / limitCollecteralRatio + params.λ_f)
+        const _max_n_s = (params.p_f - 1 / limitCollecteralRatio) / (1 / limitCollecteralRatio + params.λ_f)
         return _max_n_s
     }
 
@@ -111,12 +133,12 @@ const useFxCommon = () => {
     }
 
     /**
-     * xETH的增发幅度r_x1=(1+λ_f)*(Δn_s/n)/(1-ρ)
+     * xETH的增发幅度r_x1=(1+λ_f)*(Δn_s/n)/(1-p)
      * @param {*} params 
      * @returns 
      */
     const getRx1 = (params) => {
-        const _rx1 = (1 + params.λ_f) * params.Max_n_s / (1 - params.ρ_f)
+        const _rx1 = (1 + params.λ_f) * params.Max_n_s / (1 - params.p_f)
         return _rx1
     }
 
@@ -126,12 +148,12 @@ const useFxCommon = () => {
      * @returns 
      */
     const getRf1 = (params) => {
-        return params.λ_f * (params.m_n / params.n) / params.ρ_f
+        return params.λ_f * (params.m_n / params.n) / params.p_f
     }
 
     //fETH的超额抵押率
     const fETHCollecteralRatio = (params) => {
-        return 1 / params.ρ_f
+        return 1 / params.p_f
     }
 
     const StabilityModePrice = ''
@@ -151,11 +173,14 @@ const useFxCommon = () => {
         getR,
         getFNav,
         getXNav,
-        getρ_f,
-        getρ_x,
+        getN_F,
+        getN_X,
+        getP_F,
+        getp_x,
         getM_NF,
         getM_NX,
         _computeMultiple,
+        get_fETH_Collecteral_Ratio,
 
         getMax_n_s,
         getMax_n_s_eth,

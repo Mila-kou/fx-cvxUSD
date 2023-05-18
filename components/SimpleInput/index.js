@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import cn from 'classnames'
 import styles from './styles.module.scss'
-import { cBN, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import useGlobal from '@/hooks/useGlobal'
 
 export const useClearInput = () => {
@@ -28,7 +28,7 @@ function SimpleInput(props) {
     symbol,
     moreInfo,
     className = '',
-    onChange = () => {},
+    onChange = () => { },
   } = props
   const { theme } = useGlobal()
 
@@ -44,7 +44,7 @@ function SimpleInput(props) {
     }
 
     setVal(value || '')
-    onChange(cBN(value || '').shiftedBy(decimals ?? 18))
+    onChange(checkNotZoroNum(value) ? cBN(value).shiftedBy(decimals ?? 18).toString(10) : '')
   }
 
   const setMax = () => {
