@@ -9,7 +9,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4 } from '@/utils/index'
 import useInfo from './useInfo'
 
-const useModePrice = () => {
+const useFxCommon = () => {
     const { _currentAccount, web3, blockNumber } = useWeb3()
     const { erc20Contract } = useContract()
     const multiCallsV2 = useMutiCallV2()
@@ -155,7 +155,14 @@ const useModePrice = () => {
         getρ_x,
         getM_NF,
         getM_NX,
-        _computeMultiple
+        _computeMultiple,
+
+        getMax_n_s,
+        getMax_n_s_eth,
+        getRx1,
+        getRf1,
+        fETHCollecteralRatio
+
     }
 }
-export default useModePrice
+export default useFxCommon
