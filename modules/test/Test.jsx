@@ -42,10 +42,26 @@ export default function TestPage() {
     fNav_0: '1',
     xNav_0: '1',
   })
+
+  const [newCommonData, setNewCommonData] = useState({
+    f_ß: '0.1',
+    n: '2',
+    s0: '1890.00',
+    s1: '1890',
+    limitRatio: '1.3055',
+    fNav_0: '1',
+    xNav_0: '1',
+  })
   const [systemData, setSystemData] = useState({
     r: "0",
     n_f: ''
   })
+  const [newSystemData, setNewSystemData] = useState({
+    r: "0",
+    n_f: ''
+  })
+  const [mintType, setMintType] = useState('fETH')
+  const [mintETHNum, setMintETHNum] = useState(0)
 
   const handleChange_Beta = (e) => {
     console.log(e)
@@ -95,6 +111,19 @@ export default function TestPage() {
         s1: e
       }
     })
+  }
+
+  /////////////////// Mint /////////////////////  
+  const handleChange_mintETHNum = (e) => {
+    console.log('mintETHNum--', e)
+    const _n = cBN(commonData.n).plus(e).toString(10)
+    setNewCommonData((pre) => {
+      return {
+        ...pre,
+        n: _n
+      }
+    })
+    setMintETHNum(e)
   }
 
   const pageData = useMemo(() => {
@@ -150,6 +179,78 @@ export default function TestPage() {
       fETH_Collecteral_Ratio: _fETH_Collecteral_Ratio
     }
   }, [commonData])
+
+  const mintPageData = useMemo(() => {
+    const _r = getR({
+      s0: commonData.s0,
+      s: commonData.s1
+    })
+
+    const _fNav = pageData.fNav
+    //  getFNav({
+    //   f_ß: commonData.f_ß,
+    //   r: _r,
+    //   initFNav: commonData.fNav_0
+    // })
+
+
+    const _add_n_f = getN_F({
+      n: mintETHNum,
+      s0: commonData.s1,
+      p_f: 1,
+      fNav: _fNav
+    })
+    console.log('_add_n_f---', _add_n_f)
+
+    const _new_p_f = getP_F({
+      fNav: _fNav,
+      n_f: (systemData.n_f * 1 + _add_n_f * 1),
+      s: commonData.s1,
+      n: newCommonData.n,
+    })
+
+    const _xNav = pageData.xNav
+    // getXNav({
+    //   f_ß: commonData.f_ß,
+    //   r: _r,
+    //   initXNav: commonData.xNav_0
+    // })
+
+    const _add_n_x = getN_X({
+      n: mintETHNum,
+      s0: commonData.s1,
+      p_f: 1,
+      xNav: _xNav
+    })
+
+    // const _n_x = getN_X({
+    //   n: commonData.n,
+    //   s0: commonData.s0,
+    //   p_f: _new_p_f,
+    //   xNav: _xNav
+    // })
+
+    const _fETH_Collecteral_Ratio = get_fETH_Collecteral_Ratio({
+      p_f: _new_p_f
+    })
+    setNewSystemData((pre) => {
+      return {
+        ...pre,
+        // n_f: checkNotZoroNum(pre.n_f) ? pre.n_f : _new_p_f,
+        // n_x: checkNotZoroNum(pre.n_x) ? pre.n_x : _n_x
+      }
+    })
+    return {
+      r: _r,
+      p_f: _new_p_f,
+      n_f: mintType == 'fETH' ? (systemData.n_f * 1 + _add_n_f * 1) : systemData.n_f,
+      fNav: _fNav,
+      xNav: _xNav,
+      n_x: mintType == 'xETH' ? (systemData.n_x * 1 + _add_n_x * 1) : systemData.n_x,
+      fETH_Collecteral_Ratio: _fETH_Collecteral_Ratio
+    }
+  }, [mintETHNum, commonData])
+
   return (
     <div>
       <div className={styles.card}>
@@ -212,10 +313,31 @@ export default function TestPage() {
         fETH Collecteral Ratio:{pageData.fETH_Collecteral_Ratio * 100} %<br />
       </div>
 
-      <div>质押状况</div>
-      <div>质押ETH数量(m_n)：</div>
-      <div>铸造比例(m_r)：</div>
-      <div>铸造fETH的数量(m_nf=m_n*s*m_r/f)：</div>
+      <div>Mint</div>
+      <div>
+        MintType: {mintType}<br />
+        质押ETH数量(m_n)：
+        <SimpleInput
+          placeholder=""
+          decimals={0}
+          onChange={handleChange_mintETHNum}
+          className={styles.input}
+        />
+      </div>
+      <div style={{
+        paddingLeft: '20px'
+      }}>
+        Mint后系统状态：<br />
+        fNav: {mintPageData.fNav}<br />
+        n_f/fETH: {mintPageData.n_f}<br />
+        xNav: {mintPageData.xNav}<br />
+        n_x/xETH: {mintPageData.n_x}<br />
+        p_f(RHO):{mintPageData.p_f} <br />
+        r: {mintPageData.r}<br />
+        fETH Collecteral Ratio:{mintPageData.fETH_Collecteral_Ratio * 100} %<br />
+      </div>
+      {/* <div>铸造比例(m_r)：</div>
+      <div>铸造fETH的数量(m_nf=m_n*s*m_r/f)：</div> */}
     </div>
   )
 }
