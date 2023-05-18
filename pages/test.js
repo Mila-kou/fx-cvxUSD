@@ -1,14 +1,14 @@
 import React from 'react'
 import Head from 'next/head'
-import IdoPage from '@/modules/ido/IdoPage'
+import TestPage from '@/modules/test/Test'
 
-export default function Ido() {
+export default function Test() {
   return (
     <React.Fragment>
       <Head>
-        <title>f(x)ETH - IDO</title>
+        <title>f(x)ETH - Test</title>
       </Head>
-      <IdoPage />
+      <TestPage />
     </React.Fragment>
   )
 }

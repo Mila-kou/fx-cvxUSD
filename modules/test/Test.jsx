@@ -2,19 +2,16 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from 'antd'
 import SimpleInput from '@/components/SimpleInput'
 import styles from './styles.module.scss'
-import useIDO from './controller/useIDO'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, fb4 } from '@/utils/index'
-import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
-import { tokensList } from '@/config/ido'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
+import useFxCommon from '../home/hooks/useFxCommon'
 
-const depositTokenInfo = tokensList.depositTokens[0]
 
-export default function IdoPage() {
+export default function TestPage() {
   const PageData = useFxCommon()
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
 
@@ -82,8 +79,8 @@ export default function IdoPage() {
 
   }, [])
   return (
-    <>
-      <p className={styles.card}>
+    <div>
+      <div className={styles.card}>
         fETH Beta系数 ，合约设置 (f_ß)
         <SimpleInput
           placeholder=""
@@ -91,8 +88,8 @@ export default function IdoPage() {
           onChange={handleChange_Beta}
           className={styles.input}
         />
-      </p>
-      <p className={styles.card}>
+      </div>
+      <div className={styles.card}>
         ETH池子数量 (n)
         <SimpleInput
           placeholder=""
@@ -100,34 +97,34 @@ export default function IdoPage() {
           onChange={handleChange_ETHTotalsupply}
           className={styles.input}
         />
-      </p>
-      <p className={styles.card}>
+      </div>
+      <div className={styles.card}>
         初始化ETH价格 (s_0)
         <SimpleInput
           placeholder=""
           onChange={handleChange_InitETHPrice}
           className={styles.input}
         />
-      </p>
-      <p className={styles.card}>
+      </div>
+      <div className={styles.card}>
         触发稳定机制限制  (fETH Collecteral Ratio)
         <SimpleInput
           placeholder=""
           onChange={handleChange_LimitRatio}
           className={styles.input}
         />
-      </p>
+      </div>
 
-      <p>计算：</p>
-      <p>
+      <div>计算：</div>
+      <div>
         当前ETH价格
         <SimpleInput
           placeholder=""
           onChange={handleChange_CurrentETHPrice}
           className={styles.input}
         />
-      </p>
-      <p>
+      </div>
+      <div>
         当前系统状态：<br />
         fNav:<br />
         n_f/fETH:<br />
@@ -136,12 +133,12 @@ export default function IdoPage() {
         ρ_f(RHO):<br />
         r:<br />
         fETH Collecteral Ratio:<br />
-      </p>
+      </div>
 
-      <p>质押状况</p>
-      <p>质押ETH数量(m_n)：</p>
-      <p>铸造比例(m_r)：</p>
-      <p>铸造fETH的数量(m_nf=m_n*s*m_r/f)：</p>
-    </>
+      <div>质押状况</div>
+      <div>质押ETH数量(m_n)：</div>
+      <div>铸造比例(m_r)：</div>
+      <div>铸造fETH的数量(m_nf=m_n*s*m_r/f)：</div>
+    </div>
   )
 }
