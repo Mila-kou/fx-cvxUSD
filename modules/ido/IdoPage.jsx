@@ -29,26 +29,46 @@ export default function IdoPage() {
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
 
+  const _currentTime = Math.floor((+new Date()) / 1000)
+  const newStatus = useMemo(() => {
+    let _newStatus = 0;
+    if (PageData.saleStatus) {
+      _newStatus = PageData.saleStatus
+    } else {
+      console.log('_currentTime---', _currentTime, PageData.baseInfo.saleTime?.publicSaleTime)
+      if (cBN(_currentTime).isLessThanOrEqualTo(PageData.baseInfo.saleTime?.publicSaleTime)) {
+        _newStatus = 1
+      } else if (cBN(_currentTime).isLessThanOrEqualTo(cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(PageData.baseInfo.saleTime?.saleDuration))) {
+        _newStatus = 3
+      } else {
+        _newStatus = 2
+      }
+    }
+    return _newStatus
+  }, [PageData, _currentTime])
+
   const isEndSale = useMemo(() => {
-    if (PageData.saleStatus == 3 ||
+    if (newStatus == 3 ||
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(PageData.baseInfo.totalSoldAmount)) {
       return true
     }
     return false
   }, [PageData])
+  console.log('PageData.baseInfo.saleTime---', PageData.baseInfo.saleTime)
+
 
   const canClaim = useMemo(
     () => {
-      return (PageData.saleStatus == 3 && (PageData.userInfo.myShares * 1) && (!PageData.userInfo?.isClaimed))
+      return (newStatus == 3 && (PageData.userInfo.myShares * 1) && (!PageData.userInfo?.isClaimed))
     }, [PageData]
   )
-  console.log('PageData.saleStatus-', PageData.saleStatus, PageData.userInfo.myShares, PageData.userInfo?.isClaimed, canClaim)
+  console.log('newStatus-', newStatus, PageData.userInfo.myShares, PageData.userInfo?.isClaimed, canClaim)
 
   const canPay = useMemo(
     () =>
       cBN(depositAmount).isGreaterThan(0) &&
       cBN(selectTokenInfo?.balance).isGreaterThanOrEqualTo(depositAmount) &&
-      [2].includes(PageData.saleStatus) &&
+      [2].includes(newStatus) &&
       !cBN(PageData.baseInfo.capAmount).isEqualTo(
         PageData.baseInfo.totalSoldAmount
       ),
@@ -115,7 +135,7 @@ export default function IdoPage() {
   }
 
   const doPay = async () => {
-    if (PageData.saleStatus == 1 && !PageData.userInfo?.isWhitelisted) {
+    if (newStatus == 1 && !PageData.userInfo?.isWhitelisted) {
       setErrMsg('!Account not eligible for invest')
       return
     }
@@ -249,8 +269,8 @@ export default function IdoPage() {
 
   return (
     <>
-      {!!([0, 1].indexOf(PageData.saleStatus) > -1 || !PageData.saleStatus) && <InitialRender />}
-      {!!(PageData.saleStatus == 2) && (
+      {!!([0, 1].indexOf(newStatus) > -1) && <InitialRender />}
+      {!!(newStatus == 2) && (
         <div className={styles.container}>
           <div className={styles.card}>
             <p className={styles.title}>f(x) Auction</p>
