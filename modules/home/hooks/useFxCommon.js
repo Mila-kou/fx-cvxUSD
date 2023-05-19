@@ -156,9 +156,60 @@ const useFxCommon = () => {
         return 1 / params.p_f
     }
 
-    const StabilityModePrice = ''
-    const UserLiquidationModePrice = ''
-    const ProtocolLiquidationModePrice = ''
+    /**
+     * 获取StabilityMode 价格
+     * @param {*} params 
+     * @returns 
+     */
+    const getStabilityModePrice = (params) => {
+        const limitCollecteralRatio = 1.3055;
+        const _s = cBN(1).div(limitCollecteralRatio)
+        return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
+    }
+
+    /**
+     * 获取用户清算模式 价格
+     * @param {*} params 
+     * @returns 
+     */
+    const getUserLiquidationModePrice = (params) => {
+        const limitCollecteralRatio = 1.2067;
+        const _s = cBN(1).div(limitCollecteralRatio)
+        return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
+    }
+
+    /**
+     * 获取协议清算模式 价格
+     * @param {*} params 
+     * @returns 
+     */
+    const getProtocolLiquidationModePrice = (params) => {
+        const limitCollecteralRatio = 1.1449;
+        const _s = cBN(1).div(limitCollecteralRatio)
+        return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
+    }
+
+    /**
+     * 系统状态
+     * @param {*} params 
+     */
+    const systemStatus = (params) => {
+        const limitCollecteralRatio_0 = 1.3055;
+        const limitCollecteralRatio_1 = 1.2067;
+        const limitCollecteralRatio_2 = 1.1449;
+        const isEnd = 1;
+        let _status = 0;
+        if (cBN(params.limitCollecteralRatio).isGreaterThan(limitCollecteralRatio_0)) {
+            _status = 0;
+        } else if (cBN(params.limitCollecteralRatio).isGreaterThan(limitCollecteralRatio_1) && cBN(params.limitCollecteralRatio).isLessThanOrEqualTo(limitCollecteralRatio_0)) {
+            _status = 1;
+        } else if (cBN(params.limitCollecteralRatio).isGreaterThan(isEnd) && cBN(params.limitCollecteralRatio).isLessThanOrEqualTo(limitCollecteralRatio_1)) {
+            _status = 2;
+        } else {
+            _status = 3;
+        }
+        return _status
+    }
 
     const ETHLastChange = ''
 
@@ -186,7 +237,12 @@ const useFxCommon = () => {
         getMax_n_s_eth,
         getRx1,
         getRf1,
-        fETHCollecteralRatio
+        fETHCollecteralRatio,
+
+        getStabilityModePrice,
+        getUserLiquidationModePrice,
+        getProtocolLiquidationModePrice,
+        systemStatus
 
     }
 }

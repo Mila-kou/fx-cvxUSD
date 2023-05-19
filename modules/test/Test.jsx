@@ -29,7 +29,12 @@ export default function TestPage() {
     getMax_n_s_eth,
     getRx1,
     getRf1,
-    fETHCollecteralRatio
+    fETHCollecteralRatio,
+
+    getStabilityModePrice,
+    getUserLiquidationModePrice,
+    getProtocolLiquidationModePrice,
+    systemStatus
   } = useFxCommon()
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
 
@@ -162,6 +167,29 @@ export default function TestPage() {
     const _fETH_Collecteral_Ratio = get_fETH_Collecteral_Ratio({
       p_f: _p_f
     })
+
+    const _stabilityModePrice = getStabilityModePrice({
+      fNav: _fNav,
+      n_f: _n_f,
+      n: commonData.n
+    })
+
+    const _userLiquidationModePrice = getUserLiquidationModePrice({
+      fNav: _fNav,
+      n_f: _n_f,
+      n: commonData.n
+    })
+
+    const _protocolLiquidationModePrice = getProtocolLiquidationModePrice({
+      fNav: _fNav,
+      n_f: _n_f,
+      n: commonData.n
+    })
+
+    const _systemStatus = systemStatus({
+      limitCollecteralRatio: _fETH_Collecteral_Ratio
+    })
+
     setSystemData((pre) => {
       return {
         ...pre,
@@ -176,7 +204,12 @@ export default function TestPage() {
       fNav: _fNav,
       xNav: _xNav,
       n_x: checkNotZoroNum(systemData.n_x) ? systemData.n_x : _n_x,
-      fETH_Collecteral_Ratio: _fETH_Collecteral_Ratio
+      fETH_Collecteral_Ratio: _fETH_Collecteral_Ratio,
+      stabilityModePrice: _stabilityModePrice,
+      userLiquidationModePrice: _userLiquidationModePrice,
+      protocolLiquidationModePrice: _protocolLiquidationModePrice,
+
+      systemStatus: _systemStatus
     }
   }, [commonData])
 
@@ -202,12 +235,15 @@ export default function TestPage() {
     })
     console.log('_add_n_f---', _add_n_f)
 
+    const _new_n_f = (systemData.n_f * 1 + _add_n_f * 1)
+
     const _new_p_f = getP_F({
       fNav: _fNav,
-      n_f: (systemData.n_f * 1 + _add_n_f * 1),
+      n_f: _new_n_f,
       s: commonData.s1,
       n: newCommonData.n,
     })
+
 
     const _xNav = pageData.xNav
     // getXNav({
@@ -223,6 +259,7 @@ export default function TestPage() {
       xNav: _xNav
     })
 
+    const _new_n_x = (systemData.n_x * 1 + _add_n_x * 1)
     // const _n_x = getN_X({
     //   n: commonData.n,
     //   s0: commonData.s0,
@@ -233,6 +270,29 @@ export default function TestPage() {
     const _fETH_Collecteral_Ratio = get_fETH_Collecteral_Ratio({
       p_f: _new_p_f
     })
+
+    const _stabilityModePrice = getStabilityModePrice({
+      fNav: _fNav,
+      n_f: _new_n_f,
+      n: newCommonData.n
+    })
+
+    const _userLiquidationModePrice = getUserLiquidationModePrice({
+      fNav: _fNav,
+      n_f: _new_n_f,
+      n: newCommonData.n
+    })
+
+    const _protocolLiquidationModePrice = getProtocolLiquidationModePrice({
+      fNav: _fNav,
+      n_f: _new_n_f,
+      n: newCommonData.n
+    })
+
+    const _systemStatus = systemStatus({
+      limitCollecteralRatio: _fETH_Collecteral_Ratio
+    })
+
     setNewSystemData((pre) => {
       return {
         ...pre,
@@ -243,11 +303,16 @@ export default function TestPage() {
     return {
       r: _r,
       p_f: _new_p_f,
-      n_f: mintType == 'fETH' ? (systemData.n_f * 1 + _add_n_f * 1) : systemData.n_f,
+      n_f: mintType == 'fETH' ? _new_n_f : systemData.n_f,
       fNav: _fNav,
       xNav: _xNav,
-      n_x: mintType == 'xETH' ? (systemData.n_x * 1 + _add_n_x * 1) : systemData.n_x,
-      fETH_Collecteral_Ratio: _fETH_Collecteral_Ratio
+      n_x: mintType == 'xETH' ? _new_n_x : systemData.n_x,
+      fETH_Collecteral_Ratio: _fETH_Collecteral_Ratio,
+
+      stabilityModePrice: _stabilityModePrice,
+      userLiquidationModePrice: _userLiquidationModePrice,
+      protocolLiquidationModePrice: _protocolLiquidationModePrice,
+      systemStatus: _systemStatus
     }
   }, [mintETHNum, commonData])
 
@@ -311,6 +376,11 @@ export default function TestPage() {
         p_f(RHO):{pageData.p_f} <br />
         r: {pageData.r}<br />
         fETH Collecteral Ratio:{pageData.fETH_Collecteral_Ratio * 100} %<br />
+        系统状态:{mintPageData.systemStatus}<br />
+
+        Stability Model Price: ${pageData.stabilityModePrice}<br />
+        User Liquidation Model Price: ${pageData.userLiquidationModePrice}<br />
+        Protocol Liquidation Model Price: ${pageData.protocolLiquidationModePrice}<br />
       </div>
 
       <div>Mint</div>
@@ -335,6 +405,11 @@ export default function TestPage() {
         p_f(RHO):{mintPageData.p_f} <br />
         r: {mintPageData.r}<br />
         fETH Collecteral Ratio:{mintPageData.fETH_Collecteral_Ratio * 100} %<br />
+        系统状态:{mintPageData.systemStatus}<br />
+
+        Stability Model Price: ${mintPageData.stabilityModePrice}<br />
+        User Liquidation Model Price: ${mintPageData.userLiquidationModePrice}<br />
+        Protocol Liquidation Model Price: ${mintPageData.protocolLiquidationModePrice}<br />
       </div>
       {/* <div>铸造比例(m_r)：</div>
       <div>铸造fETH的数量(m_nf=m_n*s*m_r/f)：</div> */}
