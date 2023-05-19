@@ -28,7 +28,7 @@ function SimpleInput(props) {
     symbol,
     moreInfo,
     className = '',
-    onChange = () => { },
+    onChange = () => {},
   } = props
   const { theme } = useGlobal()
 
@@ -44,7 +44,13 @@ function SimpleInput(props) {
     }
 
     setVal(value || '')
-    onChange(checkNotZoroNum(value) ? cBN(value).shiftedBy(decimals ?? 18).toString(10) : '')
+    onChange(
+      checkNotZoroNum(value)
+        ? cBN(value)
+            .shiftedBy(decimals ?? 18)
+            .toString(10)
+        : ''
+    )
   }
 
   const setMax = () => {
