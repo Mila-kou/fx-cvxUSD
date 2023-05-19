@@ -29,6 +29,7 @@ export default function TestPage() {
     getMax_n_s_eth,
     getRx1,
     getRf1,
+    getBouns_N_X,
     fETHCollecteralRatio,
 
     getStabilityModePrice,
@@ -57,6 +58,11 @@ export default function TestPage() {
     fNav_0: '1',
     xNav_0: '1',
   })
+
+  const [stabilityCommonData, setStabilityCommonData] = useState({
+    λ_f: "0.1170"
+  })
+
   const [systemData, setSystemData] = useState({
     r: "0",
     n_f: ''
@@ -131,6 +137,19 @@ export default function TestPage() {
     setMintETHNum(e)
   }
 
+  const handleChange_stabilityMode_mintETHNum = (e) => {
+    console.log('mintETHNum--', e)
+    const _n = cBN(commonData.n).plus(e).toString(10)
+    setNewCommonData((pre) => {
+      return {
+        ...pre,
+        n: _n
+      }
+    })
+    setMintETHNum(e)
+  }
+
+  //价格改变
   const pageData = useMemo(() => {
     const _r = getR({
       s0: commonData.s0,
@@ -213,6 +232,7 @@ export default function TestPage() {
     }
   }, [commonData])
 
+  //mint ETH
   const mintPageData = useMemo(() => {
     const _r = getR({
       s0: commonData.s0,
@@ -301,6 +321,7 @@ export default function TestPage() {
       }
     })
     return {
+      n: newCommonData.n,
       r: _r,
       p_f: _new_p_f,
       n_f: mintType == 'fETH' ? _new_n_f : systemData.n_f,
@@ -316,6 +337,53 @@ export default function TestPage() {
     }
   }, [mintETHNum, commonData])
 
+  // Stability Data
+  const stabilityPageData = useMemo(() => {
+    const _max_n_s = getMax_n_s({
+      p_f: mintPageData.p_f,
+      λ_f: stabilityCommonData.λ_f
+    })
+
+    const _rx1 = getRx1({
+      λ_f: stabilityCommonData.λ_f,
+      Max_n_s: _max_n_s,
+      p_f: mintPageData.p_f,
+    })
+
+    const _max_n_s_eth = getMax_n_s_eth({
+      Max_n_s: _max_n_s,
+      n: newCommonData.n,
+    })
+
+    const _rf1 = getRf1({
+      λ_f: stabilityCommonData.λ_f,
+      n: newCommonData.n,
+      max_n_s: _max_n_s,
+      p_f: mintPageData.p_f,
+    })
+
+    const _bouns_n_x = getBouns_N_X({
+      rx1: _rf1,
+      n_x: mintPageData.n_x,
+    })
+
+
+
+    setNewSystemData((pre) => {
+      return {
+        ...pre,
+        // n_f: checkNotZoroNum(pre.n_f) ? pre.n_f : _new_p_f,
+        // n_x: checkNotZoroNum(pre.n_x) ? pre.n_x : _n_x
+      }
+    })
+    return {
+      max_n_s: _max_n_s,
+      rx1: _rx1,
+      rf1: _rf1,
+      max_n_s_eth: _max_n_s_eth,
+      bouns_n_x: _bouns_n_x
+    }
+  }, [mintETHNum, commonData])
   return (
     <div>
       <div className={styles.card}>
@@ -413,6 +481,38 @@ export default function TestPage() {
       </div>
       {/* <div>铸造比例(m_r)：</div>
       <div>铸造fETH的数量(m_nf=m_n*s*m_r/f)：</div> */}
+
+      {!!(mintPageData.systemStatus == 1) &&
+        <div style={{
+          paddingLeft: '20px'
+        }}>
+          稳定机制状态 <br />
+
+
+
+          激励比例λ_f： {stabilityCommonData.λ_f}<br />
+
+          最大追加抵押品占比Δn_s/n=(ρ-ρ_s)/(ρ_s+λ_f):{stabilityPageData.max_n_s} <br />
+          xETH的增发幅度r_x1=(1+λ_f)*(Δn_s/n)/(1-ρ)
+          :{stabilityPageData.rx1} <br />
+          最大追加抵押品（ETH）Δn_s: {stabilityPageData.max_n_s_eth}<br />
+
+          fETH付的稳定费率为: {stabilityPageData.rf1} <br />
+
+          xETH的增发数量 Bouns:{stabilityPageData.bouns_n_x}
+
+          <br />
+          <br />
+          <br />
+          质押ETH数量(m_n)
+          <SimpleInput
+            placeholder=""
+            decimals={0}
+            onChange={handleChange_stabilityMode_mintETHNum}
+            className={styles.input}
+          />
+        </div>
+      }
     </div>
   )
 }

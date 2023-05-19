@@ -48,6 +48,7 @@ const useFxCommon = () => {
         p_x: '',//xETH的比例
         r: '', //区间收益率,
 
+        max_n_s: "",//最大追加抵押品占比
         m_n: "",//质押ETH数量
         m_r: "",//铸造ETH比例
         m_nf: "", //铸造fETH的数量
@@ -119,7 +120,8 @@ const useFxCommon = () => {
      */
     const getMax_n_s = (params) => {
         const limitCollecteralRatio = 1.3055;
-        const _max_n_s = (params.p_f - 1 / limitCollecteralRatio) / (1 / limitCollecteralRatio + params.λ_f)
+        // const _max_n_s = (params.p_f - 1 / limitCollecteralRatio) / (1 / limitCollecteralRatio + params.λ_f)
+        const _max_n_s = cBN(params.p_f).minus(cBN(1).div(limitCollecteralRatio)).div(cBN(1).div(limitCollecteralRatio).plus(params.λ_f)).toString(10)
         return _max_n_s
     }
 
@@ -148,13 +150,28 @@ const useFxCommon = () => {
      * @returns 
      */
     const getRf1 = (params) => {
-        return params.λ_f * (params.m_n / params.n) / params.p_f
+        return params.λ_f * (params.max_n_s / params.n) / params.p_f
+    }
+
+    /**
+     * xETH的增发数量 Bouns n_x
+     * @param {*} params 
+     * @returns 
+     */
+    const getBouns_N_X = (params) => {
+        return params.rx1 * params.n_x
     }
 
     //fETH的超额抵押率
     const fETHCollecteralRatio = (params) => {
         return 1 / params.p_f
     }
+
+
+    ///////////////////////// 稳定机制  end //////////////////////////////////
+
+
+
 
     /**
      * 获取StabilityMode 价格
@@ -237,6 +254,7 @@ const useFxCommon = () => {
         getMax_n_s_eth,
         getRx1,
         getRf1,
+        getBouns_N_X,
         fETHCollecteralRatio,
 
         getStabilityModePrice,
