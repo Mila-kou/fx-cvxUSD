@@ -73,18 +73,32 @@ const useFxCommon = () => {
 
     const getN_F = (params) => {
         //(params.n * params.s0) * params.p_f / params.fNav
-        console.log('params.n,params.s0,params.p_f,params.fNav-', params.n, params.s0, params.p_f, params.fNav)
-        return cBN(params.n).times(params.s0).times(params.p_f).div(params.fNav).toString(10)
+        console.log('params.n,params.s,params.p_f,params.fNav-', params.n, params.s, params.p_f, params.fNav)
+        return cBN(params.n).times(params.s).times(params.p_f).div(params.fNav).toString(10)
+    }
+
+    const getAdd_N_F = (params) => {
+        //(params.n * params.s0) * params.p_f / params.fNav
+        console.log('params.n,params.s,params.p_f,params.fNav-', params.n, params.s, params.m_r, params.fNav)
+        return cBN(params.n).times(params.s).times(params.m_r).div(params.fNav).toString(10)
     }
 
     const getXNav = (params) => {
         //(1 + (1 - params.f_ß) * params.r) * params.initXNav
-        return (1 + (1 - params.f_ß) * params.r) * params.initXNav
-        // return (params.s * params.n - params.fNav * params.n_f) / params.n_x
+        console.log('params.s, params.n, params.fNav, params.n_f, params.n_x--', params.s, params.n, params.fNav, params.n_f, params.n_x)
+        return (params.s * params.n - params.fNav * params.n_f) / params.n_x
+        // return (1 + (1 - params.f_ß) * params.r) * params.initXNav
+
     }
 
     const getN_X = (params) => {
-        return (params.n * params.s0) * (1 - params.p_f) / params.xNav
+        return (params.n * params.s) * (1 - params.p_f) / params.xNav
+    }
+
+    const getAdd_N_X = (params) => {
+        //(params.n * params.s0) * params.p_f / params.fNav
+        console.log('params.n,params.s,params.p_f,params.xNav-', params.n, params.s, params.m_r, params.xNav)
+        return cBN(params.n).times(params.s).times((1 - params.m_r)).div(params.xNav).toString(10)
     }
 
     const getP_F = (params) => {
@@ -95,22 +109,13 @@ const useFxCommon = () => {
         return params.fNav * params.n_f / (params.s * params.n)
     }
 
-    const getp_x = (params) => {
+    const getP_X = (params) => {
         return params.xNav * params.n_x / (params.s * params.n)
     }
 
     const get_fETH_Collecteral_Ratio = (params) => {
         return 1 / params.p_f
-    }
-
-
-    const getM_NF = (params) => {
-        return params.m_n * params.s * params.m_r / params.fNav
-    }
-
-    const getM_NX = (params) => {
-        return params.m_n * params.s * (1 - params.m_r) / params.xNav
-    }
+    }    
 
     ///////////////////////// 稳定机制 //////////////////////////////////
     /**
@@ -168,6 +173,18 @@ const useFxCommon = () => {
     }
 
 
+    /**
+     * 
+     * @param {*} params 
+     * @returns 
+     */
+    const getM_NF = (params) => {
+        return params.m_n * params.s * params.m_r / params.fNav
+    }
+
+    const getM_NX = (params) => {
+        return params.m_n * params.s * (1 - params.m_r) / params.xNav
+    }
     ///////////////////////// 稳定机制  end //////////////////////////////////
 
 
@@ -242,9 +259,11 @@ const useFxCommon = () => {
         getFNav,
         getXNav,
         getN_F,
+        getAdd_N_F,
         getN_X,
+        getAdd_N_X,
         getP_F,
-        getp_x,
+        getP_X,
         getM_NF,
         getM_NX,
         _computeMultiple,
