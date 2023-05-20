@@ -17,11 +17,19 @@ export default function Mint() {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
+  const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
   const [ETHtAmount, setETHtAmount] = useState(0)
-  const [FETHtAmount, setFETHtAmount] = useState(0)
-  const [XETHtAmount, setXETHtAmount] = useState(0)
+  const [FETHtAmount, setFETHtAmount] = useState({
+    amount: 0,
+    tvl: 0
+  })
+  const [XETHtAmount, setXETHtAmount] = useState({
+    amount: 0,
+    tvl: 0
+  })
+  const [mintLoading, setMintLoading] = useState(false)
   const [detail, setDetail] = useState({
     bonus: 75,
     bonusRatio: 2.1,
@@ -36,7 +44,9 @@ export default function Mint() {
     _mintFETHFee,
     ethGatewayContract,
     _mintXETHFee,
-    ethPrice
+    ethPrice,
+    fnav,
+    xnav
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -55,43 +65,90 @@ export default function Mint() {
       setETHtAmount(v.toString(10))
     }
   }
-  const hanldeFETHAmountChanged = (v) => {
-    setFETHtAmount(v.toString(10))
-  }
+  // const hanldeFETHAmountChanged = (v) => {
+  //   setFETHtAmount(v.toString(10))
+  // }
 
-  const hanldeXETHAmountChanged = (v) => {
-    setXETHtAmount(v.toString(10))
-  }
+  // const hanldeXETHAmountChanged = (v) => {
+  //   setXETHtAmount(v.toString(10))
+  // }
 
-  const handleGetMinAmount = async () => {
-    console.log('ETHtAmount----', ETHtAmount)
+  const getMinAmount = async () => {
     try {
-      const minout = await marketContract.methods
-        .mintFToken(ETHtAmount, _currentAccount, 0)
-        .call()
-      console.log('minout---', minout)
+      let minout_ETH;
+      if (isF) {
+        minout_ETH = await ethGatewayContract.methods
+          .mintFToken(0)
+          .call({ value: ETHtAmount })
+      } else {
+        minout_ETH = await ethGatewayContract.methods
+          .mintXToken(0)
+          .call({ value: ETHtAmount })
+      }
+      const _minOut_CBN = (cBN(minout_ETH) || cBN(0))
+        .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+      if (isF) {
+        const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(fnav).toString(10))
+        setFETHtAmount({
+          minout: fb4(_minOut_CBN.toFixed(0, 1)),
+          tvl: _minOut_fETH_tvl
+        })
+        setXETHtAmount({
+          minout: 0,
+          tvl: 0
+        })
+      } else {
+        const _minOut_xETH_tvl = fb4(_minOut_CBN.multipliedBy(xnav).toString(10))
+        setXETHtAmount({
+          minout: fb4(_minOut_CBN.toFixed(0, 1)),
+          tvl: _minOut_xETH_tvl
+        })
+        setFETHtAmount({
+          minout: 0,
+          tvl: 0
+        })
+      }
+      return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)
       return 0
     }
   }
 
-  const handleGetAllMinAmount = async () => {
+  const handleMint = async () => {
     try {
-      console.log('ETHtAmount----', ETHtAmount)
-      const minout = await ethGatewayContract.methods
-        .mintFToken(0)
-        .call({ value: ETHtAmount })
-      console.log('minout---', minout)
-    } catch (e) {
-      console.log('minout---error--', e)
-      return 0
+      setMintLoading(true)
+      const _minOut = await getMinAmount();
+      let apiCall;
+      if (isF) {
+        apiCall = await ethGatewayContract.methods
+          .mintFToken(_minOut)
+      } else {
+        apiCall = await ethGatewayContract.methods
+          .mintXToken(_minOut)
+      }
+      const estimatedGas = await apiCall.estimateGas({
+        from: _currentAccount,
+        value: ETHtAmount,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(
+        () => apiCall.send({ from: _currentAccount, gas, value: ETHtAmount }),
+        {
+          key: 'Mint',
+          action: 'Mint',
+        }
+      )
+      setMintLoading(false)
+    } catch (error) {
+      setMintLoading(false)
+      noPayableErrorAction(`error_mint`, error)
     }
   }
 
   useEffect(() => {
-    // handleGetMinAmount()
-    handleGetAllMinAmount()
+    getMinAmount()
+    // handleGetAllMinAmount()
   }, [selected, ETHtAmount])
 
   return (
@@ -112,12 +169,12 @@ export default function Mint() {
         symbol="fETH"
         icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
         color={isF ? 'blue' : undefined}
-        placeholder="300"
+        placeholder={FETHtAmount.minout}
         disabled
         type={isF ? '' : 'select'}
         className={styles.inputItem}
-        usd="1,10"
-        onChange={hanldeFETHAmountChanged}
+        usd={FETHtAmount.tvl}
+        // onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
       <BalanceInput
@@ -126,11 +183,11 @@ export default function Mint() {
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : undefined}
         selectColor="red"
-        placeholder="300"
+        placeholder={XETHtAmount.minout}
         disabled
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd="1,10"
+        usd={XETHtAmount.tvl}
         onSelected={() => setSelected(1)}
       />
 
@@ -139,7 +196,7 @@ export default function Mint() {
         detail={detail}
       />
 
-      <Button className={styles.btn}>Mint</Button>
+      <Button className={styles.btn} loading={mintLoading} onClick={handleMint} >Mint</Button>
     </div>
   )
 }

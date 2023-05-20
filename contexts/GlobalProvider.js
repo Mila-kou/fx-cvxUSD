@@ -49,7 +49,7 @@ function GlobalProvider({ children }) {
       ETH: {
         ...ethToken,
         usd: fb4(
-          cBN(ethToken.balance).multipliedBy(tokenPrice?.ETH?.usd) || 0,
+          cBN(ethToken.balance).multipliedBy(tokenPrice?.ethereum?.usd) || 0,
           true
         ),
       },

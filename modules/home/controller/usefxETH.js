@@ -7,7 +7,6 @@ import useETHPrice from '../hooks/useETHPrice'
 const usefxETH = () => {
   const fxInfo = useInfo()
   const ethPrice = useETHPrice()
-  console.log('ethPrice----->>>', ethPrice)
   const { contract: fETHContract } = useFETH
   const { contract: xETHContract } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -27,10 +26,11 @@ const usefxETH = () => {
 
   const pageData = useMemo(() => {
     try {
-      const _fnav = checkNotZoroNumOption(fxInfo.baseInfo.fETHNav, fb4(fxInfo.baseInfo.fETHNav))
-      const _xnav = checkNotZoroNumOption(fxInfo.baseInfo.xETHNav, fb4(fxInfo.baseInfo.xETHNav))
-      const _fETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.fETHTotalSupply, fb4(fxInfo.baseInfo.fETHTotalSupply))
-      const _xETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.xETHTotalSupply, fb4(fxInfo.baseInfo.xETHTotalSupply))
+      const _fnav = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._fNav, fb4(fxInfo.baseInfo.CurrentNavRes?._fNav))
+      const _xnav = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._xNav, fb4(fxInfo.baseInfo.CurrentNavRes?._xNav))
+      const _ethPrice = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._baseNav, fb4(fxInfo.baseInfo.CurrentNavRes?._baseNav))
+      const _fETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.fETHTotalSupplyRes, fb4(fxInfo.baseInfo.fETHTotalSupplyRes))
+      const _xETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.xETHTotalSupplyRes, fb4(fxInfo.baseInfo.xETHTotalSupplyRes))
 
       const _mintFETHFee = (checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio).toString(10) : 0
       const _mintXETHFee = (checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio).toString(10) : 0
@@ -43,6 +43,7 @@ const usefxETH = () => {
       return {
         fnav: _fnav,
         xnav: _xnav,
+        ethPrice: _ethPrice,
         fETHTotalSupply: _fETHTotalSupply,
         xETHTotalSupply: _xETHTotalSupply,
         _mintFETHFee,
