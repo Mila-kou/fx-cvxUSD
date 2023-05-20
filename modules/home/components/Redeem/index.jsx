@@ -11,19 +11,126 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
+import usefxETH from '../../controller/usefxETH'
+import useApprove from '@/hooks/useApprove'
 
 export default function Redeem() {
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
-  const [fee, setFee] = useState(0.01)
-  const [feeUsd, setFeeUsd] = useState(10)
+  const {
+    fETHAddress,
+    xETHAddress,
+    fETHContract,
+    xETHContract,
+    marketContract,
+    treasuryContract,
+    _mintFETHFee,
+    ethGatewayContract,
+    _redeemFETHFee,
+    _redeemXETHFee,
+    ethPrice,
+    fnav,
+    xnav
+  } = usefxETH()
+
+  const [FETHtAmount, setFETHtAmount] = useState(0)
+  const [XETHtAmount, setXETHtAmount] = useState(0)
+
+  const [isF, isX, selectTokenAddress, tokenAmount] = useMemo(() => {
+    let _isF = false
+    let _selectTokenAddress
+    let _tokenAmount = 0
+    if (selected === 0) {
+      _isF = true
+      _selectTokenAddress = fETHAddress
+      _tokenAmount = FETHtAmount
+    } else {
+      _selectTokenAddress = xETHAddress
+      _tokenAmount = XETHtAmount
+    }
+    return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
+  }, [selected])
+
+  const [fee, feeUsd] = useMemo(() => {
+    let _redeemFee = _redeemFETHFee
+    if (isF) {
+      _redeemFee = _redeemFETHFee
+    } else {
+      _redeemFee = _redeemXETHFee
+    }
+    const _fee = cBN(tokenAmount).multipliedBy(_redeemFee)
+    const _feeUsd = cBN(_fee).multipliedBy(1 || 1)
+    return [fb4(_fee), fb4(_feeUsd)]
+  }, [isF, FETHtAmount, XETHtAmount, ethPrice])
+
+
+  const hanldeFETHAmountChanged = (v) => {
+    setFETHtAmount(v.toString(10))
+  }
+
+  const hanldeXETHAmountChanged = (v) => {
+    setXETHtAmount(v.toString(10))
+  }
+
   const [detail, setDetail] = useState({
     bonus: 75,
     bonusRatio: 2.1,
     ETH: 1,
   })
 
-  const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
+
+  const { BtnWapper } = useApprove({
+    approveAmount: tokenAmount,
+    allowance: selectTokenInfo.allowance,
+    tokenContract: selectTokenInfo.contract,
+    approveAddress: selectTokenInfo.contractAddress,
+  })
+
+  const getMinAmount = async () => {
+    // try {
+    //   if (!checkNotZoroNum(ETHtAmount)) {
+    //     return 0
+    //   }
+    //   let minout_ETH;
+    //   if (isF) {
+    //     minout_ETH = await ethGatewayContract.methods
+    //       .mintFToken(0)
+    //       .call({ value: ETHtAmount })
+    //   } else {
+    //     minout_ETH = await ethGatewayContract.methods
+    //       .mintXToken(0)
+    //       .call({ value: ETHtAmount })
+    //   }
+    //   const _minOut_CBN = (cBN(minout_ETH) || cBN(0))
+    //     .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+    //   if (isF) {
+    //     const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(fnav).toString(10))
+    //     setFETHtAmount({
+    //       minout: fb4(_minOut_CBN.toFixed(0, 1)),
+    //       tvl: _minOut_fETH_tvl
+    //     })
+    //     setXETHtAmount({
+    //       minout: 0,
+    //       tvl: 0
+    //     })
+    //   } else {
+    //     const _minOut_xETH_tvl = fb4(_minOut_CBN.multipliedBy(xnav).toString(10))
+    //     setXETHtAmount({
+    //       minout: fb4(_minOut_CBN.toFixed(0, 1)),
+    //       tvl: _minOut_xETH_tvl
+    //     })
+    //     setFETHtAmount({
+    //       minout: 0,
+    //       tvl: 0
+    //     })
+    //   }
+    //   return _minOut_CBN.toFixed(0, 1)
+    // } catch (e) {
+    //   console.log(e)
+    //   return 0
+    // }
+  }
 
   return (
     <div className={styles.container}>
@@ -37,6 +144,7 @@ export default function Redeem() {
         className={styles.inputItem}
         usd={tokens.fETH.usd}
         maxAmount={tokens.fETH.balance}
+        onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
       <BalanceInput
@@ -51,6 +159,7 @@ export default function Redeem() {
         className={styles.inputItem}
         usd={tokens.xETH.usd}
         maxAmount={tokens.xETH.balance}
+        onChange={hanldeXETHAmountChanged}
         onSelected={() => setSelected(1)}
       />
       <div className={styles.arrow}>
@@ -69,7 +178,10 @@ export default function Redeem() {
         detail={detail}
       />
 
-      <Button className={styles.btn}>Redeem</Button>
+      <BtnWapper>
+        <Button className={styles.btn}>Redeem</Button>
+      </BtnWapper>
+
     </div>
   )
 }

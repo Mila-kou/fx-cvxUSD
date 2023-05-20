@@ -59,19 +59,11 @@ export default function Mint() {
   }, [ETHtAmount, ethPrice])
 
   const hanldeETHAmountChanged = (v) => {
-    console.log(v)
     if (checkNotZoroNum(v)) {
       console.log('vv------', v.toString(10))
       setETHtAmount(v.toString(10))
     }
   }
-  // const hanldeFETHAmountChanged = (v) => {
-  //   setFETHtAmount(v.toString(10))
-  // }
-
-  // const hanldeXETHAmountChanged = (v) => {
-  //   setXETHtAmount(v.toString(10))
-  // }
 
   const getMinAmount = async () => {
     try {

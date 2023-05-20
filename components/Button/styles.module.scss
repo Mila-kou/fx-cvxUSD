@@ -1,0 +1,47 @@
+@import '../../assets/css/mixins.scss';
+.btn {
+  padding: 8px 24px;
+  background: $blue;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fefefe;
+  max-width: 95%;
+  white-space: nowrap;
+  &.small {
+    font-size: 16px;
+    padding: 4px 12px;
+    width: unset !important;
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+  &:hover {
+    background: darken(#2626da, 0.5);
+  }
+}
+
+.lightBlue {
+  background: rgba(85, 179, 216, 1);
+}
+
+.grey {
+  color: #fff;
+  background: rgb(33, 31, 35);
+}
+
+@media (max-width: 768px) {
+  .btn {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
+
+div[class='default'] {
+  .btn {
+    box-shadow: 3px 3px 9px 0px rgba(173, 173, 173, 0.57);
+  }
+  .grey {
+    color: $black;
+    background: #cfd2d3;
+  }
+}

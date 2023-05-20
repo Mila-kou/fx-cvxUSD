@@ -113,6 +113,9 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'ido':
             _contractAddress = config.contracts.idoSale
             break
+          case 'fx_redeem':
+            _contractAddress = config.contracts.fx_Market
+            break
           default:
             _contractAddress = config.contracts.idoSale
             break
