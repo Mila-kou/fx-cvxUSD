@@ -42,6 +42,11 @@ export default function SystemStatistics() {
     xETHTotalSupply,
     totalBaseToken,
     totalBaseTokenTvl,
+
+    StabilityModePrice,
+    UserLiquidationModePrice,
+    ProtocolLiquidationModePrice,
+    systemStatus
   } = usefxETH()
   return (
     <div className={styles.container}>
@@ -89,15 +94,15 @@ export default function SystemStatistics() {
           <div className={styles.details} data-color="blue">
             <div className={styles.cell}>
               <div>Stability Mode Price:</div>
-              <p>$1,200.88</p>
+              <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
               <div>User Liquidation Mode Price:</div>
-              <p>$1,100.88</p>
+              <p>${UserLiquidationModePrice}</p>
             </div>
             <div className={styles.cell}>
               <div>Protocol Liquidation Mode Price:</div>
-              <p>$900.88</p>
+              <p>${ProtocolLiquidationModePrice}</p>
             </div>
           </div>
         </div>
@@ -110,7 +115,7 @@ export default function SystemStatistics() {
                 <b>{collateralRatio}</b>%
               </p>
               <p>
-                {prices[mode + 1]} {mode < 2 && <span>$1,200</span>}
+                {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
               </p>
             </div>
           </div>

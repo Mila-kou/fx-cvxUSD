@@ -3,10 +3,12 @@ import useInfo from '../hooks/useInfo'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useFETH, useXETH, useFX_Market, useFX_Treasury, useFX_ETHGateway } from '@/hooks/useContracts'
 import useETHPrice from '../hooks/useETHPrice'
+import useFxCommon from '../hooks/useFxCommon'
 
 const usefxETH = () => {
   const fxInfo = useInfo()
   const ethPrice = useETHPrice()
+  const { getSystemStatus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
   const { contract: fETHContract } = useFETH
   const { contract: xETHContract } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -46,6 +48,29 @@ const usefxETH = () => {
       console.log('_fnav-_xnav-_fETHTotalSupply-_xETHTotalSupply-', fxInfo.baseInfo, _fnav, _xnav, _fETHTotalSupply, _xETHTotalSupply, _totalBaseToken)
 
       console.log('_mintFETHFee-_mintXETHFee-_redeemFETHFee-_redeemXETHFee-', _mintFETHFee, _mintXETHFee, _redeemFETHFee, _redeemXETHFee)
+
+      let StabilityModePrice = getStabilityModePrice({
+        fNav: fxInfo.baseInfo.CurrentNavRes._fNav / 1e18,
+        n_f: fxInfo.baseInfo.fETHTotalSupplyRes / 1e18,
+        n: fxInfo.baseInfo.totalBaseTokenRes / 1e18
+      })
+      StabilityModePrice = checkNotZoroNumOption(StabilityModePrice, fb4(StabilityModePrice, false, 0, 2))
+      let UserLiquidationModePrice = getUserLiquidationModePrice({
+        fNav: fxInfo.baseInfo.CurrentNavRes._fNav / 1e18,
+        n_f: fxInfo.baseInfo.fETHTotalSupplyRes / 1e18,
+        n: fxInfo.baseInfo.totalBaseTokenRes / 1e18
+      })
+      UserLiquidationModePrice = checkNotZoroNumOption(UserLiquidationModePrice, fb4(UserLiquidationModePrice, false, 0, 2))
+      let ProtocolLiquidationModePrice = getProtocolLiquidationModePrice({
+        fNav: fxInfo.baseInfo.CurrentNavRes._fNav / 1e18,
+        n_f: fxInfo.baseInfo.fETHTotalSupplyRes / 1e18,
+        n: fxInfo.baseInfo.totalBaseTokenRes / 1e18
+      })
+      ProtocolLiquidationModePrice = checkNotZoroNumOption(ProtocolLiquidationModePrice, fb4(ProtocolLiquidationModePrice, false, 0, 2))
+
+      const _systemStatus = getSystemStatus({
+        limitCollecteralRatio: fxInfo.baseInfo.collateralRatioRes / 1e18
+      })
       return {
         fnav: _fnav,
         xnav: _xnav,
@@ -59,7 +84,12 @@ const usefxETH = () => {
         totalBaseToken: _totalBaseToken,
         totalBaseTokenTvl: _totalBaseTokenTvl,
         collateralRatio: _collateralRatio,
-        p_f: _p_f
+        p_f: _p_f,
+
+        StabilityModePrice,
+        UserLiquidationModePrice,
+        ProtocolLiquidationModePrice,
+        systemStatus: _systemStatus
       }
     } catch (error) {
 

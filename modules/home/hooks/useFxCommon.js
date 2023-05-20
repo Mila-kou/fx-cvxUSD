@@ -227,7 +227,7 @@ const useFxCommon = () => {
      * 系统状态
      * @param {*} params 
      */
-    const systemStatus = (params) => {
+    const getSystemStatus = (params) => {
         const limitCollecteralRatio_0 = 1.3055;
         const limitCollecteralRatio_1 = 1.2067;
         const limitCollecteralRatio_2 = 1.1449;
@@ -279,7 +279,7 @@ const useFxCommon = () => {
         getStabilityModePrice,
         getUserLiquidationModePrice,
         getProtocolLiquidationModePrice,
-        systemStatus
+        getSystemStatus
 
     }
 }
