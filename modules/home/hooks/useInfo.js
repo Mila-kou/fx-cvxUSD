@@ -20,7 +20,7 @@ const useInfo = () => {
     const fetchBaseInfo = useCallback(async () => {
         const { totalSupply: fETHTotalSupplyFn } = fETHContract.methods
         const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
-        const { getCurrentNav, collateralRatio, totalBaseToken: ETHTotalUnderlying, beta } = treasuryContract.methods
+        const { getCurrentNav, collateralRatio, totalBaseToken, beta } = treasuryContract.methods
         const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio } = marketContract.methods
         try {
             const apiCalls = [
@@ -28,7 +28,7 @@ const useInfo = () => {
                 xETHTotalSupplyFn(),
                 getCurrentNav(),
                 collateralRatio(),
-                ETHTotalUnderlying(),
+                totalBaseToken(),
 
                 fTokenMintFeeRatio(),
                 fTokenRedeemFeeRatio(),
@@ -38,18 +38,18 @@ const useInfo = () => {
 
                 beta(),
             ]
-            const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, ETHTotalUnderlyingRes,
+            const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
                 'BaseInfo11111',
-                fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, ETHTotalUnderlyingRes,
+                // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
             )
 
             return {
-                fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, ETHTotalUnderlyingRes,
+                fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
             }
         } catch (error) {

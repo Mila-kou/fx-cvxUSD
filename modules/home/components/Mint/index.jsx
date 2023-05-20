@@ -75,6 +75,9 @@ export default function Mint() {
 
   const getMinAmount = async () => {
     try {
+      if (!checkNotZoroNum(ETHtAmount)) {
+        return 0
+      }
       let minout_ETH;
       if (isF) {
         minout_ETH = await ethGatewayContract.methods

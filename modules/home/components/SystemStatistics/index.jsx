@@ -16,6 +16,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import Chart from '../Chart'
 import styles from './styles.module.scss'
+import usefxETH from '../../controller/usefxETH'
 
 const tags = [
   'Stability Mode',
@@ -32,6 +33,14 @@ const prices = [
 
 export default function SystemStatistics() {
   const [mode, setMode] = useState(-1)
+  const {
+    fnav,
+    xnav,
+    fETHTotalSupply,
+    xETHTotalSupply,
+    totalBaseToken,
+    totalBaseTokenTvl
+  } = usefxETH()
   return (
     <div className={styles.container}>
       <h2 className={styles.header}>
@@ -54,16 +63,20 @@ export default function SystemStatistics() {
             <div className={styles.title}>Backed Asset Value</div>
             <div className={cn(styles.value, styles.nums)}>
               <p>
-                <b>40,000</b> ETH
+                <b>{totalBaseToken}</b> ETH
               </p>
               <p>
-                ~<span>$720,000,800</span>
+                ~<span>${totalBaseTokenTvl}</span>
               </p>
             </div>
           </div>
 
           <div className={styles.chart} data-color="blue">
             <Chart
+              fxData={{
+                nav: fnav,
+                totalSupply: fETHTotalSupply
+              }}
               color="blue"
               symbol="fETH"
               icon="/images/f-s-logo-white.svg"
@@ -101,6 +114,10 @@ export default function SystemStatistics() {
 
           <div className={styles.chart} data-color="red">
             <Chart
+              fxData={{
+                nav: xnav,
+                totalSupply: xETHTotalSupply
+              }}
               color="red"
               symbol="xETH"
               icon="/images/x-s-logo-white.svg"

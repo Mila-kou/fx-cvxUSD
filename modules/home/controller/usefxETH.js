@@ -37,7 +37,10 @@ const usefxETH = () => {
       const _redeemFETHFee = (checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio).toString(10) : 0
       const _redeemXETHFee = (checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio) || checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio)) ? cBN(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio).plus(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio).toString(10) : 0
 
-      console.log('_fnav-_xnav-_fETHTotalSupply-_xETHTotalSupply-', fxInfo.baseInfo, _fnav, _xnav, _fETHTotalSupply, _xETHTotalSupply)
+      const _totalBaseToken = checkNotZoroNum(fxInfo.baseInfo.totalBaseTokenRes) ? fb4(fxInfo.baseInfo.totalBaseTokenRes) : 0
+      const _totalBaseTokenTvl = checkNotZoroNum(fxInfo.baseInfo.totalBaseTokenRes) ? fb4(cBN(fxInfo.baseInfo.totalBaseTokenRes).multipliedBy(cBN(fxInfo.baseInfo.CurrentNavRes?._baseNav).div(1e18)).toFixed(0, 1)) : 0
+
+      console.log('_fnav-_xnav-_fETHTotalSupply-_xETHTotalSupply-', fxInfo.baseInfo, _fnav, _xnav, _fETHTotalSupply, _xETHTotalSupply, _totalBaseToken)
 
       console.log('_mintFETHFee-_mintXETHFee-_redeemFETHFee-_redeemXETHFee-', _mintFETHFee, _mintXETHFee, _redeemFETHFee, _redeemXETHFee)
       return {
@@ -50,6 +53,8 @@ const usefxETH = () => {
         _mintXETHFee,
         _redeemFETHFee,
         _redeemXETHFee,
+        totalBaseToken: _totalBaseToken,
+        totalBaseTokenTvl: _totalBaseTokenTvl
       }
     } catch (error) {
 
