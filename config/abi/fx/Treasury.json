@@ -53,6 +53,19 @@
         "inputs": [
             {
                 "indexed": false,
+                "internalType": "uint256",
+                "name": "beta",
+                "type": "uint256"
+            }
+        ],
+        "name": "UpdateBeta",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
                 "internalType": "address",
                 "name": "priceOracle",
                 "type": "address"
@@ -97,7 +110,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_baseIn",
                 "type": "uint256"
             },
             {
@@ -115,7 +128,7 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_xOut",
+                "name": "_xTokenOut",
                 "type": "uint256"
             }
         ],
@@ -176,6 +189,29 @@
                 "internalType": "address",
                 "name": "",
                 "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getCurrentNav",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_baseNav",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_fNav",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_xNav",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -243,7 +279,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_fAmt",
+                "name": "_fTokenIn",
                 "type": "uint256"
             },
             {
@@ -254,11 +290,6 @@
             {
                 "internalType": "address",
                 "name": "_owner",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_recipient",
                 "type": "address"
             }
         ],
@@ -290,7 +321,161 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_newCollateralRatio",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_incentiveRatio",
+                "type": "uint256"
+            }
+        ],
+        "name": "maxLiquidatable",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxBaseOut",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_maxFTokenLiquidatable",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_newCollateralRatio",
+                "type": "uint256"
+            }
+        ],
+        "name": "maxMintableFToken",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxBaseIn",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_maxFTokenMintable",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_newCollateralRatio",
+                "type": "uint256"
+            }
+        ],
+        "name": "maxMintableXToken",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxBaseIn",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_maxXTokenMintable",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_newCollateralRatio",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_incentiveRatio",
+                "type": "uint256"
+            }
+        ],
+        "name": "maxMintableXTokenWithIncentive",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxBaseIn",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_maxXTokenMintable",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_newCollateralRatio",
+                "type": "uint256"
+            }
+        ],
+        "name": "maxRedeemableFToken",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxBaseOut",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_maxFTokenRedeemable",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_newCollateralRatio",
+                "type": "uint256"
+            }
+        ],
+        "name": "maxRedeemableXToken",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxBaseOut",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_maxXTokenRedeemable",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_baseIn",
                 "type": "uint256"
             },
             {
@@ -308,12 +493,12 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_fOut",
+                "name": "_fTokenOut",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_xOut",
+                "name": "_xTokenOut",
                 "type": "uint256"
             }
         ],
@@ -370,12 +555,12 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_fAmt",
+                "name": "_fTokenIn",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_xAmt",
+                "name": "_xTokenIn",
                 "type": "uint256"
             },
             {
@@ -488,7 +673,7 @@
     },
     {
         "inputs": [],
-        "name": "totalUnderlying",
+        "name": "totalBaseToken",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -523,82 +708,6 @@
         "name": "transferToStrategy",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_newCollateralRatio",
-                "type": "uint256"
-            }
-        ],
-        "name": "tryMintFTokenTo",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_newCollateralRatio",
-                "type": "uint256"
-            }
-        ],
-        "name": "tryMintXTokenTo",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_newCollateralRatio",
-                "type": "uint256"
-            }
-        ],
-        "name": "tryRedeemFTokenTo",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_newCollateralRatio",
-                "type": "uint256"
-            }
-        ],
-        "name": "tryRedeemXTokenTo",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {

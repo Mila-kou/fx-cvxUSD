@@ -73,3 +73,15 @@ export const useFX_Treasury = () => {
     [getContract]
   )
 }
+
+export const useFX_ETHGateway = () => {
+  const address = config.contracts.fx_ETHGateway
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_ETHGateway),
+      address
+    }),
+    [getContract]
+  )
+}

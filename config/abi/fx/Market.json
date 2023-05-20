@@ -23,7 +23,7 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "xTokenOut",
+                "name": "xTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -143,13 +143,13 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "fTokenIn",
+                "name": "fTokenBurned",
                 "type": "uint256"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "xTokenIn",
+                "name": "xTokenBurned",
                 "type": "uint256"
             },
             {
@@ -255,7 +255,7 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "baseTokenAmt",
+                "name": "baseSwapAmt",
                 "type": "uint256"
             },
             {
@@ -267,7 +267,7 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "fTokenAmt",
+                "name": "fTokenBurned",
                 "type": "uint256"
             }
         ],
@@ -456,7 +456,7 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "fTokenIn",
+                "name": "fTokenBurned",
                 "type": "uint256"
             },
             {
@@ -499,7 +499,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_baseIn",
                 "type": "uint256"
             },
             {
@@ -509,7 +509,7 @@
             },
             {
                 "internalType": "uint256",
-                "name": "_minXOut",
+                "name": "_minXTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -517,7 +517,7 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_xOut",
+                "name": "_xTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -748,7 +748,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_fAmt",
+                "name": "_fTokenIn",
                 "type": "uint256"
             },
             {
@@ -824,7 +824,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_baseIn",
                 "type": "uint256"
             },
             {
@@ -834,12 +834,12 @@
             },
             {
                 "internalType": "uint256",
-                "name": "_minFOut",
+                "name": "_minFTokenMinted",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_minXOut",
+                "name": "_minXTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -847,12 +847,12 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_fOut",
+                "name": "_fTokenMinted",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_xOut",
+                "name": "_xTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -863,7 +863,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_baseIn",
                 "type": "uint256"
             },
             {
@@ -873,7 +873,7 @@
             },
             {
                 "internalType": "uint256",
-                "name": "_minFOut",
+                "name": "_minFTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -881,7 +881,7 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_fOut",
+                "name": "_fTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -905,7 +905,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_baseIn",
                 "type": "uint256"
             },
             {
@@ -915,7 +915,7 @@
             },
             {
                 "internalType": "uint256",
-                "name": "_minXOut",
+                "name": "_minXTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -923,7 +923,7 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_xOut",
+                "name": "_xTokenMinted",
                 "type": "uint256"
             }
         ],
@@ -934,7 +934,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_baseAmt",
+                "name": "_baseSwapAmt",
                 "type": "uint256"
             },
             {
@@ -947,7 +947,7 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_fAmt",
+                "name": "_fTokenAmt",
                 "type": "uint256"
             }
         ],
@@ -1023,12 +1023,12 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_fAmt",
+                "name": "_fTokenIn",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_xAmt",
+                "name": "_xTokenIn",
                 "type": "uint256"
             },
             {
@@ -1106,12 +1106,12 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_baseAmt",
+                "name": "_baseSwapAmt",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_minFToken",
+                "name": "_minFTokenLiquidated",
                 "type": "uint256"
             },
             {
@@ -1129,7 +1129,7 @@
             },
             {
                 "internalType": "uint256",
-                "name": "_fAmt",
+                "name": "_fTokenLiquidated",
                 "type": "uint256"
             }
         ],

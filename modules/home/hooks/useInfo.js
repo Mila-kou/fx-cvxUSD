@@ -18,38 +18,39 @@ const useInfo = () => {
     const { contract: treasuryContract } = useFX_Treasury()
 
     const fetchBaseInfo = useCallback(async () => {
-        const { nav: fETHNavFn, totalSupply: fETHTotalSupplyFn } = fETHContract.methods
-        const { nav: xETHNavFn, totalSupply: xETHTotalSupplyFn } = xETHContract.methods
-        const { totalUnderlying: ETHTotalUnderlying, twapCache, cacheTwap, beta, lastPermissionedPrice } = treasuryContract.methods
+        const { totalSupply: fETHTotalSupplyFn } = fETHContract.methods
+        const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
+        const { getCurrentNav, collateralRatio, totalBaseToken: ETHTotalUnderlying, beta } = treasuryContract.methods
         const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio } = marketContract.methods
         try {
             const apiCalls = [
-                fETHNavFn(),
                 fETHTotalSupplyFn(),
-                xETHNavFn(),
                 xETHTotalSupplyFn(),
+                getCurrentNav(),
+                collateralRatio(),
+                ETHTotalUnderlying(),
 
                 fTokenMintFeeRatio(),
                 fTokenRedeemFeeRatio(),
                 xTokenMintFeeRatio(),
                 xTokenRedeemFeeRatio(),
 
-                ETHTotalUnderlying(),
+
                 beta(),
             ]
-            const [fETHNavRes, fETHTotalSupplyRes, xETHNavRes, xETHTotalSupplyRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, ETHTotalUnderlyingRes, betaRes] =
+            const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, ETHTotalUnderlyingRes,
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
-                'BaseInfo ===>',
-                fETHNavRes, fETHTotalSupplyRes, xETHNavRes, xETHTotalSupplyRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, ETHTotalUnderlyingRes, betaRes
+                'BaseInfo11111',
+                fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, ETHTotalUnderlyingRes,
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
             )
 
             return {
-                fETHNavRes, fETHTotalSupplyRes, xETHNavRes, xETHTotalSupplyRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, ETHTotalUnderlyingRes, betaRes
+                fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, ETHTotalUnderlyingRes,
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
             }
         } catch (error) {
             console.log('baseInfoError==>', error)

@@ -34,6 +34,7 @@ export default function Mint() {
     marketContract,
     treasuryContract,
     _mintFETHFee,
+    ethGatewayContract,
     _mintXETHFee,
     ethPrice
   } = usefxETH()
@@ -76,14 +77,14 @@ export default function Mint() {
   }
 
   const handleGetAllMinAmount = async () => {
-    console.log('ETHtAmount----', ETHtAmount)
     try {
-      const minout = await marketContract.methods
-        .mint(ETHtAmount, _currentAccount, 0, 0)
-        .call()
+      console.log('ETHtAmount----', ETHtAmount)
+      const minout = await ethGatewayContract.methods
+        .mintFToken(0)
+        .call({ value: ETHtAmount })
       console.log('minout---', minout)
     } catch (e) {
-      console.log(e)
+      console.log('minout---error--', e)
       return 0
     }
   }
