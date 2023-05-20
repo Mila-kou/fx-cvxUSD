@@ -36,10 +36,12 @@ export default function SystemStatistics() {
   const {
     fnav,
     xnav,
+    collateralRatio,
+    p_f,
     fETHTotalSupply,
     xETHTotalSupply,
     totalBaseToken,
-    totalBaseTokenTvl
+    totalBaseTokenTvl,
   } = usefxETH()
   return (
     <div className={styles.container}>
@@ -75,7 +77,8 @@ export default function SystemStatistics() {
             <Chart
               fxData={{
                 nav: fnav,
-                totalSupply: fETHTotalSupply
+                totalSupply: fETHTotalSupply,
+                ratio: p_f
               }}
               color="blue"
               symbol="fETH"
@@ -104,7 +107,7 @@ export default function SystemStatistics() {
             <div className={styles.title}>fETH Collecteral Ratio</div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
-                <b>200</b>%
+                <b>{collateralRatio}</b>%
               </p>
               <p>
                 {prices[mode + 1]} {mode < 2 && <span>$1,200</span>}
@@ -116,7 +119,8 @@ export default function SystemStatistics() {
             <Chart
               fxData={{
                 nav: xnav,
-                totalSupply: xETHTotalSupply
+                totalSupply: xETHTotalSupply,
+                ratio: (100 - p_f)
               }}
               color="red"
               symbol="xETH"

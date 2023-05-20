@@ -80,7 +80,7 @@ export default function Chart({ color, icon, symbol, fxData }) {
           {/* <img src={icon} /> */}
           {symbol} Total Supply:
         </div>
-        <div>{fxData.totalSupply} (0.35)</div>
+        <div>{fxData.totalSupply} ({fxData.ratio}%)</div>
       </div>
     </div>
   )

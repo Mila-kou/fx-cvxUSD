@@ -40,6 +40,9 @@ const usefxETH = () => {
       const _totalBaseToken = checkNotZoroNum(fxInfo.baseInfo.totalBaseTokenRes) ? fb4(fxInfo.baseInfo.totalBaseTokenRes) : 0
       const _totalBaseTokenTvl = checkNotZoroNum(fxInfo.baseInfo.totalBaseTokenRes) ? fb4(cBN(fxInfo.baseInfo.totalBaseTokenRes).multipliedBy(cBN(fxInfo.baseInfo.CurrentNavRes?._baseNav).div(1e18)).toFixed(0, 1)) : 0
 
+      const _collateralRatio = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(fxInfo.baseInfo.collateralRatioRes * 100) : 200;
+      const _p_f = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).multipliedBy(1e20).toFixed(0, 1)) : 0
+
       console.log('_fnav-_xnav-_fETHTotalSupply-_xETHTotalSupply-', fxInfo.baseInfo, _fnav, _xnav, _fETHTotalSupply, _xETHTotalSupply, _totalBaseToken)
 
       console.log('_mintFETHFee-_mintXETHFee-_redeemFETHFee-_redeemXETHFee-', _mintFETHFee, _mintXETHFee, _redeemFETHFee, _redeemXETHFee)
@@ -54,7 +57,9 @@ const usefxETH = () => {
         _redeemFETHFee,
         _redeemXETHFee,
         totalBaseToken: _totalBaseToken,
-        totalBaseTokenTvl: _totalBaseTokenTvl
+        totalBaseTokenTvl: _totalBaseTokenTvl,
+        collateralRatio: _collateralRatio,
+        p_f: _p_f
       }
     } catch (error) {
 
