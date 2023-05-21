@@ -130,10 +130,35 @@ export default function Redeem() {
   const handleRedeem = async () => {
     try {
       setRedeeming(true)
+      const _minoutETH = await getMinAmount()
+      let _fTokenIn = 0
+      let _xTokenIn = 0
+      if (isF) {
+        _fTokenIn = tokenAmount
+        _xTokenIn = 0
+      } else {
+        _xTokenIn = tokenAmount
+        _fTokenIn = 0
+      }
+      const apiCall = await marketContract.methods
+        .redeem(_fTokenIn, _xTokenIn, _currentAccount, _minoutETH)
+      const estimatedGas = await apiCall.estimateGas({
+        from: _currentAccount
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(
+        () => apiCall.send({ from: _currentAccount, gas }),
+        {
+          key: 'Redeem',
+          action: 'Redeem',
+        }
+      )
+      setRedeeming(false)
     } catch (e) {
       setRedeeming(false)
     }
   }
+
   useEffect(() => {
     getMinAmount()
   }, [selected, tokenAmount])
@@ -185,7 +210,7 @@ export default function Redeem() {
       />
 
       <div className={styles.action}>
-        <BtnWapper loading={redeeming} width="100%">
+        <BtnWapper loading={redeeming}  onClick={handleRedeem} width="100%">
           Redeem
         </BtnWapper>
       </div>
