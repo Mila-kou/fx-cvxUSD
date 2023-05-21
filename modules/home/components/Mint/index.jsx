@@ -53,7 +53,7 @@ export default function Mint() {
 
   const [fee, feeUsd] = useMemo(() => {
     const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee)
-    const _feeUsd = cBN(_fee).multipliedBy(1 || 1)
+    const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     console.log('ETHtAmount---_newETHPrice--', _fee.toString(10), _feeUsd.toString(10), ethPrice)
     return [fb4(_fee), fb4(_feeUsd)]
   }, [ETHtAmount, ethPrice])

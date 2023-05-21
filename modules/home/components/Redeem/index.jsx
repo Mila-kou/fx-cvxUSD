@@ -117,7 +117,7 @@ export default function Redeem() {
       console.log('minout_ETH---', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0))
         .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
-      const _minOut_ETH_tvl = _minOut_CBN.times(ethPrice)
+      const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toFixed(0, 1))
       setMinOutETHtAmount({
         minout: fb4(_minOut_CBN.toFixed(0, 1)),
         tvl: _minOut_ETH_tvl
