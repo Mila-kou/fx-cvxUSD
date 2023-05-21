@@ -46,7 +46,10 @@ export default function SystemStatistics() {
     StabilityModePrice,
     UserLiquidationModePrice,
     ProtocolLiquidationModePrice,
-    systemStatus
+    systemStatus,
+    ethPrice_text,
+    lastPermissionedPrice,
+    R
   } = usefxETH()
   return (
     <div className={styles.container}>
@@ -136,15 +139,15 @@ export default function SystemStatistics() {
           <div className={styles.details} data-color="red">
             <div className={styles.cell}>
               <div>ETH Last Change: </div>
-              <p>20%</p>
+              <p>{R}%</p>
             </div>
             <div className={styles.cell}>
               <div>Oracle. Current Calc Price: </div>
-              <p>$2,021.88</p>
+              <p>${ethPrice_text}</p>
             </div>
             <div className={styles.cell}>
               <div>Oracle. Last Calc Price:</div>
-              <p>$2,021.88</p>
+              <p>${lastPermissionedPrice}</p>
             </div>
           </div>
         </div>

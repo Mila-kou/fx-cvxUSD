@@ -9,7 +9,7 @@ import { useGlobal } from '@/contexts/GlobalProvider'
 const usefxETH = () => {
   const { fx_info: fxInfo } = useGlobal()
   // const ethPrice = useETHPrice()
-  const { getSystemStatus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
+  const { getSystemStatus, getR, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -32,7 +32,7 @@ const usefxETH = () => {
       const _fnav = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._fNav, fb4(fxInfo.baseInfo.CurrentNavRes?._fNav))
       const _xnav = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._xNav, fb4(fxInfo.baseInfo.CurrentNavRes?._xNav))
       const _ethPrice = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._baseNav, fxInfo.baseInfo.CurrentNavRes?._baseNav / 1e18)
-      const _ethPrice_text = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._baseNav, fb4(fxInfo.baseInfo.CurrentNavRes?._baseNav))
+      const _ethPrice_text = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._baseNav, fb4(fxInfo.baseInfo.CurrentNavRes?._baseNav, false, 18, 2))
       const _fETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.fETHTotalSupplyRes, fb4(fxInfo.baseInfo.fETHTotalSupplyRes))
       const _xETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.xETHTotalSupplyRes, fb4(fxInfo.baseInfo.xETHTotalSupplyRes))
 
@@ -70,9 +70,17 @@ const usefxETH = () => {
       })
       ProtocolLiquidationModePrice = checkNotZoroNumOption(ProtocolLiquidationModePrice, fb4(ProtocolLiquidationModePrice, false, 0, 2))
 
+      const lastPermissionedPrice = checkNotZoroNumOption(fxInfo.baseInfo.lastPermissionedPriceRes, fb4(fxInfo.baseInfo.lastPermissionedPriceRes, false, 18, 2))
+
       const _systemStatus = getSystemStatus({
         limitCollecteralRatio: fxInfo.baseInfo.collateralRatioRes / 1e18
       })
+
+      let _R = getR({
+        s: fxInfo.baseInfo.CurrentNavRes?._baseNav,
+        s0: fxInfo.baseInfo.lastPermissionedPriceRes
+      })
+      _R = fb4(checkNotZoroNumOption(_R, _R * 100), false, 0, 2)
       return {
         fnav: _fnav,
         xnav: _xnav,
@@ -92,7 +100,9 @@ const usefxETH = () => {
         StabilityModePrice,
         UserLiquidationModePrice,
         ProtocolLiquidationModePrice,
-        systemStatus: _systemStatus
+        systemStatus: _systemStatus,
+        lastPermissionedPrice,
+        R: _R
       }
     } catch (error) {
 

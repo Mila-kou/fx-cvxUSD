@@ -20,7 +20,7 @@ const useInfo = () => {
     const fetchBaseInfo = useCallback(async () => {
         const { totalSupply: fETHTotalSupplyFn } = fETHContract.methods
         const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
-        const { getCurrentNav, collateralRatio, totalBaseToken, beta } = treasuryContract.methods
+        const { getCurrentNav, collateralRatio, totalBaseToken, beta, lastPermissionedPrice } = treasuryContract.methods
         const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio } = marketContract.methods
         try {
             const apiCalls = [
@@ -37,20 +37,22 @@ const useInfo = () => {
 
 
                 beta(),
+                lastPermissionedPrice()
             ]
             const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes] =
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
                 'BaseInfo11111',
                 // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
+                // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes,
+                lastPermissionedPriceRes
             )
 
             return {
                 fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes
             }
         } catch (error) {
             console.log('baseInfoError==>', error)
