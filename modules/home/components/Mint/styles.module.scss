@@ -7,14 +7,12 @@
     width: 10px;
     margin: 10px auto;
   }
-  
+
   .inputItem {
     margin-bottom: 16px;
   }
 
-  .btn {
-    @include colorful-button;
-    width: 100%;
+  .action {
     margin-top: 16px;
   }
 }

@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Button } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -30,7 +29,7 @@ export default function Redeem() {
     _redeemXETHFee,
     ethPrice,
     fnav,
-    xnav
+    xnav,
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -62,7 +61,6 @@ export default function Redeem() {
     const _feeUsd = cBN(_fee).multipliedBy(1 || 1)
     return [fb4(_fee), fb4(_feeUsd)]
   }, [isF, FETHtAmount, XETHtAmount, ethPrice])
-
 
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -178,10 +176,9 @@ export default function Redeem() {
         detail={detail}
       />
 
-      <BtnWapper>
-        <Button className={styles.btn}>Redeem</Button>
-      </BtnWapper>
-
+      <div className={styles.action}>
+        <BtnWapper width="100%">Redeem</BtnWapper>
+      </div>
     </div>
   )
 }

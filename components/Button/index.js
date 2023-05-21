@@ -24,7 +24,7 @@ export default function Button({
     <button
       className={cn(styles.btn, styles[theme], styles[size])}
       onClick={handClick}
-      disabled={disabled}
+      disabled={disabled || loading}
       style={{ width, ...style }}
     >
       {children} {loading ? <LoadingOutlined /> : null}

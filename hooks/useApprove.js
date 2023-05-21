@@ -137,10 +137,7 @@ export const useApprove = (props) => {
       () => (
         <>
           <Visible visible={needApprove && !notVisibleMaxSwitch}>
-            <div
-              className="flex items-center justify-center gap-2 mb-3"
-              style={switchStyle ?? {}}
-            >
+            <div className="root" style={switchStyle ?? {}}>
               <div>Unlimited Approve</div>
               <Switch checked={isApproveMax} onChange={setIsApproveMax} />
             </div>
@@ -154,6 +151,16 @@ export const useApprove = (props) => {
           >
             {needApprove ? `Approve & ${children}` : children}
           </Button>
+
+          <style jsx>{`
+            .root {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              column-gap: 10px;
+              margin-bottom: 10px;
+            }
+          `}</style>
         </>
       ),
       [

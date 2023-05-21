@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Button } from 'antd'
+import Button from '@/components/Button'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -23,11 +23,11 @@ export default function Mint() {
   const [ETHtAmount, setETHtAmount] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState({
     amount: 0,
-    tvl: 0
+    tvl: 0,
   })
   const [XETHtAmount, setXETHtAmount] = useState({
     amount: 0,
-    tvl: 0
+    tvl: 0,
   })
   const [mintLoading, setMintLoading] = useState(false)
   const [detail, setDetail] = useState({
@@ -46,7 +46,7 @@ export default function Mint() {
     _mintXETHFee,
     ethPrice,
     fnav,
-    xnav
+    xnav,
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -54,7 +54,12 @@ export default function Mint() {
   const [fee, feeUsd] = useMemo(() => {
     const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee)
     const _feeUsd = cBN(_fee).multipliedBy(1 || 1)
-    console.log('ETHtAmount---_newETHPrice--', _fee.toString(10), _feeUsd.toString(10), ethPrice)
+    console.log(
+      'ETHtAmount---_newETHPrice--',
+      _fee.toString(10),
+      _feeUsd.toString(10),
+      ethPrice
+    )
     return [fb4(_fee), fb4(_feeUsd)]
   }, [ETHtAmount, ethPrice])
 
@@ -70,7 +75,7 @@ export default function Mint() {
       if (!checkNotZoroNum(ETHtAmount)) {
         return 0
       }
-      let minout_ETH;
+      let minout_ETH
       if (isF) {
         minout_ETH = await ethGatewayContract.methods
           .mintFToken(0)
@@ -80,27 +85,32 @@ export default function Mint() {
           .mintXToken(0)
           .call({ value: ETHtAmount })
       }
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0))
-        .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
+        cBN(1).minus(cBN(slippage).dividedBy(100))
+      )
       if (isF) {
-        const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(fnav).toString(10))
+        const _minOut_fETH_tvl = fb4(
+          _minOut_CBN.multipliedBy(fnav).toString(10)
+        )
         setFETHtAmount({
           minout: fb4(_minOut_CBN.toFixed(0, 1)),
-          tvl: _minOut_fETH_tvl
+          tvl: _minOut_fETH_tvl,
         })
         setXETHtAmount({
           minout: 0,
-          tvl: 0
+          tvl: 0,
         })
       } else {
-        const _minOut_xETH_tvl = fb4(_minOut_CBN.multipliedBy(xnav).toString(10))
+        const _minOut_xETH_tvl = fb4(
+          _minOut_CBN.multipliedBy(xnav).toString(10)
+        )
         setXETHtAmount({
           minout: fb4(_minOut_CBN.toFixed(0, 1)),
-          tvl: _minOut_xETH_tvl
+          tvl: _minOut_xETH_tvl,
         })
         setFETHtAmount({
           minout: 0,
-          tvl: 0
+          tvl: 0,
         })
       }
       return _minOut_CBN.toFixed(0, 1)
@@ -113,14 +123,12 @@ export default function Mint() {
   const handleMint = async () => {
     try {
       setMintLoading(true)
-      const _minOut = await getMinAmount();
-      let apiCall;
+      const _minOut = await getMinAmount()
+      let apiCall
       if (isF) {
-        apiCall = await ethGatewayContract.methods
-          .mintFToken(_minOut)
+        apiCall = await ethGatewayContract.methods.mintFToken(_minOut)
       } else {
-        apiCall = await ethGatewayContract.methods
-          .mintXToken(_minOut)
+        apiCall = await ethGatewayContract.methods.mintXToken(_minOut)
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
@@ -191,7 +199,11 @@ export default function Mint() {
         detail={detail}
       />
 
-      <Button className={styles.btn} loading={mintLoading} onClick={handleMint} >Mint</Button>
+      <div className={styles.action}>
+        <Button width="100%" loading={mintLoading} onClick={handleMint}>
+          Mint
+        </Button>
+      </div>
     </div>
   )
 }
