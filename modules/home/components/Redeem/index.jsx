@@ -3,7 +3,7 @@ import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -14,7 +14,10 @@ import usefxETH from '../../controller/usefxETH'
 import useApprove from '@/hooks/useApprove'
 
 export default function Redeem() {
+  const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
+  const [redeeming, setRedeeming] = useState(0)
+  const [slippage, setSlippage] = useState(0.3)
   const { tokens } = useGlobal()
   const {
     fETHAddress,
@@ -34,6 +37,10 @@ export default function Redeem() {
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
+  const [minOutETHtAmount, setMinOutETHtAmount] = useState({
+    minout: 0,
+    tvl: 0,
+  })
 
   const [isF, isX, selectTokenAddress, tokenAmount] = useMemo(() => {
     let _isF = false
@@ -48,7 +55,7 @@ export default function Redeem() {
       _tokenAmount = XETHtAmount
     }
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
-  }, [selected])
+  }, [selected, FETHtAmount, XETHtAmount])
 
   const [fee, feeUsd] = useMemo(() => {
     let _redeemFee = _redeemFETHFee
@@ -58,7 +65,7 @@ export default function Redeem() {
       _redeemFee = _redeemXETHFee
     }
     const _fee = cBN(tokenAmount).multipliedBy(_redeemFee)
-    const _feeUsd = cBN(_fee).multipliedBy(1 || 1)
+    const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     return [fb4(_fee), fb4(_feeUsd)]
   }, [isF, FETHtAmount, XETHtAmount, ethPrice])
 
@@ -86,49 +93,50 @@ export default function Redeem() {
   })
 
   const getMinAmount = async () => {
-    // try {
-    //   if (!checkNotZoroNum(ETHtAmount)) {
-    //     return 0
-    //   }
-    //   let minout_ETH;
-    //   if (isF) {
-    //     minout_ETH = await ethGatewayContract.methods
-    //       .mintFToken(0)
-    //       .call({ value: ETHtAmount })
-    //   } else {
-    //     minout_ETH = await ethGatewayContract.methods
-    //       .mintXToken(0)
-    //       .call({ value: ETHtAmount })
-    //   }
-    //   const _minOut_CBN = (cBN(minout_ETH) || cBN(0))
-    //     .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
-    //   if (isF) {
-    //     const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(fnav).toString(10))
-    //     setFETHtAmount({
-    //       minout: fb4(_minOut_CBN.toFixed(0, 1)),
-    //       tvl: _minOut_fETH_tvl
-    //     })
-    //     setXETHtAmount({
-    //       minout: 0,
-    //       tvl: 0
-    //     })
-    //   } else {
-    //     const _minOut_xETH_tvl = fb4(_minOut_CBN.multipliedBy(xnav).toString(10))
-    //     setXETHtAmount({
-    //       minout: fb4(_minOut_CBN.toFixed(0, 1)),
-    //       tvl: _minOut_xETH_tvl
-    //     })
-    //     setFETHtAmount({
-    //       minout: 0,
-    //       tvl: 0
-    //     })
-    //   }
-    //   return _minOut_CBN.toFixed(0, 1)
-    // } catch (e) {
-    //   console.log(e)
-    //   return 0
-    // }
+    try {
+      if (!checkNotZoroNum(tokenAmount)) {
+        return 0
+      }
+      let minout_ETH
+      let _fTokenIn = 0
+      let _xTokenIn = 0
+      if (isF) {
+        _fTokenIn = tokenAmount
+        _xTokenIn = 0
+      } else {
+        _xTokenIn = tokenAmount
+        _fTokenIn = 0
+      }
+      minout_ETH = await marketContract.methods
+        .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
+        .call({ from: _currentAccount })
+
+      console.log('minout_ETH---', minout_ETH)
+      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
+        cBN(1).minus(cBN(slippage).dividedBy(100))
+      )
+      const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toFixed(0, 1))
+      setMinOutETHtAmount({
+        minout: fb4(_minOut_CBN.toFixed(0, 1)),
+        tvl: _minOut_ETH_tvl,
+      })
+      return _minOut_CBN.toFixed(0, 1)
+    } catch (e) {
+      console.log(e)
+      return 0
+    }
   }
+
+  const handleRedeem = async () => {
+    try {
+      setRedeeming(true)
+    } catch (e) {
+      setRedeeming(false)
+    }
+  }
+  useEffect(() => {
+    getMinAmount()
+  }, [selected, tokenAmount])
 
   return (
     <div className={styles.container}>
@@ -166,8 +174,8 @@ export default function Redeem() {
 
       <BalanceInput
         symbol="ETH"
-        placeholder="124.3"
-        usd="1800.24"
+        placeholder={minOutETHtAmount.minout}
+        usd={minOutETHtAmount.tvl}
         disabled
         className={styles.inputItem}
       />
@@ -177,7 +185,9 @@ export default function Redeem() {
       />
 
       <div className={styles.action}>
-        <BtnWapper width="100%">Redeem</BtnWapper>
+        <BtnWapper loading={redeeming} width="100%">
+          Redeem
+        </BtnWapper>
       </div>
     </div>
   )
