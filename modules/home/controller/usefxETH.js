@@ -7,7 +7,7 @@ import useFxCommon from '../hooks/useFxCommon'
 
 const usefxETH = () => {
   const fxInfo = useInfo()
-  const ethPrice = useETHPrice()
+  // const ethPrice = useETHPrice()
   const { getSystemStatus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
   const { contract: fETHContract, address: fETHAddress } = useFETH
   const { contract: xETHContract, address: xETHAddress } = useXETH()
@@ -30,7 +30,8 @@ const usefxETH = () => {
     try {
       const _fnav = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._fNav, fb4(fxInfo.baseInfo.CurrentNavRes?._fNav))
       const _xnav = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._xNav, fb4(fxInfo.baseInfo.CurrentNavRes?._xNav))
-      const _ethPrice = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._baseNav, fb4(fxInfo.baseInfo.CurrentNavRes?._baseNav))
+      const _ethPrice = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._baseNav, fxInfo.baseInfo.CurrentNavRes?._baseNav / 1e18)
+      const _ethPrice_text = checkNotZoroNumOption(fxInfo.baseInfo.CurrentNavRes?._baseNav, fb4(fxInfo.baseInfo.CurrentNavRes?._baseNav))
       const _fETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.fETHTotalSupplyRes, fb4(fxInfo.baseInfo.fETHTotalSupplyRes))
       const _xETHTotalSupply = checkNotZoroNumOption(fxInfo.baseInfo.xETHTotalSupplyRes, fb4(fxInfo.baseInfo.xETHTotalSupplyRes))
 
@@ -75,6 +76,7 @@ const usefxETH = () => {
         fnav: _fnav,
         xnav: _xnav,
         ethPrice: _ethPrice,
+        ethPrice_text: _ethPrice_text,
         fETHTotalSupply: _fETHTotalSupply,
         xETHTotalSupply: _xETHTotalSupply,
         _mintFETHFee,
@@ -105,7 +107,6 @@ const usefxETH = () => {
     treasuryContract,
     ethGatewayContract,
     ...pageData,
-    ethPrice
   }
 }
 
