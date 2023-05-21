@@ -9,7 +9,7 @@ const usefxETH = () => {
   const fxInfo = useInfo()
   // const ethPrice = useETHPrice()
   const { getSystemStatus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
-  const { contract: fETHContract, address: fETHAddress } = useFETH
+  const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
   const { contract: treasuryContract } = useFX_Treasury()
