@@ -44,14 +44,14 @@ export default function AppHeader() {
         symbol: 'fETH',
         amount: fb4(tokens.fETH.balance, false),
         icon: '/images/f-logo.svg',
-        usd: 0,
+        usd: tokens.fETH.usd,
       },
       {
         name: 'Leveraged ETH',
         symbol: 'xETH',
         amount: fb4(tokens.xETH.balance, false),
         icon: '/images/x-logo.svg',
-        usd: 0,
+        usd: tokens.xETH.usd,
       },
     ],
     [tokens]

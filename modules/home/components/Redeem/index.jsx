@@ -200,7 +200,7 @@ export default function Redeem() {
       <BalanceInput
         symbol="ETH"
         placeholder={minOutETHtAmount.minout}
-        usd={minOutETHtAmount.tvl}
+        usd={`$${minOutETHtAmount.tvl}`}
         disabled
         className={styles.inputItem}
       />
@@ -210,7 +210,7 @@ export default function Redeem() {
       />
 
       <div className={styles.action}>
-        <BtnWapper loading={redeeming}  onClick={handleRedeem} width="100%">
+        <BtnWapper loading={redeeming} onClick={handleRedeem} width="100%">
           Redeem
         </BtnWapper>
       </div>

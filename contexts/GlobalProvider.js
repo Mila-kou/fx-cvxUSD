@@ -12,7 +12,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { useTheme } from './ThemeProvider'
 import { useToken } from '@/hooks/useTokenInfo'
-import { cBN, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import {
   getTokenListPrice,
   getVaultsInfo,
@@ -20,6 +20,7 @@ import {
   getConcentratorInit,
   getLpPrice,
 } from '@/services/dataInfo'
+import useInfo from '@/modules/home/hooks/useInfo'
 
 const GlobalContext = createContext(null)
 
@@ -29,34 +30,54 @@ function GlobalProvider({ children }) {
   const [showSystemStatistics, { toggle: toggleShowSystemStatistics }] =
     useToggle()
 
+  const fx_info = useInfo()
   const ethToken = useToken(config.tokens.eth)
   const fETHToken = useToken(config.tokens.fETH)
   const xETHToken = useToken(config.tokens.xETH)
 
-  const [{ data: tokenPrice, refetch: refetch1 }] = useQueries({
+
+  const [
+    { data: tokenPrice, refetch: refetch1 }
+  ] = useQueries({
     queries: [
       {
         queryKey: ['tokenPrice'],
         queryFn: getTokenListPrice,
         enabled: !!web3,
-      },
+      }
     ],
   })
 
+
+
   const tokens = useMemo(() => {
     // ETH
+    const { CurrentNavRes } = fx_info.baseInfo
+    console.log('CurrentNavRes---', CurrentNavRes)
     return {
       ETH: {
         ...ethToken,
-        usd: fb4(
-          cBN(ethToken.balance).multipliedBy(tokenPrice?.ethereum?.usd) || 0,
+        usd: checkNotZoroNumOption(ethToken.balance, fb4(
+          cBN(ethToken.balance).multipliedBy(CurrentNavRes?._baseNav).div(1e18) || 0,
           true
-        ),
+        )),
       },
-      fETH: fETHToken,
-      xETH: xETHToken,
+      fETH: {
+        ...fETHToken,
+        usd: checkNotZoroNumOption(fETHToken.balance, fb4(
+          cBN(fETHToken.balance).multipliedBy(CurrentNavRes?._fNav).div(1e18) || 0,
+          true
+        )),
+      },
+      xETH: {
+        ...xETHToken,
+        usd: checkNotZoroNumOption(xETHToken.balance, fb4(
+          cBN(xETHToken.balance).multipliedBy(CurrentNavRes?._xNav).div(1e18) || 0,
+          true
+        )),
+      },
     }
-  }, [ethToken, fETHToken, xETHToken, tokenPrice])
+  }, [ethToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
 
   useDebounceEffect(
     () => {
@@ -74,6 +95,7 @@ function GlobalProvider({ children }) {
       toggleShowSystemStatistics,
       tokens,
       tokenPrice,
+      fx_info
     }),
     [
       theme,
@@ -82,6 +104,7 @@ function GlobalProvider({ children }) {
       toggleShowSystemStatistics,
       tokens,
       tokenPrice,
+      fx_info
     ]
   )
 

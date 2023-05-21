@@ -176,7 +176,7 @@ export default function Mint() {
         disabled
         type={isF ? '' : 'select'}
         className={styles.inputItem}
-        usd={FETHtAmount.tvl}
+        usd={`$${FETHtAmount.tvl}`}
         // onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
@@ -190,7 +190,7 @@ export default function Mint() {
         disabled
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd={XETHtAmount.tvl}
+        usd={`$${XETHtAmount.tvl}`}
         onSelected={() => setSelected(1)}
       />
 
