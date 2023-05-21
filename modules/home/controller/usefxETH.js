@@ -4,9 +4,10 @@ import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useFETH, useXETH, useFX_Market, useFX_Treasury, useFX_ETHGateway } from '@/hooks/useContracts'
 import useETHPrice from '../hooks/useETHPrice'
 import useFxCommon from '../hooks/useFxCommon'
+import { useGlobal } from '@/contexts/GlobalProvider'
 
 const usefxETH = () => {
-  const fxInfo = useInfo()
+  const { fx_info: fxInfo } = useGlobal()
   // const ethPrice = useETHPrice()
   const { getSystemStatus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
@@ -43,8 +44,8 @@ const usefxETH = () => {
       const _totalBaseToken = checkNotZoroNum(fxInfo.baseInfo.totalBaseTokenRes) ? fb4(fxInfo.baseInfo.totalBaseTokenRes) : 0
       const _totalBaseTokenTvl = checkNotZoroNum(fxInfo.baseInfo.totalBaseTokenRes) ? fb4(cBN(fxInfo.baseInfo.totalBaseTokenRes).multipliedBy(cBN(fxInfo.baseInfo.CurrentNavRes?._baseNav).div(1e18)).toFixed(0, 1)) : 0
 
-      const _collateralRatio = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(fxInfo.baseInfo.collateralRatioRes * 100) : 200;
-      const _p_f = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).multipliedBy(1e20).toFixed(0, 1)) : 0
+      const _collateralRatio = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(fxInfo.baseInfo.collateralRatioRes * 100, false, 18, 2) : 200.00;
+      const _p_f = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).multipliedBy(1e20).toFixed(0, 1), false, 18, 2) : 0
 
       console.log('_fnav-_xnav-_fETHTotalSupply-_xETHTotalSupply-', fxInfo.baseInfo, _fnav, _xnav, _fETHTotalSupply, _xETHTotalSupply, _totalBaseToken)
 
