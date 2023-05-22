@@ -32,6 +32,7 @@ const prices = [
 ]
 
 export default function SystemStatistics() {
+  const { blockNumber, current } = useWeb3()
   const [mode, setMode] = useState(-1)
   const {
     fnav,
@@ -50,7 +51,7 @@ export default function SystemStatistics() {
     systemStatus,
     ethPrice_text,
     lastPermissionedPrice,
-    R
+    R,
   } = usefxETH()
   return (
     <div className={styles.container}>
@@ -87,7 +88,7 @@ export default function SystemStatistics() {
               fxData={{
                 nav: fnav,
                 totalSupply: fETHTotalSupply,
-                ratio: p_f
+                ratio: p_f,
               }}
               color="blue"
               symbol="fETH"
@@ -116,8 +117,7 @@ export default function SystemStatistics() {
             <div className={styles.title}>fETH Collecteral Ratio</div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
-                <b>{collateralRatio}</b>%
-                {systemStatus}
+                <b>{collateralRatio}</b>%{systemStatus}
               </p>
               {/* <p>
                 {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
@@ -130,7 +130,7 @@ export default function SystemStatistics() {
               fxData={{
                 nav: xnav,
                 totalSupply: xETHTotalSupply,
-                ratio: p_x
+                ratio: p_x,
               }}
               color="red"
               symbol="xETH"
@@ -156,7 +156,7 @@ export default function SystemStatistics() {
       </div>
 
       <p className={styles.updateAt}>
-        Update at: [Block]17023966, 23/4/11 12:12:12
+        Update at: [Block]{blockNumber}, {current.format('YY/MM/DD, HH:mm:ss')}
       </p>
     </div>
   )
