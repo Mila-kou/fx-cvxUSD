@@ -31,6 +31,7 @@ export default function Redeem() {
     _redeemFETHFee,
     _redeemXETHFee,
     ethPrice,
+    ethPrice_text,
     fnav,
     xnav,
     mintPaused, redeemPaused
@@ -80,9 +81,9 @@ export default function Redeem() {
   }
 
   const [detail, setDetail] = useState({
-    bonus: 75,
-    bonusRatio: 2.1,
-    ETH: 1,
+    // bonus: 75,
+    // bonusRatio: 2.1,
+    // ETH: 1,
   })
 
   const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
@@ -126,10 +127,16 @@ export default function Redeem() {
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toFixed(0, 1))
+      const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toFixed(10))
       setMinOutETHtAmount({
-        minout: fb4(_minOut_CBN.toFixed(0, 1)),
+        minout: fb4(_minOut_CBN.toFixed(10)),
         tvl: _minOut_ETH_tvl,
+      })
+      setDetail((pre) => {
+        return {
+          ...pre,
+          ETH: fb4(_minOut_CBN.toFixed(10))
+        }
       })
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
@@ -184,7 +191,7 @@ export default function Redeem() {
         color={isF ? 'blue' : undefined}
         type={isF ? '' : 'select'}
         className={styles.inputItem}
-        usd={tokens.fETH.usd}
+        usd={`$${fnav}`}
         maxAmount={tokens.fETH.balance}
         onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
@@ -198,7 +205,7 @@ export default function Redeem() {
         selectColor="red"
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd={tokens.xETH.usd}
+        usd={`$${xnav}`}
         maxAmount={tokens.xETH.balance}
         onChange={hanldeXETHAmountChanged}
         onSelected={() => setSelected(1)}
@@ -210,7 +217,7 @@ export default function Redeem() {
       <BalanceInput
         symbol="ETH"
         placeholder={minOutETHtAmount.minout}
-        usd={`$${minOutETHtAmount.tvl}`}
+        usd={`$${ethPrice_text}`}
         disabled
         className={styles.inputItem}
       />
