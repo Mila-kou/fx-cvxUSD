@@ -12,6 +12,7 @@ import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 import useApprove from '@/hooks/useApprove'
+import Tabs from '../Tabs'
 
 export default function Redeem() {
   const { _currentAccount } = useWeb3()
@@ -34,7 +35,8 @@ export default function Redeem() {
     ethPrice_text,
     fnav,
     xnav,
-    mintPaused, redeemPaused
+    mintPaused,
+    redeemPaused,
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -98,9 +100,11 @@ export default function Redeem() {
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
     if (isF) {
-      _enableETH = _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
+      _enableETH =
+        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
     } else {
-      _enableETH = _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
+      _enableETH =
+        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     }
     return !redeemPaused && _enableETH
   }, [tokenAmount, redeemPaused, tokens.ETH.balance])
@@ -135,7 +139,7 @@ export default function Redeem() {
       setDetail((pre) => {
         return {
           ...pre,
-          ETH: fb4(_minOut_CBN.toFixed(10))
+          ETH: fb4(_minOut_CBN.toFixed(10)),
         }
       })
       return _minOut_CBN.toFixed(0, 1)
@@ -158,10 +162,14 @@ export default function Redeem() {
         _xTokenIn = tokenAmount
         _fTokenIn = 0
       }
-      const apiCall = await marketContract.methods
-        .redeem(_fTokenIn, _xTokenIn, _currentAccount, _minoutETH)
+      const apiCall = await marketContract.methods.redeem(
+        _fTokenIn,
+        _xTokenIn,
+        _currentAccount,
+        _minoutETH
+      )
       const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount
+        from: _currentAccount,
       })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(
@@ -183,33 +191,36 @@ export default function Redeem() {
 
   return (
     <div className={styles.container}>
-      <BalanceInput
-        placeholder="0"
-        balance={fb4(tokens.fETH.balance, false)}
-        symbol="fETH"
-        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
-        color={isF ? 'blue' : undefined}
-        type={isF ? '' : 'select'}
-        className={styles.inputItem}
-        usd={`$${fnav}`}
-        maxAmount={tokens.fETH.balance}
-        onChange={hanldeFETHAmountChanged}
-        onSelected={() => setSelected(0)}
-      />
-      <BalanceInput
-        placeholder="0"
-        balance={fb4(tokens.xETH.balance, false)}
-        symbol="xETH"
-        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
-        color={isX ? 'red' : undefined}
-        selectColor="red"
-        type={isX ? '' : 'select'}
-        className={styles.inputItem}
-        usd={`$${xnav}`}
-        maxAmount={tokens.xETH.balance}
-        onChange={hanldeXETHAmountChanged}
-        onSelected={() => setSelected(1)}
-      />
+      <Tabs selecedIndex={selected} onChange={(index) => setSelected(index)} />
+      {isF && (
+        <BalanceInput
+          placeholder="0"
+          balance={fb4(tokens.fETH.balance, false)}
+          symbol="fETH"
+          icon="/images/f-s-logo-white.svg"
+          color="blue"
+          className={styles.inputItem}
+          usd={`$${fnav}`}
+          maxAmount={tokens.fETH.balance}
+          onChange={hanldeFETHAmountChanged}
+          onSelected={() => setSelected(0)}
+        />
+      )}
+      {isX && (
+        <BalanceInput
+          placeholder="0"
+          balance={fb4(tokens.xETH.balance, false)}
+          symbol="xETH"
+          icon="/images/x-s-logo-white.svg"
+          color="red"
+          selectColor="red"
+          className={styles.inputItem}
+          usd={`$${xnav}`}
+          maxAmount={tokens.xETH.balance}
+          onChange={hanldeXETHAmountChanged}
+          onSelected={() => setSelected(1)}
+        />
+      )}
       <div className={styles.arrow}>
         <DownOutlined />
       </div>
@@ -221,13 +232,15 @@ export default function Redeem() {
         disabled
         className={styles.inputItem}
       />
-      <DetailCollapse
-        title={`Redeem Fee: ${fee}%`}
-        detail={detail}
-      />
+      <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <BtnWapper loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">
+        <BtnWapper
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleRedeem}
+          width="100%"
+        >
           Redeem
         </BtnWapper>
       </div>
