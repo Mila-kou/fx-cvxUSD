@@ -33,6 +33,7 @@ export default function Redeem() {
     ethPrice,
     fnav,
     xnav,
+    mintPaused, redeemPaused
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -92,6 +93,16 @@ export default function Redeem() {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
+  const canRedeem = useMemo(() => {
+    let _enableETH = cBN(tokenAmount).isGreaterThan(0)
+    if (isF) {
+      _enableETH = _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
+    } else {
+      _enableETH = _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
+    }
+    return !redeemPaused && _enableETH
+  }, [tokenAmount, redeemPaused, tokens.ETH.balance])
+
   const getMinAmount = async () => {
     try {
       if (!checkNotZoroNum(tokenAmount)) {
@@ -111,7 +122,6 @@ export default function Redeem() {
         .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
         .call({ from: _currentAccount })
 
-      console.log('minout_ETH---', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
@@ -210,7 +220,7 @@ export default function Redeem() {
       />
 
       <div className={styles.action}>
-        <BtnWapper loading={redeeming} onClick={handleRedeem} width="100%">
+        <BtnWapper loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">
           Redeem
         </BtnWapper>
       </div>

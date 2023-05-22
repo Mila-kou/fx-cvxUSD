@@ -97,14 +97,16 @@ const usefxETH = () => {
         totalBaseTokenTvl: _totalBaseTokenTvl,
         collateralRatio: _collateralRatio,
         p_f: _p_f,
-        p_x:_p_x,
+        p_x: _p_x,
 
         StabilityModePrice,
         UserLiquidationModePrice,
         ProtocolLiquidationModePrice,
         systemStatus: _systemStatus,
         lastPermissionedPrice,
-        R: _R
+        R: _R,
+        mintPaused: fxInfo.baseInfo.mintPausedRes,
+        redeemPaused: fxInfo.baseInfo.redeemPausedRes
       }
     } catch (error) {
 

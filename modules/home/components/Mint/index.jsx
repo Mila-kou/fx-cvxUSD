@@ -47,6 +47,7 @@ export default function Mint() {
     ethPrice,
     fnav,
     xnav,
+    mintPaused, redeemPaused
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -64,10 +65,7 @@ export default function Mint() {
   }, [ETHtAmount, ethPrice])
 
   const hanldeETHAmountChanged = (v) => {
-    if (checkNotZoroNum(v)) {
-      console.log('vv------', v.toString(10))
-      setETHtAmount(v.toString(10))
-    }
+    setETHtAmount(v.toString(10))
   }
 
   const getMinAmount = async () => {
@@ -149,6 +147,11 @@ export default function Mint() {
     }
   }
 
+  const canMint = useMemo(() => {
+    let _enableETH = cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) && cBN(ETHtAmount).isGreaterThan(0)
+    return !mintPaused && _enableETH
+  }, [ETHtAmount, mintPaused, tokens.ETH.balance])
+
   useEffect(() => {
     getMinAmount()
     // handleGetAllMinAmount()
@@ -200,7 +203,7 @@ export default function Mint() {
       />
 
       <div className={styles.action}>
-        <Button width="100%" loading={mintLoading} onClick={handleMint}>
+        <Button width="100%" loading={mintLoading} disabled={!canMint} onClick={handleMint}>
           Mint
         </Button>
       </div>

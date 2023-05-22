@@ -20,8 +20,8 @@ const useInfo = () => {
     const fetchBaseInfo = useCallback(async () => {
         const { totalSupply: fETHTotalSupplyFn } = fETHContract.methods
         const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
-        const { getCurrentNav, collateralRatio, totalBaseToken, beta, lastPermissionedPrice } = treasuryContract.methods
-        const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio, marketConfig } = marketContract.methods
+        const { getCurrentNav, collateralRatio, totalBaseToken, beta, lastPermissionedPrice, } = treasuryContract.methods
+        const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio, marketConfig, mintPaused, redeemPaused } = marketContract.methods
         try {
             const apiCalls = [
                 fETHTotalSupplyFn(),
@@ -38,10 +38,13 @@ const useInfo = () => {
 
                 beta(),
                 lastPermissionedPrice(),
-                marketConfig()
+                marketConfig(),
+                mintPaused(),
+                redeemPaused()
             ]
             const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes, marketConfigRes] =
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes,
+                lastPermissionedPriceRes, marketConfigRes, mintPausedRes, redeemPausedRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
@@ -49,18 +52,36 @@ const useInfo = () => {
                 // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
                 //  betaRes,
-                lastPermissionedPriceRes,marketConfigRes
+                lastPermissionedPriceRes, marketConfigRes,
+                mintPausedRes, redeemPausedRes
             )
 
             return {
                 fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes, marketConfigRes
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
+                betaRes, lastPermissionedPriceRes, marketConfigRes, mintPausedRes, redeemPausedRes
             }
         } catch (error) {
             console.log('baseInfoError==>', error)
             return {}
         }
     }, [fETHContract, xETHContract, multiCallsV2, _currentAccount, web3])
+
+    const getMaxAbleFToken = async () => {
+        const { maxMintableFToken, maxMintableXToken, maxRedeemableFToken, maxRedeemableXToken } = treasuryContract.methods
+        const _stabilityRatio = baseInfo.marketConfigRes?.stabilityRatio || 0
+        const _liquidationRatio = baseInfo.marketConfigRes?.liquidationRatio || 0
+        const _selfLiquidationRatio = baseInfo.marketConfigRes?.selfLiquidationRatio || 0
+        const _recapRatioRatio = baseInfo.marketConfigRes?.recapRatio || 0
+        const apiCalls = [
+            maxMintableFToken(_stabilityRatio),
+            maxMintableXToken(_stabilityRatio),
+            maxRedeemableFToken(_stabilityRatio),
+            maxRedeemableXToken(_stabilityRatio),
+        ]
+        // const [maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes] = await multiCallsV2(apiCalls)
+        // console.log('maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--', _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes)
+    }
 
     const [
         { data: baseInfo, refetch: refetchBaseInfo },
@@ -82,8 +103,11 @@ const useInfo = () => {
 
     useEffect(() => {
         refetchBaseInfo()
-        // refetchUserInfo()
     }, [_currentAccount, blockNumber])
+
+    useEffect(() => {
+        getMaxAbleFToken()
+    }, [baseInfo.collateralRatioRes])
 
     return {
         baseInfo,
