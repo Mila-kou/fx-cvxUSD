@@ -35,20 +35,15 @@ function GlobalProvider({ children }) {
   const fETHToken = useToken(config.tokens.fETH)
   const xETHToken = useToken(config.tokens.xETH)
 
-
-  const [
-    { data: tokenPrice, refetch: refetch1 }
-  ] = useQueries({
+  const [{ data: tokenPrice, refetch: refetch1 }] = useQueries({
     queries: [
       {
         queryKey: ['tokenPrice'],
         queryFn: getTokenListPrice,
         enabled: !!web3,
-      }
+      },
     ],
   })
-
-
 
   const tokens = useMemo(() => {
     // ETH
@@ -57,24 +52,39 @@ function GlobalProvider({ children }) {
     return {
       ETH: {
         ...ethToken,
-        usd: checkNotZoroNumOption(ethToken.balance, fb4(
-          cBN(ethToken.balance).multipliedBy(CurrentNavRes?._baseNav).div(1e18) || 0,
-          true
-        )),
+        usd: checkNotZoroNumOption(
+          ethToken.balance,
+          fb4(
+            cBN(ethToken.balance)
+              .multipliedBy(CurrentNavRes?._baseNav)
+              .div(1e18) || 0,
+            true
+          )
+        ),
       },
       fETH: {
         ...fETHToken,
-        usd: checkNotZoroNumOption(fETHToken.balance, fb4(
-          cBN(fETHToken.balance).multipliedBy(CurrentNavRes?._fNav).div(1e18) || 0,
-          true
-        )),
+        usd: checkNotZoroNumOption(
+          fETHToken.balance,
+          fb4(
+            cBN(fETHToken.balance)
+              .multipliedBy(CurrentNavRes?._fNav)
+              .div(1e18) || 0,
+            true
+          )
+        ),
       },
       xETH: {
         ...xETHToken,
-        usd: checkNotZoroNumOption(xETHToken.balance, fb4(
-          cBN(xETHToken.balance).multipliedBy(CurrentNavRes?._xNav).div(1e18) || 0,
-          true
-        )),
+        usd: checkNotZoroNumOption(
+          xETHToken.balance,
+          fb4(
+            cBN(xETHToken.balance)
+              .multipliedBy(CurrentNavRes?._xNav)
+              .div(1e18) || 0,
+            true
+          )
+        ),
       },
     }
   }, [ethToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
@@ -84,7 +94,7 @@ function GlobalProvider({ children }) {
       refetch1()
     },
     [blockNumber],
-    { wait: 30000 }
+    { wait: 3000 }
   )
 
   const value = useMemo(
@@ -95,7 +105,7 @@ function GlobalProvider({ children }) {
       toggleShowSystemStatistics,
       tokens,
       tokenPrice,
-      fx_info
+      fx_info,
     }),
     [
       theme,
@@ -104,7 +114,7 @@ function GlobalProvider({ children }) {
       toggleShowSystemStatistics,
       tokens,
       tokenPrice,
-      fx_info
+      fx_info,
     ]
   )
 
