@@ -8,13 +8,14 @@ import styles from './styles.module.scss'
 import Mint from '../Mint'
 import MintBonus from '../MintBonus'
 import Redeem from '../Redeem'
-import { useFETH } from '@/hooks/useContracts'
+import usefxETH from '../../controller/usefxETH'
 import RedeemBonus from '../RedeemBonus'
 
 export default function Swap() {
-  const { systemStatus } = useFETH()
+  const { systemStatus } = usefxETH()
   const [tab, setTab] = useState(0)
-  let tabs = useMemo(() => {
+
+  const tabs = useMemo(() => {
     if (systemStatus == 1) {
       return ['Mint', 'Redeem']
     }
@@ -26,6 +27,7 @@ export default function Swap() {
       <div className={styles.tabs}>
         {tabs.map((item, index) => (
           <div
+            key={item}
             className={styles.tab}
             data-active={tab === index}
             onClick={() => {
@@ -38,8 +40,7 @@ export default function Swap() {
       </div>
       {!!(tab == 0) && <Mint />}
       {!!(tab == 1) && <Redeem />}
-      {!!(tab == 2) && <MintBonus />}      
-      
+      {!!(tab == 2) && <MintBonus />}
     </div>
   )
 }
