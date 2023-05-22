@@ -31,10 +31,10 @@ export default function MintBonus() {
   })
   const [mintLoading, setMintLoading] = useState(false)
   const [detail, setDetail] = useState({
-    bonus: 75,
-    bonusRatio: 2.1,
-    fETH: 2,
-    xETH: 3,
+    // bonus: 75,
+    // bonusRatio: 2.1,
+    // fETH: 2,
+    // xETH: 3,
   })
   const {
     fETHContract,
@@ -45,6 +45,7 @@ export default function MintBonus() {
     ethGatewayContract,
     _mintXETHFee,
     ethPrice,
+    ethPrice_text,
     fnav,
     xnav,
     mintPaused, redeemPaused
@@ -53,15 +54,16 @@ export default function MintBonus() {
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   const [fee, feeUsd] = useMemo(() => {
-    const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee).div(1e18)
-    const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
-    console.log(
-      'ETHtAmount---_newETHPrice--',
-      _fee.toString(10),
-      _feeUsd.toString(10),
-      ethPrice
-    )
-    return [fb4(_fee), fb4(_feeUsd)]
+    const _fee = cBN(_mintFETHFee).multipliedBy(100).toString(10)
+    // const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee).div(1e18)
+    // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
+    // console.log(
+    //   'ETHtAmount---_newETHPrice--',
+    //   _fee.toString(10),
+    //   _feeUsd.toString(10),
+    //   ethPrice
+    // )
+    return [fb4(_fee), 1]
   }, [ETHtAmount, ethPrice])
 
   const hanldeETHAmountChanged = (v) => {
@@ -103,6 +105,13 @@ export default function MintBonus() {
           minout: 0,
           tvl: 0,
         })
+        setDetail(pre => {
+          return {
+            ...pre,
+            fETH: _minOut_fETH_tvl,
+            xETH: 0,
+          }
+        })
       } else {
         const _minOut_xETH_tvl = fb4(
           _minOut_CBN.multipliedBy(xnav).toString(10)
@@ -114,6 +123,13 @@ export default function MintBonus() {
         setFETHtAmount({
           minout: 0,
           tvl: 0,
+        })
+        setDetail(pre => {
+          return {
+            ...pre,
+            fETH: 0,
+            xETH: _minOut_xETH_tvl,
+          }
         })
       }
       return _minOut_CBN.toFixed(0, 1)
@@ -169,7 +185,7 @@ export default function MintBonus() {
         placeholder="0"
         symbol="ETH"
         balance={fb4(tokens.ETH.balance, false)}
-        usd={tokens.ETH.usd}
+        usd={`$${ethPrice_text}`}
         maxAmount={tokens.ETH.balance}
         onChange={hanldeETHAmountChanged}
       />
@@ -199,12 +215,12 @@ export default function MintBonus() {
         disabled
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd={`$${XETHtAmount.tvl}`}
+        usd={`$${xnav}`}
         onSelected={() => setSelected(1)}
       />
 
       <DetailCollapse
-        title={`Mint Fee: ${fee}ETH ~ $${feeUsd}`}
+        title={`Mint Fee: ${fee}%`}
         detail={detail}
       />
 

@@ -27,14 +27,14 @@ export default function DetailCollapse({ title, detail }) {
           {/* <p>
             fETH Collecteral Ratio will be: <span>220%</span>
           </p> */}
-          <p>
+          {/* <p>
             fETH Net Asset Value: <span>${PageData.fnav}</span>
           </p>
           <p>
             xETH Net Asset Value: <span>${PageData.xnav}</span>
-          </p>
+          </p> */}
 
-          {/* <div className={styles.result}>
+          <div className={styles.result}>
             {detail.bonus ? (
               <p>
                 System Bonus: :{' '}
@@ -58,7 +58,7 @@ export default function DetailCollapse({ title, detail }) {
                 Minimum received xETH: <span>{detail.xETH}</span>
               </p>
             ) : null}
-          </div> */}
+          </div>
         </div>
       ) : null}
     </div>

@@ -31,10 +31,10 @@ export default function Mint() {
   })
   const [mintLoading, setMintLoading] = useState(false)
   const [detail, setDetail] = useState({
-    bonus: 75,
-    bonusRatio: 2.1,
-    fETH: 2,
-    xETH: 3,
+    // bonus: 75,
+    // bonusRatio: 2.1,
+    // fETH: 2,
+    // xETH: 3,
   })
   const {
     fETHContract,
@@ -45,6 +45,7 @@ export default function Mint() {
     ethGatewayContract,
     _mintXETHFee,
     ethPrice,
+    ethPrice_text,
     fnav,
     xnav,
     mintPaused, redeemPaused
@@ -91,27 +92,41 @@ export default function Mint() {
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
         setFETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(0, 1)),
+          minout: fb4(_minOut_CBN.toFixed(10)),
           tvl: _minOut_fETH_tvl,
         })
         setXETHtAmount({
           minout: 0,
           tvl: 0,
         })
+        setDetail(pre => {
+          return {
+            ...pre,
+            fETH: _minOut_fETH_tvl,
+            xETH: 0,
+          }
+        })
       } else {
         const _minOut_xETH_tvl = fb4(
           _minOut_CBN.multipliedBy(xnav).toString(10)
         )
         setXETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(0, 1)),
+          minout: fb4(_minOut_CBN.toFixed(10)),
           tvl: _minOut_xETH_tvl,
         })
         setFETHtAmount({
           minout: 0,
           tvl: 0,
         })
+        setDetail(pre => {
+          return {
+            ...pre,
+            fETH: 0,
+            xETH: _minOut_xETH_tvl,
+          }
+        })
       }
-      return _minOut_CBN.toFixed(0, 1)
+      return _minOut_CBN.toFixed(10)
     } catch (e) {
       console.log(e)
       return 0
@@ -163,7 +178,8 @@ export default function Mint() {
         placeholder="0"
         symbol="ETH"
         balance={fb4(tokens.ETH.balance, false)}
-        usd={tokens.ETH.usd}
+        // usd={tokens.ETH.usd}
+        usd={`$${ethPrice_text}`}
         maxAmount={tokens.ETH.balance}
         onChange={hanldeETHAmountChanged}
       />
@@ -179,13 +195,13 @@ export default function Mint() {
         disabled
         type={isF ? '' : 'select'}
         className={styles.inputItem}
-        usd={`$${FETHtAmount.tvl}`}
+        usd={`$${fnav}`}
         // onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
       <BalanceInput
         symbol="xETH"
-        tip="Bonus+"
+        // tip="Bonus+"
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : undefined}
         selectColor="red"
@@ -193,7 +209,7 @@ export default function Mint() {
         disabled
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd={`$${XETHtAmount.tvl}`}
+        usd={`$${xnav}`}
         onSelected={() => setSelected(1)}
       />
 
