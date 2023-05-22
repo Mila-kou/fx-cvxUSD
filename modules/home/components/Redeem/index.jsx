@@ -203,7 +203,7 @@ export default function Redeem() {
           usd={`$${fnav}`}
           maxAmount={tokens.fETH.balance}
           onChange={hanldeFETHAmountChanged}
-          onSelected={() => setSelected(0)}
+          // onSelected={() => setSelected(0)}
         />
       )}
       {isX && (
@@ -218,7 +218,7 @@ export default function Redeem() {
           usd={`$${xnav}`}
           maxAmount={tokens.xETH.balance}
           onChange={hanldeXETHAmountChanged}
-          onSelected={() => setSelected(1)}
+          // onSelected={() => setSelected(1)}
         />
       )}
       <div className={styles.arrow}>
