@@ -18,7 +18,7 @@ export default function Swap() {
     if (systemStatus == 1) {
       return ['Mint', 'Redeem']
     }
-    return ['Mint', 'Redeem', 'Redeem Bonus']
+    return ['Mint', 'Redeem', 'Mint Bonus']
   }, [systemStatus])
 
   return (
@@ -36,9 +36,10 @@ export default function Swap() {
           </div>
         ))}
       </div>
-      {!!tab == 0 && <Mint />}
-      {!!tab == 1 && <Redeem />}
-      {!!tab == 2 && <RedeemBonus />}
+      {!!(tab == 0) && <Mint />}
+      {!!(tab == 1) && <Redeem />}
+      {!!(tab == 2) && <MintBonus />}      
+      
     </div>
   )
 }

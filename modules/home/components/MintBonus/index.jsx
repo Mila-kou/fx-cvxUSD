@@ -74,14 +74,19 @@ export default function MintBonus() {
         return 0
       }
       let minout_ETH
+      let bonuse_ETH
       if (isF) {
         minout_ETH = await ethGatewayContract.methods
           .mintFToken(0)
           .call({ value: ETHtAmount })
       } else {
+        // minout_ETH = await ethGatewayContract.methods
+        //   .mintXToken(0)
+        //   .call({ value: ETHtAmount })
         minout_ETH = await ethGatewayContract.methods
-          .mintXToken(0)
+          .addBaseToken(0)
           .call({ value: ETHtAmount })
+        console.log('minout_ETH__bonuse_ETH--', minout_ETH, bonuse_ETH)
       }
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
@@ -159,6 +164,7 @@ export default function MintBonus() {
 
   return (
     <div className={styles.container}>
+      MintBonus
       <BalanceInput
         placeholder="0"
         symbol="ETH"
@@ -171,7 +177,7 @@ export default function MintBonus() {
         <DownOutlined />
       </div>
 
-      <BalanceInput
+      {/* <BalanceInput
         symbol="fETH"
         icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
         color={isF ? 'blue' : undefined}
@@ -182,7 +188,7 @@ export default function MintBonus() {
         usd={`$${FETHtAmount.tvl}`}
         // onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
-      />
+      /> */}
       <BalanceInput
         symbol="xETH"
         tip="Bonus+"

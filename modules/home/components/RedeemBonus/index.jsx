@@ -120,7 +120,7 @@ export default function RedeemBonus() {
         _fTokenIn = 0
       }
       minout_ETH = await marketContract.methods
-        .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
+        .addBaseToken(tokenAmount, _currentAccount, 0)
         .call({ from: _currentAccount })
 
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(

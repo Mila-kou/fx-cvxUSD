@@ -185,7 +185,7 @@ export default function Mint() {
       />
       <BalanceInput
         symbol="xETH"
-        // tip="Bonus+"
+        tip="Bonus+"
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : undefined}
         selectColor="red"

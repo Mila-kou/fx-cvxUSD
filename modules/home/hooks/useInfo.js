@@ -21,7 +21,7 @@ const useInfo = () => {
         const { totalSupply: fETHTotalSupplyFn } = fETHContract.methods
         const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
         const { getCurrentNav, collateralRatio, totalBaseToken, beta, lastPermissionedPrice, } = treasuryContract.methods
-        const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio, marketConfig, mintPaused, redeemPaused } = marketContract.methods
+        const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio, marketConfig, incentiveConfig, mintPaused, redeemPaused } = marketContract.methods
         try {
             const apiCalls = [
                 fETHTotalSupplyFn(),
@@ -39,12 +39,13 @@ const useInfo = () => {
                 beta(),
                 lastPermissionedPrice(),
                 marketConfig(),
+                incentiveConfig(),
                 mintPaused(),
                 redeemPaused()
             ]
             const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes,
-                lastPermissionedPriceRes, marketConfigRes, mintPausedRes, redeemPausedRes] =
+                lastPermissionedPriceRes, marketConfigRes, incentiveConfigRes, mintPausedRes, redeemPausedRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
@@ -52,14 +53,14 @@ const useInfo = () => {
                 // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
                 //  betaRes,
-                lastPermissionedPriceRes, marketConfigRes,
+                lastPermissionedPriceRes, marketConfigRes, incentiveConfigRes,
                 mintPausedRes, redeemPausedRes
             )
 
             return {
                 fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
-                betaRes, lastPermissionedPriceRes, marketConfigRes, mintPausedRes, redeemPausedRes
+                betaRes, lastPermissionedPriceRes, marketConfigRes, incentiveConfigRes, mintPausedRes, redeemPausedRes
             }
         } catch (error) {
             console.log('baseInfoError==>', error)
