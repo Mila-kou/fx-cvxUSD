@@ -12,6 +12,7 @@ import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
+import Tabs from '../Tabs'
 
 export default function Mint() {
   const { _currentAccount } = useWeb3()
@@ -47,7 +48,8 @@ export default function Mint() {
     ethPrice,
     fnav,
     xnav,
-    mintPaused, redeemPaused
+    mintPaused,
+    redeemPaused,
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -148,7 +150,9 @@ export default function Mint() {
   }
 
   const canMint = useMemo(() => {
-    let _enableETH = cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) && cBN(ETHtAmount).isGreaterThan(0)
+    let _enableETH =
+      cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
+      cBN(ETHtAmount).isGreaterThan(0)
     return !mintPaused && _enableETH
   }, [ETHtAmount, mintPaused, tokens.ETH.balance])
 
@@ -171,39 +175,45 @@ export default function Mint() {
         <DownOutlined />
       </div>
 
-      <BalanceInput
-        symbol="fETH"
-        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
-        color={isF ? 'blue' : undefined}
-        placeholder={FETHtAmount.minout}
-        disabled
-        type={isF ? '' : 'select'}
-        className={styles.inputItem}
-        usd={`$${FETHtAmount.tvl}`}
-        // onChange={hanldeFETHAmountChanged}
-        onSelected={() => setSelected(0)}
-      />
-      <BalanceInput
-        symbol="xETH"
-        tip="Bonus+"
-        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
-        color={isX ? 'red' : undefined}
-        selectColor="red"
-        placeholder={XETHtAmount.minout}
-        disabled
-        type={isX ? '' : 'select'}
-        className={styles.inputItem}
-        usd={`$${XETHtAmount.tvl}`}
-        onSelected={() => setSelected(1)}
-      />
+      <Tabs selecedIndex={selected} onChange={(index) => setSelected(index)} />
 
-      <DetailCollapse
-        title={`Mint Fee: ${fee}%`}
-        detail={detail}
-      />
+      {isF && (
+        <BalanceInput
+          symbol="fETH"
+          icon="/images/f-s-logo-white.svg"
+          color="blue"
+          placeholder={FETHtAmount.minout}
+          disabled
+          className={styles.inputItem}
+          usd={`$${FETHtAmount.tvl}`}
+          // onChange={hanldeFETHAmountChanged}
+          // onSelected={() => setSelected(0)}
+        />
+      )}
+      {isX && (
+        <BalanceInput
+          symbol="xETH"
+          tip="Bonus+"
+          icon="/images/x-s-logo-white.svg"
+          color="red"
+          selectColor="red"
+          placeholder={XETHtAmount.minout}
+          disabled
+          className={styles.inputItem}
+          usd={`$${XETHtAmount.tvl}`}
+          // onSelected={() => setSelected(1)}
+        />
+      )}
+
+      <DetailCollapse title={`Mint Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <Button width="100%" loading={mintLoading} disabled={!canMint} onClick={handleMint}>
+        <Button
+          width="100%"
+          loading={mintLoading}
+          disabled={!canMint}
+          onClick={handleMint}
+        >
           Mint
         </Button>
       </div>
