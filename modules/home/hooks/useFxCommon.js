@@ -6,13 +6,16 @@ import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import abis from '@/config/abi'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
-import { cBN, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import useInfo from './useInfo'
+import { useGlobal } from '@/contexts/GlobalProvider'
 
 const useFxCommon = () => {
     const { _currentAccount, web3, blockNumber } = useWeb3()
     const { erc20Contract } = useContract()
     const multiCallsV2 = useMutiCallV2()
+    const { fx_info } = useGlobal()
+    console.log('fx_info--', fx_info)
     const { contract: treasuryContract } = useFX_Treasury()
     const { baseInfo } = useInfo()
     const [systemInfo, setSystemInfo] = useState({
@@ -115,7 +118,7 @@ const useFxCommon = () => {
 
     const get_fETH_Collecteral_Ratio = (params) => {
         return 1 / params.p_f
-    }    
+    }
 
     ///////////////////////// 稳定机制 //////////////////////////////////
     /**
@@ -192,11 +195,12 @@ const useFxCommon = () => {
 
     /**
      * 获取StabilityMode 价格
+     * fNav*n_f/(s*n)
      * @param {*} params 
      * @returns 
      */
     const getStabilityModePrice = (params) => {
-        const limitCollecteralRatio = 1.3055;
+        const limitCollecteralRatio = checkNotZoroNum(fx_info.marketConfigRes?.stabilityRatio) ? cBN(fx_info.marketConfigRes?.stabilityRatio).div(1e18).toFixed(0, 1) : 1.3055;
         const _s = cBN(1).div(limitCollecteralRatio)
         return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
     }
@@ -207,7 +211,7 @@ const useFxCommon = () => {
      * @returns 
      */
     const getUserLiquidationModePrice = (params) => {
-        const limitCollecteralRatio = 1.2067;
+        const limitCollecteralRatio = checkNotZoroNum(fx_info.marketConfigRes?.liquidationRatio) ? cBN(fx_info.marketConfigRes?.liquidationRatio).div(1e18).toFixed(0, 1) : 1.2067;
         const _s = cBN(1).div(limitCollecteralRatio)
         return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
     }
@@ -218,7 +222,7 @@ const useFxCommon = () => {
      * @returns 
      */
     const getProtocolLiquidationModePrice = (params) => {
-        const limitCollecteralRatio = 1.1449;
+        const limitCollecteralRatio = checkNotZoroNum(fx_info.marketConfigRes?.selfLiquidationRatio) ? cBN(fx_info.marketConfigRes?.selfLiquidationRatio).div(1e18).toFixed(0, 1) : 1.1449;
         const _s = cBN(1).div(limitCollecteralRatio)
         return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
     }

@@ -46,6 +46,7 @@ const usefxETH = () => {
 
       const _collateralRatio = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(fxInfo.baseInfo.collateralRatioRes * 100, false, 18, 2) : 200.00;
       const _p_f = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).multipliedBy(1e20).toFixed(0, 1), false, 18, 2) : 0
+      const _p_x = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes) ? fb4(cBN(1e20).minus(cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).multipliedBy(1e20)).toFixed(0, 1), false, 18, 2) : 0
 
       console.log('_fnav-_xnav-_fETHTotalSupply-_xETHTotalSupply-', fxInfo.baseInfo, _fnav, _xnav, _fETHTotalSupply, _xETHTotalSupply, _totalBaseToken)
 
@@ -96,6 +97,7 @@ const usefxETH = () => {
         totalBaseTokenTvl: _totalBaseTokenTvl,
         collateralRatio: _collateralRatio,
         p_f: _p_f,
+        p_x:_p_x,
 
         StabilityModePrice,
         UserLiquidationModePrice,

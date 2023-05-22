@@ -21,7 +21,7 @@ const useInfo = () => {
         const { totalSupply: fETHTotalSupplyFn } = fETHContract.methods
         const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
         const { getCurrentNav, collateralRatio, totalBaseToken, beta, lastPermissionedPrice } = treasuryContract.methods
-        const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio } = marketContract.methods
+        const { fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio, xTokenRedeemFeeRatio, marketConfig } = marketContract.methods
         try {
             const apiCalls = [
                 fETHTotalSupplyFn(),
@@ -37,22 +37,24 @@ const useInfo = () => {
 
 
                 beta(),
-                lastPermissionedPrice()
+                lastPermissionedPrice(),
+                marketConfig()
             ]
             const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes] =
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes, marketConfigRes] =
                 await multiCallsV2(apiCalls)
 
             console.log(
                 'BaseInfo11111',
                 // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes,
-                lastPermissionedPriceRes
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
+                //  betaRes,
+                lastPermissionedPriceRes,marketConfigRes
             )
 
             return {
                 fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes
+                fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes, lastPermissionedPriceRes, marketConfigRes
             }
         } catch (error) {
             console.log('baseInfoError==>', error)

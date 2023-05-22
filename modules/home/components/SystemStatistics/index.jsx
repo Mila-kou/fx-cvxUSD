@@ -38,6 +38,7 @@ export default function SystemStatistics() {
     xnav,
     collateralRatio,
     p_f,
+    p_x,
     fETHTotalSupply,
     xETHTotalSupply,
     totalBaseToken,
@@ -117,9 +118,9 @@ export default function SystemStatistics() {
               <p>
                 <b>{collateralRatio}</b>%
               </p>
-              <p>
+              {/* <p>
                 {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
-              </p>
+              </p> */}
             </div>
           </div>
 
@@ -128,7 +129,7 @@ export default function SystemStatistics() {
               fxData={{
                 nav: xnav,
                 totalSupply: xETHTotalSupply,
-                ratio: (100 - p_f)
+                ratio: p_x
               }}
               color="red"
               symbol="xETH"
@@ -138,15 +139,15 @@ export default function SystemStatistics() {
 
           <div className={styles.details} data-color="red">
             <div className={styles.cell}>
-              <div>ETH Last Change: </div>
+              <div>ETH’s cumulative return: </div>
               <p>{R}%</p>
             </div>
             <div className={styles.cell}>
-              <div>Oracle. Current Calc Price: </div>
+              <div>ETH’s Twap Price: </div>
               <p>${ethPrice_text}</p>
             </div>
             <div className={styles.cell}>
-              <div>Oracle. Last Calc Price:</div>
+              <div>ETH’s Last Price:</div>
               <p>${lastPermissionedPrice}</p>
             </div>
           </div>
