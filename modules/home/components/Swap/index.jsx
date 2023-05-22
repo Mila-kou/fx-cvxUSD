@@ -6,12 +6,21 @@ import { cBN, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import styles from './styles.module.scss'
 import Mint from '../Mint'
+import MintBonus from '../MintBonus'
 import Redeem from '../Redeem'
-
-const tabs = ['Mint', 'Redeem']
+import { useFETH } from '@/hooks/useContracts'
+import RedeemBonus from '../RedeemBonus'
 
 export default function Swap() {
+  const { systemStatus } = useFETH()
   const [tab, setTab] = useState(0)
+  let tabs = useMemo(() => {
+    if (systemStatus == 1) {
+      return ['Mint', 'Redeem']
+    }
+    return ['Mint', 'Redeem', 'Redeem Bonus']
+  }, [systemStatus])
+
   return (
     <div className={styles.container}>
       <div className={styles.tabs}>
@@ -27,7 +36,9 @@ export default function Swap() {
           </div>
         ))}
       </div>
-      {tab ? <Redeem /> : <Mint />}
+      {!!tab == 0 && <Mint />}
+      {!!tab == 1 && <Redeem />}
+      {!!tab == 2 && <RedeemBonus />}
     </div>
   )
 }

@@ -13,7 +13,7 @@ import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 
-export default function Mint() {
+export default function MintBonus() {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
@@ -185,7 +185,7 @@ export default function Mint() {
       />
       <BalanceInput
         symbol="xETH"
-        // tip="Bonus+"
+        tip="Bonus+"
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : undefined}
         selectColor="red"

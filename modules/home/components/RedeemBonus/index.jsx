@@ -13,7 +13,7 @@ import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 import useApprove from '@/hooks/useApprove'
 
-export default function Redeem() {
+export default function RedeemBonus() {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const [redeeming, setRedeeming] = useState(0)
@@ -191,7 +191,8 @@ export default function Redeem() {
       <BalanceInput
         placeholder="0"
         balance={fb4(tokens.xETH.balance, false)}
-        symbol="xETH"        
+        symbol="xETH"
+        tip="Bonus+"
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : undefined}
         selectColor="red"

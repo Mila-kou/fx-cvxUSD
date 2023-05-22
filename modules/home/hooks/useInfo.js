@@ -79,8 +79,8 @@ const useInfo = () => {
             maxRedeemableFToken(_stabilityRatio),
             maxRedeemableXToken(_stabilityRatio),
         ]
-        // const [maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes] = await multiCallsV2(apiCalls)
-        // console.log('maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--', _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes)
+        const [maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes] = await multiCallsV2(apiCalls)
+        console.log('maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--', _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes)
     }
 
     const [
@@ -92,12 +92,7 @@ const useInfo = () => {
                 queryKey: ['baseInfo'],
                 queryFn: () => fetchBaseInfo(),
                 initialData: {},
-            },
-            // {
-            //     queryKey: ['userInfo'],
-            //     queryFn: () => fetchUserInfo(),
-            //     initialData: {},
-            // },
+            }
         ],
     })
 

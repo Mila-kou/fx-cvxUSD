@@ -117,6 +117,7 @@ export default function SystemStatistics() {
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
                 <b>{collateralRatio}</b>%
+                {systemStatus}
               </p>
               {/* <p>
                 {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
