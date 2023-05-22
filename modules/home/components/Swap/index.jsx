@@ -18,7 +18,7 @@ export default function Swap() {
   const tabs = useMemo(() => {
     let _tabs = ['Mint', 'Redeem', 'Mint Bonus']
     if (systemStatus == 1) {
-      _tabs = ['Mint', 'Redeem']
+      _tabs = ['Mint', 'Redeem', 'Mint Bonus']
     }
     if (tab >= _tabs.length) setTab(0)
     return _tabs
