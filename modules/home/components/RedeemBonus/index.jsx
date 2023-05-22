@@ -65,7 +65,8 @@ export default function RedeemBonus() {
     } else {
       _redeemFee = _redeemXETHFee
     }
-    const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
+    // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
+    const _fee = cBN(_redeemFee).multipliedBy(100).div(1e18)
     const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     return [fb4(_fee), fb4(_feeUsd)]
   }, [isF, FETHtAmount, XETHtAmount, ethPrice])
@@ -215,7 +216,7 @@ export default function RedeemBonus() {
         className={styles.inputItem}
       />
       <DetailCollapse
-        title={`Redeem Fee: ${fee}ETH ~ $${feeUsd}`}
+        title={`Redeem Fee: ${fee}%`}
         detail={detail}
       />
 

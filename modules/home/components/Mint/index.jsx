@@ -53,15 +53,15 @@ export default function Mint() {
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   const [fee, feeUsd] = useMemo(() => {
-    const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee).div(1e18)
-    const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
-    console.log(
-      'ETHtAmount---_newETHPrice--',
-      _fee.toString(10),
-      _feeUsd.toString(10),
-      ethPrice
-    )
-    return [fb4(_fee), fb4(_feeUsd)]
+    const _fee = cBN(_mintFETHFee).multipliedBy(100).toString(10)
+    // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
+    // console.log(
+    //   'ETHtAmount---_newETHPrice--',
+    //   _fee.toString(10),
+    //   _feeUsd.toString(10),
+    //   ethPrice
+    // )
+    return [fb4(_fee), 1]
   }, [ETHtAmount, ethPrice])
 
   const hanldeETHAmountChanged = (v) => {
@@ -198,7 +198,7 @@ export default function Mint() {
       />
 
       <DetailCollapse
-        title={`Mint Fee: ${fee}ETH ~ $${feeUsd}`}
+        title={`Mint Fee: ${fee}%`}
         detail={detail}
       />
 

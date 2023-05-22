@@ -65,7 +65,8 @@ export default function Redeem() {
     } else {
       _redeemFee = _redeemXETHFee
     }
-    const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
+    // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
+    const _fee = cBN(_redeemFee).multipliedBy(100)
     const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     return [fb4(_fee), fb4(_feeUsd)]
   }, [isF, FETHtAmount, XETHtAmount, ethPrice])
@@ -191,7 +192,7 @@ export default function Redeem() {
       <BalanceInput
         placeholder="0"
         balance={fb4(tokens.xETH.balance, false)}
-        symbol="xETH"        
+        symbol="xETH"
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : undefined}
         selectColor="red"
@@ -214,7 +215,7 @@ export default function Redeem() {
         className={styles.inputItem}
       />
       <DetailCollapse
-        title={`Redeem Fee: ${fee}ETH ~ $${feeUsd}`}
+        title={`Redeem Fee: ${fee}%`}
         detail={detail}
       />
 
