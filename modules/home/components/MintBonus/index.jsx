@@ -131,7 +131,7 @@ export default function MintBonus() {
       if (isF) {
         apiCall = await ethGatewayContract.methods.mintFToken(_minOut)
       } else {
-        apiCall = await ethGatewayContract.methods.mintXToken(_minOut)
+        apiCall = await ethGatewayContract.methods.addBaseToken(_minOut)
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,

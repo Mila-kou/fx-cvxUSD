@@ -53,21 +53,21 @@ const usefxETH = () => {
       console.log('_mintFETHFee-_mintXETHFee-_redeemFETHFee-_redeemXETHFee-', _mintFETHFee, _mintXETHFee, _redeemFETHFee, _redeemXETHFee)
 
       let StabilityModePrice = getStabilityModePrice({
-        fNav: fxInfo.baseInfo.CurrentNavRes._fNav / 1e18,
-        n_f: fxInfo.baseInfo.fETHTotalSupplyRes / 1e18,
-        n: fxInfo.baseInfo.totalBaseTokenRes / 1e18
+        p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
+        beta: fxInfo.baseInfo.betaRes / 1e18,
+        s: _ethPrice
       })
       StabilityModePrice = checkNotZoroNumOption(StabilityModePrice, fb4(StabilityModePrice, false, 0, 2))
       let UserLiquidationModePrice = getUserLiquidationModePrice({
-        fNav: fxInfo.baseInfo.CurrentNavRes._fNav / 1e18,
-        n_f: fxInfo.baseInfo.fETHTotalSupplyRes / 1e18,
-        n: fxInfo.baseInfo.totalBaseTokenRes / 1e18
+        p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
+        beta: fxInfo.baseInfo.betaRes / 1e18,
+        s: _ethPrice
       })
       UserLiquidationModePrice = checkNotZoroNumOption(UserLiquidationModePrice, fb4(UserLiquidationModePrice, false, 0, 2))
       let ProtocolLiquidationModePrice = getProtocolLiquidationModePrice({
-        fNav: fxInfo.baseInfo.CurrentNavRes._fNav / 1e18,
-        n_f: fxInfo.baseInfo.fETHTotalSupplyRes / 1e18,
-        n: fxInfo.baseInfo.totalBaseTokenRes / 1e18
+        p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
+        beta: fxInfo.baseInfo.betaRes / 1e18,
+        s: _ethPrice
       })
       ProtocolLiquidationModePrice = checkNotZoroNumOption(ProtocolLiquidationModePrice, fb4(ProtocolLiquidationModePrice, false, 0, 2))
 

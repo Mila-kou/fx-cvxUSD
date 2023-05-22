@@ -195,14 +195,16 @@ const useFxCommon = () => {
 
     /**
      * 获取StabilityMode 价格
-     * fNav*n_f/(s*n)
+     * s*(1-(1-p_f*30%)/(1-beta*p_f*30%))
      * @param {*} params 
      * @returns 
      */
     const getStabilityModePrice = (params) => {
-        const limitCollecteralRatio = checkNotZoroNum(fx_info.marketConfigRes?.stabilityRatio) ? cBN(fx_info.marketConfigRes?.stabilityRatio).div(1e18).toFixed(0, 1) : 1.3055;
-        const _s = cBN(1).div(limitCollecteralRatio)
-        return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
+        const limitCollecteralRatio = checkNotZoroNum(fx_info.baseInfo.marketConfigRes?.stabilityRatio) ? cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio).div(1e18).toFixed(10) : 1.3055;
+        console.log('limitCollecteralRatio----', fx_info.baseInfo.marketConfigRes.stabilityRatio, limitCollecteralRatio, params.s, params.p_f, params.beta)
+        const _p1 = cBN(1).minus(cBN(params.p_f).multipliedBy(limitCollecteralRatio))
+        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(params.p_f).multipliedBy(limitCollecteralRatio))
+        return cBN(params.s).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
     }
 
     /**
@@ -211,9 +213,10 @@ const useFxCommon = () => {
      * @returns 
      */
     const getUserLiquidationModePrice = (params) => {
-        const limitCollecteralRatio = checkNotZoroNum(fx_info.marketConfigRes?.liquidationRatio) ? cBN(fx_info.marketConfigRes?.liquidationRatio).div(1e18).toFixed(0, 1) : 1.2067;
-        const _s = cBN(1).div(limitCollecteralRatio)
-        return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
+        const limitCollecteralRatio = checkNotZoroNum(fx_info.baseInfo.marketConfigRes?.liquidationRatio) ? cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio).div(1e18).toFixed(10) : 1.2067;
+        const _p1 = cBN(1).minus(cBN(params.p_f).multipliedBy(limitCollecteralRatio))
+        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(params.p_f).multipliedBy(limitCollecteralRatio))
+        return cBN(params.s).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
     }
 
     /**
@@ -222,9 +225,10 @@ const useFxCommon = () => {
      * @returns 
      */
     const getProtocolLiquidationModePrice = (params) => {
-        const limitCollecteralRatio = checkNotZoroNum(fx_info.marketConfigRes?.selfLiquidationRatio) ? cBN(fx_info.marketConfigRes?.selfLiquidationRatio).div(1e18).toFixed(0, 1) : 1.1449;
-        const _s = cBN(1).div(limitCollecteralRatio)
-        return cBN(params.fNav).times(params.n_f).div(_s.times(params.n)).toString(10)
+        const limitCollecteralRatio = checkNotZoroNum(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio) ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio).div(1e18).toFixed(10) : 1.1449;
+        const _p1 = cBN(1).minus(cBN(params.p_f).multipliedBy(limitCollecteralRatio))
+        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(params.p_f).multipliedBy(limitCollecteralRatio))
+        return cBN(params.s).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
     }
 
     /**
@@ -232,16 +236,17 @@ const useFxCommon = () => {
      * @param {*} params 
      */
     const getSystemStatus = (params) => {
-        const limitCollecteralRatio_0 = 1.3055;
-        const limitCollecteralRatio_1 = 1.2067;
-        const limitCollecteralRatio_2 = 1.1449;
+        const limitCollecteralRatio_0 = cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio).div(1e18).toFixed(10);
+        const limitCollecteralRatio_1 = cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio).div(1e18).toFixed(10);
+        const limitCollecteralRatio_2 = cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio).div(1e18).toFixed(10);
         const isEnd = 1;
+        // console.log('limitCollecteralRatio-limitCollecteralRatio_0-limitCollecteralRatio_1-limitCollecteralRatio_2', params.limitCollecteralRatio, limitCollecteralRatio_0, limitCollecteralRatio_1, limitCollecteralRatio_2)
         let _status = 0;
         if (cBN(params.limitCollecteralRatio).isGreaterThan(limitCollecteralRatio_0)) {
             _status = 0;
         } else if (cBN(params.limitCollecteralRatio).isGreaterThan(limitCollecteralRatio_1) && cBN(params.limitCollecteralRatio).isLessThanOrEqualTo(limitCollecteralRatio_0)) {
             _status = 1;
-        } else if (cBN(params.limitCollecteralRatio).isGreaterThan(isEnd) && cBN(params.limitCollecteralRatio).isLessThanOrEqualTo(limitCollecteralRatio_1)) {
+        } else if (cBN(params.limitCollecteralRatio).isGreaterThan(isEnd) && cBN(params.limitCollecteralRatio).isLessThanOrEqualTo(limitCollecteralRatio_2)) {
             _status = 2;
         } else {
             _status = 3;
