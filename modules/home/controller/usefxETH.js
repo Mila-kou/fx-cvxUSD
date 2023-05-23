@@ -9,7 +9,7 @@ import { useGlobal } from '@/contexts/GlobalProvider'
 const usefxETH = () => {
   const { fx_info: fxInfo } = useGlobal()
   // const ethPrice = useETHPrice()
-  const { getSystemStatus, getR, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
+  const { getSystemStatus, getR, getMaxXETHBonus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -83,8 +83,15 @@ const usefxETH = () => {
       })
       _R = fb4(checkNotZoroNumOption(_R, _R * 100), false, 0, 2)
 
+      const maxXETHBonus = getMaxXETHBonus({
+        MaxBaseInETH: fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18,
+        s: fxInfo.baseInfo.CurrentNavRes?._baseNav,
+        xNav: fxInfo.baseInfo.CurrentNavRes?._xNav
+      })
+      const maxXETHBonus_text = checkNotZoroNumOption(maxXETHBonus, fb4(maxXETHBonus, false, 0))
+      const mode1_maxBaseIn = fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn;
       const mode1_maxBaseIn_text = checkNotZoroNumOption(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn, fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn))
-      const mode1_maxXTokenMintable = checkNotZoroNumOption(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable, fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable))
+      const mode1_maxXTokenMintable_text = checkNotZoroNumOption(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable, fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable))
       return {
         fnav: _fnav,
         xnav: _xnav,
@@ -112,9 +119,12 @@ const usefxETH = () => {
         redeemPaused: fxInfo.baseInfo.redeemPausedRes,
         fTokenMintInSystemStabilityModePaused: fxInfo.baseInfo.fTokenMintInSystemStabilityModePausedRes,
         xTokenRedeemInSystemStabilityModePaused: fxInfo.baseInfo.xTokenRedeemInSystemStabilityModePausedRes,
-
+        
+        mode1_maxBaseIn,
         mode1_maxBaseIn_text,
-        mode1_maxXTokenMintable
+        mode1_maxXTokenMintable_text,
+        maxXETHBonus,
+        maxXETHBonus_text
       }
     } catch (error) {
 

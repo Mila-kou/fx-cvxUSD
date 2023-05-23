@@ -12,11 +12,13 @@ import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
+import useFxCommon from '../../hooks/useFxCommon'
 
 export default function MintBonus() {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
+  const { getMaxXETHBonus } = useFxCommon()
   const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
@@ -34,7 +36,11 @@ export default function MintBonus() {
     fnav,
     xnav,
     mintPaused, redeemPaused,
-    mode1_maxBaseIn_text
+    mode1_maxBaseIn,
+    mode1_maxBaseIn_text,
+    mode1_maxXTokenMintable_text,
+    maxXETHBonus,
+    maxXETHBonus_text
   } = usefxETH()
   const [FETHtAmount, setFETHtAmount] = useState({
     amount: 0,
@@ -50,13 +56,15 @@ export default function MintBonus() {
     // bonusRatio: 2.1,
     // fETH: 2,
     // xETH: 3,
-    maxBaseIn: mode1_maxBaseIn_text
+    maxBaseIn: mode1_maxBaseIn_text,
+    maxXTokenMintable: mode1_maxXTokenMintable_text,
+    maxXETHBonus: maxXETHBonus_text
   })
 
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
-  const [fee, feeUsd] = useMemo(() => {
+  const [fee, useXETHBonus_text] = useMemo(() => {
     const _fee = cBN(_mintFETHFee).multipliedBy(100).toString(10)
     // const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee).div(1e18)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
@@ -66,8 +74,24 @@ export default function MintBonus() {
     //   _feeUsd.toString(10),
     //   ethPrice
     // )
-    return [fb4(_fee), 1]
-  }, [ETHtAmount, ethPrice])
+    let _useXETHBonus = 0;
+    if ((cBN(ETHtAmount)).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
+      _useXETHBonus = maxXETHBonus
+    } else {
+      _useXETHBonus = getMaxXETHBonus({
+        MaxBaseInETH: ETHtAmount / 1e18
+      })
+    }
+    const _useXETHBonus_text = checkNotZoroNum(_useXETHBonus) ? fb4(_useXETHBonus, false, 0) : 0
+    setDetail((pre) => {
+      return {
+        ...pre,
+        useXETHBonus: useXETHBonus_text
+      }
+    })
+
+    return [fb4(_fee), _useXETHBonus_text]
+  }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice])
 
   const hanldeETHAmountChanged = (v) => {
     setETHtAmount(v.toString(10))

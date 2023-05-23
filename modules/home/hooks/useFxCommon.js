@@ -254,7 +254,34 @@ const useFxCommon = () => {
         return _status
     }
 
-    const ETHLastChange = ''
+    const getMaxFETHBonus = (params) => {
+
+    }
+
+    const getUserFETHBonus = (params) => {
+
+    }
+
+    const getMaxXETHBonus = (params) => {
+        // Incentive(xETH)= λ_f*Δn*s/x nav
+        // λ_f：8%，Δn：MaxBaseInETH，s1：ethPrice，xnav：xNav
+        // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
+        try {
+            const λ_f = fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio / 1e18 || 0
+            const s = fx_info.baseInfo.CurrentNavRes?._baseNav / 1e18
+            const xNav = fx_info.baseInfo.CurrentNavRes?._xNav / 1e18
+            // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
+            return cBN(λ_f).multipliedBy(params.MaxBaseInETH).multipliedBy(s).div(xNav).toString(10)
+        } catch (error) {
+            console.log(error)
+            return 0
+        }
+
+    }
+
+    const getUserXETHBonus = (params) => {
+
+    }
 
     const _computeMultiple = (_newPrice, _lastPermissionedPrice, _beta) => {
         const PRECISION_I256 = 1e18;
@@ -288,7 +315,12 @@ const useFxCommon = () => {
         getStabilityModePrice,
         getUserLiquidationModePrice,
         getProtocolLiquidationModePrice,
-        getSystemStatus
+        getSystemStatus,
+
+        getMaxFETHBonus,
+        getUserFETHBonus,
+        getMaxXETHBonus,
+        getUserXETHBonus
 
     }
 }

@@ -37,17 +37,42 @@ export default function DetailCollapse({ title, detail }) {
           <div className={styles.result}>
             {detail.maxBaseIn ? (
               <p>
-                Max Base In ETH: <span>{detail.maxBaseIn}</span>
+                Max Base In ETH: <span>{detail.maxBaseIn} ETH</span>
               </p>
             ) : null}
-            {detail.bonus ? (
+            {/* {detail.maxBaseIn ? (
+              <p>
+                Max Token Mintable: <span>{detail.maxXTokenMintable}</span>
+              </p>
+            ) : null} */}
+
+            {detail.maxXETHBonus ? (
+              <p>
+                System Bonus: :{' '}
+                <span className={styles.green}>
+                  +{detail.maxXETHBonus} xETH
+                </span>
+              </p>
+            ) : null}
+            {detail.useXETHBonus ? (
+              <p>
+                User Bonus: :{' '}
+                <span className={styles.green}>
+                  +{detail.useXETHBonus} xETH
+                </span>
+              </p>
+            ) : null}
+
+            {/* {detail.bonus ? (
               <p>
                 System Bonus: :{' '}
                 <span className={styles.green}>
                   +{detail.bonus} ETH ({detail.bonusRatio}%)
                 </span>
               </p>
-            ) : null}
+            ) : null} */}
+
+
             {detail.ETH ? (
               <p>
                 Minimum received ETH: <span>{detail.ETH}</span>
