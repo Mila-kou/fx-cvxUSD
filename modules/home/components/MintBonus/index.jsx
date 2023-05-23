@@ -35,12 +35,13 @@ export default function MintBonus() {
     ethPrice_text,
     fnav,
     xnav,
-    mintPaused, redeemPaused,
+    mintPaused,
+    redeemPaused,
     mode1_maxBaseIn,
     mode1_maxBaseIn_text,
     mode1_maxXTokenMintable_text,
     maxXETHBonus,
-    maxXETHBonus_text
+    maxXETHBonus_text,
   } = usefxETH()
   const [FETHtAmount, setFETHtAmount] = useState({
     amount: 0,
@@ -58,9 +59,8 @@ export default function MintBonus() {
     // xETH: 3,
     maxBaseIn: mode1_maxBaseIn_text,
     maxXTokenMintable: mode1_maxXTokenMintable_text,
-    maxXETHBonus: maxXETHBonus_text
+    maxXETHBonus: maxXETHBonus_text,
   })
-
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -74,19 +74,21 @@ export default function MintBonus() {
     //   _feeUsd.toString(10),
     //   ethPrice
     // )
-    let _useXETHBonus = 0;
-    if ((cBN(ETHtAmount)).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
+    let _useXETHBonus = 0
+    if (cBN(ETHtAmount).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
       _useXETHBonus = maxXETHBonus
     } else {
       _useXETHBonus = getMaxXETHBonus({
-        MaxBaseInETH: ETHtAmount / 1e18
+        MaxBaseInETH: ETHtAmount / 1e18,
       })
     }
-    const _useXETHBonus_text = checkNotZoroNum(_useXETHBonus) ? fb4(_useXETHBonus, false, 0) : 0
+    const _useXETHBonus_text = checkNotZoroNum(_useXETHBonus)
+      ? fb4(_useXETHBonus, false, 0)
+      : 0
     setDetail((pre) => {
       return {
         ...pre,
-        useXETHBonus: useXETHBonus_text
+        useXETHBonus: useXETHBonus_text,
       }
     })
 
@@ -132,11 +134,11 @@ export default function MintBonus() {
           minout: 0,
           tvl: 0,
         })
-        setDetail(pre => {
+        setDetail((pre) => {
           return {
             ...pre,
             fETH: _minOut_fETH_tvl,
-            xETH: 0
+            xETH: 0,
           }
         })
       } else {
@@ -151,7 +153,7 @@ export default function MintBonus() {
           minout: 0,
           tvl: 0,
         })
-        setDetail(pre => {
+        setDetail((pre) => {
           return {
             ...pre,
             fETH: 0,
@@ -196,7 +198,9 @@ export default function MintBonus() {
   }
 
   const canMint = useMemo(() => {
-    let _enableETH = cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) && cBN(ETHtAmount).isGreaterThan(0)
+    let _enableETH =
+      cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
+      cBN(ETHtAmount).isGreaterThan(0)
     return !mintPaused && _enableETH
   }, [ETHtAmount, mintPaused, tokens.ETH.balance])
 
@@ -245,13 +249,15 @@ export default function MintBonus() {
         onSelected={() => setSelected(1)}
       />
 
-      <DetailCollapse
-        title={`Mint Fee: ${fee}%`}
-        detail={detail}
-      />
+      <DetailCollapse open title={`Mint Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <Button width="100%" loading={mintLoading} disabled={!canMint} onClick={handleMint}>
+        <Button
+          width="100%"
+          loading={mintLoading}
+          disabled={!canMint}
+          onClick={handleMint}
+        >
           Mint
         </Button>
       </div>

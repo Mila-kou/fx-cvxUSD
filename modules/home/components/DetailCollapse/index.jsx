@@ -12,8 +12,8 @@ import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 
-export default function DetailCollapse({ title, detail }) {
-  const [showContent, { toggle }] = useToggle()
+export default function DetailCollapse({ title, detail, open = false }) {
+  const [showContent, { toggle }] = useToggle(open)
   const PageData = usefxETH()
   return (
     <div className={styles.container}>

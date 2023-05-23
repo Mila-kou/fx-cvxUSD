@@ -51,7 +51,7 @@ export default function Mint() {
     xnav,
     mintPaused,
     redeemPaused,
-    fTokenMintInSystemStabilityModePaused
+    fTokenMintInSystemStabilityModePaused,
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -203,8 +203,8 @@ export default function Mint() {
           disabled
           className={styles.inputItem}
           usd={`$${fnav}`}
-        // onChange={hanldeFETHAmountChanged}
-        // onSelected={() => setSelected(0)}
+          // onChange={hanldeFETHAmountChanged}
+          // onSelected={() => setSelected(0)}
         />
       )}
       {isX && (
@@ -218,7 +218,7 @@ export default function Mint() {
           disabled
           className={styles.inputItem}
           usd={`$${xnav}`}
-        // onSelected={() => setSelected(1)}
+          // onSelected={() => setSelected(1)}
         />
       )}
 
