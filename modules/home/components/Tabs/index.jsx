@@ -13,6 +13,7 @@ import styles from './styles.module.scss'
 export default function Tabs({
   selecedIndex = 0,
   tabs = ['fETH', 'xETH'],
+  disabledIndexs = [],
   onChange,
 }) {
   return (
@@ -22,6 +23,7 @@ export default function Tabs({
           className={styles.tab}
           data-active={selecedIndex === index}
           onClick={() => {
+            if (disabledIndexs.includes(index)) return
             onChange(index)
           }}
         >

@@ -50,8 +50,9 @@ export default function Swap() {
             tabs={['Mint Bonus', 'Redeem Bonus']}
             selecedIndex={bonusIndex}
             onChange={(index) => setBonusIndex(index)}
+            disabledIndexs={systemStatus == 2 ? [] : [1]}
           />
-          {bonusIndex === 0 ? <MintBonus /> : <RedeemBonus />}
+          {bonusIndex == 0 ? <MintBonus /> : <RedeemBonus />}
         </div>
       )}
     </div>

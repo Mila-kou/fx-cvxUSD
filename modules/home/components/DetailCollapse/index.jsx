@@ -72,7 +72,6 @@ export default function DetailCollapse({ title, detail }) {
               </p>
             ) : null} */}
 
-
             {detail.ETH ? (
               <p>
                 Minimum received ETH: <span>{detail.ETH}</span>
@@ -88,8 +87,6 @@ export default function DetailCollapse({ title, detail }) {
                 Minimum received xETH: <span>{detail.xETH}</span>
               </p>
             ) : null}
-
-
           </div>
         </div>
       ) : null}
