@@ -125,7 +125,7 @@ export default function MintBonus() {
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
         setFETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(0, 1)),
+          minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_fETH_tvl,
         })
         setXETHtAmount({
@@ -144,7 +144,7 @@ export default function MintBonus() {
           _minOut_CBN.multipliedBy(xnav).toString(10)
         )
         setXETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(0, 1)),
+          minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_xETH_tvl,
         })
         setFETHtAmount({
@@ -207,7 +207,6 @@ export default function MintBonus() {
 
   return (
     <div className={styles.container}>
-      MintBonus
       <BalanceInput
         placeholder="0"
         symbol="ETH"

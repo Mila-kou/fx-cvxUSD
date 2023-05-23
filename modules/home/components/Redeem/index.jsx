@@ -132,15 +132,15 @@ export default function Redeem() {
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toFixed(10))
+      const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
       setMinOutETHtAmount({
-        minout: fb4(_minOut_CBN.toFixed(10)),
+        minout: fb4(_minOut_CBN.toString(10)),
         tvl: _minOut_ETH_tvl,
       })
       setDetail((pre) => {
         return {
           ...pre,
-          ETH: fb4(_minOut_CBN.toFixed(10)),
+          ETH: fb4(_minOut_CBN.toString(10)),
         }
       })
       return _minOut_CBN.toFixed(0, 1)

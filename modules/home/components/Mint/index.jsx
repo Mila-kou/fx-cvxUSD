@@ -114,7 +114,7 @@ export default function Mint() {
           _minOut_CBN.multipliedBy(xnav).toString(10)
         )
         setXETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(10)),
+          minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_xETH_tvl,
         })
         setFETHtAmount({
@@ -129,7 +129,7 @@ export default function Mint() {
           }
         })
       }
-      return _minOut_CBN.toFixed(10)
+      return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)
       return 0
