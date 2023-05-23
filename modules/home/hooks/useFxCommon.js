@@ -245,17 +245,17 @@ const useFxCommon = () => {
      * @param {*} params 
      */
     const getSystemStatus = (params) => {
-        const limitCollecteralRatio_0 = cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio).div(1e18).toFixed(10);
-        const limitCollecteralRatio_1 = cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio).div(1e18).toFixed(10);
-        const limitCollecteralRatio_2 = cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio).div(1e18).toFixed(10);
+        const limitCollecteralRatio_0 = cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio).div(1e18).toString(10);
+        const limitCollecteralRatio_1 = cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio).div(1e18).toString(10);
+        const limitCollecteralRatio_2 = cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio).div(1e18).toString(10);
         const isEnd = 1;
-        // console.log('limitCollecteralRatio-limitCollecteralRatio_0-limitCollecteralRatio_1-limitCollecteralRatio_2', params.limitCollecteralRatio, limitCollecteralRatio_0, limitCollecteralRatio_1, limitCollecteralRatio_2)
+        console.log('limitCollecteralRatio-limitCollecteralRatio_0-limitCollecteralRatio_1-limitCollecteralRatio_2', params.limitCollecteralRatio, limitCollecteralRatio_0, limitCollecteralRatio_1, limitCollecteralRatio_2)
         let _status = 0;
-        if (cBN(params.limitCollecteralRatio).isGreaterThan(limitCollecteralRatio_0)) {
+        if (cBN(params.limitCollecteralRatio).isGreaterThanOrEqualTo(limitCollecteralRatio_0)) {
             _status = 0;
-        } else if (cBN(params.limitCollecteralRatio).isGreaterThan(limitCollecteralRatio_1) && cBN(params.limitCollecteralRatio).isLessThanOrEqualTo(limitCollecteralRatio_0)) {
+        } else if (cBN(params.limitCollecteralRatio).isGreaterThanOrEqualTo(limitCollecteralRatio_1) && cBN(params.limitCollecteralRatio).isLessThan(limitCollecteralRatio_0)) {
             _status = 1;
-        } else if (cBN(params.limitCollecteralRatio).isGreaterThan(isEnd) && cBN(params.limitCollecteralRatio).isLessThanOrEqualTo(limitCollecteralRatio_2)) {
+        } else if (cBN(params.limitCollecteralRatio).isGreaterThanOrEqualTo(limitCollecteralRatio_2) && cBN(params.limitCollecteralRatio).isLessThan(limitCollecteralRatio_1)) {
             _status = 2;
         } else {
             _status = 3;
