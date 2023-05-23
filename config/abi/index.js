@@ -12,6 +12,9 @@ import FX_LeveragedToken from './fx/LeveragedToken.json'
 import FX_Treasury from './fx/Treasury.json'
 import FX_ETHGateway from './fx/ETHGateway.json'
 
+//test
+import MockTwapOracle from './fx/MockTwapOracle.json'
+
 export default {
   erc20ABI,
   multiCallABI,
@@ -22,5 +25,7 @@ export default {
   FX_FractionalToken,
   FX_LeveragedToken,
   FX_Treasury,
-  FX_ETHGateway
+  FX_ETHGateway,
+
+  MockTwapOracleAbi: MockTwapOracle
 }
