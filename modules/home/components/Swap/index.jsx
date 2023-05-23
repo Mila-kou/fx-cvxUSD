@@ -10,9 +10,11 @@ import MintBonus from '../MintBonus'
 import Redeem from '../Redeem'
 import usefxETH from '../../controller/usefxETH'
 import RedeemBonus from '../RedeemBonus'
+import Tabs from '../Tabs'
 
 export default function Swap() {
   const { systemStatus } = usefxETH()
+  const [bonusIndex, setBonusIndex] = useState(0)
   const [tab, setTab] = useState(0)
 
   const tabs = useMemo(() => {
@@ -42,7 +44,16 @@ export default function Swap() {
       </div>
       {!!(tab == 0) && <Mint />}
       {!!(tab == 1) && <Redeem />}
-      {!!(tab == 2) && <MintBonus />}
+      {!!(tab == 2) && (
+        <div>
+          <Tabs
+            tabs={['Mint Bonus', 'Redeem Bonus']}
+            selecedIndex={bonusIndex}
+            onChange={(index) => setBonusIndex(index)}
+          />
+          {bonusIndex === 0 ? <MintBonus /> : <RedeemBonus />}
+        </div>
+      )}
     </div>
   )
 }

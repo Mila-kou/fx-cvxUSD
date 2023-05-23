@@ -117,7 +117,10 @@ export default function SystemStatistics() {
             <div className={styles.title}>fETH Collecteral Ratio</div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
-                <b>{collateralRatio}</b>%{systemStatus}
+                <b className={styles[systemStatus > 0 ? 'red' : 'green']}>
+                  {collateralRatio}
+                </b>
+                %{systemStatus}
               </p>
               {/* <p>
                 {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
