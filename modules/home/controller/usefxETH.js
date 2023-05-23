@@ -82,6 +82,9 @@ const usefxETH = () => {
         s0: fxInfo.baseInfo.lastPermissionedPriceRes
       })
       _R = fb4(checkNotZoroNumOption(_R, _R * 100), false, 0, 2)
+
+      const mode1_maxBaseIn_text = checkNotZoroNumOption(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn, fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn))
+      const mode1_maxXTokenMintable = checkNotZoroNumOption(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable, fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable))
       return {
         fnav: _fnav,
         xnav: _xnav,
@@ -106,7 +109,12 @@ const usefxETH = () => {
         lastPermissionedPrice,
         R: _R,
         mintPaused: fxInfo.baseInfo.mintPausedRes,
-        redeemPaused: fxInfo.baseInfo.redeemPausedRes
+        redeemPaused: fxInfo.baseInfo.redeemPausedRes,
+        fTokenMintInSystemStabilityModePaused: fxInfo.baseInfo.fTokenMintInSystemStabilityModePausedRes,
+        xTokenRedeemInSystemStabilityModePaused: fxInfo.baseInfo.xTokenRedeemInSystemStabilityModePausedRes,
+
+        mode1_maxBaseIn_text,
+        mode1_maxXTokenMintable
       }
     } catch (error) {
 

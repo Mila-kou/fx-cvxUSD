@@ -37,6 +37,7 @@ export default function Redeem() {
     xnav,
     mintPaused,
     redeemPaused,
+    xTokenRedeemInSystemStabilityModePaused
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -106,7 +107,7 @@ export default function Redeem() {
       _enableETH =
         _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     }
-    return !redeemPaused && _enableETH
+    return !redeemPaused && _enableETH && !xTokenRedeemInSystemStabilityModePaused
   }, [tokenAmount, redeemPaused, tokens.ETH.balance])
 
   const getMinAmount = async () => {
@@ -203,7 +204,7 @@ export default function Redeem() {
           usd={`$${fnav}`}
           maxAmount={tokens.fETH.balance}
           onChange={hanldeFETHAmountChanged}
-          // onSelected={() => setSelected(0)}
+        // onSelected={() => setSelected(0)}
         />
       )}
       {isX && (
@@ -218,7 +219,7 @@ export default function Redeem() {
           usd={`$${xnav}`}
           maxAmount={tokens.xETH.balance}
           onChange={hanldeXETHAmountChanged}
-          // onSelected={() => setSelected(1)}
+        // onSelected={() => setSelected(1)}
         />
       )}
       <div className={styles.arrow}>

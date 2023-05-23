@@ -21,6 +21,21 @@ export default function MintBonus() {
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
   const [ETHtAmount, setETHtAmount] = useState(0)
+  const {
+    fETHContract,
+    xETHContract,
+    marketContract,
+    treasuryContract,
+    _mintFETHFee,
+    ethGatewayContract,
+    _mintXETHFee,
+    ethPrice,
+    ethPrice_text,
+    fnav,
+    xnav,
+    mintPaused, redeemPaused,
+    mode1_maxBaseIn_text
+  } = usefxETH()
   const [FETHtAmount, setFETHtAmount] = useState({
     amount: 0,
     tvl: 0,
@@ -35,21 +50,9 @@ export default function MintBonus() {
     // bonusRatio: 2.1,
     // fETH: 2,
     // xETH: 3,
+    maxBaseIn: mode1_maxBaseIn_text
   })
-  const {
-    fETHContract,
-    xETHContract,
-    marketContract,
-    treasuryContract,
-    _mintFETHFee,
-    ethGatewayContract,
-    _mintXETHFee,
-    ethPrice,
-    ethPrice_text,
-    fnav,
-    xnav,
-    mintPaused, redeemPaused
-  } = usefxETH()
+
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -109,7 +112,7 @@ export default function MintBonus() {
           return {
             ...pre,
             fETH: _minOut_fETH_tvl,
-            xETH: 0,
+            xETH: 0
           }
         })
       } else {
