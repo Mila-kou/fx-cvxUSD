@@ -16,7 +16,7 @@ import useFxCommon from '../../hooks/useFxCommon'
 
 export default function MintBonus() {
   const { _currentAccount } = useWeb3()
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(1)
   const { tokens } = useGlobal()
   const { getMaxXETHBonus } = useFxCommon()
   const [slippage, setSlippage] = useState(0.3)
