@@ -31,6 +31,7 @@ export default function RedeemBonus() {
     _redeemFETHFee,
     _redeemXETHFee,
     ethPrice,
+    ethPrice_text,
     fnav,
     xnav,
     mintPaused, redeemPaused
@@ -66,9 +67,9 @@ export default function RedeemBonus() {
       _redeemFee = _redeemXETHFee
     }
     // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
-    const _fee = cBN(_redeemFee).multipliedBy(100).div(1e18)
+    const _fee = cBN(_redeemFee).multipliedBy(100)
     const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
-    return [fb4(_fee), fb4(_feeUsd)]
+    return [fb4(_fee), 1]
   }, [isF, FETHtAmount, XETHtAmount, ethPrice])
 
   const hanldeFETHAmountChanged = (v) => {
@@ -80,9 +81,9 @@ export default function RedeemBonus() {
   }
 
   const [detail, setDetail] = useState({
-    bonus: 75,
-    bonusRatio: 2.1,
-    ETH: 1,
+    // bonus: 75,
+    // bonusRatio: 2.1,
+    // ETH: 1,
   })
 
   const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
@@ -180,16 +181,17 @@ export default function RedeemBonus() {
         placeholder="0"
         balance={fb4(tokens.fETH.balance, false)}
         symbol="fETH"
+        tip="Bonus+"
         icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
         color={isF ? 'blue' : undefined}
         type={isF ? '' : 'select'}
         className={styles.inputItem}
-        usd={tokens.fETH.usd}
+        usd={`$${fnav}`}
         maxAmount={tokens.fETH.balance}
         onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
-      <BalanceInput
+      {/* <BalanceInput
         placeholder="0"
         balance={fb4(tokens.xETH.balance, false)}
         symbol="xETH"
@@ -203,7 +205,7 @@ export default function RedeemBonus() {
         maxAmount={tokens.xETH.balance}
         onChange={hanldeXETHAmountChanged}
         onSelected={() => setSelected(1)}
-      />
+      /> */}
       <div className={styles.arrow}>
         <DownOutlined />
       </div>
@@ -211,7 +213,7 @@ export default function RedeemBonus() {
       <BalanceInput
         symbol="ETH"
         placeholder={minOutETHtAmount.minout}
-        usd={`$${minOutETHtAmount.tvl}`}
+        usd={`$${ethPrice_text}`}
         disabled
         className={styles.inputItem}
       />
