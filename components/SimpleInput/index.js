@@ -29,7 +29,7 @@ function SimpleInput(props) {
     moreInfo,
     className = '',
     disableMax = false,
-    onChange = () => { },
+    onChange = () => {},
   } = props
   const { theme } = useGlobal()
 
@@ -48,8 +48,8 @@ function SimpleInput(props) {
     onChange(
       checkNotZoroNum(value)
         ? cBN(value)
-          .shiftedBy(decimals ?? 18)
-          .toString(10)
+            .shiftedBy(decimals ?? 18)
+            .toString(10)
         : ''
     )
   }
@@ -95,11 +95,11 @@ function SimpleInput(props) {
           value={val}
           placeholder={placeholder}
         />
-        {!disableMax &&
+        {!disableMax && (
           <div className={styles.max} onClick={setMax}>
             MAX
           </div>
-        }
+        )}
       </div>
 
       {errMsg && <div className={styles.errMsg}>{errMsg}</div>}
