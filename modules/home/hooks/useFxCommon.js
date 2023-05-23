@@ -200,11 +200,14 @@ const useFxCommon = () => {
      * @returns 
      */
     const getStabilityModePrice = (params) => {
+        const { fETHTotalSupplyRes, fNav0Res, totalBaseTokenRes, lastPermissionedPriceRes } = fx_info.baseInfo || {}
+        //n_fETH* fnav(t0) / (n_ETH * ETH Price(t0))
+        const adjust_Rho = cBN(fETHTotalSupplyRes).multipliedBy(fNav0Res).div(cBN(totalBaseTokenRes).multipliedBy(lastPermissionedPriceRes))
         const limitCollecteralRatio = checkNotZoroNum(fx_info.baseInfo.marketConfigRes?.stabilityRatio) ? cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio).div(1e18).toFixed(10) : 1.3055;
-        console.log('limitCollecteralRatio----', fx_info.baseInfo.marketConfigRes.stabilityRatio, limitCollecteralRatio, params.s, params.p_f, params.beta)
-        const _p1 = cBN(1).minus(cBN(params.p_f).multipliedBy(limitCollecteralRatio))
-        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(params.p_f).multipliedBy(limitCollecteralRatio))
-        return cBN(params.s).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
+        console.log('limitCollecteralRatio----', fx_info.baseInfo.marketConfigRes.stabilityRatio, limitCollecteralRatio, params.s, params.p_f, adjust_Rho.toString(10), params.beta)
+        const _p1 = cBN(1).minus(cBN(adjust_Rho).multipliedBy(limitCollecteralRatio))
+        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(adjust_Rho).multipliedBy(limitCollecteralRatio))
+        return cBN(lastPermissionedPriceRes).div(1e18).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
     }
 
     /**
@@ -213,10 +216,13 @@ const useFxCommon = () => {
      * @returns 
      */
     const getUserLiquidationModePrice = (params) => {
+        //n_fETH* fnav(t0) / (n_ETH * ETH Price(t0))
+        const { fETHTotalSupplyRes, fNav0Res, totalBaseTokenRes, lastPermissionedPriceRes } = fx_info.baseInfo || {}
+        const adjust_Rho = cBN(fETHTotalSupplyRes).multipliedBy(fNav0Res).div(cBN(totalBaseTokenRes).multipliedBy(lastPermissionedPriceRes))
         const limitCollecteralRatio = checkNotZoroNum(fx_info.baseInfo.marketConfigRes?.liquidationRatio) ? cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio).div(1e18).toFixed(10) : 1.2067;
-        const _p1 = cBN(1).minus(cBN(params.p_f).multipliedBy(limitCollecteralRatio))
-        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(params.p_f).multipliedBy(limitCollecteralRatio))
-        return cBN(params.s).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
+        const _p1 = cBN(1).minus(cBN(adjust_Rho).multipliedBy(limitCollecteralRatio))
+        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(adjust_Rho).multipliedBy(limitCollecteralRatio))
+        return cBN(lastPermissionedPriceRes).div(1e18).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
     }
 
     /**
@@ -225,10 +231,13 @@ const useFxCommon = () => {
      * @returns 
      */
     const getProtocolLiquidationModePrice = (params) => {
+        //n_fETH* fnav(t0) / (n_ETH * ETH Price(t0))
+        const { fETHTotalSupplyRes, fNav0Res, totalBaseTokenRes, lastPermissionedPriceRes } = fx_info.baseInfo || {}
+        const adjust_Rho = cBN(fETHTotalSupplyRes).multipliedBy(fNav0Res).div(cBN(totalBaseTokenRes).multipliedBy(lastPermissionedPriceRes))
         const limitCollecteralRatio = checkNotZoroNum(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio) ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio).div(1e18).toFixed(10) : 1.1449;
-        const _p1 = cBN(1).minus(cBN(params.p_f).multipliedBy(limitCollecteralRatio))
-        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(params.p_f).multipliedBy(limitCollecteralRatio))
-        return cBN(params.s).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
+        const _p1 = cBN(1).minus(cBN(adjust_Rho).multipliedBy(limitCollecteralRatio))
+        const _p2 = cBN(1).minus(cBN(params.beta).multipliedBy(adjust_Rho).multipliedBy(limitCollecteralRatio))
+        return cBN(lastPermissionedPriceRes).div(1e18).multipliedBy(cBN(1).minus(_p1.div(_p2))).toString(10)
     }
 
     /**

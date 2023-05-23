@@ -19,7 +19,7 @@ const useInfo = () => {
     const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
     const fetchBaseInfo = useCallback(async () => {
-        const { totalSupply: fETHTotalSupplyFn } = fETHContract.methods
+        const { nav, totalSupply: fETHTotalSupplyFn } = fETHContract.methods
         const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
         const { getCurrentNav, collateralRatio, totalBaseToken, beta, lastPermissionedPrice, } = treasuryContract.methods
         const { fTokenMintInSystemStabilityModePaused, xTokenRedeemInSystemStabilityModePaused,
@@ -46,12 +46,13 @@ const useInfo = () => {
                 mintPaused(),
                 redeemPaused(),
                 fTokenMintInSystemStabilityModePaused(),
-                xTokenRedeemInSystemStabilityModePaused()
+                xTokenRedeemInSystemStabilityModePaused(),
+                nav()
             ]
             const [fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes, betaRes,
                 lastPermissionedPriceRes, marketConfigRes, incentiveConfigRes, mintPausedRes, redeemPausedRes,
-                fTokenMintInSystemStabilityModePausedRes, xTokenRedeemInSystemStabilityModePausedRes] =
+                fTokenMintInSystemStabilityModePausedRes, xTokenRedeemInSystemStabilityModePausedRes, fNav0Res] =
                 await multiCallsV2(apiCalls)
 
             console.log(
@@ -62,7 +63,8 @@ const useInfo = () => {
                 lastPermissionedPriceRes, marketConfigRes, incentiveConfigRes,
                 // mintPausedRes, redeemPausedRes,
                 // fTokenMintInSystemStabilityModePausedRes,
-                // xTokenRedeemInSystemStabilityModePausedRes
+                // xTokenRedeemInSystemStabilityModePausedRes,
+                fNav0Res
             )
 
             return {
@@ -70,7 +72,8 @@ const useInfo = () => {
                 fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
                 betaRes, lastPermissionedPriceRes, marketConfigRes, incentiveConfigRes, mintPausedRes, redeemPausedRes,
                 fTokenMintInSystemStabilityModePausedRes,
-                xTokenRedeemInSystemStabilityModePausedRes
+                xTokenRedeemInSystemStabilityModePausedRes,
+                fNav0Res
             }
         } catch (error) {
             console.log('baseInfoError==>', error)
