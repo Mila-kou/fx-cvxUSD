@@ -58,13 +58,6 @@ const useFxCommon = () => {
         m_nx: "" //铸造xETH的数量
     }
 
-    const fetchData = () => {
-        const { fETHTotalSupplyRes, xETHTotalSupplyRes, ETHTotalUnderlyingRes } = baseInfo;
-        const _n = ETHTotalUnderlyingRes
-        const _n_f = fETHTotalSupplyRes
-        const _n_x = xETHTotalSupplyRes
-        const _x = getR(systemInfo)
-    }
     const getR = (params) => {
         return cBN(params.s).div(params.s0).minus(1).toString(10)
     }
@@ -263,12 +256,18 @@ const useFxCommon = () => {
         return _status
     }
 
-    const getMaxFETHBonus = (params) => {
+    /**
+     * redeem fETH
+     * γ*Δnl_f*f/s
+     * @param {*} params 
+     */
+    const getMaxETHBonus = (params) => {
+        const λ_f = fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio / 1e18 || 0
+        const fNav = fx_info.baseInfo.CurrentNavRes?._fNav / 1e18
+        const s = fx_info.baseInfo.CurrentNavRes?._baseNav / 1e18
 
-    }
-
-    const getUserFETHBonus = (params) => {
-
+        const _res = cBN(λ_f).multipliedBy(params.MaxBaseInfETH).multipliedBy(fNav).div(s).toString(10)        
+        return _res;
     }
 
     const getMaxXETHBonus = (params) => {
@@ -285,10 +284,6 @@ const useFxCommon = () => {
             console.log(error)
             return 0
         }
-
-    }
-
-    const getUserXETHBonus = (params) => {
 
     }
 
@@ -326,10 +321,9 @@ const useFxCommon = () => {
         getProtocolLiquidationModePrice,
         getSystemStatus,
 
-        getMaxFETHBonus,
-        getUserFETHBonus,
+
+        getMaxETHBonus,
         getMaxXETHBonus,
-        getUserXETHBonus
 
     }
 }

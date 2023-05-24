@@ -9,7 +9,7 @@ import { useGlobal } from '@/contexts/GlobalProvider'
 const usefxETH = () => {
   const { fx_info: fxInfo } = useGlobal()
   // const ethPrice = useETHPrice()
-  const { getSystemStatus, getR, getMaxXETHBonus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
+  const { getSystemStatus, getR, getMaxXETHBonus, getMaxETHBonus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice } = useFxCommon()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -85,13 +85,23 @@ const usefxETH = () => {
 
       const maxXETHBonus = getMaxXETHBonus({
         MaxBaseInETH: fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18,
-        s: fxInfo.baseInfo.CurrentNavRes?._baseNav,
-        xNav: fxInfo.baseInfo.CurrentNavRes?._xNav
       })
       const maxXETHBonus_text = checkNotZoroNumOption(maxXETHBonus, fb4(maxXETHBonus, false, 0))
       const mode1_maxBaseIn = fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn;
       const mode1_maxBaseIn_text = checkNotZoroNumOption(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn, fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn))
       const mode1_maxXTokenMintable_text = checkNotZoroNumOption(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable, fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable))
+
+      const mode2_maxFTokenBaseIn = fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable
+      const mode2_maxFTokenBaseIn_text = checkNotZoroNumOption(mode2_maxFTokenBaseIn, fb4(mode2_maxFTokenBaseIn))
+      const mode2_maxETHBaseOut = fxInfo.maxLiquidatableRes?._maxBaseOut
+      const mode2_maxETHBaseOut_text = checkNotZoroNumOption(mode2_maxETHBaseOut, fb4(mode2_maxETHBaseOut))
+
+      const maxETHBonus = getMaxETHBonus({
+        MaxBaseInfETH: fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable / 1e18,
+      })
+      const maxETHBonus_Text = checkNotZoroNumOption(maxETHBonus, fb4(maxETHBonus, false, 0))
+      console.log('maxETHBonus--', maxETHBonus, maxETHBonus_Text)
+
       return {
         fnav: _fnav,
         xnav: _xnav,
@@ -119,12 +129,18 @@ const usefxETH = () => {
         redeemPaused: fxInfo.baseInfo.redeemPausedRes,
         fTokenMintInSystemStabilityModePaused: fxInfo.baseInfo.fTokenMintInSystemStabilityModePausedRes,
         xTokenRedeemInSystemStabilityModePaused: fxInfo.baseInfo.xTokenRedeemInSystemStabilityModePausedRes,
-        
+
         mode1_maxBaseIn,
         mode1_maxBaseIn_text,
         mode1_maxXTokenMintable_text,
         maxXETHBonus,
-        maxXETHBonus_text
+        maxXETHBonus_text,
+        mode2_maxFTokenBaseIn,
+        mode2_maxFTokenBaseIn_text,
+        mode2_maxETHBaseOut,
+        mode2_maxETHBaseOut_text,
+        maxETHBonus,
+        maxETHBonus_Text
       }
     } catch (error) {
 

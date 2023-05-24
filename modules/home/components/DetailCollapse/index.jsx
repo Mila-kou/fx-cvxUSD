@@ -40,11 +40,6 @@ export default function DetailCollapse({ title, detail, open = false }) {
                 Max Base In ETH: <span>{detail.maxBaseIn} ETH</span>
               </p>
             ) : null}
-            {/* {detail.maxBaseIn ? (
-              <p>
-                Max Token Mintable: <span>{detail.maxXTokenMintable}</span>
-              </p>
-            ) : null} */}
 
             {detail.maxXETHBonus ? (
               <p>
@@ -63,14 +58,23 @@ export default function DetailCollapse({ title, detail, open = false }) {
               </p>
             ) : null}
 
-            {/* {detail.bonus ? (
+            {detail.maxETHBonus_Text ? (
               <p>
                 System Bonus: :{' '}
                 <span className={styles.green}>
-                  +{detail.bonus} ETH ({detail.bonusRatio}%)
+                  +{detail.maxETHBonus_Text} ETH
                 </span>
               </p>
-            ) : null} */}
+            ) : null}
+            {detail.useETHBonus ? (
+              <p>
+                User Bonus: :{' '}
+                <span className={styles.green}>
+                  +{detail.useETHBonus} ETH
+                </span>
+              </p>
+            ) : null}
+
 
             {detail.ETH ? (
               <p>

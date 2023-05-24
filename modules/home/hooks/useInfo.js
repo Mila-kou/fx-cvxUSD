@@ -81,36 +81,46 @@ const useInfo = () => {
         }
     }, [fETHContract, xETHContract, multiCallsV2, _currentAccount, web3])
 
-    const getMaxAbleFToken = async () => {
-        const { maxMintableFToken, maxMintableXToken, maxRedeemableFToken, maxRedeemableXToken, cacheTwap, maxMintableXTokenWithIncentive } = treasuryContract.methods
+    const getMaxAbleToken = async () => {
+        const { maxMintableFToken, maxMintableXToken, maxRedeemableFToken, maxRedeemableXToken, cacheTwap, maxMintableXTokenWithIncentive, maxLiquidatable } = treasuryContract.methods
         const _stabilityRatio = baseInfo.marketConfigRes?.stabilityRatio || 0
         const _liquidationRatio = baseInfo.marketConfigRes?.liquidationRatio || 0
         const _selfLiquidationRatio = baseInfo.marketConfigRes?.selfLiquidationRatio || 0
         const _recapRatioRatio = baseInfo.marketConfigRes?.recapRatio || 0
         const _stabilityIncentiveRatio = baseInfo.incentiveConfigRes?.stabilityIncentiveRatio || 0
-        const apiCalls = [
-            cacheTwap(),
-            // maxMintableFToken(_stabilityRatio),
-            // maxMintableXToken(_stabilityRatio),
-            // maxRedeemableFToken(_stabilityRatio),
-            // maxRedeemableXToken(_stabilityRatio),
-            maxMintableXTokenWithIncentive(
-                _stabilityRatio,
-                _stabilityIncentiveRatio
-            )
-        ]
-        const [,
-            // maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
-            maxMintableXTokenWithIncentiveRes] = await multiCallsV2(apiCalls)
-        console.log('maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--',
-            // _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
-            maxMintableXTokenWithIncentiveRes)
-        setMaxAbleFToken((pre) => {
-            return {
-                ...pre,
-                maxMintableXTokenWithIncentiveRes
-            }
-        })
+        const _liquidationIncentiveRatio = baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0
+        try {
+            const apiCalls = [
+                cacheTwap(),
+                // maxMintableFToken(_stabilityRatio),
+                // maxMintableXToken(_stabilityRatio),
+                // maxRedeemableFToken(_stabilityRatio),
+                // maxRedeemableXToken(_stabilityRatio),
+                maxMintableXTokenWithIncentive(
+                    _stabilityRatio,
+                    _stabilityIncentiveRatio
+                ),
+                maxLiquidatable(
+                    _liquidationRatio,
+                    _liquidationIncentiveRatio
+                )
+            ]
+            const [,
+                // maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
+                maxMintableXTokenWithIncentiveRes, maxLiquidatableRes] = await multiCallsV2(apiCalls)
+            console.log('maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--',
+                // _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
+                maxMintableXTokenWithIncentiveRes, maxLiquidatableRes)
+            setMaxAbleFToken((pre) => {
+                return {
+                    ...pre,
+                    maxMintableXTokenWithIncentiveRes,
+                    maxLiquidatableRes
+                }
+            })
+        } catch (e) {
+            console.log('getMaxAbleToken--', e)
+        }
     }
 
     const [
@@ -131,7 +141,7 @@ const useInfo = () => {
     }, [_currentAccount, blockNumber])
 
     useEffect(() => {
-        getMaxAbleFToken()
+        getMaxAbleToken()
     }, [blockNumber])
 
     return {

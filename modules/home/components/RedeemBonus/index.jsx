@@ -12,12 +12,14 @@ import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 import useApprove from '@/hooks/useApprove'
+import useFxCommon from '../../hooks/useFxCommon'
 
 export default function RedeemBonus() {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const [redeeming, setRedeeming] = useState(0)
   const [slippage, setSlippage] = useState(0.3)
+  const { getMaxETHBonus } = useFxCommon()
   const { tokens } = useGlobal()
   const {
     fETHAddress,
@@ -34,7 +36,14 @@ export default function RedeemBonus() {
     ethPrice_text,
     fnav,
     xnav,
-    mintPaused, redeemPaused
+    mintPaused,
+    redeemPaused,
+    mode2_maxFTokenBaseIn,
+    mode2_maxFTokenBaseIn_text,
+    mode2_maxETHBaseOut,
+    mode2_maxETHBaseOut_text,
+    maxETHBonus,
+    maxETHBonus_Text
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -42,6 +51,13 @@ export default function RedeemBonus() {
   const [minOutETHtAmount, setMinOutETHtAmount] = useState({
     minout: 0,
     tvl: 0,
+  })
+  const [detail, setDetail] = useState({
+    // bonus: 75,
+    // bonusRatio: 2.1,
+    // ETH: 1,
+    maxFTokenBaseIn: mode2_maxFTokenBaseIn_text,
+    maxETHBonus_Text: maxETHBonus_Text,
   })
 
   const [isF, isX, selectTokenAddress, tokenAmount] = useMemo(() => {
@@ -59,7 +75,7 @@ export default function RedeemBonus() {
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
 
-  const [fee, feeUsd] = useMemo(() => {
+  const [fee, useETHBonus_text] = useMemo(() => {
     let _redeemFee = _redeemFETHFee
     if (isF) {
       _redeemFee = _redeemFETHFee
@@ -68,8 +84,27 @@ export default function RedeemBonus() {
     }
     // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
     const _fee = cBN(_redeemFee).multipliedBy(100)
-    const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
-    return [fb4(_fee), 1]
+    // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
+
+    let _userETHBonus = 0;
+    if (cBN(tokenAmount).isGreaterThanOrEqualTo(mode2_maxFTokenBaseIn)) {
+      _userETHBonus = maxETHBonus
+    } else {
+      _userETHBonus = getMaxETHBonus({
+        MaxBaseInfETH: tokenAmount / 1e18,
+      })
+    }
+    const _useETHBonus_text = checkNotZoroNum(_userETHBonus)
+      ? fb4(_userETHBonus, false, 0)
+      : 0
+
+    setDetail((pre) => {
+      return {
+        ...pre,
+        useETHBonus: _useETHBonus_text,
+      }
+    })
+    return [fb4(_fee), _useETHBonus_text]
   }, [isF, FETHtAmount, XETHtAmount, ethPrice])
 
   const hanldeFETHAmountChanged = (v) => {
@@ -79,12 +114,6 @@ export default function RedeemBonus() {
   const hanldeXETHAmountChanged = (v) => {
     setXETHtAmount(v.toString(10))
   }
-
-  const [detail, setDetail] = useState({
-    // bonus: 75,
-    // bonusRatio: 2.1,
-    // ETH: 1,
-  })
 
   const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
 
