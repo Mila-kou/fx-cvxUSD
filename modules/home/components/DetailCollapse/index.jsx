@@ -43,7 +43,7 @@ export default function DetailCollapse({ title, detail, open = false }) {
 
             {detail.maxXETHBonus ? (
               <p>
-                System Bonus: :{' '}
+                System Bonus:{' '}
                 <span className={styles.green}>
                   +{detail.maxXETHBonus} xETH
                 </span>
@@ -51,16 +51,23 @@ export default function DetailCollapse({ title, detail, open = false }) {
             ) : null}
             {detail.useXETHBonus ? (
               <p>
-                User Bonus: :{' '}
+                User Bonus:{' '}
                 <span className={styles.green}>
                   +{detail.useXETHBonus} xETH
                 </span>
               </p>
             ) : null}
-
+            {detail.maxFTokenBaseIn ? (
+              <p>
+                Max Base In fETH:{' '}
+                <span className={styles.green}>
+                  +{detail.maxFTokenBaseIn} fETH
+                </span>
+              </p>
+            ) : null}
             {detail.maxETHBonus_Text ? (
               <p>
-                System Bonus: :{' '}
+                System Bonus:{' '}
                 <span className={styles.green}>
                   +{detail.maxETHBonus_Text} ETH
                 </span>
@@ -68,7 +75,7 @@ export default function DetailCollapse({ title, detail, open = false }) {
             ) : null}
             {detail.useETHBonus ? (
               <p>
-                User Bonus: :{' '}
+                User Bonus:{' '}
                 <span className={styles.green}>
                   +{detail.useETHBonus} ETH
                 </span>
