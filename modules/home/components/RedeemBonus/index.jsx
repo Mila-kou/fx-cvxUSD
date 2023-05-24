@@ -154,6 +154,13 @@ export default function RedeemBonus() {
         minout: fb4(_minOut_CBN.toFixed(0, 1)),
         tvl: _minOut_ETH_tvl,
       })
+      setDetail((pre) => {
+        return {
+          ...pre,
+          ETH: fb4(_minOut_CBN.toString(10)),
+          ETHTvl: _minOut_ETH_tvl
+        }
+      })
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)

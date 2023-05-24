@@ -85,17 +85,17 @@ export default function DetailCollapse({ title, detail, open = false }) {
 
             {detail.ETH ? (
               <p>
-                Minimum received ETH: <span>{detail.ETH}</span>
+                Minimum received ETH: <span>{detail.ETH} ~ ${detail.ETHTvl}</span>
               </p>
             ) : null}
             {detail.fETH ? (
               <p>
-                Minimum received fETH: <span>{detail.fETH}</span>
+                Minimum received fETH: <span>{detail.fETH} ~ ${detail.fETHTvl}</span>
               </p>
             ) : null}
             {detail.xETH ? (
               <p>
-                Minimum received xETH: <span>{detail.xETH}</span>
+                Minimum received xETH: <span>{detail.xETH} ~${detail.xETHTvl}</span>
               </p>
             ) : null}
           </div>

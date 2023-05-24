@@ -22,6 +22,7 @@ export default function MintBonus() {
   const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
+  const minGas = 260325
   const [ETHtAmount, setETHtAmount] = useState(0)
   const {
     fETHContract,
@@ -104,20 +105,32 @@ export default function MintBonus() {
       if (!checkNotZoroNum(ETHtAmount)) {
         return 0
       }
+      const getGasPrice = await getGas()
+      const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+      let _ETHtAmountAndGas
+      if (
+        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+      ) {
+        _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+          .minus(gasFee)
+          .toFixed(0, 1)
+          .toString()
+      } else {
+        _ETHtAmountAndGas = ETHtAmount
+      }
       let minout_ETH
-      let bonuse_ETH
       if (isF) {
         minout_ETH = await ethGatewayContract.methods
           .mintFToken(0)
-          .call({ value: ETHtAmount })
+          .call({ value: _ETHtAmountAndGas })
       } else {
         // minout_ETH = await ethGatewayContract.methods
         //   .mintXToken(0)
         //   .call({ value: ETHtAmount })
         minout_ETH = await ethGatewayContract.methods
           .addBaseToken(0)
-          .call({ value: ETHtAmount })
-        console.log('minout_ETH__bonuse_ETH--', minout_ETH, bonuse_ETH)
+          .call({ value: _ETHtAmountAndGas })
+        console.log('minout_ETH__bonuse_ETH--', minout_ETH)
       }
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
@@ -137,7 +150,8 @@ export default function MintBonus() {
         setDetail((pre) => {
           return {
             ...pre,
-            fETH: _minOut_fETH_tvl,
+            fETH: fb4(_minOut_CBN.toString(10)),
+            fETHTvl: _minOut_fETH_tvl,
             xETH: 0,
           }
         })
@@ -157,7 +171,8 @@ export default function MintBonus() {
           return {
             ...pre,
             fETH: 0,
-            xETH: _minOut_xETH_tvl,
+            xETH: fb4(_minOut_CBN.toString(10)),
+            xETHTvl: _minOut_xETH_tvl,
           }
         })
       }
@@ -172,6 +187,19 @@ export default function MintBonus() {
     try {
       setMintLoading(true)
       const _minOut = await getMinAmount()
+      const getGasPrice = await getGas()
+      const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+      let _ETHtAmountAndGas
+      if (
+        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+      ) {
+        _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+          .minus(gasFee)
+          .toFixed(0, 1)
+          .toString()
+      } else {
+        _ETHtAmountAndGas = ETHtAmount
+      }
       let apiCall
       if (isF) {
         apiCall = await ethGatewayContract.methods.mintFToken(_minOut)
@@ -180,11 +208,12 @@ export default function MintBonus() {
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
-        value: ETHtAmount,
+        value: _ETHtAmountAndGas,
       })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      console.log('gas--', gas)
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas, value: ETHtAmount }),
+        () => apiCall.send({ from: _currentAccount, gas, value: _ETHtAmountAndGas }),
         {
           key: 'Mint',
           action: 'Mint',

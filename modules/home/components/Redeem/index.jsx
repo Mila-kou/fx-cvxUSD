@@ -12,6 +12,7 @@ import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 import useApprove from '@/hooks/useApprove'
+import Button from '@/components/Button'
 import Tabs from '../Tabs'
 
 export default function Redeem() {
@@ -141,6 +142,7 @@ export default function Redeem() {
         return {
           ...pre,
           ETH: fb4(_minOut_CBN.toString(10)),
+          ETHTvl: _minOut_ETH_tvl
         }
       })
       return _minOut_CBN.toFixed(0, 1)
