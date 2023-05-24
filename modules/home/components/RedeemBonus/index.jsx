@@ -13,6 +13,7 @@ import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 import useApprove from '@/hooks/useApprove'
 import useFxCommon from '../../hooks/useFxCommon'
+import Button from '@/components/Button'
 
 export default function RedeemBonus() {
   const { _currentAccount } = useWeb3()
@@ -140,19 +141,11 @@ export default function RedeemBonus() {
         return 0
       }
       let minout_ETH
-      let _fTokenIn = 0
-      let _xTokenIn = 0
-      if (isF) {
-        _fTokenIn = tokenAmount
-        _xTokenIn = 0
-      } else {
-        _xTokenIn = tokenAmount
-        _fTokenIn = 0
-      }
+      console.log('tokenAmount---', tokenAmount)
       minout_ETH = await marketContract.methods
-        .addBaseToken(tokenAmount, _currentAccount, 0)
+        .liquidate(tokenAmount, _currentAccount, 0)
         .call({ from: _currentAccount })
-
+      console.log('tokenAmount-minout_ETH--', tokenAmount, minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
@@ -168,21 +161,12 @@ export default function RedeemBonus() {
     }
   }
 
-  const handleRedeem = async () => {
+  const handleLiquidate = async () => {
     try {
       setRedeeming(true)
       const _minoutETH = await getMinAmount()
-      let _fTokenIn = 0
-      let _xTokenIn = 0
-      if (isF) {
-        _fTokenIn = tokenAmount
-        _xTokenIn = 0
-      } else {
-        _xTokenIn = tokenAmount
-        _fTokenIn = 0
-      }
       const apiCall = await marketContract.methods
-        .redeem(_fTokenIn, _xTokenIn, _currentAccount, _minoutETH)
+        .liquidate(tokenAmount, _currentAccount, _minoutETH)
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount
       })
@@ -190,8 +174,8 @@ export default function RedeemBonus() {
       await NoPayableAction(
         () => apiCall.send({ from: _currentAccount, gas }),
         {
-          key: 'Redeem',
-          action: 'Redeem',
+          key: 'Liquidate',
+          action: 'Liquidate',
         }
       )
       setRedeeming(false)
@@ -252,9 +236,7 @@ export default function RedeemBonus() {
       />
 
       <div className={styles.action}>
-        <BtnWapper loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">
-          Redeem
-        </BtnWapper>
+        <Button loading={redeeming} disabled={!canRedeem} onClick={handleLiquidate} width="100%">Redeem</Button>
       </div>
     </div>
   )

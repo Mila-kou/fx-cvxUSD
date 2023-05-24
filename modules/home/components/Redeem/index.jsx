@@ -236,14 +236,7 @@ export default function Redeem() {
       <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <BtnWapper
-          loading={redeeming}
-          disabled={!canRedeem}
-          onClick={handleRedeem}
-          width="100%"
-        >
-          Redeem
-        </BtnWapper>
+        <Button loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">Redeem</Button>
       </div>
     </div>
   )
