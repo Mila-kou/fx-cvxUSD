@@ -5,7 +5,7 @@ import styles from './styles.module.scss'
 import useIDO from './controller/useIDO'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
@@ -36,7 +36,9 @@ export default function IdoPage() {
       _newStatus = PageData.saleStatus
     } else {
       console.log('_currentTime---', _currentTime, PageData.baseInfo.saleTime?.publicSaleTime)
-      if (cBN(_currentTime).isLessThanOrEqualTo(PageData.baseInfo.saleTime?.publicSaleTime)) {
+      if (!checkNotZoroNum(PageData.baseInfo.saleTime?.publicSaleTime)) {
+        _newStatus = 1
+      } else if (cBN(_currentTime).isLessThanOrEqualTo(PageData.baseInfo.saleTime?.publicSaleTime)) {
         _newStatus = 1
       } else if (cBN(_currentTime).isLessThanOrEqualTo(cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(PageData.baseInfo.saleTime?.saleDuration))) {
         _newStatus = 3
