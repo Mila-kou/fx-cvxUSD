@@ -180,16 +180,13 @@ const useInfo = (refreshTrigger) => {
     refetchUserInfo()
   }, [_currentAccount, blockNumber])
 
-  return useMemo(
-    () => ({
-      info: {
-        baseInfo,
-        userInfo,
-      },
-      IdoSaleContract,
-    }),
-    [baseInfo, useInfo, IdoSaleContract]
-  )
+  return {
+    info: {
+      baseInfo,
+      userInfo,
+    },
+    IdoSaleContract,
+  }
 }
 
 export default useInfo

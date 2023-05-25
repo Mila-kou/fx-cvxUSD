@@ -29,16 +29,30 @@ export default function IdoPage() {
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
 
-  const _currentTime = Math.floor((+new Date()) / 1000)
+  const _currentTime = Math.floor(+new Date() / 1000)
   const newStatus = useMemo(() => {
-    let _newStatus = 0;
+    let _newStatus = 0
     if (PageData.saleStatus) {
       _newStatus = PageData.saleStatus
     } else {
-      console.log('_currentTime---', _currentTime, PageData.baseInfo.saleTime?.publicSaleTime)
-      if (cBN(_currentTime).isLessThanOrEqualTo(PageData.baseInfo.saleTime?.publicSaleTime)) {
+      console.log(
+        '_currentTime---',
+        _currentTime,
+        PageData.baseInfo.saleTime?.publicSaleTime
+      )
+      if (
+        cBN(_currentTime).isLessThanOrEqualTo(
+          PageData.baseInfo.saleTime?.publicSaleTime
+        )
+      ) {
         _newStatus = 1
-      } else if (cBN(_currentTime).isLessThanOrEqualTo(cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(PageData.baseInfo.saleTime?.saleDuration))) {
+      } else if (
+        cBN(_currentTime).isLessThanOrEqualTo(
+          cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(
+            PageData.baseInfo.saleTime?.saleDuration
+          )
+        )
+      ) {
         _newStatus = 3
       } else {
         _newStatus = 2
@@ -48,21 +62,32 @@ export default function IdoPage() {
   }, [PageData, _currentTime])
 
   const isEndSale = useMemo(() => {
-    if (newStatus == 3 ||
-      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(PageData.baseInfo.totalSoldAmount)) {
+    if (
+      newStatus == 3 ||
+      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+        PageData.baseInfo.totalSoldAmount
+      )
+    ) {
       return true
     }
     return false
   }, [PageData])
   console.log('PageData.baseInfo.saleTime---', PageData.baseInfo.saleTime)
 
-
-  const canClaim = useMemo(
-    () => {
-      return (newStatus == 3 && (PageData.userInfo.myShares * 1) && (!PageData.userInfo?.isClaimed))
-    }, [PageData]
+  const canClaim = useMemo(() => {
+    return (
+      newStatus == 3 &&
+      PageData.userInfo.myShares * 1 &&
+      !PageData.userInfo?.isClaimed
+    )
+  }, [PageData])
+  console.log(
+    'newStatus-',
+    newStatus,
+    PageData.userInfo.myShares,
+    PageData.userInfo?.isClaimed,
+    canClaim
   )
-  console.log('newStatus-', newStatus, PageData.userInfo.myShares, PageData.userInfo?.isClaimed, canClaim)
 
   const canPay = useMemo(
     () =>
@@ -198,32 +223,8 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) { }
+    } catch (error) {}
   }, [depositAmount])
-
-  const InitialRender = () => {
-    return (
-      <div className={styles.container}>
-        <div className={styles.card}>
-          <p className={styles.title}>f(x) Auction</p>
-          <div className={styles.num}>
-            <Countdown
-              endTime={PageData.countdown}
-              onCompleted={updateSetPropsRefreshTrigger}
-            />
-          </div>
-          <p className={styles.title}>{PageData.countdownTitle}</p>
-          <p className={styles.num}>{PageData.capAmount} f(x)</p>
-          <p className={styles.title}>Auction Amount</p>
-          <p className={styles.title}>
-            <span>{PageData.currentPrice} ETH</span>
-            <br />
-            Initial Price
-          </p>
-        </div>
-      </div>
-    )
-  }
 
   const CompletedRender = () => {
     return (
@@ -269,7 +270,27 @@ export default function IdoPage() {
 
   return (
     <>
-      {!!([0, 1].indexOf(newStatus) > -1) && <InitialRender />}
+      {!!([0, 1].indexOf(newStatus) > -1) && (
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <p className={styles.title}>f(x) Auction</p>
+            <div className={styles.num}>
+              <Countdown
+                endTime={PageData.countdown}
+                onCompleted={updateSetPropsRefreshTrigger}
+              />
+            </div>
+            <p className={styles.title}>{PageData.countdownTitle}</p>
+            <p className={styles.num}>{PageData.capAmount} f(x)</p>
+            <p className={styles.title}>Auction Amount</p>
+            <p className={styles.title}>
+              <span>{PageData.currentPrice} ETH</span>
+              <br />
+              Initial Price
+            </p>
+          </div>
+        </div>
+      )}
       {!!(newStatus == 2) && (
         <div className={styles.container}>
           <div className={styles.card}>
@@ -333,7 +354,7 @@ export default function IdoPage() {
           </div>
         </div>
       )}
-      {!!(isEndSale) && <CompletedRender />}
+      {!!isEndSale && <CompletedRender />}
     </>
   )
 }
