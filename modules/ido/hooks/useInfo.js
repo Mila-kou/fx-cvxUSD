@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useCallback } from 'react'
+import { useEffect, useMemo, useContext, useCallback } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import moment from 'moment'
 import { useContract } from 'hooks/useContracts'
@@ -180,13 +180,16 @@ const useInfo = (refreshTrigger) => {
     refetchUserInfo()
   }, [_currentAccount, blockNumber])
 
-  return {
-    info: {
-      baseInfo,
-      userInfo,
-    },
-    IdoSaleContract,
-  }
+  return useMemo(
+    () => ({
+      info: {
+        baseInfo,
+        userInfo,
+      },
+      IdoSaleContract,
+    }),
+    [baseInfo, useInfo, IdoSaleContract]
+  )
 }
 
 export default useInfo
