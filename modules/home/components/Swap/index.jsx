@@ -19,7 +19,7 @@ export default function Swap() {
 
   const tabs = useMemo(() => {
     let _tabs = ['Mint', 'Redeem']
-    if (systemStatus >= 1) {
+    if (systemStatus * 1 >= 1) {
       _tabs = ['Mint', 'Redeem', 'Bonus']
     }
     if (tab >= _tabs.length) setTab(0)
@@ -47,10 +47,10 @@ export default function Swap() {
       {!!(tab == 2) && (
         <div>
           <Tabs
-            tabs={['Mint Bonus', 'Redeem Bonus']}
+            tabs={['Mint fETH', 'Redeem xETH']}
             selecedIndex={bonusIndex}
             onChange={(index) => setBonusIndex(index)}
-            disabledIndexs={systemStatus == 2 ? [] : [1]}
+            disabledIndexs={systemStatus * 1 >= 2 ? [] : [1]}
           />
           {bonusIndex == 0 ? <MintBonus /> : <RedeemBonus />}
         </div>
