@@ -6,7 +6,7 @@ import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import abis from '@/config/abi'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
-import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import useInfo from './useInfo'
 import { useGlobal } from '@/contexts/GlobalProvider'
 
@@ -266,10 +266,15 @@ const useFxCommon = () => {
         const fNav = fx_info.baseInfo.CurrentNavRes?._fNav / 1e18
         const s = fx_info.baseInfo.CurrentNavRes?._baseNav / 1e18
 
-        const _res = cBN(λ_f).multipliedBy(params.MaxBaseInfETH).multipliedBy(fNav).div(s).toString(10)        
+        const _res = cBN(λ_f).multipliedBy(params.MaxBaseInfETH).multipliedBy(fNav).div(s).toString(10)
         return _res;
     }
 
+    /**
+     * 最大XETH Bonus
+     * @param {*} params 
+     * @returns 
+     */
     const getMaxXETHBonus = (params) => {
         // Incentive(xETH)= λ_f*Δn*s/x nav
         // λ_f：8%，Δn：MaxBaseInETH，s1：ethPrice，xnav：xNav
@@ -285,6 +290,27 @@ const useFxCommon = () => {
             return 0
         }
 
+    }
+
+    /**
+     * 获取xETH倍数
+     * (1-1/CR*(1+R)*Beta)/(1-1/CR)
+     * @param {*} params 
+     */
+    const getXETHBate = (params) => {
+        const { collateralRatioRes, betaRes, CurrentNavRes, lastPermissionedPriceRes } = fx_info.baseInfo || {}
+        const r = getR({
+            s: CurrentNavRes?._baseNav,
+            s0: lastPermissionedPriceRes
+        })
+        const CR = cBN(collateralRatioRes).div(1e18)
+        const beta = cBN(betaRes).div(1e18)
+        const p1 = cBN(1).minus(cBN(1).div(CR).multipliedBy(cBN(1).plus(r)).multipliedBy(beta))
+        const p2 = cBN(1).minus(cBN(1).div(CR))
+        const res = p1.div(p2).toString(10)
+        const res_text = checkNotZoroNumOption(res, fb4(res, false, 0, 2))
+        console.log('r--CR--beta--p1--p2--res', r, CR, beta, p1, p2, res)
+        return [res, res_text]
     }
 
     const _computeMultiple = (_newPrice, _lastPermissionedPrice, _beta) => {
@@ -324,6 +350,7 @@ const useFxCommon = () => {
 
         getMaxETHBonus,
         getMaxXETHBonus,
+        getXETHBate
 
     }
 }

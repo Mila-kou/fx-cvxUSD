@@ -43,6 +43,7 @@ export default function MintBonus() {
     mode1_maxXTokenMintable_text,
     maxXETHBonus,
     maxXETHBonus_text,
+    xETHBeta_text
   } = usefxETH()
   const [FETHtAmount, setFETHtAmount] = useState({
     amount: 0,
@@ -274,7 +275,7 @@ export default function MintBonus() {
         disabled
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd={`$${xnav}`}
+        usd={`$${xnav} x${xETHBeta_text}`}
         onSelected={() => setSelected(1)}
       />
 

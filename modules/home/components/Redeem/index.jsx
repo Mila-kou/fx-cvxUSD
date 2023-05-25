@@ -38,7 +38,8 @@ export default function Redeem() {
     xnav,
     mintPaused,
     redeemPaused,
-    xTokenRedeemInSystemStabilityModePaused
+    xTokenRedeemInSystemStabilityModePaused,
+    xETHBeta_text
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -218,7 +219,7 @@ export default function Redeem() {
           color="red"
           selectColor="red"
           className={styles.inputItem}
-          usd={`$${xnav}`}
+          usd={`$${xnav} x${xETHBeta_text}`}
           maxAmount={tokens.xETH.balance}
           onChange={hanldeXETHAmountChanged}
         // onSelected={() => setSelected(1)}

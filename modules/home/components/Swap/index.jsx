@@ -47,7 +47,7 @@ export default function Swap() {
       {!!(tab == 2) && (
         <div>
           <Tabs
-            tabs={['Mint fETH', 'Redeem xETH']}
+            tabs={['Mint xETH', 'Redeem fETH']}
             selecedIndex={bonusIndex}
             onChange={(index) => setBonusIndex(index)}
             disabledIndexs={systemStatus * 1 >= 2 ? [] : [1]}

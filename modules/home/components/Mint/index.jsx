@@ -54,6 +54,7 @@ export default function Mint() {
     mintPaused,
     redeemPaused,
     fTokenMintInSystemStabilityModePaused,
+    xETHBeta_text
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -248,7 +249,7 @@ export default function Mint() {
           placeholder={XETHtAmount.minout}
           disabled
           className={styles.inputItem}
-          usd={`$${xnav}`}
+          usd={`$${xnav} x${xETHBeta_text}`}
         // onSelected={() => setSelected(1)}
         />
       )}
