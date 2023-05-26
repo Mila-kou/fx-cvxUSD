@@ -32,6 +32,7 @@ function GlobalProvider({ children }) {
 
   const fx_info = useInfo()
   const ethToken = useToken(config.tokens.eth)
+  const wethToken = useToken(config.tokens.weth)
   const fETHToken = useToken(config.tokens.fETH)
   const xETHToken = useToken(config.tokens.xETH)
 
@@ -56,6 +57,18 @@ function GlobalProvider({ children }) {
           ethToken.balance,
           fb4(
             cBN(ethToken.balance)
+              .multipliedBy(CurrentNavRes?._baseNav)
+              .div(1e18) || 0,
+            true
+          )
+        ),
+      },
+      WETH: {
+        ...wethToken,
+        usd: checkNotZoroNumOption(
+          wethToken.balance,
+          fb4(
+            cBN(wethToken.balance)
               .multipliedBy(CurrentNavRes?._baseNav)
               .div(1e18) || 0,
             true

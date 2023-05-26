@@ -40,6 +40,13 @@ export default function AppHeader() {
         usd: tokens.ETH.usd,
       },
       {
+        name: 'Ethereum',
+        symbol: 'WETH',
+        amount: fb4(tokens.WETH.balance, false),
+        icon: '/tokens/crypto-icons-stack.svg#eth',
+        usd: tokens.WETH.usd,
+      },
+      {
         name: 'Fractional ETH',
         symbol: 'fETH',
         amount: fb4(tokens.fETH.balance, false),
