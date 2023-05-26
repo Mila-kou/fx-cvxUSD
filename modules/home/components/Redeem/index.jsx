@@ -219,7 +219,7 @@ export default function Redeem() {
           color="red"
           selectColor="red"
           className={styles.inputItem}
-          usd={`$${xnav} x${xETHBeta_text}`}
+          usd={`$${xnav} ${xETHBeta_text}x`}
           maxAmount={tokens.xETH.balance}
           onChange={hanldeXETHAmountChanged}
         // onSelected={() => setSelected(1)}

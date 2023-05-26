@@ -275,7 +275,7 @@ export default function MintBonus() {
         disabled
         type={isX ? '' : 'select'}
         className={styles.inputItem}
-        usd={`$${xnav} x${xETHBeta_text}`}
+        usd={`$${xnav} ${xETHBeta_text}x`}
         onSelected={() => setSelected(1)}
       />
 

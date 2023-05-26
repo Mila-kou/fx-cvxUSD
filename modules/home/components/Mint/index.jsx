@@ -251,7 +251,7 @@ export default function Mint() {
           placeholder={XETHtAmount.minout}
           disabled
           className={styles.inputItem}
-          usd={`$${xnav} x${xETHBeta_text}`}
+          usd={`$${xnav} ${xETHBeta_text}x`}
         // onSelected={() => setSelected(1)}
         />
       )}
