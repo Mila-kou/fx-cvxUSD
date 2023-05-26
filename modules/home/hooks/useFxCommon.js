@@ -267,6 +267,7 @@ const useFxCommon = () => {
         const s = fx_info.baseInfo.CurrentNavRes?._baseNav / 1e18
 
         const _res = cBN(λ_f).multipliedBy(params.MaxBaseInfETH).multipliedBy(fNav).div(s).toString(10)
+        // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
         return _res;
     }
 
@@ -297,7 +298,7 @@ const useFxCommon = () => {
      * (1-1/CR*(1+R)*Beta)/(1-1/CR)
      * @param {*} params 
      */
-    const getXETHBate = (params) => {
+    const getXETHBeta = (params) => {
         const { collateralRatioRes, betaRes, CurrentNavRes, lastPermissionedPriceRes } = fx_info.baseInfo || {}
         const r = getR({
             s: CurrentNavRes?._baseNav,
@@ -350,7 +351,7 @@ const useFxCommon = () => {
 
         getMaxETHBonus,
         getMaxXETHBonus,
-        getXETHBate
+        getXETHBeta
 
     }
 }

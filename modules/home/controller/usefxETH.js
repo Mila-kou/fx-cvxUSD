@@ -9,7 +9,7 @@ import { useGlobal } from '@/contexts/GlobalProvider'
 const usefxETH = () => {
   const { fx_info: fxInfo } = useGlobal()
   // const ethPrice = useETHPrice()
-  const { getSystemStatus, getR, getMaxXETHBonus, getMaxETHBonus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice, getXETHBate } = useFxCommon()
+  const { getSystemStatus, getR, getMaxXETHBonus, getMaxETHBonus, getStabilityModePrice, getUserLiquidationModePrice, getProtocolLiquidationModePrice, getXETHBeta } = useFxCommon()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -102,7 +102,7 @@ const usefxETH = () => {
       const maxETHBonus_Text = checkNotZoroNumOption(maxETHBonus, fb4(maxETHBonus, false, 0))
       console.log('maxETHBonus--', maxETHBonus, maxETHBonus_Text)
 
-      const [xETHBeta, xETHBeta_text] = getXETHBate()
+      const [xETHBeta, xETHBeta_text] = getXETHBeta()
 
       return {
         fnav: _fnav,

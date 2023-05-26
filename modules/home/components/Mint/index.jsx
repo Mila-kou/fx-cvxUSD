@@ -77,32 +77,34 @@ export default function Mint() {
 
   const getMinAmount = async () => {
     try {
-      if (!checkNotZoroNum(ETHtAmount)) {
-        return 0
-      }
-      const getGasPrice = await getGas()
-      const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
       let minout_ETH
-      let _ETHtAmountAndGas
-      if (
-        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-      ) {
-        _ETHtAmountAndGas = cBN(tokens.ETH.balance)
-          .minus(gasFee)
-          .toFixed(0, 1)
-          .toString()
+      if (checkNotZoroNum(ETHtAmount)) {
+        const getGasPrice = await getGas()
+        const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+        let _ETHtAmountAndGas
+        if (
+          cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+        ) {
+          _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+            .minus(gasFee)
+            .toFixed(0, 1)
+            .toString()
+        } else {
+          _ETHtAmountAndGas = ETHtAmount
+        }
+        if (isF) {
+          minout_ETH = await ethGatewayContract.methods
+            .mintFToken(0)
+            .call({ value: _ETHtAmountAndGas })
+        } else {
+          minout_ETH = await ethGatewayContract.methods
+            .mintXToken(0)
+            .call({ value: _ETHtAmountAndGas })
+        }
       } else {
-        _ETHtAmountAndGas = ETHtAmount
+        minout_ETH = 0
       }
-      if (isF) {
-        minout_ETH = await ethGatewayContract.methods
-          .mintFToken(0)
-          .call({ value: _ETHtAmountAndGas })
-      } else {
-        minout_ETH = await ethGatewayContract.methods
-          .mintXToken(0)
-          .call({ value: _ETHtAmountAndGas })
-      }
+
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
