@@ -147,7 +147,12 @@ const usefxETH = () => {
         xETHBeta_text
       }
     } catch (error) {
-
+      return {
+        fnav: '-',
+        xnav: '-',
+        ethPrice: 1,
+        ethPrice_text: '-',
+      }
     }
   }, [fxInfo])
   return {

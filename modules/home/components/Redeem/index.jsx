@@ -40,7 +40,8 @@ export default function Redeem() {
     redeemPaused,
     systemStatus,
     xTokenRedeemInSystemStabilityModePaused,
-    xETHBeta_text
+    xETHBeta_text,
+    baseInfo
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -69,8 +70,8 @@ export default function Redeem() {
     let __redeemFETHFee = _redeemFETHFee;
     let __redeemXETHFee = _redeemXETHFee;
     if (systemStatus == 0) {
-      __redeemFETHFee = fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
-      __redeemXETHFee = fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
+      __redeemFETHFee = baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
+      __redeemXETHFee = baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
     }
     let _fee
     if (isF) {

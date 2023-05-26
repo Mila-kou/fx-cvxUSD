@@ -65,8 +65,8 @@ export default function Mint() {
     let __mintFETHFee = _mintFETHFee
     let __mintXETHFee = _mintXETHFee
     if (systemStatus == 0) {
-      __mintFETHFee = fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio || 0
-      __mintXETHFee = fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio || 0
+      __mintFETHFee = baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio || 0
+      __mintXETHFee = baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio || 0
     }
     let _fee
     if (isF) {

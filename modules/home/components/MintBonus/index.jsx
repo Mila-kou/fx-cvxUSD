@@ -43,7 +43,9 @@ export default function MintBonus() {
     mode1_maxXTokenMintable_text,
     maxXETHBonus,
     maxXETHBonus_text,
-    xETHBeta_text
+    xETHBeta_text,
+    baseInfo,
+    systemStatus
   } = usefxETH()
   const [FETHtAmount, setFETHtAmount] = useState({
     amount: 0,
@@ -67,7 +69,7 @@ export default function MintBonus() {
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   const [fee, useXETHBonus_text] = useMemo(() => {
-    const _fee = cBN(_mintFETHFee).multipliedBy(100).toString(10)
+    const _fee = cBN(_mintXETHFee).multipliedBy(100).toString(10)
     // const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee).div(1e18)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     // console.log(
