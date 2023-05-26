@@ -69,7 +69,7 @@ export default function DetailCollapse({ title, detail, open = false }) {
               <p>
                 System Bonus:{' '}
                 <span className={styles.green}>
-                  +{detail.maxETHBonus_Text} WETH
+                  +{detail.maxETHBonus_Text} ETH
                 </span>
               </p>
             ) : null}
@@ -77,7 +77,7 @@ export default function DetailCollapse({ title, detail, open = false }) {
               <p>
                 User Bonus:{' '}
                 <span className={styles.green}>
-                  +{detail.useETHBonus} WETH
+                  +{detail.useETHBonus} ETH
                 </span>
               </p>
             ) : null}
@@ -85,7 +85,7 @@ export default function DetailCollapse({ title, detail, open = false }) {
 
             {detail.ETH ? (
               <p>
-                Minimum received WETH: <span>{detail.ETH} ~ ${detail.ETHTvl}</span>
+                Minimum received ETH: <span>{detail.ETH} ~ ${detail.ETHTvl}</span>
               </p>
             ) : null}
             {detail.fETH ? (

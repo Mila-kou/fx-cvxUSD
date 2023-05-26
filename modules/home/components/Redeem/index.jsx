@@ -38,6 +38,7 @@ export default function Redeem() {
     xnav,
     mintPaused,
     redeemPaused,
+    systemStatus,
     xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text
   } = usefxETH()
@@ -65,17 +66,21 @@ export default function Redeem() {
   }, [selected, FETHtAmount, XETHtAmount])
 
   const [fee, feeUsd] = useMemo(() => {
-    let _redeemFee = _redeemFETHFee
-    if (isF) {
-      _redeemFee = _redeemFETHFee
-    } else {
-      _redeemFee = _redeemXETHFee
+    let __redeemFETHFee = _redeemFETHFee;
+    let __redeemXETHFee = _redeemXETHFee;
+    if (systemStatus == 0) {
+      __redeemFETHFee = fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
+      __redeemXETHFee = fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
     }
-    // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
-    const _fee = cBN(_redeemFee).multipliedBy(100)
+    let _fee
+    if (isF) {
+      _fee = cBN(__redeemFETHFee).multipliedBy(100).toString(10)
+    } else {
+      _fee = cBN(__redeemXETHFee).multipliedBy(100).toString(10)
+    }
     const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     return [fb4(_fee), fb4(_feeUsd)]
-  }, [isF, FETHtAmount, XETHtAmount, ethPrice])
+  }, [isF, systemStatus, ethPrice])
 
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -230,7 +235,7 @@ export default function Redeem() {
       </div>
 
       <BalanceInput
-        symbol="WETH"
+        symbol="ETH"
         placeholder={minOutETHtAmount.minout}
         usd={`$${ethPrice_text}`}
         disabled

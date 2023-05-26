@@ -54,13 +54,26 @@ export default function Mint() {
     mintPaused,
     redeemPaused,
     fTokenMintInSystemStabilityModePaused,
-    xETHBeta_text
+    xETHBeta_text,
+    systemStatus,
+    baseInfo
   } = usefxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   const [fee, feeUsd] = useMemo(() => {
-    const _fee = cBN(_mintFETHFee).multipliedBy(100).toString(10)
+    let __mintFETHFee = _mintFETHFee
+    let __mintXETHFee = _mintXETHFee
+    if (systemStatus == 0) {
+      __mintFETHFee = fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio || 0
+      __mintXETHFee = fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio || 0
+    }
+    let _fee
+    if (isF) {
+      _fee = cBN(__mintFETHFee).multipliedBy(100).toString(10)
+    } else {
+      _fee = cBN(__mintXETHFee).multipliedBy(100).toString(10)
+    }
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     // console.log(
     //   'ETHtAmount---_newETHPrice--',
@@ -69,7 +82,7 @@ export default function Mint() {
     //   ethPrice
     // )
     return [fb4(_fee), 1]
-  }, [ETHtAmount, ethPrice])
+  }, [isF, systemStatus, ethPrice])
 
   const hanldeETHAmountChanged = (v) => {
     setETHtAmount(v.toString(10))
