@@ -230,7 +230,7 @@ export default function Redeem() {
       </div>
 
       <BalanceInput
-        symbol="ETH"
+        symbol="WETH"
         placeholder={minOutETHtAmount.minout}
         usd={`$${ethPrice_text}`}
         disabled
