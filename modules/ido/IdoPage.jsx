@@ -292,7 +292,6 @@ export default function IdoPage() {
             <SimpleInput
               placeholder=""
               hidePercent
-              showMax={false}
               symbol="ETH"
               maxAmount={selectTokenInfo?.balance}
               decimals={depositTokenInfo.decimals}
