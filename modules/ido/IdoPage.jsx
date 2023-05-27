@@ -34,6 +34,8 @@ export default function IdoPage() {
     let _newStatus = 0
     if (PageData.saleStatus) {
       _newStatus = PageData.saleStatus
+    } else if (!PageData.baseInfo?.saleTime) {
+      _newStatus = 2
     } else {
       console.log(
         '_currentTime---',
@@ -74,7 +76,7 @@ export default function IdoPage() {
     }
     return false
   }, [PageData])
-  console.log('PageData.baseInfo.saleTime---', PageData.baseInfo.saleTime)
+  // console.log('PageData.baseInfo.saleTime---', PageData.baseInfo.saleTime)
 
   const canClaim = useMemo(() => {
     return (

@@ -127,7 +127,7 @@ const useInfo = (refreshTrigger) => {
         saleTime,
         capAmount,
         totalSoldAmount,
-        totalFundsRaised: totalFundsRaised, // cBN(100000).shiftedBy(18),
+        totalFundsRaised, // cBN(100000).shiftedBy(18),
         timeObj,
       }
     } catch (error) {
@@ -166,11 +166,13 @@ const useInfo = (refreshTrigger) => {
         queryKey: ['baseInfo'],
         queryFn: () => fetchBaseInfo(),
         initialData: {},
+        refetchInterval: 2000,
       },
       {
         queryKey: ['userInfo'],
         queryFn: () => fetchUserInfo(),
         initialData: {},
+        refetchInterval: 3000,
       },
     ],
   })
@@ -178,7 +180,7 @@ const useInfo = (refreshTrigger) => {
   useEffect(() => {
     refetchBaseInfo()
     refetchUserInfo()
-  }, [_currentAccount, blockNumber])
+  }, [_currentAccount])
 
   return {
     info: {
