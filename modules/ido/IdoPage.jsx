@@ -242,7 +242,7 @@ export default function IdoPage() {
 
   return (
     <>
-      {!isEndSale && (
+      {(!isEndSale && newStatus * 1 >= 0) && (
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
