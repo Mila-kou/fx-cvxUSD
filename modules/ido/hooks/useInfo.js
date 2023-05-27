@@ -46,16 +46,22 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
     publicSaleEndTime.toLocaleString()
   )
 
-  if (now.isBefore(publicSaleStartTime)) {
-    title = `Starting ${publicSaleStartTime.toLocaleString()}`
-    saleStatus = 0
-    countdown = publicSaleStartTime.valueOf()
+  if (now.isBefore(whitelistSaleStartTime)) {
+    title = `WhiteList Sale Starting ${whitelistSaleStartTime.toLocaleString()}`
+    saleStatus = 1
+    countdown = whitelistSaleStartTime.valueOf()
   }
   // // white ending time
-  // if (now.isBetween(whitelistSaleStartTime, publicSaleStartTime)) {
-  //     title = `Ending ${publicSaleStartTime.format(momentFormatStr)} UTC`
-  //     saleStatus = 1
-  //     countdown = isEnd ? 0 : publicSaleStartTime.valueOf()
+  if (now.isBetween(whitelistSaleStartTime, publicSaleStartTime)) {
+    title = `Ending WhiteList Sale ${publicSaleStartTime.format(momentFormatStr)} UTC`
+    saleStatus = 2
+    countdown = publicSaleStartTime.valueOf()
+  }
+
+  // if (now.isBefore(publicSaleStartTime)) {
+  //   title = `Public Sale Starting ${publicSaleStartTime.toLocaleString()}`
+  //   saleStatus = 0
+  //   countdown = publicSaleStartTime.valueOf()
   // }
 
   // public ending time
