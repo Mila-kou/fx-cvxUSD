@@ -53,7 +53,7 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
   }
   // // white ending time
   if (now.isBetween(whitelistSaleStartTime, publicSaleStartTime)) {
-    title = `Ending WhiteList Sale ${publicSaleStartTime.format(momentFormatStr)} UTC`
+    title = `Ending WhiteList Sale ${publicSaleStartTime.toLocaleString()}`
     saleStatus = 2
     countdown = publicSaleStartTime.valueOf()
   }
