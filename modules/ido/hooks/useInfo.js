@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useContext, useCallback } from 'react'
+import { useEffect, useState, useContext, useCallback } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import moment from 'moment'
 import { useContract } from 'hooks/useContracts'
@@ -90,6 +90,8 @@ const useInfo = (refreshTrigger) => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
   const { erc20Contract } = useContract()
   const multiCallsV2 = useMutiCallV2()
+  const [baseInfo, setBaseInfo] = useState({})
+  const [userInfo, setUserInfo] = useState({})
 
   const { contract: IdoSaleContract } = useContract(
     config.contracts.idoSale,
@@ -127,7 +129,7 @@ const useInfo = (refreshTrigger) => {
         timeObj
       )
 
-      return {
+      setBaseInfo({
         idoAmount: fb4(capAmount),
         currentPrice,
         saleTime,
@@ -135,12 +137,11 @@ const useInfo = (refreshTrigger) => {
         totalSoldAmount,
         totalFundsRaised, // cBN(100000).shiftedBy(18),
         timeObj,
-      }
+      })
     } catch (error) {
       console.log(error)
-      return {}
     }
-  }, [IdoSaleContract, erc20Contract, multiCallsV2, _currentAccount, web3])
+  }, [IdoSaleContract, erc20Contract, multiCallsV2, web3])
 
   const fetchUserInfo = useCallback(async () => {
     const { whitelistCap, shares, claimed } = IdoSaleContract.methods
@@ -151,42 +152,38 @@ const useInfo = (refreshTrigger) => {
         claimed(_currentAccount),
       ]
       const [isWhite, myShares, isClaimed] = await multiCallsV2(calls)
-      return {
+      setUserInfo({
         myShares,
         isClaimed,
         isWhitelisted: isWhite != 0,
         whitelistCap: isWhite,
-      }
+      })
     } catch (error) {
       console.log(error)
-      return {}
+      // return {}
     }
-  }, [IdoSaleContract, _currentAccount])
+  }, [IdoSaleContract, _currentAccount, multiCallsV2])
 
-  const [
-    { data: baseInfo, refetch: refetchBaseInfo },
-    { data: userInfo, refetch: refetchUserInfo },
-  ] = useQueries({
-    queries: [
-      {
-        queryKey: ['baseInfo'],
-        queryFn: () => fetchBaseInfo(),
-        initialData: {},
-        refetchInterval: 2000,
-      },
-      {
-        queryKey: ['userInfo'],
-        queryFn: () => fetchUserInfo(),
-        initialData: {},
-        refetchInterval: 3000,
-      },
-    ],
-  })
+  const [{ refetch: refetchBaseInfo }, { refetch: refetchUserInfo }] =
+    useQueries({
+      queries: [
+        {
+          queryKey: ['baseInfo'],
+          queryFn: () => fetchBaseInfo(),
+          initialData: {},
+          refetchInterval: 2000,
+        },
+        {
+          queryKey: ['userInfo'],
+          queryFn: () => fetchUserInfo(),
+          initialData: {},
+        },
+      ],
+    })
 
   useEffect(() => {
-    refetchBaseInfo()
     refetchUserInfo()
-  }, [_currentAccount])
+  }, [_currentAccount, blockNumber])
 
   return {
     info: {
