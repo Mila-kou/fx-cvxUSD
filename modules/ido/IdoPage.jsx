@@ -148,27 +148,35 @@ export default function IdoPage() {
     //     .toFixed(0, 1)
     //     .toString()
     // }
-    if (canPay && !cBN(payAmountInWei).isZero()) {
-      const shares = await IdoSaleContract.methods
-        .buy(depositTokenInfo.address, payAmountInWei, 0)
-        .call({
-          from: _currentAccount,
-          value:
-            config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0,
-        })
-      const _slippage = slippage
-      _minOut = (cBN(shares) || cBN(0))
-        .multipliedBy(cBN(1).minus(cBN(_slippage).dividedBy(100)))
-        .toFixed(0, 1)
+    try {
+      if (canPay && !cBN(payAmountInWei).isZero()) {
+        const shares = await IdoSaleContract.methods
+          .buy(depositTokenInfo.address, payAmountInWei, 0)
+          .call({
+            from: _currentAccount,
+            value:
+              config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0,
+          })
+        const _slippage = slippage
+        _minOut = (cBN(shares) || cBN(0))
+          .multipliedBy(cBN(1).minus(cBN(_slippage).dividedBy(100)))
+          .toFixed(0, 1)
+      }
+      console.log('setMinAmount----', _minOut)
+      setMinAmount(_minOut)
+      return _minOut
+    } catch (error) {
+      if (error.message.indexOf('no cap to buy') > -1) {
+        noPayableErrorAction(`error_buy`, 'No cap to buy')
+      }
+      return
     }
-    console.log('setMinAmount----', _minOut)
-    setMinAmount(_minOut)
-    return _minOut
+
   }
 
   const doPay = async () => {
     if (newStatus == 1 && !PageData.userInfo?.isWhitelisted) {
-      setErrMsg('!Account not eligible for invest')
+      noPayableErrorAction(`error_buy`, 'No cap to buy')
       return
     }
 
