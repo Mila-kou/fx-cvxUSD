@@ -265,8 +265,9 @@ export default function IdoPage() {
                   endTime={PageData.countdown}
                   onCompleted={updateSetPropsRefreshTrigger}
                 />
-              </div>
+              </div>              
               <p className={styles.title}>{PageData.countdownTitle}</p>
+              {[1].includes(newStatus) && <div className={styles.title}>🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597 with a limit of 20,000 $FX</div>}
               <p className={styles.num}>
                 {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
               </p>
