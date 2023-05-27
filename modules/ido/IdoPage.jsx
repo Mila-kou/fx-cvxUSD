@@ -11,6 +11,7 @@ import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
+import useGlobal from '@/hooks/useGlobal'
 
 const depositTokenInfo = tokensList.depositTokens[0]
 
@@ -22,6 +23,7 @@ export default function IdoPage() {
   const [depositAmount, setDepositAmount] = useState(0)
   const [minAmount, setMinAmount] = useState(0)
   const [buying, setBuying] = useState(false)
+  const { tokens } = useGlobal()
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const { IdoSaleContract } = PageData
@@ -284,6 +286,9 @@ export default function IdoPage() {
 
           <div className={styles.card}>
             <p className={styles.title}>Invest</p>
+            <p className={styles.balance}>
+              Balance: {fb4(tokens.ETH.balance, false)}
+            </p>
             <SimpleInput
               placeholder=""
               hidePercent
