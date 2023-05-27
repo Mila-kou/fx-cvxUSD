@@ -90,6 +90,7 @@ const useInfo = (refreshTrigger) => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
   const { erc20Contract } = useContract()
   const multiCallsV2 = useMutiCallV2()
+
   const [baseInfo, setBaseInfo] = useState({})
   const [userInfo, setUserInfo] = useState({})
 
@@ -129,7 +130,7 @@ const useInfo = (refreshTrigger) => {
         timeObj
       )
 
-      setBaseInfo({
+      return {
         idoAmount: fb4(capAmount),
         currentPrice,
         saleTime,
@@ -137,9 +138,10 @@ const useInfo = (refreshTrigger) => {
         totalSoldAmount,
         totalFundsRaised, // cBN(100000).shiftedBy(18),
         timeObj,
-      })
+      }
     } catch (error) {
       console.log(error)
+      return {}
     }
   }, [IdoSaleContract, erc20Contract, multiCallsV2, web3])
 
@@ -152,38 +154,45 @@ const useInfo = (refreshTrigger) => {
         claimed(_currentAccount),
       ]
       const [isWhite, myShares, isClaimed] = await multiCallsV2(calls)
-      setUserInfo({
+      return {
         myShares,
         isClaimed,
         isWhitelisted: isWhite != 0,
         whitelistCap: isWhite,
-      })
+      }
     } catch (error) {
       console.log(error)
-      // return {}
+      return {}
     }
   }, [IdoSaleContract, _currentAccount, multiCallsV2])
 
-  const [{ refetch: refetchBaseInfo }, { refetch: refetchUserInfo }] =
-    useQueries({
-      queries: [
-        {
-          queryKey: ['baseInfo'],
-          queryFn: () => fetchBaseInfo(),
-          initialData: {},
-          refetchInterval: 2000,
-        },
-        {
-          queryKey: ['userInfo'],
-          queryFn: () => fetchUserInfo(),
-          initialData: {},
-        },
-      ],
-    })
+  const [
+    { data: data1, refetch: refetchBaseInfo },
+    { data: data2, refetch: refetchUserInfo },
+  ] = useQueries({
+    queries: [
+      {
+        queryKey: ['baseInfo'],
+        queryFn: () => fetchBaseInfo(),
+        initialData: {},
+        refetchInterval: 2000,
+      },
+      {
+        queryKey: ['userInfo'],
+        queryFn: () => fetchUserInfo(),
+        initialData: {},
+      },
+    ],
+  })
 
   useEffect(() => {
     refetchUserInfo()
   }, [_currentAccount, blockNumber])
+
+  useEffect(() => {
+    if (data1?.saleTime) setBaseInfo(data1)
+    if (data2) setUserInfo(data2)
+  }, [data1, data2])
 
   return {
     info: {

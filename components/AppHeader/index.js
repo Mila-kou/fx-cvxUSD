@@ -129,7 +129,7 @@ export default function AppHeader() {
               <p className={styles.title}>{_account}</p>
               <p className={styles.title}>Assets</p>
               {assets.map((item) => (
-                <div className={styles.assetItem} key={item.name}>
+                <div className={styles.assetItem} key={item.symbol}>
                   <div className={styles.logo}>
                     <img src={item.icon} />
                   </div>
