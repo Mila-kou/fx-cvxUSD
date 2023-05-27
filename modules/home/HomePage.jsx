@@ -21,7 +21,10 @@ export default function HomePage() {
   const { _currentAccount } = useWeb3()
   const [priceLoading, setPriceLoading] = useState(0)
   const theAddr = '0xCF5d8305AB4663E46f79a640CB6075f200d13DAc'
-  const { contract: ethGatewayContract } = useContract(theAddr, abi.MockTwapOracleAbi)
+  const { contract: ethGatewayContract } = useContract(
+    theAddr,
+    abi.MockTwapOracleAbi
+  )
   const handleSetPrice = async () => {
     try {
       setPriceLoading(true)
@@ -29,7 +32,7 @@ export default function HomePage() {
       let apiCall = await ethGatewayContract.methods.setPrice(_minOut)
 
       const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount
+        from: _currentAccount,
       })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(
@@ -54,12 +57,11 @@ export default function HomePage() {
     <div className={styles.container}>
       <div className={styles.item}>
         <Swap />
-        New ETH Price: <SimpleInput disableMax={true} onChange={handleChange_CurrentETHPrice} /> <br />
-        <Button
-          width="100%"
-          loading={priceLoading}
-          onClick={handleSetPrice}
-        >
+        New ETH Price: <SimpleInput
+          onChange={handleChange_CurrentETHPrice}
+        />{' '}
+        <br />
+        <Button width="100%" loading={priceLoading} onClick={handleSetPrice}>
           OK
         </Button>
       </div>

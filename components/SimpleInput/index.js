@@ -28,8 +28,8 @@ function SimpleInput(props) {
     symbol,
     moreInfo,
     className = '',
-    disableMax = false,
     onChange = () => {},
+    showMax,
   } = props
   const { theme } = useGlobal()
 
@@ -95,7 +95,7 @@ function SimpleInput(props) {
           value={val}
           placeholder={placeholder}
         />
-        {!disableMax && (
+        {showMax && (
           <div className={styles.max} onClick={setMax}>
             MAX
           </div>
