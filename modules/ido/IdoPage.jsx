@@ -33,35 +33,35 @@ export default function IdoPage() {
 
   const _currentTime = Math.floor(+new Date() / 1000)
   const newStatus = useMemo(() => {
-    let _newStatus = 0
-    if (PageData.saleStatus) {
-      _newStatus = PageData.saleStatus
-    } else {
-      console.log(
-        '_currentTime---',
-        _currentTime,
-        PageData.baseInfo.saleTime?.publicSaleTime
-      )
-      if (!checkNotZoroNum(PageData.baseInfo.saleTime?.publicSaleTime)) {
-        _newStatus = 1
-      } else if (
-        cBN(_currentTime).isLessThanOrEqualTo(
-          PageData.baseInfo.saleTime?.publicSaleTime
-        )
-      ) {
-        _newStatus = 1
-      } else if (
-        cBN(_currentTime).isLessThanOrEqualTo(
-          cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(
-            PageData.baseInfo.saleTime?.saleDuration
-          )
-        )
-      ) {
-        _newStatus = 3
-      } else {
-        _newStatus = 2
-      }
-    }
+    let _newStatus = PageData.saleStatus
+    // if (PageData.saleStatus) {
+    //   _newStatus = PageData.saleStatus
+    // } else {
+    //   console.log(
+    //     '_currentTime---',
+    //     _currentTime,
+    //     PageData.baseInfo.saleTime?.publicSaleTime
+    //   )
+    //   if (!checkNotZoroNum(PageData.baseInfo.saleTime?.publicSaleTime)) {
+    //     _newStatus = 1
+    //   } else if (
+    //     cBN(_currentTime).isLessThanOrEqualTo(
+    //       PageData.baseInfo.saleTime?.publicSaleTime
+    //     )
+    //   ) {
+    //     _newStatus = 1
+    //   } else if (
+    //     cBN(_currentTime).isLessThanOrEqualTo(
+    //       cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(
+    //         PageData.baseInfo.saleTime?.saleDuration
+    //       )
+    //     )
+    //   ) {
+    //     _newStatus = 3
+    //   } else {
+    //     _newStatus = 2
+    //   }
+    // }
     return _newStatus
   }, [PageData, _currentTime])
 
@@ -227,7 +227,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) {}
+    } catch (error) { }
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
@@ -238,7 +238,7 @@ export default function IdoPage() {
     <>
       {!isEndSale && (
         <div className={styles.container}>
-          {[0, 1].includes(newStatus) && (
+          {[0].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>f(x) Auction</p>
               <div className={styles.num}>
@@ -257,7 +257,7 @@ export default function IdoPage() {
               </p>
             </div>
           )}
-          {!!(newStatus == 2) && (
+          {[1, 2].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>f(x) Auction</p>
               <div className={styles.num}>
