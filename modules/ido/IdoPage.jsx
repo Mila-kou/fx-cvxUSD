@@ -34,8 +34,6 @@ export default function IdoPage() {
     let _newStatus = 0
     if (PageData.saleStatus) {
       _newStatus = PageData.saleStatus
-    } else if (!PageData.baseInfo?.saleTime) {
-      _newStatus = 2
     } else {
       console.log(
         '_currentTime---',
@@ -230,96 +228,59 @@ export default function IdoPage() {
     } catch (error) {}
   }, [depositAmount])
 
-  const CompletedRender = () => {
-    return (
-      <div className={styles.container}>
-        <div className={styles.card}>
-          <p className={styles.title}>f(x) Auction</p>
-          <p className={styles.title}>Completed!</p>
-          <p className={styles.num}>{PageData.capAmount} f(x)</p>
-          <p className={styles.title}>Auction Amount</p>
-          <div className={styles.bottomWrap}>
-            <p className={styles.title}>
-              Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
-            </p>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <p className={styles.title}>Invest</p>
-          <div className={styles.bottomWrap}>
-            <p className={styles.title}>
-              myShares: <span>{PageData.myShares} f(x)ETH</span>
-            </p>
-            <p className={styles.title}>
-              Claim opening at: <span>2023/5/25 20:00 UTC</span>
-            </p>
-          </div>
-          <Button
-            className={styles.buy}
-            onClick={handleClaim}
-            disabled={!canClaim}
-            loading={claiming}
-          >
-            Claim
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
   const hanldeAmountChanged = (v) => {
     setDepositAmount(v)
   }
 
   return (
     <>
-      {!!([0, 1].indexOf(newStatus) > -1) && (
+      {!isEndSale && (
         <div className={styles.container}>
-          <div className={styles.card}>
-            <p className={styles.title}>f(x) Auction</p>
-            <div className={styles.num}>
-              <Countdown
-                endTime={PageData.countdown}
-                onCompleted={updateSetPropsRefreshTrigger}
-              />
+          {[0, 1].includes(newStatus) && (
+            <div className={styles.card}>
+              <p className={styles.title}>f(x) Auction</p>
+              <div className={styles.num}>
+                <Countdown
+                  endTime={PageData.countdown}
+                  onCompleted={updateSetPropsRefreshTrigger}
+                />
+              </div>
+              <p className={styles.title}>{PageData.countdownTitle}</p>
+              <p className={styles.num}>{PageData.capAmount} f(x)</p>
+              <p className={styles.title}>Auction Amount</p>
+              <p className={styles.title}>
+                <span>{PageData.currentPrice} ETH</span>
+                <br />
+                Initial Price
+              </p>
             </div>
-            <p className={styles.title}>{PageData.countdownTitle}</p>
-            <p className={styles.num}>{PageData.capAmount} f(x)</p>
-            <p className={styles.title}>Auction Amount</p>
-            <p className={styles.title}>
-              <span>{PageData.currentPrice} ETH</span>
-              <br />
-              Initial Price
-            </p>
-          </div>
-        </div>
-      )}
-      {!!(newStatus == 2) && (
-        <div className={styles.container}>
-          <div className={styles.card}>
-            <p className={styles.title}>f(x) Auction</p>
-            <div className={styles.num}>
-              <Countdown
-                endTime={PageData.countdown}
-                onCompleted={updateSetPropsRefreshTrigger}
-              />
-            </div>
-            <p className={styles.title}>{PageData.countdownTitle}</p>
-            <p className={styles.num}>
-              {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
-            </p>
-            <p className={styles.title}>Remaining/Auction Amount</p>
+          )}
+          {!!(newStatus == 2) && (
+            <div className={styles.card}>
+              <p className={styles.title}>f(x) Auction</p>
+              <div className={styles.num}>
+                <Countdown
+                  endTime={PageData.countdown}
+                  onCompleted={updateSetPropsRefreshTrigger}
+                />
+              </div>
+              <p className={styles.title}>{PageData.countdownTitle}</p>
+              <p className={styles.num}>
+                {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
+              </p>
+              <p className={styles.title}>Remaining/Auction Amount</p>
 
-            <div className={styles.bottomWrap}>
-              <p className={styles.title}>
-                Current Price: <span>{PageData.currentPrice} ETH</span>
-              </p>
-              <p className={styles.title}>
-                Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
-              </p>
+              <div className={styles.bottomWrap}>
+                <p className={styles.title}>
+                  Current Price: <span>{PageData.currentPrice} ETH</span>
+                </p>
+                <p className={styles.title}>
+                  Total Funds Raised:{' '}
+                  <span>{PageData.totalFundsRaised} ETH</span>
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className={styles.card}>
             <p className={styles.title}>Invest</p>
@@ -358,7 +319,42 @@ export default function IdoPage() {
           </div>
         </div>
       )}
-      {!!isEndSale && <CompletedRender />}
+
+      {!!isEndSale && (
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <p className={styles.title}>f(x) Auction</p>
+            <p className={styles.title}>Completed!</p>
+            <p className={styles.num}>{PageData.capAmount} f(x)</p>
+            <p className={styles.title}>Auction Amount</p>
+            <div className={styles.bottomWrap}>
+              <p className={styles.title}>
+                Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.card}>
+            <p className={styles.title}>Invest</p>
+            <div className={styles.bottomWrap}>
+              <p className={styles.title}>
+                myShares: <span>{PageData.myShares} f(x)ETH</span>
+              </p>
+              <p className={styles.title}>
+                Claim opening at: <span>2023/5/25 20:00 UTC</span>
+              </p>
+            </div>
+            <Button
+              className={styles.buy}
+              onClick={handleClaim}
+              disabled={!canClaim}
+              loading={claiming}
+            >
+              Claim
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   )
 }
