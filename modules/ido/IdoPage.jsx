@@ -19,7 +19,7 @@ export default function IdoPage() {
   const PageData = useIDO()
   const { _currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
-  const [slippage, setSlippage] = useState(0.3)
+  const [slippage, setSlippage] = useState(0)
   const [depositAmount, setDepositAmount] = useState(0)
   const [minAmount, setMinAmount] = useState(0)
   const [buying, setBuying] = useState(false)
