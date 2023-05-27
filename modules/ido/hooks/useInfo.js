@@ -48,13 +48,13 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
 
   if (now.isBefore(whitelistSaleStartTime)) {
     title = `WhiteList Sale Starting ${whitelistSaleStartTime.toLocaleString()}`
-    saleStatus = 1
+    saleStatus = 0
     countdown = whitelistSaleStartTime.valueOf()
   }
   // // white ending time
   if (now.isBetween(whitelistSaleStartTime, publicSaleStartTime)) {
     title = `Ending WhiteList Sale ${publicSaleStartTime.toLocaleString()}`
-    saleStatus = 2
+    saleStatus = 1
     countdown = publicSaleStartTime.valueOf()
   }
 

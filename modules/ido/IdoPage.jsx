@@ -33,35 +33,35 @@ export default function IdoPage() {
 
   const _currentTime = Math.floor(+new Date() / 1000)
   const newStatus = useMemo(() => {
-    let _newStatus = 0
-    if (PageData.saleStatus) {
-      _newStatus = PageData.saleStatus
-    } else {
-      console.log(
-        '_currentTime---',
-        _currentTime,
-        PageData.baseInfo.saleTime?.publicSaleTime
-      )
-      if (!checkNotZoroNum(PageData.baseInfo.saleTime?.publicSaleTime)) {
-        _newStatus = 1
-      } else if (
-        cBN(_currentTime).isLessThanOrEqualTo(
-          PageData.baseInfo.saleTime?.publicSaleTime
-        )
-      ) {
-        _newStatus = 1
-      } else if (
-        cBN(_currentTime).isLessThanOrEqualTo(
-          cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(
-            PageData.baseInfo.saleTime?.saleDuration
-          )
-        )
-      ) {
-        _newStatus = 3
-      } else {
-        _newStatus = 2
-      }
-    }
+    let _newStatus = PageData.saleStatus
+    // if (PageData.saleStatus) {
+    //   _newStatus = PageData.saleStatus
+    // } else {
+    //   console.log(
+    //     '_currentTime---',
+    //     _currentTime,
+    //     PageData.baseInfo.saleTime?.publicSaleTime
+    //   )
+    //   if (!checkNotZoroNum(PageData.baseInfo.saleTime?.publicSaleTime)) {
+    //     _newStatus = 1
+    //   } else if (
+    //     cBN(_currentTime).isLessThanOrEqualTo(
+    //       PageData.baseInfo.saleTime?.publicSaleTime
+    //     )
+    //   ) {
+    //     _newStatus = 1
+    //   } else if (
+    //     cBN(_currentTime).isLessThanOrEqualTo(
+    //       cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(
+    //         PageData.baseInfo.saleTime?.saleDuration
+    //       )
+    //     )
+    //   ) {
+    //     _newStatus = 3
+    //   } else {
+    //     _newStatus = 2
+    //   }
+    // }
     return _newStatus
   }, [PageData, _currentTime])
 
@@ -97,7 +97,7 @@ export default function IdoPage() {
     () =>
       cBN(depositAmount).isGreaterThan(0) &&
       cBN(selectTokenInfo?.balance).isGreaterThanOrEqualTo(depositAmount) &&
-      [2].includes(newStatus) &&
+      [1, 2].includes(newStatus) &&
       !cBN(PageData.baseInfo.capAmount).isEqualTo(
         PageData.baseInfo.totalSoldAmount
       ),
@@ -131,20 +131,23 @@ export default function IdoPage() {
     const getGasPrice = await getGas()
     const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
     console.log('gasFee--', gasFee, getGasPrice)
-    let payAmountInWei
-    if (
-      cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
-    ) {
-      payAmountInWei = cBN(selectTokenInfo.balance)
-        .minus(gasFee)
-        .toFixed(0, 1)
-        .toString()
-    } else {
-      payAmountInWei = cBN(depositAmount || 0)
-        // .shiftedBy(depositTokenInfo.decimals ?? 18)
-        .toFixed(0, 1)
-        .toString()
-    }
+    let payAmountInWei = cBN(depositAmount || 0)
+      // .shiftedBy(depositTokenInfo.decimals ?? 18)
+      .toFixed(0, 1)
+      .toString()
+    // if (
+    //   cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
+    // ) {
+    //   payAmountInWei = cBN(selectTokenInfo.balance)
+    //     .minus(gasFee)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // } else {
+    //   payAmountInWei = cBN(depositAmount || 0)
+    //     // .shiftedBy(depositTokenInfo.decimals ?? 18)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // }
     if (canPay && !cBN(payAmountInWei).isZero()) {
       const shares = await IdoSaleContract.methods
         .buy(depositTokenInfo.address, payAmountInWei, 0)
@@ -173,20 +176,23 @@ export default function IdoPage() {
     const minOut = await getMinAmount()
     const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
     console.log('gasFee--', gasFee, getGasPrice)
-    let payAmountInWei
-    if (
-      cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
-    ) {
-      payAmountInWei = cBN(selectTokenInfo.balance)
-        .minus(gasFee)
-        .toFixed(0, 1)
-        .toString()
-    } else {
-      payAmountInWei = cBN(depositAmount || 0)
-        // .shiftedBy(depositTokenInfo.decimals ?? 18)
-        .toFixed(0, 1)
-        .toString()
-    }
+    let payAmountInWei = cBN(depositAmount || 0)
+      // .shiftedBy(depositTokenInfo.decimals ?? 18)
+      .toFixed(0, 1)
+      .toString()
+    // if (
+    //   cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
+    // ) {
+    //   payAmountInWei = cBN(selectTokenInfo.balance)
+    //     .minus(gasFee)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // } else {
+    //   payAmountInWei = cBN(depositAmount || 0)
+    //     // .shiftedBy(depositTokenInfo.decimals ?? 18)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // }
 
     try {
       setBuying(true)
@@ -227,7 +233,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) {}
+    } catch (error) { }
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
@@ -238,7 +244,7 @@ export default function IdoPage() {
     <>
       {!isEndSale && (
         <div className={styles.container}>
-          {[0, 1].includes(newStatus) && (
+          {[0].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>f(x) Auction</p>
               <div className={styles.num}>
@@ -257,7 +263,7 @@ export default function IdoPage() {
               </p>
             </div>
           )}
-          {!!(newStatus == 2) && (
+          {[1, 2].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>f(x) Auction</p>
               <div className={styles.num}>
@@ -267,6 +273,7 @@ export default function IdoPage() {
                 />
               </div>
               <p className={styles.title}>{PageData.countdownTitle}</p>
+              {[1].includes(newStatus) && <div className={styles.title}>🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597 with a limit of 20,000 $FX</div>}
               <p className={styles.num}>
                 {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
               </p>
