@@ -2,7 +2,6 @@
 
 .container {
   display: flex;
-  align-items: center;
   justify-content: center;
   position: relative;
   column-gap: 32px;
@@ -27,13 +26,13 @@
         color: var(--primary-color);
       }
     }
-    .balance {
-      margin-top: 40px;
+    p {
+      white-space: pre-line;
     }
-    .input {
+    .balance {
+      margin-top: 10px;
     }
     .forWrap {
-      font-size: 24px;
       line-height: 24px;
       margin-top: 16px;
       span {
@@ -54,6 +53,9 @@
 
     .bottomWrap {
       margin-top: 57px;
+      p {
+        text-align: left;
+      }
     }
   }
 }

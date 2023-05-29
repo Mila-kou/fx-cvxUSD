@@ -40,10 +40,11 @@ export default function IdoPage() {
 
   const isWhiteListSoldEndSale = useMemo(() => {
     if (
-      ([1, 2].indexOf(newStatus) > - 1) &&
+      [1, 2].indexOf(newStatus) > -1 &&
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
         PageData.baseInfo.totalSoldAmount
-      ) && cBN(PageData.baseInfo.capAmount).isLessThan(cBN(40000).times(1e18))
+      ) &&
+      cBN(PageData.baseInfo.capAmount).isLessThan(cBN(40000).times(1e18))
     ) {
       return true
     }
@@ -140,7 +141,9 @@ export default function IdoPage() {
           .call({
             from: _currentAccount,
             value:
-              config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0,
+              config.zeroAddress == depositTokenInfo.address
+                ? payAmountInWei
+                : 0,
           })
         const _slippage = slippage
         _minOut = (cBN(shares) || cBN(0))
@@ -156,7 +159,6 @@ export default function IdoPage() {
       }
       return
     }
-
   }
 
   const doPay = async () => {
@@ -226,7 +228,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) { }
+    } catch (error) {}
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
@@ -235,11 +237,15 @@ export default function IdoPage() {
 
   return (
     <>
-      {(!isEndSale && !isWhiteListSoldEndSale && newStatus * 1 >= 0) && (
+      {!isEndSale && !isWhiteListSoldEndSale && newStatus * 1 >= 0 && (
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>f(x) Auction</p>
+              <p className={styles.title}>f(x) Auction Whitelist Round</p>
+
+              <p className={styles.num}>{PageData.capAmount} f(x)</p>
+              <p className={styles.title}>Auction Amount</p>
+
               <div className={styles.num}>
                 <Countdown
                   endTime={PageData.countdown}
@@ -247,18 +253,22 @@ export default function IdoPage() {
                 />
               </div>
               <p className={styles.title}>{PageData.countdownTitle}</p>
-              <p className={styles.num}>{PageData.capAmount} f(x)</p>
-              <p className={styles.title}>Auction Amount</p>
-              <p className={styles.title}>
-                <span>{PageData.currentPrice} ETH</span>
-                <br />
-                Initial Price
-              </p>
+
+              <p className={styles.num}>{PageData.currentPrice} ETH</p>
+              <p className={styles.title}>Price</p>
             </div>
           )}
           {[1, 2].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>f(x) Auction</p>
+              <p className={styles.title}>
+                f(x) Auction {newStatus == 1 ? 'Whitelist' : 'Public'} Round
+              </p>
+
+              <p className={styles.num}>
+                {PageData.totalSoldAmount} / {PageData.capAmount}
+              </p>
+              <p className={styles.title}>Remaining/Auction Amount</p>
+
               <div className={styles.num}>
                 <Countdown
                   endTime={PageData.countdown}
@@ -266,19 +276,19 @@ export default function IdoPage() {
                 />
               </div>
               <p className={styles.title}>{PageData.countdownTitle}</p>
-              {[1].includes(newStatus) && <div >🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597 <br /> with a limit of 20,000 $FX</div>}
-              <p className={styles.num}>
-                {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
-              </p>
-              <p className={styles.title}>Remaining/Auction Amount</p>
+              {[1].includes(newStatus) && (
+                <p>
+                  🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597 <br />{' '}
+                  with a limit of 20,000 $FX
+                </p>
+              )}
 
               <div className={styles.bottomWrap}>
                 <p className={styles.title}>
-                  Current Price: <span>{PageData.currentPrice} ETH</span>
+                  Price: <span>{PageData.currentPrice} ETH per f(x)</span>
                 </p>
                 <p className={styles.title}>
-                  Total Funds Raised:{' '}
-                  <span>{PageData.totalFundsRaised} ETH</span>
+                  Raised: <span>{PageData.totalFundsRaised} ETH</span>
                 </p>
               </div>
             </div>
@@ -309,8 +319,9 @@ export default function IdoPage() {
               disabled={!canPay}
               loading={buying}
             >
-              {(newStatus == 1 && !PageData.userInfo?.isWhitelisted) ? 'Address not in the whitelist' : 'Purchase'
-              }
+              {newStatus == 1 && !PageData.userInfo?.isWhitelisted
+                ? 'Address not in the whitelist'
+                : 'Purchase'}
             </Button>
 
             <div className={styles.bottomWrap}>
@@ -329,17 +340,27 @@ export default function IdoPage() {
         <div className={styles.container}>
           <div className={styles.card}>
             <p className={styles.title}>f(x) Auction Whitelist Round</p>
-            <p className={styles.title}>Sold Out</p>
-            <p className={styles.num}>Auction Amount {PageData.capAmount} f(x)</p>
+
+            <p className={styles.num}>Sold Out</p>
             <p className={styles.title}>
-              {newStatus == 2 ? <p className={styles.title}>Waitting Update Cap</p> : <Countdown
-                endTime={PageData.countdown}
-                onCompleted={updateSetPropsRefreshTrigger}
-              />}
+              Auction Amount {PageData.capAmount} f(x)
+            </p>
+            <p className={styles.num}>
+              {newStatus == 2 ? (
+                <p className={styles.title}>Waitting Update Cap</p>
+              ) : (
+                <Countdown
+                  endTime={PageData.countdown}
+                  onCompleted={updateSetPropsRefreshTrigger}
+                />
+              )}
             </p>
             <p className={styles.title}>Public Round</p>
             <p className={styles.title}>Auction Amount 40,000 f(x)</p>
-            <p className={styles.title}>Starting at {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}</p>
+            <p className={styles.title}>
+              Starting at{' '}
+              {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}
+            </p>
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
                 Price: <span>{PageData.currentPrice} ETH</span>
@@ -352,9 +373,6 @@ export default function IdoPage() {
 
           <div className={styles.card}>
             <p className={styles.title}>Invest</p>
-            <p className={styles.balance}>
-              Balance: {fb4(tokens.ETH.balance, false)}
-            </p>
             <SimpleInput
               placeholder=""
               hidePercent
@@ -365,20 +383,23 @@ export default function IdoPage() {
               clearTrigger={clearInputTrigger}
               className={styles.input}
             />
+            <p className={styles.balance}>
+              Balance: {fb4(tokens.ETH.balance, false)}
+            </p>
+
             <p className={styles.forWrap}>
-              For: <span>{fb4(minAmount)} f(x)</span>
+              Est. received: <span>{fb4(minAmount)} f(x)</span>
             </p>
 
             <Button
               className={styles.buy}
               onClick={doPay}
-              disabled={true}
+              disabled
               loading={buying}
             >
               Not yet started
             </Button>
             <div className={styles.bottomWrap}>
-
               <p className={styles.title}>
                 myShares: <span>{PageData.myShares} f(x)ETH</span>
               </p>
@@ -402,14 +423,14 @@ export default function IdoPage() {
         <div className={styles.container}>
           <div className={styles.card}>
             <p className={styles.title}>f(x) Auction</p>
-            <p className={styles.title}>Completed!</p>
-            <p className={styles.num}>{PageData.capAmount} f(x)</p>
+
+            <p className={styles.num}>Sold Out! 🎉</p>
+
+            <p className={styles.num}>{PageData.capAmount}</p>
             <p className={styles.title}>Auction Amount</p>
-            <div className={styles.bottomWrap}>
-              <p className={styles.title}>
-                Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
-              </p>
-            </div>
+
+            <p className={styles.num}>{PageData.totalFundsRaised}</p>
+            <p className={styles.title}>Total Raised</p>
           </div>
 
           <div className={styles.card}>
