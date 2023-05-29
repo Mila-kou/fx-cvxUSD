@@ -43,7 +43,7 @@ export default function IdoPage() {
       ([1, 2].indexOf(newStatus) > - 1) &&
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
         PageData.baseInfo.totalSoldAmount
-      )
+      ) && cBN(PageData.baseInfo.capAmount).isLessThan(cBN(40000).times(1e18))
     ) {
       return true
     }
