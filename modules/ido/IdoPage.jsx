@@ -296,9 +296,7 @@ export default function IdoPage() {
 
           <div className={styles.card}>
             <p className={styles.title}>Invest</p>
-            <p className={styles.balance}>
-              Balance: {fb4(tokens.ETH.balance, false)}
-            </p>
+
             <SimpleInput
               placeholder=""
               hidePercent
@@ -309,8 +307,12 @@ export default function IdoPage() {
               clearTrigger={clearInputTrigger}
               className={styles.input}
             />
+            <p className={styles.balance}>
+              Balance: {fb4(tokens.ETH.balance, false)}
+            </p>
+
             <p className={styles.forWrap}>
-              For: <span>{fb4(minAmount)} f(x)</span>
+              Est. received: <span>{fb4(minAmount)} f(x)</span>
             </p>
 
             <Button
