@@ -17,6 +17,7 @@ const depositTokenInfo = tokensList.depositTokens[0]
 
 export default function IdoPage() {
   const PageData = useIDO()
+  console.log('PageData---', PageData)
   const { _currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [slippage, setSlippage] = useState(0)
@@ -34,40 +35,24 @@ export default function IdoPage() {
   const _currentTime = Math.floor(+new Date() / 1000)
   const newStatus = useMemo(() => {
     let _newStatus = PageData.saleStatus
-    // if (PageData.saleStatus) {
-    //   _newStatus = PageData.saleStatus
-    // } else {
-    //   console.log(
-    //     '_currentTime---',
-    //     _currentTime,
-    //     PageData.baseInfo.saleTime?.publicSaleTime
-    //   )
-    //   if (!checkNotZoroNum(PageData.baseInfo.saleTime?.publicSaleTime)) {
-    //     _newStatus = 1
-    //   } else if (
-    //     cBN(_currentTime).isLessThanOrEqualTo(
-    //       PageData.baseInfo.saleTime?.publicSaleTime
-    //     )
-    //   ) {
-    //     _newStatus = 1
-    //   } else if (
-    //     cBN(_currentTime).isLessThanOrEqualTo(
-    //       cBN(PageData.baseInfo.saleTime?.publicSaleTime).plus(
-    //         PageData.baseInfo.saleTime?.saleDuration
-    //       )
-    //     )
-    //   ) {
-    //     _newStatus = 3
-    //   } else {
-    //     _newStatus = 2
-    //   }
-    // }
     return _newStatus
   }, [PageData, _currentTime])
 
+  const isWhiteListSoldEndSale = useMemo(() => {
+    if (
+      ([1, 2].indexOf(newStatus) > - 1) &&
+      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+        PageData.baseInfo.totalSoldAmount
+      )
+    ) {
+      return true
+    }
+    return false
+  }, [PageData])
+
   const isEndSale = useMemo(() => {
     if (
-      newStatus == 3 ||
+      newStatus == 3 &&
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
         PageData.baseInfo.totalSoldAmount
       )
@@ -250,7 +235,7 @@ export default function IdoPage() {
 
   return (
     <>
-      {(!isEndSale && newStatus * 1 >= 0) && (
+      {(!isEndSale && !isWhiteListSoldEndSale && newStatus * 1 >= 0) && (
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
@@ -324,7 +309,8 @@ export default function IdoPage() {
               disabled={!canPay}
               loading={buying}
             >
-              Purchase
+              {(newStatus == 1 && !PageData.userInfo?.isWhitelisted) ? 'Address not in the whitelist' : 'Purchase'
+              }
             </Button>
 
             <div className={styles.bottomWrap}>
@@ -335,6 +321,79 @@ export default function IdoPage() {
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
               </p> */}
             </div>
+          </div>
+        </div>
+      )}
+
+      {!!isWhiteListSoldEndSale && (
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <p className={styles.title}>f(x) Auction Whitelist Round</p>
+            <p className={styles.title}>Sold Out</p>
+            <p className={styles.num}>Auction Amount {PageData.capAmount} f(x)</p>
+            <p className={styles.title}>
+              {newStatus == 2 ? <p className={styles.title}>Waitting Update Cap</p> : <Countdown
+                endTime={PageData.countdown}
+                onCompleted={updateSetPropsRefreshTrigger}
+              />}
+            </p>
+            <p className={styles.title}>Public Round</p>
+            <p className={styles.title}>Auction Amount 40,000 f(x)</p>
+            <p className={styles.title}>Starting at {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}</p>
+            <div className={styles.bottomWrap}>
+              <p className={styles.title}>
+                Price: <span>{PageData.currentPrice} ETH</span>
+              </p>
+              <p className={styles.title}>
+                Raised: <span>{PageData.totalFundsRaised} ETH</span>
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.card}>
+            <p className={styles.title}>Invest</p>
+            <p className={styles.balance}>
+              Balance: {fb4(tokens.ETH.balance, false)}
+            </p>
+            <SimpleInput
+              placeholder=""
+              hidePercent
+              symbol="ETH"
+              maxAmount={selectTokenInfo?.balance}
+              decimals={depositTokenInfo.decimals}
+              onChange={hanldeAmountChanged}
+              clearTrigger={clearInputTrigger}
+              className={styles.input}
+            />
+            <p className={styles.forWrap}>
+              For: <span>{fb4(minAmount)} f(x)</span>
+            </p>
+
+            <Button
+              className={styles.buy}
+              onClick={doPay}
+              disabled={true}
+              loading={buying}
+            >
+              Not yet started
+            </Button>
+            <div className={styles.bottomWrap}>
+
+              <p className={styles.title}>
+                myShares: <span>{PageData.myShares} f(x)ETH</span>
+              </p>
+              {/* <p className={styles.title}>
+                Claim opening at: <span>2023/5/25 20:00 UTC</span>
+              </p> */}
+            </div>
+            {/* <Button
+              className={styles.buy}
+              onClick={handleClaim}
+              disabled={!canClaim}
+              loading={claiming}
+            >
+              Claim
+            </Button> */}
           </div>
         </div>
       )}
