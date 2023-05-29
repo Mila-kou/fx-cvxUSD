@@ -12,7 +12,7 @@
 
   .card {
     @include card;
-    height: 534px;
+    min-height: 534px;
     min-width: 500px;
     flex-shrink: 0;
     border-radius: 10px;
@@ -21,6 +21,7 @@
     padding: 70px 48px;
 
     .title {
+      text-align: center;
       font-size: 24px;
       span {
         color: var(--primary-color);
@@ -44,6 +45,7 @@
       margin-top: 35px;
     }
     .num {
+      text-align: center;
       margin-top: 38px;
       font-size: 48px;
       line-height: 48px;
