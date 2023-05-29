@@ -33,7 +33,7 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
   let countdown = 0
 
   const { timestamp } = await web3.eth.getBlock('latest')
-  const now = moment(timestamp * 1000) || moment()
+  const now = moment()
 
   console.log(
     'now',
