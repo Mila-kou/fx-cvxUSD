@@ -363,14 +363,14 @@ export default function IdoPage() {
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
               </p> */}
             </div>
-            <Button
+            {/* <Button
               className={styles.buy}
               onClick={handleClaim}
               disabled={!canClaim}
               loading={claiming}
             >
               Claim
-            </Button>
+            </Button> */}
           </div>
         </div>
       )}
