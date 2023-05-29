@@ -30,8 +30,8 @@ export default function AppHeader() {
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
 
-  const assets = useMemo(
-    () => [
+  const assets = useMemo(() => {
+    const list = [
       {
         name: 'Ethereum',
         symbol: 'ETH',
@@ -60,9 +60,12 @@ export default function AppHeader() {
         icon: '/images/x-logo.svg',
         usd: tokens.xETH.usd,
       },
-    ],
-    [tokens]
-  )
+    ]
+    if (route.includes('offering')) {
+      return list.slice(0, 1)
+    }
+    return list
+  }, [tokens, route])
 
   const showSwitch = useMemo(() => route === '/home', [route])
 
