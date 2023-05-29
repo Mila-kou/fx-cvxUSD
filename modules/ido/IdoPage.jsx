@@ -403,7 +403,7 @@ export default function IdoPage() {
             </Button>
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                myShares: <span>{PageData.myShares} f(x)ETH</span>
+                myShares: <span>{PageData.myShares} f(x)</span>
               </p>
               {/* <p className={styles.title}>
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
@@ -439,7 +439,7 @@ export default function IdoPage() {
             <p className={styles.title}>Invest</p>
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                myShares: <span>{PageData.myShares} f(x)ETH</span>
+                myShares: <span>{PageData.myShares} f(x)</span>
               </p>
               {/* <p className={styles.title}>
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
