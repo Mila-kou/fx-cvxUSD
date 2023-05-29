@@ -267,7 +267,7 @@ export default function IdoPage() {
               <p className={styles.num}>
                 {PageData.totalSoldAmount} / {PageData.capAmount}
               </p>
-              <p className={styles.title}>Remaining/Auction Amount</p>
+              <p className={styles.title}>Sold / Auction Amount</p>
 
               <div className={styles.num}>
                 <Countdown
