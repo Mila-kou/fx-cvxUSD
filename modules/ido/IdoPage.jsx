@@ -281,7 +281,7 @@ export default function IdoPage() {
                 />
               </div>
               <p className={styles.title}>{PageData.countdownTitle}</p>
-              {[1].includes(newStatus) && <div className={styles.title}>🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597 with a limit of 20,000 $FX</div>}
+              {[1].includes(newStatus) && <div >🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597 <br /> with a limit of 20,000 $FX</div>}
               <p className={styles.num}>
                 {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
               </p>

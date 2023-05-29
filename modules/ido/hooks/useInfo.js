@@ -37,7 +37,7 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
 
   console.log(
     'now',
-    now.format('l'),
+    now.toLocaleString(),
     'whitelistSaleStartTime',
     whitelistSaleStartTime.toLocaleString(),
     'publicSaleStartTime',
@@ -46,7 +46,7 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
     publicSaleEndTime.toLocaleString()
   )
 
-  if (now.isBefore(whitelistSaleStartTime) || now.isSame(whitelistSaleStartTime)) {
+  if (now.isBefore(whitelistSaleStartTime)) {
     title = `WhiteList Sale Starting ${whitelistSaleStartTime.toLocaleString()}`
     saleStatus = 0
     countdown = whitelistSaleStartTime.valueOf()
