@@ -142,9 +142,9 @@ export default function AppHeader() {
                       {item.amount} {item.symbol}
                     </div>
                   </div>
-                  <div className={styles.usd}>
+                  {/* <div className={styles.usd}>
                     {item.usd ? `~${item.usd}` : '-'}
-                  </div>
+                    </div> */}
                 </div>
               ))}
               <div className={styles.disBtn} onClick={handleDisconnect}>
