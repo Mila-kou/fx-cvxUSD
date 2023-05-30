@@ -117,7 +117,7 @@ export default function Mint() {
       } else {
         minout_ETH = 0
       }
-
+      console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )

@@ -141,11 +141,10 @@ export default function RedeemBonus() {
         return 0
       }
       let minout_ETH
-      console.log('tokenAmount---', tokenAmount)
       minout_ETH = await marketContract.methods
         .liquidate(tokenAmount, _currentAccount, 0)
         .call({ from: _currentAccount })
-      console.log('tokenAmount-minout_ETH--', tokenAmount, minout_ETH)
+      console.log('minout_ETH----', tokenAmount, minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )

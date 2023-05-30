@@ -133,8 +133,8 @@ export default function MintBonus() {
         minout_ETH = await ethGatewayContract.methods
           .addBaseToken(0)
           .call({ value: _ETHtAmountAndGas })
-        console.log('minout_ETH__bonuse_ETH--', minout_ETH)
       }
+      console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )

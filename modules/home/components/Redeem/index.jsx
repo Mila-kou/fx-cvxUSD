@@ -137,6 +137,7 @@ export default function Redeem() {
         .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
         .call({ from: _currentAccount })
 
+      console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
