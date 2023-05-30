@@ -84,6 +84,25 @@ export default function Mint() {
     return [fb4(_fee), 1]
   }, [isF, systemStatus, ethPrice])
 
+  const initPage = () => {
+    setFETHtAmount({
+      minout: 0,
+      tvl: 0,
+    })
+    setXETHtAmount({
+      minout: 0,
+      tvl: 0,
+    })
+    setDetail((pre) => {
+      return {
+        fETH: 0,
+        fETHTvl: 0,
+        xETH: 0,
+        xETHTvl: 0
+      }
+    })
+  }
+
   const hanldeETHAmountChanged = (v) => {
     setETHtAmount(v.toString(10))
   }
@@ -220,6 +239,7 @@ export default function Mint() {
   }, [ETHtAmount, mintPaused, tokens.ETH.balance])
 
   useEffect(() => {
+    initPage()
     getMinAmount()
     // handleGetAllMinAmount()
   }, [selected, ETHtAmount])

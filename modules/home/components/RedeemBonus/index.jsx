@@ -125,6 +125,21 @@ export default function RedeemBonus() {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
+  const initPage = () => {
+    setFETHtAmount(0)
+    setXETHtAmount(0)
+    setMinOutETHtAmount({
+      minout: 0,
+      tvl: 0,
+    })
+    setDetail((pre) => {
+      return {
+        ETH: 0,
+        ETHTvl: 0
+      }
+    })
+  }
+
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
     if (isF) {
@@ -191,6 +206,7 @@ export default function RedeemBonus() {
   }
 
   useEffect(() => {
+    initPage()
     getMinAmount()
   }, [selected, tokenAmount])
 

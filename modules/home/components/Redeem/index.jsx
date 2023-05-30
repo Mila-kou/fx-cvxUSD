@@ -118,6 +118,21 @@ export default function Redeem() {
     return !redeemPaused && _enableETH && !xTokenRedeemInSystemStabilityModePaused
   }, [tokenAmount, redeemPaused, tokens.ETH.balance])
 
+  const initPage = () => {
+    setFETHtAmount(0)
+    setXETHtAmount(0)
+    setMinOutETHtAmount({
+      minout: 0,
+      tvl: 0,
+    })
+    setDetail((pre) => {
+      return {
+        ETH: 0,
+        ETHTvl: 0
+      }
+    })
+  }
+
   const getMinAmount = async () => {
     try {
       if (!checkNotZoroNum(tokenAmount)) {
@@ -197,6 +212,7 @@ export default function Redeem() {
   }
 
   useEffect(() => {
+    initPage()
     getMinAmount()
   }, [selected, tokenAmount])
 
