@@ -56,7 +56,7 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
     now.isBetween(whitelistSaleStartTime, publicSaleStartTime) ||
     now.isSame(publicSaleStartTime)
   ) {
-    title = `Ending at ${publicSaleStartTime.toLocaleString()} \n Then start the public round`
+    title = `Ending at ${publicSaleStartTime.toLocaleString()}`
     saleStatus = 1
     countdown = publicSaleStartTime.valueOf()
   }

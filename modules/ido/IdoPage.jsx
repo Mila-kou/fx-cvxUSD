@@ -54,7 +54,9 @@ export default function IdoPage() {
   const isEndSale = useMemo(() => {
     if (
       newStatus >= 2 &&
-      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(cBN(60000).times(1e18)) &&
+      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(
+        cBN(60000).times(1e18)
+      ) &&
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
         PageData.baseInfo.totalSoldAmount
       )
@@ -229,7 +231,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) { }
+    } catch (error) {}
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
@@ -242,9 +244,9 @@ export default function IdoPage() {
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>f(x) Auction Whitelist Round</p>
+              <p className={styles.title}>FX Auction AladdinDAO Round</p>
 
-              <p className={styles.num}>{PageData.capAmount} f(x)</p>
+              <p className={styles.num}>{PageData.capAmount} FX</p>
               <p className={styles.title}>Auction Amount</p>
 
               <div className={styles.num}>
@@ -262,7 +264,7 @@ export default function IdoPage() {
           {[1, 2].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>
-                f(x) Auction {newStatus == 1 ? 'Whitelist' : 'Public'} Round
+                FX Auction {newStatus == 1 ? 'AladdinDAO' : 'Public'} Round
               </p>
 
               <p className={styles.num}>
@@ -277,20 +279,21 @@ export default function IdoPage() {
                 />
               </div>
               <p className={styles.title}>{PageData.countdownTitle}</p>
-              {[1].includes(newStatus) && (
-                <p>
-                  🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597 <br />{' '}
-                  with a limit of 20,000 $FX
-                </p>
-              )}
 
               <div className={styles.bottomWrap}>
                 <p className={styles.title}>
-                  Price: <span>{PageData.currentPrice} ETH per f(x)</span>
+                  Price: <span>{PageData.currentPrice} ETH per FX</span>
                 </p>
                 <p className={styles.title}>
                   Raised: <span>{PageData.totalFundsRaised} ETH</span>
                 </p>
+
+                {[1].includes(newStatus) && (
+                  <p className={styles.tip}>
+                    🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597{' '}
+                    <br /> with a limit of 20,000 $FX
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -313,7 +316,7 @@ export default function IdoPage() {
             </p>
 
             <p className={styles.forWrap}>
-              Est. received: <span>{fb4(minAmount)} f(x)</span>
+              Est. Received: <span>{fb4(minAmount)} FX</span>
             </p>
 
             <Button
@@ -323,13 +326,13 @@ export default function IdoPage() {
               loading={buying}
             >
               {newStatus == 1 && !PageData.userInfo?.isWhitelisted
-                ? 'Address not in the whitelist'
+                ? 'Address Not AladdinDAO Address'
                 : 'Purchase'}
             </Button>
 
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                My Shares: <span>{PageData.myShares} f(x)</span>
+                My Shares: <span>{PageData.myShares} FX</span>
               </p>
               {/* <p className={styles.title}>
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
@@ -342,16 +345,14 @@ export default function IdoPage() {
       {!!isWhiteListSoldEndSale && (
         <div className={styles.container}>
           <div className={styles.card}>
-            <p className={styles.title}>f(x) Auction Whitelist Round</p>
+            <p className={styles.title}>FX Auction AladdinDAO Round</p>
 
             <p className={styles.num}>Sold Out</p>
             <p className={styles.title}>
-              Auction Amount {PageData.capAmount} f(x)
+              Auction Amount {PageData.capAmount} FX
             </p>
             <p className={styles.num}>
-              {newStatus == 2 ? (
-                <p className={styles.title}>Waitting Update Cap</p>
-              ) : (
+              {newStatus == 2 ? null : (
                 <Countdown
                   endTime={PageData.countdown}
                   onCompleted={updateSetPropsRefreshTrigger}
@@ -359,7 +360,7 @@ export default function IdoPage() {
               )}
             </p>
             <p className={styles.title}>Public Round</p>
-            <p className={styles.title}>Auction Amount 40,000 f(x)</p>
+            <p className={styles.title}>Auction Amount 40,000 FX</p>
             <p className={styles.title}>
               Starting at{' '}
               {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}
@@ -391,7 +392,7 @@ export default function IdoPage() {
             </p>
 
             <p className={styles.forWrap}>
-              Est. received: <span>{fb4(minAmount)} f(x)</span>
+              Est. Received: <span>{fb4(minAmount)} FX</span>
             </p>
 
             <Button
@@ -404,7 +405,7 @@ export default function IdoPage() {
             </Button>
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                My Shares: <span>{PageData.myShares} f(x)</span>
+                My Shares: <span>{PageData.myShares} FX</span>
               </p>
               {/* <p className={styles.title}>
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
@@ -425,7 +426,7 @@ export default function IdoPage() {
       {!!isEndSale && (
         <div className={styles.container}>
           <div className={styles.card}>
-            <p className={styles.title}>f(x) Auction</p>
+            <p className={styles.title}>FX Auction</p>
 
             <p className={styles.num}>Sold Out! 🎉</p>
 
@@ -440,7 +441,7 @@ export default function IdoPage() {
             <p className={styles.title}>Invest</p>
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                My Shares: <span>{PageData.myShares} f(x)</span>
+                My Shares: <span>{PageData.myShares} FX</span>
               </p>
               {/* <p className={styles.title}>
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
