@@ -326,7 +326,7 @@ export default function IdoPage() {
               loading={buying}
             >
               {newStatus == 1 && !PageData.userInfo?.isWhitelisted
-                ? 'Address Not AladdinDAO Address'
+                ? 'Address Not AladdinDAO'
                 : 'Purchase'}
             </Button>
 
@@ -401,7 +401,7 @@ export default function IdoPage() {
               disabled
               loading={buying}
             >
-              Not yet started
+              Purchase
             </Button>
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
