@@ -30,11 +30,11 @@ function GlobalProvider({ children }) {
   const [showSystemStatistics, { toggle: toggleShowSystemStatistics }] =
     useToggle()
 
-  const fx_info = useInfo()
+  // const fx_info = useInfo()
   const ethToken = useToken(config.tokens.eth)
-  const wethToken = useToken(config.tokens.weth)
-  const fETHToken = useToken(config.tokens.fETH)
-  const xETHToken = useToken(config.tokens.xETH)
+  // const wethToken = useToken(config.tokens.weth)
+  // const fETHToken = useToken(config.tokens.fETH)
+  // const xETHToken = useToken(config.tokens.xETH)
 
   const [{ data: tokenPrice, refetch: refetch1 }] = useQueries({
     queries: [
@@ -64,44 +64,44 @@ function GlobalProvider({ children }) {
           )
         ),
       },
-      WETH: {
-        ...wethToken,
-        usd: checkNotZoroNumOption(
-          wethToken.balance,
-          fb4(
-            cBN(wethToken.balance)
-              .multipliedBy(CurrentNavRes?._baseNav)
-              .div(1e18) || 0,
-            true
-          )
-        ),
-      },
-      fETH: {
-        ...fETHToken,
-        usd: checkNotZoroNumOption(
-          fETHToken.balance,
-          fb4(
-            cBN(fETHToken.balance)
-              .multipliedBy(CurrentNavRes?._fNav)
-              .div(1e18) || 0,
-            true
-          )
-        ),
-      },
-      xETH: {
-        ...xETHToken,
-        usd: checkNotZoroNumOption(
-          xETHToken.balance,
-          fb4(
-            cBN(xETHToken.balance)
-              .multipliedBy(CurrentNavRes?._xNav)
-              .div(1e18) || 0,
-            true
-          )
-        ),
-      },
+      // WETH: {
+      //   ...wethToken,
+      //   usd: checkNotZoroNumOption(
+      //     wethToken.balance,
+      //     fb4(
+      //       cBN(wethToken.balance)
+      //         .multipliedBy(CurrentNavRes?._baseNav)
+      //         .div(1e18) || 0,
+      //       true
+      //     )
+      //   ),
+      // },
+      // fETH: {
+      //   ...fETHToken,
+      //   usd: checkNotZoroNumOption(
+      //     fETHToken.balance,
+      //     fb4(
+      //       cBN(fETHToken.balance)
+      //         .multipliedBy(CurrentNavRes?._fNav)
+      //         .div(1e18) || 0,
+      //       true
+      //     )
+      //   ),
+      // },
+      // xETH: {
+      //   ...xETHToken,
+      //   usd: checkNotZoroNumOption(
+      //     xETHToken.balance,
+      //     fb4(
+      //       cBN(xETHToken.balance)
+      //         .multipliedBy(CurrentNavRes?._xNav)
+      //         .div(1e18) || 0,
+      //       true
+      //     )
+      //   ),
+      // },
     }
-  }, [ethToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
+  }, [ethToken, tokenPrice, fx_info.baseInfo])
 
   const value = useMemo(
     () => ({
@@ -111,7 +111,7 @@ function GlobalProvider({ children }) {
       toggleShowSystemStatistics,
       tokens,
       tokenPrice,
-      fx_info,
+      // fx_info,
     }),
     [
       theme,
@@ -120,7 +120,7 @@ function GlobalProvider({ children }) {
       toggleShowSystemStatistics,
       tokens,
       tokenPrice,
-      fx_info,
+      // fx_info,
     ]
   )
 
