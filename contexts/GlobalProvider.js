@@ -101,7 +101,7 @@ function GlobalProvider({ children }) {
       //   ),
       // },
     }
-  }, [ethToken, tokenPrice, fx_info.baseInfo])
+  }, [ethToken, tokenPrice])
 
   const value = useMemo(
     () => ({
