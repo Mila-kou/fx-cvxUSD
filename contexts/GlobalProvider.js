@@ -42,6 +42,7 @@ function GlobalProvider({ children }) {
         queryKey: ['tokenPrice'],
         queryFn: getTokenListPrice,
         enabled: !!web3,
+        refetchInterval: 300000,
       },
     ],
   })
@@ -101,14 +102,6 @@ function GlobalProvider({ children }) {
       },
     }
   }, [ethToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
-
-  useDebounceEffect(
-    () => {
-      refetch1()
-    },
-    [blockNumber],
-    { wait: 3000 }
-  )
 
   const value = useMemo(
     () => ({

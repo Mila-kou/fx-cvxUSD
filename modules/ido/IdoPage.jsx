@@ -244,7 +244,7 @@ export default function IdoPage() {
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>FX Offering AladdinDAO Round</p>
+              <p className={styles.title}>FX Whitelist Offering</p>
 
               <p className={styles.num}>{PageData.capAmount} FX</p>
               <p className={styles.title}>Offering Amount</p>
@@ -264,7 +264,7 @@ export default function IdoPage() {
           {[1, 2].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>
-                FX Offering {newStatus == 1 ? 'AladdinDAO' : 'Public'} Round
+                FX {newStatus == 1 ? 'Whitelist' : 'Public'} Offering
               </p>
 
               <p className={styles.num}>
@@ -345,7 +345,7 @@ export default function IdoPage() {
       {!!isWhiteListSoldEndSale && (
         <div className={styles.container}>
           <div className={styles.card}>
-            <p className={styles.title}>FX Offering AladdinDAO Round</p>
+            <p className={styles.title}>FX Whitelist Offering</p>
 
             <p className={styles.num}>Sold Out</p>
             <p className={styles.title}>
@@ -359,7 +359,7 @@ export default function IdoPage() {
                 />
               )}
             </p>
-            <p className={styles.title}>Public Round</p>
+            <p className={styles.title}>Public Offering</p>
             <p className={styles.title}>Offering Amount 40,000 FX</p>
             <p className={styles.title}>
               Starting at{' '}
