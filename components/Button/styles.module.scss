@@ -1,0 +1,15 @@
+@import '../../assets/css/mixin.scss';
+.btn {
+  @include colorful-button;
+
+  span {
+    margin-left: 10px;
+  }
+}
+
+// @media (max-width: 768px) {
+//   .btn {
+//     padding: 10px 12px;
+//     font-size: 14px;
+//   }
+// }

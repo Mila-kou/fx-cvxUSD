@@ -5,23 +5,26 @@ import styles from './styles.module.scss'
 import useIDO from './controller/useIDO'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
+import useGlobal from '@/hooks/useGlobal'
 
 const depositTokenInfo = tokensList.depositTokens[0]
 
 export default function IdoPage() {
   const PageData = useIDO()
+  console.log('PageData---', PageData)
   const { _currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
-  const [slippage, setSlippage] = useState(0.3)
+  const [slippage, setSlippage] = useState(0)
   const [depositAmount, setDepositAmount] = useState(0)
   const [minAmount, setMinAmount] = useState(0)
   const [buying, setBuying] = useState(false)
+  const { tokens } = useGlobal()
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const { IdoSaleContract } = PageData
@@ -29,28 +32,63 @@ export default function IdoPage() {
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
 
-  const isEndSale = useMemo(() => {
-    if (PageData.saleStatus == 3 ||
-      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(PageData.baseInfo.totalSoldAmount)) {
+  const _currentTime = Math.floor(+new Date() / 1000)
+  const newStatus = useMemo(() => {
+    let _newStatus = PageData.saleStatus
+    return _newStatus
+  }, [PageData, _currentTime])
+
+  const isWhiteListSoldEndSale = useMemo(() => {
+    if (
+      [1, 2].indexOf(newStatus) > -1 &&
+      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+        PageData.baseInfo.totalSoldAmount
+      ) &&
+      cBN(PageData.baseInfo.capAmount).isLessThan(cBN(40000).times(1e18))
+    ) {
       return true
     }
     return false
   }, [PageData])
 
-  const canClaim = useMemo(
-    () => {
-      return (PageData.saleStatus == 3 && (PageData.userInfo.myShares * 1) && (!PageData.userInfo?.isClaimed))
-    }, [PageData]
+  const isEndSale = useMemo(() => {
+    if (
+      newStatus >= 2 &&
+      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(
+        cBN(60000).times(1e18)
+      ) &&
+      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+        PageData.baseInfo.totalSoldAmount
+      )
+    ) {
+      return true
+    }
+    return false
+  }, [PageData])
+  // console.log('PageData.baseInfo.saleTime---', PageData.baseInfo.saleTime)
+
+  const canClaim = useMemo(() => {
+    return (
+      newStatus == 3 &&
+      PageData.userInfo.myShares * 1 &&
+      !PageData.userInfo?.isClaimed
+    )
+  }, [PageData])
+  console.log(
+    'newStatus-',
+    newStatus,
+    PageData.userInfo.myShares,
+    PageData.userInfo?.isClaimed,
+    canClaim
   )
-  console.log('PageData.saleStatus-', PageData.saleStatus, PageData.userInfo.myShares, PageData.userInfo?.isClaimed, canClaim)
 
   const canPay = useMemo(
     () =>
       cBN(depositAmount).isGreaterThan(0) &&
       cBN(selectTokenInfo?.balance).isGreaterThanOrEqualTo(depositAmount) &&
-      [2].includes(PageData.saleStatus) &&
-      !cBN(PageData.baseInfo.capAmount).isEqualTo(
-        PageData.baseInfo.totalSoldAmount
+      [1, 2].includes(newStatus) &&
+      cBN(PageData.baseInfo.totalSoldAmount).isLessThan(
+        PageData.baseInfo.capAmount
       ),
     [depositAmount, selectTokenInfo]
   )
@@ -82,41 +120,53 @@ export default function IdoPage() {
     const getGasPrice = await getGas()
     const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
     console.log('gasFee--', gasFee, getGasPrice)
-    let payAmountInWei
-    if (
-      cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
-    ) {
-      payAmountInWei = cBN(selectTokenInfo.balance)
-        .minus(gasFee)
-        .toFixed(0, 1)
-        .toString()
-    } else {
-      payAmountInWei = cBN(depositAmount || 0)
-        // .shiftedBy(depositTokenInfo.decimals ?? 18)
-        .toFixed(0, 1)
-        .toString()
+    let payAmountInWei = cBN(depositAmount || 0)
+      // .shiftedBy(depositTokenInfo.decimals ?? 18)
+      .toFixed(0, 1)
+      .toString()
+    // if (
+    //   cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
+    // ) {
+    //   payAmountInWei = cBN(selectTokenInfo.balance)
+    //     .minus(gasFee)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // } else {
+    //   payAmountInWei = cBN(depositAmount || 0)
+    //     // .shiftedBy(depositTokenInfo.decimals ?? 18)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // }
+    try {
+      if (canPay && !cBN(payAmountInWei).isZero()) {
+        const shares = await IdoSaleContract.methods
+          .buy(depositTokenInfo.address, payAmountInWei, 0)
+          .call({
+            from: _currentAccount,
+            value:
+              config.zeroAddress == depositTokenInfo.address
+                ? payAmountInWei
+                : 0,
+          })
+        const _slippage = slippage
+        _minOut = (cBN(shares) || cBN(0))
+          .multipliedBy(cBN(1).minus(cBN(_slippage).dividedBy(100)))
+          .toFixed(0, 1)
+      }
+      console.log('setMinAmount----', _minOut)
+      setMinAmount(_minOut)
+      return _minOut
+    } catch (error) {
+      if (error.message.indexOf('no cap to buy') > -1) {
+        noPayableErrorAction(`error_buy`, 'No cap to buy')
+      }
+      return
     }
-    if (canPay && !cBN(payAmountInWei).isZero()) {
-      const shares = await IdoSaleContract.methods
-        .buy(depositTokenInfo.address, payAmountInWei, 0)
-        .call({
-          from: _currentAccount,
-          value:
-            config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0,
-        })
-      const _slippage = slippage
-      _minOut = (cBN(shares) || cBN(0))
-        .multipliedBy(cBN(1).minus(cBN(_slippage).dividedBy(100)))
-        .toFixed(0, 1)
-    }
-    console.log('setMinAmount----', _minOut)
-    setMinAmount(_minOut)
-    return _minOut
   }
 
   const doPay = async () => {
-    if (PageData.saleStatus == 1 && !PageData.userInfo?.isWhitelisted) {
-      setErrMsg('!Account not eligible for invest')
+    if (newStatus == 1 && !PageData.userInfo?.isWhitelisted) {
+      noPayableErrorAction(`error_buy`, 'No cap to buy')
       return
     }
 
@@ -124,20 +174,23 @@ export default function IdoPage() {
     const minOut = await getMinAmount()
     const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
     console.log('gasFee--', gasFee, getGasPrice)
-    let payAmountInWei
-    if (
-      cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
-    ) {
-      payAmountInWei = cBN(selectTokenInfo.balance)
-        .minus(gasFee)
-        .toFixed(0, 1)
-        .toString()
-    } else {
-      payAmountInWei = cBN(depositAmount || 0)
-        // .shiftedBy(depositTokenInfo.decimals ?? 18)
-        .toFixed(0, 1)
-        .toString()
-    }
+    let payAmountInWei = cBN(depositAmount || 0)
+      // .shiftedBy(depositTokenInfo.decimals ?? 18)
+      .toFixed(0, 1)
+      .toString()
+    // if (
+    //   cBN(depositAmount).plus(gasFee).isGreaterThan(selectTokenInfo.balance)
+    // ) {
+    //   payAmountInWei = cBN(selectTokenInfo.balance)
+    //     .minus(gasFee)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // } else {
+    //   payAmountInWei = cBN(depositAmount || 0)
+    //     // .shiftedBy(depositTokenInfo.decimals ?? 18)
+    //     .toFixed(0, 1)
+    //     .toString()
+    // }
 
     try {
       setBuying(true)
@@ -178,70 +231,8 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) { }
+    } catch (error) {}
   }, [depositAmount])
-
-  const InitialRender = () => {
-    return (
-      <div className={styles.container}>
-        <div className={styles.card}>
-          <p className={styles.title}>f(x) Auction</p>
-          <div className={styles.num}>
-            <Countdown
-              endTime={PageData.countdown}
-              onCompleted={updateSetPropsRefreshTrigger}
-            />
-          </div>
-          <p className={styles.title}>{PageData.countdownTitle}</p>
-          <p className={styles.num}>{PageData.capAmount} f(x)</p>
-          <p className={styles.title}>Auction Amount</p>
-          <p className={styles.title}>
-            <span>{PageData.currentPrice} ETH</span>
-            <br />
-            Initial Price
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  const CompletedRender = () => {
-    return (
-      <div className={styles.container}>
-        <div className={styles.card}>
-          <p className={styles.title}>f(x) Auction</p>
-          <p className={styles.title}>Completed!</p>
-          <p className={styles.num}>{PageData.capAmount} f(x)</p>
-          <p className={styles.title}>Auction Amount</p>
-          <div className={styles.bottomWrap}>
-            <p className={styles.title}>
-              Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
-            </p>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <p className={styles.title}>Invest</p>
-          <div className={styles.bottomWrap}>
-            <p className={styles.title}>
-              myShares: <span>{PageData.myShares} f(x)ETH</span>
-            </p>
-            <p className={styles.title}>
-              Claim opening at: <span>2023/5/25 20:00 UTC</span>
-            </p>
-          </div>
-          <Button
-            className={styles.buy}
-            onClick={handleClaim}
-            disabled={!canClaim}
-            loading={claiming}
-          >
-            Claim
-          </Button>
-        </div>
-      </div>
-    )
-  }
 
   const hanldeAmountChanged = (v) => {
     setDepositAmount(v)
@@ -249,29 +240,137 @@ export default function IdoPage() {
 
   return (
     <>
-      {!!([0, 1].indexOf(PageData.saleStatus) > -1 || !PageData.saleStatus) && <InitialRender />}
-      {!!(PageData.saleStatus == 2) && (
+      {!isEndSale && !isWhiteListSoldEndSale && newStatus * 1 >= 0 && (
         <div className={styles.container}>
-          <div className={styles.card}>
-            <p className={styles.title}>f(x) Auction</p>
-            <div className={styles.num}>
-              <Countdown
-                endTime={PageData.countdown}
-                onCompleted={updateSetPropsRefreshTrigger}
-              />
+          {[0].includes(newStatus) && (
+            <div className={styles.card}>
+              <p className={styles.title}>FX AladdinDAO Offering</p>
+
+              <p className={styles.num}>{PageData.capAmount} FX</p>
+              <p className={styles.title}>Offering Amount</p>
+
+              <div className={styles.num}>
+                <Countdown
+                  endTime={PageData.countdown}
+                  onCompleted={updateSetPropsRefreshTrigger}
+                />
+              </div>
+              <p className={styles.title}>{PageData.countdownTitle}</p>
+
+              <p className={styles.num}>{PageData.currentPrice} ETH</p>
+              <p className={styles.title}>Price</p>
             </div>
-            <p className={styles.title}>{PageData.countdownTitle}</p>
-            <p className={styles.num}>
-              {PageData.totalSoldAmount}/{PageData.capAmount} f(x)
+          )}
+          {[1, 2].includes(newStatus) && (
+            <div className={styles.card}>
+              <p className={styles.title}>
+                FX {newStatus == 1 ? 'Whitelist' : 'Public'} Offering
+              </p>
+
+              <p className={styles.num}>
+                {PageData.totalSoldAmount} / {PageData.capAmount}
+              </p>
+              <p className={styles.title}>Sold / Offering Amount</p>
+
+              <div className={styles.num}>
+                <Countdown
+                  endTime={PageData.countdown}
+                  onCompleted={updateSetPropsRefreshTrigger}
+                />
+              </div>
+              <p className={styles.title}>{PageData.countdownTitle}</p>
+
+              <div className={styles.bottomWrap}>
+                <p className={styles.title}>
+                  Price: <span>{PageData.currentPrice} ETH Per FX</span>
+                </p>
+                <p className={styles.title}>
+                  Raised: <span>{PageData.totalFundsRaised} ETH</span>
+                </p>
+
+                {[1].includes(newStatus) && (
+                  <p className={styles.tip}>
+                    🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597{' '}
+                    <br /> with a limit of 20,000 $FX
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className={styles.card}>
+            <p className={styles.title}>Invest</p>
+
+            <SimpleInput
+              placeholder=""
+              hidePercent
+              symbol="ETH"
+              maxAmount={selectTokenInfo?.balance}
+              decimals={depositTokenInfo.decimals}
+              onChange={hanldeAmountChanged}
+              clearTrigger={clearInputTrigger}
+              className={styles.input}
+            />
+            <p className={styles.balance}>
+              Balance: {fb4(tokens.ETH.balance, false)}
             </p>
-            <p className={styles.title}>Remaining/Auction Amount</p>
+
+            <p className={styles.forWrap}>
+              Est. Received: <span>{fb4(minAmount)} FX</span>
+            </p>
+
+            <Button
+              className={styles.buy}
+              onClick={doPay}
+              disabled={!canPay}
+              loading={buying}
+            >
+              {newStatus == 1 && !PageData.userInfo?.isWhitelisted
+                ? 'Address Not AladdinDAO'
+                : 'Purchase'}
+            </Button>
 
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                Current Price: <span>{PageData.currentPrice} ETH</span>
+                My Shares: <span>{PageData.myShares} FX</span>
+              </p>
+              {/* <p className={styles.title}>
+                Claim opening at: <span>2023/5/25 20:00 UTC</span>
+              </p> */}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!!isWhiteListSoldEndSale && (
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <p className={styles.title}>FX Whitelist Offering</p>
+
+            <p className={styles.num}>Sold Out</p>
+            <p className={styles.title}>
+              Offering Amount {PageData.capAmount} FX
+            </p>
+            <p className={styles.num}>
+              {newStatus == 2 ? null : (
+                <Countdown
+                  endTime={PageData.countdown}
+                  onCompleted={updateSetPropsRefreshTrigger}
+                />
+              )}
+            </p>
+            <p className={styles.title}>Public Offering</p>
+            <p className={styles.title}>Offering Amount 40,000 FX</p>
+            <p className={styles.title}>
+              Starting at{' '}
+              {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}
+            </p>
+            <div className={styles.bottomWrap}>
+              <p className={styles.title}>
+                Price: <span>{PageData.currentPrice} ETH</span>
               </p>
               <p className={styles.title}>
-                Total Funds Raised: <span>{PageData.totalFundsRaised} ETH</span>
+                Raised: <span>{PageData.totalFundsRaised} ETH</span>
               </p>
             </div>
           </div>
@@ -281,7 +380,6 @@ export default function IdoPage() {
             <SimpleInput
               placeholder=""
               hidePercent
-              showMax
               symbol="ETH"
               maxAmount={selectTokenInfo?.balance}
               decimals={depositTokenInfo.decimals}
@@ -289,31 +387,77 @@ export default function IdoPage() {
               clearTrigger={clearInputTrigger}
               className={styles.input}
             />
+            <p className={styles.balance}>
+              Balance: {fb4(tokens.ETH.balance, false)}
+            </p>
+
             <p className={styles.forWrap}>
-              For: <span>{fb4(minAmount)} f(x)</span>
+              Est. Received: <span>{fb4(minAmount)} FX</span>
             </p>
 
             <Button
               className={styles.buy}
               onClick={doPay}
-              disabled={!canPay}
+              disabled
               loading={buying}
             >
               Purchase
             </Button>
-
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                myShares: <span>{PageData.myShares} f(x)</span>
+                My Shares: <span>{PageData.myShares} FX</span>
               </p>
-              <p className={styles.title}>
+              {/* <p className={styles.title}>
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>
-              </p>
+              </p> */}
             </div>
+            {/* <Button
+              className={styles.buy}
+              onClick={handleClaim}
+              disabled={!canClaim}
+              loading={claiming}
+            >
+              Claim
+            </Button> */}
           </div>
         </div>
       )}
-      {!!(isEndSale) && <CompletedRender />}
+
+      {!!isEndSale && (
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <p className={styles.title}>FX Offering</p>
+
+            <p className={styles.num}>Sold Out! 🎉</p>
+
+            <p className={styles.num}>{PageData.capAmount}</p>
+            <p className={styles.title}>Offering Amount</p>
+
+            <p className={styles.num}>{PageData.totalFundsRaised}</p>
+            <p className={styles.title}>Total Raised</p>
+          </div>
+
+          <div className={styles.card}>
+            <p className={styles.title}>Invest</p>
+            <div className={styles.bottomWrap}>
+              <p className={styles.title}>
+                My Shares: <span>{PageData.myShares} FX</span>
+              </p>
+              {/* <p className={styles.title}>
+                Claim opening at: <span>2023/5/25 20:00 UTC</span>
+              </p> */}
+            </div>
+            {/* <Button
+              className={styles.buy}
+              onClick={handleClaim}
+              disabled={!canClaim}
+              loading={claiming}
+            >
+              Claim
+            </Button> */}
+          </div>
+        </div>
+      )}
     </>
   )
 }

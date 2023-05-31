@@ -62,5 +62,6 @@ module.exports = {
     'no-nested-ternary': 0,
     'react/no-unstable-nested-components': 0,
     'react/function-component-definition': 0,
+    'react/no-unknown-property': 0,
   },
 }

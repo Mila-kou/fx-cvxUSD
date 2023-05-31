@@ -33,11 +33,11 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
   let countdown = 0
 
   const { timestamp } = await web3.eth.getBlock('latest')
-  const now = moment(timestamp * 1000) || moment()
+  const now = moment()
 
   console.log(
     'now',
-    now.format('l'),
+    now.toLocaleString(),
     'whitelistSaleStartTime',
     whitelistSaleStartTime.toLocaleString(),
     'publicSaleStartTime',
@@ -46,20 +46,32 @@ const calcSaleTime = async (saleTime, web3, isEnd) => {
     publicSaleEndTime.toLocaleString()
   )
 
-  if (now.isBefore(publicSaleStartTime)) {
-    title = `Starting ${publicSaleStartTime.toLocaleString()}`
+  if (now.isBefore(whitelistSaleStartTime)) {
+    title = `Starting at ${whitelistSaleStartTime.toLocaleString()}`
     saleStatus = 0
-    countdown = publicSaleStartTime.valueOf()
+    countdown = whitelistSaleStartTime.valueOf()
   }
   // // white ending time
-  // if (now.isBetween(whitelistSaleStartTime, publicSaleStartTime)) {
-  //     title = `Ending ${publicSaleStartTime.format(momentFormatStr)} UTC`
-  //     saleStatus = 1
-  //     countdown = isEnd ? 0 : publicSaleStartTime.valueOf()
+  if (
+    now.isBetween(whitelistSaleStartTime, publicSaleStartTime) ||
+    now.isSame(publicSaleStartTime)
+  ) {
+    title = `Ending at ${publicSaleStartTime.toLocaleString()}`
+    saleStatus = 1
+    countdown = publicSaleStartTime.valueOf()
+  }
+
+  // if (now.isBefore(publicSaleStartTime)) {
+  //   title = `Public Sale Starting ${publicSaleStartTime.toLocaleString()}`
+  //   saleStatus = 0
+  //   countdown = publicSaleStartTime.valueOf()
   // }
 
   // public ending time
-  if (now.isBetween(publicSaleStartTime, publicSaleEndTime)) {
+  if (
+    now.isBetween(publicSaleStartTime, publicSaleEndTime) ||
+    now.isSame(publicSaleEndTime)
+  ) {
     title = `Ending ${publicSaleEndTime.toLocaleString()}`
     saleStatus = 2
     countdown = isEnd ? 0 : publicSaleEndTime.valueOf()
@@ -84,6 +96,9 @@ const useInfo = (refreshTrigger) => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
   const { erc20Contract } = useContract()
   const multiCallsV2 = useMutiCallV2()
+
+  const [baseInfo, setBaseInfo] = useState({})
+  const [userInfo, setUserInfo] = useState({})
 
   const { contract: IdoSaleContract } = useContract(
     config.contracts.idoSale,
@@ -127,14 +142,14 @@ const useInfo = (refreshTrigger) => {
         saleTime,
         capAmount,
         totalSoldAmount,
-        totalFundsRaised: totalFundsRaised, // cBN(100000).shiftedBy(18),
+        totalFundsRaised, // cBN(100000).shiftedBy(18),
         timeObj,
       }
     } catch (error) {
       console.log(error)
       return {}
     }
-  }, [IdoSaleContract, erc20Contract, multiCallsV2, _currentAccount, web3])
+  }, [IdoSaleContract, erc20Contract, multiCallsV2, web3])
 
   const fetchUserInfo = useCallback(async () => {
     const { whitelistCap, shares, claimed } = IdoSaleContract.methods
@@ -155,17 +170,18 @@ const useInfo = (refreshTrigger) => {
       console.log(error)
       return {}
     }
-  }, [IdoSaleContract, _currentAccount])
+  }, [IdoSaleContract, _currentAccount, multiCallsV2])
 
   const [
-    { data: baseInfo, refetch: refetchBaseInfo },
-    { data: userInfo, refetch: refetchUserInfo },
+    { data: data1, refetch: refetchBaseInfo },
+    { data: data2, refetch: refetchUserInfo },
   ] = useQueries({
     queries: [
       {
         queryKey: ['baseInfo'],
         queryFn: () => fetchBaseInfo(),
         initialData: {},
+        refetchInterval: 2000,
       },
       {
         queryKey: ['userInfo'],
@@ -176,9 +192,13 @@ const useInfo = (refreshTrigger) => {
   })
 
   useEffect(() => {
-    refetchBaseInfo()
     refetchUserInfo()
   }, [_currentAccount, blockNumber])
+
+  useEffect(() => {
+    if (data1?.saleTime) setBaseInfo(data1)
+    if (data2) setUserInfo(data2)
+  }, [data1, data2])
 
   return {
     info: {

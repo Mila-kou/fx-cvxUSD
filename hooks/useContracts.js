@@ -25,3 +25,63 @@ export const useContract = (theAddr, theAbi) => {
 
   return { getContract, erc20Contract, contract }
 }
+
+export const useFETH = () => {
+  const address = config.contracts.fETH
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_FractionalToken),
+      address
+    }),
+    [getContract]
+  )
+}
+
+export const useXETH = () => {
+  const address = config.contracts.xETH
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_LeveragedToken),
+      address
+    }),
+    [getContract]
+  )
+}
+
+export const useFX_Market = () => {
+  const address = config.contracts.fx_Market
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_Market),
+      address
+    }),
+    [getContract]
+  )
+}
+
+export const useFX_Treasury = () => {
+  const address = config.contracts.fx_Treasury
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_Treasury),
+      address
+    }),
+    [getContract]
+  )
+}
+
+export const useFX_ETHGateway = () => {
+  const address = config.contracts.fx_ETHGateway
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_ETHGateway),
+      address
+    }),
+    [getContract]
+  )
+}

@@ -11,7 +11,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
 
-export default function Chart({ color, icon, symbol }) {
+export default function Chart({ color, icon, symbol, fxData }) {
   const options = {
     grid: { top: 8, right: 0, bottom: 22, left: 25 },
     xAxis: {
@@ -64,8 +64,8 @@ export default function Chart({ color, icon, symbol }) {
           <p className={styles.second}>Net Assets Value</p>
         </div>
         <div className={styles.right}>
-          <p>$1.01</p>
-          <p className={styles.second}>(0.56 ETH per 1k fETH)</p>
+          <p>${fxData.nav}</p>
+          {/* <p className={styles.second}>(0.56 ETH per 1k fETH)</p> */}
         </div>
       </div>
 
@@ -80,7 +80,7 @@ export default function Chart({ color, icon, symbol }) {
           {/* <img src={icon} /> */}
           {symbol} Total Supply:
         </div>
-        <div>8,000,000 (0.35)</div>
+        <div>{fxData.totalSupply} ({fxData.ratio}%)</div>
       </div>
     </div>
   )

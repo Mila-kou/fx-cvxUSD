@@ -16,6 +16,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import Chart from '../Chart'
 import styles from './styles.module.scss'
+import usefxETH from '../../controller/usefxETH'
 
 const tags = [
   'Stability Mode',
@@ -31,7 +32,27 @@ const prices = [
 ]
 
 export default function SystemStatistics() {
+  const { blockNumber, current } = useWeb3()
   const [mode, setMode] = useState(-1)
+  const {
+    fnav,
+    xnav,
+    collateralRatio,
+    p_f,
+    p_x,
+    fETHTotalSupply,
+    xETHTotalSupply,
+    totalBaseToken,
+    totalBaseTokenTvl,
+
+    StabilityModePrice,
+    UserLiquidationModePrice,
+    ProtocolLiquidationModePrice,
+    systemStatus,
+    ethPrice_text,
+    lastPermissionedPrice,
+    R,
+  } = usefxETH()
   return (
     <div className={styles.container}>
       <h2 className={styles.header}>
@@ -54,16 +75,21 @@ export default function SystemStatistics() {
             <div className={styles.title}>Backed Asset Value</div>
             <div className={cn(styles.value, styles.nums)}>
               <p>
-                <b>40,000</b> ETH
+                <b>{totalBaseToken}</b> ETH
               </p>
               <p>
-                ~<span>$720,000,800</span>
+                ~<span>${totalBaseTokenTvl}</span>
               </p>
             </div>
           </div>
 
           <div className={styles.chart} data-color="blue">
             <Chart
+              fxData={{
+                nav: fnav,
+                totalSupply: fETHTotalSupply,
+                ratio: p_f,
+              }}
               color="blue"
               symbol="fETH"
               icon="/images/f-s-logo-white.svg"
@@ -73,15 +99,15 @@ export default function SystemStatistics() {
           <div className={styles.details} data-color="blue">
             <div className={styles.cell}>
               <div>Stability Mode Price:</div>
-              <p>$1,200.88</p>
+              <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
               <div>User Liquidation Mode Price:</div>
-              <p>$1,100.88</p>
+              <p>${UserLiquidationModePrice}</p>
             </div>
             <div className={styles.cell}>
               <div>Protocol Liquidation Mode Price:</div>
-              <p>$900.88</p>
+              <p>${ProtocolLiquidationModePrice}</p>
             </div>
           </div>
         </div>
@@ -91,16 +117,24 @@ export default function SystemStatistics() {
             <div className={styles.title}>fETH Collecteral Ratio</div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
-                <b>200</b>%
+                <b className={styles[systemStatus > 0 ? 'red' : 'green']}>
+                  {collateralRatio}
+                </b>
+                %{systemStatus}
               </p>
-              <p>
-                {prices[mode + 1]} {mode < 2 && <span>$1,200</span>}
-              </p>
+              {/* <p>
+                {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
+              </p> */}
             </div>
           </div>
 
           <div className={styles.chart} data-color="red">
             <Chart
+              fxData={{
+                nav: xnav,
+                totalSupply: xETHTotalSupply,
+                ratio: p_x,
+              }}
               color="red"
               symbol="xETH"
               icon="/images/x-s-logo-white.svg"
@@ -109,23 +143,23 @@ export default function SystemStatistics() {
 
           <div className={styles.details} data-color="red">
             <div className={styles.cell}>
-              <div>ETH Last Change: </div>
-              <p>20%</p>
+              <div>ETH’s cumulative return: </div>
+              <p>{R}%</p>
             </div>
             <div className={styles.cell}>
-              <div>Oracle. Current Calc Price: </div>
-              <p>$2,021.88</p>
+              <div>ETH’s Twap Price: </div>
+              <p>${ethPrice_text}</p>
             </div>
             <div className={styles.cell}>
-              <div>Oracle. Last Calc Price:</div>
-              <p>$2,021.88</p>
+              <div>ETH’s Last Price:</div>
+              <p>${lastPermissionedPrice}</p>
             </div>
           </div>
         </div>
       </div>
 
       <p className={styles.updateAt}>
-        Update at: [Block]17023966, 23/4/11 12:12:12
+        Update at: [Block]{blockNumber}, {current.format('YY/MM/DD, HH:mm:ss')}
       </p>
     </div>
   )

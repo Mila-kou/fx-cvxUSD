@@ -12,33 +12,18 @@ import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
-import Tabs from '../Tabs'
+import useFxCommon from '../../hooks/useFxCommon'
 
-export default function Mint() {
+export default function MintBonus() {
   const { _currentAccount } = useWeb3()
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(1)
   const { tokens } = useGlobal()
+  const { getMaxXETHBonus } = useFxCommon()
   const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
-
-  const minGas = 234854
+  const minGas = 260325
   const [ETHtAmount, setETHtAmount] = useState(0)
-  const [FETHtAmount, setFETHtAmount] = useState({
-    amount: 0,
-    tvl: 0,
-  })
-  const [XETHtAmount, setXETHtAmount] = useState({
-    amount: 0,
-    tvl: 0,
-  })
-  const [mintLoading, setMintLoading] = useState(false)
-  const [detail, setDetail] = useState({
-    // bonus: 75,
-    // bonusRatio: 2.1,
-    // fETH: 2,
-    // xETH: 3,
-  })
   const {
     fETHContract,
     xETHContract,
@@ -53,27 +38,39 @@ export default function Mint() {
     xnav,
     mintPaused,
     redeemPaused,
-    fTokenMintInSystemStabilityModePaused,
+    mode1_maxBaseIn,
+    mode1_maxBaseIn_text,
+    mode1_maxXTokenMintable_text,
+    maxXETHBonus,
+    maxXETHBonus_text,
     xETHBeta_text,
-    systemStatus,
-    baseInfo
+    baseInfo,
+    systemStatus
   } = usefxETH()
+  const [FETHtAmount, setFETHtAmount] = useState({
+    amount: 0,
+    tvl: 0,
+  })
+  const [XETHtAmount, setXETHtAmount] = useState({
+    amount: 0,
+    tvl: 0,
+  })
+  const [mintLoading, setMintLoading] = useState(false)
+  const [detail, setDetail] = useState({
+    // bonus: 75,
+    // bonusRatio: 2.1,
+    // fETH: 2,
+    // xETH: 3,
+    maxBaseIn: mode1_maxBaseIn_text,
+    maxXTokenMintable: mode1_maxXTokenMintable_text,
+    maxXETHBonus: maxXETHBonus_text,
+  })
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
-  const [fee, feeUsd] = useMemo(() => {
-    let __mintFETHFee = _mintFETHFee
-    let __mintXETHFee = _mintXETHFee
-    if (systemStatus == 0) {
-      __mintFETHFee = baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio || 0
-      __mintXETHFee = baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio || 0
-    }
-    let _fee
-    if (isF) {
-      _fee = cBN(__mintFETHFee).multipliedBy(100).toString(10)
-    } else {
-      _fee = cBN(__mintXETHFee).multipliedBy(100).toString(10)
-    }
+  const [fee, useXETHBonus_text] = useMemo(() => {
+    const _fee = cBN(_mintXETHFee).multipliedBy(100).toString(10)
+    // const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee).div(1e18)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     // console.log(
     //   'ETHtAmount---_newETHPrice--',
@@ -81,8 +78,26 @@ export default function Mint() {
     //   _feeUsd.toString(10),
     //   ethPrice
     // )
-    return [fb4(_fee), 1]
-  }, [isF, systemStatus, ethPrice])
+    let _useXETHBonus = 0
+    if (cBN(ETHtAmount).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
+      _useXETHBonus = maxXETHBonus
+    } else {
+      _useXETHBonus = getMaxXETHBonus({
+        MaxBaseInETH: ETHtAmount / 1e18,
+      })
+    }
+    const _useXETHBonus_text = checkNotZoroNum(_useXETHBonus)
+      ? fb4(_useXETHBonus, false, 0)
+      : 0
+    setDetail((pre) => {
+      return {
+        ...pre,
+        useXETHBonus: useXETHBonus_text,
+      }
+    })
+
+    return [fb4(_fee), _useXETHBonus_text]
+  }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice])
 
   const initPage = () => {
     setFETHtAmount({
@@ -109,32 +124,34 @@ export default function Mint() {
 
   const getMinAmount = async () => {
     try {
-      let minout_ETH
-      if (checkNotZoroNum(ETHtAmount)) {
-        const getGasPrice = await getGas()
-        const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
-        let _ETHtAmountAndGas
-        if (
-          cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-        ) {
-          _ETHtAmountAndGas = cBN(tokens.ETH.balance)
-            .minus(gasFee)
-            .toFixed(0, 1)
-            .toString()
-        } else {
-          _ETHtAmountAndGas = ETHtAmount
-        }
-        if (isF) {
-          minout_ETH = await ethGatewayContract.methods
-            .mintFToken(0)
-            .call({ value: _ETHtAmountAndGas })
-        } else {
-          minout_ETH = await ethGatewayContract.methods
-            .mintXToken(0)
-            .call({ value: _ETHtAmountAndGas })
-        }
+      if (!checkNotZoroNum(ETHtAmount)) {
+        return 0
+      }
+      const getGasPrice = await getGas()
+      const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+      let _ETHtAmountAndGas
+      if (
+        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+      ) {
+        _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+          .minus(gasFee)
+          .toFixed(0, 1)
+          .toString()
       } else {
-        minout_ETH = 0
+        _ETHtAmountAndGas = ETHtAmount
+      }
+      let minout_ETH
+      if (isF) {
+        minout_ETH = await ethGatewayContract.methods
+          .mintFToken(0)
+          .call({ value: _ETHtAmountAndGas })
+      } else {
+        // minout_ETH = await ethGatewayContract.methods
+        //   .mintXToken(0)
+        //   .call({ value: ETHtAmount })
+        minout_ETH = await ethGatewayContract.methods
+          .addBaseToken(0)
+          .call({ value: _ETHtAmountAndGas })
       }
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
@@ -145,7 +162,7 @@ export default function Mint() {
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
         setFETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(10)),
+          minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_fETH_tvl,
         })
         setXETHtAmount({
@@ -155,7 +172,7 @@ export default function Mint() {
         setDetail((pre) => {
           return {
             ...pre,
-            fETH: fb4(_minOut_CBN.toFixed(10)),
+            fETH: fb4(_minOut_CBN.toString(10)),
             fETHTvl: _minOut_fETH_tvl,
             xETH: 0,
           }
@@ -209,14 +226,14 @@ export default function Mint() {
       if (isF) {
         apiCall = await ethGatewayContract.methods.mintFToken(_minOut)
       } else {
-        apiCall = await ethGatewayContract.methods.mintXToken(_minOut)
+        apiCall = await ethGatewayContract.methods.addBaseToken(_minOut)
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
         value: _ETHtAmountAndGas,
       })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      console.log('gas----', gas)
+      console.log('gas--', gas)
       await NoPayableAction(
         () => apiCall.send({ from: _currentAccount, gas, value: _ETHtAmountAndGas }),
         {
@@ -235,7 +252,7 @@ export default function Mint() {
     let _enableETH =
       cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
       cBN(ETHtAmount).isGreaterThan(0)
-    return !mintPaused && _enableETH && !fTokenMintInSystemStabilityModePaused
+    return !mintPaused && _enableETH
   }, [ETHtAmount, mintPaused, tokens.ETH.balance])
 
   useEffect(() => {
@@ -250,7 +267,6 @@ export default function Mint() {
         placeholder="0"
         symbol="ETH"
         balance={fb4(tokens.ETH.balance, false)}
-        // usd={tokens.ETH.usd}
         usd={`$${ethPrice_text}`}
         maxAmount={tokens.ETH.balance}
         onChange={hanldeETHAmountChanged}
@@ -259,37 +275,33 @@ export default function Mint() {
         <DownOutlined />
       </div>
 
-      <Tabs selecedIndex={selected} onChange={(index) => setSelected(index)} />
-
-      {isF && (
-        <BalanceInput
-          symbol="fETH"
-          icon="/images/f-s-logo-white.svg"
-          color="blue"
-          placeholder={FETHtAmount.minout}
-          disabled
-          className={styles.inputItem}
-          usd={`$${fnav}`}
+      {/* <BalanceInput
+        symbol="fETH"
+        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
+        color={isF ? 'blue' : undefined}
+        placeholder={FETHtAmount.minout}
+        disabled
+        type={isF ? '' : 'select'}
+        className={styles.inputItem}
+        usd={`$${FETHtAmount.tvl}`}
         // onChange={hanldeFETHAmountChanged}
-        // onSelected={() => setSelected(0)}
-        />
-      )}
-      {isX && (
-        <BalanceInput
-          symbol="xETH"
-          // tip="Bonus+"
-          icon="/images/x-s-logo-white.svg"
-          color="red"
-          selectColor="red"
-          placeholder={XETHtAmount.minout}
-          disabled
-          className={styles.inputItem}
-          usd={`$${xnav} ${xETHBeta_text}x`}
-        // onSelected={() => setSelected(1)}
-        />
-      )}
+        onSelected={() => setSelected(0)}
+      /> */}
+      <BalanceInput
+        symbol="xETH"
+        tip="Bonus+"
+        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
+        color={isX ? 'red' : undefined}
+        selectColor="red"
+        placeholder={XETHtAmount.minout}
+        disabled
+        type={isX ? '' : 'select'}
+        className={styles.inputItem}
+        usd={`$${xnav} ${xETHBeta_text}x`}
+        onSelected={() => setSelected(1)}
+      />
 
-      <DetailCollapse title={`Mint Fee: ${fee}%`} detail={detail} />
+      <DetailCollapse open title={`Mint Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
         <Button

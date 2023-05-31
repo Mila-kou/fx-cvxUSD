@@ -23,45 +23,51 @@ export default function AppHeader() {
     toggleTheme,
     showSystemStatistics,
     toggleShowSystemStatistics,
+    tokens,
   } = useGlobal()
-  const { web3, connect, disconnect, currentAccount, isRightChain } = useWeb3()
+  const { connect, disconnect, currentAccount, isRightChain } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
 
-  const [ethBalance, setEthBalance] = useState(0)
+  const assets = useMemo(() => {
+    const list = [
+      {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        amount: fb4(tokens.ETH.balance, false),
+        icon: '/tokens/crypto-icons-stack.svg#eth',
+        usd: tokens.ETH.usd,
+      },
+      // {
+      //   name: 'Ethereum',
+      //   symbol: 'WETH',
+      //   amount: fb4(tokens.WETH.balance, false),
+      //   icon: '/tokens/crypto-icons-stack.svg#eth',
+      //   usd: tokens.WETH.usd,
+      // },
+      // {
+      //   name: 'Fractional ETH',
+      //   symbol: 'fETH',
+      //   amount: fb4(tokens.fETH.balance, false),
+      //   icon: '/images/f-logo.svg',
+      //   usd: tokens.fETH.usd,
+      // },
+      // {
+      //   name: 'Leveraged ETH',
+      //   symbol: 'xETH',
+      //   amount: fb4(tokens.xETH.balance, false),
+      //   icon: '/images/x-logo.svg',
+      //   usd: tokens.xETH.usd,
+      // },
+    ]
+    if (route.includes('offering')) {
+      return list.slice(0, 1)
+    }
+    return list
+  }, [tokens, route])
 
   const showSwitch = useMemo(() => route === '/home', [route])
-
-  useEffect(() => {
-    if (currentAccount) {
-      web3.eth.getBalance(currentAccount).then((res) => {
-        setEthBalance(fb4(res, false))
-      })
-    }
-  }, [currentAccount, showAccountPanel])
-
-  const assets = [
-    {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      amount: ethBalance,
-      usd: '6480.98',
-      icon: '/tokens/crypto-icons-stack.svg#eth',
-    },
-    // {
-    //   name: 'Fractional ETH',
-    //   symbol: 'fETH',
-    //   amount: '2.9',
-    //   usd: '4480.98',
-    // },
-    // {
-    //   name: 'Leveraged ETH',
-    //   symbol: 'xETH',
-    //   amount: '1.6',
-    //   usd: '1480.98',
-    // },
-  ]
 
   const refMenu = useRef(null)
   const refMenuPanel = useRef(null)
@@ -126,7 +132,7 @@ export default function AppHeader() {
               <p className={styles.title}>{_account}</p>
               <p className={styles.title}>Assets</p>
               {assets.map((item) => (
-                <div className={styles.assetItem}>
+                <div className={styles.assetItem} key={item.symbol}>
                   <div className={styles.logo}>
                     <img src={item.icon} />
                   </div>
@@ -136,7 +142,9 @@ export default function AppHeader() {
                       {item.amount} {item.symbol}
                     </div>
                   </div>
-                  {/* <div className={styles.usd}>~ ${item.usd}</div> */}
+                  {/* <div className={styles.usd}>
+                    {item.usd ? `~${item.usd}` : '-'}
+                    </div> */}
                 </div>
               ))}
               <div className={styles.disBtn} onClick={handleDisconnect}>

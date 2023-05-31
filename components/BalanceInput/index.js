@@ -76,7 +76,7 @@ function BalanceInput(props) {
         <p className={styles.symbol}>
           {symbol} <span className={styles.tip}>{tip}</span>
         </p>
-        <p className={styles.usd}>(~${usd})</p>
+        <p className={styles.usd}>(~{usd})</p>
       </div>
       <div className={styles.right}>
         {type == 'select' ? (

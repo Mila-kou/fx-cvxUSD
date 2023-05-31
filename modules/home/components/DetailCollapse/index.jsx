@@ -10,9 +10,11 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
+import usefxETH from '../../controller/usefxETH'
 
-export default function DetailCollapse({ title, detail }) {
-  const [showContent, { toggle }] = useToggle()
+export default function DetailCollapse({ title, detail, open = false }) {
+  const [showContent, { toggle }] = useToggle(open)
+  const PageData = usefxETH()
   return (
     <div className={styles.container}>
       <div className={styles.header} onClick={toggle}>
@@ -22,38 +24,78 @@ export default function DetailCollapse({ title, detail }) {
 
       {showContent ? (
         <div className={styles.content}>
-          <p>
+          {/* <p>
             fETH Collecteral Ratio will be: <span>220%</span>
+          </p> */}
+          {/* <p>
+            fETH Net Asset Value: <span>${PageData.fnav}</span>
           </p>
           <p>
-            fETH Net Asset Value: <span>$1.01</span>
-          </p>
-          <p>
-            xETH Net Asset Value: <span>$1.01</span>
-          </p>
+            xETH Net Asset Value: <span>${PageData.xnav}</span>
+          </p> */}
 
           <div className={styles.result}>
-            {detail.bonus ? (
+            {detail.maxBaseIn ? (
               <p>
-                System Bonus: :{' '}
+                Max Base In ETH: <span>{detail.maxBaseIn} ETH</span>
+              </p>
+            ) : null}
+
+            {detail.maxXETHBonus ? (
+              <p>
+                System Bonus:{' '}
                 <span className={styles.green}>
-                  +{detail.bonus} ETH ({detail.bonusRatio}%)
+                  +{detail.maxXETHBonus} xETH
                 </span>
               </p>
             ) : null}
+            {detail.useXETHBonus ? (
+              <p>
+                User Bonus:{' '}
+                <span className={styles.green}>
+                  +{detail.useXETHBonus} xETH
+                </span>
+              </p>
+            ) : null}
+            {detail.maxFTokenBaseIn ? (
+              <p>
+                Max Base In fETH:{' '}
+                <span className={styles.green}>
+                  +{detail.maxFTokenBaseIn} fETH
+                </span>
+              </p>
+            ) : null}
+            {detail.maxETHBonus_Text ? (
+              <p>
+                System Bonus:{' '}
+                <span className={styles.green}>
+                  +{detail.maxETHBonus_Text} ETH
+                </span>
+              </p>
+            ) : null}
+            {detail.useETHBonus ? (
+              <p>
+                User Bonus:{' '}
+                <span className={styles.green}>
+                  +{detail.useETHBonus} ETH
+                </span>
+              </p>
+            ) : null}
+
+
             {detail.ETH ? (
               <p>
-                Minimum received ETH: <span>{detail.ETH}</span>
+                Minimum received ETH: <span>{detail.ETH} ~ ${detail.ETHTvl}</span>
               </p>
             ) : null}
             {detail.fETH ? (
               <p>
-                Minimum received fETH: <span>{detail.fETH}</span>
+                Minimum received fETH: <span>{detail.fETH} ~ ${detail.fETHTvl}</span>
               </p>
             ) : null}
             {detail.xETH ? (
               <p>
-                Minimum received xETH: <span>{detail.xETH}</span>
+                Minimum received xETH: <span>{detail.xETH} ~${detail.xETHTvl}</span>
               </p>
             ) : null}
           </div>
