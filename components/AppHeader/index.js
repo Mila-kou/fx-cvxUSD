@@ -39,27 +39,27 @@ export default function AppHeader() {
         icon: '/tokens/crypto-icons-stack.svg#eth',
         usd: tokens.ETH.usd,
       },
-      {
-        name: 'Ethereum',
-        symbol: 'WETH',
-        amount: fb4(tokens.WETH.balance, false),
-        icon: '/tokens/crypto-icons-stack.svg#eth',
-        usd: tokens.WETH.usd,
-      },
-      {
-        name: 'Fractional ETH',
-        symbol: 'fETH',
-        amount: fb4(tokens.fETH.balance, false),
-        icon: '/images/f-logo.svg',
-        usd: tokens.fETH.usd,
-      },
-      {
-        name: 'Leveraged ETH',
-        symbol: 'xETH',
-        amount: fb4(tokens.xETH.balance, false),
-        icon: '/images/x-logo.svg',
-        usd: tokens.xETH.usd,
-      },
+      // {
+      //   name: 'Ethereum',
+      //   symbol: 'WETH',
+      //   amount: fb4(tokens.WETH.balance, false),
+      //   icon: '/tokens/crypto-icons-stack.svg#eth',
+      //   usd: tokens.WETH.usd,
+      // },
+      // {
+      //   name: 'Fractional ETH',
+      //   symbol: 'fETH',
+      //   amount: fb4(tokens.fETH.balance, false),
+      //   icon: '/images/f-logo.svg',
+      //   usd: tokens.fETH.usd,
+      // },
+      // {
+      //   name: 'Leveraged ETH',
+      //   symbol: 'xETH',
+      //   amount: fb4(tokens.xETH.balance, false),
+      //   icon: '/images/x-logo.svg',
+      //   usd: tokens.xETH.usd,
+      // },
     ]
     if (route.includes('offering')) {
       return list.slice(0, 1)

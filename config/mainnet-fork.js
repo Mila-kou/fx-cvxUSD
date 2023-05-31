@@ -1,10 +1,10 @@
 import tokensInfo from './tokens'
 
-const CHAIN_ID = 10540
+const CHAIN_ID = 10548
 
 const NETWORK_NAME = 'mainnet-fork'
 
-const devRpcurl = [CHAIN_ID, 'https://apitest.aladdin.club/rpc1']
+const devRpcurl = [CHAIN_ID, 'https://apitest.aladdin.club/rpc']
 
 const contracts = {
   ...tokensInfo.contracts,

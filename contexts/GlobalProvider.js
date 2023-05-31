@@ -49,20 +49,20 @@ function GlobalProvider({ children }) {
 
   const tokens = useMemo(() => {
     // ETH
-    const { CurrentNavRes } = fx_info.baseInfo
-    console.log('CurrentNavRes---', CurrentNavRes)
+    // const { CurrentNavRes } = fx_info.baseInfo
+    // console.log('CurrentNavRes---', CurrentNavRes)
     return {
       ETH: {
         ...ethToken,
-        usd: checkNotZoroNumOption(
-          ethToken.balance,
-          fb4(
-            cBN(ethToken.balance)
-              .multipliedBy(CurrentNavRes?._baseNav)
-              .div(1e18) || 0,
-            true
-          )
-        ),
+        // usd: checkNotZoroNumOption(
+        //   ethToken.balance,
+        //   fb4(
+        //     cBN(ethToken.balance)
+        //       .multipliedBy(CurrentNavRes?._baseNav)
+        //       .div(1e18) || 0,
+        //     true
+        //   )
+        // ),
       },
       // WETH: {
       //   ...wethToken,
