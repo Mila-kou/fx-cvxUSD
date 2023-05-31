@@ -244,7 +244,7 @@ export default function IdoPage() {
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>FX Whitelist Offering</p>
+              <p className={styles.title}>FX AladdinDAO Offering</p>
 
               <p className={styles.num}>{PageData.capAmount} FX</p>
               <p className={styles.title}>Offering Amount</p>
