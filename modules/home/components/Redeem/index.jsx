@@ -3,7 +3,7 @@ import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -121,6 +121,7 @@ export default function Redeem({ slippage }) {
     setFETHtAmount(0)
     setXETHtAmount(0)
     setMinOutETHtAmount({
+      minout_ETH: '-',
       minout: 0,
       tvl: 0,
     })
@@ -157,6 +158,7 @@ export default function Redeem({ slippage }) {
       )
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
       setMinOutETHtAmount({
+        minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
         minout: fb4(_minOut_CBN.toString(10)),
         tvl: _minOut_ETH_tvl,
       })
@@ -255,7 +257,7 @@ export default function Redeem({ slippage }) {
 
       <BalanceInput
         symbol="ETH"
-        placeholder={minOutETHtAmount.minout}
+        placeholder={minOutETHtAmount.minout_ETH}
         usd={`$${ethPrice_text}`}
         disabled
         className={styles.inputItem}

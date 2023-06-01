@@ -4,7 +4,7 @@ import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -85,10 +85,12 @@ export default function Mint({ slippage }) {
 
   const initPage = () => {
     setFETHtAmount({
+      minout_ETH: '-',
       minout: 0,
       tvl: 0,
     })
     setXETHtAmount({
+      minout_ETH: '-',
       minout: 0,
       tvl: 0,
     })
@@ -144,17 +146,19 @@ export default function Mint({ slippage }) {
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
         setFETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(10)),
+          minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
+          minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_fETH_tvl,
         })
         setXETHtAmount({
+          minout_ETH: '-',
           minout: 0,
           tvl: 0,
         })
         setDetail((pre) => {
           return {
             ...pre,
-            fETH: fb4(_minOut_CBN.toFixed(10)),
+            fETH: fb4(_minOut_CBN.toString(10)),
             fETHTvl: _minOut_fETH_tvl,
             xETH: 0,
           }
@@ -164,10 +168,12 @@ export default function Mint({ slippage }) {
           _minOut_CBN.multipliedBy(xnav).toString(10)
         )
         setXETHtAmount({
+          minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
           minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_xETH_tvl,
         })
         setFETHtAmount({
+          minout_ETH: '-',
           minout: 0,
           tvl: 0,
         })
@@ -268,7 +274,7 @@ export default function Mint({ slippage }) {
           symbol="fETH"
           icon="/images/f-s-logo-white.svg"
           color="blue"
-          placeholder={FETHtAmount.minout}
+          placeholder={FETHtAmount.minout_ETH}
           disabled
           className={styles.inputItem}
           usd={`$${fnav}`}
@@ -283,7 +289,7 @@ export default function Mint({ slippage }) {
           icon="/images/x-s-logo-white.svg"
           color="red"
           selectColor="red"
-          placeholder={XETHtAmount.minout}
+          placeholder={XETHtAmount.minout_ETH}
           disabled
           className={styles.inputItem}
           usd={`$${xnav} ${xETHBeta_text}x`}
