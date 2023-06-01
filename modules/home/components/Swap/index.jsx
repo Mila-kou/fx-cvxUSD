@@ -35,7 +35,7 @@ export default function Swap() {
 
   return (
     <div className={styles.container}>
-      <SettingOutlined onClick={toggle} />
+      <SettingOutlined onClick={toggle} className={styles.setting} />
       <div className={styles.tabs}>
         {tabs.map((item, index) => (
           <div
