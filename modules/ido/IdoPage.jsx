@@ -54,7 +54,7 @@ export default function IdoPage() {
   const isEndSale = useMemo(() => {
     if (
       newStatus >= 2 &&
-      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(cBN(50000).times(1e18)) &&
+      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(cBN(60000).times(1e18)) &&
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
         PageData.baseInfo.totalSoldAmount
       )
@@ -85,8 +85,8 @@ export default function IdoPage() {
       cBN(depositAmount).isGreaterThan(0) &&
       cBN(selectTokenInfo?.balance).isGreaterThanOrEqualTo(depositAmount) &&
       [1, 2].includes(newStatus) &&
-      !cBN(PageData.baseInfo.capAmount).isEqualTo(
-        PageData.baseInfo.totalSoldAmount
+      cBN(PageData.baseInfo.totalSoldAmount).isLessThan(
+        PageData.baseInfo.capAmount
       ),
     [depositAmount, selectTokenInfo]
   )
