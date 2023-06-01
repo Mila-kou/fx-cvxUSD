@@ -96,7 +96,7 @@ export default function Redeem({ slippage }) {
     // ETH: 1,
   })
 
-  const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_ethGateway')
 
   const { BtnWapper } = useApprove({
     approveAmount: tokenAmount,
@@ -187,10 +187,9 @@ export default function Redeem({ slippage }) {
         _xTokenIn = tokenAmount
         _fTokenIn = 0
       }
-      const apiCall = await marketContract.methods.redeem(
+      const apiCall = await ethGatewayContract.methods.redeem(
         _fTokenIn,
         _xTokenIn,
-        _currentAccount,
         _minoutETH
       )
       const estimatedGas = await apiCall.estimateGas({
@@ -206,6 +205,7 @@ export default function Redeem({ slippage }) {
       )
       setRedeeming(false)
     } catch (e) {
+      console.log('eeee---', e)
       setRedeeming(false)
     }
   }
@@ -263,7 +263,9 @@ export default function Redeem({ slippage }) {
       <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <Button loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">Redeem</Button>
+        <BtnWapper loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">
+          Redeem
+        </BtnWapper>
       </div>
     </div>
   )
