@@ -282,7 +282,7 @@ export default function IdoPage() {
 
               <div className={styles.bottomWrap}>
                 <p className={styles.title}>
-                  Price: <span>{PageData.currentPrice} ETH per FX</span>
+                  Price: <span>{PageData.currentPrice} ETH Per FX</span>
                 </p>
                 <p className={styles.title}>
                   Raised: <span>{PageData.totalFundsRaised} ETH</span>
