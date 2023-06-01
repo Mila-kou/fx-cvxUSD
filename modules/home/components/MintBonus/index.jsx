@@ -14,12 +14,11 @@ import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 import useFxCommon from '../../hooks/useFxCommon'
 
-export default function MintBonus() {
+export default function MintBonus({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(1)
   const { tokens } = useGlobal()
   const { getMaxXETHBonus } = useFxCommon()
-  const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
   const minGas = 260325
