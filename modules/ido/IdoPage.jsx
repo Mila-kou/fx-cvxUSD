@@ -53,7 +53,8 @@ export default function IdoPage() {
 
   const isEndSale = useMemo(() => {
     if (
-      newStatus == 3 &&
+      newStatus >= 2 &&
+      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(cBN(50000).times(1e18)) &&
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
         PageData.baseInfo.totalSoldAmount
       )
@@ -228,7 +229,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) {}
+    } catch (error) { }
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
