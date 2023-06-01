@@ -244,10 +244,10 @@ export default function IdoPage() {
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>FX Auction AladdinDAO Round</p>
+              <p className={styles.title}>FX Offering AladdinDAO Round</p>
 
               <p className={styles.num}>{PageData.capAmount} FX</p>
-              <p className={styles.title}>Auction Amount</p>
+              <p className={styles.title}>Offering Amount</p>
 
               <div className={styles.num}>
                 <Countdown
@@ -264,13 +264,13 @@ export default function IdoPage() {
           {[1, 2].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>
-                FX Auction {newStatus == 1 ? 'AladdinDAO' : 'Public'} Round
+                FX Offering {newStatus == 1 ? 'AladdinDAO' : 'Public'} Round
               </p>
 
               <p className={styles.num}>
                 {PageData.totalSoldAmount} / {PageData.capAmount}
               </p>
-              <p className={styles.title}>Sold / Auction Amount</p>
+              <p className={styles.title}>Sold / Offering Amount</p>
 
               <div className={styles.num}>
                 <Countdown
@@ -345,11 +345,11 @@ export default function IdoPage() {
       {!!isWhiteListSoldEndSale && (
         <div className={styles.container}>
           <div className={styles.card}>
-            <p className={styles.title}>FX Auction AladdinDAO Round</p>
+            <p className={styles.title}>FX Offering AladdinDAO Round</p>
 
             <p className={styles.num}>Sold Out</p>
             <p className={styles.title}>
-              Auction Amount {PageData.capAmount} FX
+              Offering Amount {PageData.capAmount} FX
             </p>
             <p className={styles.num}>
               {newStatus == 2 ? null : (
@@ -360,7 +360,7 @@ export default function IdoPage() {
               )}
             </p>
             <p className={styles.title}>Public Round</p>
-            <p className={styles.title}>Auction Amount 40,000 FX</p>
+            <p className={styles.title}>Offering Amount 40,000 FX</p>
             <p className={styles.title}>
               Starting at{' '}
               {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}
@@ -426,12 +426,12 @@ export default function IdoPage() {
       {!!isEndSale && (
         <div className={styles.container}>
           <div className={styles.card}>
-            <p className={styles.title}>FX Auction</p>
+            <p className={styles.title}>FX Offering</p>
 
             <p className={styles.num}>Sold Out! 🎉</p>
 
             <p className={styles.num}>{PageData.capAmount}</p>
-            <p className={styles.title}>Auction Amount</p>
+            <p className={styles.title}>Offering Amount</p>
 
             <p className={styles.num}>{PageData.totalFundsRaised}</p>
             <p className={styles.title}>Total Raised</p>
