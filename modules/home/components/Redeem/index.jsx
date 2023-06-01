@@ -114,8 +114,12 @@ export default function Redeem({ slippage }) {
       _enableETH =
         _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     }
-    return !redeemPaused && _enableETH && !xTokenRedeemInSystemStabilityModePaused
-  }, [tokenAmount, redeemPaused, tokens.ETH.balance])
+    let _xTokenRedeemInSystemStabilityModePaused = false
+    if (isX) {
+      _xTokenRedeemInSystemStabilityModePaused = (xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0)
+    }
+    return !redeemPaused && _enableETH && !_xTokenRedeemInSystemStabilityModePaused
+  }, [tokenAmount, redeemPaused, xTokenRedeemInSystemStabilityModePaused, tokens.ETH.balance])
 
   const initPage = () => {
     setFETHtAmount(0)

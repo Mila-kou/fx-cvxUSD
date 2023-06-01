@@ -240,8 +240,13 @@ export default function Mint({ slippage }) {
     let _enableETH =
       cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
       cBN(ETHtAmount).isGreaterThan(0)
-    return !mintPaused && _enableETH && !fTokenMintInSystemStabilityModePaused
-  }, [ETHtAmount, mintPaused, tokens.ETH.balance])
+    let _fTokenMintInSystemStabilityModePaused = false
+    if (isF) {
+      _fTokenMintInSystemStabilityModePaused = (fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0)
+    }
+    // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
+    return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
+  }, [ETHtAmount, mintPaused, isF, tokens.ETH.balance])
 
   useEffect(() => {
     initPage()
