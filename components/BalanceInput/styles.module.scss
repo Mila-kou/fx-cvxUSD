@@ -5,7 +5,7 @@
 
 .inputContent {
   padding: 12px 18px;
-  box-shadow: 0px 5px 10px 1px var(--box-shadow-color);
+  box-shadow: var(--input-box-shadow);
   display: flex;
   align-items: center;
   border-radius: 6px;

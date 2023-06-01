@@ -18,7 +18,7 @@ $blockBgLight: #fff;
 
 @mixin card {
   background: var(--background-color);
-  box-shadow: 0px 5px 10px 1px var(--box-shadow-color);
+  box-shadow: var(--card-box-shadow);
   border-radius: 6px;
 }
 
@@ -31,7 +31,7 @@ $blockBgLight: #fff;
     #1f14ed 1%,
     #f05a29 100%
   );
-  box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.5);
+  box-shadow: var(--btn-box-shadow);
   border-radius: 6px;
   border: none;
   display: flex;

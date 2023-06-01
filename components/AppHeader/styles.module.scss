@@ -39,6 +39,7 @@
 }
 
 .accountPanel {
+  color: #231f20;
   @include overlay;
   .content {
     padding: 30px 36px;
@@ -69,6 +70,7 @@
       height: 73px;
       min-width: 348px;
       @include card;
+      background: var(--white-background-color);
       margin-bottom: 14px;
       .logo {
         margin-right: 14px;
@@ -79,7 +81,7 @@
       .main {
         flex: 1;
         .amount {
-          color: var(--second-text-color);
+          color: #a6a6ae;
           font-size: 16px;
         }
       }
@@ -107,6 +109,7 @@
 
 .menuPanel {
   @include overlay;
+  color: #231f20;
   .content {
     padding: 32px;
     width: 418px;
