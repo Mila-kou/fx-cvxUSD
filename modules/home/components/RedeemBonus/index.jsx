@@ -15,11 +15,10 @@ import useApprove from '@/hooks/useApprove'
 import useFxCommon from '../../hooks/useFxCommon'
 import Button from '@/components/Button'
 
-export default function RedeemBonus() {
+export default function RedeemBonus({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const [redeeming, setRedeeming] = useState(0)
-  const [slippage, setSlippage] = useState(0.3)
   const { getMaxETHBonus } = useFxCommon()
   const { tokens } = useGlobal()
   const {
@@ -44,7 +43,7 @@ export default function RedeemBonus() {
     mode2_maxETHBaseOut,
     mode2_maxETHBaseOut_text,
     maxETHBonus,
-    maxETHBonus_Text
+    maxETHBonus_Text,
   } = usefxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -87,7 +86,7 @@ export default function RedeemBonus() {
     const _fee = cBN(_redeemFee).multipliedBy(100)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
 
-    let _userETHBonus = 0;
+    let _userETHBonus = 0
     if (cBN(tokenAmount).isGreaterThanOrEqualTo(mode2_maxFTokenBaseIn)) {
       _userETHBonus = maxETHBonus
     } else {
@@ -143,9 +142,11 @@ export default function RedeemBonus() {
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
     if (isF) {
-      _enableETH = _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
+      _enableETH =
+        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
     } else {
-      _enableETH = _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
+      _enableETH =
+        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     }
     return !redeemPaused && _enableETH
   }, [tokenAmount, redeemPaused, tokens.ETH.balance])
@@ -172,7 +173,7 @@ export default function RedeemBonus() {
         return {
           ...pre,
           ETH: fb4(_minOut_CBN.toString(10)),
-          ETHTvl: _minOut_ETH_tvl
+          ETHTvl: _minOut_ETH_tvl,
         }
       })
       return _minOut_CBN.toFixed(0, 1)
@@ -186,10 +187,13 @@ export default function RedeemBonus() {
     try {
       setRedeeming(true)
       const _minoutETH = await getMinAmount()
-      const apiCall = await marketContract.methods
-        .liquidate(tokenAmount, _currentAccount, _minoutETH)
+      const apiCall = await marketContract.methods.liquidate(
+        tokenAmount,
+        _currentAccount,
+        _minoutETH
+      )
       const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount
+        from: _currentAccount,
       })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(
@@ -255,13 +259,17 @@ export default function RedeemBonus() {
         disabled
         className={styles.inputItem}
       />
-      <DetailCollapse
-        title={`Redeem Fee: ${fee}%`}
-        detail={detail}
-      />
+      <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <Button loading={redeeming} disabled={!canRedeem} onClick={handleLiquidate} width="100%">Redeem</Button>
+        <Button
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleLiquidate}
+          width="100%"
+        >
+          Redeem
+        </Button>
       </div>
     </div>
   )

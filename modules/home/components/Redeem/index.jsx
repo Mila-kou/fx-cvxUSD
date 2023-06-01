@@ -15,11 +15,10 @@ import useApprove from '@/hooks/useApprove'
 import Button from '@/components/Button'
 import Tabs from '../Tabs'
 
-export default function Redeem() {
+export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const [redeeming, setRedeeming] = useState(0)
-  const [slippage, setSlippage] = useState(0.3)
   const { tokens } = useGlobal()
   const {
     fETHAddress,

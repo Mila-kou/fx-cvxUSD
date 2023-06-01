@@ -1,5 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Button } from 'antd'
+import { Modal } from 'antd'
+import { useToggle, useSetState } from 'ahooks'
+import { SettingOutlined } from '@ant-design/icons'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, fb4 } from '@/utils/index'
@@ -11,11 +13,16 @@ import Redeem from '../Redeem'
 import usefxETH from '../../controller/usefxETH'
 import RedeemBonus from '../RedeemBonus'
 import Tabs from '../Tabs'
+import SlippageModal, { useSlippage } from '../SlippageModal'
 
 export default function Swap() {
   const { systemStatus } = usefxETH()
   const [bonusIndex, setBonusIndex] = useState(0)
   const [tab, setTab] = useState(0)
+
+  const slippageProps = useSlippage(0.3)
+
+  const { slippage, toggle } = slippageProps
 
   const tabs = useMemo(() => {
     let _tabs = ['Mint', 'Redeem']
@@ -28,6 +35,7 @@ export default function Swap() {
 
   return (
     <div className={styles.container}>
+      <SettingOutlined onClick={toggle} />
       <div className={styles.tabs}>
         {tabs.map((item, index) => (
           <div
@@ -42,8 +50,8 @@ export default function Swap() {
           </div>
         ))}
       </div>
-      {!!(tab == 0) && <Mint />}
-      {!!(tab == 1) && <Redeem />}
+      {!!(tab == 0) && <Mint slippage={slippage} />}
+      {!!(tab == 1) && <Redeem slippage={slippage} />}
       {!!(tab == 2) && (
         <div>
           <Tabs
@@ -52,9 +60,15 @@ export default function Swap() {
             onChange={(index) => setBonusIndex(index)}
             disabledIndexs={systemStatus * 1 >= 2 ? [] : [1]}
           />
-          {bonusIndex == 0 ? <MintBonus /> : <RedeemBonus />}
+          {bonusIndex == 0 ? (
+            <MintBonus slippage={slippage} />
+          ) : (
+            <RedeemBonus slippage={slippage} />
+          )}
         </div>
       )}
+
+      <SlippageModal {...slippageProps} />
     </div>
   )
 }

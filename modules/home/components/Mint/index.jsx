@@ -14,11 +14,10 @@ import styles from './styles.module.scss'
 import usefxETH from '../../controller/usefxETH'
 import Tabs from '../Tabs'
 
-export default function Mint() {
+export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
-  const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
 
