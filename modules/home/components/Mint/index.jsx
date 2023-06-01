@@ -240,6 +240,9 @@ export default function Mint() {
 
   useEffect(() => {
     initPage()
+  }, [selected])
+
+  useEffect(() => {
     getMinAmount()
     // handleGetAllMinAmount()
   }, [selected, ETHtAmount])

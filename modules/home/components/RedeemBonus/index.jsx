@@ -207,6 +207,9 @@ export default function RedeemBonus() {
 
   useEffect(() => {
     initPage()
+  }, [selected])
+
+  useEffect(() => {
     getMinAmount()
   }, [selected, tokenAmount])
 

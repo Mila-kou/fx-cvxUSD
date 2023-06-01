@@ -257,6 +257,9 @@ export default function MintBonus() {
 
   useEffect(() => {
     initPage()
+  }, [selected])
+
+  useEffect(() => {
     getMinAmount()
     // handleGetAllMinAmount()
   }, [selected, ETHtAmount])

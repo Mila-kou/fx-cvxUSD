@@ -210,9 +210,11 @@ export default function Redeem() {
       setRedeeming(false)
     }
   }
-
   useEffect(() => {
     initPage()
+  }, [selected])
+
+  useEffect(() => {
     getMinAmount()
   }, [selected, tokenAmount])
 
