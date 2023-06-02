@@ -25,10 +25,17 @@ const useInfo = () => {
         const { fTokenMintInSystemStabilityModePaused, xTokenRedeemInSystemStabilityModePaused,
             fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio,
             xTokenRedeemFeeRatio, marketConfig, incentiveConfig, mintPaused, redeemPaused } = marketContract.methods
+        const wethContract = erc20Contract(config.tokens.weth)
         try {
-            const treasury_ethBalance = await web3.eth.getBalance(treasuryAddress)
-            const platform_ethBalance = await web3.eth.getBalance("0x07dA2d30E26802ED65a52859a50872cfA615bD0A")
-            console.log('treasury_ethBalance--platform_ethBalance--', treasury_ethBalance, platform_ethBalance)
+            const testApiCalls = [
+                web3.eth.getBalance(treasuryAddress),
+                web3.eth.getBalance("0x07dA2d30E26802ED65a52859a50872cfA615bD0A"),
+                wethContract.methods.balanceOf(treasuryAddress),
+                wethContract.methods.balanceOf('0x07dA2d30E26802ED65a52859a50872cfA615bD0A'),
+            ]
+            const [treasury_ethBalance, platform_ethBalance, treasury_wethBalance, platform_wethBalance] =
+                await multiCallsV2(testApiCalls)
+            console.log('treasury_ethBalance--treasury_wethBalance--platform_ethBalance--platform_wethBalance--', treasury_ethBalance, treasury_wethBalance, platform_ethBalance, platform_wethBalance)
             const apiCalls = [
                 fETHTotalSupplyFn(),
                 xETHTotalSupplyFn(),
