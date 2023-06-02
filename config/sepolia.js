@@ -8,8 +8,10 @@ const devRpcurl = [CHAIN_ID, 'https://rpc.sepolia.org']
 
 const contracts = {
   ...tokensInfo.contracts,
+  multiCall: '0x25eef291876194aefad0d60dff89e268b90754bb',
+
   ChainlinkTwapOracleV3: '0x0F221dD4d8224eCD6ec905AEA2D1602C5D5c36B4',
-  fETH: '0xcAD8810BfBbdd189686062A3A399Fc3eCAbB5164',
+  fETH: '0xd35E92d691e2423620CdeEdbbD4399BD812A712C',
   xETH: '0x7F44dD8AEf82429B091c45e40f69d31661f521Ac',
   fx_Market: '0x2932fFe5d52a3Ff38FD3165C7BCEc3d853a90552',
   fx_Treasury: '0xf27927a32f28B91912FE3e9167b71c530E3186d7',
@@ -18,7 +20,7 @@ const contracts = {
 
 const tokens = {
   ...tokensInfo.tokens,
-  fETH: '0xcAD8810BfBbdd189686062A3A399Fc3eCAbB5164',
+  fETH: '0xd35E92d691e2423620CdeEdbbD4399BD812A712C',
   xETH: '0x7F44dD8AEf82429B091c45e40f69d31661f521Ac',
 }
 
