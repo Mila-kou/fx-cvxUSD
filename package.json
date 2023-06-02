@@ -1,11 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "dev": "cross-env NETWORK_ENV=mainnet next",
+    "dev": "cross-env NETWORK_ENV=sepolia next",
     "dev:mainnet-fork": "cross-env NETWORK_ENV=mainnet-fork next",
-    "build": "cross-env NETWORK_ENV=mainnet next build",
+    "build": "cross-env NETWORK_ENV=sepolia next build",
     "build:mainnet-fork": "cross-env NETWORK_ENV=mainnet-fork next build",
-    "start": "cross-env NETWORK_ENV=mainnet next start",
+    "start": "cross-env NETWORK_ENV=sepolia next start",
     "start:mainnet-fork": "cross-env NETWORK_ENV=mainnet-fork next start",
     "lint": "eslint \"**/**.{js,jsx,ts,tsx,vue}\"",
     "lintfix": "eslint \"**/**.{js,jsx,ts,tsx,vue}\" --fix",

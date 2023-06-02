@@ -8,6 +8,7 @@ const CHAIN_MAPPING = {
   4: 'Rinkeby',
   128: 'Heco',
   256: 'Heco Test',
+  11155111: 'Sepolia',
 }
 
 const explorerUri = 'http://www.etherscan.io'
@@ -25,6 +26,18 @@ export const ChainsInfo = {
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
+      decimals: 18,
+    },
+    blockExplorerUrl: 'https://etherscan.io/',
+  },
+  11155111: {
+    chainId: 11155111,
+    chainName: 'Sepolia',
+    shortName: 'Sepolia',
+    rpcUrls: ['https://rpc.sepolia.org'],
+    nativeCurrency: {
+      name: 'SepoliaETH',
+      symbol: 'SepoliaETH',
       decimals: 18,
     },
     blockExplorerUrl: 'https://etherscan.io/',
