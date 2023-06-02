@@ -15,7 +15,7 @@ const useInfo = () => {
     const { contract: fETHContract } = useFETH()
     const { contract: xETHContract } = useXETH()
     const { contract: marketContract } = useFX_Market()
-    const { contract: treasuryContract } = useFX_Treasury()
+    const { contract: treasuryContract, address: treasuryAddress } = useFX_Treasury()
     const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
     const fetchBaseInfo = useCallback(async () => {
@@ -26,6 +26,9 @@ const useInfo = () => {
             fTokenMintFeeRatio, fTokenRedeemFeeRatio, xTokenMintFeeRatio,
             xTokenRedeemFeeRatio, marketConfig, incentiveConfig, mintPaused, redeemPaused } = marketContract.methods
         try {
+            const treasury_ethBalance = await web3.eth.getBalance(treasuryAddress)
+            const platform_ethBalance = await web3.eth.getBalance("0x07dA2d30E26802ED65a52859a50872cfA615bD0A")
+            console.log('treasury_ethBalance--platform_ethBalance--', treasury_ethBalance, platform_ethBalance)
             const apiCalls = [
                 fETHTotalSupplyFn(),
                 xETHTotalSupplyFn(),
