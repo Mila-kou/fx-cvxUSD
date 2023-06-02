@@ -79,6 +79,9 @@ switch (process.env.NETWORK_ENV) {
   case 'mainnet-fork':
     envConf = require('./mainnet-fork').default
     break
+  case 'sepolia':
+    envConf = require('./sepolia').default
+    break
   default:
     envConf = require('./mainnet').default
 }
