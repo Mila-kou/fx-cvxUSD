@@ -120,7 +120,8 @@ export default function SystemStatistics() {
                 <b className={styles[systemStatus > 0 ? 'red' : 'green']}>
                   {collateralRatio}
                 </b>
-                %{systemStatus}
+                %
+                {/* {systemStatus} */}
               </p>
               {/* <p>
                 {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
