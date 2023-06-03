@@ -14,16 +14,20 @@ body {
 
   background-image: url(../../public/images/blue-bg.webp);
 
-  --background-color: rgba(0, 0, 0, 0.6);
+  --background-color: rgba(0, 0, 0, 0.8);
   --panel-background-color: rgba(255, 255, 255, 0.9);
 
   --main-text-color: #fff;
-  --second-text-color: #fff;
+  --second-text-color: #a6a6ae;
+  --tag-background-color: rgba(126, 165, 255, 0.2);
   --primary-color: #5488fe;
   --adverse-primary-color: #fa2454;
   --card-box-shadow: 0px 9px 36px 4px rgba(49, 24, 132, 0.5);
-  --input-box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.5);
-  --btn-box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.5);
+  --input-box-shadow: none;
+  --btn-box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.01);
+  --tag-box-shadow: none;
+
+  --input-background-color: rgba(126, 165, 255, 0.2);
 
   &[data-theme='red'] {
     background-image: url(../../public/images/red-bg.webp);
@@ -33,10 +37,14 @@ body {
 
     --main-text-color: #231f20;
     --second-text-color: #a6a6ae;
+    --tag-background-color: #fff;
     --primary-color: #fa2454;
     --adverse-primary-color: #5488fe;
     --card-box-shadow: 0px 9px 36px 4px rgba(49, 24, 132, 0.5);
     --input-box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
     --btn-box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
+    --tag-box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
+
+    --input-background-color: rgba(255, 255, 255, 0.5);
   }
 }
