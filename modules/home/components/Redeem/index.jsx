@@ -3,23 +3,22 @@ import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
+import useFxETH from '../../controller/useFxETH'
 import useApprove from '@/hooks/useApprove'
 import Button from '@/components/Button'
 import Tabs from '../Tabs'
 
-export default function Redeem() {
+export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const [redeeming, setRedeeming] = useState(0)
-  const [slippage, setSlippage] = useState(0.3)
   const { tokens } = useGlobal()
   const {
     fETHAddress,
@@ -41,8 +40,8 @@ export default function Redeem() {
     systemStatus,
     xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
-    baseInfo
-  } = usefxETH()
+    baseInfo,
+  } = useFxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
@@ -67,8 +66,8 @@ export default function Redeem() {
   }, [selected, FETHtAmount, XETHtAmount])
 
   const [fee, feeUsd] = useMemo(() => {
-    let __redeemFETHFee = _redeemFETHFee;
-    let __redeemXETHFee = _redeemXETHFee;
+    let __redeemFETHFee = _redeemFETHFee
+    let __redeemXETHFee = _redeemXETHFee
     if (systemStatus == 0) {
       __redeemFETHFee = baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
       __redeemXETHFee = baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
@@ -97,7 +96,7 @@ export default function Redeem() {
     // ETH: 1,
   })
 
-  const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_ethGateway')
 
   const { BtnWapper } = useApprove({
     approveAmount: tokenAmount,
@@ -115,20 +114,33 @@ export default function Redeem() {
       _enableETH =
         _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     }
-    return !redeemPaused && _enableETH && !xTokenRedeemInSystemStabilityModePaused
-  }, [tokenAmount, redeemPaused, tokens.ETH.balance])
+    let _xTokenRedeemInSystemStabilityModePaused = false
+    if (isX) {
+      _xTokenRedeemInSystemStabilityModePaused =
+        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
+    }
+    return (
+      !redeemPaused && _enableETH && !_xTokenRedeemInSystemStabilityModePaused
+    )
+  }, [
+    tokenAmount,
+    redeemPaused,
+    xTokenRedeemInSystemStabilityModePaused,
+    tokens.ETH.balance,
+  ])
 
   const initPage = () => {
     setFETHtAmount(0)
     setXETHtAmount(0)
     setMinOutETHtAmount({
+      minout_ETH: '-',
       minout: 0,
       tvl: 0,
     })
     setDetail((pre) => {
       return {
         ETH: 0,
-        ETHTvl: 0
+        ETHTvl: 0,
       }
     })
   }
@@ -150,7 +162,7 @@ export default function Redeem() {
       }
       minout_ETH = await marketContract.methods
         .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
-        .call({ from: _currentAccount })
+        .call({ from: _currentAccount, from: _currentAccount })
 
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
@@ -158,6 +170,10 @@ export default function Redeem() {
       )
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
       setMinOutETHtAmount({
+        minout_ETH: checkNotZoroNumOption(
+          minout_ETH,
+          fb4(minout_ETH.toString(10))
+        ),
         minout: fb4(_minOut_CBN.toString(10)),
         tvl: _minOut_ETH_tvl,
       })
@@ -165,7 +181,7 @@ export default function Redeem() {
         return {
           ...pre,
           ETH: fb4(_minOut_CBN.toString(10)),
-          ETHTvl: _minOut_ETH_tvl
+          ETHTvl: _minOut_ETH_tvl,
         }
       })
       return _minOut_CBN.toFixed(0, 1)
@@ -188,10 +204,9 @@ export default function Redeem() {
         _xTokenIn = tokenAmount
         _fTokenIn = 0
       }
-      const apiCall = await marketContract.methods.redeem(
+      const apiCall = await ethGatewayContract.methods.redeem(
         _fTokenIn,
         _xTokenIn,
-        _currentAccount,
         _minoutETH
       )
       const estimatedGas = await apiCall.estimateGas({
@@ -207,14 +222,17 @@ export default function Redeem() {
       )
       setRedeeming(false)
     } catch (e) {
+      console.log('eeee---', e)
       setRedeeming(false)
     }
   }
-
   useEffect(() => {
     initPage()
+  }, [selected])
+
+  useEffect(() => {
     getMinAmount()
-  }, [selected, tokenAmount])
+  }, [selected, slippage, tokenAmount])
 
   return (
     <div className={styles.container}>
@@ -230,7 +248,7 @@ export default function Redeem() {
           usd={`$${fnav}`}
           maxAmount={tokens.fETH.balance}
           onChange={hanldeFETHAmountChanged}
-        // onSelected={() => setSelected(0)}
+          // onSelected={() => setSelected(0)}
         />
       )}
       {isX && (
@@ -245,7 +263,7 @@ export default function Redeem() {
           usd={`$${xnav} ${xETHBeta_text}x`}
           maxAmount={tokens.xETH.balance}
           onChange={hanldeXETHAmountChanged}
-        // onSelected={() => setSelected(1)}
+          // onSelected={() => setSelected(1)}
         />
       )}
       <div className={styles.arrow}>
@@ -254,7 +272,7 @@ export default function Redeem() {
 
       <BalanceInput
         symbol="ETH"
-        placeholder={minOutETHtAmount.minout}
+        placeholder={minOutETHtAmount.minout_ETH}
         usd={`$${ethPrice_text}`}
         disabled
         className={styles.inputItem}
@@ -262,7 +280,14 @@ export default function Redeem() {
       <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <Button loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">Redeem</Button>
+        <BtnWapper
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleRedeem}
+          width="100%"
+        >
+          Redeem
+        </BtnWapper>
       </div>
     </div>
   )

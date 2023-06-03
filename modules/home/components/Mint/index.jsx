@@ -4,7 +4,7 @@ import Button from '@/components/Button'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -12,14 +12,13 @@ import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import { DetailCell } from '../Common'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
 import FLogo from '../../../../public/images/f-s-logo.svg'
+import useFxETH from '../../controller/useFxETH'
 
-export default function Mint() {
+export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
-  const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
 
@@ -27,10 +26,12 @@ export default function Mint() {
   const [ETHtAmount, setETHtAmount] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState({
     minout: 0,
+    minout_ETH: 0,
     tvl: 0,
   })
   const [XETHtAmount, setXETHtAmount] = useState({
     minout: 0,
+    minout_ETH: 0,
     tvl: 0,
   })
   const [mintLoading, setMintLoading] = useState(false)
@@ -52,15 +53,15 @@ export default function Mint() {
     xETHBeta_text,
     systemStatus,
     baseInfo,
-  } = usefxETH()
+  } = useFxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   const [received, receivedTvl] = useMemo(
     () =>
       isF
-        ? [FETHtAmount.minout, FETHtAmount.tvl]
-        : [XETHtAmount.minout, XETHtAmount.tvl],
+        ? [FETHtAmount.minout_ETH, FETHtAmount.tvl]
+        : [XETHtAmount.minout_ETH, XETHtAmount.tvl],
     [FETHtAmount, XETHtAmount, isF]
   )
 
@@ -109,11 +110,11 @@ export default function Mint() {
         if (isF) {
           minout_ETH = await ethGatewayContract.methods
             .mintFToken(0)
-            .call({ value: _ETHtAmountAndGas })
+            .call({ value: _ETHtAmountAndGas, from: _currentAccount })
         } else {
           minout_ETH = await ethGatewayContract.methods
             .mintXToken(0)
-            .call({ value: _ETHtAmountAndGas })
+            .call({ value: _ETHtAmountAndGas, from: _currentAccount })
         }
       } else {
         minout_ETH = 0
@@ -127,7 +128,11 @@ export default function Mint() {
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
         setFETHtAmount({
-          minout: fb4(_minOut_CBN.toFixed(10)),
+          minout_ETH: checkNotZoroNumOption(
+            minout_ETH,
+            fb4(minout_ETH.toString(10))
+          ),
+          minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_fETH_tvl,
         })
       } else {
@@ -135,6 +140,10 @@ export default function Mint() {
           _minOut_CBN.multipliedBy(xnav).toString(10)
         )
         setXETHtAmount({
+          minout_ETH: checkNotZoroNumOption(
+            minout_ETH,
+            fb4(minout_ETH.toString(10))
+          ),
           minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_xETH_tvl,
         })
@@ -196,14 +205,19 @@ export default function Mint() {
     const _enableETH =
       cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
       cBN(ETHtAmount).isGreaterThan(0)
-    return !mintPaused && _enableETH && !fTokenMintInSystemStabilityModePaused
-  }, [ETHtAmount, mintPaused, tokens.ETH.balance])
+    let _fTokenMintInSystemStabilityModePaused = false
+    if (isF) {
+      _fTokenMintInSystemStabilityModePaused =
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+    }
+    // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
+    return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
+  }, [ETHtAmount, mintPaused, isF, tokens.ETH.balance])
 
   useEffect(() => {
-    // initPage()
     getMinAmount()
     // handleGetAllMinAmount()
-  }, [selected, ETHtAmount])
+  }, [selected, slippage, ETHtAmount])
 
   return (
     <div className={styles.container}>
@@ -223,7 +237,7 @@ export default function Mint() {
         symbol="fETH"
         icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
         color={isF ? 'blue' : ''}
-        placeholder={FETHtAmount.minout}
+        placeholder={FETHtAmount.minout_ETH}
         disabled
         className={styles.inputItem}
         usd={`$${fnav}`}
@@ -237,14 +251,14 @@ export default function Mint() {
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : ''}
         selectColor="red"
-        placeholder={XETHtAmount.minout}
+        placeholder={XETHtAmount.minout_ETH}
         disabled
         className={styles.inputItem}
         usd={`$${xnav} ${xETHBeta_text}x`}
         type={isX ? '' : 'select'}
         onSelected={() => setSelected(1)}
       />
-      <DetailCell title="Mint Fee:" content={[`${fee}%`, '180.00']} />
+      <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
       <div className={styles.action}>
         <Button

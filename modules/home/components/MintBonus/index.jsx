@@ -4,22 +4,21 @@ import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
+import useFxETH from '../../controller/useFxETH'
 import useFxCommon from '../../hooks/useFxCommon'
 
-export default function MintBonus() {
+export default function MintBonus({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(1)
   const { tokens } = useGlobal()
   const { getMaxXETHBonus } = useFxCommon()
-  const [slippage, setSlippage] = useState(0.3)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
   const minGas = 260325
@@ -45,8 +44,8 @@ export default function MintBonus() {
     maxXETHBonus_text,
     xETHBeta_text,
     baseInfo,
-    systemStatus
-  } = usefxETH()
+    systemStatus,
+  } = useFxETH()
   const [FETHtAmount, setFETHtAmount] = useState({
     amount: 0,
     tvl: 0,
@@ -97,7 +96,7 @@ export default function MintBonus() {
     })
 
     return [fb4(_fee), _useXETHBonus_text]
-  }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice])
+  }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice, getMaxXETHBonus])
 
   const initPage = () => {
     setFETHtAmount({
@@ -113,7 +112,7 @@ export default function MintBonus() {
         fETH: 0,
         fETHTvl: 0,
         xETH: 0,
-        xETHTvl: 0
+        xETHTvl: 0,
       }
     })
   }
@@ -130,9 +129,7 @@ export default function MintBonus() {
       const getGasPrice = await getGas()
       const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
       let _ETHtAmountAndGas
-      if (
-        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-      ) {
+      if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)) {
         _ETHtAmountAndGas = cBN(tokens.ETH.balance)
           .minus(gasFee)
           .toFixed(0, 1)
@@ -144,14 +141,14 @@ export default function MintBonus() {
       if (isF) {
         minout_ETH = await ethGatewayContract.methods
           .mintFToken(0)
-          .call({ value: _ETHtAmountAndGas })
+          .call({ value: _ETHtAmountAndGas, from: _currentAccount })
       } else {
         // minout_ETH = await ethGatewayContract.methods
         //   .mintXToken(0)
         //   .call({ value: ETHtAmount })
         minout_ETH = await ethGatewayContract.methods
           .addBaseToken(0)
-          .call({ value: _ETHtAmountAndGas })
+          .call({ value: _ETHtAmountAndGas, from: _currentAccount })
       }
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
@@ -162,10 +159,15 @@ export default function MintBonus() {
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
         setFETHtAmount({
+          minout_ETH: checkNotZoroNumOption(
+            minout_ETH,
+            fb4(minout_ETH.toString(10))
+          ),
           minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_fETH_tvl,
         })
         setXETHtAmount({
+          minout_ETH: '-',
           minout: 0,
           tvl: 0,
         })
@@ -182,10 +184,15 @@ export default function MintBonus() {
           _minOut_CBN.multipliedBy(xnav).toString(10)
         )
         setXETHtAmount({
+          minout_ETH: checkNotZoroNumOption(
+            minout_ETH,
+            fb4(minout_ETH.toString(10))
+          ),
           minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_xETH_tvl,
         })
         setFETHtAmount({
+          minout_ETH: '-',
           minout: 0,
           tvl: 0,
         })
@@ -212,9 +219,7 @@ export default function MintBonus() {
       const getGasPrice = await getGas()
       const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
       let _ETHtAmountAndGas
-      if (
-        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-      ) {
+      if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)) {
         _ETHtAmountAndGas = cBN(tokens.ETH.balance)
           .minus(gasFee)
           .toFixed(0, 1)
@@ -235,7 +240,12 @@ export default function MintBonus() {
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       console.log('gas--', gas)
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas, value: _ETHtAmountAndGas }),
+        () =>
+          apiCall.send({
+            from: _currentAccount,
+            gas,
+            value: _ETHtAmountAndGas,
+          }),
         {
           key: 'Mint',
           action: 'Mint',
@@ -257,9 +267,12 @@ export default function MintBonus() {
 
   useEffect(() => {
     initPage()
+  }, [selected])
+
+  useEffect(() => {
     getMinAmount()
     // handleGetAllMinAmount()
-  }, [selected, ETHtAmount])
+  }, [selected, slippage, ETHtAmount])
 
   return (
     <div className={styles.container}>
@@ -293,7 +306,7 @@ export default function MintBonus() {
         icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : undefined}
         selectColor="red"
-        placeholder={XETHtAmount.minout}
+        placeholder={XETHtAmount.minout_ETH}
         disabled
         type={isX ? '' : 'select'}
         className={styles.inputItem}
