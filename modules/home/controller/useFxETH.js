@@ -211,8 +211,9 @@ const useFxETH = () => {
 
       const maxXETHBonus = getMaxXETHBonus({
         MaxBaseInETH:
-          fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0 / 1e18,
+          fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0,
       })
+      console.log('maxXETHBonus---',maxXETHBonus)
       const maxXETHBonus_text = checkNotZoroNumOption(
         maxXETHBonus,
         fb4(maxXETHBonus, false, 0)

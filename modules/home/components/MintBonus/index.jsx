@@ -80,22 +80,25 @@ export default function MintBonus({ slippage }) {
     //   ethPrice
     // )
     let _useXETHBonus = 0
+    // console.log('mode1_maxBaseIn---', ETHtAmount, mode1_maxBaseIn, maxXETHBonus)
+    let _useXETHBonus_text = '-'
     if (cBN(ETHtAmount).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
       _useXETHBonus = maxXETHBonus
+      _useXETHBonus_text = checkNotZoroNumOption(_useXETHBonus, fb4(cBN(maxXETHBonus).toFixed(0, 1), false, 18))
+      console.log('mode1_maxBaseIn---', ETHtAmount, mode1_maxBaseIn, maxXETHBonus, '111')
     } else {
       _useXETHBonus = getMaxXETHBonus({
         MaxBaseInETH: ETHtAmount / 1e18,
       })
+      _useXETHBonus_text = checkNotZoroNumOption(_useXETHBonus, fb4(_useXETHBonus, false))
+      console.log('mode1_maxBaseIn---', ETHtAmount, mode1_maxBaseIn, maxXETHBonus, '222')
     }
-    const _useXETHBonus_text = checkNotZoroNum(_useXETHBonus)
-      ? fb4(_useXETHBonus, false, 0)
-      : 0
-    setDetail((pre) => {
-      return {
-        ...pre,
-        useXETHBonus: useXETHBonus_text,
-      }
-    })
+    // setDetail((pre) => {
+    //   return {
+    //     ...pre,
+    //     useXETHBonus: useXETHBonus_text,
+    //   }
+    // })
 
     return [fb4(_fee), _useXETHBonus_text]
   }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice, getMaxXETHBonus])
@@ -280,8 +283,8 @@ export default function MintBonus({ slippage }) {
   return (
     <div className={styles.container}>
       <BonusCard
-        title="8% bonus ends after mint"
-        amount="100,000,000"
+        title="bonus ends after mint"
+        amount={mode1_maxXTokenMintable_text}
         symbol="xETH"
       />
 

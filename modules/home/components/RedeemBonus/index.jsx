@@ -227,7 +227,7 @@ export default function RedeemBonus({ slippage }) {
   return (
     <div className={styles.container}>
       <BonusCard
-        title="8% bonus ends after redeem"
+        title="bonus ends after redeem"
         amount="100,000,000"
         symbol="fETH"
       />
