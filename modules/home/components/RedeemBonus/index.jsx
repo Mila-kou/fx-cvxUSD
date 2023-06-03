@@ -217,7 +217,7 @@ export default function RedeemBonus({ slippage }) {
 
   useEffect(() => {
     getMinAmount()
-  }, [selected, tokenAmount])
+  }, [selected, slippage, tokenAmount])
 
   return (
     <div className={styles.container}>

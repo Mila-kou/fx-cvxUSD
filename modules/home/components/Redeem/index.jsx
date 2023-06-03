@@ -221,7 +221,7 @@ export default function Redeem({ slippage }) {
 
   useEffect(() => {
     getMinAmount()
-  }, [selected, tokenAmount])
+  }, [selected, slippage, tokenAmount])
 
   return (
     <div className={styles.container}>

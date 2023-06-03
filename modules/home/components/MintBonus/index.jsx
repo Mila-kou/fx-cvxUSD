@@ -265,7 +265,7 @@ export default function MintBonus({ slippage }) {
   useEffect(() => {
     getMinAmount()
     // handleGetAllMinAmount()
-  }, [selected, ETHtAmount])
+  }, [selected, slippage, ETHtAmount])
 
   return (
     <div className={styles.container}>
