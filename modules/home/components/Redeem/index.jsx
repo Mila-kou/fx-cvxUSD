@@ -154,7 +154,7 @@ export default function Redeem({ slippage }) {
       }
       minout_ETH = await marketContract.methods
         .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
-        .call({ from: _currentAccount })
+        .call({ from: _currentAccount, from: _currentAccount })
 
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
