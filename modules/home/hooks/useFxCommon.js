@@ -7,7 +7,6 @@ import abis from '@/config/abi'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
-import useInfo from './useInfo'
 import { useGlobal } from '@/contexts/GlobalProvider'
 
 const useFxCommon = () => {
@@ -17,7 +16,6 @@ const useFxCommon = () => {
     const { fx_info } = useGlobal()
     console.log('fx_info--', fx_info)
     const { contract: treasuryContract } = useFX_Treasury()
-    const { baseInfo } = useInfo()
     const [systemInfo, setSystemInfo] = useState({
         s0: '',//初始化ETH价格
         initFNav: '1',//初始化fNav
