@@ -13,7 +13,11 @@
   }
 
   .action {
-    margin-top: 16px;
+    margin-top: 80px;
+  }
+
+  .yellow {
+    color: var(--yellow-color);
   }
 }
 
@@ -22,3 +26,4 @@
     width: calc(100vw - 60px) !important;
   }
 }
+

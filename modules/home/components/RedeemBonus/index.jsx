@@ -14,6 +14,7 @@ import useFxETH from '../../controller/useFxETH'
 import useApprove from '@/hooks/useApprove'
 import useFxCommon from '../../hooks/useFxCommon'
 import Button from '@/components/Button'
+import { DetailCell, BonusCard, NoticeCard } from '../Common'
 
 export default function RedeemBonus({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -224,47 +225,38 @@ export default function RedeemBonus({ slippage }) {
 
   return (
     <div className={styles.container}>
+      <BonusCard
+        title="8% bonus ends after redeem"
+        amount="100,000,000"
+        symbol="fETH"
+      />
+
       <BalanceInput
         placeholder="0"
         balance={fb4(tokens.fETH.balance, false)}
         symbol="fETH"
-        tip="Bonus+"
-        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
-        color={isF ? 'blue' : undefined}
-        type={isF ? '' : 'select'}
         className={styles.inputItem}
         usd={`$${fnav}`}
         maxAmount={tokens.fETH.balance}
         onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
-      {/* <BalanceInput
-        placeholder="0"
-        balance={fb4(tokens.xETH.balance, false)}
-        symbol="xETH"
-        tip="Bonus+"
-        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
-        color={isX ? 'red' : undefined}
-        selectColor="red"
-        type={isX ? '' : 'select'}
-        className={styles.inputItem}
-        usd={tokens.xETH.usd}
-        maxAmount={tokens.xETH.balance}
-        onChange={hanldeXETHAmountChanged}
-        onSelected={() => setSelected(1)}
-      /> */}
-      <div className={styles.arrow}>
-        <DownOutlined />
+
+      <div className={styles.details}>
+        <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
+        <DetailCell
+          title="Est. Received:"
+          content={[detail.ETH, detail.ETHTvl]}
+        />
+        <DetailCell title="Min. Received:" content={[]} />
+        <DetailCell
+          isGreen
+          title="System Bonus:"
+          content={[`+${detail.maxETHBonus || 0} ETH`]}
+        />
       </div>
 
-      <BalanceInput
-        symbol="ETH"
-        placeholder={minOutETHtAmount.minout_ETH}
-        usd={`$${ethPrice_text}`}
-        disabled
-        className={styles.inputItem}
-      />
-      <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
+      <NoticeCard />
 
       <div className={styles.action}>
         <Button

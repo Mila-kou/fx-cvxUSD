@@ -19,13 +19,13 @@ import styles from './styles.module.scss'
 import useFxETH from '../../controller/useFxETH'
 
 const tags = [
-  'Stability Mode',
+  'Rebalance Mode',
   'User Liquidation Mode',
   'Protocol Liquidation Mode',
 ]
 
 const prices = [
-  'Stability mode price:',
+  'Rebalance mode price:',
   'User liquidation price:',
   'Protocol liquidation price:',
   'Protocol liquidation price',
@@ -71,7 +71,7 @@ export default function SystemStatistics() {
 
       <div className={styles.wrap}>
         <div className={styles.item}>
-          <div className={styles.card}>
+          <div className={styles.card} data-color="blue">
             <div className={styles.title}>Backed Asset Value</div>
             <div className={cn(styles.value, styles.nums)}>
               <p>
@@ -98,7 +98,7 @@ export default function SystemStatistics() {
 
           <div className={styles.details} data-color="blue">
             <div className={styles.cell}>
-              <div>Stability Mode Price:</div>
+              <div>Rebalance Mode Price:</div>
               <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
@@ -113,7 +113,7 @@ export default function SystemStatistics() {
         </div>
 
         <div className={styles.item}>
-          <div className={styles.card}>
+          <div className={styles.card} data-color="red">
             <div className={styles.title}>fETH Collecteral Ratio</div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>

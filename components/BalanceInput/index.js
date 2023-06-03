@@ -3,6 +3,8 @@ import cn from 'classnames'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
 import useGlobal from '@/hooks/useGlobal'
+import FLogo from '../../public/images/f-s-logo.svg'
+import XLogo from '../../public/images/x-s-logo.svg'
 
 export const useClearInput = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
@@ -30,7 +32,7 @@ function BalanceInput(props) {
     disabled,
     type,
     color,
-    selectColor,
+    rightSuffix,
     onChange = () => {},
     onSelected = () => {},
   } = props
@@ -68,9 +70,15 @@ function BalanceInput(props) {
   }, [clearTrigger])
 
   return (
-    <div className={cn(styles.inputContent, className)} data-color={color}>
+    <div
+      className={cn(styles.inputContent, className)}
+      data-color={color}
+      onClick={type == 'select' ? onSelected : () => {}}
+    >
       <div className={styles.left}>
-        <img src={icon || '/tokens/crypto-icons-stack.svg#eth'} />
+        {symbol === 'fETH' && <FLogo />}
+        {symbol === 'xETH' && <XLogo />}
+        {symbol === 'ETH' && <img src="/tokens/crypto-icons-stack.svg#eth" />}
       </div>
       <div className={styles.symbolWrap}>
         <p className={styles.symbol}>
@@ -79,16 +87,14 @@ function BalanceInput(props) {
         <p className={styles.usd}>(~{usd})</p>
       </div>
       <div className={styles.right}>
-        {type == 'select' ? (
-          <div
-            className={styles.select}
-            onClick={onSelected}
-            data-color={selectColor}
-          >
-            Select
-          </div>
-        ) : (
+        {type == 'select' ? null : (
           <>
+            <input
+              onChange={handleInputChange}
+              value={val}
+              placeholder={placeholder}
+              disabled={disabled}
+            />
             {balance && (
               <p className={styles.balanceWrap}>
                 Balance: {balance}
@@ -97,12 +103,9 @@ function BalanceInput(props) {
                 </span>
               </p>
             )}
-            <input
-              onChange={handleInputChange}
-              value={val}
-              placeholder={placeholder}
-              disabled={disabled}
-            />
+            {rightSuffix ? (
+              <p className={styles.balanceWrap}>{rightSuffix}</p>
+            ) : null}
           </>
         )}
       </div>

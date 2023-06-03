@@ -9,10 +9,8 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import DetailCollapse from '../DetailCollapse'
 import { DetailCell } from '../Common'
 import styles from './styles.module.scss'
-import FLogo from '../../../../public/images/f-s-logo.svg'
 import useFxETH from '../../controller/useFxETH'
 
 export default function Mint({ slippage }) {
@@ -225,7 +223,6 @@ export default function Mint({ slippage }) {
         placeholder="0"
         symbol="ETH"
         balance={fb4(tokens.ETH.balance, false)}
-        // usd={tokens.ETH.usd}
         usd={`$${ethPrice_text}`}
         maxAmount={tokens.ETH.balance}
         onChange={hanldeETHAmountChanged}
@@ -235,28 +232,28 @@ export default function Mint({ slippage }) {
       </div>
       <BalanceInput
         symbol="fETH"
-        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
         color={isF ? 'blue' : ''}
         placeholder={FETHtAmount.minout_ETH}
         disabled
         className={styles.inputItem}
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
-        // onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
+        rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
         // tip="Bonus+"
-        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
         color={isX ? 'red' : ''}
-        selectColor="red"
         placeholder={XETHtAmount.minout_ETH}
         disabled
         className={styles.inputItem}
-        usd={`$${xnav} ${xETHBeta_text}x`}
+        usd={`$${xnav}`}
         type={isX ? '' : 'select'}
         onSelected={() => setSelected(1)}
+        rightSuffix={
+          <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
+        }
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />

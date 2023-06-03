@@ -272,7 +272,7 @@ export default function TestPage() {
     // const _bouns_n_x =
   }
 
-  // Stability Data
+  // Rebalance Data
   useEffect(() => {
     const _max_n_s = getMax_n_s({
       p_f: mintPageData.p_f,
@@ -357,7 +357,7 @@ export default function TestPage() {
         fETH Collecteral Ratio:{pageData.fETH_Collecteral_Ratio * 100} %<br />
         系统状态:{mintPageData.systemStatus}
         <br />
-        Stability Model Price: ${pageData.stabilityModePrice}
+        Rebalance Model Price: ${pageData.stabilityModePrice}
         <br />
         User Liquidation Model Price: ${pageData.userLiquidationModePrice}
         <br />
@@ -403,7 +403,7 @@ export default function TestPage() {
         <br />
         系统状态:{mintPageData.systemStatus}
         <br />
-        Stability Model Price: ${mintPageData.stabilityModePrice}
+        Rebalance Model Price: ${mintPageData.stabilityModePrice}
         <br />
         User Liquidation Model Price: ${mintPageData.userLiquidationModePrice}
         <br />

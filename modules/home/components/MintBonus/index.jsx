@@ -13,6 +13,7 @@ import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import useFxETH from '../../controller/useFxETH'
 import useFxCommon from '../../hooks/useFxCommon'
+import { DetailCell, BonusCard, NoticeCard } from '../Common'
 
 export default function MintBonus({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -276,6 +277,12 @@ export default function MintBonus({ slippage }) {
 
   return (
     <div className={styles.container}>
+      <BonusCard
+        title="8% bonus ends after mint"
+        amount="100,000,000"
+        symbol="xETH"
+      />
+
       <BalanceInput
         placeholder="0"
         symbol="ETH"
@@ -284,37 +291,22 @@ export default function MintBonus({ slippage }) {
         maxAmount={tokens.ETH.balance}
         onChange={hanldeETHAmountChanged}
       />
-      <div className={styles.arrow}>
-        <DownOutlined />
+
+      <div className={styles.details}>
+        <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
+        <DetailCell
+          title="Est. Received:"
+          content={[detail.xETH, detail.xETHTvl]}
+        />
+        <DetailCell title="Min. Received:" content={[]} />
+        <DetailCell
+          isGreen
+          title="System Bonus:"
+          content={[`+${detail.maxXETHBonus || 0} xETH`]}
+        />
       </div>
 
-      {/* <BalanceInput
-        symbol="fETH"
-        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
-        color={isF ? 'blue' : undefined}
-        placeholder={FETHtAmount.minout}
-        disabled
-        type={isF ? '' : 'select'}
-        className={styles.inputItem}
-        usd={`$${FETHtAmount.tvl}`}
-        // onChange={hanldeFETHAmountChanged}
-        onSelected={() => setSelected(0)}
-      /> */}
-      <BalanceInput
-        symbol="xETH"
-        tip="Bonus+"
-        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
-        color={isX ? 'red' : undefined}
-        selectColor="red"
-        placeholder={XETHtAmount.minout_ETH}
-        disabled
-        type={isX ? '' : 'select'}
-        className={styles.inputItem}
-        usd={`$${xnav} ${xETHBeta_text}x`}
-        onSelected={() => setSelected(1)}
-      />
-
-      <DetailCollapse open title={`Mint Fee: ${fee}%`} detail={detail} />
+      <NoticeCard />
 
       <div className={styles.action}>
         <Button
