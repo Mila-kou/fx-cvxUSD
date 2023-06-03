@@ -55,16 +55,16 @@ export default function HomePage() {
   }
   return (
     <div className={styles.container}>
-      {/* <div className={styles.item}>
+      <div className={styles.item}>
         <Swap />
-        New ETH Price: <SimpleInput
+        {/* New ETH Price: <SimpleInput
           onChange={handleChange_CurrentETHPrice}
         />{' '}
         <br />
         <Button width="100%" loading={priceLoading} onClick={handleSetPrice}>
           OK
-        </Button>
-      </div> */}
+        </Button> */}
+      </div>
       {showSystemStatistics ? (
         <div className={styles.item}>
           <SystemStatistics />
