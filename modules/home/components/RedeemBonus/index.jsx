@@ -10,7 +10,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
+import useFxETH from '../../controller/useFxETH'
 import useApprove from '@/hooks/useApprove'
 import useFxCommon from '../../hooks/useFxCommon'
 import Button from '@/components/Button'
@@ -44,7 +44,7 @@ export default function RedeemBonus({ slippage }) {
     mode2_maxETHBaseOut_text,
     maxETHBonus,
     maxETHBonus_Text,
-  } = usefxETH()
+  } = useFxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
@@ -105,7 +105,7 @@ export default function RedeemBonus({ slippage }) {
       }
     })
     return [fb4(_fee), _useETHBonus_text]
-  }, [isF, FETHtAmount, XETHtAmount, ethPrice])
+  }, [isF, FETHtAmount, XETHtAmount, ethPrice, getMaxETHBonus])
 
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -135,7 +135,7 @@ export default function RedeemBonus({ slippage }) {
     setDetail((pre) => {
       return {
         ETH: 0,
-        ETHTvl: 0
+        ETHTvl: 0,
       }
     })
   }
@@ -167,7 +167,10 @@ export default function RedeemBonus({ slippage }) {
       )
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toFixed(0, 1))
       setMinOutETHtAmount({
-        minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
+        minout_ETH: checkNotZoroNumOption(
+          minout_ETH,
+          fb4(minout_ETH.toString(10))
+        ),
         minout: fb4(_minOut_CBN.toFixed(0, 1)),
         tvl: _minOut_ETH_tvl,
       })

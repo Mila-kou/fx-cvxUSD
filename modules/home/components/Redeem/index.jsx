@@ -10,7 +10,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
+import useFxETH from '../../controller/useFxETH'
 import useApprove from '@/hooks/useApprove'
 import Button from '@/components/Button'
 import Tabs from '../Tabs'
@@ -40,8 +40,8 @@ export default function Redeem({ slippage }) {
     systemStatus,
     xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
-    baseInfo
-  } = usefxETH()
+    baseInfo,
+  } = useFxETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
@@ -66,8 +66,8 @@ export default function Redeem({ slippage }) {
   }, [selected, FETHtAmount, XETHtAmount])
 
   const [fee, feeUsd] = useMemo(() => {
-    let __redeemFETHFee = _redeemFETHFee;
-    let __redeemXETHFee = _redeemXETHFee;
+    let __redeemFETHFee = _redeemFETHFee
+    let __redeemXETHFee = _redeemXETHFee
     if (systemStatus == 0) {
       __redeemFETHFee = baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
       __redeemXETHFee = baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
@@ -116,10 +116,18 @@ export default function Redeem({ slippage }) {
     }
     let _xTokenRedeemInSystemStabilityModePaused = false
     if (isX) {
-      _xTokenRedeemInSystemStabilityModePaused = (xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0)
+      _xTokenRedeemInSystemStabilityModePaused =
+        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
     }
-    return !redeemPaused && _enableETH && !_xTokenRedeemInSystemStabilityModePaused
-  }, [tokenAmount, redeemPaused, xTokenRedeemInSystemStabilityModePaused, tokens.ETH.balance])
+    return (
+      !redeemPaused && _enableETH && !_xTokenRedeemInSystemStabilityModePaused
+    )
+  }, [
+    tokenAmount,
+    redeemPaused,
+    xTokenRedeemInSystemStabilityModePaused,
+    tokens.ETH.balance,
+  ])
 
   const initPage = () => {
     setFETHtAmount(0)
@@ -132,7 +140,7 @@ export default function Redeem({ slippage }) {
     setDetail((pre) => {
       return {
         ETH: 0,
-        ETHTvl: 0
+        ETHTvl: 0,
       }
     })
   }
@@ -162,7 +170,10 @@ export default function Redeem({ slippage }) {
       )
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
       setMinOutETHtAmount({
-        minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
+        minout_ETH: checkNotZoroNumOption(
+          minout_ETH,
+          fb4(minout_ETH.toString(10))
+        ),
         minout: fb4(_minOut_CBN.toString(10)),
         tvl: _minOut_ETH_tvl,
       })
@@ -170,7 +181,7 @@ export default function Redeem({ slippage }) {
         return {
           ...pre,
           ETH: fb4(_minOut_CBN.toString(10)),
-          ETHTvl: _minOut_ETH_tvl
+          ETHTvl: _minOut_ETH_tvl,
         }
       })
       return _minOut_CBN.toFixed(0, 1)
@@ -237,7 +248,7 @@ export default function Redeem({ slippage }) {
           usd={`$${fnav}`}
           maxAmount={tokens.fETH.balance}
           onChange={hanldeFETHAmountChanged}
-        // onSelected={() => setSelected(0)}
+          // onSelected={() => setSelected(0)}
         />
       )}
       {isX && (
@@ -252,7 +263,7 @@ export default function Redeem({ slippage }) {
           usd={`$${xnav} ${xETHBeta_text}x`}
           maxAmount={tokens.xETH.balance}
           onChange={hanldeXETHAmountChanged}
-        // onSelected={() => setSelected(1)}
+          // onSelected={() => setSelected(1)}
         />
       )}
       <div className={styles.arrow}>
@@ -269,7 +280,12 @@ export default function Redeem({ slippage }) {
       <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
 
       <div className={styles.action}>
-        <BtnWapper loading={redeeming} disabled={!canRedeem} onClick={handleRedeem} width="100%">
+        <BtnWapper
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleRedeem}
+          width="100%"
+        >
           Redeem
         </BtnWapper>
       </div>

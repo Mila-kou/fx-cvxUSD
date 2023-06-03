@@ -11,7 +11,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
+import useFxETH from '../../controller/useFxETH'
 import Tabs from '../Tabs'
 
 export default function Mint({ slippage }) {
@@ -55,8 +55,8 @@ export default function Mint({ slippage }) {
     fTokenMintInSystemStabilityModePaused,
     xETHBeta_text,
     systemStatus,
-    baseInfo
-  } = usefxETH()
+    baseInfo,
+  } = useFxETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -99,7 +99,7 @@ export default function Mint({ slippage }) {
         fETH: 0,
         fETHTvl: 0,
         xETH: 0,
-        xETHTvl: 0
+        xETHTvl: 0,
       }
     })
   }
@@ -115,9 +115,7 @@ export default function Mint({ slippage }) {
         const getGasPrice = await getGas()
         const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
         let _ETHtAmountAndGas
-        if (
-          cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-        ) {
+        if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)) {
           _ETHtAmountAndGas = cBN(tokens.ETH.balance)
             .minus(gasFee)
             .toFixed(0, 1)
@@ -146,7 +144,10 @@ export default function Mint({ slippage }) {
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
         setFETHtAmount({
-          minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
+          minout_ETH: checkNotZoroNumOption(
+            minout_ETH,
+            fb4(minout_ETH.toString(10))
+          ),
           minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_fETH_tvl,
         })
@@ -168,7 +169,10 @@ export default function Mint({ slippage }) {
           _minOut_CBN.multipliedBy(xnav).toString(10)
         )
         setXETHtAmount({
-          minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
+          minout_ETH: checkNotZoroNumOption(
+            minout_ETH,
+            fb4(minout_ETH.toString(10))
+          ),
           minout: fb4(_minOut_CBN.toString(10)),
           tvl: _minOut_xETH_tvl,
         })
@@ -200,9 +204,7 @@ export default function Mint({ slippage }) {
       const getGasPrice = await getGas()
       const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
       let _ETHtAmountAndGas
-      if (
-        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-      ) {
+      if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)) {
         _ETHtAmountAndGas = cBN(tokens.ETH.balance)
           .minus(gasFee)
           .toFixed(0, 1)
@@ -223,7 +225,12 @@ export default function Mint({ slippage }) {
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       console.log('gas----', gas)
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas, value: _ETHtAmountAndGas }),
+        () =>
+          apiCall.send({
+            from: _currentAccount,
+            gas,
+            value: _ETHtAmountAndGas,
+          }),
         {
           key: 'Mint',
           action: 'Mint',
@@ -242,7 +249,8 @@ export default function Mint({ slippage }) {
       cBN(ETHtAmount).isGreaterThan(0)
     let _fTokenMintInSystemStabilityModePaused = false
     if (isF) {
-      _fTokenMintInSystemStabilityModePaused = (fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0)
+      _fTokenMintInSystemStabilityModePaused =
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
     }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
     return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
@@ -283,8 +291,8 @@ export default function Mint({ slippage }) {
           disabled
           className={styles.inputItem}
           usd={`$${fnav}`}
-        // onChange={hanldeFETHAmountChanged}
-        // onSelected={() => setSelected(0)}
+          // onChange={hanldeFETHAmountChanged}
+          // onSelected={() => setSelected(0)}
         />
       )}
       {isX && (
@@ -298,7 +306,7 @@ export default function Mint({ slippage }) {
           disabled
           className={styles.inputItem}
           usd={`$${xnav} ${xETHBeta_text}x`}
-        // onSelected={() => setSelected(1)}
+          // onSelected={() => setSelected(1)}
         />
       )}
 
