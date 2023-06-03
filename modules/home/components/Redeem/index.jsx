@@ -45,8 +45,8 @@ export default function Redeem({ slippage }) {
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
   const [minOutETHtAmount, setMinOutETHtAmount] = useState({
-    minout: 0,
-    tvl: 0,
+    minout_slippage: 0,
+    minout_slippage_tvl: 0,
   })
 
   const [isF, isX, selectTokenAddress, tokenAmount] = useMemo(() => {
@@ -128,8 +128,8 @@ export default function Redeem({ slippage }) {
     clearInput()
     setMinOutETHtAmount({
       minout_ETH: '-',
-      minout: 0,
-      tvl: 0,
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
     })
   }
 
@@ -162,8 +162,8 @@ export default function Redeem({ slippage }) {
           minout_ETH,
           fb4(minout_ETH.toString(10))
         ),
-        minout: fb4(_minOut_CBN.toString(10)),
-        tvl: _minOut_ETH_tvl,
+        minout_slippage: fb4(_minOut_CBN.toString(10)),
+        minout_slippage_tvl: _minOut_ETH_tvl,
       })
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
@@ -258,7 +258,7 @@ export default function Redeem({ slippage }) {
       <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
       <DetailCell
         title="Min. Received:"
-        content={[minOutETHtAmount.minout_ETH, minOutETHtAmount.tvl]}
+        content={[minOutETHtAmount.minout_slippage, minOutETHtAmount.minout_slippage_tvl]}
       />
 
       <div className={styles.action}>

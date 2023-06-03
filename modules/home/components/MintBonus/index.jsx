@@ -48,12 +48,13 @@ export default function MintBonus({ slippage }) {
     systemStatus,
   } = useFxETH()
   const [FETHtAmount, setFETHtAmount] = useState({
-    amount: 0,
-    tvl: 0,
+    minout_slippage: 0,
+    minout_slippage_tvl: 0,
   })
   const [XETHtAmount, setXETHtAmount] = useState({
-    amount: 0,
-    tvl: 0,
+    minout_ETH: '-',
+    minout_slippage: 0,
+    minout_slippage_tvl: 0,
   })
   const [mintLoading, setMintLoading] = useState(false)
   const [detail, setDetail] = useState({
@@ -101,12 +102,13 @@ export default function MintBonus({ slippage }) {
 
   const initPage = () => {
     setFETHtAmount({
-      minout: 0,
-      tvl: 0,
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
     })
     setXETHtAmount({
-      minout: 0,
-      tvl: 0,
+      minout_ETH: '-',
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
     })
     setDetail((pre) => {
       return {
@@ -164,13 +166,13 @@ export default function MintBonus({ slippage }) {
             minout_ETH,
             fb4(minout_ETH.toString(10))
           ),
-          minout: fb4(_minOut_CBN.toString(10)),
-          tvl: _minOut_fETH_tvl,
+          minout_slippage: fb4(_minOut_CBN.toString(10)),
+          minout_slippage_tvl: _minOut_fETH_tvl,
         })
         setXETHtAmount({
           minout_ETH: '-',
-          minout: 0,
-          tvl: 0,
+          minout_slippage: 0,
+          minout_slippage_tvl: 0,
         })
         setDetail((pre) => {
           return {
@@ -189,13 +191,13 @@ export default function MintBonus({ slippage }) {
             minout_ETH,
             fb4(minout_ETH.toString(10))
           ),
-          minout: fb4(_minOut_CBN.toString(10)),
-          tvl: _minOut_xETH_tvl,
+          minout_slippage: fb4(_minOut_CBN.toString(10)),
+          minout_slippage_tvl: _minOut_xETH_tvl,
         })
         setFETHtAmount({
           minout_ETH: '-',
-          minout: 0,
-          tvl: 0,
+          minout_slippage: 0,
+          minout_slippage_tvl: 0,
         })
         setDetail((pre) => {
           return {
@@ -296,13 +298,13 @@ export default function MintBonus({ slippage }) {
         <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
         <DetailCell
           title="Est. Received:"
-          content={[detail.xETH, detail.xETHTvl]}
+          content={[XETHtAmount.minout_ETH]}
         />
-        <DetailCell title="Min. Received:" content={[]} />
+        <DetailCell title="Min. Received:" content={[XETHtAmount.minout_slippage, XETHtAmount.minout_slippage_tvl]} />
         <DetailCell
           isGreen
-          title="System Bonus:"
-          content={[`+${detail.maxXETHBonus || 0} xETH`]}
+          title="User Bonus:"
+          content={[`+${useXETHBonus_text} xETH`]}
         />
       </div>
 

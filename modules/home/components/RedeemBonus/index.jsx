@@ -50,8 +50,9 @@ export default function RedeemBonus({ slippage }) {
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
   const [minOutETHtAmount, setMinOutETHtAmount] = useState({
-    minout: 0,
-    tvl: 0,
+    minout_ETH: '-',
+    minout_slippage: 0,
+    minout_slippage_tvl: 0,
   })
   const [detail, setDetail] = useState({
     // bonus: 75,
@@ -130,8 +131,8 @@ export default function RedeemBonus({ slippage }) {
     setXETHtAmount(0)
     setMinOutETHtAmount({
       minout_ETH: '-',
-      minout: 0,
-      tvl: 0,
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
     })
     setDetail((pre) => {
       return {
@@ -172,8 +173,8 @@ export default function RedeemBonus({ slippage }) {
           minout_ETH,
           fb4(minout_ETH.toString(10))
         ),
-        minout: fb4(_minOut_CBN.toFixed(0, 1)),
-        tvl: _minOut_ETH_tvl,
+        minout_slippage: fb4(_minOut_CBN.toFixed(0, 1)),
+        minout_slippage_tvl: _minOut_ETH_tvl,
       })
       setDetail((pre) => {
         return {
@@ -246,9 +247,9 @@ export default function RedeemBonus({ slippage }) {
         <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
         <DetailCell
           title="Est. Received:"
-          content={[detail.ETH, detail.ETHTvl]}
+          content={[minOutETHtAmount.minout_ETH]}
         />
-        <DetailCell title="Min. Received:" content={[]} />
+        <DetailCell title="Min. Received:" content={[minOutETHtAmount.minout_slippage, minOutETHtAmount.minout_slippage_tvl]} />
         <DetailCell
           isGreen
           title="System Bonus:"

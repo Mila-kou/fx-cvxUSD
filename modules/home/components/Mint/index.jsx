@@ -23,14 +23,14 @@ export default function Mint({ slippage }) {
   const minGas = 234854
   const [ETHtAmount, setETHtAmount] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState({
-    minout: 0,
+    minout_slippage: 0,
     minout_ETH: 0,
-    tvl: 0,
+    minout_slippage_tvl: 0,
   })
   const [XETHtAmount, setXETHtAmount] = useState({
-    minout: 0,
+    minout_slippage: 0,
     minout_ETH: 0,
-    tvl: 0,
+    minout_slippage_tvl: 0,
   })
   const [mintLoading, setMintLoading] = useState(false)
   const {
@@ -58,8 +58,8 @@ export default function Mint({ slippage }) {
   const [received, receivedTvl] = useMemo(
     () =>
       isF
-        ? [FETHtAmount.minout_ETH, FETHtAmount.tvl]
-        : [XETHtAmount.minout_ETH, XETHtAmount.tvl],
+        ? [FETHtAmount.minout_slippage, FETHtAmount.minout_slippage_tvl]
+        : [XETHtAmount.minout_slippage, XETHtAmount.minout_slippage_tvl],
     [FETHtAmount, XETHtAmount, isF]
   )
 
@@ -130,8 +130,8 @@ export default function Mint({ slippage }) {
             minout_ETH,
             fb4(minout_ETH.toString(10))
           ),
-          minout: fb4(_minOut_CBN.toString(10)),
-          tvl: _minOut_fETH_tvl,
+          minout_slippage: fb4(_minOut_CBN.toString(10)),
+          minout_slippage_tvl: _minOut_fETH_tvl,
         })
       } else {
         const _minOut_xETH_tvl = fb4(
@@ -142,8 +142,8 @@ export default function Mint({ slippage }) {
             minout_ETH,
             fb4(minout_ETH.toString(10))
           ),
-          minout: fb4(_minOut_CBN.toString(10)),
-          tvl: _minOut_xETH_tvl,
+          minout_slippage: fb4(_minOut_CBN.toString(10)),
+          minout_slippage_tvl: _minOut_xETH_tvl,
         })
       }
       return _minOut_CBN.toFixed(0, 1)
@@ -239,7 +239,7 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-        rightSuffix="Beta 0.1"
+        // rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
