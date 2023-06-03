@@ -9,6 +9,7 @@ $radius: 10px;
   h2 {
     font-size: bold;
     font-size: 24px;
+    color: var(--main-text-color);
     span {
       margin-right: 10px;
     }
@@ -90,10 +91,10 @@ $radius: 10px;
         margin-top: 24px;
         padding: 20px 16px;
         &[data-color='blue'] {
-          background: var(--blue-color);
+          background: linear-gradient(45deg, #1d27a0 0%, #7f1ddb 98%);
         }
         &[data-color='red'] {
-          background: var(--red-color);
+          background: linear-gradient(45deg, #ee0647 0%, #f05a29 100%);
         }
       }
 
