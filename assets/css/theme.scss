@@ -35,6 +35,8 @@ body {
   --blue-background-color: rgba(126, 165, 255, 0.2);
 
   &[data-theme='red'] {
+    --blue-color: #1f14ed;
+
     background-image: url(../../public/images/red-bg.webp);
     color: #231f20;
 
