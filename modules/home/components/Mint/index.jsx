@@ -128,11 +128,11 @@ export default function Mint({ slippage }) {
         if (isF) {
           minout_ETH = await ethGatewayContract.methods
             .mintFToken(0)
-            .call({ value: _ETHtAmountAndGas })
+            .call({ value: _ETHtAmountAndGas, from: _currentAccount })
         } else {
           minout_ETH = await ethGatewayContract.methods
             .mintXToken(0)
-            .call({ value: _ETHtAmountAndGas })
+            .call({ value: _ETHtAmountAndGas, from: _currentAccount })
         }
       } else {
         minout_ETH = 0

@@ -143,14 +143,14 @@ export default function MintBonus({ slippage }) {
       if (isF) {
         minout_ETH = await ethGatewayContract.methods
           .mintFToken(0)
-          .call({ value: _ETHtAmountAndGas })
+          .call({ value: _ETHtAmountAndGas, from: _currentAccount })
       } else {
         // minout_ETH = await ethGatewayContract.methods
         //   .mintXToken(0)
         //   .call({ value: ETHtAmount })
         minout_ETH = await ethGatewayContract.methods
           .addBaseToken(0)
-          .call({ value: _ETHtAmountAndGas })
+          .call({ value: _ETHtAmountAndGas, from: _currentAccount })
       }
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
