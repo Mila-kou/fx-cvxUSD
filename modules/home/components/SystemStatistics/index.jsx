@@ -92,7 +92,7 @@ export default function SystemStatistics() {
               }}
               color="blue"
               symbol="fETH"
-              icon="/images/f-s-logo-white.svg"
+              icon="/images/f-s-logo.svg"
             />
           </div>
 
@@ -137,7 +137,7 @@ export default function SystemStatistics() {
               }}
               color="red"
               symbol="xETH"
-              icon="/images/x-s-logo-white.svg"
+              icon="/images/x-s-logo.svg"
             />
           </div>
 

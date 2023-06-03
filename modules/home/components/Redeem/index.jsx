@@ -237,7 +237,7 @@ export default function Redeem({ slippage }) {
         type={isX ? '' : 'select'}
         color={isX ? 'red' : ''}
         className={styles.inputItem}
-        usd={`$${xnav} ${xETHBeta_text}x`}
+        usd={`$${xnav}`}
         maxAmount={tokens.xETH.balance}
         onChange={hanldeXETHAmountChanged}
         onSelected={() => setSelected(1)}
