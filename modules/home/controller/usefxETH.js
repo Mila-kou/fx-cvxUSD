@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
-import useInfo from '../hooks/useInfo'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useFETH, useXETH, useFX_Market, useFX_Treasury, useFX_ETHGateway } from '@/hooks/useContracts'
 import useETHPrice from '../hooks/useETHPrice'
