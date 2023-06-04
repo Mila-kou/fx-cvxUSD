@@ -8,7 +8,6 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
@@ -138,7 +137,9 @@ export default function RedeemBonus({ slippage }) {
   }
 
   const canRedeem = useMemo(() => {
-    let _enableETH = cBN(tokenAmount).isGreaterThan(0) && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
+    let _enableETH =
+      cBN(tokenAmount).isGreaterThan(0) &&
+      cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     return !redeemPaused && _enableETH
   }, [tokenAmount, redeemPaused, tokens.ETH.balance])
 

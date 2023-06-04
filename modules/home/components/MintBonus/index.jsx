@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import Button from '@/components/Button'
-import { DownOutlined } from '@ant-design/icons'
 import BalanceInput from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
@@ -9,7 +8,6 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useFxCommon from '../../hooks/useFxCommon'
@@ -125,9 +123,7 @@ export default function MintBonus({ slippage }) {
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      const _minOut_xETH_tvl = fb4(
-        _minOut_CBN.multipliedBy(xnav).toString(10)
-      )
+      const _minOut_xETH_tvl = fb4(_minOut_CBN.multipliedBy(xnav).toString(10))
       setXETHtAmount({
         minout_ETH: checkNotZoroNumOption(
           minout_ETH,
@@ -136,7 +132,7 @@ export default function MintBonus({ slippage }) {
         minout_slippage: fb4(_minOut_CBN.toString(10)),
         minout_slippage_tvl: _minOut_xETH_tvl,
       })
-      
+
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)
