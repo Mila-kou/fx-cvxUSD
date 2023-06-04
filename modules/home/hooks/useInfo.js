@@ -27,9 +27,6 @@ const useInfo = () => {
             xTokenRedeemFeeRatio, marketConfig, incentiveConfig, mintPaused, redeemPaused } = marketContract.methods
         const wethContract = erc20Contract(config.tokens.weth)
         try {
-            // const aa = await fETHTotalSupplyFn().call();
-            // console.log('aa---', aa)
-            // return
             // const testApiCalls = [
             //     web3.eth.getBalance(treasuryAddress),
             //     web3.eth.getBalance("0x07dA2d30E26802ED65a52859a50872cfA615bD0A"),

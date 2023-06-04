@@ -1,11 +1,3 @@
-$blue: #2e2eff;
-$white: #fff;
-$black: #000;
-$lightBlue: #5ad0ff;
-
-$blockBg: #1b1c1e;
-$blockBgLight: #fff;
-
 @mixin overlay {
   height: 100vh;
   width: 100vw;
@@ -18,7 +10,7 @@ $blockBgLight: #fff;
 
 @mixin card {
   background: var(--background-color);
-  box-shadow: 0px 5px 10px 1px var(--box-shadow-color);
+  box-shadow: var(--card-box-shadow);
   border-radius: 6px;
 }
 
@@ -31,7 +23,7 @@ $blockBgLight: #fff;
     #1f14ed 1%,
     #f05a29 100%
   );
-  box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.5);
+  box-shadow: var(--btn-box-shadow);
   border-radius: 6px;
   border: none;
   display: flex;
@@ -58,10 +50,10 @@ $blockBgLight: #fff;
   cursor: pointer;
   &[data-active='true'] {
     opacity: 1;
-    background: #ffffff;
+    background: var(--tag-background-color);
     border-radius: 4px;
     color: var(--primary-color);
-    box-shadow: 0px 5px 10px 1px rgba(183, 169, 235, 0.5);
+    box-shadow: var(--tag-box-shadow);
   }
 }
 
@@ -69,14 +61,22 @@ $blockBgLight: #fff;
   display: inline-block;
   padding: 4px 8px;
   font-size: 14px;
-  background: #ffffff;
+  background: var(--tag-background-color);
   border-radius: 5px;
-  box-shadow: 0px 5px 5px 0px rgba(183, 169, 235, 0.5);
+  box-shadow: var(--tag-box-shadow);
 }
 
 @mixin max-button {
-  color: var(--primary-color);
-  text-decoration: underline;
+  color: var(--blue-color);
   font-size: 16px;
   cursor: pointer;
+}
+
+@mixin color-svg($color: #fff) {
+  svg {
+    g,
+    path {
+      fill: $color;
+    }
+  }
 }

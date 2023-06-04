@@ -3,29 +3,60 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
-  color: #231f20;
+  color: #fff;
 
-  --blue-color: #1f14ed;
+  --blue-color: #5488fe;
   --red-color: #fa2454;
   --yellow-color: #eeba04;
-  --green-color: #5adc03;
+  --green-color: #44b904;
+
+  --white-background-color: rgba(255, 255, 255, 0.8);
 
   background-image: url(../../public/images/blue-bg.webp);
 
-  --background-color: rgba(255, 255, 255, 0.8);
+  --background-color: rgba(0, 0, 0, 0.8);
   --panel-background-color: rgba(255, 255, 255, 0.9);
-  --main-text-color: #231f20;
-  --second-text-color: #a6a6ae;
 
-  --primary-color: #1f14ed;
+  --main-text-color: #fff;
+  --second-text-color: #a6a6ae;
+  --tag-background-color: rgba(126, 165, 255, 0.2);
+  --primary-color: #5488fe;
   --adverse-primary-color: #fa2454;
-  --box-shadow-color: rgba(183, 169, 235, 0.5);
+  --card-box-shadow: 0px 9px 36px 4px rgba(49, 24, 132, 0.5);
+  --input-box-shadow: none;
+  --btn-box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.01);
+  --tag-box-shadow: none;
+
+  --input-background-color: rgba(126, 165, 255, 0.2);
+
+  --notice-background-color: rgba(255, 217, 41, 0.5);
+
+  --red-background-color: rgba(61, 13, 13, 1);
+  --blue-background-color: rgba(126, 165, 255, 0.2);
 
   &[data-theme='red'] {
-    background-image: url(../../public/images/red-bg.webp);
+    --blue-color: #1f14ed;
 
+    background-image: url(../../public/images/red-bg.webp);
+    color: #231f20;
+
+    --background-color: rgba(255, 255, 255, 0.8);
+
+    --main-text-color: #231f20;
+    --second-text-color: #a6a6ae;
+    --tag-background-color: #fff;
     --primary-color: #fa2454;
-    --adverse-primary-color: #1f14ed;
-    --box-shadow-color: rgba(251, 194, 194, 0.5);
+    --adverse-primary-color: #5488fe;
+    --card-box-shadow: 0px 9px 36px 4px rgba(49, 24, 132, 0.5);
+    --input-box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
+    --btn-box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
+    --tag-box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
+
+    --input-background-color: rgba(255, 255, 255, 0.5);
+
+    --notice-background-color: rgba(248, 187, 0, 0.5);
+
+    --red-background-color: rgba(235, 182, 182, 0.8);
+    --blue-background-color: rgba(126, 165, 255, 0.46);
   }
 }

@@ -16,16 +16,16 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import Chart from '../Chart'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 
 const tags = [
-  'Stability Mode',
+  'Rebalance Mode',
   'User Liquidation Mode',
   'Protocol Liquidation Mode',
 ]
 
 const prices = [
-  'Stability mode price:',
+  'Rebalance mode price:',
   'User liquidation price:',
   'Protocol liquidation price:',
   'Protocol liquidation price',
@@ -52,7 +52,7 @@ export default function SystemStatistics() {
     ethPrice_text,
     lastPermissionedPrice,
     R,
-  } = usefxETH()
+  } = useETH()
   return (
     <div className={styles.container}>
       <h2 className={styles.header}>
@@ -71,7 +71,7 @@ export default function SystemStatistics() {
 
       <div className={styles.wrap}>
         <div className={styles.item}>
-          <div className={styles.card}>
+          <div className={styles.card} data-color="blue">
             <div className={styles.title}>Backed Asset Value</div>
             <div className={cn(styles.value, styles.nums)}>
               <p>
@@ -92,13 +92,13 @@ export default function SystemStatistics() {
               }}
               color="blue"
               symbol="fETH"
-              icon="/images/f-s-logo-white.svg"
+              icon="/images/f-s-logo.svg"
             />
           </div>
 
           <div className={styles.details} data-color="blue">
             <div className={styles.cell}>
-              <div>Stability Mode Price:</div>
+              <div>Rebalance Mode Price:</div>
               <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
@@ -113,7 +113,7 @@ export default function SystemStatistics() {
         </div>
 
         <div className={styles.item}>
-          <div className={styles.card}>
+          <div className={styles.card} data-color="red">
             <div className={styles.title}>fETH Collecteral Ratio</div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
@@ -138,7 +138,7 @@ export default function SystemStatistics() {
               }}
               color="red"
               symbol="xETH"
-              icon="/images/x-s-logo-white.svg"
+              icon="/images/x-s-logo.svg"
             />
           </div>
 

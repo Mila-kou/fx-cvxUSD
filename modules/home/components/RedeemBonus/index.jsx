@@ -8,12 +8,12 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import usefxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
 import useFxCommon from '../../hooks/useFxCommon'
 import Button from '@/components/Button'
+import { DetailCell, BonusCard, NoticeCard } from '../Common'
 
 export default function RedeemBonus({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -44,20 +44,21 @@ export default function RedeemBonus({ slippage }) {
     mode2_maxETHBaseOut_text,
     maxETHBonus,
     maxETHBonus_Text,
-  } = usefxETH()
+  } = useETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
   const [minOutETHtAmount, setMinOutETHtAmount] = useState({
-    minout: 0,
-    tvl: 0,
+    minout_ETH: '-',
+    minout_slippage: 0,
+    minout_slippage_tvl: 0,
   })
   const [detail, setDetail] = useState({
     // bonus: 75,
     // bonusRatio: 2.1,
     // ETH: 1,
     maxFTokenBaseIn: mode2_maxFTokenBaseIn_text,
-    maxETHBonus_Text: maxETHBonus_Text,
+    maxETHBonus_Text,
   })
 
   const [isF, isX, selectTokenAddress, tokenAmount] = useMemo(() => {
@@ -77,11 +78,6 @@ export default function RedeemBonus({ slippage }) {
 
   const [fee, useETHBonus_text] = useMemo(() => {
     let _redeemFee = _redeemFETHFee
-    if (isF) {
-      _redeemFee = _redeemFETHFee
-    } else {
-      _redeemFee = _redeemXETHFee
-    }
     // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
     const _fee = cBN(_redeemFee).multipliedBy(100)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
@@ -98,14 +94,14 @@ export default function RedeemBonus({ slippage }) {
       ? fb4(_userETHBonus, false, 0)
       : 0
 
-    setDetail((pre) => {
-      return {
-        ...pre,
-        useETHBonus: _useETHBonus_text,
-      }
-    })
+    // setDetail((pre) => {
+    //   return {
+    //     ...pre,
+    //     useETHBonus: _useETHBonus_text,
+    //   }
+    // })
     return [fb4(_fee), _useETHBonus_text]
-  }, [isF, FETHtAmount, XETHtAmount, ethPrice])
+  }, [FETHtAmount, XETHtAmount, ethPrice, getMaxETHBonus])
 
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -129,26 +125,13 @@ export default function RedeemBonus({ slippage }) {
     setXETHtAmount(0)
     setMinOutETHtAmount({
       minout_ETH: '-',
-      minout: 0,
-      tvl: 0,
-    })
-    setDetail((pre) => {
-      return {
-        ETH: 0,
-        ETHTvl: 0
-      }
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
     })
   }
 
   const canRedeem = useMemo(() => {
-    let _enableETH = cBN(tokenAmount).isGreaterThan(0)
-    if (isF) {
-      _enableETH =
-        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
-    } else {
-      _enableETH =
-        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
-    }
+    let _enableETH = cBN(tokenAmount).isGreaterThan(0) && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     return !redeemPaused && _enableETH
   }, [tokenAmount, redeemPaused, tokens.ETH.balance])
 
@@ -167,17 +150,20 @@ export default function RedeemBonus({ slippage }) {
       )
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toFixed(0, 1))
       setMinOutETHtAmount({
-        minout_ETH: checkNotZoroNumOption(minout_ETH, fb4(minout_ETH.toString(10))),
-        minout: fb4(_minOut_CBN.toFixed(0, 1)),
-        tvl: _minOut_ETH_tvl,
+        minout_ETH: checkNotZoroNumOption(
+          minout_ETH,
+          fb4(minout_ETH.toString(10))
+        ),
+        minout_slippage: fb4(_minOut_CBN.toFixed(0, 1)),
+        minout_slippage_tvl: _minOut_ETH_tvl,
       })
-      setDetail((pre) => {
-        return {
-          ...pre,
-          ETH: fb4(_minOut_CBN.toString(10)),
-          ETHTvl: _minOut_ETH_tvl,
-        }
-      })
+      // setDetail((pre) => {
+      //   return {
+      //     ...pre,
+      //     ETH: fb4(_minOut_CBN.toString(10)),
+      //     ETHTvl: _minOut_ETH_tvl,
+      //   }
+      // })
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)
@@ -221,47 +207,44 @@ export default function RedeemBonus({ slippage }) {
 
   return (
     <div className={styles.container}>
+      <BonusCard
+        title="bonus ends after redeem"
+        amount={mode2_maxFTokenBaseIn_text}
+        symbol="fETH"
+      />
+
       <BalanceInput
         placeholder="0"
         balance={fb4(tokens.fETH.balance, false)}
         symbol="fETH"
-        tip="Bonus+"
-        icon={`/images/f-s-logo${isF ? '-white' : ''}.svg`}
-        color={isF ? 'blue' : undefined}
-        type={isF ? '' : 'select'}
         className={styles.inputItem}
         usd={`$${fnav}`}
         maxAmount={tokens.fETH.balance}
         onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
       />
-      {/* <BalanceInput
-        placeholder="0"
-        balance={fb4(tokens.xETH.balance, false)}
-        symbol="xETH"
-        tip="Bonus+"
-        icon={`/images/x-s-logo${isX ? '-white' : ''}.svg`}
-        color={isX ? 'red' : undefined}
-        selectColor="red"
-        type={isX ? '' : 'select'}
-        className={styles.inputItem}
-        usd={tokens.xETH.usd}
-        maxAmount={tokens.xETH.balance}
-        onChange={hanldeXETHAmountChanged}
-        onSelected={() => setSelected(1)}
-      /> */}
-      <div className={styles.arrow}>
-        <DownOutlined />
+
+      <div className={styles.details}>
+        <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
+        <DetailCell
+          title="Est. Received:"
+          content={[minOutETHtAmount.minout_ETH]}
+        />
+        <DetailCell
+          title="Min. Received:"
+          content={[
+            minOutETHtAmount.minout_slippage,
+            minOutETHtAmount.minout_slippage_tvl,
+          ]}
+        />
+        <DetailCell
+          isGreen
+          title="System Bonus:"
+          content={[`+${maxETHBonus_Text || 0} ETH`]}
+        />
       </div>
 
-      <BalanceInput
-        symbol="ETH"
-        placeholder={minOutETHtAmount.minout_ETH}
-        usd={`$${ethPrice_text}`}
-        disabled
-        className={styles.inputItem}
-      />
-      <DetailCollapse title={`Redeem Fee: ${fee}%`} detail={detail} />
+      <NoticeCard />
 
       <div className={styles.action}>
         <Button

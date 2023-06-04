@@ -10,13 +10,13 @@ import styles from './styles.module.scss'
 import Mint from '../Mint'
 import MintBonus from '../MintBonus'
 import Redeem from '../Redeem'
-import usefxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 import RedeemBonus from '../RedeemBonus'
 import Tabs from '../Tabs'
 import SlippageModal, { useSlippage } from '../SlippageModal'
 
 export default function Swap() {
-  const { systemStatus } = usefxETH()
+  const { systemStatus } = useETH()
   const [bonusIndex, setBonusIndex] = useState(0)
   const [tab, setTab] = useState(0)
 

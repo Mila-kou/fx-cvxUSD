@@ -5,29 +5,33 @@
 
 .inputContent {
   padding: 12px 18px;
-  box-shadow: 0px 5px 10px 1px var(--box-shadow-color);
+  box-shadow: var(--input-box-shadow);
   display: flex;
   align-items: center;
   border-radius: 6px;
   justify-content: space-between;
   column-gap: 14px;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--input-background-color);
 
   &[data-color] {
     opacity: 0.9;
-    color: #fff;
-    --second-text-color: rgba(255, 255, 255, 0.5);
+    color: var(--second-text-color);
+    // --second-text-color: rgba(255, 255, 255, 0.5);
     .max {
       color: #fff !important;
     }
   }
+  @include color-svg(var(--second-text-color));
+
   &[data-color='blue'] {
-    background: linear-gradient(0deg, #1f14ed 0%, #165ddf 100%);
-    box-shadow: 0px 5px 10px 1px rgba(122, 84, 251, 0.5);
+    color: #fff;
+    background: linear-gradient(0deg, #4214ed 0%, #7316ff 100%);
+    @include color-svg();
   }
   &[data-color='red'] {
+    color: #fff;
     background: linear-gradient(0deg, #ff086b 0%, #f05a29 100%);
-    box-shadow: 0px 5px 10px 1px rgba(247, 130, 130, 0.5);
+    @include color-svg();
   }
 
   .left {
