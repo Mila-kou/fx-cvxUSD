@@ -265,8 +265,8 @@ const useFxCommon = () => {
         fx_info.baseInfo.marketConfigRes?.stabilityRatio
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio)
-            .div(1e18)
-            .toFixed(10)
+          .div(1e18)
+          .toString(10)
         : 1.3055
       console.log(
         'limitCollecteralRatio----',
@@ -314,8 +314,8 @@ const useFxCommon = () => {
         fx_info.baseInfo.marketConfigRes?.liquidationRatio
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio)
-            .div(1e18)
-            .toFixed(10)
+          .div(1e18)
+          .toString(10)
         : 1.2067
       const _p1 = cBN(1).minus(
         cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
@@ -354,8 +354,8 @@ const useFxCommon = () => {
         fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio)
-            .div(1e18)
-            .toFixed(10)
+          .div(1e18)
+          .toString(10)
         : 1.1449
       const _p1 = cBN(1).minus(
         cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
@@ -438,17 +438,17 @@ const useFxCommon = () => {
   const getMaxETHBonus = useCallback(
     (params) => {
       const λ_f =
-        fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio ||
+        fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio / 1e18 ||
         0 / 1e18
-      const fNav = fx_info.baseInfo.CurrentNavRes?._fNav || 0 / 1e18
-      const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
+      const fNav = fx_info.baseInfo.CurrentNavRes?._fNav / 1e18 || 0 / 1e18
+      const s = fx_info.baseInfo.CurrentNavRes?._baseNav / 1e18 || 0 / 1e18
 
       const _res = cBN(λ_f)
         .multipliedBy(params.MaxBaseInfETH)
         .multipliedBy(fNav)
         .div(s)
         .toString(10)
-      // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
+      console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
       return _res
     },
     [fx_info]
@@ -466,10 +466,10 @@ const useFxCommon = () => {
       // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
       try {
         const λ_f =
-          fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio ||
+          fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio / 1e18 ||
           0 / 1e18
-        const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
-        const xNav = fx_info.baseInfo.CurrentNavRes?._xNav || 0 / 1e18
+        const s = fx_info.baseInfo.CurrentNavRes?._baseNav / 1e18 || 0 / 1e18
+        const xNav = fx_info.baseInfo.CurrentNavRes?._xNav / 1e18 || 0 / 1e18
         // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
         return cBN(λ_f)
           .multipliedBy(params.MaxBaseInETH)
