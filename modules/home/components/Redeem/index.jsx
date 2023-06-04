@@ -9,7 +9,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH'
+import useFxETH from '../../controller/useFxETH2'
 import useApprove from '@/hooks/useApprove'
 import { DetailCell } from '../Common'
 
@@ -258,7 +258,10 @@ export default function Redeem({ slippage }) {
       <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
       <DetailCell
         title="Min. Received:"
-        content={[minOutETHtAmount.minout_slippage, minOutETHtAmount.minout_slippage_tvl]}
+        content={[
+          minOutETHtAmount.minout_slippage,
+          minOutETHtAmount.minout_slippage_tvl,
+        ]}
       />
 
       <div className={styles.action}>

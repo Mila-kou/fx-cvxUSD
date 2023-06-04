@@ -10,7 +10,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH'
+import useFxETH from '../../controller/useFxETH2'
 import useApprove from '@/hooks/useApprove'
 import useFxCommon from '../../hooks/useFxCommon'
 import Button from '@/components/Button'
@@ -249,7 +249,13 @@ export default function RedeemBonus({ slippage }) {
           title="Est. Received:"
           content={[minOutETHtAmount.minout_ETH]}
         />
-        <DetailCell title="Min. Received:" content={[minOutETHtAmount.minout_slippage, minOutETHtAmount.minout_slippage_tvl]} />
+        <DetailCell
+          title="Min. Received:"
+          content={[
+            minOutETHtAmount.minout_slippage,
+            minOutETHtAmount.minout_slippage_tvl,
+          ]}
+        />
         <DetailCell
           isGreen
           title="System Bonus:"

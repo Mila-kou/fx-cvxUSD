@@ -11,7 +11,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH'
+import useFxETH from '../../controller/useFxETH2'
 import useFxCommon from '../../hooks/useFxCommon'
 import { DetailCell, BonusCard, NoticeCard } from '../Common'
 
@@ -84,14 +84,32 @@ export default function MintBonus({ slippage }) {
     let _useXETHBonus_text = '-'
     if (cBN(ETHtAmount).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
       _useXETHBonus = maxXETHBonus
-      _useXETHBonus_text = checkNotZoroNumOption(_useXETHBonus, fb4(cBN(maxXETHBonus).toFixed(0, 1), false, 18))
-      console.log('mode1_maxBaseIn---', ETHtAmount, mode1_maxBaseIn, maxXETHBonus, '111')
+      _useXETHBonus_text = checkNotZoroNumOption(
+        _useXETHBonus,
+        fb4(cBN(maxXETHBonus).toFixed(0, 1), false, 18)
+      )
+      console.log(
+        'mode1_maxBaseIn---',
+        ETHtAmount,
+        mode1_maxBaseIn,
+        maxXETHBonus,
+        '111'
+      )
     } else {
       _useXETHBonus = getMaxXETHBonus({
         MaxBaseInETH: ETHtAmount / 1e18,
       })
-      _useXETHBonus_text = checkNotZoroNumOption(_useXETHBonus, fb4(_useXETHBonus, false))
-      console.log('mode1_maxBaseIn---', ETHtAmount, mode1_maxBaseIn, maxXETHBonus, '222')
+      _useXETHBonus_text = checkNotZoroNumOption(
+        _useXETHBonus,
+        fb4(_useXETHBonus, false)
+      )
+      console.log(
+        'mode1_maxBaseIn---',
+        ETHtAmount,
+        mode1_maxBaseIn,
+        maxXETHBonus,
+        '222'
+      )
     }
     // setDetail((pre) => {
     //   return {
@@ -299,11 +317,14 @@ export default function MintBonus({ slippage }) {
 
       <div className={styles.details}>
         <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
+        <DetailCell title="Est. Received:" content={[XETHtAmount.minout_ETH]} />
         <DetailCell
-          title="Est. Received:"
-          content={[XETHtAmount.minout_ETH]}
+          title="Min. Received:"
+          content={[
+            XETHtAmount.minout_slippage,
+            XETHtAmount.minout_slippage_tvl,
+          ]}
         />
-        <DetailCell title="Min. Received:" content={[XETHtAmount.minout_slippage, XETHtAmount.minout_slippage_tvl]} />
         <DetailCell
           isGreen
           title="User Bonus:"

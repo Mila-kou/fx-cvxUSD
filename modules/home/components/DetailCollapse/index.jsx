@@ -10,7 +10,7 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH'
+import useFxETH from '../../controller/useFxETH2'
 
 export default function DetailCollapse({ title, detail, open = false }) {
   const [showContent, { toggle }] = useToggle(open)
@@ -76,26 +76,32 @@ export default function DetailCollapse({ title, detail, open = false }) {
             {detail.useETHBonus ? (
               <p>
                 User Bonus:{' '}
-                <span className={styles.green}>
-                  +{detail.useETHBonus} ETH
-                </span>
+                <span className={styles.green}>+{detail.useETHBonus} ETH</span>
               </p>
             ) : null}
 
-
             {detail.ETH ? (
               <p>
-                Minimum received ETH: <span>{detail.ETH} ~ ${detail.ETHTvl}</span>
+                Minimum received ETH:{' '}
+                <span>
+                  {detail.ETH} ~ ${detail.ETHTvl}
+                </span>
               </p>
             ) : null}
             {detail.fETH ? (
               <p>
-                Minimum received fETH: <span>{detail.fETH} ~ ${detail.fETHTvl}</span>
+                Minimum received fETH:{' '}
+                <span>
+                  {detail.fETH} ~ ${detail.fETHTvl}
+                </span>
               </p>
             ) : null}
             {detail.xETH ? (
               <p>
-                Minimum received xETH: <span>{detail.xETH} ~${detail.xETHTvl}</span>
+                Minimum received xETH:{' '}
+                <span>
+                  {detail.xETH} ~${detail.xETHTvl}
+                </span>
               </p>
             ) : null}
           </div>
