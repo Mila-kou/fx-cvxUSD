@@ -11,7 +11,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import { DetailCell } from '../Common'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH2'
+import useFxETH from '../../controller/useFxETH'
 
 export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()

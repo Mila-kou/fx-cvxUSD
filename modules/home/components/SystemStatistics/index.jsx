@@ -16,7 +16,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import Chart from '../Chart'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH2'
+import useFxETH from '../../controller/useFxETH'
 
 const tags = [
   'Rebalance Mode',
