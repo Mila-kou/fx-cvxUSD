@@ -231,7 +231,7 @@ const useETH = () => {
 
       const maxETHBonus = getMaxETHBonus({
         MaxBaseInfETH:
-          fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable || 0 / 1e18,
+          (fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable || 0) / 1e18,
       })
       const maxETHBonus_Text = checkNotZoroNumOption(
         maxETHBonus,
