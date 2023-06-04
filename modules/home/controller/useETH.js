@@ -301,6 +301,7 @@ const useETH = () => {
     systemStatus,
     getMaxETHBonus,
     getMaxXETHBonus,
+    ethPrice,
   ])
   return {
     ...fxInfo,
