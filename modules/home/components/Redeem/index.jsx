@@ -9,7 +9,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH'
+import useFxETH from '../../controller/usefxETH'
 import useApprove from '@/hooks/useApprove'
 import { DetailCell } from '../Common'
 

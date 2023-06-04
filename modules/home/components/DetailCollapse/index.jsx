@@ -10,7 +10,7 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH'
+import useFxETH from '../../controller/usefxETH'
 
 export default function DetailCollapse({ title, detail, open = false }) {
   const [showContent, { toggle }] = useToggle(open)

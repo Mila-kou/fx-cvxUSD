@@ -15,13 +15,15 @@ const useFxETH = () => {
   const { fx_info: fxInfo } = useGlobal()
   // const ethPrice = useETHPrice()
   const {
-    getSystemStatus,
-    getMaxXETHBonus,
-    getMaxETHBonus,
+    systemStatus,
+    maxXETHBonus,
+    maxETHBonus,
     getStabilityModePrice,
     getUserLiquidationModePrice,
-    getProtocolLiquidationModePrice,
-    getXETHBeta,
+    protocolLiquidationModePrice,
+    xETHBeta,
+    xETHBeta_text,
+    ethPrice,
   } = useFxCommon()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
@@ -47,10 +49,6 @@ const useFxETH = () => {
       const _xnav = checkNotZoroNumOption(
         fxInfo.baseInfo.CurrentNavRes?._xNav,
         fb4(fxInfo.baseInfo.CurrentNavRes?._xNav)
-      )
-      const _ethPrice = checkNotZoroNumOption(
-        fxInfo.baseInfo.CurrentNavRes?._baseNav,
-        fxInfo.baseInfo.CurrentNavRes?._baseNav / 1e18
       )
       const _ethPrice_text = checkNotZoroNumOption(
         fxInfo.baseInfo.CurrentNavRes?._baseNav,
@@ -169,7 +167,7 @@ const useFxETH = () => {
       let StabilityModePrice = getStabilityModePrice({
         p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
         beta: fxInfo.baseInfo.betaRes / 1e18,
-        s: _ethPrice,
+        s: ethPrice,
       })
       StabilityModePrice = checkNotZoroNumOption(
         StabilityModePrice,
@@ -178,20 +176,15 @@ const useFxETH = () => {
       let UserLiquidationModePrice = getUserLiquidationModePrice({
         p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
         beta: fxInfo.baseInfo.betaRes / 1e18,
-        s: _ethPrice,
+        s: ethPrice,
       })
       UserLiquidationModePrice = checkNotZoroNumOption(
         UserLiquidationModePrice,
         fb4(UserLiquidationModePrice, false, 0, 2)
       )
-      let ProtocolLiquidationModePrice = getProtocolLiquidationModePrice({
-        p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
-        beta: fxInfo.baseInfo.betaRes / 1e18,
-        s: _ethPrice,
-      })
-      ProtocolLiquidationModePrice = checkNotZoroNumOption(
-        ProtocolLiquidationModePrice,
-        fb4(ProtocolLiquidationModePrice, false, 0, 2)
+      const ProtocolLiquidationModePrice = checkNotZoroNumOption(
+        protocolLiquidationModePrice,
+        fb4(protocolLiquidationModePrice, false, 0, 2)
       )
 
       const lastPermissionedPrice = checkNotZoroNumOption(
@@ -199,19 +192,12 @@ const useFxETH = () => {
         fb4(fxInfo.baseInfo.lastPermissionedPriceRes, false, 18, 2)
       )
 
-      const _systemStatus = getSystemStatus({
-        limitCollecteralRatio: fxInfo.baseInfo.collateralRatioRes / 1e18,
-      })
-
       let _R = getR({
         s: fxInfo.baseInfo.CurrentNavRes?._baseNav,
         s0: fxInfo.baseInfo.lastPermissionedPriceRes,
       })
       _R = fb4(checkNotZoroNumOption(_R, _R * 100), false, 0, 2)
 
-      const maxXETHBonus = getMaxXETHBonus({
-        MaxBaseInETH: fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0,
-      })
       console.log('maxXETHBonus---', maxXETHBonus)
       const maxXETHBonus_text = checkNotZoroNumOption(
         maxXETHBonus,
@@ -240,22 +226,16 @@ const useFxETH = () => {
         fb4(mode2_maxETHBaseOut)
       )
 
-      const maxETHBonus = getMaxETHBonus({
-        MaxBaseInfETH:
-          fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable || 0 / 1e18,
-      })
       const maxETHBonus_Text = checkNotZoroNumOption(
         maxETHBonus,
         fb4(maxETHBonus, false, 0)
       )
       console.log('maxETHBonus--', maxETHBonus, maxETHBonus_Text)
 
-      const [xETHBeta, xETHBeta_text] = getXETHBeta()
-
       return {
         fnav: _fnav,
         xnav: _xnav,
-        ethPrice: _ethPrice,
+        ethPrice,
         ethPrice_text: _ethPrice_text,
         fETHTotalSupply: _fETHTotalSupply,
         xETHTotalSupply: _xETHTotalSupply,
@@ -272,7 +252,7 @@ const useFxETH = () => {
         StabilityModePrice,
         UserLiquidationModePrice,
         ProtocolLiquidationModePrice,
-        systemStatus: _systemStatus,
+        systemStatus,
         lastPermissionedPrice,
         R: _R,
         mintPaused: fxInfo.baseInfo.mintPausedRes,
@@ -307,12 +287,13 @@ const useFxETH = () => {
   }, [
     fxInfo,
     getStabilityModePrice,
-    getXETHBeta,
+    xETHBeta,
+    xETHBeta_text,
     getUserLiquidationModePrice,
-    getProtocolLiquidationModePrice,
-    getSystemStatus,
-    getMaxETHBonus,
-    getMaxXETHBonus,
+    protocolLiquidationModePrice,
+    systemStatus,
+    maxETHBonus,
+    maxXETHBonus,
   ])
   return {
     ...fxInfo,

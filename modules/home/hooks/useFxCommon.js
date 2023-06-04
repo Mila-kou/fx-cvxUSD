@@ -243,6 +243,15 @@ const useFxCommon = () => {
   //   m_nx: '', //铸造xETH的数量
   // }
 
+  const ethPrice = useMemo(
+    () =>
+      checkNotZoroNumOption(
+        fx_info.baseInfo.CurrentNavRes?._baseNav,
+        fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
+      ),
+    [fx_info]
+  )
+
   /**
    * 获取StabilityMode 价格
    * s*(1-(1-p_f*30%)/(1-beta*p_f*30%))
@@ -338,157 +347,142 @@ const useFxCommon = () => {
    * @param {*} params
    * @returns
    */
-  const getProtocolLiquidationModePrice = useCallback(
-    (params) => {
-      // n_fETH* fnav(t0) / (n_ETH * ETH Price(t0))
-      const {
-        fETHTotalSupplyRes,
-        fNav0Res,
-        totalBaseTokenRes,
-        lastPermissionedPriceRes,
-      } = fx_info.baseInfo || {}
-      const adjust_Rho = cBN(fETHTotalSupplyRes)
-        .multipliedBy(fNav0Res)
-        .div(cBN(totalBaseTokenRes).multipliedBy(lastPermissionedPriceRes))
-      const limitCollecteralRatio = checkNotZoroNum(
-        fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio
-      )
-        ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio)
-            .div(1e18)
-            .toFixed(10)
-        : 1.1449
-      const _p1 = cBN(1).minus(
-        cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
-      )
-      const _p2 = cBN(1).minus(
-        cBN(params.beta)
-          .multipliedBy(adjust_Rho)
-          .multipliedBy(limitCollecteralRatio)
-      )
-      return cBN(lastPermissionedPriceRes)
-        .div(1e18)
-        .multipliedBy(cBN(1).minus(_p1.div(_p2)))
-        .toString(10)
-    },
-    [fx_info]
-  )
+  const protocolLiquidationModePrice = useMemo(() => {
+    // n_fETH* fnav(t0) / (n_ETH * ETH Price(t0))
+    const {
+      fETHTotalSupplyRes,
+      fNav0Res,
+      totalBaseTokenRes,
+      lastPermissionedPriceRes,
+    } = fx_info.baseInfo || {}
+    const adjust_Rho = cBN(fETHTotalSupplyRes)
+      .multipliedBy(fNav0Res)
+      .div(cBN(totalBaseTokenRes).multipliedBy(lastPermissionedPriceRes))
+    const limitCollecteralRatio = checkNotZoroNum(
+      fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio
+    )
+      ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio)
+          .div(1e18)
+          .toFixed(10)
+      : 1.1449
+    const _p1 = cBN(1).minus(
+      cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
+    )
+    const _p2 = cBN(1).minus(
+      cBN(fx_info.baseInfo.betaRes / 1e18)
+        .multipliedBy(adjust_Rho)
+        .multipliedBy(limitCollecteralRatio)
+    )
+    return cBN(lastPermissionedPriceRes)
+      .div(1e18)
+      .multipliedBy(cBN(1).minus(_p1.div(_p2)))
+      .toString(10)
+  }, [fx_info])
 
   /**
    * 系统状态
-   * @param {*} params
    */
-  const getSystemStatus = useCallback(
-    (params) => {
-      const limitCollecteralRatio_0 = cBN(
-        fx_info.baseInfo.marketConfigRes?.stabilityRatio
-      )
-        .div(1e18)
-        .toString(10)
-      const limitCollecteralRatio_1 = cBN(
-        fx_info.baseInfo.marketConfigRes?.liquidationRatio
-      )
-        .div(1e18)
-        .toString(10)
-      const limitCollecteralRatio_2 = cBN(
-        fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio
-      )
-        .div(1e18)
-        .toString(10)
-      console.log(
-        'limitCollecteralRatio-limitCollecteralRatio_0-limitCollecteralRatio_1-limitCollecteralRatio_2',
-        params.limitCollecteralRatio,
-        limitCollecteralRatio_0,
-        limitCollecteralRatio_1,
+  const systemStatus = useMemo(() => {
+    const limitCollecteralRatio_0 = cBN(
+      fx_info.baseInfo.marketConfigRes?.stabilityRatio
+    )
+      .div(1e18)
+      .toString(10)
+    const limitCollecteralRatio_1 = cBN(
+      fx_info.baseInfo.marketConfigRes?.liquidationRatio
+    )
+      .div(1e18)
+      .toString(10)
+    const limitCollecteralRatio_2 = cBN(
+      fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio
+    )
+      .div(1e18)
+      .toString(10)
+    const limitCollecteralRatio = fx_info.baseInfo.collateralRatioRes / 1e18
+    console.log(
+      'limitCollecteralRatio-limitCollecteralRatio_0-limitCollecteralRatio_1-limitCollecteralRatio_2',
+      limitCollecteralRatio,
+      limitCollecteralRatio_0,
+      limitCollecteralRatio_1,
+      limitCollecteralRatio_2
+    )
+    let _status = 0
+    if (
+      cBN(limitCollecteralRatio).isGreaterThanOrEqualTo(limitCollecteralRatio_0)
+    ) {
+      _status = 0
+    } else if (
+      cBN(limitCollecteralRatio).isGreaterThanOrEqualTo(
+        limitCollecteralRatio_1
+      ) &&
+      cBN(limitCollecteralRatio).isLessThan(limitCollecteralRatio_0)
+    ) {
+      _status = 1
+    } else if (
+      cBN(limitCollecteralRatio).isGreaterThanOrEqualTo(
         limitCollecteralRatio_2
-      )
-      let _status = 0
-      if (
-        cBN(params.limitCollecteralRatio).isGreaterThanOrEqualTo(
-          limitCollecteralRatio_0
-        )
-      ) {
-        _status = 0
-      } else if (
-        cBN(params.limitCollecteralRatio).isGreaterThanOrEqualTo(
-          limitCollecteralRatio_1
-        ) &&
-        cBN(params.limitCollecteralRatio).isLessThan(limitCollecteralRatio_0)
-      ) {
-        _status = 1
-      } else if (
-        cBN(params.limitCollecteralRatio).isGreaterThanOrEqualTo(
-          limitCollecteralRatio_2
-        ) &&
-        cBN(params.limitCollecteralRatio).isLessThan(limitCollecteralRatio_1)
-      ) {
-        _status = 2
-      } else {
-        _status = 3
-      }
-      return _status
-    },
-    [fx_info]
-  )
+      ) &&
+      cBN(limitCollecteralRatio).isLessThan(limitCollecteralRatio_1)
+    ) {
+      _status = 2
+    } else {
+      _status = 3
+    }
+    return _status
+  }, [fx_info])
 
   /**
    * redeem fETH
    * γ*Δnl_f*f/s
-   * @param {*} params
    */
-  const getMaxETHBonus = useCallback(
-    (params) => {
-      const λ_f =
-        fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio ||
-        0 / 1e18
-      const fNav = fx_info.baseInfo.CurrentNavRes?._fNav || 0 / 1e18
-      const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
+  const maxETHBonus = useMemo(() => {
+    const λ_f =
+      fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0 / 1e18
+    const fNav = fx_info.baseInfo.CurrentNavRes?._fNav || 0 / 1e18
+    const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
 
-      const _res = cBN(λ_f)
-        .multipliedBy(params.MaxBaseInfETH)
-        .multipliedBy(fNav)
-        .div(s)
-        .toString(10)
-      // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
-      return _res
-    },
-    [fx_info]
-  )
+    const _res = cBN(λ_f)
+      .multipliedBy(
+        fx_info.maxLiquidatableRes?._maxFTokenLiquidatable || 0 / 1e18
+      )
+      .multipliedBy(fNav)
+      .div(s)
+      .toString(10)
+    // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
+    return _res
+  }, [fx_info])
 
   /**
    * 最大XETH Bonus
-   * @param {*} params
-   * @returns
    */
-  const getMaxXETHBonus = useCallback(
-    (params) => {
-      // Incentive(xETH)= λ_f*Δn*s/x nav
-      // λ_f：8%，Δn：MaxBaseInETH，s1：ethPrice，xnav：xNav
-      // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
-      try {
-        const λ_f =
-          fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio ||
-          0 / 1e18
-        const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
-        const xNav = fx_info.baseInfo.CurrentNavRes?._xNav || 0 / 1e18
-        // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
-        return cBN(λ_f)
-          .multipliedBy(params.MaxBaseInETH)
-          .multipliedBy(s)
-          .div(xNav)
-          .toString(10)
-      } catch (error) {
-        console.log(error)
-        return 0
-      }
-    },
-    [fx_info]
-  )
+  const maxXETHBonus = useMemo(() => {
+    // Incentive(xETH)= λ_f*Δn*s/x nav
+    // λ_f：8%，Δn：MaxBaseInETH，s1：ethPrice，xnav：xNav
+    // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
+    try {
+      const λ_f =
+        fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio || 0 / 1e18
+      const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
+      const xNav = fx_info.baseInfo.CurrentNavRes?._xNav || 0 / 1e18
+      // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
+      return cBN(λ_f)
+        .multipliedBy(
+          fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0
+        )
+        .multipliedBy(s)
+        .div(xNav)
+        .toString(10)
+    } catch (error) {
+      console.log(error)
+      return 0
+    }
+  }, [fx_info])
 
   /**
    * 获取xETH倍数
    * (1-1/CR*(1+R)*Beta)/(1-1/CR)
    */
-  const getXETHBeta = useCallback(() => {
+  const [xETHBeta, xETHBeta_text] = useMemo(() => {
     const {
       collateralRatioRes,
       betaRes,
@@ -514,12 +508,14 @@ const useFxCommon = () => {
   return {
     getStabilityModePrice,
     getUserLiquidationModePrice,
-    getProtocolLiquidationModePrice,
-    getSystemStatus,
+    protocolLiquidationModePrice,
+    systemStatus,
 
-    getMaxETHBonus,
-    getMaxXETHBonus,
-    getXETHBeta,
+    maxETHBonus,
+    maxXETHBonus,
+    xETHBeta,
+    xETHBeta_text,
+    ethPrice,
   }
 }
 

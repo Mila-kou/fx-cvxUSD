@@ -11,7 +11,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/useFxETH'
+import useFxETH from '../../controller/usefxETH'
 import useFxCommon from '../../hooks/useFxCommon'
 import { DetailCell, BonusCard, NoticeCard } from '../Common'
 
