@@ -47,40 +47,16 @@ export default function MintBonus({ slippage }) {
     baseInfo,
     systemStatus,
   } = useETH()
-  const [FETHtAmount, setFETHtAmount] = useState({
-    minout_slippage: 0,
-    minout_slippage_tvl: 0,
-  })
   const [XETHtAmount, setXETHtAmount] = useState({
     minout_ETH: '-',
     minout_slippage: 0,
     minout_slippage_tvl: 0,
   })
   const [mintLoading, setMintLoading] = useState(false)
-  const [detail, setDetail] = useState({
-    // bonus: 75,
-    // bonusRatio: 2.1,
-    // fETH: 2,
-    // xETH: 3,
-    maxBaseIn: mode1_maxBaseIn_text,
-    maxXTokenMintable: mode1_maxXTokenMintable_text,
-    maxXETHBonus: maxXETHBonus_text,
-  })
-
-  const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
   const [fee, useXETHBonus_text] = useMemo(() => {
     const _fee = cBN(_mintXETHFee).multipliedBy(100).toString(10)
-    // const _fee = cBN(ETHtAmount).multipliedBy(_mintFETHFee).div(1e18)
-    // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
-    // console.log(
-    //   'ETHtAmount---_newETHPrice--',
-    //   _fee.toString(10),
-    //   _feeUsd.toString(10),
-    //   ethPrice
-    // )
     let _useXETHBonus = 0
-    // console.log('mode1_maxBaseIn---', ETHtAmount, mode1_maxBaseIn, maxXETHBonus)
     let _useXETHBonus_text = '-'
     if (cBN(ETHtAmount).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
       _useXETHBonus = maxXETHBonus
@@ -111,33 +87,14 @@ export default function MintBonus({ slippage }) {
         '222'
       )
     }
-    // setDetail((pre) => {
-    //   return {
-    //     ...pre,
-    //     useXETHBonus: useXETHBonus_text,
-    //   }
-    // })
-
     return [fb4(_fee), _useXETHBonus_text]
   }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice, getMaxXETHBonus])
 
   const initPage = () => {
-    setFETHtAmount({
-      minout_slippage: 0,
-      minout_slippage_tvl: 0,
-    })
     setXETHtAmount({
       minout_ETH: '-',
       minout_slippage: 0,
       minout_slippage_tvl: 0,
-    })
-    setDetail((pre) => {
-      return {
-        fETH: 0,
-        fETHTvl: 0,
-        xETH: 0,
-        xETHTvl: 0,
-      }
     })
   }
 
@@ -161,74 +118,25 @@ export default function MintBonus({ slippage }) {
       } else {
         _ETHtAmountAndGas = ETHtAmount
       }
-      let minout_ETH
-      if (isF) {
-        minout_ETH = await ethGatewayContract.methods
-          .mintFToken(0)
-          .call({ value: _ETHtAmountAndGas, from: _currentAccount })
-      } else {
-        // minout_ETH = await ethGatewayContract.methods
-        //   .mintXToken(0)
-        //   .call({ value: ETHtAmount })
-        minout_ETH = await ethGatewayContract.methods
-          .addBaseToken(0)
-          .call({ value: _ETHtAmountAndGas, from: _currentAccount })
-      }
+      let minout_ETH = await ethGatewayContract.methods
+        .addBaseToken(0)
+        .call({ value: _ETHtAmountAndGas, from: _currentAccount })
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      if (isF) {
-        const _minOut_fETH_tvl = fb4(
-          _minOut_CBN.multipliedBy(fnav).toString(10)
-        )
-        setFETHtAmount({
-          minout_ETH: checkNotZoroNumOption(
-            minout_ETH,
-            fb4(minout_ETH.toString(10))
-          ),
-          minout_slippage: fb4(_minOut_CBN.toString(10)),
-          minout_slippage_tvl: _minOut_fETH_tvl,
-        })
-        setXETHtAmount({
-          minout_ETH: '-',
-          minout_slippage: 0,
-          minout_slippage_tvl: 0,
-        })
-        setDetail((pre) => {
-          return {
-            ...pre,
-            fETH: fb4(_minOut_CBN.toString(10)),
-            fETHTvl: _minOut_fETH_tvl,
-            xETH: 0,
-          }
-        })
-      } else {
-        const _minOut_xETH_tvl = fb4(
-          _minOut_CBN.multipliedBy(xnav).toString(10)
-        )
-        setXETHtAmount({
-          minout_ETH: checkNotZoroNumOption(
-            minout_ETH,
-            fb4(minout_ETH.toString(10))
-          ),
-          minout_slippage: fb4(_minOut_CBN.toString(10)),
-          minout_slippage_tvl: _minOut_xETH_tvl,
-        })
-        setFETHtAmount({
-          minout_ETH: '-',
-          minout_slippage: 0,
-          minout_slippage_tvl: 0,
-        })
-        setDetail((pre) => {
-          return {
-            ...pre,
-            fETH: 0,
-            xETH: fb4(_minOut_CBN.toString(10)),
-            xETHTvl: _minOut_xETH_tvl,
-          }
-        })
-      }
+      const _minOut_xETH_tvl = fb4(
+        _minOut_CBN.multipliedBy(xnav).toString(10)
+      )
+      setXETHtAmount({
+        minout_ETH: checkNotZoroNumOption(
+          minout_ETH,
+          fb4(minout_ETH.toString(10))
+        ),
+        minout_slippage: fb4(_minOut_CBN.toString(10)),
+        minout_slippage_tvl: _minOut_xETH_tvl,
+      })
+      
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)
@@ -251,12 +159,7 @@ export default function MintBonus({ slippage }) {
       } else {
         _ETHtAmountAndGas = ETHtAmount
       }
-      let apiCall
-      if (isF) {
-        apiCall = await ethGatewayContract.methods.mintFToken(_minOut)
-      } else {
-        apiCall = await ethGatewayContract.methods.addBaseToken(_minOut)
-      }
+      let apiCall = await ethGatewayContract.methods.addBaseToken(_minOut)
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
         value: _ETHtAmountAndGas,

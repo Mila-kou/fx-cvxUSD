@@ -275,7 +275,7 @@ const useFxCommon = () => {
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio)
             .div(1e18)
-            .toFixed(10)
+            .toString(10)
         : 1.3055
       console.log(
         'limitCollecteralRatio----',
@@ -324,7 +324,7 @@ const useFxCommon = () => {
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio)
             .div(1e18)
-            .toFixed(10)
+            .toString(10)
         : 1.2067
       const _p1 = cBN(1).minus(
         cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
@@ -363,7 +363,7 @@ const useFxCommon = () => {
     )
       ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio)
           .div(1e18)
-          .toFixed(10)
+          .toString(10)
       : 1.1449
     const _p1 = cBN(1).minus(
       cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)

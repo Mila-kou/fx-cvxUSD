@@ -79,11 +79,6 @@ export default function RedeemBonus({ slippage }) {
 
   const [fee, useETHBonus_text] = useMemo(() => {
     let _redeemFee = _redeemFETHFee
-    if (isF) {
-      _redeemFee = _redeemFETHFee
-    } else {
-      _redeemFee = _redeemXETHFee
-    }
     // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
     const _fee = cBN(_redeemFee).multipliedBy(100)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
@@ -100,14 +95,14 @@ export default function RedeemBonus({ slippage }) {
       ? fb4(_userETHBonus, false, 0)
       : 0
 
-    setDetail((pre) => {
-      return {
-        ...pre,
-        useETHBonus: _useETHBonus_text,
-      }
-    })
+    // setDetail((pre) => {
+    //   return {
+    //     ...pre,
+    //     useETHBonus: _useETHBonus_text,
+    //   }
+    // })
     return [fb4(_fee), _useETHBonus_text]
-  }, [isF, FETHtAmount, XETHtAmount, ethPrice, getMaxETHBonus])
+  }, [FETHtAmount, XETHtAmount, ethPrice, getMaxETHBonus])
 
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -134,23 +129,16 @@ export default function RedeemBonus({ slippage }) {
       minout_slippage: 0,
       minout_slippage_tvl: 0,
     })
-    setDetail((pre) => {
-      return {
-        ETH: 0,
-        ETHTvl: 0,
-      }
-    })
+    // setDetail((pre) => {
+    //   return {
+    //     ETH: 0,
+    //     ETHTvl: 0,
+    //   }
+    // })
   }
 
   const canRedeem = useMemo(() => {
-    let _enableETH = cBN(tokenAmount).isGreaterThan(0)
-    if (isF) {
-      _enableETH =
-        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
-    } else {
-      _enableETH =
-        _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
-    }
+    let _enableETH = cBN(tokenAmount).isGreaterThan(0) && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
     return !redeemPaused && _enableETH
   }, [tokenAmount, redeemPaused, tokens.ETH.balance])
 
@@ -176,13 +164,13 @@ export default function RedeemBonus({ slippage }) {
         minout_slippage: fb4(_minOut_CBN.toFixed(0, 1)),
         minout_slippage_tvl: _minOut_ETH_tvl,
       })
-      setDetail((pre) => {
-        return {
-          ...pre,
-          ETH: fb4(_minOut_CBN.toString(10)),
-          ETHTvl: _minOut_ETH_tvl,
-        }
-      })
+      // setDetail((pre) => {
+      //   return {
+      //     ...pre,
+      //     ETH: fb4(_minOut_CBN.toString(10)),
+      //     ETHTvl: _minOut_ETH_tvl,
+      //   }
+      // })
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)
