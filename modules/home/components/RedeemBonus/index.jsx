@@ -228,7 +228,7 @@ export default function RedeemBonus({ slippage }) {
     <div className={styles.container}>
       <BonusCard
         title="bonus ends after redeem"
-        amount="100,000,000"
+        amount={mode2_maxFTokenBaseIn_text}
         symbol="fETH"
       />
 
@@ -253,7 +253,7 @@ export default function RedeemBonus({ slippage }) {
         <DetailCell
           isGreen
           title="System Bonus:"
-          content={[`+${detail.maxETHBonus || 0} ETH`]}
+          content={[`+${maxETHBonus_Text || 0} ETH`]}
         />
       </div>
 
