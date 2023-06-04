@@ -11,7 +11,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 import useFxCommon from '../../hooks/useFxCommon'
 import { DetailCell, BonusCard, NoticeCard } from '../Common'
 
@@ -46,7 +46,7 @@ export default function MintBonus({ slippage }) {
     xETHBeta_text,
     baseInfo,
     systemStatus,
-  } = useFxETH()
+  } = useETH()
   const [FETHtAmount, setFETHtAmount] = useState({
     minout_slippage: 0,
     minout_slippage_tvl: 0,

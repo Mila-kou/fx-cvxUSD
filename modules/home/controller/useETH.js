@@ -11,7 +11,7 @@ import useETHPrice from '../hooks/useETHPrice'
 import useFxCommon, { getR } from '../hooks/useFxCommon'
 import { useGlobal } from '@/contexts/GlobalProvider'
 
-const useFxETH = () => {
+const useETH = () => {
   const { fx_info: fxInfo } = useGlobal()
   // const ethPrice = useETHPrice()
   const {
@@ -315,4 +315,4 @@ const useFxETH = () => {
   }
 }
 
-export default useFxETH
+export default useETH
