@@ -11,7 +11,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import { DetailCell } from '../Common'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 
 export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -51,7 +51,7 @@ export default function Mint({ slippage }) {
     xETHBeta_text,
     systemStatus,
     baseInfo,
-  } = useFxETH()
+  } = useETH()
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 

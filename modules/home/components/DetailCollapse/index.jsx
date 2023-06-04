@@ -10,11 +10,11 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 
 export default function DetailCollapse({ title, detail, open = false }) {
   const [showContent, { toggle }] = useToggle(open)
-  const PageData = useFxETH()
+  const PageData = useETH()
   return (
     <div className={styles.container}>
       <div className={styles.header} onClick={toggle}>

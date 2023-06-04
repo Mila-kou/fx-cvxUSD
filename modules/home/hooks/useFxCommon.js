@@ -435,48 +435,52 @@ const useFxCommon = () => {
    * redeem fETH
    * γ*Δnl_f*f/s
    */
-  const maxETHBonus = useMemo(() => {
-    const λ_f =
-      fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0 / 1e18
-    const fNav = fx_info.baseInfo.CurrentNavRes?._fNav || 0 / 1e18
-    const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
+  const getMaxETHBonus = useCallback(
+    (params) => {
+      const λ_f =
+        fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio ||
+        0 / 1e18
+      const fNav = fx_info.baseInfo.CurrentNavRes?._fNav || 0 / 1e18
+      const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
 
-    const _res = cBN(λ_f)
-      .multipliedBy(
-        fx_info.maxLiquidatableRes?._maxFTokenLiquidatable || 0 / 1e18
-      )
-      .multipliedBy(fNav)
-      .div(s)
-      .toString(10)
-    // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
-    return _res
-  }, [fx_info])
+      const _res = cBN(λ_f)
+        .multipliedBy(params.MaxBaseInfETH)
+        .multipliedBy(fNav)
+        .div(s)
+        .toString(10)
+      // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
+      return _res
+    },
+    [fx_info]
+  )
 
   /**
    * 最大XETH Bonus
    */
-  const maxXETHBonus = useMemo(() => {
-    // Incentive(xETH)= λ_f*Δn*s/x nav
-    // λ_f：8%，Δn：MaxBaseInETH，s1：ethPrice，xnav：xNav
-    // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
-    try {
-      const λ_f =
-        fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio || 0 / 1e18
-      const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
-      const xNav = fx_info.baseInfo.CurrentNavRes?._xNav || 0 / 1e18
-      // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
-      return cBN(λ_f)
-        .multipliedBy(
-          fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0
-        )
-        .multipliedBy(s)
-        .div(xNav)
-        .toString(10)
-    } catch (error) {
-      console.log(error)
-      return 0
-    }
-  }, [fx_info])
+  const getMaxXETHBonus = useCallback(
+    (params) => {
+      // Incentive(xETH)= λ_f*Δn*s/x nav
+      // λ_f：8%，Δn：MaxBaseInETH，s1：ethPrice，xnav：xNav
+      // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
+      try {
+        const λ_f =
+          fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio ||
+          0 / 1e18
+        const s = fx_info.baseInfo.CurrentNavRes?._baseNav || 0 / 1e18
+        const xNav = fx_info.baseInfo.CurrentNavRes?._xNav || 0 / 1e18
+        // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
+        return cBN(λ_f)
+          .multipliedBy(params.MaxBaseInETH)
+          .multipliedBy(s)
+          .div(xNav)
+          .toString(10)
+      } catch (error) {
+        console.log(error)
+        return 0
+      }
+    },
+    [fx_info]
+  )
 
   /**
    * 获取xETH倍数
@@ -511,8 +515,8 @@ const useFxCommon = () => {
     protocolLiquidationModePrice,
     systemStatus,
 
-    maxETHBonus,
-    maxXETHBonus,
+    getMaxETHBonus,
+    getMaxXETHBonus,
     xETHBeta,
     xETHBeta_text,
     ethPrice,

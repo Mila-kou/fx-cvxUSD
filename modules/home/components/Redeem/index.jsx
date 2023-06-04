@@ -9,7 +9,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
 import { DetailCell } from '../Common'
 
@@ -40,7 +40,7 @@ export default function Redeem({ slippage }) {
     xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
     baseInfo,
-  } = useFxETH()
+  } = useETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)

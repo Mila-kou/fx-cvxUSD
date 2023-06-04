@@ -16,8 +16,8 @@ const useFxETH = () => {
   // const ethPrice = useETHPrice()
   const {
     systemStatus,
-    maxXETHBonus,
-    maxETHBonus,
+    getMaxXETHBonus,
+    getMaxETHBonus,
     getStabilityModePrice,
     getUserLiquidationModePrice,
     protocolLiquidationModePrice,
@@ -198,6 +198,9 @@ const useFxETH = () => {
       })
       _R = fb4(checkNotZoroNumOption(_R, _R * 100), false, 0, 2)
 
+      const maxXETHBonus = getMaxXETHBonus({
+        MaxBaseInETH: fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0,
+      })
       console.log('maxXETHBonus---', maxXETHBonus)
       const maxXETHBonus_text = checkNotZoroNumOption(
         maxXETHBonus,
@@ -226,6 +229,10 @@ const useFxETH = () => {
         fb4(mode2_maxETHBaseOut)
       )
 
+      const maxETHBonus = getMaxETHBonus({
+        MaxBaseInfETH:
+          fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable || 0 / 1e18,
+      })
       const maxETHBonus_Text = checkNotZoroNumOption(
         maxETHBonus,
         fb4(maxETHBonus, false, 0)
@@ -292,8 +299,8 @@ const useFxETH = () => {
     getUserLiquidationModePrice,
     protocolLiquidationModePrice,
     systemStatus,
-    maxETHBonus,
-    maxXETHBonus,
+    getMaxETHBonus,
+    getMaxXETHBonus,
   ])
   return {
     ...fxInfo,

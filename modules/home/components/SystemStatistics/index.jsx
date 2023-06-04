@@ -16,7 +16,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import Chart from '../Chart'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 
 const tags = [
   'Rebalance Mode',
@@ -52,7 +52,7 @@ export default function SystemStatistics() {
     ethPrice_text,
     lastPermissionedPrice,
     R,
-  } = useFxETH()
+  } = useETH()
   return (
     <div className={styles.container}>
       <h2 className={styles.header}>

@@ -10,7 +10,7 @@ import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import DetailCollapse from '../DetailCollapse'
 import styles from './styles.module.scss'
-import useFxETH from '../../controller/usefxETH'
+import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
 import useFxCommon from '../../hooks/useFxCommon'
 import Button from '@/components/Button'
@@ -45,7 +45,7 @@ export default function RedeemBonus({ slippage }) {
     mode2_maxETHBaseOut_text,
     maxETHBonus,
     maxETHBonus_Text,
-  } = useFxETH()
+  } = useETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
@@ -59,7 +59,7 @@ export default function RedeemBonus({ slippage }) {
     // bonusRatio: 2.1,
     // ETH: 1,
     maxFTokenBaseIn: mode2_maxFTokenBaseIn_text,
-    maxETHBonus_Text: maxETHBonus_Text,
+    maxETHBonus_Text,
   })
 
   const [isF, isX, selectTokenAddress, tokenAmount] = useMemo(() => {
