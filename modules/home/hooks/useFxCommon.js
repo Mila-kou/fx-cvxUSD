@@ -274,8 +274,8 @@ const useFxCommon = () => {
         fx_info.baseInfo.marketConfigRes?.stabilityRatio
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio)
-            .div(1e18)
-            .toString(10)
+          .div(1e18)
+          .toString(10)
         : 1.3055
       console.log(
         'limitCollecteralRatio----',
@@ -323,8 +323,8 @@ const useFxCommon = () => {
         fx_info.baseInfo.marketConfigRes?.liquidationRatio
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio)
-            .div(1e18)
-            .toString(10)
+          .div(1e18)
+          .toString(10)
         : 1.2067
       const _p1 = cBN(1).minus(
         cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
@@ -362,8 +362,8 @@ const useFxCommon = () => {
       fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio
     )
       ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio)
-          .div(1e18)
-          .toString(10)
+        .div(1e18)
+        .toString(10)
       : 1.1449
     const _p1 = cBN(1).minus(
       cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
@@ -438,8 +438,7 @@ const useFxCommon = () => {
   const getMaxETHBonus = useCallback(
     (params) => {
       const λ_f =
-        fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio ||
-        0 / 1e18
+        (fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0) / 1e18
       const fNav = (fx_info.baseInfo.CurrentNavRes?._fNav || 0) / 1e18
       const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
 
