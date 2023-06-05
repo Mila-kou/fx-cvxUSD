@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import Button from '@/components/Button'
-import BalanceInput from '@/components/BalanceInput'
+import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
@@ -17,6 +17,7 @@ export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
+  const [clearTrigger, clearInput] = useClearInput()
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
 
@@ -88,6 +89,11 @@ export default function Mint({ slippage }) {
 
   const hanldeETHAmountChanged = (v) => {
     setETHtAmount(v.toString(10))
+  }
+
+  const initPage = () => {
+    clearInput()
+    setETHtAmount(0)
   }
 
   const getMinAmount = async () => {
@@ -193,6 +199,7 @@ export default function Mint({ slippage }) {
         }
       )
       setMintLoading(false)
+      initPage()
     } catch (error) {
       setMintLoading(false)
       noPayableErrorAction(`error_mint`, error)
@@ -225,6 +232,7 @@ export default function Mint({ slippage }) {
         balance={fb4(tokens.ETH.balance, false)}
         usd={`$${ethPrice_text}`}
         maxAmount={tokens.ETH.balance}
+        clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
       />
       <div className={styles.arrow}>
@@ -239,7 +247,7 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-        // rightSuffix="Beta 0.1"
+      // rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
