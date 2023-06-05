@@ -44,6 +44,7 @@ export default function MintBonus({ slippage }) {
     xETHBeta_text,
     baseInfo,
     systemStatus,
+    stabilityIncentiveRatio_text
   } = useETH()
   const [XETHtAmount, setXETHtAmount] = useState({
     minout_ETH: '-',
@@ -200,7 +201,7 @@ export default function MintBonus({ slippage }) {
   return (
     <div className={styles.container}>
       <BonusCard
-        title="bonus ends after mint"
+        title={`${stabilityIncentiveRatio_text}% bonus ends after mint`}
         amount={mode1_maxXTokenMintable_text}
         symbol="xETH"
       />

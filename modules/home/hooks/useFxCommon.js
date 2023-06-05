@@ -433,10 +433,11 @@ const useFxCommon = () => {
 
   /**
    * redeem fETH
-   * γ*Δnl_f*f/s
+   * γ*Δnl_f*f*(1-fee)/s
    */
   const getMaxETHBonus = useCallback(
     (params) => {
+      // const _newMaxBaseInfETH = 
       const λ_f =
         (fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0) / 1e18
       const fNav = (fx_info.baseInfo.CurrentNavRes?._fNav || 0) / 1e18
@@ -445,6 +446,7 @@ const useFxCommon = () => {
       const _res = cBN(λ_f)
         .multipliedBy(params.MaxBaseInfETH)
         .multipliedBy(fNav)
+        .multipliedBy(cBN(1).minus(params.redeemFETHFee))
         .div(s)
         .toString(10)
       // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
@@ -455,6 +457,7 @@ const useFxCommon = () => {
 
   /**
    * 最大XETH Bonus
+   * λ_f*MaxBaseInETH*s/(1-fee)/xNav
    */
   const getMaxXETHBonus = useCallback(
     (params) => {
@@ -471,6 +474,7 @@ const useFxCommon = () => {
         return cBN(λ_f)
           .multipliedBy(params.MaxBaseInETH)
           .multipliedBy(s)
+          .div(cBN(1).minus(params.mintXETHFee))
           .div(xNav)
           .toString(10)
       } catch (error) {

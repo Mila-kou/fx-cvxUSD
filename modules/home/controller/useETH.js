@@ -200,6 +200,7 @@ const useETH = () => {
 
       const maxXETHBonus = getMaxXETHBonus({
         MaxBaseInETH: (fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0) / 1e18,
+        mintXETHFee: _mintXETHFee
       })
       console.log('maxXETHBonus---', maxXETHBonus)
       const maxXETHBonus_text = checkNotZoroNumOption(
@@ -232,11 +233,16 @@ const useETH = () => {
       const maxETHBonus = getMaxETHBonus({
         MaxBaseInfETH:
           (fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable || 0) / 1e18,
+        redeemFETHFee: (_redeemFETHFee || 0) / 1e18
       })
       const maxETHBonus_Text = checkNotZoroNumOption(
         maxETHBonus,
         fb4(maxETHBonus, false, 0)
       )
+
+      console.log('fxInfo.incentiveConfigRes---', fxInfo)
+      const stabilityIncentiveRatio_text = checkNotZoroNumOption(fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio, fb4(fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio * 100))
+      const liquidationIncentiveRatio_text = checkNotZoroNumOption(fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio, fb4(fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio * 100))
       console.log('maxETHBonus--', maxETHBonus, maxETHBonus_Text)
 
       return {
@@ -282,6 +288,9 @@ const useETH = () => {
         maxETHBonus_Text,
         xETHBeta,
         xETHBeta_text,
+
+        stabilityIncentiveRatio_text,
+        liquidationIncentiveRatio_text
       }
     } catch (error) {
       return {
