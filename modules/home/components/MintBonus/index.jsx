@@ -75,6 +75,7 @@ export default function MintBonus({ slippage }) {
       _useXETHBonus = getMaxXETHBonus({
         MaxBaseInETH: ETHtAmount / 1e18,
         mintXETHFee: (_mintXETHFee || 0) / 1e18,
+        maxXETHBonus,
         isUserType: true
       })
       _useXETHBonus_text = checkNotZoroNumOption(
