@@ -11,7 +11,7 @@ import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
-import { DetailCell } from '../Common'
+import { DetailCell, NoticeCard } from '../Common'
 
 export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -19,6 +19,9 @@ export default function Redeem({ slippage }) {
   const [redeeming, setRedeeming] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+
+  const [showDisabledNotice, setShowDisabledNotice] = useState(false)
+
   const {
     fETHAddress,
     xETHAddress,
@@ -263,6 +266,20 @@ export default function Redeem({ slippage }) {
           minOutETHtAmount.minout_slippage,
           minOutETHtAmount.minout_slippage_tvl,
         ]}
+      />
+
+      <NoticeCard
+        content={
+          showDisabledNotice
+            ? [
+                'If the bonus is fully distributed, ',
+                '1. You can receive part of the bonus and return the rest;',
+                '2. Or your transaction will fail.',
+              ]
+            : [
+                'fx governance decision to temporarily disabled Redeem functionality.',
+              ]
+        }
       />
 
       <div className={styles.action}>
