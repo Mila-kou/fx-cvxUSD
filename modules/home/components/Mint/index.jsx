@@ -219,7 +219,16 @@ export default function Mint({ slippage }) {
     }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
     return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
-  }, [ETHtAmount, mintPaused, isF, tokens.ETH.balance])
+  }, [ETHtAmount, mintPaused, fTokenMintInSystemStabilityModePaused, isF, tokens.ETH.balance])
+
+  useEffect(() => {
+    let _fTokenMintInSystemStabilityModePaused = false
+    if (isF) {
+      _fTokenMintInSystemStabilityModePaused =
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+    }
+    setShowDisabledNotice(mintPaused || _fTokenMintInSystemStabilityModePaused)
+  }, [mintPaused, fTokenMintInSystemStabilityModePaused])
 
   useEffect(() => {
     getMinAmount()
@@ -249,7 +258,7 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-        // rightSuffix="Beta 0.1"
+      // rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
@@ -268,19 +277,14 @@ export default function Mint({ slippage }) {
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
 
-      <NoticeCard
+      {showDisabledNotice && <NoticeCard
         content={
-          showDisabledNotice
-            ? [
-                'If the bonus is fully distributed, ',
-                '1. You can receive part of the bonus and return the rest;',
-                '2. Or your transaction will fail.',
-              ]
-            : [
-                'fx governance decision to temporarily disabled Mint functionality.',
-              ]
+          [
+            'fx governance decision to temporarily disabled Mint functionality.',
+          ]
         }
-      />
+      />}
+
 
       <div className={styles.action}>
         <Button

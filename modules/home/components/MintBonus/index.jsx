@@ -19,6 +19,7 @@ export default function MintBonus({ slippage }) {
   const { tokens } = useGlobal()
   const { getMaxXETHBonus } = useFxCommon()
   const [clearTrigger, clearInput] = useClearInput()
+  const [showDisabledNotice, setShowDisabledNotice] = useState(false)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
   const minGas = 260325
@@ -175,6 +176,10 @@ export default function MintBonus({ slippage }) {
   }, [ETHtAmount, mintPaused, tokens.ETH.balance])
 
   useEffect(() => {
+    setShowDisabledNotice(mintPaused)
+  }, [mintPaused])
+
+  useEffect(() => {
     initPage()
   }, [selected])
 
@@ -223,7 +228,19 @@ export default function MintBonus({ slippage }) {
         />
       </div>
 
-      <NoticeCard />
+      <NoticeCard
+        content={
+          showDisabledNotice
+            ? [
+              'fx governance decision to temporarily disabled Mint functionality.',
+            ]
+            : [
+              'If the bonus is fully distributed, ',
+              '1. You can receive part of the bonus and return the rest;',
+              '2. Or your transaction will fail.',
+            ]
+        }
+      />
 
       <div className={styles.action}>
         <Button

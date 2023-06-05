@@ -22,6 +22,7 @@ export default function RedeemBonus({ slippage }) {
   const { getMaxETHBonus } = useFxCommon()
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+  const [showDisabledNotice, setShowDisabledNotice] = useState(false)
   const {
     fETHAddress,
     xETHAddress,
@@ -139,6 +140,10 @@ export default function RedeemBonus({ slippage }) {
     return !redeemPaused && _enableETH
   }, [tokenAmount, redeemPaused, tokens.fETH.balance])
 
+  useEffect(() => {
+    setShowDisabledNotice(redeemPaused)
+  }, [redeemPaused])
+
   const getMinAmount = async () => {
     try {
       if (!checkNotZoroNum(tokenAmount)) {
@@ -253,8 +258,19 @@ export default function RedeemBonus({ slippage }) {
           content={[`+${useETHBonus_text || 0} ETH`]}
         />
       </div>
-
-      <NoticeCard />
+      <NoticeCard
+        content={
+          showDisabledNotice
+            ? [
+              'fx governance decision to temporarily disabled Redeem functionality.',
+            ]
+            : [
+              'If the bonus is fully distributed, ',
+              '1. You can receive part of the bonus and return the rest;',
+              '2. Or your transaction will fail.',
+            ]
+        }
+      />
 
       <div className={styles.action}>
         <BtnWapper

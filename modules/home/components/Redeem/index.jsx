@@ -125,6 +125,15 @@ export default function Redeem({ slippage }) {
     tokens.ETH.balance,
   ])
 
+  useEffect(() => {
+    let _xTokenRedeemInSystemStabilityModePaused = false
+    if (isX) {
+      _xTokenRedeemInSystemStabilityModePaused =
+        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
+    }
+    setShowDisabledNotice(redeemPaused || _xTokenRedeemInSystemStabilityModePaused)
+  }, [redeemPaused, xTokenRedeemInSystemStabilityModePaused])
+
   const initPage = () => {
     setFETHtAmount(0)
     setXETHtAmount(0)
@@ -268,19 +277,14 @@ export default function Redeem({ slippage }) {
         ]}
       />
 
-      <NoticeCard
-        content={
-          showDisabledNotice
-            ? [
-                'If the bonus is fully distributed, ',
-                '1. You can receive part of the bonus and return the rest;',
-                '2. Or your transaction will fail.',
-              ]
-            : [
-                'fx governance decision to temporarily disabled Redeem functionality.',
-              ]
+      {showDisabledNotice && <NoticeCard
+        content={[
+          'fx governance decision to temporarily disabled Redeem functionality.',
+        ]
         }
       />
+      }
+
 
       <div className={styles.action}>
         <BtnWapper
