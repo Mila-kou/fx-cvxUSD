@@ -443,13 +443,16 @@ const useFxCommon = () => {
       const fNav = (fx_info.baseInfo.CurrentNavRes?._fNav || 0) / 1e18
       const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
 
-      const _res = cBN(λ_f)
+      let _res = cBN(λ_f)
         .multipliedBy(params.MaxBaseInfETH)
         .multipliedBy(fNav)
         .multipliedBy(cBN(1).minus(params.redeemFETHFee))
         .div(s)
         .toString(10)
       // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
+      if (params.isUserType) {
+        _res = cBN(_res).isGreaterThan(params.maxETHBonus) ? params.maxETHBonus : _res
+      }
       return _res
     },
     [fx_info]

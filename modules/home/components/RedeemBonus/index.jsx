@@ -85,15 +85,12 @@ export default function RedeemBonus({ slippage }) {
     const _fee = cBN(_redeemFee).multipliedBy(100)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
 
-    let _userETHBonus = 0
-    if (cBN(tokenAmount).isGreaterThanOrEqualTo(mode2_maxFTokenBaseIn)) {
-      _userETHBonus = maxETHBonus
-    } else {
-      _userETHBonus = getMaxETHBonus({
-        MaxBaseInfETH: tokenAmount / 1e18,
-        redeemFETHFee: (_redeemFETHFee || 0) / 1e18
-      })
-    }
+    let _userETHBonus = getMaxETHBonus({
+      MaxBaseInfETH: tokenAmount / 1e18,
+      redeemFETHFee: (_redeemFETHFee || 0) / 1e18,
+      isUserType: true,
+      maxETHBonus
+    })
     const _useETHBonus_text = checkNotZoroNum(_userETHBonus)
       ? fb4(_userETHBonus, false, 0)
       : 0
