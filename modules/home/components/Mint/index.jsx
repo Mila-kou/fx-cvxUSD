@@ -9,7 +9,7 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import { DetailCell } from '../Common'
+import { DetailCell, NoticeCard } from '../Common'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 
@@ -20,6 +20,8 @@ export default function Mint({ slippage }) {
   const [clearTrigger, clearInput] = useClearInput()
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
+
+  const [showDisabledNotice, setShowDisabledNotice] = useState(false)
 
   const minGas = 234854
   const [ETHtAmount, setETHtAmount] = useState(0)
@@ -247,7 +249,7 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-      // rightSuffix="Beta 0.1"
+        // rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
@@ -265,6 +267,21 @@ export default function Mint({ slippage }) {
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
+
+      <NoticeCard
+        content={
+          showDisabledNotice
+            ? [
+                'If the bonus is fully distributed, ',
+                '1. You can receive part of the bonus and return the rest;',
+                '2. Or your transaction will fail.',
+              ]
+            : [
+                'fx governance decision to temporarily disabled Mint functionality.',
+              ]
+        }
+      />
+
       <div className={styles.action}>
         <Button
           width="100%"
