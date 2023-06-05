@@ -133,9 +133,9 @@ export default function RedeemBonus({ slippage }) {
   }
 
   const canRedeem = useMemo(() => {
-    let _enableETH = cBN(tokenAmount).isGreaterThan(0) && cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
+    let _enableETH = cBN(tokenAmount).isGreaterThan(0) && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
     return !redeemPaused && _enableETH
-  }, [tokenAmount, redeemPaused, tokens.ETH.balance])
+  }, [tokenAmount, redeemPaused, tokens.fETH.balance])
 
   const getMinAmount = async () => {
     try {
