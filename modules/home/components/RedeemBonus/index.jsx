@@ -44,6 +44,7 @@ export default function RedeemBonus({ slippage }) {
     mode2_maxETHBaseOut_text,
     maxETHBonus,
     maxETHBonus_Text,
+    liquidationIncentiveRatio_text
   } = useETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -208,7 +209,7 @@ export default function RedeemBonus({ slippage }) {
   return (
     <div className={styles.container}>
       <BonusCard
-        title="bonus ends after redeem"
+        title={`${liquidationIncentiveRatio_text}% bonus ends after redeem`}
         amount={mode2_maxFTokenBaseIn_text}
         symbol="fETH"
       />
