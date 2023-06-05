@@ -457,7 +457,7 @@ const useFxCommon = () => {
 
   /**
    * 最大XETH Bonus
-   * λ_f*MaxBaseInETH*s/(1-fee)/xNav
+   * λ_f*MaxBaseInETH*s/xNav
    */
   const getMaxXETHBonus = useCallback(
     (params) => {
@@ -474,7 +474,7 @@ const useFxCommon = () => {
         return cBN(λ_f)
           .multipliedBy(params.MaxBaseInETH)
           .multipliedBy(s)
-          .div(cBN(1).minus(params.mintXETHFee))
+          // .div(cBN(1).minus(params.mintXETHFee))
           .div(xNav)
           .toString(10)
       } catch (error) {
