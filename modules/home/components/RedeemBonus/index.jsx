@@ -89,6 +89,7 @@ export default function RedeemBonus({ slippage }) {
     } else {
       _userETHBonus = getMaxETHBonus({
         MaxBaseInfETH: tokenAmount / 1e18,
+        redeemFETHFee: (_redeemFETHFee || 0) / 1e18
       })
     }
     const _useETHBonus_text = checkNotZoroNum(_userETHBonus)
@@ -240,8 +241,13 @@ export default function RedeemBonus({ slippage }) {
         />
         <DetailCell
           isGreen
-          title="System Bonus:"
+          title="Max Bonus:"
           content={[`+${maxETHBonus_Text || 0} ETH`]}
+        />
+        <DetailCell
+          isGreen
+          title="User Bonus:"
+          content={[`+${useETHBonus_text || 0} ETH`]}
         />
       </div>
 

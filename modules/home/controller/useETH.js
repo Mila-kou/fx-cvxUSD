@@ -200,7 +200,7 @@ const useETH = () => {
 
       const maxXETHBonus = getMaxXETHBonus({
         MaxBaseInETH: (fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0) / 1e18,
-        mintXETHFee: _mintXETHFee
+        mintXETHFee: (_mintXETHFee || 0) / 1e18
       })
       console.log('maxXETHBonus---', maxXETHBonus)
       const maxXETHBonus_text = checkNotZoroNumOption(
