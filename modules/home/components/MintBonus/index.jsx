@@ -58,38 +58,16 @@ export default function MintBonus({ slippage }) {
     const _fee = cBN(_mintXETHFee).multipliedBy(100).toString(10)
     let _useXETHBonus = 0
     let _useXETHBonus_text = '-'
-    if (cBN(ETHtAmount).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
-      _useXETHBonus = maxXETHBonus
-      _useXETHBonus_text = checkNotZoroNumOption(
-        _useXETHBonus,
-        fb4(cBN(maxXETHBonus).toString(10), false, 0)
-      )
-      console.log(
-        'mode1_maxBaseIn---',
-        ETHtAmount,
-        mode1_maxBaseIn,
-        maxXETHBonus,
-        '111'
-      )
-    } else {
-      _useXETHBonus = getMaxXETHBonus({
-        MaxBaseInETH: ETHtAmount / 1e18,
-        mintXETHFee: (_mintXETHFee || 0) / 1e18,
-        maxXETHBonus,
-        isUserType: true
-      })
-      _useXETHBonus_text = checkNotZoroNumOption(
-        _useXETHBonus,
-        fb4(_useXETHBonus, false, 0)
-      )
-      console.log(
-        'mode1_maxBaseIn---',
-        ETHtAmount,
-        mode1_maxBaseIn,
-        maxXETHBonus,
-        '222'
-      )
-    }
+    _useXETHBonus = getMaxXETHBonus({
+      MaxBaseInETH: ETHtAmount / 1e18,
+      mintXETHFee: (_mintXETHFee || 0) / 1e18,
+      maxXETHBonus,
+      isUserType: true
+    })
+    _useXETHBonus_text = checkNotZoroNumOption(
+      _useXETHBonus,
+      fb4(_useXETHBonus, false, 0)
+    )
     return [fb4(_fee), _useXETHBonus_text]
   }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice, getMaxXETHBonus])
 
