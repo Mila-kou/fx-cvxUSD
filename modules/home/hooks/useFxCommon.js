@@ -466,8 +466,8 @@ const useFxCommon = () => {
       // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
       try {
         const λ_f =
-          fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio ||
-          0 / 1e18
+          (fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio ||
+            0) / 1e18
         const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
         const xNav = (fx_info.baseInfo.CurrentNavRes?._xNav || 0) / 1e18
         // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)

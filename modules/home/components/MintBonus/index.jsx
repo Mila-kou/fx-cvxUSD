@@ -61,7 +61,7 @@ export default function MintBonus({ slippage }) {
       _useXETHBonus = maxXETHBonus
       _useXETHBonus_text = checkNotZoroNumOption(
         _useXETHBonus,
-        fb4(cBN(maxXETHBonus).toFixed(0, 1), false, 18)
+        fb4(cBN(maxXETHBonus).toString(10), false, 0)
       )
       console.log(
         'mode1_maxBaseIn---',
@@ -73,10 +73,11 @@ export default function MintBonus({ slippage }) {
     } else {
       _useXETHBonus = getMaxXETHBonus({
         MaxBaseInETH: ETHtAmount / 1e18,
+        mintXETHFee: (_mintXETHFee || 0) / 1e18
       })
       _useXETHBonus_text = checkNotZoroNumOption(
         _useXETHBonus,
-        fb4(_useXETHBonus, false)
+        fb4(_useXETHBonus, false, 0)
       )
       console.log(
         'mode1_maxBaseIn---',
@@ -224,6 +225,11 @@ export default function MintBonus({ slippage }) {
             XETHtAmount.minout_slippage,
             XETHtAmount.minout_slippage_tvl,
           ]}
+        />
+        <DetailCell
+          isGreen
+          title="Max Bonus:"
+          content={[`+${maxXETHBonus_text} xETH`]}
         />
         <DetailCell
           isGreen
