@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
-import BalanceInput from '@/components/BalanceInput'
+import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
@@ -21,6 +21,7 @@ export default function RedeemBonus({ slippage }) {
   const [redeeming, setRedeeming] = useState(0)
   const { getMaxETHBonus } = useFxCommon()
   const { tokens } = useGlobal()
+  const [clearTrigger, clearInput] = useClearInput()
   const {
     fETHAddress,
     xETHAddress,
@@ -113,7 +114,7 @@ export default function RedeemBonus({ slippage }) {
     setXETHtAmount(v.toString(10))
   }
 
-  const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_ethGateway')
 
   const { BtnWapper } = useApprove({
     approveAmount: tokenAmount,
@@ -125,6 +126,7 @@ export default function RedeemBonus({ slippage }) {
   const initPage = () => {
     setFETHtAmount(0)
     setXETHtAmount(0)
+    clearInput()
     setMinOutETHtAmount({
       minout_ETH: '-',
       minout_slippage: 0,
@@ -177,9 +179,8 @@ export default function RedeemBonus({ slippage }) {
     try {
       setRedeeming(true)
       const _minoutETH = await getMinAmount()
-      const apiCall = await marketContract.methods.liquidate(
+      const apiCall = await ethGatewayContract.methods.liquidate(
         tokenAmount,
-        _currentAccount,
         _minoutETH
       )
       const estimatedGas = await apiCall.estimateGas({
@@ -194,6 +195,7 @@ export default function RedeemBonus({ slippage }) {
         }
       )
       setRedeeming(false)
+      initPage()
     } catch (e) {
       setRedeeming(false)
     }
@@ -224,6 +226,7 @@ export default function RedeemBonus({ slippage }) {
         maxAmount={tokens.fETH.balance}
         onChange={hanldeFETHAmountChanged}
         onSelected={() => setSelected(0)}
+        clearTrigger={clearTrigger}
       />
 
       <div className={styles.details}>
@@ -254,14 +257,14 @@ export default function RedeemBonus({ slippage }) {
       <NoticeCard />
 
       <div className={styles.action}>
-        <Button
+        <BtnWapper
           loading={redeeming}
           disabled={!canRedeem}
           onClick={handleLiquidate}
           width="100%"
         >
           Redeem
-        </Button>
+        </BtnWapper>
       </div>
     </div>
   )

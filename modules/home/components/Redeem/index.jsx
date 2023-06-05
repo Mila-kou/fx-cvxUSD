@@ -202,6 +202,7 @@ export default function Redeem({ slippage }) {
         }
       )
       setRedeeming(false)
+      initPage()
     } catch (e) {
       console.log('eeee---', e)
       setRedeeming(false)

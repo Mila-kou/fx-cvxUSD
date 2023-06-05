@@ -471,10 +471,11 @@ const useFxCommon = () => {
         const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
         const xNav = (fx_info.baseInfo.CurrentNavRes?._xNav || 0) / 1e18
         // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
+        const _userFee = params.isUserType ? cBN(1).minus(params.mintXETHFee) : 1
         return cBN(λ_f)
           .multipliedBy(params.MaxBaseInETH)
           .multipliedBy(s)
-          // .div(cBN(1).minus(params.mintXETHFee))
+          .div(_userFee)
           .div(xNav)
           .toString(10)
       } catch (error) {
