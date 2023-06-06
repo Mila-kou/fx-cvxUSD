@@ -25,11 +25,15 @@ export function BonusCard({ title, amount, symbol }) {
   )
 }
 
-export function NoticeCard() {
+export function NoticeCard({
+  content = ['If the bonus is fully distributed, your transaction will fail.'],
+}) {
   return (
     <div className={styles.noticeCard}>
       <p className={styles.title}>Notice</p>
-      <p>If the bonus is fully distributed, your transaction will fail.</p>
+      {content.map((item) => (
+        <p>{item}</p>
+      ))}
     </div>
   )
 }

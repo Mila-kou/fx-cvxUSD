@@ -443,13 +443,16 @@ const useFxCommon = () => {
       const fNav = (fx_info.baseInfo.CurrentNavRes?._fNav || 0) / 1e18
       const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
 
-      const _res = cBN(λ_f)
+      let _res = cBN(λ_f)
         .multipliedBy(params.MaxBaseInfETH)
         .multipliedBy(fNav)
         .multipliedBy(cBN(1).minus(params.redeemFETHFee))
         .div(s)
         .toString(10)
       // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
+      if (params.isUserType) {
+        _res = cBN(_res).isGreaterThan(params.maxETHBonus) ? params.maxETHBonus : _res
+      }
       return _res
     },
     [fx_info]
@@ -457,7 +460,7 @@ const useFxCommon = () => {
 
   /**
    * 最大XETH Bonus
-   * λ_f*MaxBaseInETH*s/(1-fee)/xNav
+   * λ_f*MaxBaseInETH*s/xNav
    */
   const getMaxXETHBonus = useCallback(
     (params) => {
@@ -471,12 +474,20 @@ const useFxCommon = () => {
         const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
         const xNav = (fx_info.baseInfo.CurrentNavRes?._xNav || 0) / 1e18
         // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
-        return cBN(λ_f)
-          .multipliedBy(params.MaxBaseInETH)
+        // const _userFee = params.isUserType ? cBN(1).minus(params.mintXETHFee) : 1
+        let _newMaxBaseInETH = params.MaxBaseInETH
+        if (params.isUserType) {
+          _newMaxBaseInETH = _newMaxBaseInETH * (1 - params.mintXETHFee)
+        }
+        let _res = cBN(λ_f)
+          .multipliedBy(_newMaxBaseInETH)
           .multipliedBy(s)
-          .div(cBN(1).minus(params.mintXETHFee))
           .div(xNav)
           .toString(10)
+        if (params.isUserType) {
+          _res = cBN(_res).isGreaterThan(params.maxXETHBonus) ? params.maxXETHBonus : _res
+        }
+        return _res
       } catch (error) {
         console.log(error)
         return 0

@@ -11,7 +11,7 @@ import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
-import { DetailCell } from '../Common'
+import { DetailCell, NoticeCard } from '../Common'
 
 export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -19,6 +19,9 @@ export default function Redeem({ slippage }) {
   const [redeeming, setRedeeming] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+
+  const [showDisabledNotice, setShowDisabledNotice] = useState(false)
+
   const {
     fETHAddress,
     xETHAddress,
@@ -122,6 +125,15 @@ export default function Redeem({ slippage }) {
     tokens.ETH.balance,
   ])
 
+  useEffect(() => {
+    let _xTokenRedeemInSystemStabilityModePaused = false
+    if (isX) {
+      _xTokenRedeemInSystemStabilityModePaused =
+        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
+    }
+    setShowDisabledNotice(redeemPaused || _xTokenRedeemInSystemStabilityModePaused)
+  }, [redeemPaused, isX, xTokenRedeemInSystemStabilityModePaused])
+
   const initPage = () => {
     setFETHtAmount(0)
     setXETHtAmount(0)
@@ -202,6 +214,7 @@ export default function Redeem({ slippage }) {
         }
       )
       setRedeeming(false)
+      initPage()
     } catch (e) {
       console.log('eeee---', e)
       setRedeeming(false)
@@ -263,6 +276,15 @@ export default function Redeem({ slippage }) {
           minOutETHtAmount.minout_slippage_tvl,
         ]}
       />
+
+      {showDisabledNotice && <NoticeCard
+        content={[
+          'fx governance decision to temporarily disabled Redeem functionality.',
+        ]
+        }
+      />
+      }
+
 
       <div className={styles.action}>
         <BtnWapper

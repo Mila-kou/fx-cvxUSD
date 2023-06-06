@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import Button from '@/components/Button'
-import BalanceInput from '@/components/BalanceInput'
+import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
@@ -18,6 +18,8 @@ export default function MintBonus({ slippage }) {
   const [selected, setSelected] = useState(1)
   const { tokens } = useGlobal()
   const { getMaxXETHBonus } = useFxCommon()
+  const [clearTrigger, clearInput] = useClearInput()
+  const [showDisabledNotice, setShowDisabledNotice] = useState(false)
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
   const minGas = 260325
@@ -44,7 +46,7 @@ export default function MintBonus({ slippage }) {
     xETHBeta_text,
     baseInfo,
     systemStatus,
-    stabilityIncentiveRatio_text
+    stabilityIncentiveRatio_text,
   } = useETH()
   const [XETHtAmount, setXETHtAmount] = useState({
     minout_ETH: '-',
@@ -57,40 +59,22 @@ export default function MintBonus({ slippage }) {
     const _fee = cBN(_mintXETHFee).multipliedBy(100).toString(10)
     let _useXETHBonus = 0
     let _useXETHBonus_text = '-'
-    if (cBN(ETHtAmount).isGreaterThanOrEqualTo(mode1_maxBaseIn)) {
-      _useXETHBonus = maxXETHBonus
-      _useXETHBonus_text = checkNotZoroNumOption(
-        _useXETHBonus,
-        fb4(cBN(maxXETHBonus).toString(10), false, 0)
-      )
-      console.log(
-        'mode1_maxBaseIn---',
-        ETHtAmount,
-        mode1_maxBaseIn,
-        maxXETHBonus,
-        '111'
-      )
-    } else {
-      _useXETHBonus = getMaxXETHBonus({
-        MaxBaseInETH: ETHtAmount / 1e18,
-        mintXETHFee: (_mintXETHFee || 0) / 1e18
-      })
-      _useXETHBonus_text = checkNotZoroNumOption(
-        _useXETHBonus,
-        fb4(_useXETHBonus, false, 0)
-      )
-      console.log(
-        'mode1_maxBaseIn---',
-        ETHtAmount,
-        mode1_maxBaseIn,
-        maxXETHBonus,
-        '222'
-      )
-    }
+    _useXETHBonus = getMaxXETHBonus({
+      MaxBaseInETH: ETHtAmount / 1e18,
+      mintXETHFee: (_mintXETHFee || 0) / 1e18,
+      maxXETHBonus,
+      isUserType: true,
+    })
+    _useXETHBonus_text = checkNotZoroNumOption(
+      _useXETHBonus,
+      fb4(_useXETHBonus, false, 0)
+    )
     return [fb4(_fee), _useXETHBonus_text]
   }, [ETHtAmount, maxXETHBonus, mode1_maxBaseIn, ethPrice, getMaxXETHBonus])
 
   const initPage = () => {
+    setETHtAmount(0)
+    clearInput()
     setXETHtAmount({
       minout_ETH: '-',
       minout_slippage: 0,
@@ -177,6 +161,7 @@ export default function MintBonus({ slippage }) {
         }
       )
       setMintLoading(false)
+      initPage()
     } catch (error) {
       setMintLoading(false)
       noPayableErrorAction(`error_mint`, error)
@@ -189,6 +174,10 @@ export default function MintBonus({ slippage }) {
       cBN(ETHtAmount).isGreaterThan(0)
     return !mintPaused && _enableETH
   }, [ETHtAmount, mintPaused, tokens.ETH.balance])
+
+  useEffect(() => {
+    setShowDisabledNotice(mintPaused)
+  }, [mintPaused])
 
   useEffect(() => {
     initPage()
@@ -213,6 +202,7 @@ export default function MintBonus({ slippage }) {
         balance={fb4(tokens.ETH.balance, false)}
         usd={`$${ethPrice_text}`}
         maxAmount={tokens.ETH.balance}
+        clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
       />
 
@@ -238,7 +228,17 @@ export default function MintBonus({ slippage }) {
         />
       </div>
 
-      <NoticeCard />
+      <NoticeCard
+        content={
+          showDisabledNotice
+            ? [
+                'fx governance decision to temporarily disabled Mint functionality.',
+              ]
+            : [
+                'Excess payments will be refunded if rewards are fully allocated.',
+              ]
+        }
+      />
 
       <div className={styles.action}>
         <Button
