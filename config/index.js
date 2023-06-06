@@ -1,106 +1,40 @@
-/* eslint-disable global-require */
+import ethereum from './network/ethereum'
+import mainnetFork from './network/mainnet-fork'
+import sepolia from './network/sepolia'
 
-// Configs irrelated to network
-const CHAIN_MAPPING = {
-  1: 'Mainnet',
-  3: 'Ropsten',
-  42: 'Kovan',
-  4: 'Rinkeby',
-  128: 'Heco',
-  256: 'Heco Test',
-  11155111: 'Sepolia',
-}
+const isForkEnv = process.env.NETWORK_ENV === 'mainnet-fork'
 
-const explorerUri = 'http://www.etherscan.io'
+const chainMap = isForkEnv
+  ? { [mainnetFork.chainInfo.id]: mainnetFork }
+  : {
+      [ethereum.chainInfo.id]: ethereum,
+      [sepolia.chainInfo.id]: sepolia,
+    }
 
-const enableCachedLpPrice = false
+const allowChains = Object.values(chainMap).map((item) => item.chainInfo)
 
-const isServerData = true
+const concentratorAPI = isForkEnv
+  ? 'https://apitest.aladdin.club'
+  : `https://api.aladdin.club`
 
-export const ChainsInfo = {
-  1: {
-    chainId: 1,
-    chainName: 'Ethereum',
-    shortName: 'Ethereum',
-    rpcUrls: ['https://main-rpc.linkpool.io'],
-    nativeCurrency: {
-      name: 'ETH',
-      symbol: 'ETH',
-      decimals: 18,
-    },
-    blockExplorerUrl: 'https://etherscan.io/',
-  },
-  11155111: {
-    chainId: 11155111,
-    chainName: 'Sepolia',
-    shortName: 'Sepolia',
-    rpcUrls: ['https://rpc.sepolia.org'],
-    nativeCurrency: {
-      name: 'SepoliaETH',
-      symbol: 'SepoliaETH',
-      decimals: 18,
-    },
-    blockExplorerUrl: 'https://etherscan.io/',
-  },
-}
-
-const ALLOWS_CHAINS = [1, 10548]
-
-console.log(process.env.NETWORK_ENV, '???')
-
-const NET_STATUS = {
-  checkUser: 3,
-  checkNetWork: 2,
-  checkWeb3: 1,
-  err: 0,
-}
-
-const coingeckoURL = 'https://api.coingecko.com/api/v3'
-
-const API = `https://api.aladdin.club/api/`
-const concentratorAPI =
-  process.env.NETWORK_ENV === 'mainnet-fork'
-    ? 'https://apitest.aladdin.club'
-    : `https://api.aladdin.club`
-
-const stakingStartTime = 1631289693000
 const zeroAddress = '0x0000000000000000000000000000000000000000'
 const defaultAddress = '0x1111111111111111111111111111111111111111'
 const uint256Max =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-const SECONDS_PER_YEAR = '31536000'
 
-let envConf = {}
-
-switch (process.env.NETWORK_ENV) {
-  case 'mainnet':
-    envConf = require('./mainnet').default
-    break
-  case 'mainnet-fork':
-    envConf = require('./mainnet-fork').default
-    break
-  case 'sepolia':
-    envConf = require('./sepolia').default
-    break
-  default:
-    envConf = require('./mainnet').default
-}
-// envConf = mainConfig
-
-export default {
+const config = {
   concentratorAPI,
-  enableCachedLpPrice,
-  explorerUri,
-  coingeckoURL,
-  API,
-  NET_STATUS,
-  CHAIN_MAPPING,
-  ALLOWS_CHAINS,
   zeroAddress,
   defaultAddress,
-  ...envConf,
-  stakingStartTime,
-  isServerData,
+  allowChains,
   uint256Max,
-  SECONDS_PER_YEAR,
+  ...Object.values(chainMap)[0],
 }
+
+export const setNetwork = (chainId) => {
+  if (chainMap[chainId]) {
+    Object.assign(config, chainMap[chainId])
+  }
+}
+
+export default config

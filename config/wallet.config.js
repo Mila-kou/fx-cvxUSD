@@ -5,6 +5,7 @@ import walletConnectModule from '@web3-onboard/walletconnect'
 import coinbaseModule from '@web3-onboard/coinbase'
 import trezorModule from '@web3-onboard/trezor'
 import trustModule from '@web3-onboard/trust'
+import config from '@/config/index'
 
 const injected = injectedModule()
 const ledger = ledgerModule()
@@ -38,14 +39,7 @@ export const initWeb3Onboard = init({
     ledger,
     trust,
   ],
-  chains: [
-    {
-      id: '0x1',
-      token: 'ETH',
-      label: 'Ethereum Mainnet',
-      rpcUrl: `https://eth-mainnet.alchemyapi.io/v2/NYoZTYs7oGkwlUItqoSHJeqpjqtlRT6m`,
-    },
-  ],
+  chains: config.allowChains,
   appMetadata: {
     name: 'fxETH',
     icon: '/images/onbroad-logo.png',

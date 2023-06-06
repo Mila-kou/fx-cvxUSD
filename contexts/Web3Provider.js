@@ -2,16 +2,16 @@ import React, { useEffect, useMemo, useCallback } from 'react'
 import { useQuery, useQueries, useMutation } from '@tanstack/react-query'
 import Web3 from 'web3'
 import ethProvider from 'eth-provider'
-import { useConnectWallet } from '@web3-onboard/react'
+import { useConnectWallet, useSetChain } from '@web3-onboard/react'
 import moment from 'moment'
+import config, { setNetwork } from '@/config/index'
 import { initWeb3Onboard } from '@/config/wallet.config'
-import config from '@/config/index'
 
 const Web3Context = React.createContext(null)
 
 function Web3ContextProvider({ children }) {
-  const [{ wallet, connecting }, connect, _disconnect, updateBalances] =
-    useConnectWallet()
+  const [{ wallet, connecting }, connect, _disconnect] = useConnectWallet()
+  const [{ chains, connectedChain, settingChain }, setChain] = useSetChain()
 
   useEffect(() => {
     if (!wallet && !connecting) {
@@ -40,22 +40,27 @@ function Web3ContextProvider({ children }) {
       window.localStorage.setItem('selectedWallet', wallet.label)
       // return ['0x741be0a7f5f373d31c70a7a655c174162fb38657', wallet.chains[0].id]
       // return ['0x9a27B56cf576E45ad10D8d3Cf26Dbe207463e813', wallet.chains[0].id]
-      return [wallet.accounts[0].address, wallet.chains[0].id?.toString()]
+      return [wallet.accounts[0].address, connectedChain.id]
     }
-    return ['', config.CHAIN_ID]
-  }, [wallet])
+    return ['', config.chainInfo.id]
+  }, [wallet, connectedChain])
 
   const isRightChain = useMemo(
-    () => Web3.utils.hexToNumber(currentChainId) == config.CHAIN_ID,
+    () => config.allowChains.find((item) => item.id == currentChainId),
     [currentChainId]
   )
+
+  useEffect(() => {
+    setNetwork(currentChainId)
+    // console.log('config---', currentChainId, config.chainInfo)
+  }, [currentChainId])
 
   const provider = useMemo(() => {
     if (typeof window !== 'undefined' && wallet && isRightChain) {
       console.log('wallet---', wallet)
       if (wallet?.provider) return wallet.provider
     }
-    return ethProvider(config.devRpcurl[1])
+    return ethProvider(config.rpcUrl)
   }, [wallet, isRightChain])
 
   const web3 = useMemo(() => {
@@ -112,6 +117,8 @@ function Web3ContextProvider({ children }) {
       isAllReady,
       _currentAccount: currentAccount || config.defaultAddress,
       isRightChain,
+      chains,
+      setChain,
     }),
     [
       web3,
@@ -126,6 +133,8 @@ function Web3ContextProvider({ children }) {
       blockTime,
       isAllReady,
       isRightChain,
+      chains,
+      setChain,
     ]
   )
 

@@ -2,7 +2,7 @@ import React, { useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Button, Switch } from 'antd'
+import { Select, Switch } from 'antd'
 import { useToggle, useClickAway } from 'ahooks'
 import {
   MenuOutlined,
@@ -25,7 +25,14 @@ export default function AppHeader() {
     toggleShowSystemStatistics,
     tokens,
   } = useGlobal()
-  const { connect, disconnect, currentAccount, isRightChain } = useWeb3()
+  const {
+    connect,
+    disconnect,
+    currentAccount,
+    isRightChain,
+    setChain,
+    currentChainId,
+  } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
@@ -110,6 +117,17 @@ export default function AppHeader() {
           src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
         />
         <div className={styles.right}>
+          {currentChainId ? (
+            <Select
+              value={isRightChain ? currentChainId : ''}
+              style={{ width: 120 }}
+              onChange={(val) => setChain({ chainId: val })}
+              options={config.allowChains.map((item) => ({
+                value: item.id,
+                label: item.label,
+              }))}
+            />
+          ) : null}
           <div className={styles.account} ref={refAccount}>
             {currentAccount ? (
               <div onClick={toggleShowAccountPanel}>{_account}</div>
@@ -197,8 +215,8 @@ export default function AppHeader() {
       </div>
       {isRightChain ? null : (
         <p className={styles.network}>
-          Please switch your network to{' '}
-          {config.CHAIN_MAPPING[config.CHAIN_ID] || 'mainnet-fork'}
+          Please switch your wallet's network to{' '}
+          {config.allowChains.map((item) => item.label).join(' or ')}
         </p>
       )}
     </div>

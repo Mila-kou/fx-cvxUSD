@@ -1,10 +1,13 @@
-import tokensInfo from './tokens'
+import tokensInfo from '../tokens'
 
-const CHAIN_ID = 11155111
+const chainInfo = {
+  id: '0xaa36a7',
+  token: 'SepoliaETH',
+  label: 'Sepolia',
+  rpcUrl: 'https://rpc.sepolia.org',
+}
 
-const NETWORK_NAME = 'Sepolia'
-
-const devRpcurl = [CHAIN_ID, 'https://rpc.sepolia.org']
+const explorerUri = 'https://sepolia.etherscan.io/'
 
 const contracts = {
   ...tokensInfo.contracts,
@@ -29,10 +32,9 @@ const TOKENS_INFO = {
 }
 
 export default {
-  CHAIN_ID,
-  devRpcurl,
-  NETWORK_NAME,
+  chainInfo,
   tokens,
   contracts,
   TOKENS_INFO,
+  explorerUri,
 }
