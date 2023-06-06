@@ -132,7 +132,7 @@ export default function Redeem({ slippage }) {
         xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
     }
     setShowDisabledNotice(redeemPaused || _xTokenRedeemInSystemStabilityModePaused)
-  }, [redeemPaused, xTokenRedeemInSystemStabilityModePaused])
+  }, [redeemPaused, isX, xTokenRedeemInSystemStabilityModePaused])
 
   const initPage = () => {
     setFETHtAmount(0)
