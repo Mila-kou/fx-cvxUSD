@@ -46,7 +46,7 @@ export default function MintBonus({ slippage }) {
     xETHBeta_text,
     baseInfo,
     systemStatus,
-    stabilityIncentiveRatio_text
+    stabilityIncentiveRatio_text,
   } = useETH()
   const [XETHtAmount, setXETHtAmount] = useState({
     minout_ETH: '-',
@@ -63,7 +63,7 @@ export default function MintBonus({ slippage }) {
       MaxBaseInETH: ETHtAmount / 1e18,
       mintXETHFee: (_mintXETHFee || 0) / 1e18,
       maxXETHBonus,
-      isUserType: true
+      isUserType: true,
     })
     _useXETHBonus_text = checkNotZoroNumOption(
       _useXETHBonus,
@@ -232,13 +232,11 @@ export default function MintBonus({ slippage }) {
         content={
           showDisabledNotice
             ? [
-              'fx governance decision to temporarily disabled Mint functionality.',
-            ]
+                'fx governance decision to temporarily disabled Mint functionality.',
+              ]
             : [
-              'If the bonus is fully distributed, ',
-              '1. You can receive part of the bonus and return the rest;',
-              '2. Or your transaction will fail.',
-            ]
+                'Excess payments will be refunded if rewards are fully allocated.',
+              ]
         }
       />
 

@@ -46,7 +46,7 @@ export default function RedeemBonus({ slippage }) {
     mode2_maxETHBaseOut_text,
     maxETHBonus,
     maxETHBonus_Text,
-    liquidationIncentiveRatio_text
+    liquidationIncentiveRatio_text,
   } = useETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -89,7 +89,7 @@ export default function RedeemBonus({ slippage }) {
       MaxBaseInfETH: tokenAmount / 1e18,
       redeemFETHFee: (_redeemFETHFee || 0) / 1e18,
       isUserType: true,
-      maxETHBonus
+      maxETHBonus,
     })
     const _useETHBonus_text = checkNotZoroNum(_userETHBonus)
       ? fb4(_userETHBonus, false, 0)
@@ -133,7 +133,9 @@ export default function RedeemBonus({ slippage }) {
   }
 
   const canRedeem = useMemo(() => {
-    let _enableETH = cBN(tokenAmount).isGreaterThan(0) && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
+    let _enableETH =
+      cBN(tokenAmount).isGreaterThan(0) &&
+      cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
     return !redeemPaused && _enableETH
   }, [tokenAmount, redeemPaused, tokens.fETH.balance])
 
@@ -259,13 +261,11 @@ export default function RedeemBonus({ slippage }) {
         content={
           showDisabledNotice
             ? [
-              'fx governance decision to temporarily disabled Redeem functionality.',
-            ]
+                'fx governance decision to temporarily disabled Redeem functionality.',
+              ]
             : [
-              'If the bonus is fully distributed, ',
-              '1. You can receive part of the bonus and return the rest;',
-              '2. Or your transaction will fail.',
-            ]
+                'Excess payments will be refunded if rewards are fully allocated.',
+              ]
         }
       />
 
