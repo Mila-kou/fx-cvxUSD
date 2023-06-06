@@ -1,11 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Button } from 'antd'
+import { Tooltip } from 'antd'
 import cn from 'classnames'
 import {
   MenuOutlined,
   CloseOutlined,
   LineChartOutlined,
-  SkinOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons'
 import SimpleInput from '@/components/SimpleInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -98,15 +98,15 @@ export default function SystemStatistics() {
 
           <div className={styles.details} data-color="blue">
             <div className={styles.cell}>
-              <div>Rebalance Mode Price:</div>
+              <div>Stability Mode Price:</div>
               <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
-              <div>User Liquidation Mode Price:</div>
+              <div>User Rebalance Mode Price:</div>
               <p>${UserLiquidationModePrice}</p>
             </div>
             <div className={styles.cell}>
-              <div>Protocol Liquidation Mode Price:</div>
+              <div>Protocol Rebalance Price:</div>
               <p>${ProtocolLiquidationModePrice}</p>
             </div>
           </div>
@@ -143,15 +143,25 @@ export default function SystemStatistics() {
 
           <div className={styles.details} data-color="red">
             <div className={styles.cell}>
-              <div>ETH’s cumulative return: </div>
+              <div>ETH cumulative return: </div>
               <p>{R}%</p>
             </div>
             <div className={styles.cell}>
-              <div>ETH’s Twap Price: </div>
+              <div>
+                ETH Price:
+                <Tooltip
+                  placement="top"
+                  title="ETH 30 Minute TWAP Price"
+                  arrow
+                  color="#000"
+                >
+                  <InfoCircleOutlined />
+                </Tooltip>
+              </div>
               <p>${ethPrice_text}</p>
             </div>
             <div className={styles.cell}>
-              <div>ETH’s Last Price:</div>
+              <div>ETH Last Price:</div>
               <p>${lastPermissionedPrice}</p>
             </div>
           </div>
