@@ -228,7 +228,7 @@ export default function Mint({ slippage }) {
         fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
     }
     setShowDisabledNotice(mintPaused || _fTokenMintInSystemStabilityModePaused)
-  }, [mintPaused, fTokenMintInSystemStabilityModePaused])
+  }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused])
 
   useEffect(() => {
     getMinAmount()
