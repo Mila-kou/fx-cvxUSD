@@ -4,7 +4,7 @@ import tokensInfo from '../tokens'
 const chainInfo = {
   id: '0x292c',
   token: 'ETH',
-  label: 'Mainnet Fork',
+  label: 'Fork-10540',
   rpcUrl: 'https://apitest.aladdin.club/rpc1',
 }
 

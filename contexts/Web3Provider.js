@@ -35,33 +35,51 @@ function Web3ContextProvider({ children }) {
     }
   }, [_disconnect, wallet])
 
-  const [currentAccount, currentChainId] = useMemo(() => {
+  const currentAccount = useMemo(() => {
     if (wallet?.accounts?.length) {
       window.localStorage.setItem('selectedWallet', wallet.label)
       // return ['0x741be0a7f5f373d31c70a7a655c174162fb38657', wallet.chains[0].id]
       // return ['0x9a27B56cf576E45ad10D8d3Cf26Dbe207463e813', wallet.chains[0].id]
-      return [wallet.accounts[0].address, connectedChain.id]
+      return wallet.accounts[0].address
     }
-    return ['', config.chainInfo.id]
-  }, [wallet, connectedChain])
+    return ''
+  }, [wallet])
 
-  const isRightChain = useMemo(
-    () => config.allowChains.find((item) => item.id == currentChainId),
-    [currentChainId]
+  const currentChainId = useMemo(
+    () => config.chainInfo.id,
+    [config.chainInfo.id]
   )
 
+  const switchChain = useCallback(
+    (chainId) => {
+      if (!currentAccount) {
+        connect()
+        return
+      }
+      setChain({ chainId: chainId || config.chainInfo.id })
+    },
+    [setChain, connect, currentAccount]
+  )
+
+  const [isRightChain, isAllowChain] = useMemo(() => {
+    return [
+      !currentAccount || currentChainId === connectedChain?.id,
+      !currentAccount ||
+        config.allowChains.find((item) => connectedChain?.id === item.id),
+    ]
+  }, [currentAccount, currentChainId, connectedChain])
+
   useEffect(() => {
-    setNetwork(currentChainId)
-    // console.log('config---', currentChainId, config.chainInfo)
-  }, [currentChainId])
+    setNetwork(connectedChain?.id)
+  }, [connectedChain])
 
   const provider = useMemo(() => {
     if (typeof window !== 'undefined' && wallet && isRightChain) {
       console.log('wallet---', wallet)
       if (wallet?.provider) return wallet.provider
     }
-    return ethProvider(config.rpcUrl)
-  }, [wallet, isRightChain])
+    return ethProvider(config.chainInfo.rpcUrl)
+  }, [wallet, currentChainId, isRightChain, config.chainInfo.rpcUrl])
 
   const web3 = useMemo(() => {
     const _web3 = new Web3(provider)
@@ -85,13 +103,13 @@ function Web3ContextProvider({ children }) {
   const [{ data: blockNumber }, { data: blockTime }] = useQueries({
     queries: [
       {
-        queryKey: ['blockNumber'],
+        queryKey: ['blockNumber', currentChainId],
         queryFn: () => web3.eth.getBlockNumber(),
         enabled: !!web3,
         refetchInterval: 2000,
       },
       {
-        queryKey: ['blockTime'],
+        queryKey: ['blockTime', currentChainId],
         queryFn: () =>
           web3.eth.getBlock('latest').then(({ timestamp }) => timestamp),
         enabled: !!web3,
@@ -118,7 +136,9 @@ function Web3ContextProvider({ children }) {
       _currentAccount: currentAccount || config.defaultAddress,
       isRightChain,
       chains,
-      setChain,
+      switchChain,
+      settingChain,
+      isAllowChain,
     }),
     [
       web3,
@@ -134,7 +154,9 @@ function Web3ContextProvider({ children }) {
       isAllReady,
       isRightChain,
       chains,
-      setChain,
+      switchChain,
+      settingChain,
+      isAllowChain,
     ]
   )
 

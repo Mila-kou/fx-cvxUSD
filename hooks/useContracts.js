@@ -32,7 +32,7 @@ export const useFETH = () => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.FX_FractionalToken),
-      address
+      address,
     }),
     [getContract]
   )
@@ -44,7 +44,7 @@ export const useXETH = () => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.FX_LeveragedToken),
-      address
+      address,
     }),
     [getContract]
   )
@@ -56,7 +56,7 @@ export const useFX_Market = () => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.FX_Market),
-      address
+      address,
     }),
     [getContract]
   )
@@ -68,7 +68,7 @@ export const useFX_Treasury = () => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.FX_Treasury),
-      address
+      address,
     }),
     [getContract]
   )
@@ -80,7 +80,7 @@ export const useFX_ETHGateway = () => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.FX_ETHGateway),
-      address
+      address,
     }),
     [getContract]
   )

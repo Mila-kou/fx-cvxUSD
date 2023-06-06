@@ -29,9 +29,10 @@ export default function AppHeader() {
     connect,
     disconnect,
     currentAccount,
-    isRightChain,
-    setChain,
+    switchChain,
     currentChainId,
+    settingChain,
+    isAllowChain,
   } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
@@ -109,6 +110,12 @@ export default function AppHeader() {
     connect()
   }
 
+  useEffect(() => {
+    if (!isAllowChain) {
+      switchChain()
+    }
+  }, [isAllowChain, switchChain])
+
   return (
     <div>
       <div className={styles.container}>
@@ -117,17 +124,16 @@ export default function AppHeader() {
           src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
         />
         <div className={styles.right}>
-          {currentChainId ? (
-            <Select
-              value={isRightChain ? currentChainId : ''}
-              style={{ width: 120 }}
-              onChange={(val) => setChain({ chainId: val })}
-              options={config.allowChains.map((item) => ({
-                value: item.id,
-                label: item.label,
-              }))}
-            />
-          ) : null}
+          <Select
+            value={currentChainId}
+            style={{ width: '150px', marginRight: '16px' }}
+            onChange={(val) => switchChain(val)}
+            options={config.allowChains.map((item) => ({
+              value: item.id,
+              label: item.label,
+            }))}
+            disabled={settingChain}
+          />
           <div className={styles.account} ref={refAccount}>
             {currentAccount ? (
               <div onClick={toggleShowAccountPanel}>{_account}</div>
@@ -213,7 +219,7 @@ export default function AppHeader() {
           </div>
         ) : null}
       </div>
-      {isRightChain ? null : (
+      {isAllowChain ? null : (
         <p className={styles.network}>
           Please switch your network to{' '}
           {config.allowChains.map((item) => item.label).join(' or ')}

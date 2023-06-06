@@ -3,7 +3,7 @@ import tokensInfo from '../tokens'
 const chainInfo = {
   id: '0x1',
   token: 'ETH',
-  label: 'Ethereum Mainnet',
+  label: 'Ethereum',
   rpcUrl:
     'https://eth-mainnet.alchemyapi.io/v2/NYoZTYs7oGkwlUItqoSHJeqpjqtlRT6m',
 }
