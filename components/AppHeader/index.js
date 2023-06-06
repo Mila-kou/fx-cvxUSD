@@ -215,7 +215,7 @@ export default function AppHeader() {
       </div>
       {isRightChain ? null : (
         <p className={styles.network}>
-          Please switch your wallet's network to{' '}
+          Please switch your network to{' '}
           {config.allowChains.map((item) => item.label).join(' or ')}
         </p>
       )}
