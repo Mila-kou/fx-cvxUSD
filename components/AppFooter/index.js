@@ -73,10 +73,10 @@ export default function AppFooter() {
             </ul>
             <div className={style.footerTitle}>Audits</div>
 
-            <img
+            {/* <img
               src="/resources/images/audits/secbit.jpg"
               className="w-44 mb-4"
-            />
+  /> */}
 
             <div className="flex items-center gap-2">
               {audits.map((item) => (
