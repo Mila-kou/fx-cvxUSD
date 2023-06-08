@@ -15,12 +15,14 @@ import RedeemBonus from '../RedeemBonus'
 import Tabs from '../Tabs'
 import SlippageModal, { useSlippage } from '../SlippageModal'
 
+const AUTO = 0.3
+
 export default function Swap() {
   const { systemStatus } = useETH()
   const [bonusIndex, setBonusIndex] = useState(0)
   const [tab, setTab] = useState(0)
 
-  const slippageProps = useSlippage(0.3)
+  const slippageProps = useSlippage(AUTO)
 
   const { slippage, toggle } = slippageProps
 
@@ -35,8 +37,12 @@ export default function Swap() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.setting} onClick={toggle}>
-        <span>{slippage}% slippage</span>
+      <div
+        className={styles.setting}
+        onClick={toggle}
+        data-auto={AUTO === slippage}
+      >
+        <span className={styles.custom}>{slippage}% slippage</span>
         <SettingOutlined />
       </div>
       <div className={styles.tabs}>
