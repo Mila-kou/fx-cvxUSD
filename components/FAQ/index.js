@@ -16,7 +16,7 @@ export default function FAQ({ open, onCancel }) {
             </div>
 
             <div className={styles.content}>
-              <h2>1) What</h2>
+              <h2>1) What?</h2>
 
               <p>
                 f(x) allows you to transform your ETH into either a
@@ -110,7 +110,7 @@ export default function FAQ({ open, onCancel }) {
 
               <p>
                 f(x) charges a small minting and redemption fee, but those can
-                be avoided by swapping in and out on secondary (and those fees
+                be avoided by swapping in and out on secondary ( and those fees
                 are waived in certain circumstances, see{' '}
                 <a
                   href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/audit-reports/f(x)%20whitepaper.pdf"
