@@ -1,0 +1,52 @@
+@import '../../assets/css/mixin.scss';
+
+.faq {
+  border: none;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(1px);
+}
+
+.content {
+  padding: 16px 32px;
+  color: var(--main-text-color);
+  background-color: var(--background-color);
+  border-radius: 16px;
+  overflow-y: scroll;
+  position: relative;
+  max-width: 60vw;
+  max-height: 70vh;
+
+  svg {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-size: 600;
+  }
+  h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 16px;
+  }
+  h1,
+  h2,
+  p {
+    color: var(--main-text-color);
+  }
+  p {
+    word-break: normal;
+    font-size: 14px;
+  }
+}
