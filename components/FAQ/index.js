@@ -72,7 +72,7 @@ export default function FAQ({ open, onCancel }) {
               prices very close.
             </p>
 
-            <h2>7)What risks am I taking when I hold fETH/xETH?</h2>
+            <h2>7) What risks am I taking when I hold fETH/xETH?</h2>
 
             <p>
               f(x) was designed specifically to create a scalable low volatility
@@ -93,7 +93,7 @@ export default function FAQ({ open, onCancel }) {
               the whitepaper to understand them.
             </p>
 
-            <h2>8)How much does it cost?</h2>
+            <h2>8) How much does it cost?</h2>
 
             <p>
               f(x) charges a small minting and redemption fee, but those can be
@@ -111,7 +111,7 @@ export default function FAQ({ open, onCancel }) {
               stability. Again, see whitepaper for details.
             </p>
 
-            <h2>9)What am I waiting for?</h2>
+            <h2>9) What am I waiting for?</h2>
 
             <p>Good question!</p>
           </div>
