@@ -22,7 +22,7 @@ const routers = [
   ['Mint', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
-  ['IDO', '/offering'],
+  // ['IDO', '/offering'],
 ]
 
 export default function AppHeader() {
@@ -145,6 +145,14 @@ export default function AppHeader() {
               {label}
             </Link>
           ))}
+          <a
+            className={styles.route}
+            target="_blank"
+            href="https://offering.aladdin.club/#/offering"
+            rel="noreferrer"
+          >
+            IDO
+          </a>
           <a
             className={styles.route}
             target="_blank"
