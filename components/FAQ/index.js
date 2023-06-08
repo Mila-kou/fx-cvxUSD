@@ -1,22 +1,28 @@
 import React from 'react'
 import { CloseOutlined } from '@ant-design/icons'
+import useGlobal from '@/hooks/useGlobal'
 
 import styles from './styles.module.scss'
 
 export default function FAQ({ open, onCancel }) {
-  console.log('open----', open)
+  const { theme } = useGlobal()
   return (
     <div>
       {open ? (
         <div className={styles.faq}>
           <div className={styles.container}>
             <div className={styles.header}>
-              <h1>f(x) FAQ</h1>
+              <div className={styles.title}>
+                <img
+                  src={`/images/f-x-logo${theme === 'blue' ? '-dark' : ''}.svg`}
+                />
+                <p>FAQ</p>
+              </div>
               <CloseOutlined onClick={onCancel} />
             </div>
 
             <div className={styles.content}>
-              <h2>1) What?</h2>
+              <h2>1. What?</h2>
 
               <p>
                 f(x) allows you to transform your ETH into either a
@@ -25,7 +31,7 @@ export default function FAQ({ open, onCancel }) {
                 one.
               </p>
 
-              <h2>2) Can I get ETH back out again?</h2>
+              <h2>2. Can I get ETH back out again?</h2>
 
               <p>
                 Yes! Every fETH or xETH token is redeemable for ETH at any time,
@@ -35,7 +41,7 @@ export default function FAQ({ open, onCancel }) {
                 them.
               </p>
 
-              <h2>3) What is NAV?</h2>
+              <h2>3. What is NAV?</h2>
 
               <p>
                 NAV is net asset value. It’s the current price, as determined by
@@ -43,7 +49,7 @@ export default function FAQ({ open, onCancel }) {
                 fETH for their respective NAVs.{' '}
               </p>
 
-              <h2>4) Why would I want fETH?</h2>
+              <h2>4. Why would I want fETH?</h2>
 
               <p>
                 fETH is intended to be used like a stablecoin. It’s completely
@@ -60,7 +66,7 @@ export default function FAQ({ open, onCancel }) {
                 you might like to hold it instead of USD stablecoins.
               </p>
 
-              <h2>5) Why would I want xETH?</h2>
+              <h2>5. Why would I want xETH?</h2>
 
               <p>
                 That’s easy: xETH provides powerful, free leverage on ETH. No
@@ -68,7 +74,7 @@ export default function FAQ({ open, onCancel }) {
                 to amplify your gains on a long-term bet on ETH price growth.
               </p>
 
-              <h2>6) Where can I trade it?</h2>
+              <h2>6. Where can I trade it?</h2>
 
               <p>
                 There are secondary markets available to trade on Curve. There
@@ -77,7 +83,7 @@ export default function FAQ({ open, onCancel }) {
                 prices very close.
               </p>
 
-              <h2>7) What risks am I taking when I hold fETH/xETH?</h2>
+              <h2>7. What risks am I taking when I hold fETH/xETH?</h2>
 
               <p>
                 f(x) was designed specifically to create a scalable low
@@ -106,7 +112,7 @@ export default function FAQ({ open, onCancel }) {
                 to understand them.
               </p>
 
-              <h2>8) How much does it cost?</h2>
+              <h2>8. How much does it cost?</h2>
 
               <p>
                 f(x) charges a small minting and redemption fee, but those can
@@ -140,7 +146,7 @@ export default function FAQ({ open, onCancel }) {
                 for details.
               </p>
 
-              <h2>9) What am I waiting for?</h2>
+              <h2>9. What am I waiting for?</h2>
 
               <p>Good question!</p>
             </div>

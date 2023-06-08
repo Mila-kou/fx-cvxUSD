@@ -18,6 +18,9 @@
     font-size: 18px;
     color: var(--disabled-text-color);
     cursor: pointer;
+    &:hover {
+      color: #fff;
+    }
   }
 
   .active {
