@@ -7,13 +7,25 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  padding: 30px 24px 40px;
+  padding: 54px 24px 40px;
 
   .setting {
-    width: 16px;
     position: absolute;
-    top: 22px;
-    right: 22px;
+    cursor: pointer;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    color: var(--second-text-color);
+    background: var(--tag-background-color);
+    font-size: 16px;
+    line-height: 16px;
+    gap: 4px;
+    padding: 8px 16px;
+    border-radius: 22px;
+    svg {
+      width: 16px;
+    }
   }
 }
 
