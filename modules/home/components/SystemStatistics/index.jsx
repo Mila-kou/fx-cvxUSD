@@ -114,14 +114,13 @@ export default function SystemStatistics() {
 
         <div className={styles.item}>
           <div className={styles.card} data-color="red">
-            <div className={styles.title}>fETH Collecteral Ratio</div>
+            <div className={styles.title}>fETH Collateral Ratio</div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
                 <b className={styles[systemStatus > 0 ? 'red' : 'green']}>
                   {collateralRatio}
                 </b>
-                %
-                {/* {systemStatus} */}
+                %{/* {systemStatus} */}
               </p>
               {/* <p>
                 {prices[mode + 1]} {mode < 2 && <span>${StabilityModePrice}</span>}
@@ -144,7 +143,7 @@ export default function SystemStatistics() {
 
           <div className={styles.details} data-color="red">
             <div className={styles.cell}>
-              <div>ETH cumulative return: </div>
+              <div>ETH Cumulative Return: </div>
               <p>{R}%</p>
             </div>
             <div className={styles.cell}>
