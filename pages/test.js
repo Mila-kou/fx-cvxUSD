@@ -6,7 +6,7 @@ export default function Test() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX ETH - Test</title>
+        <title>FX  - Offering</title>
       </Head>
       <TestPage />
     </React.Fragment>

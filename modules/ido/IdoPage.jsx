@@ -231,7 +231,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) {}
+    } catch (error) { }
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
@@ -433,7 +433,7 @@ export default function IdoPage() {
             <p className={styles.num}>{PageData.capAmount}</p>
             <p className={styles.title}>Offering Amount</p>
 
-            <p className={styles.num}>{PageData.totalFundsRaised}</p>
+            <p className={styles.num}>300</p>
             <p className={styles.title}>Total Raised</p>
           </div>
 

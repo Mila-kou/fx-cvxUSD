@@ -6,7 +6,7 @@ export default function Ido() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX ETH - IDO</title>
+        <title>FX  - Offering</title>
       </Head>
       <IdoPage />
     </React.Fragment>
