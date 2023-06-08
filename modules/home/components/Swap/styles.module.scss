@@ -26,6 +26,12 @@
     svg {
       width: 16px;
     }
+    &[data-auto='true'] {
+      background: transparent;
+      .custom {
+        display: none;
+      }
+    }
   }
 }
 
