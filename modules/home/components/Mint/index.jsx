@@ -214,7 +214,7 @@ export default function Mint({ slippage }) {
     let _fTokenMintInSystemStabilityModePaused = false
     if (isF) {
       _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 >= 0
     }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
     return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
@@ -224,7 +224,7 @@ export default function Mint({ slippage }) {
     let _fTokenMintInSystemStabilityModePaused = false
     if (isF) {
       _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 >= 0
     }
     setShowDisabledNotice(mintPaused || _fTokenMintInSystemStabilityModePaused)
   }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused])
