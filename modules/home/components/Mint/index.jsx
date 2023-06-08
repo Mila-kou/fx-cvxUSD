@@ -21,6 +21,7 @@ export default function Mint({ slippage }) {
   // const [feeUsd, setFeeUsd] = useState(10)
 
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
+  const [errorMinout, setErrorMinout] = useState(false)
 
   const minGas = 234854
   const [ETHtAmount, setETHtAmount] = useState(0)
@@ -154,8 +155,11 @@ export default function Mint({ slippage }) {
         })
       }
       return _minOut_CBN.toFixed(0, 1)
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log(error)
+      // if (error.message.indexOf('no cap to buy') > -1) {
+      //   // noPayableErrorAction(`error_buy`, 'No cap to buy')
+      // }
       return 0
     }
   }
@@ -214,7 +218,7 @@ export default function Mint({ slippage }) {
     let _fTokenMintInSystemStabilityModePaused = false
     if (isF) {
       _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 >= 0
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
     }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
     return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
@@ -224,7 +228,7 @@ export default function Mint({ slippage }) {
     let _fTokenMintInSystemStabilityModePaused = false
     if (isF) {
       _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 >= 0
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
     }
     setShowDisabledNotice(mintPaused || _fTokenMintInSystemStabilityModePaused)
   }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused])

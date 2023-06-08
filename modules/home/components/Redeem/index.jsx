@@ -113,7 +113,7 @@ export default function Redeem({ slippage }) {
     let _xTokenRedeemInSystemStabilityModePaused = false
     if (isX) {
       _xTokenRedeemInSystemStabilityModePaused =
-        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 >= 0
+        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
     }
     return (
       !redeemPaused && _enableETH && !_xTokenRedeemInSystemStabilityModePaused
@@ -129,7 +129,7 @@ export default function Redeem({ slippage }) {
     let _xTokenRedeemInSystemStabilityModePaused = false
     if (isX) {
       _xTokenRedeemInSystemStabilityModePaused =
-        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 >= 0
+        xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
     }
     console.log('redeemPaused---', redeemPaused, xTokenRedeemInSystemStabilityModePaused, systemStatus, _xTokenRedeemInSystemStabilityModePaused)
     setShowDisabledNotice(redeemPaused || _xTokenRedeemInSystemStabilityModePaused)
