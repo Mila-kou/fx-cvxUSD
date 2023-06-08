@@ -237,7 +237,7 @@ export default function Mint({ slippage }) {
   return (
     <div className={styles.container}>
       <BalanceInput
-        placeholder="0"
+        placeholder="-"
         symbol="ETH"
         balance={fb4(tokens.ETH.balance, false)}
         usd={`$${ethPrice_text}`}

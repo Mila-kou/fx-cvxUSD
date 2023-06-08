@@ -222,7 +222,7 @@ export default function RedeemBonus({ slippage }) {
       />
 
       <BalanceInput
-        placeholder="0"
+        placeholder="-"
         balance={fb4(tokens.fETH.balance, false)}
         symbol="fETH"
         className={styles.inputItem}

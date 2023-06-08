@@ -17,9 +17,10 @@ import styles from './styles.module.scss'
 import config from '@/config/index'
 import { cBN, fb4 } from '@/utils/index'
 import Select from '@/components/Select'
+import FAQ from '@/components/FAQ'
 
 const routers = [
-  ['Mint', '/home'],
+  ['F(x)', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
   // ['IDO', '/offering'],
@@ -45,6 +46,7 @@ export default function AppHeader() {
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
+  const [openFAQ, { toggle: toggleFAQ }] = useToggle()
 
   const assets = useMemo(() => {
     const list = [
@@ -148,19 +150,14 @@ export default function AppHeader() {
           <a
             className={styles.route}
             target="_blank"
-            href="https://offering.aladdin.club/#/offering"
+            href="https://offering.aladdin.club/"
             rel="noreferrer"
           >
-            IDO
+            Offering
           </a>
-          <a
-            className={styles.route}
-            target="_blank"
-            href="https://docs.google.com/document/d/1zdYtYm701qZmw8mSTh_MEixPrMiXrB1W0bnlLmOIaVo/edit"
-            rel="noreferrer"
-          >
+          <span className={styles.route} onClick={toggleFAQ}>
             FAQ
-          </a>
+          </span>
         </div>
         <div className={styles.right}>
           <Select
@@ -264,6 +261,7 @@ export default function AppHeader() {
           {config.allowChains.map((item) => item.label).join(' or ')}
         </p>
       )}
+      <FAQ open={openFAQ} onCancel={toggleFAQ} />
     </div>
   )
 }

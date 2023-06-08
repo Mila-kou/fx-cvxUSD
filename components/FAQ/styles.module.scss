@@ -1,0 +1,55 @@
+@import '../../assets/css/mixin.scss';
+
+.faq {
+  border: none;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(1px);
+}
+
+.container {
+  padding: 32px;
+  color: var(--main-text-color);
+  background-color: var(--background-color);
+  border-radius: 16px;
+
+  .header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    h1 {
+      color: var(--main-text-color);
+      font-size: 22px;
+    }
+  }
+
+  .content {
+    overflow-y: scroll;
+    position: relative;
+    max-width: 60vw;
+    max-height: 70vh;
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-top: 16px;
+    }
+    h1,
+    h2,
+    p {
+      color: var(--main-text-color);
+    }
+    p {
+      word-break: normal;
+      font-size: 16px;
+    }
+  }
+}
