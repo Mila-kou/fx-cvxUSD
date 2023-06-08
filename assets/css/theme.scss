@@ -19,6 +19,7 @@ body {
 
   --main-text-color: #fff;
   --second-text-color: #a6a6ae;
+  --disabled-text-color: #3a3a65;
   --tag-background-color: rgba(126, 165, 255, 0.2);
   --primary-color: #5488fe;
   --adverse-primary-color: #fa2454;
@@ -34,6 +35,10 @@ body {
   --red-background-color: rgba(61, 13, 13, 1);
   --blue-background-color: rgba(126, 165, 255, 0.2);
 
+  --nav-background-color: rgba(7, 1, 71, 0.8);
+
+  --select-color: #3a3a65;
+
   &[data-theme='red'] {
     --blue-color: #1f14ed;
 
@@ -44,6 +49,7 @@ body {
 
     --main-text-color: #231f20;
     --second-text-color: #a6a6ae;
+    --disabled-text-color: #ebb6b6;
     --tag-background-color: #fff;
     --primary-color: #fa2454;
     --adverse-primary-color: #5488fe;
@@ -58,5 +64,9 @@ body {
 
     --red-background-color: rgba(235, 182, 182, 0.8);
     --blue-background-color: rgba(126, 165, 255, 0.46);
+
+    --nav-background-color: rgba(143, 1, 1, 0.6);
+
+    --select-color: #a6a6ae;
   }
 }

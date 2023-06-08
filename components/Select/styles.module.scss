@@ -1,0 +1,48 @@
+@import '../../assets/css/mixin.scss';
+
+.container {
+  position: relative;
+  padding: 0 12px 0 16px;
+  height: 36px;
+  background: var(--background-color);
+  border-radius: 4px;
+  cursor: pointer;
+  p {
+    font-size: 16px;
+  }
+  .content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    svg {
+      height: 14px;
+      g,
+      path {
+        fill: var(--select-color);
+      }
+    }
+  }
+
+  .dropdown {
+    position: absolute;
+    padding: 12px 16px;
+    left: 0;
+    right: 0;
+    background: var(--background-color);
+    margin-top: 4px;
+    border-radius: 4px;
+    .item {
+      color: var(--select-color);
+      padding: 2px 0;
+      &:hover {
+        color: var(--main-text-color);
+      }
+    }
+    .active {
+      color: var(--main-text-color);
+      font-weight: 500;
+    }
+  }
+}

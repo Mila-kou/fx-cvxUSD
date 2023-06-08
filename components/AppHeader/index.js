@@ -2,7 +2,7 @@ import React, { useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Select, Switch } from 'antd'
+import { Switch } from 'antd'
 import { useToggle, useClickAway } from 'ahooks'
 import {
   MenuOutlined,
@@ -16,6 +16,14 @@ import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import config from '@/config/index'
 import { cBN, fb4 } from '@/utils/index'
+import Select from '@/components/Select'
+
+const routers = [
+  ['Mint', '/home'],
+  // ['Farming', '/farming'],
+  // ['Locker', '/locker'],
+  ['IDO', '/offering'],
+]
 
 export default function AppHeader() {
   const {
@@ -69,9 +77,9 @@ export default function AppHeader() {
         usd: tokens.xETH.usd,
       },
     ]
-    if (route.includes('offering')) {
-      return list.slice(0, 1)
-    }
+    // if (route.includes('offering')) {
+    //   return list.slice(0, 1)
+    // }
     return list
   }, [tokens, route])
 
@@ -119,14 +127,37 @@ export default function AppHeader() {
   return (
     <div>
       <div className={styles.container}>
-        <img
-          className={styles.logo}
-          src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
-        />
+        <div>
+          <Link href="/home">
+            <img
+              className={styles.logo}
+              src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
+            />
+          </Link>
+          {routers.map(([label, href]) => (
+            <Link
+              href={href}
+              className={cn(
+                styles.route,
+                route.includes(href) && styles.active
+              )}
+            >
+              {label}
+            </Link>
+          ))}
+          <a
+            className={styles.route}
+            target="_blank"
+            href="https://docs.google.com/document/d/1zdYtYm701qZmw8mSTh_MEixPrMiXrB1W0bnlLmOIaVo/edit"
+            rel="noreferrer"
+          >
+            FAQ
+          </a>
+        </div>
         <div className={styles.right}>
           <Select
             value={currentChainId}
-            style={{ width: '150px', marginRight: '16px' }}
+            style={{ width: '130px', marginRight: '16px' }}
             onChange={(val) => switchChain(val)}
             options={config.allowChains.map((item) => ({
               value: item.id,
@@ -136,9 +167,9 @@ export default function AppHeader() {
           />
           <div className={styles.account} ref={refAccount}>
             {currentAccount ? (
-              <div onClick={toggleShowAccountPanel}>{_account}</div>
+              <p onClick={toggleShowAccountPanel}>{_account}</p>
             ) : (
-              <div onClick={handleConnect}>Connect Wallet</div>
+              <p onClick={handleConnect}>Connect Wallet</p>
             )}
           </div>
           <div className={styles.menu}>
