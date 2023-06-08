@@ -197,7 +197,7 @@ export default function MintBonus({ slippage }) {
       />
 
       <BalanceInput
-        placeholder="0"
+        placeholder="-"
         symbol="ETH"
         balance={fb4(tokens.ETH.balance, false)}
         usd={`$${ethPrice_text}`}

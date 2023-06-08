@@ -231,7 +231,7 @@ export default function Redeem({ slippage }) {
   return (
     <div className={styles.container}>
       <BalanceInput
-        placeholder="0"
+        placeholder="-"
         balance={fb4(tokens.fETH.balance, false)}
         symbol="fETH"
         color={isF ? 'blue' : ''}
@@ -244,7 +244,7 @@ export default function Redeem({ slippage }) {
         clearTrigger={clearTrigger}
       />
       <BalanceInput
-        placeholder="0"
+        placeholder="-"
         balance={fb4(tokens.xETH.balance, false)}
         symbol="xETH"
         type={isX ? '' : 'select'}

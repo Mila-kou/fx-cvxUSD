@@ -19,7 +19,7 @@ import { cBN, fb4 } from '@/utils/index'
 import Select from '@/components/Select'
 
 const routers = [
-  ['Mint', '/home'],
+  ['Fx', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
   // ['IDO', '/offering'],
@@ -148,10 +148,10 @@ export default function AppHeader() {
           <a
             className={styles.route}
             target="_blank"
-            href="https://offering.aladdin.club/#/offering"
+            href="https://offering.aladdin.club/"
             rel="noreferrer"
           >
-            IDO
+            Offering
           </a>
           <a
             className={styles.route}
