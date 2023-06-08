@@ -20,7 +20,7 @@ import Select from '@/components/Select'
 import FAQ from '@/components/FAQ'
 
 const routers = [
-  ['Fx', '/home'],
+  ['F(x)', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
   // ['IDO', '/offering'],
