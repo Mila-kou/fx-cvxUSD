@@ -24,11 +24,23 @@
   .header {
     position: sticky;
     top: 0;
-    display: flex;
-    justify-content: space-between;
-    h1 {
-      color: var(--main-text-color);
-      font-size: 22px;
+    .title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        height: 34px;
+      }
+      p {
+        color: var(--main-text-color);
+        font-size: 30px;
+        margin-left: 16px;
+      }
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      right: 0;
     }
   }
 
@@ -39,7 +51,7 @@
     max-height: 70vh;
     h2 {
       font-size: 18px;
-      font-weight: 500;
+      font-weight: 600;
       margin-top: 16px;
     }
     h1,
