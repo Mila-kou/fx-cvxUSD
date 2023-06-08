@@ -129,7 +129,7 @@ export default function AppHeader() {
   return (
     <div>
       <div className={styles.container}>
-        <div>
+        <div className={styles.left}>
           <Link href="/home">
             <img
               className={styles.logo}
