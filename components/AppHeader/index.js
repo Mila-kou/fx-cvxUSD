@@ -57,13 +57,13 @@ export default function AppHeader() {
         icon: '/tokens/crypto-icons-stack.svg#eth',
         usd: tokens.ETH.usd,
       },
-      {
-        name: 'Ethereum',
-        symbol: 'WETH',
-        amount: fb4(tokens.WETH.balance, false),
-        icon: '/tokens/crypto-icons-stack.svg#eth',
-        usd: tokens.WETH.usd,
-      },
+      // {
+      //   name: 'Ethereum',
+      //   symbol: 'WETH',
+      //   amount: fb4(tokens.WETH.balance, false),
+      //   icon: '/tokens/crypto-icons-stack.svg#eth',
+      //   usd: tokens.WETH.usd,
+      // },
       {
         name: 'Fractional ETH',
         symbol: 'fETH',
