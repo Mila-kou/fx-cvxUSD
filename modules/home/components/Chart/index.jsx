@@ -1,18 +1,18 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, {
+  memo,
+  useCallback,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react'
 import ReactECharts from 'echarts-for-react'
-import cn from 'classnames'
-import { DownOutlined } from '@ant-design/icons'
-import BalanceInput from '@/components/BalanceInput'
-import useWeb3 from '@/hooks/useWeb3'
-import config from '@/config/index'
-import { cBN, fb4 } from '@/utils/index'
-import { useToken } from '@/hooks/useTokenInfo'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import { getGas } from '@/utils/gas'
 import styles from './styles.module.scss'
 
-export default function Chart({ color, icon, symbol, fxData }) {
-  const options = {
+export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
+  const ref = useRef(null)
+
+  const option = {
     grid: { top: 8, right: 0, bottom: 22, left: 25 },
     xAxis: {
       type: 'category',
@@ -25,7 +25,7 @@ export default function Chart({ color, icon, symbol, fxData }) {
         fontSize: 10,
         interval: 0,
       },
-      data: ['3/21', '3/22', '3/23', '3/24', '3/25', '3/26', '3/27'],
+      data: dateList,
     },
     yAxis: {
       type: 'value',
@@ -46,10 +46,14 @@ export default function Chart({ color, icon, symbol, fxData }) {
     },
     series: [
       {
-        data: [1.2, 1.0, 1.1, 1.3, 1.1, 1.2, 1.1],
+        data: navs,
         type: 'line',
       },
     ],
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b0}<br />Net Assets Value: ${c0}'
+    },
     color: ['rgba(255, 255, 255, 0.8)'],
   }
 
@@ -70,7 +74,9 @@ export default function Chart({ color, icon, symbol, fxData }) {
       </div>
 
       <ReactECharts
-        option={options}
+        ref={ref}
+        option={option}
+        notMerge
         className={styles.chart}
         style={{ height: 118 }}
       />
@@ -80,7 +86,9 @@ export default function Chart({ color, icon, symbol, fxData }) {
           {/* <img src={icon} /> */}
           {symbol} Total Supply:
         </div>
-        <div>{fxData.totalSupply} ({fxData.ratio}%)</div>
+        <div>
+          {fxData.totalSupply} ({fxData.ratio}%)
+        </div>
       </div>
     </div>
   )
