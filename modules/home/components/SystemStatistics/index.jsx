@@ -14,6 +14,7 @@ import { cBN, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
+import useNavs from '../../hooks/useNavs'
 import Chart from '../Chart'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
@@ -53,6 +54,7 @@ export default function SystemStatistics() {
     lastPermissionedPrice,
     R,
   } = useETH()
+  const navsData = useNavs()
   return (
     <div className={styles.container}>
       <h2 className={styles.header}>
@@ -90,6 +92,8 @@ export default function SystemStatistics() {
                 totalSupply: fETHTotalSupply,
                 ratio: p_f,
               }}
+              dateList={navsData.dateList}
+              navs={navsData.fETH}
               color="blue"
               symbol="fETH"
               icon="/images/f-s-logo.svg"
@@ -135,6 +139,8 @@ export default function SystemStatistics() {
                 totalSupply: xETHTotalSupply,
                 ratio: p_x,
               }}
+              dateList={navsData.dateList}
+              navs={navsData.xETH}
               color="red"
               symbol="xETH"
               icon="/images/x-s-logo.svg"
