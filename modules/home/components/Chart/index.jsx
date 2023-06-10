@@ -50,6 +50,10 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
         type: 'line',
       },
     ],
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b0}<br />Net Assets Value: ${c0}'
+    },
     color: ['rgba(255, 255, 255, 0.8)'],
   }
 
