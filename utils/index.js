@@ -41,6 +41,33 @@ export function formatBalance(balanceInWei, decimals = 18, toFixed = -1) {
   return formatResult(result)
 }
 
+export const addToMetamask = (options) => {
+  try {
+    window.ethereum
+      .request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: options.address,
+            symbol: options.symbol,
+            decimals: options.decimals,
+            image: options.image,
+          },
+        },
+      })
+      .then((success) => {
+        if (success) {
+          message.success('Token Added')
+        } else {
+          message.error('Failed to add token')
+        }
+      })
+  } catch (error) {
+    message.error('Failed to add token')
+  }
+}
+
 export const fb4 = (balance, isMoney, decimals, toFixedNum = -1) => {
   if (cBN(balance).isZero()) {
     return isMoney ? '$0' : '-'
@@ -67,59 +94,11 @@ export const groupByLength = (array, subGroupLength) => {
   return newArray
 }
 
-export const getConvexData = (connvexInfo, tokenName) => {
-  try {
-    const info = connvexInfo.find((item) => {
-      const iname = decodeURI(encodeURI(item.name).replace(/%E2%80%8B/g, ''))
-      return (
-        iname.toLocaleLowerCase() === tokenName.toLocaleLowerCase() ||
-        item.name === tokenName ||
-        item.depositInfo.url === tokenName
-      )
-    })
-    return info
-  } catch (e) {
-    // console.log('tokenName----', tokenName)
-    return null
-  }
-}
-
 export const checkNotZoroNumOption = (num, cb) => {
   if (checkNotZoroNum(num)) {
     return cb
   }
   return '-'
-}
-
-export const addToMetamask = async (
-  tokenAddress,
-  tokenSymbol,
-  // eslint-disable-next-line default-param-last
-  tokenDecimals = 18,
-  tokenImage
-) => {
-  try {
-    const wasAdded = await window.ethereum.request({
-      method: 'wallet_watchAsset',
-      params: {
-        type: 'ERC20',
-        options: {
-          address: tokenAddress,
-          symbol: tokenSymbol,
-          decimals: tokenDecimals,
-          image: tokenImage,
-        },
-      },
-    })
-
-    if (wasAdded) {
-      message.success('Token Added')
-    } else {
-      message.error('Failed to add token')
-    }
-  } catch (error) {
-    message.error('Failed to add token')
-  }
 }
 
 export const numberLess = (number, floorNum, cb) => {
