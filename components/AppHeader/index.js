@@ -15,7 +15,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import config from '@/config/index'
-import { cBN, fb4 } from '@/utils/index'
+import { addToMetamask, fb4 } from '@/utils/index'
 import Select from '@/components/Select'
 import FAQ from '@/components/FAQ'
 
@@ -70,6 +70,7 @@ export default function AppHeader() {
         amount: fb4(tokens.fETH.balance, false),
         icon: '/images/f-logo.svg',
         usd: tokens.fETH.usd,
+        showAdd: true,
       },
       {
         name: 'Leveraged ETH',
@@ -77,6 +78,7 @@ export default function AppHeader() {
         amount: fb4(tokens.xETH.balance, false),
         icon: '/images/x-logo.svg',
         usd: tokens.xETH.usd,
+        showAdd: true,
       },
     ]
     // if (route.includes('offering')) {
@@ -86,6 +88,24 @@ export default function AppHeader() {
   }, [tokens, route])
 
   const showSwitch = useMemo(() => route === '/home', [route])
+
+  const handleAdd = (symbol) => {
+    const map = {
+      fETH: {
+        address: config.tokens.fETH,
+        symbol: 'fETH',
+        decimals: 18,
+        image: `${window.location.origin}/images/f-logo.svg`,
+      },
+      xETH: {
+        address: config.tokens.xETH,
+        symbol: 'xETH',
+        decimals: 18,
+        image: `${window.location.origin}/images/x-logo.svg`,
+      },
+    }
+    addToMetamask(map[symbol])
+  }
 
   const refMenu = useRef(null)
   const refMenuPanel = useRef(null)
@@ -202,6 +222,14 @@ export default function AppHeader() {
                       {item.amount} {item.symbol}
                     </div>
                   </div>
+                  {item.showAdd ? (
+                    <div
+                      className={styles.add}
+                      onClick={() => handleAdd(item.symbol)}
+                    >
+                      Add to wallet
+                    </div>
+                  ) : null}
                   {/* <div className={styles.usd}>
                     {item.usd ? `~${item.usd}` : '-'}
                     </div> */}
