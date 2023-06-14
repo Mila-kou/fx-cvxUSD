@@ -6,13 +6,16 @@ html body {
 
 div {
   font-family: 'Myriad', sans-serif;
+  color: var(--main-text-color);
 }
 
 p,
+h2,
 span {
   font-family: 'Myriad', sans-serif;
   margin: 0;
   padding: 0;
+  color: inherit;
 }
 
 body,
@@ -113,11 +116,18 @@ div[class='red'] {
 }
 
 .ant-modal-content {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--modal-background-color);
   border-radius: 8px;
 
   .ant-modal-body {
-    padding: 36px;
+    padding: 50px;
+  }
+}
+
+.ant-modal-close {
+  color: #9595c2;
+  &:hover {
+    color: #9595c2;
   }
 }
 

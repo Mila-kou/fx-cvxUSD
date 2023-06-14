@@ -78,11 +78,16 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      color: #231f20;
+      p {
+        color: #231f20;
+      }
     }
 
     .title {
       font-weight: 500;
       margin-bottom: 10px;
+      color: #231f20;
     }
 
     .assetItem {
@@ -154,6 +159,9 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      div {
+        color: #231f20;
+      }
 
       span {
         margin-right: 9px;

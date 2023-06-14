@@ -17,12 +17,21 @@
     position: relative;
     display: flex;
     align-items: center;
+    border-radius: 6px;
+  }
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    span {
+      color: var(--primary-color);
+    }
   }
   input {
     height: 60px;
-    color: #fff;
+    color: #aca6a6;
     width: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    background: #fff;
     border: none;
     outline: none;
     padding-left: 22px;
@@ -36,21 +45,20 @@
     position: absolute;
     right: 16px;
     top: 16px;
-    color: $blue;
+    color: var(--primary-color);
     text-decoration: underline;
   }
   .errMsg {
     color: #a40000;
   }
   .moreInfoItem {
-    // color: $blue;
     font-size: 16px;
     margin: 4px 0;
   }
 
   .selectBox {
     min-width: 164px;
-    background: rgba(0, 0, 0, 0.4);
+    background: #fff;
     height: 60px;
     padding: 0 12px;
     position: relative;
@@ -59,7 +67,6 @@
   .select {
     cursor: pointer;
     position: relative;
-    color: #fff;
     width: 100%;
     border: none;
     outline: none;
@@ -67,23 +74,19 @@
     appearance: none;
     height: 60px;
     cursor: pointer;
-    // &::after {
-    //   content: "";
-    //   display: block;
-    //   position: absolute;
-    //   right: -16px;
-    //   height: 40px;
-    //   background: $blue;
-    //   width: 1px;
-    // }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #231f20;
+    div {
+      color: #231f20;
+    }
   }
 
   .divider {
     display: block;
-    // position: absolute;
-    // right: -16px;
     height: 40px;
-    background: $blue;
+    background: var(--border-color);
     width: 1px;
   }
   .options {
@@ -96,7 +99,7 @@
     transition: opacity 0.03s;
     opacity: 0;
     visibility: hidden;
-    background: $blue;
+    background: var(--background-color);
     padding: 4px 6px;
     &.visible {
       opacity: 1;
@@ -104,15 +107,11 @@
     }
   }
   .option {
-    &:not(:first-child) {
-      border-top: 1px solid #000014;
-    }
-    color: #fff;
     padding: 8px 8px;
-    background: $blue;
+    background: var(--background-color);
     transition: background 0.03s;
     &:hover {
-      background: #1a4caf;
+      color: var(--blue-color);
     }
   }
   @media (max-width: 768px) {
@@ -156,9 +155,6 @@ div[class='red'] {
     background: #f2f4f7;
   }
   .option {
-    &:not(:first-child) {
-      border-top: 1px solid #000014;
-    }
     color: #000;
     background: #f2f4f7;
     &:hover {

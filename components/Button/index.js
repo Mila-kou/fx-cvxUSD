@@ -13,6 +13,7 @@ export default function Button({
   disabled,
   theme,
   size,
+  type = 'default',
 }) {
   const handClick = () => {
     if (!loading && !disabled && onClick) {
@@ -23,6 +24,7 @@ export default function Button({
   return (
     <button
       className={cn(styles.btn, styles[theme], styles[size])}
+      data-type={type}
       onClick={handClick}
       disabled={disabled || loading}
       style={{ width, ...style }}
