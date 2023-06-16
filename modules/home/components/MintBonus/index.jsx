@@ -247,7 +247,7 @@ export default function MintBonus({ slippage }) {
           disabled={!canMint}
           onClick={handleMint}
         >
-          Mint
+          Mint Volatile xETH
         </Button>
       </div>
     </div>
