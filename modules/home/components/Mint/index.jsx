@@ -296,7 +296,7 @@ export default function Mint({ slippage }) {
           disabled={!canMint}
           onClick={handleMint}
         >
-          Mint
+          Mint {isF ? 'Stable fETH' : 'Volatile xETH'}
         </Button>
       </div>
     </div>
