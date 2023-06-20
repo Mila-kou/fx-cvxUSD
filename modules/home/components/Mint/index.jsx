@@ -276,8 +276,15 @@ export default function Mint({ slippage }) {
     // handleGetAllMinAmount()
   }, [selected, slippage, ETHtAmount])
 
+  const handelTest = () => {
+    setETHtAmount('100200000000000000')
+  }
+
+  console.log('ETHtAmount----', ETHtAmount)
+
   return (
     <div className={styles.container}>
+      <div onClick={handelTest}>Change ETH Value</div>
       <BalanceInput
         placeholder="-"
         symbol="ETH"
@@ -286,6 +293,7 @@ export default function Mint({ slippage }) {
         maxAmount={tokens.ETH.balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
+        changeValue={cBN(ETHtAmount)}
       />
       <div className={styles.arrow}>
         <DownOutlined />
