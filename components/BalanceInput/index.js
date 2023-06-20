@@ -58,6 +58,11 @@ function BalanceInput(props) {
     setVal(fb4(maxAmount, false, decimals ?? 18))
   }
 
+  const setInputText = (amountIn) => {
+    onChange(amountIn)
+    setVal(fb4(amountIn, false, decimals ?? 18))
+  }
+
   useEffect(() => {
     if (changeValue) {
       setVal(fb4(changeValue, false, decimals ?? 18))
