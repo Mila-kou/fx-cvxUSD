@@ -9,6 +9,7 @@ import {
   CloseOutlined,
   LineChartOutlined,
   SkinOutlined,
+  ShareAltOutlined,
 } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import useWeb3 from '@/hooks/useWeb3'
@@ -131,6 +132,14 @@ export default function AppHeader() {
     [currentAccount]
   )
 
+  const historyUrl = useMemo(
+    () =>
+      currentAccount
+        ? `https://sepolia.etherscan.io/address/${currentAccount}`
+        : '',
+    [currentAccount]
+  )
+
   const handleDisconnect = () => {
     disconnect()
     toggleShowAccountPanel()
@@ -190,15 +199,15 @@ export default function AppHeader() {
             }))}
             disabled={settingChain}
           />
-          <div className={styles.account} ref={refAccount}>
-            {currentAccount ? (
-              <p onClick={toggleShowAccountPanel}>{_account}</p>
-            ) : (
-              <p onClick={handleConnect}>Connect Wallet</p>
-            )}
+          <div
+            onClick={currentAccount ? toggleShowAccountPanel : handleConnect}
+            className={styles.account}
+            ref={refAccount}
+          >
+            <p>{currentAccount ? _account : 'Connect Wallet'}</p>
           </div>
-          <div className={styles.menu}>
-            <MenuOutlined ref={refMenu} onClick={toggleShowMenuPanel} />
+          <div className={styles.menu} onClick={toggleShowMenuPanel}>
+            <MenuOutlined ref={refMenu} />
           </div>
         </div>
 
@@ -210,6 +219,14 @@ export default function AppHeader() {
                 <CloseOutlined onClick={toggleShowAccountPanel} />
               </div>
               <p className={styles.title}>{_account}</p>
+              <a
+                className={styles.histories}
+                href={historyUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Transaction Histories <ShareAltOutlined />
+              </a>
               <p className={styles.title}>Assets</p>
               {assets.map((item) => (
                 <div className={styles.assetItem} key={item.symbol}>
