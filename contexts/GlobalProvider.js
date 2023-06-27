@@ -27,8 +27,7 @@ const GlobalContext = createContext(null)
 function GlobalProvider({ children }) {
   const { web3, blockNumber } = useWeb3()
   const { theme, toggleTheme } = useTheme()
-  const [showSystemStatistics, { toggle: toggleShowSystemStatistics }] =
-    useToggle()
+  const [showSystemStatistics, setShowSystemStatistics] = useState(false)
 
   const fx_info = useInfo()
   const ethToken = useToken(config.tokens.eth)
@@ -46,6 +45,15 @@ function GlobalProvider({ children }) {
       },
     ],
   })
+
+  useEffect(() => {
+    setShowSystemStatistics(window.localStorage.getItem('showSS') == 1)
+  }, [])
+
+  const toggleShowSystemStatistics = useCallback(() => {
+    window.localStorage.setItem('showSS', showSystemStatistics ? 0 : 1)
+    setShowSystemStatistics(!showSystemStatistics)
+  }, [setShowSystemStatistics, showSystemStatistics])
 
   const tokens = useMemo(() => {
     // ETH
