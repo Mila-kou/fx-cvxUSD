@@ -44,7 +44,9 @@ export default function SlippageModal(props) {
     const _val = Number(value)
     // console.log('_val----', _val)
 
-    if (!_val && _val !== 0) {
+    if (_val === 0) {
+      setVal(0)
+    } else if (!_val) {
       return
     }
     if (_val > 5) {
