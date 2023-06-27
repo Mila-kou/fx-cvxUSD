@@ -284,7 +284,7 @@ export default function Mint({ slippage }) {
 
   return (
     <div className={styles.container}>
-      <div onClick={handelTest}>Change ETH Value</div>
+      {/* <div onClick={handelTest}>Change ETH Value</div> */}
       <BalanceInput
         placeholder="-"
         symbol="ETH"
@@ -293,7 +293,7 @@ export default function Mint({ slippage }) {
         maxAmount={tokens.ETH.balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
-        changeValue={cBN(ETHtAmount)}
+        // changeValue={cBN(ETHtAmount)}
       />
       <div className={styles.arrow}>
         <DownOutlined />
