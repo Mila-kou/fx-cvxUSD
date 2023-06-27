@@ -302,12 +302,12 @@ export default function Mint({ slippage }) {
         symbol="fETH"
         color={isF ? 'blue' : ''}
         placeholder={FETHtAmount.minout_ETH}
-        // disabled
+        disabled
         className={styles.inputItem}
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-        onChange={hanldefETHAmountChanged}
+        // onChange={hanldefETHAmountChanged}
         // rightSuffix="Beta 0.1"
       />
       <BalanceInput
@@ -315,7 +315,7 @@ export default function Mint({ slippage }) {
         // tip="Bonus+"
         color={isX ? 'red' : ''}
         placeholder={XETHtAmount.minout_ETH}
-        // disabled
+        disabled
         className={styles.inputItem}
         usd={`$${xnav}`}
         type={isX ? '' : 'select'}
@@ -323,7 +323,7 @@ export default function Mint({ slippage }) {
         rightSuffix={
           <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
         }
-        onChange={hanldexETHAmountChanged}
+        // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />

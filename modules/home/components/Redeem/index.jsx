@@ -297,7 +297,8 @@ export default function Redeem({ slippage }) {
         symbol="ETH"
         placeholder={minOutETHtAmount.minout_ETH}
         usd={`$${ethPrice_text}`}
-        onChange={hanldeETHAmountChanged}
+        disabled
+        // onChange={hanldeETHAmountChanged}
         className={styles.inputItem}
       />
 
