@@ -168,10 +168,10 @@ const useInfo = () => {
     try {
       const apiCalls = [
         cacheTwap(),
-        // maxMintableFToken(_stabilityRatio),
-        // maxMintableXToken(_stabilityRatio),
-        // maxRedeemableFToken(_stabilityRatio),
-        // maxRedeemableXToken(_stabilityRatio),
+        maxMintableFToken(_stabilityRatio),
+        maxMintableXToken(_stabilityRatio),
+        maxRedeemableFToken(_stabilityRatio),
+        maxRedeemableXToken(_stabilityRatio),
         maxMintableXTokenWithIncentive(
           _stabilityRatio,
           _stabilityIncentiveRatio
@@ -180,13 +180,13 @@ const useInfo = () => {
       ]
       const [
         ,
-        // maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
+        maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
         maxMintableXTokenWithIncentiveRes,
         maxLiquidatableRes,
       ] = await multiCallsV2(apiCalls)
       console.log(
         'maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--',
-        // _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
+        _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
         maxMintableXTokenWithIncentiveRes,
         maxLiquidatableRes
       )

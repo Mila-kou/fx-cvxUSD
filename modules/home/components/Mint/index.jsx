@@ -25,6 +25,9 @@ export default function Mint({ slippage }) {
 
   const minGas = 234854
   const [ETHtAmount, setETHtAmount] = useState(0)
+  const [fETHtAmountIn, setFETHtAmountIn] = useState(0)
+  const [xETHtAmountIn, setXETHtAmountIn] = useState(0)
+  const [manualNum, setManualNum] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState({
     minout_slippage: 0,
     minout_ETH: 0,
@@ -66,7 +69,7 @@ export default function Mint({ slippage }) {
     [FETHtAmount, XETHtAmount, isF]
   )
 
-  const [fee, feeUsd] = useMemo(() => {
+  const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __mintFETHFee = _mintFETHFee
     let __mintXETHFee = _mintXETHFee
     if (systemStatus == 0) {
@@ -86,13 +89,42 @@ export default function Mint({ slippage }) {
     //   _feeUsd.toString(10),
     //   ethPrice
     // )
-    return [fb4(_fee), 1]
+    return [fb4(_fee), 1, __mintXETHFee]
   }, [isF, systemStatus, ethPrice])
+
+  const ethAmount = useMemo(() => {
+    console.log(
+      'ethAmount',
+      manualNum,
+      fETHtAmountIn,
+      fnav,
+      xETHtAmountIn,
+      feeCBN
+    )
+    let _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
+    let _tokenNav = isF ? fnav : xnav
+    const _needETH = cBN(_tokenAmountIn)
+      .div(1e18)
+      .times(_tokenNav)
+      .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
+      .div(ethPrice)
+    console.log('ethAmount', _needETH.toString(10))
+    setETHtAmount(_needETH.times(1e18).toString(10))
+  }, [fETHtAmountIn, xETHtAmountIn, manualNum])
 
   const hanldeETHAmountChanged = (v) => {
     setETHtAmount(v.toString(10))
   }
-
+  const hanldefETHAmountChanged = (v) => {
+    setFETHtAmountIn(v.toString(10))
+    let _pre = manualNum + 1
+    setManualNum(_pre)
+  }
+  const hanldexETHAmountChanged = (v) => {
+    setXETHtAmountIn(v.toString(10))
+    let _pre = manualNum + 1
+    setManualNum(_pre)
+  }
   const initPage = () => {
     clearInput()
     setETHtAmount(0)
@@ -222,7 +254,13 @@ export default function Mint({ slippage }) {
     }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
     return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
-  }, [ETHtAmount, mintPaused, fTokenMintInSystemStabilityModePaused, isF, tokens.ETH.balance])
+  }, [
+    ETHtAmount,
+    mintPaused,
+    fTokenMintInSystemStabilityModePaused,
+    isF,
+    tokens.ETH.balance,
+  ])
 
   useEffect(() => {
     let _fTokenMintInSystemStabilityModePaused = false
@@ -238,8 +276,15 @@ export default function Mint({ slippage }) {
     // handleGetAllMinAmount()
   }, [selected, slippage, ETHtAmount])
 
+  const handelTest = () => {
+    setETHtAmount('100200000000000000')
+  }
+
+  console.log('ETHtAmount----', ETHtAmount)
+
   return (
     <div className={styles.container}>
+      {/* <div onClick={handelTest}>Change ETH Value</div> */}
       <BalanceInput
         placeholder="-"
         symbol="ETH"
@@ -248,6 +293,7 @@ export default function Mint({ slippage }) {
         maxAmount={tokens.ETH.balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
+        // changeValue={cBN(ETHtAmount)}
       />
       <div className={styles.arrow}>
         <DownOutlined />
@@ -261,7 +307,8 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-      // rightSuffix="Beta 0.1"
+        // onChange={hanldefETHAmountChanged}
+        // rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
@@ -276,18 +323,18 @@ export default function Mint({ slippage }) {
         rightSuffix={
           <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
         }
+        // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
 
-      {showDisabledNotice && <NoticeCard
-        content={
-          [
+      {showDisabledNotice && (
+        <NoticeCard
+          content={[
             'fx governance decision to temporarily disabled Mint functionality.',
-          ]
-        }
-      />}
-
+          ]}
+        />
+      )}
 
       <div className={styles.action}>
         <Button

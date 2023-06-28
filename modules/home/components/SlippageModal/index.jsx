@@ -42,10 +42,14 @@ export default function SlippageModal(props) {
     }
 
     const _val = Number(value)
+    // console.log('_val----', _val)
 
-    if (_val.isNaN) {
-      setVal('')
-    } else if (_val > 5) {
+    if (_val === 0) {
+      setVal(0)
+    } else if (!_val) {
+      return
+    }
+    if (_val > 5) {
       setVal(5)
     } else {
       setVal(value)

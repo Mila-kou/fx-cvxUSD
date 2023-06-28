@@ -47,6 +47,8 @@ export default function Redeem({ slippage }) {
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
+  const [ETHtAmountIn, setETHtAmountIn] = useState(0)
+  const [manualNum, setManualNum] = useState(0)
   const [minOutETHtAmount, setMinOutETHtAmount] = useState({
     minout_slippage: 0,
     minout_slippage_tvl: 0,
@@ -67,7 +69,7 @@ export default function Redeem({ slippage }) {
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
 
-  const [fee, feeUsd] = useMemo(() => {
+  const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __redeemFETHFee = _redeemFETHFee
     let __redeemXETHFee = _redeemXETHFee
     if (systemStatus == 0) {
@@ -75,14 +77,36 @@ export default function Redeem({ slippage }) {
       __redeemXETHFee = baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
     }
     let _fee
+    let _feeCBN
     if (isF) {
       _fee = cBN(__redeemFETHFee).multipliedBy(100).toString(10)
+      _feeCBN = __redeemFETHFee
     } else {
       _fee = cBN(__redeemXETHFee).multipliedBy(100).toString(10)
+      _feeCBN = __redeemXETHFee
     }
     const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
-    return [fb4(_fee), fb4(_feeUsd)]
+    return [fb4(_fee), fb4(_feeUsd), _feeCBN]
   }, [isF, systemStatus, ethPrice])
+
+  const fxTokenAmount = useMemo(() => {
+    console.log('ethAmount', manualNum, ETHtAmountIn, fnav, feeCBN)
+    let _tokenAmountIn = ETHtAmountIn
+    let _tokenNav = isF ? fnav : xnav
+    const _needETH = cBN(_tokenAmountIn)
+      .div(1e18)
+      .times(ethPrice)
+      .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
+      .div(_tokenNav)
+    console.log('ethAmount', _needETH.toString(10))
+    // setETHtAmount(_needETH.times(1e18).toString(10))
+  }, [ETHtAmountIn, manualNum])
+
+  const hanldeETHAmountChanged = (v) => {
+    setETHtAmountIn(v.toString(10))
+    let _pre = manualNum + 1
+    setManualNum(_pre)
+  }
 
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -131,8 +155,16 @@ export default function Redeem({ slippage }) {
       _xTokenRedeemInSystemStabilityModePaused =
         xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
     }
-    console.log('redeemPaused---', redeemPaused, xTokenRedeemInSystemStabilityModePaused, systemStatus, _xTokenRedeemInSystemStabilityModePaused)
-    setShowDisabledNotice(redeemPaused || _xTokenRedeemInSystemStabilityModePaused)
+    console.log(
+      'redeemPaused---',
+      redeemPaused,
+      xTokenRedeemInSystemStabilityModePaused,
+      systemStatus,
+      _xTokenRedeemInSystemStabilityModePaused
+    )
+    setShowDisabledNotice(
+      redeemPaused || _xTokenRedeemInSystemStabilityModePaused
+    )
   }, [redeemPaused, isX, xTokenRedeemInSystemStabilityModePaused])
 
   const initPage = () => {
@@ -266,6 +298,7 @@ export default function Redeem({ slippage }) {
         placeholder={minOutETHtAmount.minout_ETH}
         usd={`$${ethPrice_text}`}
         disabled
+        // onChange={hanldeETHAmountChanged}
         className={styles.inputItem}
       />
 
@@ -278,14 +311,13 @@ export default function Redeem({ slippage }) {
         ]}
       />
 
-      {showDisabledNotice && <NoticeCard
-        content={[
-          'fx governance decision to temporarily disabled Redeem functionality.',
-        ]
-        }
-      />
-      }
-
+      {showDisabledNotice && (
+        <NoticeCard
+          content={[
+            'fx governance decision to temporarily disabled Redeem functionality.',
+          ]}
+        />
+      )}
 
       <div className={styles.action}>
         <BtnWapper
