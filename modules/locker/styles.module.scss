@@ -44,45 +44,9 @@
     }
     .right {
       background: var(--background-color);
-      width: 362px;
+      flex: 1;
       padding: 28px 28px 0 44px;
       border-radius: 10px;
-
-      h2 {
-        color: var(--primary-color);
-      }
-
-      .wrap {
-        margin-top: 35px;
-        h2 {
-          font-size: 20px;
-        }
-        .color {
-          color: var(--primary-color);
-        }
-      }
-
-      button {
-        margin-top: 335px;
-      }
-
-      .cell {
-        margin-top: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 44px;
-
-        p {
-          font-size: 16px;
-        }
-
-        a {
-          text-decoration: underline;
-          color: #9595c2;
-          font-size: 16px;
-        }
-      }
     }
   }
 }

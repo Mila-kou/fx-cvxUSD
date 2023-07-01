@@ -17,8 +17,8 @@ import sepolia from './network/sepolia'
 //     }
 
 const chainMap = {
-  [sepolia.chainInfo.id]: sepolia,
-  // [ethereum.chainInfo.id]: ethereum,
+  // [sepolia.chainInfo.id]: sepolia,
+  [ethereum.chainInfo.id]: ethereum,
   // [mainnetFork.chainInfo.id]: mainnetFork,
 }
 

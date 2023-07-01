@@ -107,3 +107,20 @@ export const numberLess = (number, floorNum, cb) => {
   }
   return cb
 }
+
+export const getConvexData = (connvexInfo, tokenName) => {
+  try {
+    const info = connvexInfo.find((item) => {
+      const iname = decodeURI(encodeURI(item.name).replace(/%E2%80%8B/g, ''))
+      return (
+        iname.toLocaleLowerCase() === tokenName.toLocaleLowerCase() ||
+        item.name === tokenName ||
+        item.depositInfo.url === tokenName
+      )
+    })
+    return info
+  } catch (e) {
+    // console.log('tokenName----', tokenName)
+    return null
+  }
+}

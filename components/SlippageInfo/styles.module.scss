@@ -1,0 +1,19 @@
+.slippageInfo {
+  height: 20px;
+  .slippageInput {
+    color: #020e2d;
+    height: 20px;
+    width: 52px;
+    padding: 2px 4px;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+div[class="default"]{
+  .slippageInfo{
+    .slippageInput{
+      border: 1px solid #020e2d;
+    }
+  }
+}

@@ -35,16 +35,63 @@ function GlobalProvider({ children }) {
   const fETHToken = useToken(config.tokens.fETH)
   const xETHToken = useToken(config.tokens.xETH)
 
-  const [{ data: tokenPrice, refetch: refetch1 }] = useQueries({
+  const [
+    { data: tokenPrice, refetch: refetch1 },
+    { data: vaultsInfo, refetch: refetch2 },
+    { data: ConvexVaultsAPY, refetch: refetch3 },
+    { data: concentratorInitData, refetch: refetch4 },
+    { data: lpPrice, refetch: refetch5 },
+  ] = useQueries({
     queries: [
       {
         queryKey: ['tokenPrice'],
         queryFn: getTokenListPrice,
         enabled: !!web3,
-        refetchInterval: 300000,
+      },
+      {
+        queryKey: ['vaultsInfo'],
+        queryFn: getVaultsInfo,
+      },
+      {
+        queryKey: ['ConvexVaultsAPY'],
+        queryFn: getConvexVaultsAPY,
+        initialData: [],
+      },
+      {
+        queryKey: ['concentratorInitData'],
+        queryFn: getConcentratorInit,
+        initialData: {},
+      },
+      {
+        queryKey: ['lpPrice'],
+        queryFn: getLpPrice,
+        initialData: {},
       },
     ],
   })
+
+  const ifoVaultWithdrawFee = useMemo(() => {
+    try {
+      return (
+        (Object.values(vaultsInfo.newVault)[0]?.withdrawFeePercentage ??
+          500000) / 10e8
+      )
+    } catch (e) {
+      return 0.0005
+    }
+  }, [vaultsInfo])
+
+  useDebounceEffect(
+    () => {
+      refetch1()
+      refetch2()
+      refetch3()
+      refetch4()
+      refetch5()
+    },
+    [blockNumber],
+    { wait: 30000 }
+  )
 
   useEffect(() => {
     setShowSystemStatistics(window.localStorage.getItem('showSS') == 1)
@@ -120,6 +167,12 @@ function GlobalProvider({ children }) {
       tokens,
       tokenPrice,
       fx_info,
+
+      lpPrice,
+      vaultsInfo,
+      ConvexVaultsAPY,
+      concentratorInitData,
+      ifoVaultWithdrawFee,
     }),
     [
       theme,
@@ -129,6 +182,12 @@ function GlobalProvider({ children }) {
       tokens,
       tokenPrice,
       fx_info,
+
+      lpPrice,
+      vaultsInfo,
+      ConvexVaultsAPY,
+      concentratorInitData,
+      ifoVaultWithdrawFee,
     ]
   )
 

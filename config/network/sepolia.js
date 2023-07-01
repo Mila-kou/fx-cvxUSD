@@ -31,10 +31,20 @@ const TOKENS_INFO = {
   ...tokensInfo.TOKENS_INFO,
 }
 
+const POOLS_LIST_GAUGE = {
+  ...tokensInfo.POOLS_LIST_GAUGE,
+}
+
+const zapTokens = {
+  ...tokensInfo.zapTokens,
+}
+
 export default {
-  chainInfo,
   tokens,
   contracts,
   TOKENS_INFO,
+  chainInfo,
   explorerUri,
+  POOLS_LIST_GAUGE,
+  zapTokens,
 }
