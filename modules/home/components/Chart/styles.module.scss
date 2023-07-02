@@ -4,6 +4,9 @@
   color: #fff;
   font-size: 11px;
   --tip-color: #25a8df;
+  div {
+    color: #fff;
+  }
 
   &[data-color='red'] {
     --tip-color: #f7c67f;

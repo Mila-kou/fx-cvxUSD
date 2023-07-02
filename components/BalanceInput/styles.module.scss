@@ -24,11 +24,23 @@
   @include color-svg(var(--second-text-color));
 
   &[data-color='blue'] {
+    p {
+      color: #fff;
+    }
+    input {
+      color: #fff;
+    }
     color: #fff;
     background: linear-gradient(0deg, #4214ed 0%, #7316ff 100%);
     @include color-svg();
   }
   &[data-color='red'] {
+    p {
+      color: #fff;
+    }
+    input {
+      color: #fff;
+    }
     color: #fff;
     background: linear-gradient(0deg, #ff086b 0%, #f05a29 100%);
     @include color-svg();

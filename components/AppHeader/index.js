@@ -22,8 +22,8 @@ import FAQ from '@/components/FAQ'
 
 const routers = [
   ['F(x)', '/home'],
-  // ['Farming', '/farming'],
-  // ['Locker', '/locker'],
+  ['Farming', '/farming'],
+  ['Locker', '/locker'],
   // ['IDO', '/offering'],
 ]
 

@@ -27,6 +27,12 @@
     color: #fff !important;
   }
 
+  .left {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
   .right {
     display: flex;
     justify-content: flex-end;
@@ -78,11 +84,16 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      color: #231f20;
+      p {
+        color: #231f20;
+      }
     }
 
     .title {
       font-weight: 500;
       margin-bottom: 10px;
+      color: #231f20;
     }
 
     .histories {
@@ -107,6 +118,9 @@
 
       .main {
         flex: 1;
+        div {
+          color: #231f20;
+        }
         .amount {
           color: #a6a6ae;
           font-size: 16px;
@@ -158,6 +172,9 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      div {
+        color: #231f20;
+      }
 
       span {
         margin-right: 9px;
