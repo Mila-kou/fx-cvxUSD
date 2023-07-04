@@ -22,9 +22,9 @@ import FAQ from '@/components/FAQ'
 
 const routers = [
   ['F(x)', '/home'],
-  ['Farming', '/farming'],
-  ['Locker', '/locker'],
-  // ['IDO', '/offering'],
+  // ['Farming', '/farming'],
+  // ['Locker', '/locker'],
+  ['Stability Pool', '/stability-pool'],
 ]
 
 export default function AppHeader() {
