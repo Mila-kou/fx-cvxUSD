@@ -11,6 +11,7 @@ import {
 } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
+import config from '@/config/index'
 
 const useInfo = () => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
@@ -20,17 +21,19 @@ const useInfo = () => {
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
-    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlockingFn, rewardsLength: rewardsLengthFn } = fx_stabilityPoolContract.methods
+    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlockingFn, rewardsLength: rewardsLengthFn, rewards: rewardsFn } = fx_stabilityPoolContract.methods
     try {
       const apiCalls = [
         stabilityPoolTotalSupplyFn(),
         totalUnlockingFn,
-        rewardsLengthFn()
+        rewardsLengthFn(),
+        rewardsFn(0)
       ]
       const [
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
-        rewardsLengthRes
+        rewardsLengthRes,
+        rewardsRes
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -40,7 +43,8 @@ const useInfo = () => {
         //  betaRes,
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
-        rewardsLengthRes
+        rewardsLengthRes,
+        rewardsRes
       )
 
       return {
@@ -53,13 +57,24 @@ const useInfo = () => {
   }, [fx_stabilityPoolContract, multiCallsV2, _currentAccount])
 
   const fetchUserInfo = useCallback(async () => {
-    const { balanceOf: stabilityPoolBalanceOfFn } = fx_stabilityPoolContract.methods
+
+    const { balanceOf: stabilityPoolBalanceOfFn, unlockedBalanceOf: unlockedBalanceOfFn, unlockingBalanceOf: unlockingBalanceOfFn, claimable: claimableFn } = fx_stabilityPoolContract.methods
+    const aa = await stabilityPoolBalanceOfFn(_currentAccount).call({ from: _currentAccount })
+    console.log('_currentAccount---', _currentAccount, aa)
+
     try {
+      console.log('config.tokens.steth--', config.tokens.steth)
       const apiCalls = [
         stabilityPoolBalanceOfFn(_currentAccount),
+        // unlockedBalanceOfFn(_currentAccount),
+        // unlockingBalanceOfFn(_currentAccount),
+        claimableFn(_currentAccount, config.tokens.steth)
       ]
       const [
         stabilityPoolBalanceOfRes,
+        // unlockedBalanceOfRes,
+        // unlockingBalanceOfRes,
+        claimableRes
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -68,10 +83,16 @@ const useInfo = () => {
         // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
         //  betaRes,
         stabilityPoolBalanceOfRes,
+        // unlockedBalanceOfRes,
+        // unlockingBalanceOfRes,
+        claimableRes
       )
 
       return {
         stabilityPoolBalanceOfRes,
+        // unlockedBalanceOfRes,
+        // unlockingBalanceOfRes,
+        claimableRes
       }
     } catch (error) {
       console.log('UserInfoError==>', error)
@@ -83,6 +104,7 @@ const useInfo = () => {
     _currentAccount,
     web3,
   ])
+
   const [
     { data: stabilityPool_baseInfo, refetch: refetchBaseInfo },
     { data: stabilityPool_userInfo, refetch: refetchUserInfo },
@@ -106,11 +128,6 @@ const useInfo = () => {
     refetchBaseInfo()
     refetchUserInfo()
   }, [_currentAccount, blockNumber])
-
-  // useEffect(() => {
-  //   getMaxAbleToken()
-  // }, [blockNumber])
-
   return {
     baseInfo: stabilityPool_baseInfo,
     // ...maxAbleFToken,
