@@ -11,8 +11,8 @@ import useWeb3 from '@/hooks/useWeb3'
 import styles from './styles.module.scss'
 import Button from '@/components/Button'
 
-import useLiquidityLimit from '@/modules/calculator/hook/useLiquidityLimit'
-import useCalc from '@/modules/calculator/hook/useCalc'
+import useLiquidityLimit from '../../hooks/useLiquidityLimit'
+import useCalc from '../../hooks/useCalc'
 
 const IconClev = '/assets/ctr.svg'
 const cryptoIcons = '/assets/crypto-icons-stack.svg'
