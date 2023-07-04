@@ -32,7 +32,7 @@ const useStabiltyPool_c = () => {
             let stabilityPoolTotalSupplyTvl = cBN(0);
             console.log('fxInfo.baseInfo.CurrentNavRes?._fNav', fxInfo.baseInfo.CurrentNavRes?._fNav, stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes)
             if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes)) {
-                stabilityPoolTotalSupplyTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes)
+                stabilityPoolTotalSupplyTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes).div(1e18)
             }
             const stabilityPoolTotalSupplyTvl_text = fb4(stabilityPoolTotalSupplyTvl, false, 0)
 

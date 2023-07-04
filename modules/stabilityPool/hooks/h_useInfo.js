@@ -84,8 +84,8 @@ const useInfo = () => {
     web3,
   ])
   const [
-    { data: baseInfo, refetch: refetchBaseInfo },
-    { data: userInfo, refetch: refetchUserInfo },
+    { data: stabilityPool_baseInfo, refetch: refetchBaseInfo },
+    { data: stabilityPool_userInfo, refetch: refetchUserInfo },
   ] = useQueries({
     queries: [
       {
@@ -95,7 +95,7 @@ const useInfo = () => {
         enabled: !!web3,
       },
       {
-        queryKey: ['userInfo'],
+        queryKey: ['stabilityPool_userInfo'],
         queryFn: () => fetchUserInfo(),
         initialData: {},
       },
@@ -112,9 +112,9 @@ const useInfo = () => {
   // }, [blockNumber])
 
   return {
-    baseInfo,
+    baseInfo: stabilityPool_baseInfo,
     // ...maxAbleFToken,
-    userInfo,
+    userInfo: stabilityPool_userInfo,
   }
 }
 export default useInfo
