@@ -78,7 +78,7 @@ export default function StabilityPoolPage() {
               <div>
                 <p>fxETH Earned</p>
                 <h2>${userWstETHClaimableTvl_text}</h2>
-                <p>{userWstETHClaimable} fxETH</p>
+                <p>{userWstETHClaimable} stETH</p>
               </div>
               {/* <div>
                 <p>fx Earned</p>
