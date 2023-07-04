@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import moment from 'moment'
-import { useContract, useFETH, useFX_Market, useFX_Treasury, useXETH } from 'hooks/useContracts'
+import { useContract, useFETH, useFX_Market, useFX_stETHTreasury, useXETH } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import abis from '@/config/abi'
 import config from '@/config/index'
@@ -12,7 +12,7 @@ const useETHPrice = () => {
     const { _currentAccount, web3, blockNumber } = useWeb3()
     const { erc20Contract } = useContract()
     const multiCallsV2 = useMutiCallV2()
-    const { contract: treasuryContract } = useFX_Treasury()
+    const { contract: treasuryContract } = useFX_stETHTreasury()
 
     const fetchInfo = useCallback(async () => {
 

@@ -5,7 +5,7 @@ import {
   useContract,
   useFETH,
   useFX_Market,
-  useFX_Treasury,
+  useFX_stETHTreasury,
   useXETH,
 } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
@@ -19,7 +19,7 @@ const useInfo = () => {
   const { contract: fETHContract } = useFETH()
   const { contract: xETHContract } = useXETH()
   const { contract: marketContract } = useFX_Market()
-  const { contract: treasuryContract } = useFX_Treasury()
+  const { contract: treasuryContract } = useFX_stETHTreasury()
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {

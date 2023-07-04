@@ -5,7 +5,6 @@ import {
   useContract,
   useFETH,
   useFX_Market,
-  useFX_Treasury,
   useXETH,
 } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
@@ -202,7 +201,6 @@ const useFxCommon = () => {
   const { erc20Contract } = useContract()
   const multiCallsV2 = useMutiCallV2()
   const { fx_info } = useGlobal()
-  const { contract: treasuryContract } = useFX_Treasury()
   // const [systemInfo, setSystemInfo] = useState({
   //   s0: '', //初始化ETH价格
   //   initFNav: '1', //初始化fNav
