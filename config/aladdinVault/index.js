@@ -35,7 +35,7 @@ export const POOLS_LIST = [
       //   isLp: true,
       // },
       {
-        ...config.zapTokens.stETH,
+        ...config.zapTokens.fETH,
         needZap: false,
       },
     ],

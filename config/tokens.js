@@ -156,6 +156,8 @@ const TOKENS_INFO = {
   lusd: ['usd-coin', tokens.lusd, 18, 'lusd'],
   cvxfxs: ['', tokens.cvxfxs, 18, 'cvxfxs'],
   clevUSD: ['frax', tokens.clevUSD, 18],
+  fETH: ['fETH', tokens.fETH, 18],
+
 }
 
 const zapTokens = {
@@ -250,6 +252,13 @@ const zapTokens = {
     address: TOKENS_INFO.clevUSD[1],
     needZap: true,
   },
+  fETH: {
+    symbol: 'fETH',
+    icon: 'eth',
+    decimals: TOKENS_INFO.fETH[2],
+    address: TOKENS_INFO.fETH[1],
+    needZap: true,
+  }
 }
 
 const POOLS_LIST_GAUGE = {

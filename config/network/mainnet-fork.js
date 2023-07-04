@@ -36,10 +36,13 @@ const contracts = {
 
 const tokens = {
   ...tokensInfo.tokens,
+  fETH: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',
+  xETH: '0x7b9Bb9CdBb04BF57F2F82e51D54F6C8ee165FF3B',
 }
 
 const TOKENS_INFO = {
   ...tokensInfo.TOKENS_INFO,
+  fETH: ['fETH', tokens.fETH, 18],
 }
 
 const POOLS_LIST_GAUGE = {
@@ -48,6 +51,13 @@ const POOLS_LIST_GAUGE = {
 
 const zapTokens = {
   ...tokensInfo.zapTokens,
+  fETH: {
+    symbol: 'fETH',
+    icon: 'eth',
+    decimals: TOKENS_INFO.fETH[2],
+    address: TOKENS_INFO.fETH[1],
+    needZap: true,
+  }
 }
 
 export default {

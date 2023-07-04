@@ -21,7 +21,7 @@ import {
   getLpPrice,
 } from '@/services/dataInfo'
 import useInfo from '@/modules/home/hooks/useInfo'
-import stabilityPoolUseInfo from '@/modules/stabilityPool/hooks/useInfo'
+import stabilityPoolUseInfo from '@/modules/stabilityPool/hooks/h_useInfo'
 
 const GlobalContext = createContext(null)
 

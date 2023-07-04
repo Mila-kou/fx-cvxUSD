@@ -11,7 +11,6 @@ import {
 } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
-import { cBN, fb4 } from '@/utils/index'
 
 const useInfo = () => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
@@ -21,11 +20,18 @@ const useInfo = () => {
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
-    const { totalSupply: stabilityPoolTotalSupplyFn } =
-      fx_stabilityPoolContract.methods
+    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlockingFn, rewardsLength: rewardsLengthFn } = fx_stabilityPoolContract.methods
     try {
-      const apiCalls = [stabilityPoolTotalSupplyFn()]
-      const [stabilityPoolTotalSupplyRes] = await multiCallsV2(apiCalls)
+      const apiCalls = [
+        stabilityPoolTotalSupplyFn(),
+        totalUnlockingFn,
+        rewardsLengthFn()
+      ]
+      const [
+        stabilityPoolTotalSupplyRes,
+        totalUnlockingRes,
+        rewardsLengthRes
+      ] = await multiCallsV2(apiCalls)
 
       console.log(
         'BaseInfo222222',
@@ -33,7 +39,8 @@ const useInfo = () => {
         // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
         //  betaRes,
         stabilityPoolTotalSupplyRes,
-        _currentAccount
+        totalUnlockingRes,
+        rewardsLengthRes
       )
 
       return {
@@ -45,9 +52,40 @@ const useInfo = () => {
     }
   }, [fx_stabilityPoolContract, multiCallsV2, _currentAccount])
 
+  const fetchUserInfo = useCallback(async () => {
+    const { balanceOf: stabilityPoolBalanceOfFn } = fx_stabilityPoolContract.methods
+    try {
+      const apiCalls = [
+        stabilityPoolBalanceOfFn(_currentAccount),
+      ]
+      const [
+        stabilityPoolBalanceOfRes,
+      ] = await multiCallsV2(apiCalls)
+
+      console.log(
+        'fetchUserInfo222222',
+        // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
+        // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
+        //  betaRes,
+        stabilityPoolBalanceOfRes,
+      )
+
+      return {
+        stabilityPoolBalanceOfRes,
+      }
+    } catch (error) {
+      console.log('UserInfoError==>', error)
+      return {}
+    }
+  }, [
+    fx_stabilityPoolContract,
+    multiCallsV2,
+    _currentAccount,
+    web3,
+  ])
   const [
     { data: baseInfo, refetch: refetchBaseInfo },
-    // { data: userInfo, refetch: refetchUserInfo },
+    { data: userInfo, refetch: refetchUserInfo },
   ] = useQueries({
     queries: [
       {
@@ -56,11 +94,17 @@ const useInfo = () => {
         initialData: {},
         enabled: !!web3,
       },
+      {
+        queryKey: ['userInfo'],
+        queryFn: () => fetchUserInfo(),
+        initialData: {},
+      },
     ],
   })
 
   useEffect(() => {
     refetchBaseInfo()
+    refetchUserInfo()
   }, [_currentAccount, blockNumber])
 
   // useEffect(() => {
@@ -70,7 +114,7 @@ const useInfo = () => {
   return {
     baseInfo,
     // ...maxAbleFToken,
-    // userInfo,
+    userInfo,
   }
 }
 export default useInfo

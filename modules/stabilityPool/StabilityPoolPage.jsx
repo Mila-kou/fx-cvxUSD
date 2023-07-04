@@ -7,11 +7,13 @@ import WithdrawModal from './components/WithdrawModal'
 import { POOLS_LIST } from '@/config/aladdinVault'
 
 import styles from './styles.module.scss'
+import useStabiltyPool_c from './controller/c_stabiltyPool'
 
 const item = POOLS_LIST[0]
 
 export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
+  const { stabilityPoolTotalSupply, stabilityPoolTotalSupplyTvl_text } = useStabiltyPool_c()
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -43,8 +45,8 @@ export default function StabilityPoolPage() {
         <div className={styles.items}>
           <div className={styles.item}>
             <p>Total Deposited Value</p>
-            <h2>$1,888,888.88</h2>
-            <p>1,888,888.88 fETH</p>
+            <h2>${stabilityPoolTotalSupplyTvl_text}</h2>
+            <p>{stabilityPoolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
             <p>Last 7 Days APY</p>
@@ -59,7 +61,7 @@ export default function StabilityPoolPage() {
         <div className={styles.content}>
           <div className={styles.left}>
             <p>Total Value</p>
-            <h2>$18,888.88</h2>
+            <h2>${stabilityPoolTotalSupplyTvl_text}</h2>
           </div>
           <div className={styles.right}>
             <p>Deposited fETH</p>
