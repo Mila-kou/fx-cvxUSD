@@ -21,14 +21,11 @@ const useInfo = () => {
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
-    const { totalSupply: stabilityPoolTotalSupplyFn } = fx_stabilityPoolContract.methods
+    const { totalSupply: stabilityPoolTotalSupplyFn } =
+      fx_stabilityPoolContract.methods
     try {
-      const apiCalls = [
-        stabilityPoolTotalSupplyFn(),
-      ]
-      const [
-        stabilityPoolTotalSupplyRes,
-      ] = await multiCallsV2(apiCalls)
+      const apiCalls = [stabilityPoolTotalSupplyFn()]
+      const [stabilityPoolTotalSupplyRes] = await multiCallsV2(apiCalls)
 
       console.log(
         'BaseInfo222222',
@@ -36,22 +33,17 @@ const useInfo = () => {
         // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
         //  betaRes,
         stabilityPoolTotalSupplyRes,
+        _currentAccount
       )
 
       return {
         stabilityPoolTotalSupplyRes,
-
       }
     } catch (error) {
       console.log('baseInfoError==>', error)
       return {}
     }
-  }, [
-    fx_stabilityPoolContract,
-    multiCallsV2,
-    _currentAccount,
-    web3,
-  ])
+  }, [fx_stabilityPoolContract, multiCallsV2, _currentAccount])
 
   const [
     { data: baseInfo, refetch: refetchBaseInfo },
@@ -59,9 +51,10 @@ const useInfo = () => {
   ] = useQueries({
     queries: [
       {
-        queryKey: ['baseInfo'],
+        queryKey: ['baseInfo', _currentAccount],
         queryFn: () => fetchBaseInfo(),
         initialData: {},
+        enabled: !!web3,
       },
     ],
   })
