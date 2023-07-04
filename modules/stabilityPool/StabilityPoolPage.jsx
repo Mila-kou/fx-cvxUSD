@@ -13,7 +13,10 @@ const item = POOLS_LIST[0]
 
 export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
-  const { stabilityPoolTotalSupply, stabilityPoolTotalSupplyTvl_text } = useStabiltyPool_c()
+  const { stabilityPoolTotalSupply,
+    stabilityPoolTotalSupplyTvl_text,
+    userDeposit,
+    userDepositTvl_text } = useStabiltyPool_c()
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -65,8 +68,8 @@ export default function StabilityPoolPage() {
           </div>
           <div className={styles.right}>
             <p>Deposited fETH</p>
-            <h2>$18,888.88</h2>
-            <p>18,888.88 fETH</p>
+            <h2>${userDepositTvl_text}</h2>
+            <p>{userDeposit} fETH</p>
 
             <div className="mt-[44px] flex gap-[80px]">
               <div>

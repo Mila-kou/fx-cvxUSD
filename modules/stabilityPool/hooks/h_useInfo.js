@@ -110,7 +110,7 @@ const useInfo = () => {
   ] = useQueries({
     queries: [
       {
-        queryKey: ['baseInfo', _currentAccount],
+        queryKey: ['stabilityPool_baseInfo'],
         queryFn: () => fetchBaseInfo(),
         initialData: {},
         enabled: !!web3,
@@ -119,6 +119,7 @@ const useInfo = () => {
         queryKey: ['stabilityPool_userInfo'],
         queryFn: () => fetchUserInfo(),
         initialData: {},
+        enabled: !!web3,
       },
     ],
   })
