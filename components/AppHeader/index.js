@@ -191,7 +191,7 @@ export default function AppHeader() {
         <div className={styles.right}>
           <Select
             value={currentChainId}
-            style={{ width: '130px', marginRight: '16px' }}
+            style={{ minWidth: '130px', marginRight: '16px' }}
             onChange={(val) => switchChain(val)}
             options={config.allowChains.map((item) => ({
               value: item.id,
