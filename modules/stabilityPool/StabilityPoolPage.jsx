@@ -39,6 +39,13 @@ export default function StabilityPoolPage() {
     setClaiming(true)
   }
 
+  const canClaim = useMemo(() => {
+    if (userWstETHClaimable) {
+      return true
+    }
+    return false
+  }, [userWstETHClaimable])
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -111,6 +118,7 @@ export default function StabilityPoolPage() {
             type="second"
             width="120px"
             height="45px"
+            disabled={!canClaim}
             loading={claiming}
             onClick={handleClaim}
           >
