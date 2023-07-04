@@ -63,7 +63,6 @@ const useInfo = () => {
     console.log('_currentAccount---', _currentAccount, aa)
 
     try {
-      console.log('config.tokens.steth--', config.tokens.steth)
       const apiCalls = [
         stabilityPoolBalanceOfFn(_currentAccount),
         // unlockedBalanceOfFn(_currentAccount),
