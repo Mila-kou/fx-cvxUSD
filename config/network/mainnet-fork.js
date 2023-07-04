@@ -16,7 +16,6 @@ const chainInfo = {
   token: 'ETH',
   label: 'Mainnet Fork',
   rpcUrl: 'https://apitest.aladdin.club/rpc',
-  explorerUri: 'https://www.etherscan.io',
 }
 
 const contracts = {
