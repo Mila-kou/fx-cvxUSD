@@ -10,12 +10,13 @@ import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
 import { cBN, formatBalance, checkNotZoroNum } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import { useContract, useAllInOneGateway } from '@/hooks/useContracts'
+import { useContract, useAllInOneGateway, useFX_stabilityPool } from '@/hooks/useContracts'
 import abi from '@/config/abi'
 import styles from './styles.module.scss'
 
 export default function DepositModal(props) {
   const { onCancel, info } = props
+  const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
   const [slippage, setSlippage] = useState('0.3')
   const [minAmount, setMinAmount] = useState(0)
   const [minAmountTvl, setMinAmountTvl] = useState(0)
@@ -52,19 +53,10 @@ export default function DepositModal(props) {
 
   const handleDeposit = async () => {
     if (!isAllReady) return
-    if (!isSelfLp) {
-      // console.log('let us try to switch token')
-      handleZapDeposit()
-      return
-    }
-    const lpContract = getContract(
-      info.lpGaugeAddress,
-      abi.AlaLiquidityGaugeV3ABI
-    )
     const depositAmountInWei = cBN(depositAmount || 0).toFixed(0, 1)
     setDepositing(true)
     try {
-      const apiCall = lpContract.methods.deposit(
+      const apiCall = FX_StabilityPoolContract.methods.deposit(
         depositAmountInWei,
         currentAccount
       )
@@ -82,56 +74,7 @@ export default function DepositModal(props) {
     }
   }
 
-  const handleZapDeposit = async () => {
-    if (!isAllReady) return
-    setDepositing(true)
-    const depositAmountInWei = cBN(depositAmount || 0).toFixed(0, 1)
-    const { shares: _minAmount } = await getMinout(true)
-    const minOut = (cBN(_minAmount) || cBN(0))
-      .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
-      .toFixed(0)
-
-    try {
-      const _method =
-        fromPlatform.toLowerCase() == 'curve'
-          ? 'depositGaugeWithCurveLP'
-          : 'depositGaugeWithBalancerLP'
-      const apiCall = AllInOneGatewayContract.methods[_method](
-        lpGaugeAddress,
-        selectToken.address,
-        depositAmountInWei,
-        selectToken.routes,
-        minOut
-      )
-      const estimatedGas = await apiCall.estimateGas({
-        from: currentAccount,
-        value:
-          config.zeroAddress === selectToken.address ? depositAmountInWei : 0,
-      })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(
-        () =>
-          apiCall.send({
-            from: currentAccount,
-            gas,
-            value:
-              config.zeroAddress === selectToken.address
-                ? depositAmountInWei
-                : 0,
-          }),
-        {
-          key: 'farm',
-          action: 'zapAndDeposit',
-        }
-      )
-      setDepositing(false)
-      onCancel()
-    } catch (error) {
-      console.log(error)
-      setDepositing(false)
-      noPayableErrorAction(`error_zapAndDeposit`, error)
-    }
-  }
+  
 
   useDebounceEffect(
     () => {
