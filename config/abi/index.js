@@ -34,6 +34,11 @@ import CurveStaticCoinABI from './common/curveStaticCoin.json'
 import AladdinbcCVXABI from './AladdinbcCVX.json'
 import RewardClaimHelperABI from './RewardClaimHelper.json'
 
+import FX_stETHGatewayABI from './fx/stETHGateway.json'
+import FX_stETHTreasuryABI from './fx/stETHTreasury.json'
+import FX_StabilityPoolABI from './fx/StabilityPool.json'
+
+
 export default {
   erc20ABI,
   multiCallABI,
@@ -45,6 +50,9 @@ export default {
   FX_LeveragedToken,
   FX_Treasury,
   FX_ETHGateway,
+  FX_stETHGatewayABI,
+  FX_stETHTreasuryABI,
+  FX_StabilityPoolABI,
 
   MockTwapOracleAbi: MockTwapOracle,
 

@@ -75,6 +75,42 @@ export const useFX_Treasury = () => {
   )
 }
 
+export const useFX_stETHTreasury = () => {
+  const address = config.contracts.fx_stETHTreasury
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_stETHTreasuryABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+/////////////////////////////
+export const useFX_stETHGateway = () => {
+  const address = config.contracts.fx_stETHGateway
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_stETHGatewayABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useFX_stabilityPool = () => {
+  const address = config.contracts.fx_StabilityPool
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_StabilityPoolABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
 export const useFX_ETHGateway = () => {
   const address = config.contracts.fx_ETHGateway
   const { getContract } = useContract()
@@ -86,6 +122,7 @@ export const useFX_ETHGateway = () => {
     [getContract]
   )
 }
+
 
 export const useClev = () => {
   const address = config.contracts.aladdinCLEV
