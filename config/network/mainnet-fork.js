@@ -1,23 +1,23 @@
 import tokensInfo from '../tokens'
 
 // ---------- 10540,
-const chainInfo = {
-  id: '10548',
-  token: 'ETH',
-  label: 'Fork-10548',
-  rpcUrl: 'https://apitest.aladdin.club/rpc',
-}
+// const chainInfo = {
+//   id: '10548',
+//   token: 'ETH',
+//   label: 'Fork-10548',
+//   rpcUrl: 'https://apitest.aladdin.club/rpc',
+// }
 
 const explorerUri = 'https://www.etherscan.io'
 
 // ---------- 10548
-// const chainInfo = {
-//   id: '0x2934',
-//   token: 'ETH',
-//   label: 'Mainnet Fork',
-//   rpcUrl: 'https://apitest.aladdin.club/rpc',
-//   explorerUri: 'https://www.etherscan.io',
-// }
+const chainInfo = {
+  id: '0x2934',
+  token: 'ETH',
+  label: 'Mainnet Fork',
+  rpcUrl: 'https://apitest.aladdin.club/rpc',
+  explorerUri: 'https://www.etherscan.io',
+}
 
 const contracts = {
   ...tokensInfo.contracts,
@@ -29,7 +29,7 @@ const contracts = {
   fx_stETHTreasury: '0xBED3FEBBB237AeDdAc81904aD49a93143d5026C8',
   fx_stETHGateway: '0x92d0cb7E56806Bf977e7F5296EA2Fe84B475Fe83',
 
-  fx_StabilityPool: "0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2",
+  fx_StabilityPool: '0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2',
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
