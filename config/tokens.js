@@ -173,6 +173,13 @@ const zapTokens = {
     address: TOKENS_INFO.eth[1],
     needZap: true,
   },
+  stETH: {
+    symbol: 'stETH',
+    icon: 'weth',
+    decimals: TOKENS_INFO.steth[2],
+    address: TOKENS_INFO.steth[1],
+    needZap: true,
+  },
   WETH: {
     symbol: 'WETH',
     icon: 'weth',
