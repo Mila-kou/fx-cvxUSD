@@ -8,11 +8,14 @@ import {
     useFX_stETHGateway,
 } from '@/hooks/useContracts'
 import { useGlobal } from '@/contexts/GlobalProvider'
+import useFxCommon from '@/modules/home/hooks/useFxCommon'
 
 const useStabiltyPool_c = () => {
     const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo } = useGlobal()
-    console.log('stabilityPoolInfo---', stabilityPoolInfo, fxInfo)
-
+    const {
+        ethPrice,
+    } = useFxCommon()
+    console.log('stabilityPoolInfo---fxInfo--ethPrice--', stabilityPoolInfo, fxInfo, ethPrice)
 
     const pageData = useMemo(() => {
         try {
@@ -32,11 +35,24 @@ const useStabiltyPool_c = () => {
                 userDepositTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.stabilityPoolBalanceOfRes).div(1e18)
             }
             const userDepositTvl_text = fb4(userDepositTvl, false, 0)
+
+            let userWstETHClaimable = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.claimableRes, fb4(stabilityPoolInfo.userInfo.claimableRes))
+            let userWstETHClaimableTvl = cBN(0);
+            if (checkNotZoroNum(ethPrice) && checkNotZoroNum(stabilityPoolInfo.userInfo.claimableRes)) {
+                userWstETHClaimableTvl = cBN(ethPrice).times(stabilityPoolInfo.userInfo.claimableRes).div(1e18)
+            }
+            const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, false, 0)
+
+            const myTotalValue = userDepositTvl.plus(userWstETHClaimableTvl)
+            const myTotalValue_text = checkNotZoroNumOption(myTotalValue, fb4(myTotalValue, false, 0))
             return {
                 stabilityPoolTotalSupplyTvl_text,
                 stabilityPoolTotalSupply,
                 userDeposit,
-                userDepositTvl_text
+                userDepositTvl_text,
+                userWstETHClaimable,
+                userWstETHClaimableTvl_text,
+                myTotalValue_text
             }
         } catch (error) {
             console.log('error--', error)
@@ -44,12 +60,16 @@ const useStabiltyPool_c = () => {
                 stabilityPoolTotalSupply: '-',
                 stabilityPoolTotalSupplyTvl_text: '-',
                 userDeposit: '-',
-                userDepositTvl_text: "-"
+                userDepositTvl_text: "-",
+                userWstETHClaimable: '-',
+                userWstETHClaimableTvl_text: '-',
+                myTotalValue_text: '-'
             }
         }
     }, [
         stabilityPoolInfo,
-        fxInfo.baseInfo
+        fxInfo.baseInfo,
+        ethPrice
     ])
     return {
         ...pageData

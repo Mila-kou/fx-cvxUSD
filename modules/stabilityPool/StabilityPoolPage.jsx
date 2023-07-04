@@ -16,7 +16,10 @@ export default function StabilityPoolPage() {
   const { stabilityPoolTotalSupply,
     stabilityPoolTotalSupplyTvl_text,
     userDeposit,
-    userDepositTvl_text } = useStabiltyPool_c()
+    userDepositTvl_text,
+    userWstETHClaimableTvl_text,
+    myTotalValue_text,
+    userWstETHClaimable } = useStabiltyPool_c()
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -64,7 +67,7 @@ export default function StabilityPoolPage() {
         <div className={styles.content}>
           <div className={styles.left}>
             <p>Total Value</p>
-            <h2>${stabilityPoolTotalSupplyTvl_text}</h2>
+            <h2>${myTotalValue_text}</h2>
           </div>
           <div className={styles.right}>
             <p>Deposited fETH</p>
@@ -74,14 +77,14 @@ export default function StabilityPoolPage() {
             <div className="mt-[44px] flex gap-[80px]">
               <div>
                 <p>fxETH Earned</p>
-                <h2>$18,888.88</h2>
-                <p>18,888.88 fxETH</p>
+                <h2>${userWstETHClaimableTvl_text}</h2>
+                <p>{userWstETHClaimable} fxETH</p>
               </div>
-              <div>
+              {/* <div>
                 <p>fx Earned</p>
                 <h2>$18,888.88</h2>
                 <p>18,888.88 fx</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
