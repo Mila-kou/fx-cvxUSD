@@ -45,7 +45,7 @@ export default function Mint({ slippage }) {
     marketContract,
     treasuryContract,
     _mintFETHFee,
-    ethGatewayContract,
+    stETHGatewayContract,
     _mintXETHFee,
     ethPrice,
     ethPrice_text,
@@ -146,11 +146,11 @@ export default function Mint({ slippage }) {
           _ETHtAmountAndGas = ETHtAmount
         }
         if (isF) {
-          minout_ETH = await ethGatewayContract.methods
+          minout_ETH = await stETHGatewayContract.methods
             .mintFToken(0)
             .call({ value: _ETHtAmountAndGas, from: _currentAccount })
         } else {
-          minout_ETH = await ethGatewayContract.methods
+          minout_ETH = await stETHGatewayContract.methods
             .mintXToken(0)
             .call({ value: _ETHtAmountAndGas, from: _currentAccount })
         }
@@ -213,9 +213,9 @@ export default function Mint({ slippage }) {
       }
       let apiCall
       if (isF) {
-        apiCall = await ethGatewayContract.methods.mintFToken(_minOut)
+        apiCall = await stETHGatewayContract.methods.mintFToken(_minOut)
       } else {
-        apiCall = await ethGatewayContract.methods.mintXToken(_minOut)
+        apiCall = await stETHGatewayContract.methods.mintXToken(_minOut)
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,

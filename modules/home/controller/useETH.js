@@ -29,7 +29,7 @@ const useETH = () => {
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
   const { contract: treasuryContract } = useFX_stETHTreasury()
-  const { contract: ethGatewayContract } = useFX_stETHGateway()
+  const { contract: stETHGatewayContract } = useFX_stETHGateway()
   const [mintLoading, setMintLoading] = useState(false)
   const [feeUsd, setFeeUsd] = useState(10)
 
@@ -327,7 +327,7 @@ const useETH = () => {
     xETHContract,
     marketContract,
     treasuryContract,
-    ethGatewayContract,
+    stETHGatewayContract,
     ...pageData,
   }
 }

@@ -69,6 +69,7 @@ export default function DepositModal(props) {
       onCancel()
       setDepositing(false)
     } catch (error) {
+      console.log('error_deposit---', error)
       setDepositing(false)
       noPayableErrorAction(`error_deposit`, error)
     }
@@ -94,19 +95,12 @@ export default function DepositModal(props) {
       try {
         const depositAmountInWei = cBN(depositAmount || 0).toFixed(0, 1)
         if (
-          (canDeposit && !cBN(depositAmountInWei).isZero() && !isSelfLp) ||
-          (isDeposit && !isSelfLp)
+          (canDeposit && !cBN(depositAmountInWei).isZero() && !isNeedZap) ||
+          (isDeposit && !isNeedZap)
         ) {
-          const _method =
-            fromPlatform.toLowerCase() == 'curve'
-              ? 'depositGaugeWithCurveLP'
-              : 'depositGaugeWithBalancerLP'
-          const shares = await AllInOneGatewayContract.methods[_method](
-            lpGaugeAddress,
-            selectToken.address,
+          const shares = await FX_StabilityPoolContract.methods.deposit(
             depositAmountInWei,
-            selectToken.routes,
-            0
+            currentAccount
           ).call({
             from: currentAccount,
             value:
@@ -137,7 +131,7 @@ export default function DepositModal(props) {
         }
       }
     },
-    [depositAmount, AllInOneGatewayContract]
+    [depositAmount, FX_StabilityPoolContract]
   )
 
   const handleTokenSelect = (token) => {

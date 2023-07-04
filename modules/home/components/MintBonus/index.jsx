@@ -30,7 +30,7 @@ export default function MintBonus({ slippage }) {
     marketContract,
     treasuryContract,
     _mintFETHFee,
-    ethGatewayContract,
+    stETHGatewayContract,
     _mintXETHFee,
     ethPrice,
     ethPrice_text,
@@ -102,7 +102,7 @@ export default function MintBonus({ slippage }) {
       } else {
         _ETHtAmountAndGas = ETHtAmount
       }
-      let minout_ETH = await ethGatewayContract.methods
+      let minout_ETH = await stETHGatewayContract.methods
         .addBaseToken(0)
         .call({ value: _ETHtAmountAndGas, from: _currentAccount })
       console.log('minout_ETH----', minout_ETH)
@@ -141,7 +141,7 @@ export default function MintBonus({ slippage }) {
       } else {
         _ETHtAmountAndGas = ETHtAmount
       }
-      let apiCall = await ethGatewayContract.methods.addBaseToken(_minOut)
+      let apiCall = await stETHGatewayContract.methods.addBaseToken(_minOut)
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
         value: _ETHtAmountAndGas,

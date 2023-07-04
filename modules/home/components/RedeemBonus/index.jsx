@@ -31,7 +31,7 @@ export default function RedeemBonus({ slippage }) {
     marketContract,
     treasuryContract,
     _mintFETHFee,
-    ethGatewayContract,
+    stETHGatewayContract,
     _redeemFETHFee,
     _redeemXETHFee,
     ethPrice,
@@ -183,7 +183,7 @@ export default function RedeemBonus({ slippage }) {
     try {
       setRedeeming(true)
       const _minoutETH = await getMinAmount()
-      const apiCall = await ethGatewayContract.methods.liquidate(
+      const apiCall = await stETHGatewayContract.methods.liquidate(
         tokenAmount,
         _minoutETH
       )
