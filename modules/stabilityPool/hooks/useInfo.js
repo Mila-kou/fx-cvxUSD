@@ -31,7 +31,7 @@ const useInfo = () => {
       ] = await multiCallsV2(apiCalls)
 
       console.log(
-        'BaseInfo11111',
+        'BaseInfo222222',
         // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
         // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
         //  betaRes,
@@ -70,13 +70,13 @@ const useInfo = () => {
     refetchBaseInfo()
   }, [_currentAccount, blockNumber])
 
-  useEffect(() => {
-    getMaxAbleToken()
-  }, [blockNumber])
+  // useEffect(() => {
+  //   getMaxAbleToken()
+  // }, [blockNumber])
 
   return {
     baseInfo,
-    ...maxAbleFToken,
+    // ...maxAbleFToken,
     // userInfo,
   }
 }

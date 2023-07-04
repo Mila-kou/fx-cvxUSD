@@ -21,6 +21,7 @@ import {
   getLpPrice,
 } from '@/services/dataInfo'
 import useInfo from '@/modules/home/hooks/useInfo'
+import stabilityPoolUseInfo from '@/modules/stabilityPool/hooks/useInfo'
 
 const GlobalContext = createContext(null)
 
@@ -30,6 +31,7 @@ function GlobalProvider({ children }) {
   const [showSystemStatistics, setShowSystemStatistics] = useState(false)
 
   const fx_info = useInfo()
+  const stabilityPool_info = stabilityPoolUseInfo()
   const ethToken = useToken(config.tokens.eth)
   // const wethToken = useToken(config.tokens.weth)
   const fETHToken = useToken(config.tokens.fETH)
@@ -167,6 +169,7 @@ function GlobalProvider({ children }) {
       tokens,
       tokenPrice,
       fx_info,
+      stabilityPool_info,
 
       lpPrice,
       vaultsInfo,
@@ -182,6 +185,7 @@ function GlobalProvider({ children }) {
       tokens,
       tokenPrice,
       fx_info,
+      stabilityPool_info,
 
       lpPrice,
       vaultsInfo,

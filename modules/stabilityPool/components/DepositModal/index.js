@@ -31,10 +31,10 @@ export default function DepositModal(props) {
   const [depositAmount, setDepositAmount] = useState(0)
   const { contract: AllInOneGatewayContract } = useAllInOneGateway()
 
-  const isSelfLp = info.lpAddress === selectToken.address
+  const isNeedZap = selectToken.needZap
   const selectTokenInfo = useToken(
     selectToken.address,
-    isSelfLp ? 'gauge' : 'gaugeZAP',
+    'fx_stabiltityPool',
     info
   )
   const tokenContract = selectTokenInfo.contract
@@ -74,7 +74,7 @@ export default function DepositModal(props) {
     }
   }
 
-  
+
 
   useDebounceEffect(
     () => {
