@@ -27,31 +27,16 @@ export const POOLS_LIST = [
     rewardTokenDecimals: 18,
     isClevPrice: true,
     zapTokens: [
+      // {
+      //   symbol: 'Curve_CLEV_ETH',
+      //   icon: 'eth',
+      //   address: config.POOLS_LIST_GAUGE.Curve_CLEV_ETH.token,
+      //   needZap: false,
+      //   isLp: true,
+      // },
       {
-        symbol: 'Curve_CLEV_ETH',
-        icon: 'eth',
-        address: config.POOLS_LIST_GAUGE.Curve_CLEV_ETH.token,
+        ...config.zapTokens.stETH,
         needZap: false,
-        isLp: true,
-      },
-      {
-        ...config.zapTokens.WETH,
-        routes: ['0x4104342d1c4aa76ea6f5e5871b7f11a019a0eb713a4f'],
-      },
-      {
-        ...config.zapTokens.ETH,
-        routes: ['0x4104342d1c4aa76ea6f5e5871b7f11a019a0eb713a4f'],
-      },
-      {
-        ...config.zapTokens.CLEV,
-        routes: ['0x5504342d1c4aa76ea6f5e5871b7f11a019a0eb713a4f'],
-      },
-      {
-        ...config.zapTokens.USDC,
-        routes: [
-          '0x110188e6a0c2ddd26feeb64f039a2c41296fcb3f5640',
-          '0x4104342d1c4aa76ea6f5e5871b7f11a019a0eb713a4f',
-        ],
       },
     ],
   },
