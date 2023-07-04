@@ -62,20 +62,20 @@ export default function StabilityPoolPage() {
             <h2>$18,888.88</h2>
           </div>
           <div className={styles.right}>
-            <p>Total Value</p>
+            <p>Deposited fETH</p>
             <h2>$18,888.88</h2>
-            <p>Total Value</p>
+            <p>18,888.88 fETH</p>
 
             <div className="mt-[44px] flex gap-[80px]">
               <div>
-                <p>Total Value</p>
+                <p>fxETH Earned</p>
                 <h2>$18,888.88</h2>
-                <p>Total Value</p>
+                <p>18,888.88 fxETH</p>
               </div>
               <div>
-                <p>Total Value</p>
+                <p>fx Earned</p>
                 <h2>$18,888.88</h2>
-                <p>Total Value</p>
+                <p>18,888.88 fx</p>
               </div>
             </div>
           </div>
