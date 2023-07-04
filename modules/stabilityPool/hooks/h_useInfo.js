@@ -59,8 +59,7 @@ const useInfo = () => {
   const fetchUserInfo = useCallback(async () => {
 
     const { balanceOf: stabilityPoolBalanceOfFn, unlockedBalanceOf: unlockedBalanceOfFn, unlockingBalanceOf: unlockingBalanceOfFn, claimable: claimableFn } = fx_stabilityPoolContract.methods
-    const aa = await stabilityPoolBalanceOfFn(_currentAccount).call({ from: _currentAccount })
-    console.log('_currentAccount---', _currentAccount, aa)
+    console.log('_currentAccount---', _currentAccount)
 
     try {
       const apiCalls = [
