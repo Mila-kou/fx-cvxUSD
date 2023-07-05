@@ -26,6 +26,8 @@ export default function StabilityPoolPage() {
     userWstETHClaimableTvl_text,
     myTotalValue_text,
     userWstETHClaimable,
+    userUnlockingBalance,
+    userUnlockingBalanceTvl_text,
     apy } = useStabiltyPool_c()
 
   const [depositVisible, setDepositVisible] = useState(false)
@@ -110,11 +112,11 @@ export default function StabilityPoolPage() {
                 <h2>${userWstETHClaimableTvl_text}</h2>
                 <p>{userWstETHClaimable} stETH</p>
               </div>
-              {/* <div>
-                <p>fx Earned</p>
-                <h2>$18,888.88</h2>
-                <p>18,888.88 fx</p>
-              </div> */}
+              <div>
+                <p>Locking</p>
+                <h2>${userUnlockingBalanceTvl_text}</h2>
+                <p>{userUnlockingBalance} fx</p>
+              </div>
             </div>
           </div>
         </div>
