@@ -32,7 +32,7 @@ export default function StabilityPoolPage() {
     userUnlockedBalance,
     userUnlockedBalanceTvl,
     userUnlockedBalanceTvl_text,
-    apy
+    apy,
   } = useStabiltyPool_c()
 
   const [depositVisible, setDepositVisible] = useState(false)
@@ -65,7 +65,7 @@ export default function StabilityPoolPage() {
       setClaiming(false)
     } catch (error) {
       setClaiming(false)
-      console.log("unlock-error---", error)
+      console.log('unlock-error---', error)
       noPayableErrorAction(`error_unlock`, error)
     }
   }
@@ -87,7 +87,7 @@ export default function StabilityPoolPage() {
       setClaiming(false)
     } catch (error) {
       setClaiming(false)
-      console.log("claim-error---", error)
+      console.log('claim-error---', error)
       noPayableErrorAction(`error_claim`, error)
     }
   }
@@ -132,9 +132,22 @@ export default function StabilityPoolPage() {
             <h2>${myTotalValue_text}</h2>
           </div>
           <div className={styles.right}>
-            <p>Deposited fETH</p>
-            <h2>${userDepositTvl_text}</h2>
-            <p>{userDeposit} fETH</p>
+            <div className="mt-[44px] flex gap-[80px]">
+              <div>
+                <p>Deposited fETH</p>
+                <h2>${userDepositTvl_text}</h2>
+                <p>{userDeposit} fETH</p>
+              </div>
+              <div>
+                <p>Unlocked Funds</p>
+                <h2>${userUnlockedBalanceTvl_text}</h2>
+                <p>{userUnlockedBalance} fx</p>
+
+                <a disabled={!canUnlock} onClick={handleUnlock}>
+                  Unlock
+                </a>
+              </div>
+            </div>
 
             <div className="mt-[44px] flex gap-[80px]">
               <div>
@@ -146,21 +159,6 @@ export default function StabilityPoolPage() {
                 <p>Locking</p>
                 <h2>${userUnlockingBalanceTvl_text}</h2>
                 <p>{userUnlockingBalance} fx</p>
-              </div>
-              <div>
-                <p>unLocked</p>
-                <h2>${userUnlockedBalanceTvl_text}</h2>
-                <p>{userUnlockedBalance} fx</p>
-
-                <Button
-                  width="120px"
-                  height="45px"
-                  disabled={!canUnlock}
-                  className="mr-[25px]"
-                  onClick={handleUnlock}
-                >
-                  Unlock
-                </Button>
               </div>
             </div>
           </div>
@@ -198,10 +196,18 @@ export default function StabilityPoolPage() {
       </div>
 
       {depositVisible && (
-        <DepositModal info={item} poolData={stabilityPoolInfo} onCancel={() => setDepositVisible(false)} />
+        <DepositModal
+          info={item}
+          poolData={stabilityPoolInfo}
+          onCancel={() => setDepositVisible(false)}
+        />
       )}
       {withdrawVisible && (
-        <WithdrawModal info={item} poolData={stabilityPoolInfo} onCancel={() => setWithdrawVisible(false)} />
+        <WithdrawModal
+          info={item}
+          poolData={stabilityPoolInfo}
+          onCancel={() => setWithdrawVisible(false)}
+        />
       )}
     </div>
   )

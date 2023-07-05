@@ -52,6 +52,11 @@
       .right {
         padding-left: 83px;
         border-left: 1px solid var(--main-text-color);
+
+        a {
+          text-decoration: underline;
+          color: var(--a-button-color);
+        }
       }
     }
 
