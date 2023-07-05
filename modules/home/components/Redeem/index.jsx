@@ -230,7 +230,7 @@ export default function Redeem({ slippage }) {
         _xTokenIn = tokenAmount
         _fTokenIn = 0
       }
-      const apiCall = await stETHGatewayContract.methods.redeem(
+      const apiCall = await marketContract.methods.redeem(
         _fTokenIn,
         _xTokenIn,
         _minoutETH
