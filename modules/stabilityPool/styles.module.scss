@@ -23,7 +23,6 @@
     .items {
       display: flex;
       gap: 30px;
-      flex-wrap: wrap;
       margin-top: 24px;
 
       .item {
@@ -64,6 +63,24 @@
       margin-top: 46px;
       display: flex;
       justify-content: end;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .items {
+    flex-direction: column;
+  }
+  .wrap {
+    padding: 16px !important;
+    .content {
+      flex-direction: column;
+      .right {
+        padding: 0 !important;
+        border-left: 0 !important;
+        border-top: 1px solid var(--main-text-color);
+      }
     }
   }
 }
