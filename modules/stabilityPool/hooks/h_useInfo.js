@@ -72,14 +72,14 @@ const useInfo = () => {
       const apiCalls = [
         updateAccountSnapshot(config.zeroAddress),
         stabilityPoolBalanceOfFn(_currentAccount),
-        // unlockedBalanceOfFn(_currentAccount),
-        // unlockingBalanceOfFn(_currentAccount),
+        unlockedBalanceOfFn(_currentAccount),
+        unlockingBalanceOfFn(_currentAccount),
         claimableFn(_currentAccount, config.tokens.wstETH)
       ]
       const [,
         stabilityPoolBalanceOfRes,
-        // unlockedBalanceOfRes,
-        // unlockingBalanceOfRes,
+        unlockedBalanceOfRes,
+        unlockingBalanceOfRes,
         claimableRes
       ] = await multiCallsV2(apiCalls)
 
@@ -89,15 +89,15 @@ const useInfo = () => {
         // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
         //  betaRes,
         stabilityPoolBalanceOfRes,
-        // unlockedBalanceOfRes,
-        // unlockingBalanceOfRes,
+        unlockedBalanceOfRes,
+        unlockingBalanceOfRes,
         claimableRes
       )
 
       return {
         stabilityPoolBalanceOfRes,
-        // unlockedBalanceOfRes,
-        // unlockingBalanceOfRes,
+        unlockedBalanceOfRes,
+        unlockingBalanceOfRes,
         claimableRes
       }
     } catch (error) {

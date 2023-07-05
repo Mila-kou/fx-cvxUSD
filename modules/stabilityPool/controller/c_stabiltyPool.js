@@ -57,7 +57,21 @@ const useStabiltyPool_c = () => {
             }
             const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, false, 0)
 
-            const myTotalValue = userDepositTvl.plus(userWstETHClaimableTvl)
+            let userUnlockedBalance = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockedBalanceOfRes, fb4(stabilityPoolInfo.userInfo.unlockedBalanceOfRes))
+            let userUnlockedBalanceTvl = cBN(0);
+            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.userInfo.unlockedBalanceOfRes)) {
+                userUnlockedBalanceTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.unlockedBalanceOfRes).div(1e18)
+            }
+            const userUnlockedBalanceTvl_text = fb4(userUnlockedBalanceTvl, false, 0)
+
+            let userUnlockingBalance = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes, fb4(stabilityPoolInfo.userInfo.unlockingBalanceOfRes))
+            let userUnlockingBalanceTvl = cBN(0);
+            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.userInfo.unlockingBalanceOfRes)) {
+                userUnlockingBalanceTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.unlockingBalanceOfRes).div(1e18)
+            }
+            const userUnlockingBalanceTvl_text = fb4(userUnlockingBalanceTvl, false, 0)
+
+            const myTotalValue = userDepositTvl.plus(userWstETHClaimableTvl).plus(userUnlockingBalanceTvl).plus(userUnlockedBalanceTvl)
             const myTotalValue_text = checkNotZoroNumOption(myTotalValue, fb4(myTotalValue, false, 0))
 
             const apy = getStabiltyPoolApy(stabilityPoolTotalSupplyTvl)
@@ -69,6 +83,10 @@ const useStabiltyPool_c = () => {
                 userWstETHClaimable,
                 userWstETHClaimableTvl_text,
                 myTotalValue_text,
+                userUnlockingBalanceTvl_text,
+                userUnlockingBalance,
+                userUnlockedBalanceTvl_text,
+                userUnlockedBalance,
                 apy
             }
         } catch (error) {
@@ -80,7 +98,11 @@ const useStabiltyPool_c = () => {
                 userDepositTvl_text: "-",
                 userWstETHClaimable: '-',
                 userWstETHClaimableTvl_text: '-',
-                myTotalValue_text: '-'
+                myTotalValue_text: '-',
+                userUnlockingBalanceTvl_text: '-',
+                userUnlockingBalance: '-',
+                userUnlockedBalanceTvl_text: '-',
+                userUnlockedBalance: "-",
             }
         }
     }, [
