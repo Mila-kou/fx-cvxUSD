@@ -22,6 +22,7 @@ import {
 } from '@/services/dataInfo'
 import useInfo from '@/modules/home/hooks/useInfo'
 import stabilityPoolUseInfo from '@/modules/stabilityPool/hooks/h_useInfo'
+import { getStETHRate } from '@/utils/stETHRate'
 
 const GlobalContext = createContext(null)
 
@@ -43,6 +44,8 @@ function GlobalProvider({ children }) {
     { data: ConvexVaultsAPY, refetch: refetch3 },
     { data: concentratorInitData, refetch: refetch4 },
     { data: lpPrice, refetch: refetch5 },
+    { data: stETHRate, refetch: refetch6 },
+
   ] = useQueries({
     queries: [
       {
@@ -69,6 +72,12 @@ function GlobalProvider({ children }) {
         queryFn: getLpPrice,
         initialData: {},
       },
+      {
+        queryKey: ['stETHRate'],
+        queryFn: getStETHRate,
+        refetchInterval: 600000,
+        initialData: 1,
+      },
     ],
   })
 
@@ -90,6 +99,7 @@ function GlobalProvider({ children }) {
       refetch3()
       refetch4()
       refetch5()
+      refetch6()
     },
     [blockNumber],
     { wait: 30000 }
@@ -176,6 +186,7 @@ function GlobalProvider({ children }) {
       ConvexVaultsAPY,
       concentratorInitData,
       ifoVaultWithdrawFee,
+      stETHRate
     }),
     [
       theme,

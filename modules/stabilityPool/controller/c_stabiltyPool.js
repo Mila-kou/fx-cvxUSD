@@ -12,7 +12,7 @@ import useFxCommon from '@/modules/home/hooks/useFxCommon'
 
 
 const useStabiltyPool_c = () => {
-    const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo } = useGlobal()
+    const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo, stETHRate } = useGlobal()
     const {
         ethPrice,
     } = useFxCommon()
@@ -25,12 +25,12 @@ const useStabiltyPool_c = () => {
         if (_currentTime > finishAt) {
             apy = 0
         } else {
-            const apyWei = cBN(rate).multipliedBy(config.daySecond).multipliedBy(ethPrice).div(stabilityPoolTotalSupplyTvl)
+            const apyWei = cBN(rate).multipliedBy(config.daySecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl)
             apy = checkNotZoroNumOption(apyWei, fb4(apyWei, false, 0, 2))
         }
-        console.log('apy---', apy)
+        console.log('apy---', apy, stETHRate)
         return apy
-    }, [stabilityPoolInfo?.baseInfo])
+    }, [stabilityPoolInfo?.baseInfo, stETHRate])
     const pageData = useMemo(() => {
         try {
             const stabilityPoolTotalSupply = checkNotZoroNumOption(
