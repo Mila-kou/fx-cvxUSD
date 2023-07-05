@@ -10,13 +10,27 @@ import {
 import { useGlobal } from '@/contexts/GlobalProvider'
 import useFxCommon from '@/modules/home/hooks/useFxCommon'
 
+
 const useStabiltyPool_c = () => {
     const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo } = useGlobal()
     const {
         ethPrice,
     } = useFxCommon()
     console.log('stabilityPoolInfo---fxInfo--ethPrice--', stabilityPoolInfo, fxInfo, ethPrice)
-
+    const getStabiltyPoolApy = useCallback((stabilityPoolTotalSupplyTvl) => {
+        const { rewardStateRes } = stabilityPoolInfo?.baseInfo
+        const { finishAt, rate } = rewardStateRes
+        let apy = 0
+        const _currentTime = +new Date()
+        if (_currentTime > finishAt) {
+            apy = 0
+        } else {
+            const apyWei = cBN(rate).multipliedBy(config.daySecond).multipliedBy(ethPrice).div(stabilityPoolTotalSupplyTvl)
+            apy = checkNotZoroNumOption(apyWei, fb4(apyWei, false, 0, 2))
+        }
+        console.log('apy---', apy)
+        return apy
+    }, [stabilityPoolInfo?.baseInfo])
     const pageData = useMemo(() => {
         try {
             const stabilityPoolTotalSupply = checkNotZoroNumOption(
@@ -45,6 +59,8 @@ const useStabiltyPool_c = () => {
 
             const myTotalValue = userDepositTvl.plus(userWstETHClaimableTvl)
             const myTotalValue_text = checkNotZoroNumOption(myTotalValue, fb4(myTotalValue, false, 0))
+
+            const apy = getStabiltyPoolApy(stabilityPoolTotalSupplyTvl)
             return {
                 stabilityPoolTotalSupplyTvl_text,
                 stabilityPoolTotalSupply,
@@ -52,7 +68,8 @@ const useStabiltyPool_c = () => {
                 userDepositTvl_text,
                 userWstETHClaimable,
                 userWstETHClaimableTvl_text,
-                myTotalValue_text
+                myTotalValue_text,
+                apy
             }
         } catch (error) {
             console.log('error--', error)

@@ -26,6 +26,7 @@ const allowChains = Object.values(chainMap).map((item) => item.chainInfo)
 
 const zeroAddress = '0x0000000000000000000000000000000000000000'
 const defaultAddress = '0x1111111111111111111111111111111111111111'
+const daySecond = 86400
 const uint256Max =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
 
@@ -34,6 +35,7 @@ const config = {
   zeroAddress,
   defaultAddress,
   allowChains,
+  daySecond,
   uint256Max,
   ...Object.values(chainMap)[0],
 }

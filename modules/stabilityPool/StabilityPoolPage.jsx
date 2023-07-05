@@ -23,7 +23,8 @@ export default function StabilityPoolPage() {
     userDepositTvl_text,
     userWstETHClaimableTvl_text,
     myTotalValue_text,
-    userWstETHClaimable } = useStabiltyPool_c()
+    userWstETHClaimable,
+    apy } = useStabiltyPool_c()
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -83,9 +84,8 @@ export default function StabilityPoolPage() {
             <p>{stabilityPoolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
-            <p>Last 7 Days APY</p>
-            <h2>12%</h2>
-            <p>Daily 0.0328%</p>
+            <p>APY</p>
+            <h2>{apy}%</h2>
           </div>
         </div>
       </div>
