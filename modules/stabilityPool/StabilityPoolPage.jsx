@@ -17,7 +17,9 @@ const item = POOLS_LIST[0]
 export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
-  const { stabilityPoolTotalSupply,
+  const {
+    stabilityPoolInfo,
+    stabilityPoolTotalSupply,
     stabilityPoolTotalSupplyTvl_text,
     userDeposit,
     userDepositTvl_text,
@@ -149,10 +151,10 @@ export default function StabilityPoolPage() {
       </div>
 
       {depositVisible && (
-        <DepositModal info={item} onCancel={() => setDepositVisible(false)} />
+        <DepositModal info={item} poolData={stabilityPoolInfo} onCancel={() => setDepositVisible(false)} />
       )}
       {withdrawVisible && (
-        <WithdrawModal info={item} onCancel={() => setWithdrawVisible(false)} />
+        <WithdrawModal info={item} poolData={stabilityPoolInfo} onCancel={() => setWithdrawVisible(false)} />
       )}
     </div>
   )

@@ -10,7 +10,7 @@ export const POOLS_LIST = [
     logo: FLogo,
     logo2: `/tokens/crypto-icons-stack.svg#eth`,
     id: 1,
-    name: 'f(x) / ETH Curve LP',
+    name: 'fETH',
     platform: 'CLever',
     fromPlatformIcon: `${cryptoIcons}#crv`,
     fromPlatform: 'Curve',

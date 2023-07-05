@@ -18,18 +18,22 @@ const useStabiltyPool_c = () => {
     } = useFxCommon()
     console.log('stabilityPoolInfo---fxInfo--ethPrice--', stabilityPoolInfo, fxInfo, ethPrice)
     const getStabiltyPoolApy = useCallback((stabilityPoolTotalSupplyTvl) => {
-        const { rewardStateRes } = stabilityPoolInfo?.baseInfo
-        const { finishAt, rate } = rewardStateRes
-        let apy = 0
-        const _currentTime = +new Date()
-        if (_currentTime > finishAt) {
-            apy = 0
-        } else {
-            const apyWei = cBN(rate).multipliedBy(config.daySecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl)
-            apy = checkNotZoroNumOption(apyWei, fb4(apyWei, false, 0, 2))
+        try {
+            const { rewardStateRes } = stabilityPoolInfo?.baseInfo
+            const { finishAt, rate } = rewardStateRes || {}
+            let apy = 0
+            const _currentTime = +new Date()
+            if (_currentTime > finishAt) {
+                apy = 0
+            } else {
+                const apyWei = cBN(rate).multipliedBy(config.daySecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl)
+                apy = checkNotZoroNumOption(apyWei, fb4(apyWei, false, 0, 2))
+            }
+            console.log('apy---', apy, stETHRate)
+            return apy
+        } catch (error) {
+            return 0
         }
-        console.log('apy---', apy, stETHRate)
-        return apy
     }, [stabilityPoolInfo?.baseInfo, stETHRate])
     const pageData = useMemo(() => {
         try {
@@ -76,6 +80,7 @@ const useStabiltyPool_c = () => {
 
             const apy = getStabiltyPoolApy(stabilityPoolTotalSupplyTvl)
             return {
+                stabilityPoolInfo,
                 stabilityPoolTotalSupplyTvl_text,
                 stabilityPoolTotalSupply,
                 userDeposit,
@@ -92,6 +97,7 @@ const useStabiltyPool_c = () => {
         } catch (error) {
             console.log('error--', error)
             return {
+                stabilityPoolInfo: {},
                 stabilityPoolTotalSupply: '-',
                 stabilityPoolTotalSupplyTvl_text: '-',
                 userDeposit: '-',
