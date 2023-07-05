@@ -11,6 +11,7 @@ import useStabiltyPool_c from './controller/c_stabiltyPool'
 import { useFX_stabilityPool } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
+import { checkNotZoroNum } from '@/utils/index'
 
 const item = POOLS_LIST[0]
 
@@ -28,7 +29,11 @@ export default function StabilityPoolPage() {
     userWstETHClaimable,
     userUnlockingBalance,
     userUnlockingBalanceTvl_text,
-    apy } = useStabiltyPool_c()
+    userUnlockedBalance,
+    userUnlockedBalanceTvl,
+    userUnlockedBalanceTvl_text,
+    apy
+  } = useStabiltyPool_c()
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -41,6 +46,28 @@ export default function StabilityPoolPage() {
   const handleWithdraw = () => {
     if (!isAllReady) return
     setWithdrawVisible(true)
+  }
+
+  const handleUnlock = async () => {
+    if (!isAllReady) return
+    try {
+      setClaiming(true)
+      const apiCall = FX_StabilityPoolContract.methods.withdrawUnlocked(
+        true,
+        true
+      )
+      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'lp',
+        action: 'Unlock',
+      })
+      setClaiming(false)
+    } catch (error) {
+      setClaiming(false)
+      console.log("unlock-error---", error)
+      noPayableErrorAction(`error_unlock`, error)
+    }
   }
 
   const handleClaim = async () => {
@@ -71,6 +98,9 @@ export default function StabilityPoolPage() {
     }
     return false
   }, [userWstETHClaimable])
+  const canUnlock = useMemo(() => {
+    return !!checkNotZoroNum(userUnlockedBalanceTvl)
+  }, [userUnlockedBalanceTvl])
 
   return (
     <div className={styles.container}>
@@ -116,6 +146,21 @@ export default function StabilityPoolPage() {
                 <p>Locking</p>
                 <h2>${userUnlockingBalanceTvl_text}</h2>
                 <p>{userUnlockingBalance} fx</p>
+              </div>
+              <div>
+                <p>unLocked</p>
+                <h2>${userUnlockedBalanceTvl_text}</h2>
+                <p>{userUnlockedBalance} fx</p>
+
+                <Button
+                  width="120px"
+                  height="45px"
+                  disabled={!canUnlock}
+                  className="mr-[25px]"
+                  onClick={handleUnlock}
+                >
+                  Unlock
+                </Button>
               </div>
             </div>
           </div>

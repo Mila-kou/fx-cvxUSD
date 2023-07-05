@@ -90,6 +90,7 @@ const useStabiltyPool_c = () => {
                 myTotalValue_text,
                 userUnlockingBalanceTvl_text,
                 userUnlockingBalance,
+                userUnlockedBalanceTvl,
                 userUnlockedBalanceTvl_text,
                 userUnlockedBalance,
                 apy
