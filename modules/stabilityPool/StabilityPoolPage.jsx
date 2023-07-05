@@ -8,11 +8,15 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 
 import styles from './styles.module.scss'
 import useStabiltyPool_c from './controller/c_stabiltyPool'
+import { useFX_stabilityPool } from '@/hooks/useContracts'
+import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import config from '@/config/index'
 
 const item = POOLS_LIST[0]
 
 export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
+  const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
   const { stabilityPoolTotalSupply,
     stabilityPoolTotalSupplyTvl_text,
     userDeposit,
@@ -34,9 +38,26 @@ export default function StabilityPoolPage() {
     setWithdrawVisible(true)
   }
 
-  const handleClaim = () => {
+  const handleClaim = async () => {
     if (!isAllReady) return
-    setClaiming(true)
+    try {
+      setClaiming(true)
+      const apiCall = FX_StabilityPoolContract.methods.claim(
+        config.tokens.wstETH,
+        true
+      )
+      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'lp',
+        action: 'Claim',
+      })
+      setClaiming(false)
+    } catch (error) {
+      setClaiming(false)
+      console.log("claim-error---", error)
+      noPayableErrorAction(`error_claim`, error)
+    }
   }
 
   const canClaim = useMemo(() => {
