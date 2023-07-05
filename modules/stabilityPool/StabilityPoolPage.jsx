@@ -104,7 +104,7 @@ export default function StabilityPoolPage() {
 
             <div className="mt-[44px] flex gap-[80px]">
               <div>
-                <p>fxETH Earned</p>
+                <p>Earned</p>
                 <h2>${userWstETHClaimableTvl_text}</h2>
                 <p>{userWstETHClaimable} stETH</p>
               </div>

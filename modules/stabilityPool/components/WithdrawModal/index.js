@@ -8,6 +8,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import { useContract } from '@/hooks/useContracts'
 import abi from '@/config/abi'
 import styles from './styles.module.scss'
+import useStabiltyPool_c from '../../controller/c_stabiltyPool'
 
 export default function WithdrawModal(props) {
   const { onCancel, info } = props
@@ -17,6 +18,11 @@ export default function WithdrawModal(props) {
   const { getContract } = useContract()
 
   const { logo, userInfo = {}, name, stakeTokenDecimals } = info
+  const {
+    userDeposit,
+    userDepositTvl_text,
+  } = useStabiltyPool_c()
+
   const handleInputChange = (val) => setWithdrawAmount(val)
 
   const handleWithdraw = async () => {
@@ -54,8 +60,9 @@ export default function WithdrawModal(props) {
       <div className={styles.content}>
         <h2>Withdraw fETH/ETH </h2>
         <Input
+          balance={userDeposit}
           onChange={handleInputChange}
-          available={earned}
+          // available={userDeposit}
           token={name}
           decimals={stakeTokenDecimals}
         />
