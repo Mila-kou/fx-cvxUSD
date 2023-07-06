@@ -141,7 +141,7 @@ export default function StabilityPoolPage() {
               <div>
                 <p>Unlocked Funds</p>
                 <h2>${userUnlockedBalanceTvl_text}</h2>
-                <p>{userUnlockedBalance} fx</p>
+                <p>{userUnlockedBalance} fETH</p>
 
                 <a disabled={!canUnlock} onClick={handleUnlock}>
                   Unlock
@@ -158,7 +158,7 @@ export default function StabilityPoolPage() {
               <div>
                 <p>Locking</p>
                 <h2>${userUnlockingBalanceTvl_text}</h2>
-                <p>{userUnlockingBalance} fx</p>
+                <p>{userUnlockingBalance} fETH</p>
               </div>
             </div>
           </div>
