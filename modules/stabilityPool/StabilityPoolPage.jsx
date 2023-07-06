@@ -38,6 +38,7 @@ export default function StabilityPoolPage() {
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
   const [claiming, setClaiming] = useState(false)
+  const [unlocking, setUnlocking] = useState(false)
 
   const handleDeposit = () => {
     if (!isAllReady) return
@@ -51,7 +52,7 @@ export default function StabilityPoolPage() {
   const handleUnlock = async () => {
     if (!isAllReady) return
     try {
-      setClaiming(true)
+      setUnlocking(true)
       const apiCall = FX_StabilityPoolContract.methods.withdrawUnlocked(
         true,
         true
@@ -62,9 +63,9 @@ export default function StabilityPoolPage() {
         key: 'lp',
         action: 'Unlock',
       })
-      setClaiming(false)
+      setUnlocking(false)
     } catch (error) {
-      setClaiming(false)
+      setUnlocking(false)
       console.log('unlock-error---', error)
       noPayableErrorAction(`error_unlock`, error)
     }
@@ -143,9 +144,16 @@ export default function StabilityPoolPage() {
                 <h2>${userUnlockedBalanceTvl_text}</h2>
                 <p>{userUnlockedBalance} fETH</p>
 
-                <a disabled={!canUnlock} onClick={handleUnlock}>
+                <Button
+                  type="second"
+                  width="120px"
+                  height="45px"
+                  disabled={!canUnlock}
+                  loading={unlocking}
+                  onClick={handleUnlock}
+                >
                   Unlock
-                </a>
+                </Button>
               </div>
             </div>
 
