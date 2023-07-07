@@ -34,7 +34,7 @@ function GlobalProvider({ children }) {
   const fx_info = useInfo()
   const stabilityPool_info = stabilityPoolUseInfo()
   const ethToken = useToken(config.tokens.eth)
-  const stethToken = useToken(config.tokens.steth)
+  const stETHToken = useToken(config.tokens.steth)
   const fETHToken = useToken(config.tokens.fETH)
   const xETHToken = useToken(config.tokens.xETH)
 
@@ -130,12 +130,12 @@ function GlobalProvider({ children }) {
           )
         ),
       },
-      steth: {
-        ...stethToken,
+      stETH: {
+        ...stETHToken,
         usd: checkNotZoroNumOption(
-          stethToken.balance,
+          stETHToken.balance,
           fb4(
-            cBN(stethToken.balance)
+            cBN(stETHToken.balance)
               .multipliedBy(CurrentNavRes?._baseNav)
               .div(1e18) || 0,
             true
@@ -167,7 +167,7 @@ function GlobalProvider({ children }) {
         ),
       },
     }
-  }, [ethToken, stethToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
+  }, [ethToken, stETHToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
 
   const value = useMemo(
     () => ({

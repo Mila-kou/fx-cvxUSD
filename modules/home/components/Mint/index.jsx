@@ -289,9 +289,9 @@ export default function Mint({ slippage }) {
       <BalanceInput
         placeholder="-"
         symbol={symbol}
-        balance={fb4(tokens.ETH.balance, false)}
+        balance={fb4(tokens[symbol].balance, false)}
         usd={`$${ethPrice_text}`}
-        maxAmount={tokens.ETH.balance}
+        maxAmount={tokens[symbol].balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
         // changeValue={cBN(ETHtAmount)}

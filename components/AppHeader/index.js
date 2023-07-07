@@ -61,7 +61,7 @@ export default function AppHeader() {
       {
         name: 'stETH',
         symbol: 'stETH',
-        amount: fb4(tokens.steth.balance, false),
+        amount: fb4(tokens.stETH.balance, false),
         icon: '/tokens/crypto-icons-stack.svg#eth',
         usd: tokens.ETH.usd,
         showAdd: true,
