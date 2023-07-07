@@ -24,6 +24,7 @@ export default function MintBonus({ slippage }) {
   // const [feeUsd, setFeeUsd] = useState(10)
   const minGas = 260325
   const [ETHtAmount, setETHtAmount] = useState(0)
+  const [symbol, setSymbol] = useState('ETH')
   const {
     fETHContract,
     xETHContract,
@@ -198,12 +199,14 @@ export default function MintBonus({ slippage }) {
 
       <BalanceInput
         placeholder="-"
-        symbol="ETH"
-        balance={fb4(tokens.ETH.balance, false)}
+        symbol={symbol}
+        balance={fb4(tokens[symbol].balance, false)}
         usd={`$${ethPrice_text}`}
-        maxAmount={tokens.ETH.balance}
+        maxAmount={tokens[symbol].balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
+        options={['ETH', 'stETH']}
+        onSymbolChanged={(v) => setSymbol(v)}
       />
 
       <div className={styles.details}>
