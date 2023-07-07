@@ -51,20 +51,21 @@ export default function AppHeader() {
 
   const assets = useMemo(() => {
     const list = [
-      {
-        name: 'Ethereum',
-        symbol: 'ETH',
-        amount: fb4(tokens.ETH.balance, false),
-        icon: '/tokens/crypto-icons-stack.svg#eth',
-        usd: tokens.ETH.usd,
-      },
       // {
       //   name: 'Ethereum',
-      //   symbol: 'WETH',
-      //   amount: fb4(tokens.WETH.balance, false),
+      //   symbol: 'ETH',
+      //   amount: fb4(tokens.ETH.balance, false),
       //   icon: '/tokens/crypto-icons-stack.svg#eth',
-      //   usd: tokens.WETH.usd,
+      //   usd: tokens.ETH.usd,
       // },
+      {
+        name: 'stETH',
+        symbol: 'stETH',
+        amount: fb4(tokens.steth.balance, false),
+        icon: '/tokens/crypto-icons-stack.svg#eth',
+        usd: tokens.ETH.usd,
+        showAdd: true,
+      },
       {
         name: 'Fractional ETH',
         symbol: 'fETH',

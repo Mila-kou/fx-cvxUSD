@@ -34,7 +34,7 @@ function GlobalProvider({ children }) {
   const fx_info = useInfo()
   const stabilityPool_info = stabilityPoolUseInfo()
   const ethToken = useToken(config.tokens.eth)
-  // const wethToken = useToken(config.tokens.weth)
+  const stethToken = useToken(config.tokens.steth)
   const fETHToken = useToken(config.tokens.fETH)
   const xETHToken = useToken(config.tokens.xETH)
 
@@ -45,7 +45,6 @@ function GlobalProvider({ children }) {
     { data: concentratorInitData, refetch: refetch4 },
     { data: lpPrice, refetch: refetch5 },
     { data: stETHRate, refetch: refetch6 },
-
   ] = useQueries({
     queries: [
       {
@@ -131,18 +130,18 @@ function GlobalProvider({ children }) {
           )
         ),
       },
-      // WETH: {
-      //   ...wethToken,
-      //   usd: checkNotZoroNumOption(
-      //     wethToken.balance,
-      //     fb4(
-      //       cBN(wethToken.balance)
-      //         .multipliedBy(CurrentNavRes?._baseNav)
-      //         .div(1e18) || 0,
-      //       true
-      //     )
-      //   ),
-      // },
+      steth: {
+        ...stethToken,
+        usd: checkNotZoroNumOption(
+          stethToken.balance,
+          fb4(
+            cBN(stethToken.balance)
+              .multipliedBy(CurrentNavRes?._baseNav)
+              .div(1e18) || 0,
+            true
+          )
+        ),
+      },
       fETH: {
         ...fETHToken,
         usd: checkNotZoroNumOption(
@@ -168,7 +167,7 @@ function GlobalProvider({ children }) {
         ),
       },
     }
-  }, [ethToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
+  }, [ethToken, stethToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
 
   const value = useMemo(
     () => ({
@@ -186,7 +185,7 @@ function GlobalProvider({ children }) {
       ConvexVaultsAPY,
       concentratorInitData,
       ifoVaultWithdrawFee,
-      stETHRate
+      stETHRate,
     }),
     [
       theme,
