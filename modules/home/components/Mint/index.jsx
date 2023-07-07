@@ -22,6 +22,7 @@ export default function Mint({ slippage }) {
 
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
   const [errorMinout, setErrorMinout] = useState(false)
+  const [symbol, setSymbol] = useState('ETH')
 
   const minGas = 234854
   const [ETHtAmount, setETHtAmount] = useState(0)
@@ -287,13 +288,15 @@ export default function Mint({ slippage }) {
       {/* <div onClick={handelTest}>Change ETH Value</div> */}
       <BalanceInput
         placeholder="-"
-        symbol="ETH"
+        symbol={symbol}
         balance={fb4(tokens.ETH.balance, false)}
         usd={`$${ethPrice_text}`}
         maxAmount={tokens.ETH.balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
         // changeValue={cBN(ETHtAmount)}
+        options={['ETH', 'stETH']}
+        onSymbolChanged={(v) => setSymbol(v)}
       />
       <div className={styles.arrow}>
         <DownOutlined />
