@@ -138,7 +138,7 @@ export default function Mint({ slippage }) {
         const getGasPrice = await getGas()
         const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
         let _ETHtAmountAndGas
-        if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)) {
+        if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) && symbol == 'ETH') {
           _ETHtAmountAndGas = cBN(tokens.ETH.balance)
             .minus(gasFee)
             .toFixed(0, 1)
@@ -204,7 +204,7 @@ export default function Mint({ slippage }) {
       const getGasPrice = await getGas()
       const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
       let _ETHtAmountAndGas
-      if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)) {
+      if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) && symbol == 'ETH') {
         _ETHtAmountAndGas = cBN(tokens.ETH.balance)
           .minus(gasFee)
           .toFixed(0, 1)
@@ -213,10 +213,14 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = ETHtAmount
       }
       let apiCall
+      let _gatewayContract = stETHGatewayContract
+      if (symbol == 'stETH') {
+        _gatewayContract = marketContract
+      }
       if (isF) {
-        apiCall = await stETHGatewayContract.methods.mintFToken(_minOut)
+        apiCall = await _gatewayContract.methods.mintFToken(_minOut)
       } else {
-        apiCall = await stETHGatewayContract.methods.mintXToken(_minOut)
+        apiCall = await _gatewayContract.methods.mintXToken(_minOut)
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
@@ -303,8 +307,8 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-        // onChange={hanldefETHAmountChanged}
-        // rightSuffix="Beta 0.1"
+      // onChange={hanldefETHAmountChanged}
+      // rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
@@ -319,7 +323,7 @@ export default function Mint({ slippage }) {
         rightSuffix={
           <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
         }
-        // onChange={hanldexETHAmountChanged}
+      // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
