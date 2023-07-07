@@ -277,15 +277,8 @@ export default function Mint({ slippage }) {
     // handleGetAllMinAmount()
   }, [selected, slippage, ETHtAmount])
 
-  const handelTest = () => {
-    setETHtAmount('100200000000000000')
-  }
-
-  console.log('ETHtAmount----', ETHtAmount)
-
   return (
     <div className={styles.container}>
-      {/* <div onClick={handelTest}>Change ETH Value</div> */}
       <BalanceInput
         placeholder="-"
         symbol={symbol}
