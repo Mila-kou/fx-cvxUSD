@@ -105,6 +105,12 @@ export default function AppHeader() {
         decimals: 18,
         image: `${window.location.origin}/images/x-logo.svg`,
       },
+      stETH: {
+        address: config.tokens.stETH,
+        symbol: 'stETH',
+        decimals: 18,
+        image: `/tokens/crypto-icons-stack.svg#eth`,
+      },
     }
     addToMetamask(map[symbol])
   }

@@ -34,7 +34,7 @@ function GlobalProvider({ children }) {
   const fx_info = useInfo()
   const stabilityPool_info = stabilityPoolUseInfo()
   const ethToken = useToken(config.tokens.eth)
-  const stETHToken = useToken(config.tokens.steth)
+  const stETHToken = useToken(config.tokens.stETH)
   const fETHToken = useToken(config.tokens.fETH)
   const xETHToken = useToken(config.tokens.xETH)
 

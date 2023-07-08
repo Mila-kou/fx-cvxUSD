@@ -91,7 +91,7 @@ const tokens = {
   dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
   wbtc: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
   seth: '0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb',
-  steth: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+  stETH: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
   renBTC: '0xEB4C2781e4ebA804CE9a9803C67d0893436bB27D',
   aldVote: '0x6e2b4801040d5fab7D0d7700bE5903322BCf61Ce',
   comp: '0xc00e94cb662c3520282e6f5717214004a7f26888',
@@ -143,7 +143,7 @@ const TOKENS_INFO = {
   weth: ['weth', tokens.weth, 18, 'weth'],
   wbtc: ['bitcoin', tokens.wbtc, 8, 'wbtc'],
   seth: ['seth', tokens.seth, 18, 'seth'],
-  steth: ['staked-ether', tokens.steth, 18, 'steth'],
+  stETH: ['staked-ether', tokens.stETH, 18, 'stETH'],
   renBTC: ['renbtc', tokens.renBTC, 8, 'renBTC'],
   clev: ['clev', tokens.clev, 18, 'aldClev'],
   clevCVX: ['clev', tokens.clevCVX, 18, 'aldClevCVX'],
@@ -178,8 +178,8 @@ const zapTokens = {
   stETH: {
     symbol: 'stETH',
     icon: 'weth',
-    decimals: TOKENS_INFO.steth[2],
-    address: TOKENS_INFO.steth[1],
+    decimals: TOKENS_INFO.stETH[2],
+    address: TOKENS_INFO.stETH[1],
     needZap: true,
   },
   WETH: {

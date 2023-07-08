@@ -11,6 +11,8 @@ import useGlobal from '@/hooks/useGlobal'
 import { DetailCell, NoticeCard } from '../Common'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
+import config from '@/config/index'
+import useApprove from '@/hooks/useApprove'
 
 export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -59,6 +61,18 @@ export default function Mint({ slippage }) {
     systemStatus,
     baseInfo,
   } = useETH()
+
+  const selectTokenAddress = useMemo(() => {
+    return symbol == 'stETH' ? config.tokens.stETH : config.zeroAddress
+  }, [symbol])
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_stETH_mint')
+
+  const { BtnWapper } = useApprove({
+    approveAmount: ETHtAmount,
+    allowance: selectTokenInfo.allowance,
+    tokenContract: selectTokenInfo.contract,
+    approveAddress: selectTokenInfo.contractAddress,
+  })
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -213,33 +227,52 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = ETHtAmount
       }
       let apiCall
-      let _gatewayContract = stETHGatewayContract
+      let estimatedGas;
       if (symbol == 'stETH') {
-        _gatewayContract = marketContract
-      }
-      if (isF) {
-        apiCall = await _gatewayContract.methods.mintFToken(_minOut)
-      } else {
-        apiCall = await _gatewayContract.methods.mintXToken(_minOut)
-      }
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-        value: _ETHtAmountAndGas,
-      })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      console.log('gas----', gas)
-      await NoPayableAction(
-        () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
-            value: _ETHtAmountAndGas,
-          }),
-        {
-          key: 'Mint',
-          action: 'Mint',
+        if (isF) {
+          apiCall = await marketContract.methods.mintFToken(_ETHtAmountAndGas, _currentAccount, _minOut)
+        } else {
+          apiCall = await marketContract.methods.mintXToken(_ETHtAmountAndGas, _currentAccount, _minOut)
         }
-      )
+        estimatedGas = await apiCall.estimateGas({
+          from: _currentAccount
+        })
+        const gas = parseInt(estimatedGas * 1.2, 10) || 0
+        await NoPayableAction(
+          () =>
+            apiCall.send({
+              from: _currentAccount,
+              gas
+            }),
+          {
+            key: 'Mint',
+            action: 'Mint',
+          }
+        )
+      } else {
+        if (isF) {
+          apiCall = await stETHGatewayContract.methods.mintFToken(_minOut)
+        } else {
+          apiCall = await stETHGatewayContract.methods.mintXToken(_minOut)
+        }
+        estimatedGas = await apiCall.estimateGas({
+          from: _currentAccount,
+          value: _ETHtAmountAndGas,
+        })
+        const gas = parseInt(estimatedGas * 1.2, 10) || 0
+        await NoPayableAction(
+          () =>
+            apiCall.send({
+              from: _currentAccount,
+              gas,
+              value: _ETHtAmountAndGas,
+            }),
+          {
+            key: 'Mint',
+            action: 'Mint',
+          }
+        )
+      }
       setMintLoading(false)
       initPage()
     } catch (error) {
@@ -249,9 +282,16 @@ export default function Mint({ slippage }) {
   }
 
   const canMint = useMemo(() => {
-    const _enableETH =
-      cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
-      cBN(ETHtAmount).isGreaterThan(0)
+    let _enableETH = false
+    if (symbol == 'stETH') {
+      _enableETH =
+        cBN(ETHtAmount).isLessThanOrEqualTo(tokens.stETH.balance) &&
+        cBN(ETHtAmount).isGreaterThan(0)
+    } else {
+      _enableETH =
+        cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
+        cBN(ETHtAmount).isGreaterThan(0)
+    }
     let _fTokenMintInSystemStabilityModePaused = false
     if (isF) {
       _fTokenMintInSystemStabilityModePaused =
@@ -337,14 +377,22 @@ export default function Mint({ slippage }) {
       )}
 
       <div className={styles.action}>
-        <Button
+        <BtnWapper
+          loading={mintLoading}
+          disabled={!canMint}
+          onClick={handleMint}
+          width="100%"
+        >
+          Mint {isF ? 'Stable fETH' : 'Volatile xETH'}
+        </BtnWapper>
+        {/* <Button
           width="100%"
           loading={mintLoading}
           disabled={!canMint}
           onClick={handleMint}
         >
           Mint {isF ? 'Stable fETH' : 'Volatile xETH'}
-        </Button>
+        </Button> */}
       </div>
     </div>
   )

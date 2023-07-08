@@ -12,6 +12,7 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useFxCommon from '../../hooks/useFxCommon'
 import { DetailCell, BonusCard, NoticeCard } from '../Common'
+import useApprove from '@/hooks/useApprove'
 
 export default function MintBonus({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -49,6 +50,19 @@ export default function MintBonus({ slippage }) {
     systemStatus,
     stabilityIncentiveRatio_text,
   } = useETH()
+  const selectTokenAddress = useMemo(() => {
+    return symbol == 'stETH' ? config.tokens.stETH : config.zeroAddress
+  }, [symbol])
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_stETH_mint')
+
+  const { BtnWapper } = useApprove({
+    approveAmount: ETHtAmount,
+    allowance: selectTokenInfo.allowance,
+    tokenContract: selectTokenInfo.contract,
+    approveAddress: selectTokenInfo.contractAddress,
+  })
+
+
   const [XETHtAmount, setXETHtAmount] = useState({
     minout_ETH: '-',
     minout_slippage: 0,
@@ -142,25 +156,53 @@ export default function MintBonus({ slippage }) {
       } else {
         _ETHtAmountAndGas = ETHtAmount
       }
-      let apiCall = await stETHGatewayContract.methods.addBaseToken(_minOut)
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-        value: _ETHtAmountAndGas,
-      })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      console.log('gas--', gas)
-      await NoPayableAction(
-        () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
-            value: _ETHtAmountAndGas,
-          }),
-        {
-          key: 'Mint',
-          action: 'Mint',
+      let apiCall
+      let estimatedGas;
+      if (symbol == 'stETH') {
+        if (isF) {
+          apiCall = await marketContract.methods.mintFToken(_ETHtAmountAndGas, _currentAccount, _minOut)
+        } else {
+          apiCall = await marketContract.methods.mintXToken(_ETHtAmountAndGas, _currentAccount, _minOut)
         }
-      )
+        estimatedGas = await apiCall.estimateGas({
+          from: _currentAccount
+        })
+        const gas = parseInt(estimatedGas * 1.2, 10) || 0
+        await NoPayableAction(
+          () =>
+            apiCall.send({
+              from: _currentAccount,
+              gas
+            }),
+          {
+            key: 'Mint',
+            action: 'Mint',
+          }
+        )
+      } else {
+        if (isF) {
+          apiCall = await stETHGatewayContract.methods.mintFToken(_minOut)
+        } else {
+          apiCall = await stETHGatewayContract.methods.mintXToken(_minOut)
+        }
+        estimatedGas = await apiCall.estimateGas({
+          from: _currentAccount,
+          value: _ETHtAmountAndGas,
+        })
+        const gas = parseInt(estimatedGas * 1.2, 10) || 0
+        await NoPayableAction(
+          () =>
+            apiCall.send({
+              from: _currentAccount,
+              gas,
+              value: _ETHtAmountAndGas,
+            }),
+          {
+            key: 'Mint',
+            action: 'Mint',
+          }
+        )
+      }
       setMintLoading(false)
       initPage()
     } catch (error) {
@@ -235,11 +277,11 @@ export default function MintBonus({ slippage }) {
         content={
           showDisabledNotice
             ? [
-                'fx governance decision to temporarily disabled Mint functionality.',
-              ]
+              'fx governance decision to temporarily disabled Mint functionality.',
+            ]
             : [
-                'Excess payments will be refunded if rewards are fully allocated.',
-              ]
+              'Excess payments will be refunded if rewards are fully allocated.',
+            ]
         }
       />
 
