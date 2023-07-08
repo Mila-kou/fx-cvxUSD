@@ -233,6 +233,7 @@ export default function Redeem({ slippage }) {
       const apiCall = await marketContract.methods.redeem(
         _fTokenIn,
         _xTokenIn,
+        _currentAccount,
         _minoutETH
       )
       const estimatedGas = await apiCall.estimateGas({
