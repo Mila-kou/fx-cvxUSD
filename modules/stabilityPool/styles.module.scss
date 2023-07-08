@@ -89,6 +89,10 @@
           }
           .cellContent {
             flex: 1;
+            svg {
+              display: inline-block;
+              cursor: pointer;
+            }
           }
         }
 
