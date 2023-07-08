@@ -37,13 +37,14 @@ const useStabiltyPool_c = () => {
     }, [stabilityPoolInfo?.baseInfo, stETHRate])
     const pageData = useMemo(() => {
         try {
+            const stabilityPoolTotalSupply_res = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(stabilityPoolInfo.baseInfo?.totalUnlockingRes)
             const stabilityPoolTotalSupply = checkNotZoroNumOption(
-                stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes,
-                fb4(stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes)
+                stabilityPoolTotalSupply_res,
+                fb4(stabilityPoolTotalSupply_res)
             )
             let stabilityPoolTotalSupplyTvl = cBN(0);
-            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes)) {
-                stabilityPoolTotalSupplyTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.baseInfo.stabilityPoolTotalSupplyRes).div(1e18)
+            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolTotalSupply_res)) {
+                stabilityPoolTotalSupplyTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolTotalSupply_res).div(1e18)
             }
             const stabilityPoolTotalSupplyTvl_text = fb4(stabilityPoolTotalSupplyTvl, false, 0)
 

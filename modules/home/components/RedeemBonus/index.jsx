@@ -249,12 +249,12 @@ export default function RedeemBonus({ slippage }) {
         <DetailCell
           isGreen
           title="Max Bonus:"
-          content={[`+${maxETHBonus_Text || 0} ETH`]}
+          content={[`+${maxETHBonus_Text || 0} stETH`]}
         />
         <DetailCell
           isGreen
           title="User Bonus:"
-          content={[`+${useETHBonus_text || 0} ETH`]}
+          content={[`+${useETHBonus_text || 0} stETH`]}
         />
       </div>
       <NoticeCard

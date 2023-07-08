@@ -295,7 +295,7 @@ export default function Redeem({ slippage }) {
       </div>
 
       <BalanceInput
-        symbol="ETH"
+        symbol="stETH"
         placeholder={minOutETHtAmount.minout_ETH}
         usd={`$${ethPrice_text}`}
         disabled
