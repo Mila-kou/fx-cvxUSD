@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import cn from 'classnames'
 import { useToggle, useSetState } from 'ahooks'
 import useWeb3 from '@/hooks/useWeb3'
@@ -161,7 +162,9 @@ export default function StabilityPoolPage() {
             <div className={cn(styles.item, styles.itemWrap, 'mt-[40px]')}>
               <div>
                 <img src={ETHImg} />
-                <p>Get fETH to Deposit →</p>
+                <Link href="/home">
+                  <p>Get fETH to Deposit →</p>
+                </Link>
               </div>
             </div>
           </div>
@@ -177,7 +180,12 @@ export default function StabilityPoolPage() {
                 <p className="text-[14px]">
                   Unlocked: {userUnlockedBalance} fETH{'  '}
                   <span
-                    className="text-[#6B79FC] underline cursor-pointer"
+                    className={cn(
+                      'text-[#6B79FC] underline',
+                      canUnlock
+                        ? 'cursor-pointer'
+                        : 'cursor-not-allowed opacity-[0.6]'
+                    )}
                     onClick={handleUnlock}
                   >
                     Claim Funds
@@ -209,7 +217,12 @@ export default function StabilityPoolPage() {
               </div>
               <div>
                 <p
-                  className="text-[#fff] w-[178px] h-[48px] rounded-[10px] bg-[#4FBF67] flex items-center justify-center cursor-pointer"
+                  className={cn(
+                    'text-[#fff] w-[178px] h-[48px] rounded-[10px] bg-[#4FBF67] flex items-center justify-center',
+                    canClaim
+                      ? 'cursor-pointer'
+                      : 'cursor-not-allowed opacity-[0.6]'
+                  )}
                   onClick={handleClaim}
                 >
                   Claim
