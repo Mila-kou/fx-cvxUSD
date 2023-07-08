@@ -159,11 +159,8 @@ export default function MintBonus({ slippage }) {
       let apiCall
       let estimatedGas;
       if (symbol == 'stETH') {
-        if (isF) {
-          apiCall = await marketContract.methods.mintFToken(_ETHtAmountAndGas, _currentAccount, _minOut)
-        } else {
-          apiCall = await marketContract.methods.mintXToken(_ETHtAmountAndGas, _currentAccount, _minOut)
-        }
+        apiCall = await marketContract.methods
+          .addBaseToken(_ETHtAmountAndGas, _currentAccount, _minOut)
         estimatedGas = await apiCall.estimateGas({
           from: _currentAccount
         })
@@ -180,11 +177,8 @@ export default function MintBonus({ slippage }) {
           }
         )
       } else {
-        if (isF) {
-          apiCall = await stETHGatewayContract.methods.mintFToken(_minOut)
-        } else {
-          apiCall = await stETHGatewayContract.methods.mintXToken(_minOut)
-        }
+        apiCall = await stETHGatewayContract.methods
+          .addBaseToken(_minOut)
         estimatedGas = await apiCall.estimateGas({
           from: _currentAccount,
           value: _ETHtAmountAndGas,

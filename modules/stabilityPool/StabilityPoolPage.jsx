@@ -120,11 +120,14 @@ export default function StabilityPoolPage() {
   }
 
   const canClaim = useMemo(() => {
-    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableResd)) {
+    console.log('stabilityPoolInfo.userInfo?.claimableResd--', stabilityPoolInfo.userInfo?.claimableRes)
+    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableRes)) {
       return true
     }
     return false
   }, [userWstETHClaimable])
+
+  
   const canUnlock = useMemo(() => {
     return !!checkNotZoroNum(userUnlockedBalanceTvl)
   }, [userUnlockedBalanceTvl])
