@@ -100,7 +100,7 @@ export default function StabilityPoolPage() {
   }
 
   const canClaim = useMemo(() => {
-    if (userWstETHClaimable) {
+    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableResd)) {
       return true
     }
     return false
