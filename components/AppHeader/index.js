@@ -51,13 +51,13 @@ export default function AppHeader() {
 
   const assets = useMemo(() => {
     const list = [
-      // {
-      //   name: 'Ethereum',
-      //   symbol: 'ETH',
-      //   amount: fb4(tokens.ETH.balance, false),
-      //   icon: '/tokens/crypto-icons-stack.svg#eth',
-      //   usd: tokens.ETH.usd,
-      // },
+      {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        amount: fb4(tokens.ETH.balance, false),
+        icon: '/tokens/crypto-icons-stack.svg#eth',
+        usd: tokens.ETH.usd,
+      },
       {
         name: 'stETH',
         symbol: 'stETH',

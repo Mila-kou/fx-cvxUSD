@@ -118,7 +118,7 @@ export default function StabilityPoolPage() {
   }
 
   const canClaim = useMemo(() => {
-    if (userWstETHClaimable) {
+    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableResd)) {
       return true
     }
     return false
@@ -203,9 +203,9 @@ export default function StabilityPoolPage() {
             <div className={cn(styles.cell, 'mt-[50px]')}>
               <img src={ETHImg} />
               <div className={styles.cellContent}>
-                <p className="text-[14px]">fxETH Earned</p>
+                <p className="text-[14px]">Earned</p>
                 <p className="text-[24px]">${userWstETHClaimableTvl_text}</p>
-                <p className="text-[14px]">{userWstETHClaimable} fxETH</p>
+                <p className="text-[14px]">{userWstETHClaimable} stETH</p>
               </div>
               <div>
                 <p
@@ -217,14 +217,14 @@ export default function StabilityPoolPage() {
               </div>
             </div>
 
-            <div className={cn(styles.cell, 'mt-[20px]')}>
+            {/* <div className={cn(styles.cell, 'mt-[20px]')}>
               <img src={ETHImg} />
               <div className={styles.cellContent}>
                 <p className="text-[14px]">fx Earned</p>
                 <p className="text-[24px]">${userUnlockingBalanceTvl_text}</p>
                 <p className="text-[14px]">{userUnlockingBalance} fETH</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
