@@ -16,7 +16,8 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
 import { checkNotZoroNum } from '@/utils/index'
 import Warning from '../../public/images/warning.svg'
-import Waiting from '../../public/images/waiting.svg'
+// import Waiting from '../../public/images/waiting.svg'
+// <Waiting onClick={toggle} />
 
 const ETHImg = '/tokens/crypto-icons-stack.svg#eth'
 
@@ -174,9 +175,7 @@ export default function StabilityPoolPage() {
               <div className={styles.cellContent}>
                 <p className="text-[14px]">Deposited fETH</p>
                 <p className="text-[24px]">${userDepositTvl_text}</p>
-                <p className="text-[14px]">
-                  {userDeposit} fETH
-                </p>
+                <p className="text-[14px]">{userDeposit} fETH</p>
                 <p className="text-[14px]">
                   Unlocking {userUnlockingBalance} fETH
                 </p>
