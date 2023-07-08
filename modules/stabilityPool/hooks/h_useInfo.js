@@ -21,11 +21,11 @@ const useInfo = () => {
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
-    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlockingFn, rewardsLength: rewardsLengthFn, rewards: rewardsFn, rewardState } = fx_stabilityPoolContract.methods
+    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlocking, rewardsLength: rewardsLengthFn, rewards: rewardsFn, rewardState } = fx_stabilityPoolContract.methods
     try {
       const apiCalls = [
         stabilityPoolTotalSupplyFn(),
-        totalUnlockingFn,
+        totalUnlocking(),
         rewardsLengthFn(),
         rewardsFn(0),
         rewardState(config.tokens.wstETH)
