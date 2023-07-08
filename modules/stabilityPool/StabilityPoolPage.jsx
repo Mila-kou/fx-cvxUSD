@@ -175,7 +175,10 @@ export default function StabilityPoolPage() {
                 <p className="text-[14px]">Deposited fETH</p>
                 <p className="text-[24px]">${userDepositTvl_text}</p>
                 <p className="text-[14px]">
-                  {userDeposit} fETH <Waiting onClick={toggle} />
+                  {userDeposit} fETH
+                </p>
+                <p className="text-[14px]">
+                  Unlocking {userUnlockingBalance} fETH
                 </p>
                 <p className="text-[14px]">
                   Unlocked: {userUnlockedBalance} fETH{'  '}
