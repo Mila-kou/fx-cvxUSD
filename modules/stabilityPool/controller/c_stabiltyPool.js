@@ -9,10 +9,13 @@ import {
 } from '@/hooks/useContracts'
 import { useGlobal } from '@/contexts/GlobalProvider'
 import useFxCommon from '@/modules/home/hooks/useFxCommon'
+import config from '@/config/index'
+import useWeb3 from '@/hooks/useWeb3'
 
 
 const useStabiltyPool_c = () => {
     const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo, stETHRate } = useGlobal()
+    const { current } = useWeb3()
     const {
         ethPrice,
     } = useFxCommon()
@@ -22,16 +25,18 @@ const useStabiltyPool_c = () => {
             const { rewardStateRes } = stabilityPoolInfo?.baseInfo
             const { finishAt, rate } = rewardStateRes || {}
             let apy = 0
-            const _currentTime = +new Date()
+
+            const _currentTime = current.unix()
             if (_currentTime > finishAt) {
                 apy = 0
             } else {
-                const apyWei = cBN(rate).multipliedBy(config.daySecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl)
+                const apyWei = cBN(rate).div(1e18).multipliedBy(config.daySecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl).times(100)
                 apy = checkNotZoroNumOption(apyWei, fb4(apyWei, false, 0, 2))
             }
-            console.log('apy---', apy, stETHRate)
+            console.log('rate_currentTime--finishAt--config.daySecond--ethPrice--stETHRate--stabilityPoolTotalSupplyTvl--apy---', rate, _currentTime, finishAt, config.daySecond, ethPrice, stETHRate, stabilityPoolTotalSupplyTvl.toString(), apy.toString())
             return apy
         } catch (error) {
+            console.log('apy---', error)
             return 0
         }
     }, [stabilityPoolInfo?.baseInfo, stETHRate])
