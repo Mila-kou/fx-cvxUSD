@@ -42,7 +42,7 @@ const useStabiltyPool_c = () => {
     }, [stabilityPoolInfo?.baseInfo, stETHRate])
     const pageData = useMemo(() => {
         try {
-            const stabilityPoolTotalSupply_res = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(stabilityPoolInfo.baseInfo?.totalUnlockingRes)
+            const stabilityPoolTotalSupply_res = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes)
             const stabilityPoolTotalSupply = checkNotZoroNumOption(
                 stabilityPoolTotalSupply_res,
                 fb4(stabilityPoolTotalSupply_res)
