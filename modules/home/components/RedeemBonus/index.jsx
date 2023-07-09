@@ -133,7 +133,7 @@ export default function RedeemBonus({ slippage }) {
   }
 
   const canRedeem = useMemo(() => {
-    let _enableETH =
+    const _enableETH =
       cBN(tokenAmount).isGreaterThan(0) &&
       cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
     return !redeemPaused && _enableETH
@@ -148,8 +148,7 @@ export default function RedeemBonus({ slippage }) {
       if (!checkNotZoroNum(tokenAmount)) {
         return 0
       }
-      let minout_ETH
-      minout_ETH = await marketContract.methods
+      const minout_ETH = await marketContract.methods
         .liquidate(tokenAmount, _currentAccount, 0)
         .call({ from: _currentAccount })
       console.log('minout_ETH----', tokenAmount, minout_ETH)
@@ -183,10 +182,12 @@ export default function RedeemBonus({ slippage }) {
     try {
       setRedeeming(true)
       const _minoutETH = await getMinAmount()
-      const apiCall = await stETHGatewayContract.methods.liquidate(
+      const apiCall = await marketContract.methods.liquidate(
         tokenAmount,
+        _currentAccount,
         _minoutETH
       )
+      debugger
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
