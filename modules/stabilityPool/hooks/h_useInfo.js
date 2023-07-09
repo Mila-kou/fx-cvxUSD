@@ -76,7 +76,8 @@ const useInfo = () => {
         unlockingBalanceOfFn(_currentAccount),
         claimableFn(_currentAccount, config.tokens.wstETH)
       ]
-      const [,
+      const [
+        ,
         stabilityPoolBalanceOfRes,
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,

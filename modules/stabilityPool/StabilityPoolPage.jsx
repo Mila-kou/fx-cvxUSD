@@ -79,7 +79,7 @@ export default function StabilityPoolPage() {
     try {
       setUnlocking(true)
       const apiCall = FX_StabilityPoolContract.methods.withdrawUnlocked(
-        true,
+        false,
         true
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
@@ -127,7 +127,7 @@ export default function StabilityPoolPage() {
     return false
   }, [userWstETHClaimable])
 
-  
+
   const canUnlock = useMemo(() => {
     return !!checkNotZoroNum(userUnlockedBalanceTvl)
   }, [userUnlockedBalanceTvl])
