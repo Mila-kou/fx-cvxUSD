@@ -60,10 +60,11 @@ const useStabiltyPool_c = () => {
             }
             const userDepositTvl_text = fb4(userDepositTvl, false, 0)
 
-            let userWstETHClaimable = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.claimableRes, fb4(stabilityPoolInfo.userInfo.claimableRes))
+            const userWstETHClaimable_res = cBN(stabilityPoolInfo.userInfo?.claimableRes).times(stETHRate)
+            let userWstETHClaimable = checkNotZoroNumOption(userWstETHClaimable_res, fb4(userWstETHClaimable_res))
             let userWstETHClaimableTvl = cBN(0);
             if (checkNotZoroNum(ethPrice) && checkNotZoroNum(stabilityPoolInfo.userInfo.claimableRes)) {
-                userWstETHClaimableTvl = cBN(ethPrice).times(stabilityPoolInfo.userInfo.claimableRes).div(1e18)
+                userWstETHClaimableTvl = cBN(ethPrice).times(stabilityPoolInfo.userInfo.claimableRes).times(stETHRate).div(1e18)
             }
             const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, false, 0)
 
