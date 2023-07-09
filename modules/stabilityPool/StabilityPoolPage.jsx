@@ -11,7 +11,7 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 
 import styles from './styles.module.scss'
 import useStabiltyPool_c from './controller/c_stabiltyPool'
-import { useFX_stabilityPool } from '@/hooks/useContracts'
+import { useFX_stabilityPool, useFX_stETHTreasury } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
 import { checkNotZoroNum } from '@/utils/index'
@@ -26,6 +26,7 @@ const item = POOLS_LIST[0]
 export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
+  const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
   const {
     stabilityPoolInfo,
     stabilityPoolTotalSupply,
@@ -48,6 +49,7 @@ export default function StabilityPoolPage() {
   const [withdrawVisible, setWithdrawVisible] = useState(false)
   const [claiming, setClaiming] = useState(false)
   const [unlocking, setUnlocking] = useState(false)
+  const [harvesting, setHarvesting] = useState(false)
 
   const unlockingList = [
     {
@@ -119,15 +121,37 @@ export default function StabilityPoolPage() {
     }
   }
 
+  const handleHarvest = async () => {
+    if (harvesting) return
+    if (!isAllReady) return
+    try {
+      setHarvesting(true)
+      const apiCall = FX_stETHTreasuryContract.methods.harvest()
+      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'lp',
+        action: 'Harvest',
+      })
+      setHarvesting(false)
+    } catch (error) {
+      setHarvesting(false)
+      console.log('harvest-error---', error)
+      noPayableErrorAction(`error_harvest`, error)
+    }
+  }
+
   const canClaim = useMemo(() => {
-    console.log('stabilityPoolInfo.userInfo?.claimableResd--', stabilityPoolInfo.userInfo?.claimableRes)
+    console.log(
+      'stabilityPoolInfo.userInfo?.claimableResd--',
+      stabilityPoolInfo.userInfo?.claimableRes
+    )
     if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableRes)) {
       return true
     }
     return false
   }, [userWstETHClaimable])
 
-  
   const canUnlock = useMemo(() => {
     return !!checkNotZoroNum(userUnlockedBalanceTvl)
   }, [userUnlockedBalanceTvl])
@@ -143,7 +167,7 @@ export default function StabilityPoolPage() {
             <p className="text-[14px]">{stabilityPoolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
-            <p>Last 7 Days APY</p>
+            <p>APY</p>
             <h2 className={styles.green}>{apy}%</h2>
           </div>
           <div className={cn(styles.item, styles.itemWrap)}>
@@ -180,7 +204,7 @@ export default function StabilityPoolPage() {
                 <p className="text-[24px]">${userDepositTvl_text}</p>
                 <p className="text-[14px]">{userDeposit} fETH</p>
                 <p className="text-[14px]">
-                  Unlocking {userUnlockingBalance} fETH
+                  Unlocking: {userUnlockingBalance} fETH
                 </p>
                 <p className="text-[14px]">
                   Unlocked: {userUnlockedBalance} fETH{'  '}
@@ -209,6 +233,12 @@ export default function StabilityPoolPage() {
                   onClick={handleWithdraw}
                 >
                   Withdraw
+                </p>
+                <p
+                  className="text-[#000] border-[#E4E4E4] border-[1px] border-solid w-[178px] h-[48px] rounded-[10px] bg-[#fff] flex items-center justify-center cursor-pointer mt-[13px]"
+                  onClick={handleHarvest}
+                >
+                  Harvest
                 </p>
               </div>
             </div>
