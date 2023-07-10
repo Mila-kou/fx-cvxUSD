@@ -37,6 +37,7 @@ import RewardClaimHelperABI from './RewardClaimHelper.json'
 import FX_stETHGatewayABI from './fx/stETHGateway.json'
 import FX_stETHTreasuryABI from './fx/stETHTreasury.json'
 import FX_StabilityPoolABI from './fx/StabilityPool.json'
+import FX_LiquidatorWithBonusTokenABI from './fx/LiquidatorWithBonusToken.json'
 
 
 export default {
@@ -53,6 +54,7 @@ export default {
   FX_stETHGatewayABI,
   FX_stETHTreasuryABI,
   FX_StabilityPoolABI,
+  FX_LiquidatorWithBonusTokenABI,
 
   MockTwapOracleAbi: MockTwapOracle,
 

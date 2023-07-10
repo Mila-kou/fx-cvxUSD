@@ -11,31 +11,38 @@ import tokensInfo from '../tokens'
 const explorerUri = 'https://www.etherscan.io'
 
 // ---------- 10548
+// const chainInfo = {
+//   id: '0x2934',
+//   token: 'ETH',
+//   label: 'Mainnet Fork',
+//   rpcUrl: 'https://apitest.aladdin.club/rpc',
+// }
 const chainInfo = {
-  id: '0x2934',
+  id: '0x2707',
   token: 'ETH',
   label: 'Mainnet Fork',
-  rpcUrl: 'https://apitest.aladdin.club/rpc',
+  rpcUrl: 'https://rpc.phalcon.xyz/rpc_942dd1172f3349ce8ff1d1a6bbffaac2',
 }
 
 const contracts = {
   ...tokensInfo.contracts,
 
-  ChainlinkTwapOracleV3: '0x0F221dD4d8224eCD6ec905AEA2D1602C5D5c36B4',
-  fETH: '0xdBB1AAeb04F3B5e2587E4bB849717E9ebD0c8acC',
-  xETH: '0x4eECa6bFa3C96210260691639827eEF4D80FA8C6',
-  fx_Market: '0x7185E3477Ad54A8186e623768833e8C2686591D3',
-  fx_stETHTreasury: '0xe6AAF8fBB56488941f619A9ADB0EB4d89fA9d217',
-  fx_stETHGateway: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',
+  ChainlinkTwapOracleV3: '0xf651a9E5eF8a4E35133e91a851838638853814ae',
+  fETH: '0x056cdD95DdF742DB771F5A1F76aF6C39987Cc9E3',
+  xETH: '0x7f12E5c14AcED183FD6b9ECf82E5F481F284dB41',
+  fx_Market: '0xaE942FBB54cB3C0a2B9F65090bE6dfc487CeC84A',
+  fx_stETHTreasury: '0xa8F4242793b65fF4E939C486b88E35D1a216B50a',
+  fx_stETHGateway: '0x43697A3a9003F42A7518c1D12b9051972B259a8d',
 
-  fx_StabilityPool: '0x719c287932B0ea6037862b4cec4A786939DEb1d8',
-  
-  LiquidatorWithBonusToken: '0xBED3FEBBB237AeDdAc81904aD49a93143d5026C8',
-  wstETHWrapper: '0x7b9Bb9CdBb04BF57F2F82e51D54F6C8ee165FF3B'
+  fx_StabilityPool: '0x57c9f5a2fC8D4fEd08e563Efc817Af89C4dE9dAf',
+
+  LiquidatorWithBonusToken: '0x0FD4653B77565C4e3a0580F87B521403762f638E',
+  wstETHWrapper: '0x72d62875684d7A6b64410E49A92fC43de903C06a'
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
+
 
 const tokens = {
   ...tokensInfo.tokens,
