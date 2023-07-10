@@ -65,7 +65,7 @@ function Web3ContextProvider({ children }) {
     return [
       !currentAccount || currentChainId === connectedChain?.id,
       !currentAccount ||
-        config.allowChains.find((item) => connectedChain?.id === item.id),
+      config.allowChains.find((item) => connectedChain?.id === item.id),
     ]
   }, [currentAccount, currentChainId, connectedChain])
 
