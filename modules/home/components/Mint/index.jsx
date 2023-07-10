@@ -152,7 +152,10 @@ export default function Mint({ slippage }) {
         const getGasPrice = await getGas()
         const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
         let _ETHtAmountAndGas
-        if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) && symbol == 'ETH') {
+        if (
+          cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) &&
+          symbol == 'ETH'
+        ) {
           _ETHtAmountAndGas = cBN(tokens.ETH.balance)
             .minus(gasFee)
             .toFixed(0, 1)
@@ -218,7 +221,10 @@ export default function Mint({ slippage }) {
       const getGasPrice = await getGas()
       const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
       let _ETHtAmountAndGas
-      if (cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) && symbol == 'ETH') {
+      if (
+        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) &&
+        symbol == 'ETH'
+      ) {
         _ETHtAmountAndGas = cBN(tokens.ETH.balance)
           .minus(gasFee)
           .toFixed(0, 1)
@@ -227,22 +233,30 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = ETHtAmount
       }
       let apiCall
-      let estimatedGas;
+      let estimatedGas
       if (symbol == 'stETH') {
         if (isF) {
-          apiCall = await marketContract.methods.mintFToken(_ETHtAmountAndGas, _currentAccount, _minOut)
+          apiCall = await marketContract.methods.mintFToken(
+            _ETHtAmountAndGas,
+            _currentAccount,
+            _minOut
+          )
         } else {
-          apiCall = await marketContract.methods.mintXToken(_ETHtAmountAndGas, _currentAccount, _minOut)
+          apiCall = await marketContract.methods.mintXToken(
+            _ETHtAmountAndGas,
+            _currentAccount,
+            _minOut
+          )
         }
         estimatedGas = await apiCall.estimateGas({
-          from: _currentAccount
+          from: _currentAccount,
         })
         const gas = parseInt(estimatedGas * 1.2, 10) || 0
         await NoPayableAction(
           () =>
             apiCall.send({
               from: _currentAccount,
-              gas
+              gas,
             }),
           {
             key: 'Mint',
@@ -347,8 +361,8 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
-      // onChange={hanldefETHAmountChanged}
-      // rightSuffix="Beta 0.1"
+        // onChange={hanldefETHAmountChanged}
+        // rightSuffix="Beta 0.1"
       />
       <BalanceInput
         symbol="xETH"
@@ -363,7 +377,7 @@ export default function Mint({ slippage }) {
         rightSuffix={
           <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
         }
-      // onChange={hanldexETHAmountChanged}
+        // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
@@ -383,7 +397,7 @@ export default function Mint({ slippage }) {
           onClick={handleMint}
           width="100%"
         >
-          Mint {isF ? 'Stable fETH' : 'Volatile xETH'}
+          {isF ? 'Mint Stable fETH' : 'Mint Volatile xETH'}
         </BtnWapper>
         {/* <Button
           width="100%"
