@@ -111,6 +111,20 @@ export const useFX_stabilityPool = () => {
   )
 }
 
+export const useFX_LiquidatorWithBonusToken = () => {
+  const address = config.contracts.LiquidatorWithBonusToken
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_LiquidatorWithBonusTokenABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+
+
 export const useFX_ETHGateway = () => {
   const address = config.contracts.fx_ETHGateway
   const { getContract } = useContract()

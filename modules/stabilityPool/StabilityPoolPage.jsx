@@ -11,10 +11,10 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 
 import styles from './styles.module.scss'
 import useStabiltyPool_c from './controller/c_stabiltyPool'
-import { useFX_stabilityPool, useFX_stETHTreasury } from '@/hooks/useContracts'
+import { useFX_LiquidatorWithBonusToken, useFX_stabilityPool, useFX_stETHTreasury } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
-import { checkNotZoroNum } from '@/utils/index'
+import { cBN, checkNotZoroNum } from '@/utils/index'
 import Warning from '../../public/images/warning.svg'
 // import Waiting from '../../public/images/waiting.svg'
 // <Waiting onClick={toggle} />
@@ -27,6 +27,7 @@ export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
   const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
+  const { contract: FX_LiquidatorWithBonusContract } = useFX_LiquidatorWithBonusToken()
   const {
     stabilityPoolInfo,
     stabilityPoolTotalSupply,
@@ -141,6 +142,19 @@ export default function StabilityPoolPage() {
     }
   }
 
+  const handleLiquidatorWithBonus = async () => {
+    try {
+      // const _totalFETH = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(stabilityPoolInfo.baseInfo?.totalUnlockingRes).toString(10)
+      const apiCall = FX_LiquidatorWithBonusContract.methods.liquidate(0)
+      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const tx = await apiCall.send({ from: currentAccount, gas })
+      console.log('stabilityPool liquidate success---', tx)
+    } catch (error) {
+      console.log('stabilityPool liquidate error', error)
+    }
+  }
+
   const canClaim = useMemo(() => {
     console.log(
       'stabilityPoolInfo.userInfo?.claimableResd--',
@@ -239,6 +253,12 @@ export default function StabilityPoolPage() {
                   onClick={handleHarvest}
                 >
                   Harvest
+                </p>
+                <p
+                  className="text-[#000] border-[#E4E4E4] border-[1px] border-solid w-[178px] h-[48px] rounded-[10px] bg-[#fff] flex items-center justify-center cursor-pointer mt-[13px]"
+                  onClick={handleLiquidatorWithBonus}
+                >
+                  Liquidator
                 </p>
               </div>
             </div>
