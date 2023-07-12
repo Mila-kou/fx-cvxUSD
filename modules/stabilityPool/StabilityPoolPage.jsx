@@ -43,6 +43,7 @@ export default function StabilityPoolPage() {
     myTotalValue_text,
     userWstETHClaimable,
     userUnlockingBalance,
+    userUnlockingUnlockAt,
     userUnlockingBalanceTvl_text,
     userUnlockedBalance,
     userUnlockedBalanceTvl,
@@ -227,6 +228,7 @@ export default function StabilityPoolPage() {
                 <p className="text-[14px]">
                   Unlocking: {userUnlockingBalance} fETH
                 </p>
+                {checkNotZoroNum(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance) ? <p className="text-[14px]">UnlockAt: {userUnlockingUnlockAt}</p> : ''}
                 <p className="text-[14px]">
                   Unlocked: {userUnlockedBalance} fETH{'  '}
                   <span

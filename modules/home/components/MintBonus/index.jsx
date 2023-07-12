@@ -280,14 +280,14 @@ export default function MintBonus({ slippage }) {
       />
 
       <div className={styles.action}>
-        <Button
-          width="100%"
+        <BtnWapper
           loading={mintLoading}
           disabled={!canMint}
           onClick={handleMint}
+          width="100%"
         >
           Mint Volatile xETH
-        </Button>
+        </BtnWapper>
       </div>
     </div>
   )
