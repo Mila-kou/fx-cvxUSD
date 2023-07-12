@@ -57,7 +57,7 @@ export default function SystemStatistics() {
   const navsData = useNavs()
   return (
     <div className={styles.container}>
-      <h2 className={styles.header}>
+      <h2 className="mb-[24px]">
         <LineChartOutlined />
         System Statistics
       </h2>

@@ -205,9 +205,9 @@ export default function StabilityPoolPage() {
         <div className={styles.content}>
           <div className={styles.left}>
             <p className="text-[22px]">My Stability Pool</p>
-            <p className="text-[32px] mt-[10px]">
+            <h2 className="text-[32px] mt-[10px]">
               {dollarText(myTotalValue_text)}
-            </p>
+            </h2>
             <div className={cn(styles.item, styles.itemWrap, 'mt-[40px]')}>
               <div>
                 <img src={ETHImg} />
@@ -222,7 +222,9 @@ export default function StabilityPoolPage() {
               <img src="/images/f-logo.svg" />
               <div className={styles.cellContent}>
                 <p className="text-[16px]">Deposited fETH</p>
-                <p className="text-[24px]">{dollarText(userDepositTvl_text)}</p>
+                <h2 className="text-[24px]">
+                  {dollarText(userDepositTvl_text)}
+                </h2>
                 <p className="text-[16px]">{userDeposit} fETH</p>
                 <p className="text-[16px]">
                   Unlocking: {userUnlockingBalance} fETH
@@ -273,9 +275,9 @@ export default function StabilityPoolPage() {
               <img src={ETHImg} />
               <div className={styles.cellContent}>
                 <p className="text-[16px]">Earned</p>
-                <p className="text-[24px]">
+                <h2 className="text-[24px]">
                   {dollarText(userWstETHClaimableTvl_text)}
-                </p>
+                </h2>
                 <p className="text-[16px]">{userWstETHClaimable} stETH</p>
               </div>
               <div>
