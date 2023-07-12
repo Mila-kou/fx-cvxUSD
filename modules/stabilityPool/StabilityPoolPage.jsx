@@ -210,7 +210,7 @@ export default function StabilityPoolPage() {
             </h2>
             <div className={cn(styles.item, styles.itemWrap, 'mt-[40px]')}>
               <div>
-                <img src={ETHImg} />
+                <img src="/images/f-logo.svg" />
                 <Link href="/home">
                   <p>Get fETH to Deposit →</p>
                 </Link>
@@ -221,14 +221,16 @@ export default function StabilityPoolPage() {
             <div className={styles.cell}>
               <img src="/images/f-logo.svg" />
               <div className={styles.cellContent}>
-                <p className="text-[16px]">Deposited fETH</p>
+                <p className="text-[18px]">Deposited fETH</p>
                 <h2 className="text-[24px]">
                   {dollarText(userDepositTvl_text)}
                 </h2>
                 <p className="text-[16px]">{userDeposit} fETH</p>
-                <p className="text-[16px]">
-                  Unlocking: {userUnlockingBalance} fETH
-                </p>
+                {userUnlockingBalance && userUnlockingBalance !== '-' ? (
+                  <p className="text-[16px]">
+                    Unlocking: {userUnlockingBalance} fETH
+                  </p>
+                ) : null}
                 {checkNotZoroNum(
                   stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance
                 ) ? (
@@ -238,26 +240,29 @@ export default function StabilityPoolPage() {
                 ) : (
                   ''
                 )}
-                <p className="text-[16px]">
-                  Unlocked: {userUnlockedBalance} fETH{'  '}
-                  <span
-                    className={cn(
-                      'text-[#6B79FC] underline',
-                      canUnlock
-                        ? 'cursor-pointer'
-                        : 'cursor-not-allowed opacity-[0.6]'
-                    )}
-                    onClick={handleUnlock}
-                  >
-                    Claim Funds
-                  </span>
-                </p>
+                {userUnlockedBalance && userUnlockedBalance !== '-' ? (
+                  <p className="text-[16px]">
+                    Unlocked: {userUnlockedBalance} fETH{'  '}
+                    <span
+                      className={cn(
+                        'text-[#6B79FC] underline',
+                        canUnlock
+                          ? 'cursor-pointer'
+                          : 'cursor-not-allowed opacity-[0.6]'
+                      )}
+                      onClick={handleUnlock}
+                    >
+                      Claim Funds
+                    </span>
+                  </p>
+                ) : null}
               </div>
               <div className={styles.actions}>
                 <Button onClick={handleDeposit}>Deposit</Button>
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
+                {/*
                 <Button
                   loading={harvesting}
                   onClick={handleHarvest}
@@ -268,13 +273,14 @@ export default function StabilityPoolPage() {
                 <Button onClick={handleLiquidatorWithBonus} type="second">
                   Liquidator
                 </Button>
+                */}
               </div>
             </div>
 
             <div className={cn(styles.cell, 'mt-[50px]')}>
               <img src={ETHImg} />
               <div className={styles.cellContent}>
-                <p className="text-[16px]">Earned</p>
+                <p className="text-[18px]">Earned</p>
                 <h2 className="text-[24px]">
                   {dollarText(userWstETHClaimableTvl_text)}
                 </h2>

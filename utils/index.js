@@ -4,9 +4,9 @@ import BigNumber from 'bignumber.js'
 export const cBN = (val) => new BigNumber(val)
 
 export const dollarText = (val) => {
-  if (val === '-') return '-'
-  if (val === undefined) return '-'
-  return `${val}`
+  if (val === '-') return '$0'
+  if (val === undefined) return '$0'
+  return `$${val}`
 }
 
 export const checkNotZoroNum = (num) => {
