@@ -36,7 +36,7 @@ const contracts = {
 
   fx_StabilityPool: '0xeD8895F754baA58e37b8c6dfAC202d67bf3e6550',
 
-  LiquidatorWithBonusToken: '0xBED3FEBBB237AeDdAc81904aD49a93143d5026C8',
+  LiquidatorWithBonusToken: '0x5DD55b5506DF07E426d771315485d63699846264',
   wstETHWrapper: '0x7b9Bb9CdBb04BF57F2F82e51D54F6C8ee165FF3B'
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
