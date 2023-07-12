@@ -3,6 +3,7 @@ import Link from 'next/link'
 import cn from 'classnames'
 import { useToggle, useSetState } from 'ahooks'
 import useWeb3 from '@/hooks/useWeb3'
+import Button from '@/components/Button'
 import DepositModal from './components/DepositModal'
 import WithdrawModal from './components/WithdrawModal'
 import UnlockingModal from './components/UnlockingModal'
@@ -106,7 +107,6 @@ export default function StabilityPoolPage() {
   }
 
   const handleClaim = async () => {
-    if (claiming || !canClaim) return
     if (!isAllReady) return
     try {
       setClaiming(true)
@@ -129,7 +129,6 @@ export default function StabilityPoolPage() {
   }
 
   const handleHarvest = async () => {
-    if (harvesting) return
     if (!isAllReady) return
     try {
       setHarvesting(true)
@@ -180,24 +179,20 @@ export default function StabilityPoolPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <p className="text-[22px]">Stability Pool Overview</p>
+        <p className="text-[20px] mt-[24px]">Overview</p>
+        <p>
+          When the collateral rate is lower than 130%, the deposited fETH will
+          be used for liquidation.
+        </p>
         <div className={styles.items}>
           <div className={styles.item}>
             <p>Total Deposited Value</p>
             <h2>{dollarText(stabilityPoolTotalSupplyTvl_text)}</h2>
-            <p className="text-[14px]">{stabilityPoolTotalSupply} fETH</p>
+            <p>{stabilityPoolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
             <p>APY</p>
-            <h2 className={styles.green}>{apy}%</h2>
-          </div>
-          <div className={cn(styles.item, styles.itemWrap)}>
-            <div>
-              <Warning />
-              <p>
-                When the collateral rate is lower than 130%, the deposited fETH
-                will be used for liquidation.
-              </p>
-            </div>
+            <h2>{apy}%</h2>
           </div>
         </div>
       </div>
@@ -228,7 +223,15 @@ export default function StabilityPoolPage() {
                 <p className="text-[14px]">
                   Unlocking: {userUnlockingBalance} fETH
                 </p>
-                {checkNotZoroNum(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance) ? <p className="text-[14px]">UnlockAt: {userUnlockingUnlockAt}</p> : ''}
+                {checkNotZoroNum(
+                  stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance
+                ) ? (
+                  <p className="text-[14px]">
+                    UnlockAt: {userUnlockingUnlockAt}
+                  </p>
+                ) : (
+                  ''
+                )}
                 <p className="text-[14px]">
                   Unlocked: {userUnlockedBalance} fETH{'  '}
                   <span
@@ -244,31 +247,21 @@ export default function StabilityPoolPage() {
                   </span>
                 </p>
               </div>
-              <div>
-                <p
-                  className="text-[#fff] w-[178px] h-[48px] rounded-[10px] bg-[#6B79FC] flex items-center justify-center cursor-pointer"
-                  onClick={handleDeposit}
-                >
-                  Deposit
-                </p>
-                <p
-                  className="text-[#000] border-[#E4E4E4] border-[1px] border-solid w-[178px] h-[48px] rounded-[10px] bg-[#fff] flex items-center justify-center cursor-pointer mt-[13px]"
-                  onClick={handleWithdraw}
-                >
+              <div className={styles.actions}>
+                <Button onClick={handleDeposit}>Deposit</Button>
+                <Button onClick={handleWithdraw} type="second">
                   Withdraw
-                </p>
-                <p
-                  className="text-[#000] border-[#E4E4E4] border-[1px] border-solid w-[178px] h-[48px] rounded-[10px] bg-[#fff] flex items-center justify-center cursor-pointer mt-[13px]"
+                </Button>
+                <Button
+                  loading={harvesting}
                   onClick={handleHarvest}
+                  type="second"
                 >
                   Harvest
-                </p>
-                <p
-                  className="text-[#000] border-[#E4E4E4] border-[1px] border-solid w-[178px] h-[48px] rounded-[10px] bg-[#fff] flex items-center justify-center cursor-pointer mt-[13px]"
-                  onClick={handleLiquidatorWithBonus}
-                >
+                </Button>
+                <Button onClick={handleLiquidatorWithBonus} type="second">
                   Liquidator
-                </p>
+                </Button>
               </div>
             </div>
 
@@ -282,17 +275,15 @@ export default function StabilityPoolPage() {
                 <p className="text-[14px]">{userWstETHClaimable} stETH</p>
               </div>
               <div>
-                <p
-                  className={cn(
-                    'text-[#fff] w-[178px] h-[48px] rounded-[10px] bg-[#4FBF67] flex items-center justify-center',
-                    canClaim
-                      ? 'cursor-pointer'
-                      : 'cursor-not-allowed opacity-[0.6]'
-                  )}
+                <Button
+                  width="170px"
+                  disabled={!canClaim}
+                  loading={claiming}
                   onClick={handleClaim}
+                  type="second"
                 >
                   Claim
-                </p>
+                </Button>
               </div>
             </div>
 
