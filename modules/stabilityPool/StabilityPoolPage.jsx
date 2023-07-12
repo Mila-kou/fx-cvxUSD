@@ -11,10 +11,14 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 
 import styles from './styles.module.scss'
 import useStabiltyPool_c from './controller/c_stabiltyPool'
-import { useFX_LiquidatorWithBonusToken, useFX_stabilityPool, useFX_stETHTreasury } from '@/hooks/useContracts'
+import {
+  useFX_LiquidatorWithBonusToken,
+  useFX_stabilityPool,
+  useFX_stETHTreasury,
+} from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum } from '@/utils/index'
+import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 import Warning from '../../public/images/warning.svg'
 // import Waiting from '../../public/images/waiting.svg'
 // <Waiting onClick={toggle} />
@@ -27,7 +31,8 @@ export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
   const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
-  const { contract: FX_LiquidatorWithBonusContract } = useFX_LiquidatorWithBonusToken()
+  const { contract: FX_LiquidatorWithBonusContract } =
+    useFX_LiquidatorWithBonusToken()
   const {
     stabilityPoolInfo,
     stabilityPoolTotalSupply,
@@ -173,11 +178,11 @@ export default function StabilityPoolPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>Stability Pool Overview</h1>
+        <p className="text-[22px]">Stability Pool Overview</p>
         <div className={styles.items}>
           <div className={styles.item}>
             <p>Total Deposited Value</p>
-            <h2>${stabilityPoolTotalSupplyTvl_text}</h2>
+            <h2>{dollarText(stabilityPoolTotalSupplyTvl_text)}</h2>
             <p className="text-[14px]">{stabilityPoolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
@@ -200,7 +205,9 @@ export default function StabilityPoolPage() {
         <div className={styles.content}>
           <div className={styles.left}>
             <p className="text-[22px]">My Stability Pool</p>
-            <p className="text-[32px] mt-[10px]">${myTotalValue_text}</p>
+            <p className="text-[32px] mt-[10px]">
+              {dollarText(myTotalValue_text)}
+            </p>
             <div className={cn(styles.item, styles.itemWrap, 'mt-[40px]')}>
               <div>
                 <img src={ETHImg} />
@@ -215,7 +222,7 @@ export default function StabilityPoolPage() {
               <img src="/images/f-logo.svg" />
               <div className={styles.cellContent}>
                 <p className="text-[14px]">Deposited fETH</p>
-                <p className="text-[24px]">${userDepositTvl_text}</p>
+                <p className="text-[24px]">{dollarText(userDepositTvl_text)}</p>
                 <p className="text-[14px]">{userDeposit} fETH</p>
                 <p className="text-[14px]">
                   Unlocking: {userUnlockingBalance} fETH
@@ -267,7 +274,9 @@ export default function StabilityPoolPage() {
               <img src={ETHImg} />
               <div className={styles.cellContent}>
                 <p className="text-[14px]">Earned</p>
-                <p className="text-[24px]">${userWstETHClaimableTvl_text}</p>
+                <p className="text-[24px]">
+                  {dollarText(userWstETHClaimableTvl_text)}
+                </p>
                 <p className="text-[14px]">{userWstETHClaimable} stETH</p>
               </div>
               <div>
@@ -289,7 +298,7 @@ export default function StabilityPoolPage() {
               <img src={ETHImg} />
               <div className={styles.cellContent}>
                 <p className="text-[14px]">fx Earned</p>
-                <p className="text-[24px]">${userUnlockingBalanceTvl_text}</p>
+                <p className="text-[24px]">{dollarText(userUnlockingBalanceTvl_text)}</p>
                 <p className="text-[14px]">{userUnlockingBalance} fETH</p>
               </div>
             </div> */}

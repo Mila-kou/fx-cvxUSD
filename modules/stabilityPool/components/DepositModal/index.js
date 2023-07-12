@@ -6,11 +6,16 @@ import TokenSelectV1 from '@/components/TokenSelectV1'
 import { useToken } from '@/hooks/useTokenInfo'
 import config from '@/config/index'
 import ZapInfo from '@/components/ZapInfo'
+import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
 import { cBN, formatBalance, checkNotZoroNum } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import { useContract, useAllInOneGateway, useFX_stabilityPool } from '@/hooks/useContracts'
+import {
+  useContract,
+  useAllInOneGateway,
+  useFX_stabilityPool,
+} from '@/hooks/useContracts'
 import abi from '@/config/abi'
 import styles from './styles.module.scss'
 
@@ -75,8 +80,6 @@ export default function DepositModal(props) {
     }
   }
 
-
-
   useDebounceEffect(
     () => {
       getMinout().then(({ shares, sharesLpNum, sharesTvl }) => {
@@ -98,16 +101,15 @@ export default function DepositModal(props) {
           (canDeposit && !cBN(depositAmountInWei).isZero() && !isNeedZap) ||
           (isDeposit && !isNeedZap)
         ) {
-          const shares = await FX_StabilityPoolContract.methods.deposit(
-            depositAmountInWei,
-            currentAccount
-          ).call({
-            from: currentAccount,
-            value:
-              config.zeroAddress === selectToken.address
-                ? depositAmountInWei
-                : 0,
-          })
+          const shares = await FX_StabilityPoolContract.methods
+            .deposit(depositAmountInWei, currentAccount)
+            .call({
+              from: currentAccount,
+              value:
+                config.zeroAddress === selectToken.address
+                  ? depositAmountInWei
+                  : 0,
+            })
 
           const _shares = checkNotZoroNum(shares) ? cBN(shares) : cBN(0)
           const _sharesTvl = _shares.times(lpTokenPrice)
@@ -148,6 +150,14 @@ export default function DepositModal(props) {
     <Modal visible centered onCancel={onCancel} footer={null} width={600}>
       <div className={styles.content}>
         <h2>Deposit fETH/ETH </h2>
+
+        <BalanceInput
+          placeholder="-"
+          symbol="fETH"
+          balance={userTokenBalance}
+          maxAmount={userTokenBalance}
+          onChange={handleInputChange}
+        />
 
         <TokenSelectV1
           title="Deposit token"

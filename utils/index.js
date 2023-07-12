@@ -3,6 +3,12 @@ import BigNumber from 'bignumber.js'
 
 export const cBN = (val) => new BigNumber(val)
 
+export const dollarText = (val) => {
+  if (val === '-') return '-'
+  if (val === undefined) return '-'
+  return `${val}`
+}
+
 export const checkNotZoroNum = (num) => {
   if (!num) {
     return false
