@@ -179,10 +179,10 @@ export default function StabilityPoolPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <p className={styles.headerTitle}>
+        <div className={styles.headerTitle}>
           <DotChartOutlined />
           Stability Pool Overview
-        </p>
+        </div>
         <p className="text-[20px] mt-[24px]">Overview</p>
         <p>
           When the collateral rate is lower than 130%, the deposited fETH will
@@ -221,22 +221,22 @@ export default function StabilityPoolPage() {
             <div className={styles.cell}>
               <img src="/images/f-logo.svg" />
               <div className={styles.cellContent}>
-                <p className="text-[14px]">Deposited fETH</p>
+                <p className="text-[16px]">Deposited fETH</p>
                 <p className="text-[24px]">{dollarText(userDepositTvl_text)}</p>
-                <p className="text-[14px]">{userDeposit} fETH</p>
-                <p className="text-[14px]">
+                <p className="text-[16px]">{userDeposit} fETH</p>
+                <p className="text-[16px]">
                   Unlocking: {userUnlockingBalance} fETH
                 </p>
                 {checkNotZoroNum(
                   stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance
                 ) ? (
-                  <p className="text-[14px]">
+                  <p className="text-[16px]">
                     UnlockAt: {userUnlockingUnlockAt}
                   </p>
                 ) : (
                   ''
                 )}
-                <p className="text-[14px]">
+                <p className="text-[16px]">
                   Unlocked: {userUnlockedBalance} fETH{'  '}
                   <span
                     className={cn(
@@ -272,11 +272,11 @@ export default function StabilityPoolPage() {
             <div className={cn(styles.cell, 'mt-[50px]')}>
               <img src={ETHImg} />
               <div className={styles.cellContent}>
-                <p className="text-[14px]">Earned</p>
+                <p className="text-[16px]">Earned</p>
                 <p className="text-[24px]">
                   {dollarText(userWstETHClaimableTvl_text)}
                 </p>
-                <p className="text-[14px]">{userWstETHClaimable} stETH</p>
+                <p className="text-[16px]">{userWstETHClaimable} stETH</p>
               </div>
               <div>
                 <Button
@@ -294,9 +294,9 @@ export default function StabilityPoolPage() {
             {/* <div className={cn(styles.cell, 'mt-[20px]')}>
               <img src={ETHImg} />
               <div className={styles.cellContent}>
-                <p className="text-[14px]">fx Earned</p>
+                <p className="text-[16px]">fx Earned</p>
                 <p className="text-[24px]">{dollarText(userUnlockingBalanceTvl_text)}</p>
-                <p className="text-[14px]">{userUnlockingBalance} fETH</p>
+                <p className="text-[16px]">{userUnlockingBalance} fETH</p>
               </div>
             </div> */}
           </div>

@@ -49,11 +49,7 @@
     div {
       display: flex;
       gap: 10px;
-      align-items: center;
-      background: var(--input-background-color);
       padding: 13px;
-      border-radius: 10px;
-      border: 1px solid var(--tag-background-color);
       svg {
         flex-shrink: 0;
       }
@@ -64,9 +60,10 @@
       }
       p {
         white-space: break-spaces;
-        font-size: 12px;
+        text-decoration: underline;
+        font-size: 14px;
         line-height: 22px;
-        color: var(--second-text-color);
+        color: var(--a-button-color);
       }
     }
   }
@@ -78,13 +75,12 @@
     background: var(--background-color);
     .content {
       display: flex;
-      gap: 20px;
       .left {
         min-width: 280px;
       }
       .right {
         flex: 1;
-        padding-left: 18px;
+        padding-left: 26px;
         border-left: 1px solid var(--border-color);
 
         .cell {
