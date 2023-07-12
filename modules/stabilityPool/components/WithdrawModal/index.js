@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { Modal } from 'antd'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
@@ -49,6 +49,9 @@ export default function WithdrawModal(props) {
       noPayableErrorAction(`error_earn_withdraw`, error)
     }
   }
+  const canWithdraw = useMemo(() => {
+    return !!withdrawAmount && isAllReady
+  }, [withdrawAmount, isAllReady])
 
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
@@ -66,7 +69,7 @@ export default function WithdrawModal(props) {
       </div>
 
       <div className="mt-[40px]">
-        <Button width="100%" loading={withdrawing} onClick={handleWithdraw}>
+        <Button width="100%" disabled={!canWithdraw} loading={withdrawing} onClick={handleWithdraw}>
           Withdraw
         </Button>
       </div>
