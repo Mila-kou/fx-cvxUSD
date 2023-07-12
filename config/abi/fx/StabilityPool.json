@@ -270,13 +270,32 @@
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "amount",
+                "name": "newUnlock",
                 "type": "uint256"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
                 "name": "loss",
+                "type": "uint256"
+            }
+        ],
+        "name": "UserUnlockChange",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "amount",
                 "type": "uint256"
             }
         ],
@@ -333,6 +352,19 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "baseRewardToken",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -473,6 +505,30 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "epochToScaleToBaseRewardSum",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -488,7 +544,78 @@
                 "type": "uint256"
             }
         ],
-        "name": "epochToScaleToSum",
+        "name": "epochToScaleToExtraRewardSum",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "extraRewardState",
+        "outputs": [
+            {
+                "internalType": "uint128",
+                "name": "rate",
+                "type": "uint128"
+            },
+            {
+                "internalType": "uint32",
+                "name": "periodLength",
+                "type": "uint32"
+            },
+            {
+                "internalType": "uint48",
+                "name": "lastUpdate",
+                "type": "uint48"
+            },
+            {
+                "internalType": "uint48",
+                "name": "finishAt",
+                "type": "uint48"
+            },
+            {
+                "internalType": "uint256",
+                "name": "queued",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "extraRewards",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "extraRewardsLength",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -638,77 +765,6 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "rewardState",
-        "outputs": [
-            {
-                "internalType": "uint128",
-                "name": "rate",
-                "type": "uint128"
-            },
-            {
-                "internalType": "uint32",
-                "name": "periodLength",
-                "type": "uint32"
-            },
-            {
-                "internalType": "uint48",
-                "name": "lastUpdate",
-                "type": "uint48"
-            },
-            {
-                "internalType": "uint48",
-                "name": "finishAt",
-                "type": "uint48"
-            },
-            {
-                "internalType": "uint256",
-                "name": "queued",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "rewards",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "rewardsLength",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "name": "totalSupply",
         "outputs": [
@@ -817,7 +873,12 @@
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "_balance",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_unlockAt",
                 "type": "uint256"
             }
         ],
@@ -903,7 +964,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_wrapper",
+                "name": "_newWrapper",
                 "type": "address"
             }
         ],

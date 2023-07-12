@@ -11,6 +11,7 @@ import { useGlobal } from '@/contexts/GlobalProvider'
 import useFxCommon from '@/modules/home/hooks/useFxCommon'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
+import moment from 'moment'
 
 
 const useStabiltyPool_c = () => {
@@ -75,7 +76,9 @@ const useStabiltyPool_c = () => {
             }
             const userUnlockedBalanceTvl_text = fb4(userUnlockedBalanceTvl, false, 0)
 
-            let userUnlockingBalance = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes, fb4(stabilityPoolInfo.userInfo.unlockingBalanceOfRes))
+            let userUnlockingBalance = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance, fb4(stabilityPoolInfo.userInfo.unlockingBalanceOfRes._balance))
+            let userUnlockingUnlockAt = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt, moment(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt * 1000).format('lll'))
+
             let userUnlockingBalanceTvl = cBN(0);
             if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.userInfo.unlockingBalanceOfRes)) {
                 userUnlockingBalanceTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.unlockingBalanceOfRes).div(1e18)
@@ -97,6 +100,7 @@ const useStabiltyPool_c = () => {
                 myTotalValue_text,
                 userUnlockingBalanceTvl_text,
                 userUnlockingBalance,
+                userUnlockingUnlockAt,
                 userUnlockedBalanceTvl,
                 userUnlockedBalanceTvl_text,
                 userUnlockedBalance,
