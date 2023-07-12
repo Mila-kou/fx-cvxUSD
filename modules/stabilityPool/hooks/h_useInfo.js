@@ -21,17 +21,19 @@ const useInfo = () => {
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
-    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlocking, baseRewardToken: rewardsFn, rewardState } = fx_stabilityPoolContract.methods
+    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlocking, extraRewardState: extraRewardStateFn, baseRewardToken: rewardsFn } = fx_stabilityPoolContract.methods
     try {
       const apiCalls = [
         stabilityPoolTotalSupplyFn(),
         totalUnlocking(),
-        rewardsFn()
+        rewardsFn(),
+        extraRewardStateFn(config.tokens.wstETH)
       ]
       const [
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
         rewardsRes,
+        extraRewardState
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -42,12 +44,14 @@ const useInfo = () => {
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
         rewardsRes,
+        extraRewardState
       )
 
       return {
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
         rewardsRes,
+        extraRewardState
       }
     } catch (error) {
       console.log('baseInfoError==>', error)
