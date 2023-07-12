@@ -23,8 +23,8 @@ const useStabiltyPool_c = () => {
     console.log('stabilityPoolInfo---fxInfo--ethPrice--', stabilityPoolInfo, fxInfo, ethPrice)
     const getStabiltyPoolApy = useCallback((stabilityPoolTotalSupplyTvl) => {
         try {
-            const { rewardStateRes } = stabilityPoolInfo?.baseInfo
-            const { finishAt, rate } = rewardStateRes || {}
+            const { extraRewardState } = stabilityPoolInfo?.baseInfo
+            const { finishAt, rate } = extraRewardState || {}
             let apy = 0
 
             const _currentTime = current.unix()
