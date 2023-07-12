@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
 import { useToggle, useSetState } from 'ahooks'
+import { DotChartOutlined } from '@ant-design/icons'
 import useWeb3 from '@/hooks/useWeb3'
 import Button from '@/components/Button'
 import DepositModal from './components/DepositModal'
@@ -178,7 +179,10 @@ export default function StabilityPoolPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <p className="text-[22px]">Stability Pool Overview</p>
+        <p className={styles.headerTitle}>
+          <DotChartOutlined />
+          Stability Pool Overview
+        </p>
         <p className="text-[20px] mt-[24px]">Overview</p>
         <p>
           When the collateral rate is lower than 130%, the deposited fETH will

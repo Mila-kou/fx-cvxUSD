@@ -21,6 +21,7 @@ function BalanceInput(props) {
   const {
     balance,
     usd = '-',
+    withUsd = true,
     placeholder,
     clearTrigger,
     decimals,
@@ -101,7 +102,7 @@ function BalanceInput(props) {
             {symbol} <span className={styles.tip}>{tip}</span>
           </p>
         )}
-        <p className={styles.usd}>(~{usd})</p>
+        {withUsd ? <p className={styles.usd}>(~{usd})</p> : null}
       </div>
       <div className={styles.right}>
         {type == 'select' ? null : (

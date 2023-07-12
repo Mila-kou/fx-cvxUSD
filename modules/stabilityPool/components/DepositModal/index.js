@@ -9,7 +9,7 @@ import ZapInfo from '@/components/ZapInfo'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
-import { cBN, formatBalance, checkNotZoroNum } from '@/utils/index'
+import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import {
   useContract,
@@ -136,58 +136,27 @@ export default function DepositModal(props) {
     [depositAmount, FX_StabilityPoolContract]
   )
 
-  const handleTokenSelect = (token) => {
-    setMinAmount(0)
-    setSelectToken(token)
-    setInputReseter((prev) => prev + 1)
-  }
   const handleInputChange = (val) => setDepositAmount(val)
   const canSubmit =
     cBN(depositAmount).isGreaterThan(0) &&
     cBN(depositAmount).isLessThanOrEqualTo(cBN(userTokenBalance))
 
   return (
-    <Modal visible centered onCancel={onCancel} footer={null} width={600}>
+    <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2>Deposit fETH/ETH </h2>
+        <h2 className="mb-[16px]">Deposit fETH/ETH </h2>
 
         <BalanceInput
-          placeholder="-"
+          placeholder="0"
           symbol="fETH"
-          balance={userTokenBalance}
+          balance={fb4(userTokenBalance, false)}
           maxAmount={userTokenBalance}
           onChange={handleInputChange}
+          withUsd={false}
         />
-
-        <TokenSelectV1
-          title="Deposit token"
-          onChange={(token) => handleTokenSelect(token)}
-          value={selectToken}
-          options={info.zapTokens}
-        />
-        <Input
-          placeholder="Type the amount you want to deposit"
-          balance={userTokenBalance}
-          decimals={selectToken.decimals}
-          token={selectToken.symbol}
-          onChange={handleInputChange}
-          reset={inputReseter}
-        />
-        {selectToken.needZap && (
-          <ZapInfo
-            zapTitle="Zap Transaction Info"
-            slippage={slippage}
-            slippageChange={(val) => setSlippage(val)}
-            minAmount={formatBalance(minAmount, lp_decimals, 4)}
-            minLpAmountTvl={formatBalance(minAmountTvl, lp_decimals, 4)}
-            isLpMinAmount
-            tokenName={name}
-            zapType="Deposit"
-          />
-        )}
       </div>
 
-      <div className="mt-[56px]">
+      <div className="mt-[40px]">
         <BtnWapper
           width="100%"
           loading={depositing}

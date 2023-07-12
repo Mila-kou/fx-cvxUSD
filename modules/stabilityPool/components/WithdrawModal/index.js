@@ -2,11 +2,12 @@ import React, { useState, useCallback } from 'react'
 import { Modal } from 'antd'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
-import { cBN } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
 import { useContract, useFX_stabilityPool } from '@/hooks/useContracts'
+import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import abi from '@/config/abi'
+import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import styles from './styles.module.scss'
 import useStabiltyPool_c from '../../controller/c_stabiltyPool'
 
@@ -26,9 +27,11 @@ export default function WithdrawModal(props) {
     if (!isAllReady) return
 
     setWithdrawing(true)
-    let sharesInWei = withdrawAmount?.toFixed(0, 1) || '0'
+    let sharesInWei = cBN(withdrawAmount || 0).toFixed(0, 1)
     try {
-      if (cBN(userInfo.stabilityPoolBalanceOfRes).isLessThanOrEqualTo(sharesInWei)) {
+      if (
+        cBN(userInfo.stabilityPoolBalanceOfRes).isLessThanOrEqualTo(sharesInWei)
+      ) {
         sharesInWei = userInfo.stabilityPoolBalanceOfRes
       }
       const apiCall = stabilityPoolContract.methods.unlock(sharesInWei)
@@ -48,19 +51,21 @@ export default function WithdrawModal(props) {
   }
 
   return (
-    <Modal visible centered onCancel={onCancel} footer={null} width={600}>
+    <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2>Withdraw fETH </h2>
-        <Input
-          balance={userInfo.stabilityPoolBalanceOfRes}
+        <h2 className="mb-[16px]">Withdraw fETH </h2>
+        <BalanceInput
+          placeholder="0"
+          symbol={name}
+          color="blue"
+          balance={fb4(userInfo.stabilityPoolBalanceOfRes, false)}
+          maxAmount={userInfo.stabilityPoolBalanceOfRes}
           onChange={handleInputChange}
-          // available={userDeposit}
-          token={name}
-          decimals={stakeTokenDecimals}
+          withUsd={false}
         />
       </div>
 
-      <div className="mt-[56px]">
+      <div className="mt-[40px]">
         <Button width="100%" loading={withdrawing} onClick={handleWithdraw}>
           Withdraw
         </Button>
