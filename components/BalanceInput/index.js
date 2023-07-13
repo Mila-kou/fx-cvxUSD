@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import cn from 'classnames'
+import InputSelect from '@/components/InputSelect'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
 import useGlobal from '@/hooks/useGlobal'
@@ -20,6 +21,7 @@ function BalanceInput(props) {
   const {
     balance,
     usd = '-',
+    withUsd = true,
     placeholder,
     clearTrigger,
     decimals,
@@ -35,6 +37,8 @@ function BalanceInput(props) {
     rightSuffix,
     onChange = () => {},
     onSelected = () => {},
+    options = [],
+    onSymbolChanged = () => {},
   } = props
   const { theme } = useGlobal()
 
@@ -78,13 +82,27 @@ function BalanceInput(props) {
       <div className={styles.left}>
         {symbol === 'fETH' && <FLogo />}
         {symbol === 'xETH' && <XLogo />}
-        {symbol === 'ETH' && <img src="/tokens/crypto-icons-stack.svg#eth" />}
+        {['ETH', 'stETH'].includes(symbol) && (
+          <img src="/tokens/crypto-icons-stack.svg#eth" />
+        )}
       </div>
       <div className={styles.symbolWrap}>
-        <p className={styles.symbol}>
-          {symbol} <span className={styles.tip}>{tip}</span>
-        </p>
-        <p className={styles.usd}>(~{usd})</p>
+        {options.length ? (
+          <InputSelect
+            value={symbol}
+            style={{ minWidth: '130px', marginRight: '16px' }}
+            onChange={(v) => onSymbolChanged(v)}
+            options={options.map((item) => ({
+              value: item,
+              label: item,
+            }))}
+          />
+        ) : (
+          <p className={styles.symbol}>
+            {symbol} <span className={styles.tip}>{tip}</span>
+          </p>
+        )}
+        {withUsd ? <p className={styles.usd}>(~{usd})</p> : null}
       </div>
       <div className={styles.right}>
         {type == 'select' ? null : (

@@ -24,7 +24,7 @@ const routers = [
   ['F(x)', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
-  // ['IDO', '/offering'],
+  ['Stability Pool', '/stability-pool'],
 ]
 
 export default function AppHeader() {
@@ -58,13 +58,14 @@ export default function AppHeader() {
         icon: '/tokens/crypto-icons-stack.svg#eth',
         usd: tokens.ETH.usd,
       },
-      // {
-      //   name: 'Ethereum',
-      //   symbol: 'WETH',
-      //   amount: fb4(tokens.WETH.balance, false),
-      //   icon: '/tokens/crypto-icons-stack.svg#eth',
-      //   usd: tokens.WETH.usd,
-      // },
+      {
+        name: 'stETH',
+        symbol: 'stETH',
+        amount: fb4(tokens.stETH.balance, false),
+        icon: '/tokens/crypto-icons-stack.svg#eth',
+        usd: tokens.ETH.usd,
+        showAdd: true,
+      },
       {
         name: 'Fractional ETH',
         symbol: 'fETH',
@@ -103,6 +104,12 @@ export default function AppHeader() {
         symbol: 'xETH',
         decimals: 18,
         image: `${window.location.origin}/images/x-logo.svg`,
+      },
+      stETH: {
+        address: config.tokens.stETH,
+        symbol: 'stETH',
+        decimals: 18,
+        image: `/tokens/crypto-icons-stack.svg#eth`,
       },
     }
     addToMetamask(map[symbol])
@@ -189,9 +196,17 @@ export default function AppHeader() {
           </span>
         </div>
         <div className={styles.right}>
+          <a
+            className={styles.faucet}
+            target="_blank"
+            href="https://docs.google.com/forms/d/e/1FAIpQLScewYkjwJ5pdxQDD0GGSiVbQTE4GgDJ8tf-l5wRIEGpHjwFTw/viewform"
+            rel="noreferrer"
+          >
+            Faucet
+          </a>
           <Select
             value={currentChainId}
-            style={{ width: '130px', marginRight: '16px' }}
+            style={{ minWidth: '130px', marginRight: '16px' }}
             onChange={(val) => switchChain(val)}
             options={config.allowChains.map((item) => ({
               value: item.id,

@@ -65,7 +65,6 @@ export default function SlippageModal(props) {
     <Modal
       centered
       visible={visible}
-      closable={false}
       onCancel={close}
       footer={null}
       width={440}

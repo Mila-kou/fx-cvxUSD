@@ -1,6 +1,11 @@
 @import '../../assets/css/mixin.scss';
 .btn {
   @include colorful-button;
+  &[data-type='second'] {
+    background: var(--input-background-color);
+    box-shadow: none;
+    color: var(--main-text-color);
+  }
 
   span {
     margin-left: 10px;

@@ -30,7 +30,7 @@ export default function Redeem({ slippage }) {
     marketContract,
     treasuryContract,
     _mintFETHFee,
-    ethGatewayContract,
+    stETHGatewayContract,
     _redeemFETHFee,
     _redeemXETHFee,
     ethPrice,
@@ -230,9 +230,10 @@ export default function Redeem({ slippage }) {
         _xTokenIn = tokenAmount
         _fTokenIn = 0
       }
-      const apiCall = await ethGatewayContract.methods.redeem(
+      const apiCall = await marketContract.methods.redeem(
         _fTokenIn,
         _xTokenIn,
+        _currentAccount,
         _minoutETH
       )
       const estimatedGas = await apiCall.estimateGas({
@@ -294,7 +295,7 @@ export default function Redeem({ slippage }) {
       </div>
 
       <BalanceInput
-        symbol="ETH"
+        symbol="stETH"
         placeholder={minOutETHtAmount.minout_ETH}
         usd={`$${ethPrice_text}`}
         disabled

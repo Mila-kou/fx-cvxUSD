@@ -6,6 +6,7 @@ import styles from './styles.module.scss'
 
 export default function Button({
   width,
+  height,
   onClick,
   loading,
   style,
@@ -13,6 +14,8 @@ export default function Button({
   disabled,
   theme,
   size,
+  type = 'default',
+  className,
 }) {
   const handClick = () => {
     if (!loading && !disabled && onClick) {
@@ -22,10 +25,11 @@ export default function Button({
 
   return (
     <button
-      className={cn(styles.btn, styles[theme], styles[size])}
+      className={cn(styles.btn, styles[theme], styles[size], className)}
+      data-type={type}
       onClick={handClick}
       disabled={disabled || loading}
-      style={{ width, ...style }}
+      style={{ width, height, ...style }}
     >
       {children} {loading ? <LoadingOutlined /> : null}
     </button>

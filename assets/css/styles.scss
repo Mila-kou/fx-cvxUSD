@@ -2,6 +2,10 @@
 @import './global';
 @import './mixin';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: 'Myriad';
   font-weight: 400;
@@ -12,4 +16,8 @@
   font-family: 'Myriad';
   font-weight: 600;
   src: url('../fonts/Myriad Pro Bold.ttf');
+}
+
+.color-blue {
+  color: var(--blue-color);
 }

@@ -10,15 +10,21 @@ body {
   --yellow-color: #eeba04;
   --green-color: #44b904;
 
+  --a-button-color: #9595c2;
+
   --white-background-color: rgba(255, 255, 255, 0.8);
 
   background-image: url(../../public/images/blue-bg.webp);
 
   --background-color: rgba(0, 0, 0, 0.8);
+
+  --modal-background-color: rgba(0, 0, 0, 1);
   --panel-background-color: rgba(255, 255, 255, 0.9);
 
-  --main-text-color: #fff;
+  --border-color: #a6a6ae;
   --second-text-color: #a6a6ae;
+
+  --main-text-color: #fff;
   --disabled-text-color: #3a3a65;
   --tag-background-color: rgba(126, 165, 255, 0.2);
   --primary-color: #5488fe;
@@ -46,9 +52,9 @@ body {
     color: #231f20;
 
     --background-color: rgba(255, 255, 255, 0.8);
+    --modal-background-color: rgba(255, 255, 255, 0.9);
 
     --main-text-color: #231f20;
-    --second-text-color: #a6a6ae;
     --disabled-text-color: #ebb6b6;
     --tag-background-color: #fff;
     --primary-color: #fa2454;

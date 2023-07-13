@@ -32,7 +32,7 @@ export const useApprove = (props) => {
     notVisibleMaxSwitch = false,
   } = props
 
-  const [isApproveMax, setIsApproveMax] = useState(false)
+  const [isApproveMax, setIsApproveMax] = useState(true)
   const [loading, setLoading] = useState(false)
 
   const allowAction = allowance > 0

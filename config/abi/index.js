@@ -15,6 +15,31 @@ import FX_ETHGateway from './fx/ETHGateway.json'
 //test
 import MockTwapOracle from './fx/MockTwapOracle.json'
 
+import AladdinCVXLockerABI from './AladdinCVXLocker.json'
+import AladdinCVXABI from './AladdinCVX.json'
+import TransmuterABI from './Transmuter.json'
+
+import AlaLiquidityGaugeV3ABI from './ve/AlaLiquidityGaugeV3.json'
+import AlaVeCLEVABI from './ve/AlaVeCLEV.json'
+import AlaFeeDistributor from './ve/AlaFeeDistributor.json'
+import AlaCLEV from './ve/AlaCLEV.json'
+import AlaMinterABI from './ve/AlaMinter.json'
+import AlaGaugeControllerABI from './ve/AlaGaugeController.json'
+import AlaAllInOneGatewayABI from './ve/AllInOneGateway.json'
+import PlatformFeeDistributorABI from './PlatformFeeDistributor.json'
+import CommonABI from './common/abi.json'
+import BalancerABI from './common/Balancer.json'
+import CurveCopytoABI from './common/curveCopyto.json'
+import CurveStaticCoinABI from './common/curveStaticCoin.json'
+import AladdinbcCVXABI from './AladdinbcCVX.json'
+import RewardClaimHelperABI from './RewardClaimHelper.json'
+
+import FX_stETHGatewayABI from './fx/stETHGateway.json'
+import FX_stETHTreasuryABI from './fx/stETHTreasury.json'
+import FX_StabilityPoolABI from './fx/StabilityPool.json'
+import FX_LiquidatorWithBonusTokenABI from './fx/LiquidatorWithBonusToken.json'
+
+
 export default {
   erc20ABI,
   multiCallABI,
@@ -26,6 +51,28 @@ export default {
   FX_LeveragedToken,
   FX_Treasury,
   FX_ETHGateway,
+  FX_stETHGatewayABI,
+  FX_stETHTreasuryABI,
+  FX_StabilityPoolABI,
+  FX_LiquidatorWithBonusTokenABI,
 
-  MockTwapOracleAbi: MockTwapOracle
+  MockTwapOracleAbi: MockTwapOracle,
+
+  AladdinCVXLockerABI,
+  AladdinCVXABI,
+  TransmuterABI,
+  AlaVeCLEVABI,
+  AlaFeeDistributor,
+  AlaCLEV,
+  AlaLiquidityGaugeV3ABI,
+  AlaMinterABI,
+  AlaGaugeControllerABI,
+  AlaAllInOneGatewayABI,
+  CommonABI,
+  BalancerABI,
+  CurveCopytoABI,
+  CurveStaticCoinABI,
+  PlatformFeeDistributorABI,
+  AladdinbcCVXABI,
+  RewardClaimHelperABI,
 }

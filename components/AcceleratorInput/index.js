@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import cn from 'classnames'
+import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
 import useGlobal from '@/hooks/useGlobal'
@@ -48,10 +49,10 @@ function AcceleratorInput(props) {
     onChange(cBN(value || '').shiftedBy(decimals ?? 18))
   }
 
-  const setMax = () => {
-    onChange(maxAmount)
-    setVal(fb4(maxAmount, false, decimals ?? 18))
-  }
+  // const setMax = () => {
+  //   onChange(maxAmount)
+  //   setVal(fb4(maxAmount, false, decimals ?? 18))
+  // }
 
   const handleSelectChange = (value) => {
     setVal('')
@@ -73,17 +74,16 @@ function AcceleratorInput(props) {
 
   return (
     <div className={cn(styles.inputWrapper, errMsg && styles.error)}>
-      {(title || balance || available) && (
-        <div className="flex items-center justify-between mb-2 color-white">
-          {title && <div className="">{title}</div>}
+      {(balance || available) && (
+        <div className={styles.header}>
           {balance && (
             <div>
-              Balance: <span className="color-blue">{balance}</span>
+              Balance: <span>{balance}</span>
             </div>
           )}
           {available && (
             <div>
-              Available: <span className="color-blue">{available}</span>
+              Available: <span>{available}</span>
             </div>
           )}
         </div>
@@ -94,21 +94,11 @@ function AcceleratorInput(props) {
           <>
             <div className={styles.selectBox}>
               <div
-                className={cn(
-                  styles.select,
-                  'flex justify-between items-center'
-                )}
+                className={styles.select}
                 onClick={() => setOptionVisible((prev) => !prev)}
               >
                 <div>{selectedToken}</div>
-                <img
-                  src={
-                    theme === 'red'
-                      ? '/assets/arrow-down-default.svg'
-                      : '/assets/arrow-down-dark.svg'
-                  }
-                  className={cn('w-6', optionVisible && styles.reverse)}
-                />
+                {optionVisible ? <CaretUpOutlined /> : <CaretDownOutlined />}
               </div>
               <div
                 className={cn(styles.options, optionVisible && styles.visible)}
@@ -136,9 +126,9 @@ function AcceleratorInput(props) {
           placeholder={placeholder}
         />
 
-        <a className={styles.max} onClick={setMax}>
+        {/* <a className={styles.max} onClick={setMax}>
           MAX
-        </a>
+        </a> */}
       </div>
 
       {errMsg && <div className={styles.errMsg}>{errMsg}</div>}
