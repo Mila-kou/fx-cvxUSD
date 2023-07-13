@@ -31,10 +31,10 @@ const useStabiltyPool_c = () => {
             if (_currentTime > finishAt) {
                 apy = 0
             } else {
-                const apyWei = cBN(rate).div(1e18).multipliedBy(config.daySecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl).times(100)
+                const apyWei = cBN(rate).div(1e18).multipliedBy(config.yearSecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl).times(100)
                 apy = checkNotZoroNumOption(apyWei, fb4(apyWei, false, 0, 2))
             }
-            console.log('rate_currentTime--finishAt--config.daySecond--ethPrice--stETHRate--stabilityPoolTotalSupplyTvl--apy---', rate, _currentTime, finishAt, config.daySecond, ethPrice, stETHRate, stabilityPoolTotalSupplyTvl.toString(), apy.toString())
+            console.log('rate_currentTime--finishAt--config.yearSecond--ethPrice--stETHRate--stabilityPoolTotalSupplyTvl--apy---', rate, _currentTime, finishAt, config.yearSecond, ethPrice, stETHRate, stabilityPoolTotalSupplyTvl.toString(), apy.toString())
             return apy
         } catch (error) {
             console.log('apy---', error)
