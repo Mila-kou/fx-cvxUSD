@@ -20,7 +20,7 @@ const explorerUri = 'https://www.etherscan.io'
 const chainInfo = {
   id: '0x2708',
   token: 'ETH',
-  label: 'phalcon',
+  label: 'Phalcon',
   rpcUrl: 'https://rpc.phalcon.xyz/rpc_d461c536e3d945d0b00c5663b4144cc3',
 }
 

@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { Tooltip } from 'antd'
 import cn from 'classnames'
 import { useToggle, useSetState } from 'ahooks'
-import { DotChartOutlined } from '@ant-design/icons'
+import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import useWeb3 from '@/hooks/useWeb3'
 import Button from '@/components/Button'
 import DepositModal from './components/DepositModal'
@@ -181,13 +182,21 @@ export default function StabilityPoolPage() {
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
-          Stability Pool
+          Rebalance Pool
         </div>
         <p className="text-[20px] mt-[24px]">Overview</p>
-        <p>
-          When the collateral rate is lower than 130%, the
-          deposited/locking/locked fETH will be used for liquidation.
-        </p>
+        <div className="flex items-center">
+          {`CR < 130% fETH will be used for liquidation`}
+          <Tooltip
+            placement="topLeft"
+            title="The deposited, unlocking, unclaimed fETH will be used for liquidation. Unlocking takes 14 days from the last unlocking transaction."
+            arrow
+            color="#000"
+            overlayInnerStyle={{ width: '300px' }}
+          >
+            <InfoCircleOutlined className="ml-[8px]" />
+          </Tooltip>
+        </div>
         <div className={styles.items}>
           <div className={styles.item}>
             <p>Total Deposited Value</p>
@@ -195,7 +204,7 @@ export default function StabilityPoolPage() {
             <p>{stabilityPoolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
-            <p>APY</p>
+            <p>APR</p>
             <h2>{apy}%</h2>
           </div>
         </div>
@@ -204,7 +213,7 @@ export default function StabilityPoolPage() {
       <div className={styles.wrap}>
         <div className={styles.content}>
           <div className={styles.left}>
-            <p className="text-[22px]">My Stability Pool</p>
+            <p className="text-[22px]">My Rebalance Pool</p>
             <h2 className="text-[32px] mt-[10px]">
               {dollarText(myTotalValue_text)}
             </h2>
