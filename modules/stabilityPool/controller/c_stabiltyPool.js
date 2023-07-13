@@ -80,8 +80,8 @@ const useStabiltyPool_c = () => {
             let userUnlockingUnlockAt = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt, moment(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt * 1000).format('lll'))
 
             let userUnlockingBalanceTvl = cBN(0);
-            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.userInfo.unlockingBalanceOfRes)) {
-                userUnlockingBalanceTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.unlockingBalanceOfRes).div(1e18)
+            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.userInfo.unlockingBalanceOfRes._balance)) {
+                userUnlockingBalanceTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.unlockingBalanceOfRes._balance).div(1e18)
             }
             const userUnlockingBalanceTvl_text = fb4(userUnlockingBalanceTvl, false, 0)
 
