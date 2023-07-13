@@ -185,8 +185,8 @@ export default function StabilityPoolPage() {
         </div>
         <p className="text-[20px] mt-[24px]">Overview</p>
         <p>
-          When the collateral rate is lower than 130%, the deposited fETH will
-          be used for liquidation.
+          When the collateral rate is lower than 130%, the
+          deposited/locking/locked fETH will be used for liquidation.
         </p>
         <div className={styles.items}>
           <div className={styles.item}>
