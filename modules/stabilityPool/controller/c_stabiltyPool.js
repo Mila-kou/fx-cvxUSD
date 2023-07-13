@@ -31,10 +31,10 @@ const useStabiltyPool_c = () => {
             if (_currentTime > finishAt) {
                 apy = 0
             } else {
-                const apyWei = cBN(rate).div(1e18).multipliedBy(config.daySecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl).times(100)
+                const apyWei = cBN(rate).div(1e18).multipliedBy(config.yearSecond).multipliedBy(ethPrice).multipliedBy(stETHRate).div(stabilityPoolTotalSupplyTvl).times(100)
                 apy = checkNotZoroNumOption(apyWei, fb4(apyWei, false, 0, 2))
             }
-            console.log('rate_currentTime--finishAt--config.daySecond--ethPrice--stETHRate--stabilityPoolTotalSupplyTvl--apy---', rate, _currentTime, finishAt, config.daySecond, ethPrice, stETHRate, stabilityPoolTotalSupplyTvl.toString(), apy.toString())
+            console.log('rate_currentTime--finishAt--config.yearSecond--ethPrice--stETHRate--stabilityPoolTotalSupplyTvl--apy---', rate, _currentTime, finishAt, config.yearSecond, ethPrice, stETHRate, stabilityPoolTotalSupplyTvl.toString(), apy.toString())
             return apy
         } catch (error) {
             console.log('apy---', error)
@@ -76,12 +76,12 @@ const useStabiltyPool_c = () => {
             }
             const userUnlockedBalanceTvl_text = fb4(userUnlockedBalanceTvl, false, 0)
 
-            let userUnlockingBalance = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance, fb4(stabilityPoolInfo.userInfo.unlockingBalanceOfRes._balance))
+            let userUnlockingBalance = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes?._balance, fb4(stabilityPoolInfo.userInfo.unlockingBalanceOfRes?._balance))
             let userUnlockingUnlockAt = checkNotZoroNumOption(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt, moment(stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt * 1000).format('lll'))
 
             let userUnlockingBalanceTvl = cBN(0);
-            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.userInfo.unlockingBalanceOfRes)) {
-                userUnlockingBalanceTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.unlockingBalanceOfRes).div(1e18)
+            if (checkNotZoroNum(fxInfo.baseInfo.CurrentNavRes?._fNav) && checkNotZoroNum(stabilityPoolInfo.userInfo.unlockingBalanceOfRes?._balance)) {
+                userUnlockingBalanceTvl = cBN(fxInfo.baseInfo.CurrentNavRes?._fNav).div(1e18).times(stabilityPoolInfo.userInfo.unlockingBalanceOfRes?._balance).div(1e18)
             }
             const userUnlockingBalanceTvl_text = fb4(userUnlockingBalanceTvl, false, 0)
 
