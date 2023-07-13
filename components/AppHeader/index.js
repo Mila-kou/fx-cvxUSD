@@ -196,6 +196,13 @@ export default function AppHeader() {
           </span>
         </div>
         <div className={styles.right}>
+          <a className={styles.faucet}
+            target="_blank"
+            href="https://docs.google.com/forms/d/e/1FAIpQLScewYkjwJ5pdxQDD0GGSiVbQTE4GgDJ8tf-l5wRIEGpHjwFTw/viewform"
+            rel="noreferrer"
+          >
+            Faucet
+          </a>
           <Select
             value={currentChainId}
             style={{ minWidth: '130px', marginRight: '16px' }}

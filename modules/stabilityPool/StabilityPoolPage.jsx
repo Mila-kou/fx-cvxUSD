@@ -288,7 +288,6 @@ export default function StabilityPoolPage() {
               </div>
               <div>
                 <Button
-                  width="170px"
                   disabled={!canClaim}
                   loading={claiming}
                   onClick={handleClaim}
