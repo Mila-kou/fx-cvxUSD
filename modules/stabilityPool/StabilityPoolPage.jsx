@@ -181,7 +181,7 @@ export default function StabilityPoolPage() {
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
-          Stability Pool Overview
+          Stability Pool
         </div>
         <p className="text-[20px] mt-[24px]">Overview</p>
         <p>
