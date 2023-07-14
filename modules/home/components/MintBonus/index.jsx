@@ -226,7 +226,7 @@ export default function MintBonus({ slippage }) {
     // handleGetAllMinAmount()
   }, [selected, slippage, ETHtAmount])
 
-  const showMinReceived = useMemo(() => {
+  const canReceived = useMemo(() => {
     return cBN(ETHtAmount).isLessThanOrEqualTo(tokens[symbol].balance)
   }, [ETHtAmount, tokens, symbol])
 
@@ -253,7 +253,7 @@ export default function MintBonus({ slippage }) {
       <div className={styles.details}>
         <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
         <DetailCell title="Est. Received:" content={[XETHtAmount.minout_ETH]} />
-        {showMinReceived && (
+        {canReceived && (
           <DetailCell
             title="Min. Received:"
             content={[

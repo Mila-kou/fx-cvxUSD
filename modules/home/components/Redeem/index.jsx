@@ -69,7 +69,7 @@ export default function Redeem({ slippage }) {
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
 
-  const showMinReceived = useMemo(() => {
+  const canReceived = useMemo(() => {
     if (!minOutETHtAmount.minout_slippage) return false
     if (isF) {
       return cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
@@ -304,7 +304,7 @@ export default function Redeem({ slippage }) {
 
       <BalanceInput
         symbol="stETH"
-        placeholder={minOutETHtAmount.minout_ETH}
+        placeholder={canReceived ? minOutETHtAmount.minout_ETH : '-'}
         usd={`$${ethPrice_text}`}
         disabled
         // onChange={hanldeETHAmountChanged}
@@ -312,7 +312,7 @@ export default function Redeem({ slippage }) {
       />
 
       <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
-      {showMinReceived && (
+      {canReceived && (
         <DetailCell
           title="Min. Received:"
           content={[

@@ -84,7 +84,7 @@ export default function Mint({ slippage }) {
     [FETHtAmount, XETHtAmount, isF]
   )
 
-  const showMinReceived = useMemo(
+  const canReceived = useMemo(
     () =>
       cBN(ETHtAmount).isLessThanOrEqualTo(tokens[symbol].balance) && received,
     [FETHtAmount, tokens, symbol, received]
@@ -361,7 +361,7 @@ export default function Mint({ slippage }) {
       <BalanceInput
         symbol="fETH"
         color={isF ? 'blue' : ''}
-        placeholder={FETHtAmount.minout_ETH}
+        placeholder={canReceived ? FETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${fnav}`}
@@ -374,7 +374,7 @@ export default function Mint({ slippage }) {
         symbol="xETH"
         // tip="Bonus+"
         color={isX ? 'red' : ''}
-        placeholder={XETHtAmount.minout_ETH}
+        placeholder={canReceived ? XETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${xnav}`}
@@ -386,7 +386,7 @@ export default function Mint({ slippage }) {
         // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
-      {showMinReceived && (
+      {canReceived && (
         <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
       )}
 
