@@ -79,6 +79,10 @@ export default function RedeemBonus({ slippage }) {
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
 
+  const showMinReceived = useMemo(() => {
+    return cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
+  }, [FETHtAmount, tokens.fETH.balance])
+
   const [fee, useETHBonus_text] = useMemo(() => {
     let _redeemFee = _redeemFETHFee
     // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
@@ -240,13 +244,15 @@ export default function RedeemBonus({ slippage }) {
           title="Est. Received:"
           content={[minOutETHtAmount.minout_ETH]}
         />
-        <DetailCell
-          title="Min. Received:"
-          content={[
-            minOutETHtAmount.minout_slippage,
-            minOutETHtAmount.minout_slippage_tvl,
-          ]}
-        />
+        {showMinReceived && (
+          <DetailCell
+            title="Min. Received:"
+            content={[
+              minOutETHtAmount.minout_slippage,
+              minOutETHtAmount.minout_slippage_tvl,
+            ]}
+          />
+        )}
         <DetailCell
           isGreen
           title="Max Bonus:"

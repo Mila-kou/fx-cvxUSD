@@ -62,7 +62,6 @@ export default function MintBonus({ slippage }) {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
-
   const [XETHtAmount, setXETHtAmount] = useState({
     minout_ETH: '-',
     minout_slippage: 0,
@@ -157,19 +156,22 @@ export default function MintBonus({ slippage }) {
         _ETHtAmountAndGas = ETHtAmount
       }
       let apiCall
-      let estimatedGas;
+      let estimatedGas
       if (symbol == 'stETH') {
-        apiCall = await marketContract.methods
-          .addBaseToken(_ETHtAmountAndGas, _currentAccount, _minOut)
+        apiCall = await marketContract.methods.addBaseToken(
+          _ETHtAmountAndGas,
+          _currentAccount,
+          _minOut
+        )
         estimatedGas = await apiCall.estimateGas({
-          from: _currentAccount
+          from: _currentAccount,
         })
         const gas = parseInt(estimatedGas * 1.2, 10) || 0
         await NoPayableAction(
           () =>
             apiCall.send({
               from: _currentAccount,
-              gas
+              gas,
             }),
           {
             key: 'Mint',
@@ -177,8 +179,7 @@ export default function MintBonus({ slippage }) {
           }
         )
       } else {
-        apiCall = await stETHGatewayContract.methods
-          .addBaseToken(_minOut)
+        apiCall = await stETHGatewayContract.methods.addBaseToken(_minOut)
         estimatedGas = await apiCall.estimateGas({
           from: _currentAccount,
           value: _ETHtAmountAndGas,
@@ -225,6 +226,10 @@ export default function MintBonus({ slippage }) {
     // handleGetAllMinAmount()
   }, [selected, slippage, ETHtAmount])
 
+  const showMinReceived = useMemo(() => {
+    return cBN(ETHtAmount).isLessThanOrEqualTo(tokens[symbol].balance)
+  }, [ETHtAmount, tokens, symbol])
+
   return (
     <div className={styles.container}>
       <BonusCard
@@ -248,13 +253,15 @@ export default function MintBonus({ slippage }) {
       <div className={styles.details}>
         <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
         <DetailCell title="Est. Received:" content={[XETHtAmount.minout_ETH]} />
-        <DetailCell
-          title="Min. Received:"
-          content={[
-            XETHtAmount.minout_slippage,
-            XETHtAmount.minout_slippage_tvl,
-          ]}
-        />
+        {showMinReceived && (
+          <DetailCell
+            title="Min. Received:"
+            content={[
+              XETHtAmount.minout_slippage,
+              XETHtAmount.minout_slippage_tvl,
+            ]}
+          />
+        )}
         <DetailCell
           isGreen
           title="Max Bonus:"
@@ -271,11 +278,11 @@ export default function MintBonus({ slippage }) {
         content={
           showDisabledNotice
             ? [
-              'fx governance decision to temporarily disabled Mint functionality.',
-            ]
+                'fx governance decision to temporarily disabled Mint functionality.',
+              ]
             : [
-              'Excess payments will be refunded if rewards are fully allocated.',
-            ]
+                'Excess payments will be refunded if rewards are fully allocated.',
+              ]
         }
       />
 

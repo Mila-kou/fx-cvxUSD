@@ -84,6 +84,12 @@ export default function Mint({ slippage }) {
     [FETHtAmount, XETHtAmount, isF]
   )
 
+  const showMinReceived = useMemo(
+    () =>
+      cBN(ETHtAmount).isLessThanOrEqualTo(tokens[symbol].balance) && received,
+    [FETHtAmount, tokens, symbol, received]
+  )
+
   const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __mintFETHFee = _mintFETHFee
     let __mintXETHFee = _mintXETHFee
@@ -380,7 +386,9 @@ export default function Mint({ slippage }) {
         // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
-      <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
+      {showMinReceived && (
+        <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
+      )}
 
       {showDisabledNotice && (
         <NoticeCard
