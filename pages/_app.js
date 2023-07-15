@@ -15,7 +15,7 @@ import { initWeb3Onboard } from '@/config/wallet.config'
 
 function noop() {}
 
-if (process.env.NETWORK_ENV === 'mainnet' || true) {
+if (process.env.NETWORK_ENV === 'mainnet') {
   console.log = noop
   console.warn = noop
   console.error = noop
