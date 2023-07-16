@@ -12,6 +12,7 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
 import { DetailCell, NoticeCard } from '../Common'
+import Button from '@/components/Button'
 
 export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -124,7 +125,7 @@ export default function Redeem({ slippage }) {
     setXETHtAmount(v.toString(10))
   }
 
-  const selectTokenInfo = useToken(selectTokenAddress, 'fx_ethGateway')
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
 
   const { BtnWapper } = useApprove({
     approveAmount: tokenAmount,
@@ -331,14 +332,22 @@ export default function Redeem({ slippage }) {
       )}
 
       <div className={styles.action}>
-        <BtnWapper
+        {/* <BtnWapper
           loading={redeeming}
           disabled={!canRedeem}
           onClick={handleRedeem}
           width="100%"
         >
           Redeem
-        </BtnWapper>
+        </BtnWapper> */}
+        <Button
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleRedeem}
+          width="100%"
+        >
+          Redeem
+        </Button>
       </div>
     </div>
   )

@@ -18,7 +18,7 @@ import SlippageModal, { useSlippage } from '../SlippageModal'
 const AUTO = 0.3
 
 export default function Swap() {
-  const { systemStatus } = useETH()
+  const { systemStatus, isShowBonusTab } = useETH()
   const [bonusIndex, setBonusIndex] = useState(0)
   const [tab, setTab] = useState(0)
 
@@ -28,7 +28,7 @@ export default function Swap() {
 
   const tabs = useMemo(() => {
     let _tabs = ['Mint', 'Redeem']
-    if (systemStatus * 1 >= 1) {
+    if (systemStatus * 1 >= 1 && isShowBonusTab) {
       _tabs = ['Mint', 'Redeem', 'Bonus']
     }
     if (tab >= _tabs.length) setTab(0)

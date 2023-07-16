@@ -268,23 +268,30 @@ export default function RedeemBonus({ slippage }) {
         content={
           showDisabledNotice
             ? [
-                'fx governance decision to temporarily disabled Redeem functionality.',
-              ]
+              'fx governance decision to temporarily disabled Redeem functionality.',
+            ]
             : [
-                'Excess payments will be refunded if rewards are fully allocated.',
-              ]
+              'Excess payments will be refunded if rewards are fully allocated.',
+            ]
         }
       />
 
       <div className={styles.action}>
-        <BtnWapper
+        {/* <BtnWapper
           loading={redeeming}
           disabled={!canRedeem}
           onClick={handleLiquidate}
           width="100%"
         >
           Redeem
-        </BtnWapper>
+        </BtnWapper> */}
+        <Button
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleLiquidate}
+          width="100%">
+          Redeem
+        </Button>
       </div>
     </div>
   )

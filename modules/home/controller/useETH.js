@@ -251,6 +251,10 @@ const useETH = () => {
         fb4(fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio * 100)
       )
       console.log('maxETHBonus--', maxETHBonus, maxETHBonus_Text)
+      let isShowBonusTab = false
+      if (checkNotZoroNum(fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio) && checkNotZoroNum(fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio)) {
+        isShowBonusTab = true
+      }
 
       return {
         fnav: _fnav,
@@ -298,6 +302,7 @@ const useETH = () => {
 
         stabilityIncentiveRatio_text,
         liquidationIncentiveRatio_text,
+        isShowBonusTab
       }
     } catch (error) {
       return {
