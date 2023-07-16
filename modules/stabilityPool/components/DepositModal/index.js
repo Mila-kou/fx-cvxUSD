@@ -144,7 +144,7 @@ export default function DepositModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">Deposit fETH/ETH </h2>
+        <h2 className="mb-[16px]">Deposit fETH</h2>
 
         <BalanceInput
           placeholder="0"

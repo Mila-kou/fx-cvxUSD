@@ -60,7 +60,6 @@ export default function WithdrawModal(props) {
         <BalanceInput
           placeholder="0"
           symbol={name}
-          color="blue"
           balance={fb4(userInfo.stabilityPoolBalanceOfRes, false)}
           maxAmount={userInfo.stabilityPoolBalanceOfRes}
           onChange={handleInputChange}
@@ -69,7 +68,12 @@ export default function WithdrawModal(props) {
       </div>
 
       <div className="mt-[40px]">
-        <Button width="100%" disabled={!canWithdraw} loading={withdrawing} onClick={handleWithdraw}>
+        <Button
+          width="100%"
+          disabled={!canWithdraw}
+          loading={withdrawing}
+          onClick={handleWithdraw}
+        >
           Withdraw
         </Button>
       </div>
