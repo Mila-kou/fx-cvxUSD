@@ -79,6 +79,10 @@ export default function RedeemBonus({ slippage }) {
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
 
+  const canReceived = useMemo(() => {
+    return cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
+  }, [FETHtAmount, tokens.fETH.balance])
+
   const [fee, useETHBonus_text] = useMemo(() => {
     let _redeemFee = _redeemFETHFee
     // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
@@ -240,13 +244,15 @@ export default function RedeemBonus({ slippage }) {
           title="Est. Received:"
           content={[minOutETHtAmount.minout_ETH]}
         />
-        <DetailCell
-          title="Min. Received:"
-          content={[
-            minOutETHtAmount.minout_slippage,
-            minOutETHtAmount.minout_slippage_tvl,
-          ]}
-        />
+        {canReceived && (
+          <DetailCell
+            title="Min. Received:"
+            content={[
+              minOutETHtAmount.minout_slippage,
+              minOutETHtAmount.minout_slippage_tvl,
+            ]}
+          />
+        )}
         <DetailCell
           isGreen
           title="Max Bonus:"
@@ -262,23 +268,30 @@ export default function RedeemBonus({ slippage }) {
         content={
           showDisabledNotice
             ? [
-                'fx governance decision to temporarily disabled Redeem functionality.',
-              ]
+              'fx governance decision to temporarily disabled Redeem functionality.',
+            ]
             : [
-                'Excess payments will be refunded if rewards are fully allocated.',
-              ]
+              'Excess payments will be refunded if rewards are fully allocated.',
+            ]
         }
       />
 
       <div className={styles.action}>
-        <BtnWapper
+        {/* <BtnWapper
           loading={redeeming}
           disabled={!canRedeem}
           onClick={handleLiquidate}
           width="100%"
         >
           Redeem
-        </BtnWapper>
+        </BtnWapper> */}
+        <Button
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleLiquidate}
+          width="100%">
+          Redeem
+        </Button>
       </div>
     </div>
   )

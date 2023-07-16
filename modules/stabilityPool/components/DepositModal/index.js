@@ -154,6 +154,11 @@ export default function DepositModal(props) {
           onChange={handleInputChange}
           withUsd={false}
         />
+        <p className={styles.note}>
+          Note that withdrawals from Rebalancing Pool require 2 week waiting
+          period. Pending withdrawals earn no yield, but may be used for stETH
+          redemption.
+        </p>
       </div>
 
       <div className="mt-[40px]">

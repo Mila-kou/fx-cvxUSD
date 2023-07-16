@@ -84,6 +84,12 @@ export default function Mint({ slippage }) {
     [FETHtAmount, XETHtAmount, isF]
   )
 
+  const canReceived = useMemo(
+    () =>
+      cBN(ETHtAmount).isLessThanOrEqualTo(tokens[symbol].balance) && received,
+    [FETHtAmount, tokens, symbol, received]
+  )
+
   const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __mintFETHFee = _mintFETHFee
     let __mintXETHFee = _mintXETHFee
@@ -355,7 +361,7 @@ export default function Mint({ slippage }) {
       <BalanceInput
         symbol="fETH"
         color={isF ? 'blue' : ''}
-        placeholder={FETHtAmount.minout_ETH}
+        placeholder={canReceived ? FETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${fnav}`}
@@ -368,7 +374,7 @@ export default function Mint({ slippage }) {
         symbol="xETH"
         // tip="Bonus+"
         color={isX ? 'red' : ''}
-        placeholder={XETHtAmount.minout_ETH}
+        placeholder={canReceived ? XETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${xnav}`}
@@ -380,7 +386,9 @@ export default function Mint({ slippage }) {
         // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
-      <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
+      {canReceived && (
+        <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
+      )}
 
       {showDisabledNotice && (
         <NoticeCard

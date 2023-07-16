@@ -12,6 +12,7 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
 import { DetailCell, NoticeCard } from '../Common'
+import Button from '@/components/Button'
 
 export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -69,6 +70,14 @@ export default function Redeem({ slippage }) {
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
 
+  const canReceived = useMemo(() => {
+    if (!minOutETHtAmount.minout_slippage) return false
+    if (isF) {
+      return cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
+    }
+    return cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
+  }, [tokenAmount, tokens.fETH.balance, tokens.xETH.balance, isF])
+
   const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __redeemFETHFee = _redeemFETHFee
     let __redeemXETHFee = _redeemXETHFee
@@ -116,7 +125,7 @@ export default function Redeem({ slippage }) {
     setXETHtAmount(v.toString(10))
   }
 
-  const selectTokenInfo = useToken(selectTokenAddress, 'fx_ethGateway')
+  const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
 
   const { BtnWapper } = useApprove({
     approveAmount: tokenAmount,
@@ -296,7 +305,7 @@ export default function Redeem({ slippage }) {
 
       <BalanceInput
         symbol="stETH"
-        placeholder={minOutETHtAmount.minout_ETH}
+        placeholder={canReceived ? minOutETHtAmount.minout_ETH : '-'}
         usd={`$${ethPrice_text}`}
         disabled
         // onChange={hanldeETHAmountChanged}
@@ -304,13 +313,15 @@ export default function Redeem({ slippage }) {
       />
 
       <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
-      <DetailCell
-        title="Min. Received:"
-        content={[
-          minOutETHtAmount.minout_slippage,
-          minOutETHtAmount.minout_slippage_tvl,
-        ]}
-      />
+      {canReceived && (
+        <DetailCell
+          title="Min. Received:"
+          content={[
+            minOutETHtAmount.minout_slippage,
+            minOutETHtAmount.minout_slippage_tvl,
+          ]}
+        />
+      )}
 
       {showDisabledNotice && (
         <NoticeCard
@@ -321,14 +332,22 @@ export default function Redeem({ slippage }) {
       )}
 
       <div className={styles.action}>
-        <BtnWapper
+        {/* <BtnWapper
           loading={redeeming}
           disabled={!canRedeem}
           onClick={handleRedeem}
           width="100%"
         >
           Redeem
-        </BtnWapper>
+        </BtnWapper> */}
+        <Button
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleRedeem}
+          width="100%"
+        >
+          Redeem
+        </Button>
       </div>
     </div>
   )
