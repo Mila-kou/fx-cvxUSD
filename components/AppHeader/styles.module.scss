@@ -16,7 +16,7 @@
   .route {
     margin-left: 64px;
     font-size: 18px;
-    color: var(--disabled-text-color);
+    color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
     &:hover {
       color: #fff;
@@ -54,6 +54,7 @@
 
     .faucet {
       margin-right: 26px;
+      color: #fff;
     }
 
     .menu {
