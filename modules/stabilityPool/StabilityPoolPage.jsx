@@ -271,7 +271,7 @@ export default function StabilityPoolPage() {
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
-                
+{/*                 
                 <Button
                   loading={harvesting}
                   onClick={handleHarvest}
@@ -281,7 +281,7 @@ export default function StabilityPoolPage() {
                 </Button>
                 <Button onClick={handleLiquidatorWithBonus} type="second">
                   Liquidator
-                </Button>
+                </Button> */}
                
               </div>
             </div>
