@@ -137,7 +137,19 @@ export const useFX_ETHGateway = () => {
   )
 }
 
+export const useWstETH = () => {
+  const address = config.tokens.wstETH
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.wstETHABI),
+      address,
+    }),
+    [getContract]
+  )
+}
 
+////////////////////////////////////////
 export const useClev = () => {
   const address = config.contracts.aladdinCLEV
   const { getContract } = useContract()

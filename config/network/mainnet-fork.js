@@ -18,25 +18,25 @@ const explorerUri = 'https://www.etherscan.io'
 //   rpcUrl: 'https://apitest.aladdin.club/rpc',
 // }
 const chainInfo = {
-  id: '0x2708',
+  id: '0x1',
   token: 'ETH',
-  label: 'Phalcon',
-  rpcUrl: 'https://rpc.phalcon.xyz/rpc_d461c536e3d945d0b00c5663b4144cc3',
+  label: 'Phalcon-Inner',
+  rpcUrl: 'https://rpc.phalcon.xyz/rpc_999ebf7d68bb4a2e9c81c59c3e597280',
 }
 
 const contracts = {
   ...tokensInfo.contracts,
 
-  ChainlinkTwapOracleV3: '0xdBB1AAeb04F3B5e2587E4bB849717E9ebD0c8acC',
-  fETH: '0x4eECa6bFa3C96210260691639827eEF4D80FA8C6',
-  xETH: '0xe6AAF8fBB56488941f619A9ADB0EB4d89fA9d217',
-  fx_Market: '0x719c287932B0ea6037862b4cec4A786939DEb1d8',
-  fx_stETHTreasury: '0x7185E3477Ad54A8186e623768833e8C2686591D3',
-  fx_stETHGateway: '0x7b9Bb9CdBb04BF57F2F82e51D54F6C8ee165FF3B',
+  ChainlinkTwapOracleV3: '0x1109E1f9e6D4A15EabAdb22dE11B3077DD2be793',
+  fETH: '0xd6e6561Ed9D4a041a2e0c771A06aCCA82765635C',
+  xETH: '0x1CCdE657685926e342D12dF5F33d555985FBd0C3',
+  fx_Market: '0x3CB1ee412b295aC5B45952658fD70c2DeEc3B59e',
+  fx_stETHTreasury: '0x79e3868f36E2F38d2D4C71190D259b614d1d5Fe2',
+  fx_stETHGateway: '0x58A76E9C37B89718fE05446C19850249B9564C5B',
 
-  fx_StabilityPool: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',
+  fx_StabilityPool: '0x7d42f87D19D872B5d343aaC09D8436ab276F9d38',
 
-  LiquidatorWithBonusToken: '0x3D8faCB2b65B8CEB682ADE00E016c672Ee6262c0',
+  LiquidatorWithBonusToken: '0x2394b0433Bd5769Dc16FdBaf5d24f862fc855fFc',
   wstETHWrapper: '0x0338B5CCEe1B9297d242A2f0836379470D2e857C'
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
@@ -46,8 +46,8 @@ const contracts = {
 
 const tokens = {
   ...tokensInfo.tokens,
-  fETH: '0x4eECa6bFa3C96210260691639827eEF4D80FA8C6',
-  xETH: '0xe6AAF8fBB56488941f619A9ADB0EB4d89fA9d217',
+  fETH: '0x6b8dBaB9605FD4a1007e6F64176DB64482B8dB47',
+  xETH: '0x828849cD2f08B3c1ACaD6587B3adb470D870DE16',
 }
 
 const TOKENS_INFO = {

@@ -3,11 +3,13 @@ import { useQueries } from '@tanstack/react-query'
 import moment from 'moment'
 import {
   useContract,
+  useErc20Token,
   useFETH,
   useFX_Market,
   useFX_stETHTreasury,
   useFX_stabilityPool,
   useXETH,
+  useWstETH,
 } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
@@ -15,9 +17,9 @@ import config from '@/config/index'
 
 const useInfo = () => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
-  const { erc20Contract } = useContract()
   const multiCallsV2 = useMutiCallV2()
   const { contract: fx_stabilityPoolContract } = useFX_stabilityPool()
+  const { contract: wstETHContract } = useWstETH()
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
@@ -27,13 +29,15 @@ const useInfo = () => {
         stabilityPoolTotalSupplyFn(),
         totalUnlocking(),
         rewardsFn(),
-        extraRewardStateFn(config.tokens.wstETH)
+        extraRewardStateFn(config.tokens.wstETH),
+        wstETHContract.methods.tokensPerStEth()
       ]
       const [
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
         rewardsRes,
-        extraRewardState
+        extraRewardState,
+        tokensPerStEth
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -44,14 +48,16 @@ const useInfo = () => {
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
         rewardsRes,
-        extraRewardState
+        extraRewardState,
+        tokensPerStEth
       )
 
       return {
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
         rewardsRes,
-        extraRewardState
+        extraRewardState,
+        tokensPerStEth
       }
     } catch (error) {
       console.log('baseInfoError==>', error)
