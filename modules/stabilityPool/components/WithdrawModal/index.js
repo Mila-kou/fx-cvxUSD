@@ -50,7 +50,7 @@ export default function WithdrawModal(props) {
     }
   }
   const canWithdraw = useMemo(() => {
-    return !!withdrawAmount && isAllReady
+    return !!(withdrawAmount * 1) && isAllReady && cBN(withdrawAmount).isLessThanOrEqualTo(userInfo.stabilityPoolBalanceOfRes)
   }, [withdrawAmount, isAllReady])
 
   return (
