@@ -15,15 +15,19 @@ import moment from 'moment'
 
 
 const useStabiltyPool_c = () => {
-    const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo, stETHRate } = useGlobal()
+    const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo } = useGlobal()
     const { current } = useWeb3()
     const {
         ethPrice,
     } = useFxCommon()
     console.log('stabilityPoolInfo---fxInfo--ethPrice--', stabilityPoolInfo, fxInfo, ethPrice)
+    const { extraRewardState, tokensPerStEth } = stabilityPoolInfo?.baseInfo
+    const stETHRate = checkNotZoroNum(tokensPerStEth) ? cBN(1).div(cBN(tokensPerStEth).div(1e18)).toFixed(4) : 1
+    console.log('stETHRate-----', stETHRate)
     const getStabiltyPoolApy = useCallback((stabilityPoolTotalSupplyTvl) => {
         try {
-            const { extraRewardState } = stabilityPoolInfo?.baseInfo
+
+
             const { finishAt, rate } = extraRewardState || {}
             let apy = 0
 
@@ -40,7 +44,7 @@ const useStabiltyPool_c = () => {
             console.log('apy---', error)
             return 0
         }
-    }, [stabilityPoolInfo?.baseInfo, stETHRate])
+    }, [stabilityPoolInfo?.baseInfo])
     const pageData = useMemo(() => {
         try {
             const stabilityPoolTotalSupply_res = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes)

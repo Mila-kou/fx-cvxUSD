@@ -39,6 +39,8 @@ import FX_stETHTreasuryABI from './fx/stETHTreasury.json'
 import FX_StabilityPoolABI from './fx/StabilityPool.json'
 import FX_LiquidatorWithBonusTokenABI from './fx/LiquidatorWithBonusToken.json'
 
+import wstETHABI from './wstETH.json'
+
 
 export default {
   erc20ABI,
@@ -75,4 +77,5 @@ export default {
   PlatformFeeDistributorABI,
   AladdinbcCVXABI,
   RewardClaimHelperABI,
+  wstETHABI
 }
