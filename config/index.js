@@ -1,5 +1,5 @@
 import ethereum from './network/ethereum'
-import mainnetFork from './network/mainnet-fork'
+import mainnetFork from './network/mainnet-fork-inner'
 import sepolia from './network/sepolia'
 
 // const isForkEnv = process.env.NETWORK_ENV === 'mainnet-fork'
