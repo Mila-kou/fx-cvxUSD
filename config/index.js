@@ -17,7 +17,7 @@ import sepolia from './network/sepolia'
 //       [sepolia.chainInfo.id]: sepolia,
 //       [mainnetFork.chainInfo.id]: mainnetFork,
 //     }
-const mainnetFork = mainnetFork_10548
+const mainnetFork = mainnetFork_outer
 const chainMap = {
   // [sepolia.chainInfo.id]: sepolia,
   // [ethereum.chainInfo.id]: ethereum,
