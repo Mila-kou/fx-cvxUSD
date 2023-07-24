@@ -412,7 +412,7 @@ export default function Mint({ slippage }) {
           onClick={handleMint}
           width="100%"
         >
-          {isF ? 'Mint Stable fETH' : 'Mint Volatile xETH'}
+          {isF ? 'Mint Stable fETH' : 'Mint Leveraged Long xETH'}
         </BtnWapper>
         {/* <Button
           width="100%"

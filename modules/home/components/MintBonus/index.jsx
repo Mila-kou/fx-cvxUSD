@@ -300,7 +300,7 @@ export default function MintBonus({ slippage }) {
           onClick={handleMint}
           width="100%"
         >
-          Mint Volatile xETH
+          Mint Leveraged Long xETH
         </BtnWapper>
       </div>
     </div>
