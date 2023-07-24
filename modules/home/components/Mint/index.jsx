@@ -301,6 +301,13 @@ export default function Mint({ slippage }) {
     }
   }
 
+  const showMinReceive = useMemo(
+    () =>
+      canReceived &&
+      cBN(selectTokenInfo.allowance).isGreaterThanOrEqualTo(ETHtAmount),
+    [canReceived, selectTokenInfo.allowance, ETHtAmount]
+  )
+
   const canMint = useMemo(() => {
     let _enableETH = false
     if (symbol == 'stETH') {
@@ -339,7 +346,7 @@ export default function Mint({ slippage }) {
   useEffect(() => {
     getMinAmount()
     // handleGetAllMinAmount()
-  }, [selected, slippage, ETHtAmount])
+  }, [isF, slippage, ETHtAmount])
 
   return (
     <div className={styles.container}>
@@ -386,7 +393,7 @@ export default function Mint({ slippage }) {
         // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
-      {canReceived && (
+      {showMinReceive && (
         <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
       )}
 
@@ -405,7 +412,7 @@ export default function Mint({ slippage }) {
           onClick={handleMint}
           width="100%"
         >
-          {isF ? 'Mint Stable fETH' : 'Mint Volatile xETH'}
+          {isF ? 'Mint Stable fETH' : 'Mint Leveraged Long xETH'}
         </BtnWapper>
         {/* <Button
           width="100%"

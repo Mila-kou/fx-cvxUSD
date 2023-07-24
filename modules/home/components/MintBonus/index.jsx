@@ -230,6 +230,13 @@ export default function MintBonus({ slippage }) {
     return cBN(ETHtAmount).isLessThanOrEqualTo(tokens[symbol].balance)
   }, [ETHtAmount, tokens, symbol])
 
+  const showMinReceive = useMemo(
+    () =>
+      canReceived &&
+      cBN(selectTokenInfo.allowance).isGreaterThanOrEqualTo(ETHtAmount),
+    [canReceived, selectTokenInfo.allowance, ETHtAmount]
+  )
+
   return (
     <div className={styles.container}>
       <BonusCard
@@ -253,7 +260,7 @@ export default function MintBonus({ slippage }) {
       <div className={styles.details}>
         <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
         <DetailCell title="Est. Received:" content={[XETHtAmount.minout_ETH]} />
-        {canReceived && (
+        {showMinReceive && (
           <DetailCell
             title="Min. Received:"
             content={[
@@ -293,7 +300,7 @@ export default function MintBonus({ slippage }) {
           onClick={handleMint}
           width="100%"
         >
-          Mint Volatile xETH
+          Mint Leveraged Long xETH
         </BtnWapper>
       </div>
     </div>

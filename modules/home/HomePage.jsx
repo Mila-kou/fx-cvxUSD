@@ -20,8 +20,8 @@ export default function HomePage() {
   const [ethPrice, setEthPrice] = useState(0)
   const { _currentAccount } = useWeb3()
   const [priceLoading, setPriceLoading] = useState(0)
-  const theAddr = '0xCF5d8305AB4663E46f79a640CB6075f200d13DAc'
-  const { contract: stETHGatewayContract } = useContract(
+  const theAddr = '0x91dF41002b9b2f4DB6E5376Af0F338a586c89d8A'
+  const { contract: MockTwapOracleContract } = useContract(
     theAddr,
     abi.MockTwapOracleAbi
   )
@@ -29,7 +29,7 @@ export default function HomePage() {
     try {
       setPriceLoading(true)
       const _minOut = cBN(ethPrice).toString(10)
-      let apiCall = await stETHGatewayContract.methods.setPrice(_minOut)
+      let apiCall = await MockTwapOracleContract.methods.setPrice(_minOut)
 
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,

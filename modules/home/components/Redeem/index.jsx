@@ -76,7 +76,13 @@ export default function Redeem({ slippage }) {
       return cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
     }
     return cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
-  }, [tokenAmount, tokens.fETH.balance, tokens.xETH.balance, isF])
+  }, [
+    tokenAmount,
+    minOutETHtAmount.minout_slippage,
+    tokens.fETH.balance,
+    tokens.xETH.balance,
+    isF,
+  ])
 
   const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __redeemFETHFee = _redeemFETHFee
@@ -269,7 +275,7 @@ export default function Redeem({ slippage }) {
 
   useEffect(() => {
     getMinAmount()
-  }, [selected, slippage, tokenAmount])
+  }, [isF, slippage, tokenAmount])
 
   return (
     <div className={styles.container}>
