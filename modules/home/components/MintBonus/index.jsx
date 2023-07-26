@@ -259,7 +259,10 @@ export default function MintBonus({ slippage }) {
 
       <div className={styles.details}>
         <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
-        <DetailCell title="Est. Received:" content={[XETHtAmount.minout_ETH]} />
+        <DetailCell
+          title="Est. Received:"
+          content={[checkNotZoroNum(ETHtAmount) ? XETHtAmount.minout_ETH : '-']}
+        />
         {showMinReceive && (
           <DetailCell
             title="Min. Received:"
