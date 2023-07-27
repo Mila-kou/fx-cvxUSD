@@ -200,7 +200,7 @@ export default function RedeemBonus({ slippage }) {
         () => apiCall.send({ from: _currentAccount, gas }),
         {
           key: 'Liquidate',
-          action: 'Liquidate',
+          action: 'Liquidat',
         }
       )
       setRedeeming(false)
