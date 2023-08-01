@@ -251,7 +251,7 @@ export default function IdoPage() {
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>FX AladdinDAO Offering</p>
+              <p className={styles.title}>FX AladdinDAO Offering Round 2</p>
 
               <p className={styles.num}>{PageData.capAmount} FX</p>
               <p className={styles.title}>Offering Amount</p>
@@ -351,7 +351,7 @@ export default function IdoPage() {
       {!!isWhiteListSoldEndSale && (
         <div className={styles.container}>
           <div className={styles.card}>
-            <p className={styles.title}>FX AladdinDAO Offering</p>
+            <p className={styles.title}>FX AladdinDAO Offering Round 2</p>
 
             <p className={styles.num}>Sold Out</p>
             <p className={styles.title}>
