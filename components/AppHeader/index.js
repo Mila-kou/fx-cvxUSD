@@ -141,9 +141,7 @@ export default function AppHeader() {
 
   const historyUrl = useMemo(
     () =>
-      currentAccount
-        ? `https://etherscan.io/address/${currentAccount}`
-        : '',
+      currentAccount ? `https://etherscan.io/address/${currentAccount}` : '',
     [currentAccount]
   )
 
