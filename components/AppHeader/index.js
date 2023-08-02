@@ -142,7 +142,7 @@ export default function AppHeader() {
   const historyUrl = useMemo(
     () =>
       currentAccount
-        ? `https://sepolia.etherscan.io/address/${currentAccount}`
+        ? `https://etherscan.io/address/${currentAccount}`
         : '',
     [currentAccount]
   )
