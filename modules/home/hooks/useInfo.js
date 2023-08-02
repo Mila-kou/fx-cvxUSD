@@ -167,7 +167,6 @@ const useInfo = () => {
       baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0
     try {
       const apiCalls = [
-        cacheTwap(),
         maxMintableFToken(_stabilityRatio),
         maxMintableXToken(_stabilityRatio),
         maxRedeemableFToken(_stabilityRatio),
@@ -179,7 +178,6 @@ const useInfo = () => {
         maxLiquidatable(_liquidationRatio, _liquidationIncentiveRatio),
       ]
       const [
-        ,
         maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
         maxMintableXTokenWithIncentiveRes,
         maxLiquidatableRes,

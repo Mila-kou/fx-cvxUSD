@@ -200,7 +200,7 @@ export default function RedeemBonus({ slippage }) {
         () => apiCall.send({ from: _currentAccount, gas }),
         {
           key: 'Liquidate',
-          action: 'Liquidate',
+          action: 'Liquidat',
         }
       )
       setRedeeming(false)
@@ -242,7 +242,9 @@ export default function RedeemBonus({ slippage }) {
         <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
         <DetailCell
           title="Est. Received:"
-          content={[minOutETHtAmount.minout_ETH]}
+          content={[
+            checkNotZoroNum(FETHtAmount) ? minOutETHtAmount.minout_ETH : '-',
+          ]}
         />
         {canReceived && (
           <DetailCell
