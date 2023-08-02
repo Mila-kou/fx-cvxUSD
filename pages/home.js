@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX ETH</title>
+        <title>FX - Offering</title>
       </Head>
       <HomePage />
     </React.Fragment>

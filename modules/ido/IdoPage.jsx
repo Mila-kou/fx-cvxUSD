@@ -39,26 +39,33 @@ export default function IdoPage() {
   }, [PageData, _currentTime])
 
   const isWhiteListSoldEndSale = useMemo(() => {
-    if (
-      [1, 2].indexOf(newStatus) > -1 &&
-      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
-        PageData.baseInfo.totalSoldAmount
-      ) &&
-      cBN(PageData.baseInfo.capAmount).isLessThan(cBN(40000).times(1e18))
-    ) {
-      return true
-    }
+    // if (
+    //   [1, 2].indexOf(newStatus) > -1 &&
+    //   cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+    //     PageData.baseInfo.totalSoldAmount
+    //   )
+    // ) {
+    //   return true
+    // }
     return false
   }, [PageData])
 
   const isEndSale = useMemo(() => {
     if (
-      newStatus >= 2 &&
-      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(
-        cBN(60000).times(1e18)
-      ) &&
-      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
-        PageData.baseInfo.totalSoldAmount
+      (newStatus >= 1 &&
+        cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+          PageData.baseInfo.totalSoldAmount
+        )) || newStatus == 3
+    ) {
+      return true
+    }
+    return false
+  }, [PageData])
+  const isEndSaleAndFail = useMemo(() => {
+    if (
+      newStatus == 3 &&
+      cBN(PageData.baseInfo.totalSoldAmount).isLessThanOrEqualTo(
+        PageData.baseInfo.capAmount
       )
     ) {
       return true
@@ -231,7 +238,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) {}
+    } catch (error) { }
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
@@ -244,7 +251,7 @@ export default function IdoPage() {
         <div className={styles.container}>
           {[0].includes(newStatus) && (
             <div className={styles.card}>
-              <p className={styles.title}>FX AladdinDAO Offering</p>
+              <p className={styles.title}>FX AladdinDAO Offering Round 2</p>
 
               <p className={styles.num}>{PageData.capAmount} FX</p>
               <p className={styles.title}>Offering Amount</p>
@@ -264,7 +271,7 @@ export default function IdoPage() {
           {[1, 2].includes(newStatus) && (
             <div className={styles.card}>
               <p className={styles.title}>
-                FX {newStatus == 1 ? 'Whitelist' : 'Public'} Offering
+                FX {newStatus == 1 ? 'AladdinDAO' : 'Public'} Offering
               </p>
 
               <p className={styles.num}>
@@ -290,8 +297,7 @@ export default function IdoPage() {
 
                 {[1].includes(newStatus) && (
                   <p className={styles.tip}>
-                    🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597{' '}
-                    <br /> with a limit of 20,000 $FX
+                    🔥 Holders of 10,000 $ALD or $xALD
                   </p>
                 )}
               </div>
@@ -345,7 +351,7 @@ export default function IdoPage() {
       {!!isWhiteListSoldEndSale && (
         <div className={styles.container}>
           <div className={styles.card}>
-            <p className={styles.title}>FX Whitelist Offering</p>
+            <p className={styles.title}>FX AladdinDAO Offering Round 2</p>
 
             <p className={styles.num}>Sold Out</p>
             <p className={styles.title}>
@@ -360,7 +366,7 @@ export default function IdoPage() {
               )}
             </p>
             <p className={styles.title}>Public Offering</p>
-            <p className={styles.title}>Offering Amount 40,000 FX</p>
+            <p className={styles.title}>Offering Amount {PageData.totalFundsRaised} FX</p>
             <p className={styles.title}>
               Starting at{' '}
               {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}
