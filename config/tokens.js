@@ -6,9 +6,8 @@ const contracts = {
   multiCall: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
   idoSale1: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
 
-  idoSale2: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',//'
+  idoSale2: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',
   fundsRaisedToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // weth
-
 
   // fx ----
   ChainlinkTwapOracleV3: '0x460B3CdE57DfbA90DBed02fd83d3990a92DA1230',
@@ -166,7 +165,6 @@ const TOKENS_INFO = {
   cvxfxs: ['', tokens.cvxfxs, 18, 'cvxfxs'],
   clevUSD: ['frax', tokens.clevUSD, 18],
   fETH: ['fETH', tokens.fETH, 18],
-
 }
 
 const zapTokens = {
@@ -267,7 +265,7 @@ const zapTokens = {
     decimals: TOKENS_INFO.fETH[2],
     address: TOKENS_INFO.fETH[1],
     needZap: true,
-  }
+  },
 }
 
 const POOLS_LIST_GAUGE = {
