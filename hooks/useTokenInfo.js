@@ -167,4 +167,39 @@ export const useToken = (address, contractType, lpInfo) => {
   return token
 }
 
+export const useTokenBalance = (address) => {
+  const { _currentAccount, web3, blockNumber, isAllReady } = useWeb3()
+  const { erc20Contract } = useContract()
+  const [balance, setBalance] = useState({
+    balance: 0,
+  })
+
+  const fetchUserInfo = useCallback(async () => {
+    try {
+      const tokenContract = erc20Contract(address)
+      const _balance = await tokenContract.methods
+        .balanceOf(_currentAccount)
+        .call()
+      setBalance({
+        balance: _balance,
+        contract: tokenContract,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }, [_currentAccount, web3, erc20Contract, address])
+
+  useEffect(() => {
+    if (isAllReady && address) {
+      fetchUserInfo()
+    } else {
+      setBalance({
+        balance,
+      })
+    }
+  }, [web3, blockNumber, _currentAccount, isAllReady, address])
+
+  return balance
+}
+
 export default useTokens

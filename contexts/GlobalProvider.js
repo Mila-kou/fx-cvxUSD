@@ -11,7 +11,7 @@ import { useQuery, useQueries } from '@tanstack/react-query'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { useTheme } from './ThemeProvider'
-import { useToken } from '@/hooks/useTokenInfo'
+import { useToken, useTokenBalance } from '@/hooks/useTokenInfo'
 import { cBN, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import {
   getTokenListPrice,
@@ -34,9 +34,9 @@ function GlobalProvider({ children }) {
   const fx_info = useInfo()
   const stabilityPool_info = stabilityPoolUseInfo()
   const ethToken = useToken(config.tokens.eth)
-  const stETHToken = useToken(config.tokens.stETH)
-  const fETHToken = useToken(config.tokens.fETH)
-  const xETHToken = useToken(config.tokens.xETH)
+  const stETHToken = useTokenBalance(config.tokens.stETH)
+  const fETHToken = useTokenBalance(config.tokens.fETH)
+  const xETHToken = useTokenBalance(config.tokens.xETH)
 
   const [
     { data: tokenPrice, refetch: refetch1 },
