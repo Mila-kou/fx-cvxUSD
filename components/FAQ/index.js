@@ -120,7 +120,7 @@ export default function FAQ({ open, onCancel }) {
                 stETH if the amount of fETH minted ever gets too high compared
                 to xETH (see risks above, and{' '}
                 <a
-                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/audit-reports/f(x)%20whitepaper.pdf"
+                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/whitepaper_v2.pdf"
                   target="_blank"
                   rel="noreferrer"
                 >
