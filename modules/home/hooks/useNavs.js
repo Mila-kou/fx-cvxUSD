@@ -20,7 +20,8 @@ export default function useNavs() {
     queryKey: ['navs'],
     queryFn: async () =>
       request(
-        'https://api.studio.thegraph.com/query/43247/fx-value/v0.1.0',
+        // 'https://api.studio.thegraph.com/query/43247/fx-value/v0.1.0',
+        'https://api.thegraph.com/subgraphs/name/devchenyan/fx-value-eth',
         query
       ).then((res) => res.navs.reverse()),
   })
