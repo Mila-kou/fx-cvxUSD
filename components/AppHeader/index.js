@@ -24,6 +24,7 @@ const routers = [
   ['F(x)', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
+  ['Offering', '/offering'],
   ['Rebalance Pool', '/rebalance-pool'],
 ]
 
@@ -141,9 +142,7 @@ export default function AppHeader() {
 
   const historyUrl = useMemo(
     () =>
-      currentAccount
-        ? `https://sepolia.etherscan.io/address/${currentAccount}`
-        : '',
+      currentAccount ? `https://etherscan.io/address/${currentAccount}` : '',
     [currentAccount]
   )
 
@@ -183,14 +182,14 @@ export default function AppHeader() {
               {label}
             </Link>
           ))}
-          <a
+          {/* <a
             className={styles.route}
             target="_blank"
             href="https://offering.aladdin.club/"
             rel="noreferrer"
           >
             Offering
-          </a>
+          </a> */}
           <span className={styles.route} onClick={toggleFAQ}>
             FAQ
           </span>

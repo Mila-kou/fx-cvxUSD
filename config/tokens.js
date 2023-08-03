@@ -4,15 +4,22 @@ const clevUsdIcons = '/assets/tokens/clevUSD.svg'
 const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
   multiCall: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
-  idoSale: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
+  idoSale1: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f', // round 1
+
+  idoSale: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935', // round 2
   fundsRaisedToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // weth
 
-  ChainlinkTwapOracleV3: '0x32366846354DB5C08e92b4Ab0D2a510b2a2380C8',
-  fETH: '0xcAD8810BfBbdd189686062A3A399Fc3eCAbB5164',
-  xETH: '0xBB8828DDb2774a141EBE3BB449d1cc5BF6212885',
-  fx_Market: '0xDd2cf944633484e4B415d540397C7DD34093ECBc',
-  fx_Treasury: '0x58EE0A16FB24ea34169e237bb10900A6a90288FB',
-  fx_ETHGateway: '0x922837838aEd2937742CFF7b0AdFd74157e3B9D7',
+  // fx ----
+  ChainlinkTwapOracleV3: '0x460B3CdE57DfbA90DBed02fd83d3990a92DA1230',
+  fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
+  xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
+  fx_Market: '0xe7b9c7c9cA85340b8c06fb805f7775e3015108dB',
+  fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
+  fx_stETHGateway: '0x4C5C52d507066780500e627d592DbE11476E7c21',
+
+  fx_StabilityPool: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
+  LiquidatorWithBonusToken: '0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2',
+  wstETHWrapper: '0xb09e34dD25d5E88a1E9Ff6F6418109927675B658',
 
   fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
   fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
@@ -83,8 +90,9 @@ const tokens = {
   eth: '0x0000000000000000000000000000000000000000',
   weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
   idoSale: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
-  fETH: '0xcAD8810BfBbdd189686062A3A399Fc3eCAbB5164',
-  xETH: '0xBB8828DDb2774a141EBE3BB449d1cc5BF6212885',
+
+  fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
+  xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
 
   usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',
@@ -157,7 +165,6 @@ const TOKENS_INFO = {
   cvxfxs: ['', tokens.cvxfxs, 18, 'cvxfxs'],
   clevUSD: ['frax', tokens.clevUSD, 18],
   fETH: ['fETH', tokens.fETH, 18],
-
 }
 
 const zapTokens = {
@@ -258,7 +265,7 @@ const zapTokens = {
     decimals: TOKENS_INFO.fETH[2],
     address: TOKENS_INFO.fETH[1],
     needZap: true,
-  }
+  },
 }
 
 const POOLS_LIST_GAUGE = {

@@ -104,9 +104,18 @@ const useInfo = (refreshTrigger) => {
     config.contracts.idoSale,
     abis.IdoSale
   )
+  const { contract: IdoSaleContract1 } = useContract(
+    config.contracts.idoSale1,
+    abis.IdoSale
+  )
 
   const fetchBaseInfo = useCallback(async () => {
     const { getPrice, saleTimeData, cap, totalSold } = IdoSaleContract.methods
+    const {
+      getPrice: getPrice_round1,
+      cap: cap_round1,
+      totalSold: totalSold_round1,
+    } = IdoSaleContract1.methods
     const fundsRaisedErc20 = erc20Contract(config.contracts.fundsRaisedToken)
     try {
       const saleCalls = [
@@ -114,13 +123,27 @@ const useInfo = (refreshTrigger) => {
         saleTimeData(),
         cap(),
         totalSold(),
+
+        getPrice_round1(),
+        cap_round1(),
+        totalSold_round1(),
         // rewardErc20.methods.balanceOf(config.contracts.idoSale)
       ]
       console.log('getPrice')
-      const [currentPrice, saleTime, capAmount, totalSoldAmount] =
-        await multiCallsV2(saleCalls)
+      const [
+        currentPrice,
+        saleTime,
+        capAmount,
+        totalSoldAmount,
+        currentPrice_round1,
+        capAmount_round1,
+        totalSoldAmount_round1,
+      ] = await multiCallsV2(saleCalls)
       const totalFundsRaised = await fundsRaisedErc20.methods
         .balanceOf(config.contracts.idoSale)
+        .call()
+      const totalFundsRaised_round1 = await fundsRaisedErc20.methods
+        .balanceOf(config.contracts.idoSale1)
         .call()
       const isEnd = cBN(capAmount).isEqualTo(cBN(totalSoldAmount))
         ? true
@@ -144,6 +167,10 @@ const useInfo = (refreshTrigger) => {
         totalSoldAmount,
         totalFundsRaised, // cBN(100000).shiftedBy(18),
         timeObj,
+        currentPrice_round1,
+        capAmount_round1,
+        totalSoldAmount_round1,
+        totalFundsRaised_round1,
       }
     } catch (error) {
       console.log(error)
@@ -153,18 +180,26 @@ const useInfo = (refreshTrigger) => {
 
   const fetchUserInfo = useCallback(async () => {
     const { whitelistCap, shares, claimed } = IdoSaleContract.methods
+    const { shares: shares_round1, claimed: claimed_round1 } =
+      IdoSaleContract1.methods
+
     try {
       const calls = [
         whitelistCap(_currentAccount),
         shares(_currentAccount),
         claimed(_currentAccount),
+        shares_round1(_currentAccount),
+        claimed_round1(_currentAccount),
       ]
-      const [isWhite, myShares, isClaimed] = await multiCallsV2(calls)
+      const [isWhite, myShares, isClaimed, myShares_round1, isClaimed_round1] =
+        await multiCallsV2(calls)
       return {
         myShares,
         isClaimed,
         isWhitelisted: isWhite != 0,
         whitelistCap: isWhite,
+        myShares_round1,
+        isClaimed_round1,
       }
     } catch (error) {
       console.log(error)
