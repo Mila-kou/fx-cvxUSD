@@ -102,11 +102,11 @@ export default function SystemStatistics() {
 
           <div className={styles.details} data-color="blue">
             <div className={styles.cell}>
-              <div>Rebalance Mode Price:</div>
+              <div>Stability Mode Price:</div>
               <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
-              <div>User Rebalance Mode Price:</div>
+              <div>User Stability Mode Price:</div>
               <p>${UserLiquidationModePrice}</p>
             </div>
             <div className={styles.cell}>
