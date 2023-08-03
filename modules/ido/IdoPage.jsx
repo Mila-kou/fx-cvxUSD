@@ -436,10 +436,12 @@ export default function IdoPage() {
 
             <p className={styles.num}>Sold Out! 🎉</p>
 
-            <p className={styles.num}>{PageData.capAmount}</p>
-            <p className={styles.title}>Offering Amount</p>
+            <p className={styles.num} > {PageData.capAmount_round1}<span style={{ fontSize: 20, color: "#fff" }}> (Round 1)</span></p>
+            <p className={styles.num1} > {PageData.capAmount}<span style={{ fontSize:20,color:"#fff" }}> (Round 2)</span></p>
 
-            <p className={styles.num}>{PageData.totalFundsRaised}</p>
+            <p className={styles.title}>Offering Amount</p>
+            <p className={styles.num} > {300}<span style={{ fontSize: 20, color: "#fff" }}> (Round 2)</span></p>
+            <p className={styles.num1} > {PageData.totalFundsRaised}<span style={{ fontSize:20,color:"#fff" }}> (Round 2)</span></p>
             <p className={styles.title}>Total Raised</p>
           </div>
 
@@ -447,7 +449,10 @@ export default function IdoPage() {
             <p className={styles.title}>Invest</p>
             <div className={styles.bottomWrap}>
               <p className={styles.title}>
-                My Shares: <span>{PageData.myShares} FX</span>
+                Round 1 My Shares: <span>{PageData.myShares_round1} FX</span>
+              </p>
+              <p className={styles.title}>
+                Round 2 My Shares: <span>{PageData.myShares} FX</span>
               </p>
               {/* <p className={styles.title}>
                 Claim opening at: <span>2023/5/25 20:00 UTC</span>

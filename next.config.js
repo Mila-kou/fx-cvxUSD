@@ -22,11 +22,6 @@ module.exports = {
         destination: '/home',
         permanent: false,
       },
-      {
-        source: '/offering',
-        destination: '/home',
-        permanent: false,
-      },
     ]
   },
 }
