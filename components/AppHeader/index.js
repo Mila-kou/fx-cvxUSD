@@ -21,7 +21,7 @@ import Select from '@/components/Select'
 import FAQ from '@/components/FAQ'
 
 const routers = [
-  ['F(x)', '/home'],
+  ['f(x) Protocol', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
   ['Rebalance Pool', '/rebalance-pool'],

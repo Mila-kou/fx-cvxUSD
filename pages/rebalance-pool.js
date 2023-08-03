@@ -6,7 +6,7 @@ export default function StabilityPool() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX ETH</title>
+        <title>f(x) Protocol</title>
       </Head>
       <StabilityPoolPage />
     </React.Fragment>

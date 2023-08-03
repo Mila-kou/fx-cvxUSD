@@ -6,7 +6,7 @@ export default function Ido() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX - Offering</title>
+        <title>f(x) Protocol</title>
       </Head>
       <IdoPage />
     </React.Fragment>
