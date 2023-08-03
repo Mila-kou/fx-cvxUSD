@@ -39,24 +39,20 @@ export default function IdoPage() {
   }, [PageData, _currentTime])
 
   const isWhiteListSoldEndSale = useMemo(() => {
-    if (
-      [1, 2].indexOf(newStatus) > -1 &&
-      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
-        PageData.baseInfo.totalSoldAmount
-      ) &&
-      cBN(PageData.baseInfo.capAmount).isLessThan(cBN(40000).times(1e18))
-    ) {
-      return true
-    }
+    // if (
+    //   [1, 2].indexOf(newStatus) > -1 &&
+    //   cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+    //     PageData.baseInfo.totalSoldAmount
+    //   )
+    // ) {
+    //   return true
+    // }
     return false
   }, [PageData])
 
   const isEndSale = useMemo(() => {
     if (
-      newStatus >= 2 &&
-      cBN(PageData.baseInfo.capAmount).isGreaterThanOrEqualTo(
-        cBN(60000).times(1e18)
-      ) &&
+      newStatus >= 1 &&
       cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
         PageData.baseInfo.totalSoldAmount
       )
@@ -290,8 +286,7 @@ export default function IdoPage() {
 
                 {[1].includes(newStatus) && (
                   <p className={styles.tip}>
-                    🔥 Holders of $xALD, $veCTR & $veCLEV at block 17344597{' '}
-                    <br /> with a limit of 20,000 $FX
+                    🔥 Holders of 10,000 $ALD or $xALD
                   </p>
                 )}
               </div>
@@ -360,7 +355,7 @@ export default function IdoPage() {
               )}
             </p>
             <p className={styles.title}>Public Offering</p>
-            <p className={styles.title}>Offering Amount 40,000 FX</p>
+            <p className={styles.title}>Offering Amount {PageData.totalFundsRaised} FX</p>
             <p className={styles.title}>
               Starting at{' '}
               {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}
@@ -433,7 +428,7 @@ export default function IdoPage() {
             <p className={styles.num}>{PageData.capAmount}</p>
             <p className={styles.title}>Offering Amount</p>
 
-            <p className={styles.num}>300</p>
+            <p className={styles.num}>{PageData.totalFundsRaised}</p>
             <p className={styles.title}>Total Raised</p>
           </div>
 
