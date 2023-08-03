@@ -440,7 +440,7 @@ export default function IdoPage() {
             <p className={styles.num1} > {PageData.capAmount}<span style={{ fontSize:20,color:"#fff" }}> (Round 2)</span></p>
 
             <p className={styles.title}>Offering Amount</p>
-            <p className={styles.num} > {300}<span style={{ fontSize: 20, color: "#fff" }}> (Round 2)</span></p>
+            <p className={styles.num} > {300}<span style={{ fontSize: 20, color: "#fff" }}> (Round 1)</span></p>
             <p className={styles.num1} > {PageData.totalFundsRaised}<span style={{ fontSize:20,color:"#fff" }}> (Round 2)</span></p>
             <p className={styles.title}>Total Raised</p>
           </div>
