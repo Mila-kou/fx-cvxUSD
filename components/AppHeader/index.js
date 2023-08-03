@@ -24,8 +24,8 @@ const routers = [
   ['F(x)', '/home'],
   // ['Farming', '/farming'],
   // ['Locker', '/locker'],
-  ['Offering', '/offering'],
   ['Rebalance Pool', '/rebalance-pool'],
+  ['Offering', '/offering'],
 ]
 
 export default function AppHeader() {
