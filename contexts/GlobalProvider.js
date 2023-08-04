@@ -115,7 +115,6 @@ function GlobalProvider({ children }) {
   const toggleShowSystemStatistics = useCallback(() => {
     window.localStorage.setItem('hideSS', showSystemStatistics ? 1 : 0)
     setShowSystemStatistics(!showSystemStatistics)
-    toggleShowMenuPanel()
   }, [setShowSystemStatistics, showSystemStatistics])
 
   const tokens = useMemo(() => {

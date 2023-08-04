@@ -287,7 +287,9 @@ export default function StabilityPoolPage() {
             </div>
 
             <div className={cn(styles.cell, 'mt-[50px]')}>
-              <img src={stETHImg} />
+              <div className={styles.stETHWrap}>
+                <img src={stETHImg} />
+              </div>
               <div className={styles.cellContent}>
                 <p className="text-[18px]">Earned</p>
                 <h2 className="text-[24px]">

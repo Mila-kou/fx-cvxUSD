@@ -86,6 +86,20 @@
           justify-content: space-between;
           align-items: center;
           gap: 20px;
+          .stETHWrap {
+            background: #fff;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+
+            img {
+              height: 36px;
+              width: 36px;
+            }
+          }
           img {
             height: 42px;
             width: 42px;
@@ -106,13 +120,12 @@
       }
     }
 
-
-      button {
-        width: 170px;
-        height: 48px;
-        font-size: 18px;
-        margin-top: 20px;
-      }
+    button {
+      width: 170px;
+      height: 48px;
+      font-size: 18px;
+      margin-top: 20px;
+    }
 
     .footer {
       margin-top: 46px;

@@ -121,11 +121,16 @@ export default function AppHeader() {
   const refMenu = useRef(null)
   const refMenuPanel = useRef(null)
 
+  const targets =
+    showSystemStatistics && showSwitch
+      ? [refMenu, refMenu2, refMenuPanel]
+      : [refMenu, refMenuPanel]
+
   useClickAway(() => {
     if (showMenuPanel) {
       toggleShowMenuPanel()
     }
-  }, [refMenu, refMenu2, refMenuPanel])
+  }, targets)
 
   const refAccount = useRef(null)
   const refAccountPanel = useRef(null)
