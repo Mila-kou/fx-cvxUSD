@@ -138,7 +138,7 @@ export default function SystemStatistics() {
             <div className={styles.title}>
               fETH Collateral Ratio{' '}
               <span className="text-[12px]">
-                (fETH Marketcap / Backed Asset Value)
+                (Backed Asset Value / fETH Marketcap )
               </span>
               {/* <Tooltip
                 placement="top"
