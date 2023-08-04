@@ -68,15 +68,7 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
           <div>
             {symbol}
             {symbol === 'xETH' ? (
-              <Tooltip
-                placement="top"
-                title={`Leverage(Target/Real)+1.25~4.00/+${fxData.xETHBeta_text}X`}
-                arrow
-                color="#000"
-                overlayInnerStyle={{
-                  width: '270px',
-                }}
-              >
+              <Tooltip placement="top" title="Leverage" arrow color="#000">
                 <span className="ml-[12px] border-b-[1px] border-dashed cursor-pointer">
                   x{fxData.xETHBeta_text}
                 </span>
