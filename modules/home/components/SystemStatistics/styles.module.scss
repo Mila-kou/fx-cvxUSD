@@ -48,6 +48,10 @@ $radius: 10px;
         border-radius: $radius;
         .title {
           font-size: 14px;
+          svg {
+            margin-top: -10px;
+            margin-left: 10px;
+          }
         }
         .nums {
           margin-top: 14px;

@@ -26,7 +26,8 @@ import Warning from '../../public/images/warning.svg'
 // import Waiting from '../../public/images/waiting.svg'
 // <Waiting onClick={toggle} />
 
-const ETHImg = '/tokens/crypto-icons-stack.svg#eth'
+// const ETHImg = '/tokens/crypto-icons-stack.svg#eth'
+const stETHImg = '/tokens/steth.svg'
 
 const item = POOLS_LIST[0]
 
@@ -271,7 +272,7 @@ export default function StabilityPoolPage() {
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
-{/*                 
+                {/*                 
                 <Button
                   loading={harvesting}
                   onClick={handleHarvest}
@@ -282,12 +283,11 @@ export default function StabilityPoolPage() {
                 <Button onClick={handleLiquidatorWithBonus} type="second">
                   Liquidator
                 </Button> */}
-               
               </div>
             </div>
 
             <div className={cn(styles.cell, 'mt-[50px]')}>
-              <img src={ETHImg} />
+              <img src={stETHImg} />
               <div className={styles.cellContent}>
                 <p className="text-[18px]">Earned</p>
                 <h2 className="text-[24px]">

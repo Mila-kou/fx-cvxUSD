@@ -3,11 +3,12 @@ import { Tooltip } from 'antd'
 import cn from 'classnames'
 import {
   MenuOutlined,
-  CloseOutlined,
+  SettingOutlined,
   LineChartOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons'
 import SimpleInput from '@/components/SimpleInput'
+import useGlobal from '@/hooks/useGlobal'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, fb4 } from '@/utils/index'
@@ -33,6 +34,7 @@ const prices = [
 ]
 
 export default function SystemStatistics() {
+  const { toggleShowMenuPanel, refMenu2 } = useGlobal()
   const { blockNumber, current } = useWeb3()
   const [mode, setMode] = useState(-1)
   const {
@@ -53,14 +55,24 @@ export default function SystemStatistics() {
     ethPrice_text,
     lastPermissionedPrice,
     R,
+
+    xETHBeta_text,
   } = useETH()
   const navsData = useNavs()
   return (
     <div className={styles.container}>
-      <h2 className="mb-[24px]">
-        <LineChartOutlined />
-        System Statistics
-      </h2>
+      <div className="flex justify-between align-middle mb-[24px]">
+        <h2>
+          <LineChartOutlined />
+          System Statistics
+        </h2>
+        <SettingOutlined
+          ref={refMenu2}
+          className="cursor-pointer"
+          style={{ color: 'var(--second-text-color)' }}
+          onClick={toggleShowMenuPanel}
+        />
+      </div>
       {mode > -1 ? (
         <div className={styles.modeContent}>
           <div className={styles.tag}>{tags[mode]}</div>
@@ -106,19 +118,34 @@ export default function SystemStatistics() {
               <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
+              <div>ETH Last Price:</div>
+              <p>${lastPermissionedPrice}</p>
+            </div>
+            {/* <div className={styles.cell}>
               <div>User Stability Mode Price:</div>
               <p>${UserLiquidationModePrice}</p>
-            </div>
+            </div> 
             <div className={styles.cell}>
               <div>Protocol Rebalance Price:</div>
               <p>${ProtocolLiquidationModePrice}</p>
             </div>
+            */}
           </div>
         </div>
 
         <div className={styles.item}>
           <div className={styles.card} data-color="red">
-            <div className={styles.title}>fETH Collateral Ratio</div>
+            <div className={styles.title}>
+              fETH Collateral Ratio
+              <Tooltip
+                placement="top"
+                title="fETH Marketcap / Backed Asset Value"
+                arrow
+                color="#000"
+              >
+                <InfoCircleOutlined />
+              </Tooltip>
+            </div>
             <div className={cn(styles.ratio, styles.nums)}>
               <p>
                 <b className={styles[systemStatus > 0 ? 'red' : 'green']}>
@@ -138,6 +165,7 @@ export default function SystemStatistics() {
                 nav: xnav,
                 totalSupply: xETHTotalSupply,
                 ratio: p_x,
+                xETHBeta_text,
               }}
               dateList={navsData.dateList}
               navs={navsData.xETH}
@@ -165,10 +193,6 @@ export default function SystemStatistics() {
                 </Tooltip>
               </div>
               <p>${ethPrice_text}</p>
-            </div>
-            <div className={styles.cell}>
-              <div>ETH Last Price:</div>
-              <p>${lastPermissionedPrice}</p>
             </div>
           </div>
         </div>

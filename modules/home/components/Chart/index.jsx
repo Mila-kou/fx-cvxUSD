@@ -6,6 +6,7 @@ import React, {
   useState,
   useEffect,
 } from 'react'
+import { Tooltip } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import styles from './styles.module.scss'
 
@@ -52,7 +53,7 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
     ],
     tooltip: {
       trigger: 'item',
-      formatter: '{b0}<br />Net Assets Value: ${c0}'
+      formatter: '{b0}<br />Net Assets Value: ${c0}',
     },
     color: ['rgba(255, 255, 255, 0.8)'],
   }
@@ -64,7 +65,24 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
           <img src={icon} />
         </div>
         <div className={styles.content}>
-          <div>{symbol}</div>
+          <div>
+            {symbol}
+            {symbol === 'xETH' ? (
+              <Tooltip
+                placement="top"
+                title="Leverage(Target/Real)+1.25~14.00/+2.43X"
+                arrow
+                color="#000"
+                overlayInnerStyle={{
+                  width: '270px',
+                }}
+              >
+                <span className="ml-[12px] border-b-[1px] border-dashed cursor-pointer">
+                  x{fxData.xETHBeta_text}
+                </span>
+              </Tooltip>
+            ) : null}
+          </div>
           <p className={styles.second}>Net Assets Value</p>
         </div>
         <div className={styles.right}>

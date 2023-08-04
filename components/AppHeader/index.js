@@ -35,6 +35,9 @@ export default function AppHeader() {
     showSystemStatistics,
     toggleShowSystemStatistics,
     tokens,
+    showMenuPanel,
+    toggleShowMenuPanel,
+    refMenu2,
   } = useGlobal()
   const {
     connect,
@@ -47,7 +50,6 @@ export default function AppHeader() {
   } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
-  const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
   const [openFAQ, { toggle: toggleFAQ }] = useToggle()
 
   const assets = useMemo(() => {
@@ -63,7 +65,7 @@ export default function AppHeader() {
         name: 'stETH',
         symbol: 'stETH',
         amount: fb4(tokens.stETH.balance, false),
-        icon: '/tokens/crypto-icons-stack.svg#eth',
+        icon: '/tokens/steth.svg',
         usd: tokens.ETH.usd,
         showAdd: true,
       },
@@ -118,11 +120,12 @@ export default function AppHeader() {
 
   const refMenu = useRef(null)
   const refMenuPanel = useRef(null)
+
   useClickAway(() => {
     if (showMenuPanel) {
       toggleShowMenuPanel()
     }
-  }, [refMenu, refMenuPanel])
+  }, [refMenu, refMenu2, refMenuPanel])
 
   const refAccount = useRef(null)
   const refAccountPanel = useRef(null)
@@ -224,7 +227,6 @@ export default function AppHeader() {
             <MenuOutlined ref={refMenu} />
           </div>
         </div>
-
         {showAccountPanel ? (
           <div className={styles.accountPanel}>
             <div ref={refAccountPanel} className={styles.content}>
@@ -245,7 +247,7 @@ export default function AppHeader() {
               {assets.map((item) => (
                 <div className={styles.assetItem} key={item.symbol}>
                   <div className={styles.logo}>
-                    <img src={item.icon} />
+                    <img src={item.icon} className="w-[35px] h-[35px]" />
                   </div>
                   <div className={styles.main}>
                     <div>{item.name}</div>

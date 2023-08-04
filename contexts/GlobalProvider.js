@@ -5,6 +5,7 @@ import React, {
   createContext,
   useContext,
   useCallback,
+  useRef,
 } from 'react'
 import { useDebounceEffect, useToggle } from 'ahooks'
 import { useQuery, useQueries } from '@tanstack/react-query'
@@ -30,6 +31,9 @@ function GlobalProvider({ children }) {
   const { web3, blockNumber } = useWeb3()
   const { theme, toggleTheme } = useTheme()
   const [showSystemStatistics, setShowSystemStatistics] = useState(false)
+  const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
+
+  const refMenu2 = useRef(null)
 
   const fx_info = useInfo()
   const stabilityPool_info = stabilityPoolUseInfo()
@@ -105,12 +109,13 @@ function GlobalProvider({ children }) {
   )
 
   useEffect(() => {
-    setShowSystemStatistics(window.localStorage.getItem('showSS') == 1)
+    setShowSystemStatistics(window.localStorage.getItem('hideSS') != 1)
   }, [])
 
   const toggleShowSystemStatistics = useCallback(() => {
-    window.localStorage.setItem('showSS', showSystemStatistics ? 0 : 1)
+    window.localStorage.setItem('hideSS', showSystemStatistics ? 1 : 0)
     setShowSystemStatistics(!showSystemStatistics)
+    toggleShowMenuPanel()
   }, [setShowSystemStatistics, showSystemStatistics])
 
   const tokens = useMemo(() => {
@@ -175,6 +180,10 @@ function GlobalProvider({ children }) {
       toggleTheme,
       showSystemStatistics,
       toggleShowSystemStatistics,
+      showMenuPanel,
+      toggleShowMenuPanel,
+      refMenu2,
+
       tokens,
       tokenPrice,
       fx_info,
@@ -192,6 +201,10 @@ function GlobalProvider({ children }) {
       toggleTheme,
       showSystemStatistics,
       toggleShowSystemStatistics,
+      showMenuPanel,
+      toggleShowMenuPanel,
+      refMenu2,
+
       tokens,
       tokenPrice,
       fx_info,
