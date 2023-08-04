@@ -70,7 +70,7 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
             {symbol === 'xETH' ? (
               <Tooltip
                 placement="top"
-                title="Leverage(Target/Real)+1.25~14.00/+2.43X"
+                title={`Leverage(Target/Real)+1.25~4.00/+${fxData.xETHBeta_text}X`}
                 arrow
                 color="#000"
                 overlayInnerStyle={{
