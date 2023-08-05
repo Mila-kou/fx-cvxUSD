@@ -2,7 +2,7 @@ import React, { useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Switch } from 'antd'
+import { Switch, Drawer } from 'antd'
 import { useToggle, useClickAway } from 'ahooks'
 import {
   MenuOutlined,
@@ -51,6 +51,7 @@ export default function AppHeader() {
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [openFAQ, { toggle: toggleFAQ }] = useToggle()
+  const [openMenu, setOpenMenu] = useState(false)
 
   const assets = useMemo(() => {
     const list = [
@@ -169,9 +170,30 @@ export default function AppHeader() {
     }
   }, [isAllowChain, switchChain])
 
+  console.log('--openMenu--', openMenu)
+
   return (
     <div>
       <div className={styles.container}>
+        <div className={styles.mobile}>
+          <Link href="/home">
+            <img
+              className={styles.logo}
+              src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
+            />
+          </Link>
+          <div
+            onClick={currentAccount ? toggleShowAccountPanel : handleConnect}
+            className={styles.account}
+            ref={refAccount}
+          >
+            <p>{currentAccount ? _account : 'Connect Wallet'}</p>
+          </div>
+          <div className={styles.menu} onClick={toggleShowMenuPanel}>
+            <MenuOutlined ref={refMenu} />
+          </div>
+        </div>
+
         <div className={styles.left}>
           <Link href="/home">
             <img
@@ -232,6 +254,7 @@ export default function AppHeader() {
             <MenuOutlined ref={refMenu} />
           </div>
         </div>
+
         {showAccountPanel ? (
           <div className={styles.accountPanel}>
             <div ref={refAccountPanel} className={styles.content}>
@@ -283,6 +306,31 @@ export default function AppHeader() {
         {showMenuPanel ? (
           <div className={styles.menuPanel}>
             <div ref={refMenuPanel} className={styles.content}>
+              <div className={styles.mobileLinks}>
+                {routers.map(([label, href]) => (
+                  <Link
+                    href={href}
+                    className={cn(
+                      styles.route,
+                      route.includes(href) && styles.active
+                    )}
+                  >
+                    {label}
+                  </Link>
+                ))}
+                {/* <a
+                  className={styles.route}
+                  target="_blank"
+                  href="https://offering.aladdin.club/"
+                  rel="noreferrer"
+                >
+                  Offering
+                </a> */}
+                <p className={styles.route} onClick={toggleFAQ}>
+                  FAQ
+                </p>
+              </div>
+
               {showSwitch ? (
                 <div className={styles.item}>
                   <div>
@@ -321,12 +369,14 @@ export default function AppHeader() {
           </div>
         ) : null}
       </div>
+
       {isAllowChain ? null : (
         <p className={styles.network}>
           Please switch your network to{' '}
           {config.allowChains.map((item) => item.label).join(' or ')}
         </p>
       )}
+
       <FAQ open={openFAQ} onCancel={toggleFAQ} />
     </div>
   )
