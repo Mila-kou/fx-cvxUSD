@@ -51,7 +51,6 @@ export default function AppHeader() {
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [openFAQ, { toggle: toggleFAQ }] = useToggle()
-  const [openMenu, setOpenMenu] = useState(false)
 
   const assets = useMemo(() => {
     const list = [
@@ -120,12 +119,13 @@ export default function AppHeader() {
   }
 
   const refMenu = useRef(null)
+  const refMenuMobile = useRef(null)
   const refMenuPanel = useRef(null)
 
   const targets =
     showSystemStatistics && showSwitch
-      ? [refMenu, refMenu2, refMenuPanel]
-      : [refMenu, refMenuPanel]
+      ? [refMenu, refMenuMobile, refMenu2, refMenuPanel]
+      : [refMenu, refMenuMobile, refMenuPanel]
 
   useClickAway(() => {
     if (showMenuPanel) {
@@ -170,8 +170,6 @@ export default function AppHeader() {
     }
   }, [isAllowChain, switchChain])
 
-  console.log('--openMenu--', openMenu)
-
   return (
     <div>
       <div className={styles.container}>
@@ -190,7 +188,7 @@ export default function AppHeader() {
             <p>{currentAccount ? _account : 'Connect Wallet'}</p>
           </div>
           <div className={styles.menu} onClick={toggleShowMenuPanel}>
-            <MenuOutlined ref={refMenu} />
+            <MenuOutlined ref={refMenuMobile} />
           </div>
         </div>
 
