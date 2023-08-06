@@ -24,7 +24,11 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
       },
       axisLabel: {
         fontSize: 10,
-        interval: 0,
+        interval: 23,
+        formatter: (value) => {
+          const time = new Date(value * 1000)
+          return `${time.getMonth() + 1}/${time.getDate()}`
+        },
       },
       data: dateList,
     },
@@ -49,11 +53,21 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
       {
         data: navs,
         type: 'line',
+        symbol: 'none',
       },
     ],
     tooltip: {
-      trigger: 'item',
-      formatter: '{b0}<br />Net Assets Value: ${c0}',
+      trigger: 'axis',
+      // formatter: '{b0}<br />Net Assets Value: ${c0}',
+      formatter: (params) => {
+        const { axisValue, value } = params[0]
+        console.log('params----', params)
+        const time = new Date(axisValue * 1000)
+        const _time = `${time.getFullYear()}-${
+          time.getMonth() + 1
+        }-${time.getDate()} ${time.getHours()}:00:00`
+        return `${_time}<br />Net Assets Value: ${value}`
+      },
     },
     color: ['rgba(255, 255, 255, 0.8)'],
   }
