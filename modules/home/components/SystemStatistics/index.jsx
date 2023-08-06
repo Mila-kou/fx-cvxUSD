@@ -139,7 +139,7 @@ export default function SystemStatistics() {
           <div className={styles.card} data-color="red">
             <div className={styles.title}>
               fETH Collateral Ratio{' '}
-              <span className="text-[12px]">
+              <span className="text-[13px]">
                 (Backed Asset Value / fETH Supply)
               </span>
               {/* <Tooltip
