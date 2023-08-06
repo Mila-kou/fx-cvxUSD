@@ -57,6 +57,8 @@ export default function SystemStatistics() {
     R,
 
     xETHBeta_text,
+
+    isETHPriceGreatThanETHLastPrice,
   } = useETH()
   const navsData = useNavs()
   return (
@@ -178,7 +180,10 @@ export default function SystemStatistics() {
             />
           </div>
 
-          <div className={styles.details} data-color="red">
+          <div
+            className={styles.details}
+            data-color={isETHPriceGreatThanETHLastPrice ? 'green' : 'red'}
+          >
             <div className={styles.cell}>
               <div>ETH Cumulative Return: </div>
               <p>{R}%</p>
