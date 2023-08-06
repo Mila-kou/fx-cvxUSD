@@ -66,7 +66,7 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
         const _time = `${time.getFullYear()}-${
           time.getMonth() + 1
         }-${time.getDate()} ${time.getHours()}:00:00`
-        return `${_time}<br />Net Assets Value: ${value}`
+        return `${_time}<br />Net Assets Value: $${value}`
       },
     },
     color: ['rgba(255, 255, 255, 0.8)'],
