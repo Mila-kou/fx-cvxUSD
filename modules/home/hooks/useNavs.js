@@ -5,7 +5,7 @@ import { cBN, fb4 } from '@/utils/index'
 
 const query = `
     query MyQuery {
-      navs(first: 7, orderBy: timestamp, orderDirection: desc) {
+      navs(first: 168, orderBy: timestamp, orderDirection: desc) {
         id
         baseNav
         fNav
@@ -21,7 +21,7 @@ export default function useNavs() {
     queryFn: async () =>
       request(
         // 'https://api.studio.thegraph.com/query/43247/fx-value/v0.1.0',
-        'https://api.thegraph.com/subgraphs/name/devchenyan/fx-value-eth',
+        'https://api.thegraph.com/subgraphs/name/aladdindaogroup/fx-navs',
         query
       ).then((res) => res.navs.reverse()),
   })
@@ -37,8 +37,7 @@ export default function useNavs() {
         res.fETH.push(fb4(cBN(fNav)))
         res.xETH.push(fb4(cBN(xNav)))
 
-        const time = new Date(timestamp * 1000)
-        res.dateList.push(`${time.getUTCMonth() + 1}/${time.getUTCDate()}`)
+        res.dateList.push(timestamp)
       })
     }
 
