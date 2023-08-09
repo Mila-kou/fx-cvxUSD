@@ -57,8 +57,13 @@ export default function SystemStatistics() {
     R,
 
     xETHBeta_text,
+
+    isETHPriceGreatThanETHLastPrice,
+    baseTokenCap,
+    baseTokenCap_text,
   } = useETH()
   const navsData = useNavs()
+  const MAX_ETH = baseTokenCap
   return (
     <div className={styles.container}>
       <div className="flex justify-between align-middle mb-[24px]">
@@ -94,6 +99,12 @@ export default function SystemStatistics() {
               <p>
                 ~<span>${totalBaseTokenTvl}</span>
               </p>
+            </div>
+            <div className={styles.processWrap}>
+              <p>
+                {totalBaseToken} / {baseTokenCap_text}
+              </p>
+              <progress value={totalBaseToken} max={MAX_ETH} />
             </div>
           </div>
 
@@ -137,7 +148,7 @@ export default function SystemStatistics() {
           <div className={styles.card} data-color="red">
             <div className={styles.title}>
               fETH Collateral Ratio{' '}
-              <span className="text-[12px]">
+              <span className="text-[13px]">
                 (Backed Asset Value / fETH Supply)
               </span>
               {/* <Tooltip
@@ -178,7 +189,10 @@ export default function SystemStatistics() {
             />
           </div>
 
-          <div className={styles.details} data-color="red">
+          <div
+            className={styles.details}
+            data-color={isETHPriceGreatThanETHLastPrice ? 'green' : 'red'}
+          >
             <div className={styles.cell}>
               <div>ETH Cumulative Return: </div>
               <p>{R}%</p>

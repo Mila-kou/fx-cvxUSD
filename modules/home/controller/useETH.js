@@ -38,7 +38,7 @@ const useETH = () => {
     // fETHContract
   }
 
-  const handleMintXETH = async () => { }
+  const handleMintXETH = async () => {}
 
   const pageData = useMemo(() => {
     try {
@@ -62,42 +62,46 @@ const useETH = () => {
         fxInfo.baseInfo.xETHTotalSupplyRes,
         fb4(fxInfo.baseInfo.xETHTotalSupplyRes)
       )
+      const _baseTokenCap_text = checkNotZoroNumOption(
+        fxInfo.baseInfo.baseTokenCapRes,
+        fb4(fxInfo.baseInfo.baseTokenCapRes)
+      )
 
       const _mintFETHFee =
         checkNotZoroNum(
           fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio
         ) ||
-          checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio)
+        checkNotZoroNum(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio)
           ? cBN(fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio)
-            .plus(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio)
-            .toString(10)
+              .plus(fxInfo.baseInfo.fTokenMintFeeRatioRes?.extraFeeRatio)
+              .toString(10)
           : 0
       const _mintXETHFee =
         checkNotZoroNum(
           fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio
         ) ||
-          checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio)
+        checkNotZoroNum(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio)
           ? cBN(fxInfo.baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio)
-            .plus(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio)
-            .toString(10)
+              .plus(fxInfo.baseInfo.xTokenMintFeeRatioRes?.extraFeeRatio)
+              .toString(10)
           : 0
       const _redeemFETHFee =
         checkNotZoroNum(
           fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio
         ) ||
-          checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio)
+        checkNotZoroNum(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio)
           ? cBN(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio)
-            .plus(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio)
-            .toString(10)
+              .plus(fxInfo.baseInfo.fTokenRedeemFeeRatioRes?.extraFeeRatio)
+              .toString(10)
           : 0
       const _redeemXETHFee =
         checkNotZoroNum(
           fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio
         ) ||
-          checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio)
+        checkNotZoroNum(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio)
           ? cBN(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio)
-            .plus(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio)
-            .toString(10)
+              .plus(fxInfo.baseInfo.xTokenRedeemFeeRatioRes?.extraFeeRatio)
+              .toString(10)
           : 0
 
       const _totalBaseToken = checkNotZoroNum(fxInfo.baseInfo.totalBaseTokenRes)
@@ -107,12 +111,12 @@ const useETH = () => {
         fxInfo.baseInfo.totalBaseTokenRes
       )
         ? fb4(
-          cBN(fxInfo.baseInfo.totalBaseTokenRes)
-            .multipliedBy(
-              cBN(fxInfo.baseInfo.CurrentNavRes?._baseNav).div(1e18)
-            )
-            .toFixed(0, 1)
-        )
+            cBN(fxInfo.baseInfo.totalBaseTokenRes)
+              .multipliedBy(
+                cBN(fxInfo.baseInfo.CurrentNavRes?._baseNav).div(1e18)
+              )
+              .toFixed(0, 1)
+          )
         : 0
 
       const _collateralRatio = checkNotZoroNum(
@@ -122,28 +126,28 @@ const useETH = () => {
         : 200.0
       const _p_f = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes)
         ? fb4(
-          cBN(1e18)
-            .div(fxInfo.baseInfo.collateralRatioRes)
-            .multipliedBy(1e20)
-            .toFixed(0, 1),
-          false,
-          18,
-          2
-        )
+            cBN(1e18)
+              .div(fxInfo.baseInfo.collateralRatioRes)
+              .multipliedBy(1e20)
+              .toFixed(0, 1),
+            false,
+            18,
+            2
+          )
         : 0
       const _p_x = checkNotZoroNum(fxInfo.baseInfo.collateralRatioRes)
         ? fb4(
-          cBN(1e20)
-            .minus(
-              cBN(1e18)
-                .div(fxInfo.baseInfo.collateralRatioRes)
-                .multipliedBy(1e20)
-            )
-            .toFixed(0, 1),
-          false,
-          18,
-          2
-        )
+            cBN(1e20)
+              .minus(
+                cBN(1e18)
+                  .div(fxInfo.baseInfo.collateralRatioRes)
+                  .multipliedBy(1e20)
+              )
+              .toFixed(0, 1),
+            false,
+            18,
+            2
+          )
         : 0
 
       console.log(
@@ -252,7 +256,14 @@ const useETH = () => {
       )
       console.log('maxETHBonus--', maxETHBonus, maxETHBonus_Text)
       let isShowBonusTab = false
-      if (checkNotZoroNum(fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio) && checkNotZoroNum(fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio)) {
+      if (
+        checkNotZoroNum(
+          fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio
+        ) &&
+        checkNotZoroNum(
+          fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio
+        )
+      ) {
         isShowBonusTab = true
       }
 
@@ -261,6 +272,10 @@ const useETH = () => {
         xnav: _xnav,
         ethPrice,
         ethPrice_text: _ethPrice_text,
+        baseTokenCap_text: _baseTokenCap_text,
+        baseTokenCap: checkNotZoroNum(fxInfo.baseInfo?.baseTokenCapRes)
+          ? fxInfo.baseInfo.baseTokenCapRes / 1e18
+          : 0,
         fETHTotalSupply: _fETHTotalSupply,
         xETHTotalSupply: _xETHTotalSupply,
         _mintFETHFee,
@@ -302,7 +317,11 @@ const useETH = () => {
 
         stabilityIncentiveRatio_text,
         liquidationIncentiveRatio_text,
-        isShowBonusTab
+        isShowBonusTab,
+
+        isETHPriceGreatThanETHLastPrice: cBN(
+          fxInfo.baseInfo.CurrentNavRes?._baseNav
+        ).isGreaterThan(fxInfo.baseInfo.lastPermissionedPriceRes),
       }
     } catch (error) {
       return {
