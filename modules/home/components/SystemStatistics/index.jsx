@@ -59,6 +59,8 @@ export default function SystemStatistics() {
     R,
 
     xETHBeta_text,
+
+    isETHPriceGreatThanETHLastPrice,
   } = useETH()
   const navsData = useNavs()
   return (
@@ -145,7 +147,7 @@ export default function SystemStatistics() {
           <div className={styles.card} data-color="red">
             <div className={styles.title}>
               fETH Collateral Ratio{' '}
-              <span className="text-[12px]">
+              <span className="text-[13px]">
                 (Backed Asset Value / fETH Supply)
               </span>
               {/* <Tooltip
@@ -186,7 +188,10 @@ export default function SystemStatistics() {
             />
           </div>
 
-          <div className={styles.details} data-color="red">
+          <div
+            className={styles.details}
+            data-color={isETHPriceGreatThanETHLastPrice ? 'green' : 'red'}
+          >
             <div className={styles.cell}>
               <div>ETH Cumulative Return: </div>
               <p>{R}%</p>

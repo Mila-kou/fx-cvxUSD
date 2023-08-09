@@ -116,6 +116,11 @@ $radius: 10px;
             color: var(--red-color);
           }
         }
+        &[data-color='green'] {
+          p {
+            color: var(--green-color);
+          }
+        }
         .cell {
           padding: 4px 0;
           display: flex;
