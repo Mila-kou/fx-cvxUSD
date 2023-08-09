@@ -52,9 +52,20 @@ export default function IdoPage() {
 
   const isEndSale = useMemo(() => {
     if (
-      newStatus >= 1 &&
-      cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
-        PageData.baseInfo.totalSoldAmount
+      (newStatus >= 1 &&
+        cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
+          PageData.baseInfo.totalSoldAmount
+        )) || newStatus == 3
+    ) {
+      return true
+    }
+    return false
+  }, [PageData])
+  const isEndSaleAndFail = useMemo(() => {
+    if (
+      newStatus == 3 &&
+      cBN(PageData.baseInfo.totalSoldAmount).isLessThanOrEqualTo(
+        PageData.baseInfo.capAmount
       )
     ) {
       return true
