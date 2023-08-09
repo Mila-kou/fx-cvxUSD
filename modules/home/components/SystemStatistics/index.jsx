@@ -20,6 +20,8 @@ import Chart from '../Chart'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 
+const MAX_ETH = 1000
+
 const tags = [
   'Rebalance Mode',
   'User Liquidation Mode',
@@ -96,6 +98,12 @@ export default function SystemStatistics() {
               <p>
                 ~<span>${totalBaseTokenTvl}</span>
               </p>
+            </div>
+            <div className={styles.processWrap}>
+              <p>
+                {totalBaseToken} / {MAX_ETH}
+              </p>
+              <progress value={totalBaseToken} max={MAX_ETH} />
             </div>
           </div>
 
