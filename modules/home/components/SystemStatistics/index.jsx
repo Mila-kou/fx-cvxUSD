@@ -20,8 +20,6 @@ import Chart from '../Chart'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 
-const MAX_ETH = 1000
-
 const tags = [
   'Rebalance Mode',
   'User Liquidation Mode',
@@ -61,8 +59,11 @@ export default function SystemStatistics() {
     xETHBeta_text,
 
     isETHPriceGreatThanETHLastPrice,
+    baseTokenCap,
+    baseTokenCap_text,
   } = useETH()
   const navsData = useNavs()
+  const MAX_ETH = baseTokenCap
   return (
     <div className={styles.container}>
       <div className="flex justify-between align-middle mb-[24px]">
@@ -101,7 +102,7 @@ export default function SystemStatistics() {
             </div>
             <div className={styles.processWrap}>
               <p>
-                {totalBaseToken} / {MAX_ETH}
+                {totalBaseToken} / {baseTokenCap_text}
               </p>
               <progress value={totalBaseToken} max={MAX_ETH} />
             </div>

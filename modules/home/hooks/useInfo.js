@@ -31,6 +31,7 @@ const useInfo = () => {
       totalBaseToken,
       beta,
       lastPermissionedPrice,
+      baseTokenCap,
     } = treasuryContract.methods
     const {
       fTokenMintInSystemStabilityModePaused,
@@ -76,6 +77,7 @@ const useInfo = () => {
         fTokenMintInSystemStabilityModePaused(),
         xTokenRedeemInSystemStabilityModePaused(),
         nav(),
+        baseTokenCap(),
       ]
       const [
         fETHTotalSupplyRes,
@@ -96,6 +98,7 @@ const useInfo = () => {
         fTokenMintInSystemStabilityModePausedRes,
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
+        baseTokenCapRes,
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -109,7 +112,8 @@ const useInfo = () => {
         // mintPausedRes, redeemPausedRes,
         // fTokenMintInSystemStabilityModePausedRes,
         // xTokenRedeemInSystemStabilityModePausedRes,
-        fNav0Res
+        fNav0Res,
+        baseTokenCapRes
       )
 
       return {
@@ -131,6 +135,7 @@ const useInfo = () => {
         fTokenMintInSystemStabilityModePausedRes,
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
+        baseTokenCapRes,
       }
     } catch (error) {
       console.log('baseInfoError==>', error)
@@ -178,13 +183,20 @@ const useInfo = () => {
         maxLiquidatable(_liquidationRatio, _liquidationIncentiveRatio),
       ]
       const [
-        maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
+        maxMintableFTokenRes,
+        maxMintableXTokenRes,
+        maxRedeemableFTokenRes,
+        maxRedeemableXTokenRes,
         maxMintableXTokenWithIncentiveRes,
         maxLiquidatableRes,
       ] = await multiCallsV2(apiCalls)
       console.log(
         'maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--',
-        _stabilityRatio, maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes,
+        _stabilityRatio,
+        maxMintableFTokenRes,
+        maxMintableXTokenRes,
+        maxRedeemableFTokenRes,
+        maxRedeemableXTokenRes,
         maxMintableXTokenWithIncentiveRes,
         maxLiquidatableRes
       )
