@@ -63,6 +63,8 @@ export default function SystemStatistics() {
     baseTokenCap_text,
   } = useETH()
   const navsData = useNavs()
+
+  const totalBaseTokenNumber = (totalBaseToken || '').replace(',', '')
   const MAX_ETH = baseTokenCap
   return (
     <div className={styles.container}>
@@ -104,7 +106,7 @@ export default function SystemStatistics() {
               <p>
                 {totalBaseToken} / {baseTokenCap_text}
               </p>
-              <progress value={totalBaseToken} max={MAX_ETH} />
+              <progress value={totalBaseTokenNumber} max={MAX_ETH} />
             </div>
           </div>
 
