@@ -62,6 +62,10 @@ const useETH = () => {
         fxInfo.baseInfo.xETHTotalSupplyRes,
         fb4(fxInfo.baseInfo.xETHTotalSupplyRes)
       )
+      const _baseTokenCap_text = checkNotZoroNumOption(
+        fxInfo.baseInfo.baseTokenCapRes,
+        fb4(fxInfo.baseInfo.baseTokenCapRes)
+      )
 
       const _mintFETHFee =
         checkNotZoroNum(
@@ -268,6 +272,10 @@ const useETH = () => {
         xnav: _xnav,
         ethPrice,
         ethPrice_text: _ethPrice_text,
+        baseTokenCap_text: _baseTokenCap_text,
+        baseTokenCap: checkNotZoroNum(fxInfo.baseInfo?.baseTokenCapRes)
+          ? fxInfo.baseInfo.baseTokenCapRes / 1e18
+          : 0,
         fETHTotalSupply: _fETHTotalSupply,
         xETHTotalSupply: _xETHTotalSupply,
         _mintFETHFee,

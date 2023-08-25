@@ -16,13 +16,15 @@ const ledger = ledgerModule({
 const trust = trustModule()
 
 const walletConnect = walletConnectModule({
-  version: 2,
   projectId,
+  requiredChains: [1],
+  dappUrl: 'https://fx.aladdin.club/',
 })
+
 const coinbaseConnect = coinbaseModule()
 const trezorConnect = trezorModule({
   email: 'chao@aladdin.club',
-  appUrl: 'https://concentrator.aladdin.club/',
+  appUrl: 'https://fx.aladdin.club/',
 })
 
 export const initWeb3Onboard = Onboard({
