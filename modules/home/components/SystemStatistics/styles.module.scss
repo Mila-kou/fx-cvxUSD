@@ -150,6 +150,14 @@ $radius: 10px;
   .wrap {
     .item {
       width: 348px !important;
+      .card {
+        .nums {
+          b {
+            font-size: 30px !important;
+            line-height: 30px !important;
+          }
+        }
+      }
     }
   }
 }
