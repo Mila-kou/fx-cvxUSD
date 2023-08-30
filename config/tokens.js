@@ -24,6 +24,9 @@ const contracts = {
   fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
   fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
   fx_Minter: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
+  fx_FxGateway: '0xCF016452646ce2d40dcb2B2646cba1007892FF83',
+  fx_ReservePool: '0x3bf7b33FabA3F2B0D16696590058aD640f60D863',
+  fx_FxETHTwapOracle: '0x7B65ecd9AB996B57A5CF59BB8AE3a6C22B63c72E',
 
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',
