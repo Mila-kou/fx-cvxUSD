@@ -13,18 +13,21 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
+import { useFx_FxGateway } from '@/hooks/useContracts'
 
 export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
 
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
   const [errorMinout, setErrorMinout] = useState(false)
   const [symbol, setSymbol] = useState('ETH')
+  const { contract: FxGatewayContract } = useFx_FxGateway()
 
   const minGas = 234854
   const [ETHtAmount, setETHtAmount] = useState(0)
@@ -122,8 +125,8 @@ export default function Mint({ slippage }) {
       xETHtAmountIn,
       feeCBN
     )
-    let _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
-    let _tokenNav = isF ? fnav : xnav
+    const _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
+    const _tokenNav = isF ? fnav : xnav
     const _needETH = cBN(_tokenAmountIn)
       .div(1e18)
       .times(_tokenNav)
@@ -136,16 +139,51 @@ export default function Mint({ slippage }) {
   const hanldeETHAmountChanged = (v) => {
     setETHtAmount(v.toString(10))
   }
-  const hanldefETHAmountChanged = (v) => {
-    setFETHtAmountIn(v.toString(10))
-    let _pre = manualNum + 1
-    setManualNum(_pre)
+  const handleSwap = async () => {
+    // TODO add swap action
+    const _amountIn = 0
+    const _fTokenForXToken = true
+
+    const minout = await stETHGatewayContract.methods
+      .swap(_amountIn, _fTokenForXToken, 0)
+      .call()
+
+    const _minOut_CBN = cBN(minout).multipliedBy(
+      cBN(1).minus(cBN(slippage).dividedBy(100))
+    )
+    const apiCall = await FxGatewayContract.methods.swap(
+      _amountIn,
+      _fTokenForXToken,
+      _minOut_CBN
+    )
+    const estimatedGas = await apiCall.estimateGas({
+      from: _currentAccount,
+    })
+    const gas = parseInt(estimatedGas * 1.2, 10) || 0
+    await NoPayableAction(
+      () =>
+        apiCall.send({
+          from: _currentAccount,
+          gas,
+        }),
+      {
+        key: 'Mint',
+        action: 'Mint',
+      }
+    )
   }
-  const hanldexETHAmountChanged = (v) => {
-    setXETHtAmountIn(v.toString(10))
-    let _pre = manualNum + 1
-    setManualNum(_pre)
-  }
+
+  // const hanldefETHAmountChanged = (v) => {
+  //   setFETHtAmountIn(v.toString(10))
+  //   let _pre = manualNum + 1
+  //   setManualNum(_pre)
+  // }
+  // const hanldexETHAmountChanged = (v) => {
+  //   setXETHtAmountIn(v.toString(10))
+  //   let _pre = manualNum + 1
+  //   setManualNum(_pre)
+  // }
+
   const initPage = () => {
     clearInput()
     setETHtAmount(0)
