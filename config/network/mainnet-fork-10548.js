@@ -11,18 +11,18 @@ import tokensInfo from '../tokens'
 const explorerUri = 'https://www.etherscan.io'
 
 // ---------- 10548
-// const chainInfo = {
-//   id: '0x2934',
-//   token: 'ETH',
-//   label: 'Mainnet Fork',
-//   rpcUrl: 'https://apitest.aladdin.club/rpc',
-// }
 const chainInfo = {
   id: '0x2934',
   token: 'ETH',
-  label: 'Mainnet Fork-10548',
-  rpcUrl: 'https://rpc.phalcon.xyz/rpc_999ebf7d68bb4a2e9c81c59c3e597280',
+  label: 'Mainnet Fork',
+  rpcUrl: 'https://apitest.aladdin.club/rpc',
 }
+// const chainInfo = {
+//   id: '0x2934',
+//   token: 'ETH',
+//   label: 'Mainnet Fork-10548',
+//   rpcUrl: 'https://rpc.phalcon.xyz/rpc_999ebf7d68bb4a2e9c81c59c3e597280',
+// }
 
 const contracts = {
   ...tokensInfo.contracts,
@@ -37,12 +37,11 @@ const contracts = {
   fx_StabilityPool: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
 
   LiquidatorWithBonusToken: '0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2',
-  wstETHWrapper: '0xb09e34dD25d5E88a1E9Ff6F6418109927675B658'
+  wstETHWrapper: '0xb09e34dD25d5E88a1E9Ff6F6418109927675B658',
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
-
 
 const tokens = {
   ...tokensInfo.tokens,
@@ -67,7 +66,7 @@ const zapTokens = {
     decimals: TOKENS_INFO.fETH[2],
     address: TOKENS_INFO.fETH[1],
     needZap: true,
-  }
+  },
 }
 
 export default {
