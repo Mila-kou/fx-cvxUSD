@@ -86,6 +86,42 @@ export const useFX_stETHTreasury = () => {
     [getContract]
   )
 }
+
+export const useFx_FxGateway = () => {
+  const address = config.contracts.fx_FxGateway
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.Fx_Gateway),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useFx_ReservePool = () => {
+  const address = config.contracts.fx_ReservePool
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.Fx_ReservePool),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useFx_FxETHTwapOracle = () => {
+  const address = config.contracts.fx_FxETHTwapOracle
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.Fx_FxETHTwapOracle),
+      address,
+    }),
+    [getContract]
+  )
+}
 /////////////////////////////
 export const useFX_stETHGateway = () => {
   const address = config.contracts.fx_stETHGateway
@@ -122,8 +158,6 @@ export const useFX_LiquidatorWithBonusToken = () => {
     [getContract]
   )
 }
-
-
 
 export const useFX_ETHGateway = () => {
   const address = config.contracts.fx_ETHGateway

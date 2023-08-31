@@ -13,13 +13,13 @@ import Web3Provider from '@/contexts/Web3Provider'
 import GlobalProvider from '@/contexts/GlobalProvider'
 import { initWeb3Onboard } from '@/config/wallet.config'
 
-function noop() {}
+// function noop() {}
 
-if (process.env.NETWORK_ENV === 'mainnet') {
-  console.log = noop
-  console.warn = noop
-  console.error = noop
-}
+// if (process.env.NETWORK_ENV === 'mainnet') {
+//   console.log = noop
+//   console.warn = noop
+//   console.error = noop
+// }
 
 function App({ Component, pageProps }) {
   const [queryClient] = useState(() => new QueryClient())

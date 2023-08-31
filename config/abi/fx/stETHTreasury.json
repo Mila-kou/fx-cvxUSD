@@ -136,6 +136,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "rateProvider",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateRateProvider",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "stabilityPoolRatio",
         "type": "uint256"
@@ -197,17 +210,29 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_baseIn", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_baseIn",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_incentiveRatio",
         "type": "uint256"
       },
-      { "internalType": "address", "name": "_recipient", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      }
     ],
     "name": "addBaseToken",
     "outputs": [
-      { "internalType": "uint256", "name": "_xTokenOut", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_xTokenOut",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -215,35 +240,103 @@
   {
     "inputs": [],
     "name": "baseToken",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "baseTokenCap",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "beta",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "collateralRatio",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "convertToUnwrapped",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "convertToWrapped",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "fToken",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -251,9 +344,21 @@
     "inputs": [],
     "name": "getCurrentNav",
     "outputs": [
-      { "internalType": "uint256", "name": "_baseNav", "type": "uint256" },
-      { "internalType": "uint256", "name": "_fNav", "type": "uint256" },
-      { "internalType": "uint256", "name": "_xNav", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_baseNav",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fNav",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_xNav",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -268,19 +373,58 @@
   {
     "inputs": [],
     "name": "harvestBountyRatio",
-    "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_market", "type": "address" },
-      { "internalType": "address", "name": "_baseToken", "type": "address" },
-      { "internalType": "address", "name": "_fToken", "type": "address" },
-      { "internalType": "address", "name": "_xToken", "type": "address" },
-      { "internalType": "address", "name": "_priceOracle", "type": "address" },
-      { "internalType": "uint256", "name": "_beta", "type": "uint256" },
-      { "internalType": "uint256", "name": "_baseTokenCap", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_baseToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_fToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_xToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_priceOracle",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_beta",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_baseTokenCap",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_rateProvider",
+        "type": "address"
+      }
     ],
     "name": "initialize",
     "outputs": [],
@@ -297,23 +441,41 @@
   {
     "inputs": [],
     "name": "lastPermissionedPrice",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_fTokenIn", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_fTokenIn",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_incentiveRatio",
         "type": "uint256"
       },
-      { "internalType": "address", "name": "_owner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      }
     ],
     "name": "liquidate",
     "outputs": [
-      { "internalType": "uint256", "name": "_baseOut", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_baseOut",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -321,7 +483,13 @@
   {
     "inputs": [],
     "name": "market",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -340,7 +508,11 @@
     ],
     "name": "maxLiquidatable",
     "outputs": [
-      { "internalType": "uint256", "name": "_maxBaseOut", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_maxBaseOut",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_maxFTokenLiquidatable",
@@ -360,7 +532,11 @@
     ],
     "name": "maxMintableFToken",
     "outputs": [
-      { "internalType": "uint256", "name": "_maxBaseIn", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_maxBaseIn",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_maxFTokenMintable",
@@ -380,7 +556,11 @@
     ],
     "name": "maxMintableXToken",
     "outputs": [
-      { "internalType": "uint256", "name": "_maxBaseIn", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_maxBaseIn",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_maxXTokenMintable",
@@ -405,7 +585,11 @@
     ],
     "name": "maxMintableXTokenWithIncentive",
     "outputs": [
-      { "internalType": "uint256", "name": "_maxBaseIn", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_maxBaseIn",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_maxXTokenMintable",
@@ -425,7 +609,11 @@
     ],
     "name": "maxRedeemableFToken",
     "outputs": [
-      { "internalType": "uint256", "name": "_maxBaseOut", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_maxBaseOut",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_maxFTokenRedeemable",
@@ -445,7 +633,11 @@
     ],
     "name": "maxRedeemableXToken",
     "outputs": [
-      { "internalType": "uint256", "name": "_maxBaseOut", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_maxBaseOut",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_maxXTokenRedeemable",
@@ -457,8 +649,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_baseIn", "type": "uint256" },
-      { "internalType": "address", "name": "_recipient", "type": "address" },
+      {
+        "internalType": "uint256",
+        "name": "_baseIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      },
       {
         "internalType": "enum ITreasury.MintOption",
         "name": "_option",
@@ -467,15 +667,27 @@
     ],
     "name": "mint",
     "outputs": [
-      { "internalType": "uint256", "name": "_fTokenOut", "type": "uint256" },
-      { "internalType": "uint256", "name": "_xTokenOut", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_fTokenOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_xTokenOut",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
     "name": "notifyStrategyProfit",
     "outputs": [],
@@ -485,21 +697,39 @@
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "platform",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "priceOracle",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -511,14 +741,43 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "rateProvider",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
-      { "internalType": "uint256", "name": "_fTokenIn", "type": "uint256" },
-      { "internalType": "uint256", "name": "_xTokenIn", "type": "uint256" },
-      { "internalType": "address", "name": "_owner", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_fTokenIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_xTokenIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      }
     ],
     "name": "redeem",
     "outputs": [
-      { "internalType": "uint256", "name": "_baseOut", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_baseOut",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -532,68 +791,134 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_baseAmt", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_baseAmt",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_incentiveRatio",
         "type": "uint256"
       },
-      { "internalType": "address", "name": "_recipient", "type": "address" },
-      { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
     ],
     "name": "selfLiquidate",
     "outputs": [
-      { "internalType": "uint256", "name": "_baseOut", "type": "uint256" },
-      { "internalType": "uint256", "name": "_fAmt", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_baseOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fAmt",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "name": "settleWhitelist",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "stabilityPool",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "stabilityPoolRatio",
-    "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "strategy",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "strategyUnderlying",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "totalBaseToken",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -602,7 +927,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
     "name": "transferToStrategy",
     "outputs": [],
@@ -611,7 +940,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_baseTokenCap", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_baseTokenCap",
+        "type": "uint256"
+      }
     ],
     "name": "updateBaseTokenCap",
     "outputs": [],
@@ -620,7 +953,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_beta", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_beta",
+        "type": "uint256"
+      }
     ],
     "name": "updateBeta",
     "outputs": [],
@@ -629,7 +966,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_platform", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_platform",
+        "type": "address"
+      }
     ],
     "name": "updatePlatform",
     "outputs": [],
@@ -638,9 +979,26 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_priceOracle", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_priceOracle",
+        "type": "address"
+      }
     ],
     "name": "updatePriceOracle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_rateProvider",
+        "type": "address"
+      }
+    ],
+    "name": "updateRateProvider",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -665,8 +1023,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_account", "type": "address" },
-      { "internalType": "bool", "name": "_status", "type": "bool" }
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
     ],
     "name": "updateSettleWhitelist",
     "outputs": [],
@@ -675,7 +1041,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_stabilityPool", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_stabilityPool",
+        "type": "address"
+      }
     ],
     "name": "updateStabilityPool",
     "outputs": [],
@@ -684,7 +1054,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_strategy", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_strategy",
+        "type": "address"
+      }
     ],
     "name": "updateStrategy",
     "outputs": [],
@@ -694,7 +1068,13 @@
   {
     "inputs": [],
     "name": "xToken",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   }
