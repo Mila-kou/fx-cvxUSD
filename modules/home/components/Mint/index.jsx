@@ -15,6 +15,13 @@ import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
 
+const OPTIONS = [
+  ['ETH', config.tokens.eth],
+  ['stETH', config.tokens.stETH],
+  ['fETH', config.tokens.fETH],
+  ['xETH', config.tokens.xETH],
+]
+
 export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
@@ -65,9 +72,31 @@ export default function Mint({ slippage }) {
     baseInfo,
   } = useETH()
 
-  const selectTokenAddress = useMemo(() => {
-    return symbol == 'stETH' ? config.tokens.stETH : config.zeroAddress
+  const isSwap = useMemo(() => {
+    if (symbol === 'fETH') {
+      setSelected(1)
+      return true
+    }
+    if (symbol === 'xETH') {
+      setSelected(0)
+      return true
+    }
+    return false
   }, [symbol])
+
+  useEffect(() => {
+    if (
+      (symbol == 'fETH' && selected === 0) ||
+      (symbol == 'xETH' && selected === 1)
+    ) {
+      setSymbol('ETH')
+    }
+  }, [symbol, selected])
+
+  const selectTokenAddress = useMemo(() => {
+    return OPTIONS.find((item) => item[0] === symbol)[1]
+  }, [symbol])
+
   const selectTokenInfo = useToken(selectTokenAddress, 'fx_stETH_mint')
 
   const { BtnWapper } = useApprove({
@@ -116,61 +145,28 @@ export default function Mint({ slippage }) {
     return [fb4(_fee), 1, __mintXETHFee]
   }, [isF, systemStatus, ethPrice])
 
-  const ethAmount = useMemo(() => {
-    console.log(
-      'ethAmount',
-      manualNum,
-      fETHtAmountIn,
-      fnav,
-      xETHtAmountIn,
-      feeCBN
-    )
-    const _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
-    const _tokenNav = isF ? fnav : xnav
-    const _needETH = cBN(_tokenAmountIn)
-      .div(1e18)
-      .times(_tokenNav)
-      .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
-      .div(ethPrice)
-    console.log('ethAmount', _needETH.toString(10))
-    setETHtAmount(_needETH.times(1e18).toString(10))
-  }, [fETHtAmountIn, xETHtAmountIn, manualNum])
+  // const ethAmount = useMemo(() => {
+  //   console.log(
+  //     'ethAmount',
+  //     manualNum,
+  //     fETHtAmountIn,
+  //     fnav,
+  //     xETHtAmountIn,
+  //     feeCBN
+  //   )
+  //   const _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
+  //   const _tokenNav = isF ? fnav : xnav
+  //   const _needETH = cBN(_tokenAmountIn)
+  //     .div(1e18)
+  //     .times(_tokenNav)
+  //     .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
+  //     .div(ethPrice)
+  //   console.log('ethAmount', _needETH.toString(10))
+  //   setETHtAmount(_needETH.times(1e18).toString(10))
+  // }, [fETHtAmountIn, xETHtAmountIn, manualNum])
 
   const hanldeETHAmountChanged = (v) => {
     setETHtAmount(v.toString(10))
-  }
-  const handleSwap = async () => {
-    // TODO add swap action
-    const _amountIn = 0
-    const _fTokenForXToken = true
-
-    const minout = await stETHGatewayContract.methods
-      .swap(_amountIn, _fTokenForXToken, 0)
-      .call()
-
-    const _minOut_CBN = cBN(minout).multipliedBy(
-      cBN(1).minus(cBN(slippage).dividedBy(100))
-    )
-    const apiCall = await FxGatewayContract.methods.swap(
-      _amountIn,
-      _fTokenForXToken,
-      _minOut_CBN
-    )
-    const estimatedGas = await apiCall.estimateGas({
-      from: _currentAccount,
-    })
-    const gas = parseInt(estimatedGas * 1.2, 10) || 0
-    await NoPayableAction(
-      () =>
-        apiCall.send({
-          from: _currentAccount,
-          gas,
-        }),
-      {
-        key: 'Mint',
-        action: 'Mint',
-      }
-    )
   }
 
   // const hanldefETHAmountChanged = (v) => {
@@ -258,7 +254,45 @@ export default function Mint({ slippage }) {
     }
   }
 
+  const handleSwap = async () => {
+    const _amountIn = cBN(ETHtAmount)
+    const _fTokenForXToken = symbol === 'fETH'
+
+    const minout = await stETHGatewayContract.methods
+      .swap(_amountIn, _fTokenForXToken, 0)
+      .call()
+
+    const _minOut_CBN = cBN(minout).multipliedBy(
+      cBN(1).minus(cBN(slippage).dividedBy(100))
+    )
+    const apiCall = await FxGatewayContract.methods.swap(
+      _amountIn,
+      _fTokenForXToken,
+      _minOut_CBN
+    )
+    const estimatedGas = await apiCall.estimateGas({
+      from: _currentAccount,
+    })
+    const gas = parseInt(estimatedGas * 1.2, 10) || 0
+    await NoPayableAction(
+      () =>
+        apiCall.send({
+          from: _currentAccount,
+          gas,
+        }),
+      {
+        key: 'Mint',
+        action: 'Mint',
+      }
+    )
+  }
+
   const handleMint = async () => {
+    if (isSwap) {
+      handleSwap()
+      return
+    }
+
     try {
       setMintLoading(true)
       const _minOut = await getMinAmount()
@@ -397,7 +431,7 @@ export default function Mint({ slippage }) {
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
         // changeValue={cBN(ETHtAmount)}
-        options={['ETH', 'stETH']}
+        options={OPTIONS.map((item) => item[0])}
         onSymbolChanged={(v) => setSymbol(v)}
       />
       <div className={styles.arrow}>
