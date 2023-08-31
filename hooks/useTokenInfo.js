@@ -122,6 +122,9 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fx_ethGateway':
             _contractAddress = config.contracts.fx_ETHGateway
             break
+          case 'fx_fxGateway':
+            _contractAddress = config.contracts.fx_FxGateway
+            break
           case 'fx_stabiltityPool':
             _contractAddress = config.contracts.fx_StabilityPool
             break
@@ -162,7 +165,7 @@ export const useToken = (address, contractType, lpInfo) => {
     } else {
       setToken({ balance: 0, allowance: 0 })
     }
-  }, [web3, blockNumber, _currentAccount, isAllReady, address])
+  }, [web3, blockNumber, _currentAccount, isAllReady, contractType, address])
 
   return token
 }

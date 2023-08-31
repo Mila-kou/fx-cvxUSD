@@ -144,6 +144,7 @@ export const useApprove = (props) => {
           </Visible>
           <Button
             size={size}
+            style={{ fontSize: '20px' }}
             minWidth="280px"
             loading={actionLoading || loading}
             onClick={handleBtnClick}

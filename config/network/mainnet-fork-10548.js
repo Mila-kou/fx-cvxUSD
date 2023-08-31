@@ -26,27 +26,10 @@ const chainInfo = {
 
 const contracts = {
   ...tokensInfo.contracts,
-
-  ChainlinkTwapOracleV3: '0x460B3CdE57DfbA90DBed02fd83d3990a92DA1230',
-  fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
-  xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
-  fx_Market: '0xe7b9c7c9cA85340b8c06fb805f7775e3015108dB',
-  fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
-  fx_stETHGateway: '0x4C5C52d507066780500e627d592DbE11476E7c21',
-
-  fx_StabilityPool: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
-
-  LiquidatorWithBonusToken: '0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2',
-  wstETHWrapper: '0xb09e34dD25d5E88a1E9Ff6F6418109927675B658',
-
-  // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
-  // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
 
 const tokens = {
   ...tokensInfo.tokens,
-  fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
-  xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
 }
 
 const TOKENS_INFO = {
