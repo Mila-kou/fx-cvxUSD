@@ -1,9 +1,12 @@
 /* eslint-disable no-lonely-if */
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
+import axios from 'axios'
+
 import Button from '@/components/Button'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
+
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
@@ -185,6 +188,37 @@ export default function Mint({ slippage }) {
   //   let _pre = manualNum + 1
   //   setManualNum(_pre)
   // }
+
+  const get1inchParams = async (params) => {
+    // for test
+    const testParams = {
+      src: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      dst: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+      amount: '100000000000000000',
+      from: '0xf3e0974a5fecfe4173e454993406243b2188eeed',
+      slippage: 1,
+      disableEstimate: true,
+      allowPartialFill: false,
+    }
+    params = testParams
+
+    axios
+      .get(`/INCH_HOST/swap`, {
+        headers: {
+          Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
+          accept: 'application/json',
+        },
+        params,
+      })
+      .then(
+        (res) => {
+          console.log('res==', res)
+        },
+        (error) => {
+          console.log('error==', error)
+        }
+      )
+  }
 
   const initPage = () => {
     clearInput()
@@ -510,6 +544,7 @@ export default function Mint({ slippage }) {
         >
           Mint {isF ? 'Stable fETH' : 'Volatile xETH'}
         </Button> */}
+        <Button onClick={get1inchParams}>get1inchParams</Button>
       </div>
     </div>
   )
