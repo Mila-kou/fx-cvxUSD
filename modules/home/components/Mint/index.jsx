@@ -58,6 +58,7 @@ export default function Mint({ slippage }) {
     minout_ETH: 0,
     minout_slippage_tvl: 0,
   })
+  const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
   const {
     fETHContract,
@@ -197,7 +198,11 @@ export default function Mint({ slippage }) {
     setFromAmount(0)
   }
 
-  const getMinAmount = async () => {
+  const getMinAmount = async (needLoading) => {
+    if (needLoading) {
+      setPriceLoading(true)
+    }
+
     try {
       let minout_ETH
       if (checkNotZoroNum(fromAmount)) {
@@ -285,6 +290,7 @@ export default function Mint({ slippage }) {
         })
       }
 
+      setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
       console.log(error)
@@ -301,6 +307,7 @@ export default function Mint({ slippage }) {
         minout_slippage: 0,
         minout_slippage_tvl: 0,
       })
+      setPriceLoading(false)
       return 0
     }
   }
@@ -494,7 +501,7 @@ export default function Mint({ slippage }) {
   }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused])
 
   useEffect(() => {
-    getMinAmount()
+    getMinAmount(true)
     // handleGetAllMinAmount()
   }, [isF, slippage, fromAmount, symbol])
 
@@ -531,6 +538,7 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
+        loading={isF && priceLoading}
         // onChange={hanldefETHAmountChanged}
         // rightSuffix="Beta 0.1"
       />
@@ -547,20 +555,21 @@ export default function Mint({ slippage }) {
         rightSuffix={
           <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
         }
+        loading={isX && priceLoading}
         // onChange={hanldexETHAmountChanged}
       />
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
-      {showMinReceive && (
+      {showMinReceive ? (
         <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
-      )}
+      ) : null}
 
-      {showDisabledNotice && (
+      {showDisabledNotice ? (
         <NoticeCard
           content={[
             'fx governance decision to temporarily disabled Mint functionality.',
           ]}
         />
-      )}
+      ) : null}
 
       <div className={styles.action}>
         <BtnWapper
