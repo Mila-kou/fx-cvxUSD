@@ -15,6 +15,14 @@ module.exports = {
     NETWORK_ENV: process.env.NETWORK_ENV,
     VERSION: version,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/INCH_HOST/:path*',
+        destination: 'https://api.1inch.dev/swap/v5.2/1/:path*',
+      },
+    ]
+  },
   async redirects() {
     return [
       {

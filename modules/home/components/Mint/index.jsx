@@ -189,43 +189,35 @@ export default function Mint({ slippage }) {
   //   setManualNum(_pre)
   // }
 
-  const get1inchParams = async () => {
-    const swapParams = {
-      src: '0x111111111117dc0aa78b770fa6a738034120c302', // Token address of 1INCH
-      dst: '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3', // Token address of DAI
-      amount: '100000000000000000', // Amount of 1INCH to swap (in wei)
-      from: _currentAccount,
-      slippage: 1, // Maximum acceptable slippage percentage for the swap (e.g., 1 for 1%)
-      disableEstimate: false, // Set to true to disable estimation of swap details
-      allowPartialFill: false, // Set to true to allow partial filling of the swap order
+  const get1inchParams = async (params) => {
+    // for test
+    const testParams = {
+      src: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      dst: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+      amount: '100000000000000000',
+      from: '0xf3e0974a5fecfe4173e454993406243b2188eeed',
+      slippage: 1,
+      disableEstimate: true,
+      allowPartialFill: false,
     }
+    params = testParams
 
-    const apiBaseUrl = `https://api.1inch.dev/swap/v5.2/1`
-    const headers = {
-      headers: {
-        Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
-        accept: 'application/json',
-      },
-    }
-    function apiRequestUrl(methodName, queryParams) {
-      return `${apiBaseUrl + methodName}?${new URLSearchParams(
-        queryParams
-      ).toString()}`
-    }
-
-    const url = apiRequestUrl('/swap', swapParams)
-    axios(url, headers).then(
-      (res) => {
-        console.log('res==', res)
-      },
-      (error) => {
-        console.log('error==', error)
-      }
-    )
-
-    // fetch(url, headers)
-    //   .then((res) => res.json())
-    //   .then((res) => res.tx)
+    axios
+      .get(`/INCH_HOST/swap`, {
+        headers: {
+          Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
+          accept: 'application/json',
+        },
+        params,
+      })
+      .then(
+        (res) => {
+          console.log('res==', res)
+        },
+        (error) => {
+          console.log('error==', error)
+        }
+      )
   }
 
   const initPage = () => {
