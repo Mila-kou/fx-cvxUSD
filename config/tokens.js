@@ -150,6 +150,7 @@ const tokens = {
 const TOKENS_INFO = {
   eth: ['ethereum', tokens.eth, 18, 'eth'],
   usdc: ['usd-coin', tokens.usdc, 6, 'usdc'],
+  usdt: ['usdt', tokens.usdt, 6, 'usdt'],
   dai: ['dai', tokens.dai, 18, 'dai'],
   weth: ['weth', tokens.weth, 18, 'weth'],
   wbtc: ['bitcoin', tokens.wbtc, 8, 'wbtc'],
@@ -168,6 +169,7 @@ const TOKENS_INFO = {
   cvxfxs: ['', tokens.cvxfxs, 18, 'cvxfxs'],
   clevUSD: ['frax', tokens.clevUSD, 18],
   fETH: ['fETH', tokens.fETH, 18],
+  xETH: ['xETH', tokens.xETH, 18],
 }
 
 const zapTokens = {
@@ -176,6 +178,13 @@ const zapTokens = {
     icon: 'usdc',
     decimals: TOKENS_INFO.usdc[2],
     address: TOKENS_INFO.usdc[1],
+    needZap: true,
+  },
+  USDT: {
+    symbol: 'USDT',
+    icon: 'usdt',
+    decimals: TOKENS_INFO.usdt[2],
+    address: TOKENS_INFO.usdt[1],
     needZap: true,
   },
   ETH: {
@@ -190,6 +199,20 @@ const zapTokens = {
     icon: 'weth',
     decimals: TOKENS_INFO.stETH[2],
     address: TOKENS_INFO.stETH[1],
+    needZap: true,
+  },
+  fETH: {
+    symbol: 'fETH',
+    icon: 'eth',
+    decimals: TOKENS_INFO.fETH[2],
+    address: TOKENS_INFO.fETH[1],
+    needZap: true,
+  },
+  xETH: {
+    symbol: 'xETH',
+    icon: 'eth',
+    decimals: TOKENS_INFO.xETH[2],
+    address: TOKENS_INFO.xETH[1],
     needZap: true,
   },
   WETH: {
@@ -260,13 +283,6 @@ const zapTokens = {
     icon: clevUsdIcons,
     decimals: TOKENS_INFO.clevUSD[2],
     address: TOKENS_INFO.clevUSD[1],
-    needZap: true,
-  },
-  fETH: {
-    symbol: 'fETH',
-    icon: 'eth',
-    decimals: TOKENS_INFO.fETH[2],
-    address: TOKENS_INFO.fETH[1],
     needZap: true,
   },
 }
