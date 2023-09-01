@@ -291,6 +291,16 @@ export default function Mint({ slippage }) {
       // if (error.message.indexOf('no cap to buy') > -1) {
       //   // noPayableErrorAction(`error_buy`, 'No cap to buy')
       // }
+      setFETHtAmount({
+        minout_ETH: 0,
+        minout_slippage: 0,
+        minout_slippage_tvl: 0,
+      })
+      setXETHtAmount({
+        minout_ETH: 0,
+        minout_slippage: 0,
+        minout_slippage_tvl: 0,
+      })
       return 0
     }
   }
