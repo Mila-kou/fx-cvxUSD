@@ -195,29 +195,48 @@ export default function Mint({ slippage }) {
       src: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       dst: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
       amount: '100000000000000000',
-      from: '0xf3e0974a5fecfe4173e454993406243b2188eeed',
+      from: '0x46db808262a9d3221cb56bf54f52a35ca2eeec96',
       slippage: 1,
       disableEstimate: true,
       allowPartialFill: false,
     }
     params = testParams
 
-    axios
-      .get(`/INCH_HOST/swap`, {
-        headers: {
-          Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
-          accept: 'application/json',
-        },
-        params,
-      })
-      .then(
-        (res) => {
-          console.log('res==', res)
-        },
-        (error) => {
-          console.log('error==', error)
-        }
-      )
+    const {
+      data: { tx },
+    } = await axios.get(`/INCH_HOST/swap`, {
+      headers: {
+        Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
+        accept: 'application/json',
+      },
+      params,
+    })
+    console.log('data----', tx)
+
+    const apiCall = await FxGatewayContract.methods.mintFToken(
+      {
+        src: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        amount: '100000000000000000',
+        target: tx.to,
+        data: tx.data,
+      },
+      0
+    )
+    const estimatedGas = await apiCall.estimateGas({
+      from: _currentAccount,
+    })
+    const gas = parseInt(estimatedGas * 1.2, 10) || 0
+    await NoPayableAction(
+      () =>
+        apiCall.send({
+          from: _currentAccount,
+          gas,
+        }),
+      {
+        key: 'Mint',
+        action: 'Mint',
+      }
+    )
   }
 
   const initPage = () => {
