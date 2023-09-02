@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import cn from 'classnames'
 import InputSelect from '@/components/InputSelect'
+import { SyncOutlined } from '@ant-design/icons'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
 import useGlobal from '@/hooks/useGlobal'
@@ -39,6 +40,7 @@ function BalanceInput(props) {
     onSelected = () => {},
     options = [],
     onSymbolChanged = () => {},
+    loading,
   } = props
   const { theme } = useGlobal()
 
@@ -73,6 +75,13 @@ function BalanceInput(props) {
     setVal('')
   }, [clearTrigger])
 
+  const logoSrc = useMemo(() => {
+    if (['fETH', 'xETH'].includes(symbol)) return ''
+    if (['ETH', 'stETH'].includes(symbol))
+      return '/tokens/crypto-icons-stack.svg#eth'
+    return `/tokens/crypto-icons-stack.svg#${symbol.toLowerCase()}`
+  }, [symbol])
+
   return (
     <div
       className={cn(styles.inputContent, className)}
@@ -82,9 +91,7 @@ function BalanceInput(props) {
       <div className={styles.left}>
         {symbol === 'fETH' && <FLogo />}
         {symbol === 'xETH' && <XLogo />}
-        {['ETH', 'stETH'].includes(symbol) && (
-          <img src="/tokens/crypto-icons-stack.svg#eth" />
-        )}
+        {logoSrc && <img src={logoSrc} />}
       </div>
       <div className={styles.symbolWrap}>
         {options.length ? (
@@ -107,12 +114,21 @@ function BalanceInput(props) {
       <div className={styles.right}>
         {type == 'select' ? null : (
           <>
-            <input
-              onChange={handleInputChange}
-              value={val}
-              placeholder={placeholder}
-              disabled={disabled}
-            />
+            {loading ? (
+              <SyncOutlined spin />
+            ) : (
+              <>
+                <input
+                  onChange={handleInputChange}
+                  value={val}
+                  placeholder={placeholder}
+                  disabled={disabled}
+                />
+                {rightSuffix ? (
+                  <p className={styles.balanceWrap}>{rightSuffix}</p>
+                ) : null}
+              </>
+            )}
             {balance && (
               <p className={styles.balanceWrap}>
                 Balance: {balance}
@@ -121,9 +137,6 @@ function BalanceInput(props) {
                 </span>
               </p>
             )}
-            {rightSuffix ? (
-              <p className={styles.balanceWrap}>{rightSuffix}</p>
-            ) : null}
           </>
         )}
       </div>
