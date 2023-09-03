@@ -248,7 +248,7 @@ export default function Mint({ slippage }) {
                 .toString()
             }
           }
-          const { data } = await get1inchParams({
+          const res = await get1inchParams({
             src:
               symbol == 'ETH'
                 ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -259,7 +259,13 @@ export default function Mint({ slippage }) {
             slippage: Number(slippage),
             disableEstimate: true,
             allowPartialFill: false,
+          }).catch((e) => {
+            getMinAmount()
           })
+
+          if (!res) return
+
+          const { data } = res
 
           console.log('FxGatewayContract.methods---', FxGatewayContract.methods)
           minout_ETH = await FxGatewayContract.methods[
