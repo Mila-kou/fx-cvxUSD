@@ -78,6 +78,8 @@ export default function Mint({ slippage }) {
     xETHBeta_text,
     systemStatus,
     baseInfo,
+    _redeemFETHFee,
+    _redeemXETHFee,
   } = useETH()
 
   const isSwap = useMemo(() => {
@@ -138,15 +140,29 @@ export default function Mint({ slippage }) {
   const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __mintFETHFee = _mintFETHFee
     let __mintXETHFee = _mintXETHFee
+    let __redeemFETHFee = _redeemFETHFee
+    let __redeemXETHFee = _redeemXETHFee
     if (systemStatus == 0) {
       __mintFETHFee = baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio || 0
       __mintXETHFee = baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio || 0
+
+      if (isSwap) {
+        __redeemFETHFee = baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
+        __redeemXETHFee = baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
+      }
     }
+
     let _fee
     if (isF) {
-      _fee = cBN(__mintFETHFee).multipliedBy(100).toString(10)
+      _fee = cBN(__mintFETHFee)
+        .plus(cBN(isSwap ? __redeemXETHFee : 0))
+        .multipliedBy(100)
+        .toString(10)
     } else {
-      _fee = cBN(__mintXETHFee).multipliedBy(100).toString(10)
+      _fee = cBN(__mintXETHFee)
+        .plus(cBN(isSwap ? __redeemFETHFee : 0))
+        .multipliedBy(100)
+        .toString(10)
     }
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     // console.log(
@@ -156,7 +172,7 @@ export default function Mint({ slippage }) {
     //   ethPrice
     // )
     return [fb4(_fee), 1, __mintXETHFee]
-  }, [isF, systemStatus, ethPrice])
+  }, [isF, systemStatus, ethPrice, isSwap])
 
   // const ethAmount = useMemo(() => {
   //   console.log(
@@ -322,7 +338,7 @@ export default function Mint({ slippage }) {
       const apiCall = await FxGatewayContract.methods.swap(
         _amountIn,
         symbol === 'fETH',
-        _minOut
+        cBN(_minOut)
       )
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
@@ -580,7 +596,6 @@ export default function Mint({ slippage }) {
         >
           {isF ? 'Mint Stable fETH' : 'Mint Leveraged Long xETH'}
         </BtnWapper>
-        <Button onClick={get1inchParams}>get1inchParams</Button>
       </div>
     </div>
   )
