@@ -18,6 +18,12 @@ const chainInfo = {
   rpcUrl: 'https://apitest.aladdin.club/rpc',
 }
 // const chainInfo = {
+//   id: '0x1',
+//   token: 'ETH',
+//   label: 'Mainnet Fork',
+//   rpcUrl: 'https://curve.readthedocs.io/exchange-cross-asset-swaps.html',
+// }
+// const chainInfo = {
 //   id: '0x2934',
 //   token: 'ETH',
 //   label: 'Mainnet Fork-10548',
