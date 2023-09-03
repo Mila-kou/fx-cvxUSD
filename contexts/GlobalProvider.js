@@ -41,6 +41,8 @@ function GlobalProvider({ children }) {
   const stETHToken = useTokenBalance(config.tokens.stETH)
   const fETHToken = useTokenBalance(config.tokens.fETH)
   const xETHToken = useTokenBalance(config.tokens.xETH)
+  const usdcToken = useTokenBalance(config.tokens.usdc)
+  const usdtToken = useTokenBalance(config.tokens.usdt)
 
   const [
     { data: tokenPrice, refetch: refetch1 },
@@ -170,8 +172,31 @@ function GlobalProvider({ children }) {
           )
         ),
       },
+      USDC: {
+        ...usdcToken,
+        usd: checkNotZoroNumOption(
+          usdcToken.balance,
+          fb4(cBN(usdcToken.balance).div(1e6) || 0, true)
+        ),
+      },
+      USDT: {
+        ...usdtToken,
+        usd: checkNotZoroNumOption(
+          usdtToken.balance,
+          fb4(cBN(usdtToken.balance).div(1e6) || 0, true)
+        ),
+      },
     }
-  }, [ethToken, stETHToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
+  }, [
+    ethToken,
+    stETHToken,
+    fETHToken,
+    xETHToken,
+    usdcToken,
+    usdtToken,
+    tokenPrice,
+    fx_info.baseInfo,
+  ])
 
   const value = useMemo(
     () => ({
