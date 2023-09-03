@@ -331,14 +331,13 @@ export default function Mint({ slippage }) {
   const handleSwap = async () => {
     try {
       setMintLoading(true)
-      const _amountIn = cBN(fromAmount)
 
       const _minOut = await getMinAmount()
 
       const apiCall = await FxGatewayContract.methods.swap(
-        _amountIn,
+        fromAmount,
         symbol === 'fETH',
-        cBN(_minOut)
+        _minOut
       )
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
