@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import cn from 'classnames'
-import InputSelect from '@/components/InputSelect'
 import { SyncOutlined } from '@ant-design/icons'
+import InputSelect from '@/components/InputSelect'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
 import useGlobal from '@/hooks/useGlobal'
