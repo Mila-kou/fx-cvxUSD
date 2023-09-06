@@ -25,8 +25,8 @@ const contracts = {
   fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
   fx_Minter: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
   fx_FxGateway: '0x5979651d542C058A2917be11804D05a652197C80',
-  fx_ReservePool: '0x9dC0b225C59E308B7140b8502bA0fd41d342aB4a',
-  fx_FxETHTwapOracle: '0xce3b7f32b98599260F4a057b47fa55DcBDa0A757',
+  fx_ReservePool: '0x79ec7351773228d79FA585d770588c0D6A1Ad60C',
+  fx_FxETHTwapOracle: '0x4abbd445a93E5881389355e225Ae776Cb4d5D37C',
 
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',

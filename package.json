@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@curvefi/api": "^2.46.4",
     "@styled-jsx/plugin-sass": "^4.0.2",
     "@tanstack/react-query": "^4.29.1",
     "@web3-onboard/coinbase": "^2.2.4",
