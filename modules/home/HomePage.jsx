@@ -627,8 +627,8 @@ export default function HomePage() {
 
   const { _currentAccount } = useWeb3()
   const [priceLoading, setPriceLoading] = useState(0)
-  const ethMockTwapOracleAddr = '0x84496fc45b3b3fda16cc8786bfa07674ac556e84'
-  const stEthMockTwapOracleAddr = '0x0f9d2ba589a9257f8432e88ff6d12a2ff684dc3c'
+  const ethMockTwapOracleAddr = '0xca726e18766b8b0f8e1f47edc7f2298c6c1ad945'
+  const stEthMockTwapOracleAddr = '0x3a6337ab482280e0fbf46e3493f3626ddecbabb8'
 
   const { contract: ethMockTwapOracleContract } = useContract(
     ethMockTwapOracleAddr,
