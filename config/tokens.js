@@ -26,7 +26,7 @@ const contracts = {
   fx_Minter: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
   fx_FxGateway: '0x5979651d542C058A2917be11804D05a652197C80',
   fx_ReservePool: '0x9dC0b225C59E308B7140b8502bA0fd41d342aB4a',
-  fx_FxETHTwapOracle: '0xadD40aB404612075cE9C45BB59Bb070081675a0A',
+  fx_FxETHTwapOracle: '0xce3b7f32b98599260F4a057b47fa55DcBDa0A757',
 
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',
