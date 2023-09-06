@@ -117,11 +117,12 @@ function LockerUserInfo({ userData, userHasLocked, userLockExpired }) {
           </div>
         </div>
 
-        <div className="text-center">
+        <div className="flex justify-center">
           <Button
             disabled={!claimable}
             loading={claiming}
             onClick={handleClaim}
+            width="200px"
           >
             Claim ALL
           </Button>

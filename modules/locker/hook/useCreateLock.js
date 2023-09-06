@@ -54,7 +54,7 @@ const useCreateLock = (parmas) => {
       : cBN(willBe).isZero()
       ? 0
       : cBN(willBe)
-  }, [lockAmount, currentTime, userLocked])
+  }, [lockAmount, currentTime, userLocked?.end])
 
   const extendVePower = useMemo(() => {
     if (!lockTo) {
@@ -78,7 +78,7 @@ const useCreateLock = (parmas) => {
       ((unlock_time - currentTime.unix()) / (4 * YEARS)) * _lockAmount
 
     return willBe
-  }, [lockTo, currentTime, userLocked])
+  }, [lockTo, currentTime, userLocked?.amount, userLocked?.end])
 
   const days = useMemo(() => {
     const params = userLocked?.end
@@ -89,7 +89,7 @@ const useCreateLock = (parmas) => {
         )
       : 0
     return Math.abs(params) + 7
-  }, [userLocked])
+  }, [userLocked?.end])
 
   const shortDate = useMemo(() => {
     return [
@@ -138,7 +138,7 @@ const useCreateLock = (parmas) => {
       actions.setLockTo(calc4(lockedEndTime.clone().add(1, 'week')))
       actions.setStartTime(calc4(lockedEndTime.clone().add(1, 'week')))
     }
-  }, [status, currentTime, userLocked])
+  }, [status, userLocked?.end])
 
   const handleCreateLock = async (cb) => {
     if (!isAllReady) return

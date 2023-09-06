@@ -19,15 +19,15 @@ export function VeLockerRules({ status }) {
         overlayClassName="lock-to-tooltip"
         title={
           <div>
-            Locking CLEV will receive veCLEV. <br />
-            The longer the lock time, the more veCLEV received.
+            Locking f(x) will receive vef(x). <br />
+            The longer the lock time, the more vef(x) received.
             <br />
-            1 CLEV locked for 4 years = 1 veCLEV
+            1 f(x) locked for 4 years = 1 vef(x)
             <br />
-            1 CLEV locked for 3 years = 0.75 veCLEV
+            1 f(x) locked for 3 years = 0.75 vef(x)
             <br />
-            1 CLEV locked for 2 years = 0.5 veCLEV
-            <br />1 CLEV locked for 1 year = 0.25 veCLEV
+            1 f(x) locked for 2 years = 0.5 vef(x)
+            <br />1 f(x) locked for 1 year = 0.25 vef(x)
           </div>
         }
       >

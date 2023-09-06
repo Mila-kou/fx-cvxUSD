@@ -4,7 +4,7 @@ import moment from 'moment'
 import useWeb3 from '@/hooks/useWeb3'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import Button from '@/components/Button'
-import { TabsHeader } from '@/components/Tabs'
+import Tabs from '@/modules/home/components/Tabs'
 import useApprove from '@/hooks/useApprove'
 import config from '@/config/index'
 import Visible from '@/components/Visible'
@@ -27,7 +27,7 @@ function VELockCom({
 }) {
   const { isAllReady, currentAccount, current } = useWeb3()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const [tabsActinveKey, setTabsActinveKey] = useState()
+  const [tabsActinveKey, setTabsActinveKey] = useState(0)
   const [lockAmount, setLockAmount] = useState(0)
   const [lockTo, setLockTo] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
@@ -165,10 +165,10 @@ function VELockCom({
         }`}
       >
         <Visible visible={userHasLocked}>
-          <TabsHeader
-            onChange={(key) => setTabsActinveKey(key)}
-            options={['Lock', 'Extend']}
-            headerItemClass="text-3xl font-semibold"
+          <Tabs
+            tabs={['Lock', 'Extend']}
+            onChange={(index) => setTabsActinveKey(index)}
+            selecedIndex={tabsActinveKey}
           />
         </Visible>
         <Visible visible={!userHasLocked}>
@@ -182,7 +182,7 @@ function VELockCom({
         </Visible>
 
         <Visible visible={!userLockExpired}>
-          <Visible visible={tabsActinveKey === 'Lock' || status == 'no-lock'}>
+          <Visible visible={tabsActinveKey === 0 || status == 'no-lock'}>
             <Input
               label="Amount"
               value={lockAmount}
@@ -205,7 +205,7 @@ function VELockCom({
                   <Visible visible={status === 'ing'}>
                     Your starting voting power will be:{' '}
                     <span className="color-blue">
-                      {fb4(lockMoreVePower)} veCLEV
+                      {fb4(lockMoreVePower)} vef(x)
                     </span>
                   </Visible>
                 </div>
@@ -214,12 +214,13 @@ function VELockCom({
 
             <Visible visible={userHasLocked}>
               <div className="flex justify-center mt-5">
-                <div>
+                <div width="100%">
                   <BtnWapper
                     disabled={cBN(lockAmount).isLessThanOrEqualTo(0)}
                     onClick={() => {
                       handleIncreaseAmount(lockCb)
                     }}
+                    width="300px"
                   >
                     Lock More
                   </BtnWapper>
@@ -228,7 +229,7 @@ function VELockCom({
             </Visible>
           </Visible>
 
-          <Visible visible={tabsActinveKey === 'Extend' || status == 'no-lock'}>
+          <Visible visible={tabsActinveKey === 1 || status == 'no-lock'}>
             <VeLockerRules status={status} />
             <div className="flex gap-4 items-center ">
               <DatePicker
@@ -261,7 +262,7 @@ function VELockCom({
               <div>
                 Your starting voting power will be:{' '}
                 <span className="color-blue">
-                  {fb4(status === 'no-lock' ? vePower : extendVePower)} veCLEV
+                  {fb4(status === 'no-lock' ? vePower : extendVePower)} vef(x)
                 </span>
               </div>
 
@@ -270,7 +271,7 @@ function VELockCom({
               </Visible>
               <div>
                 After creating your lock, you will need to{' '}
-                <Tooltip title="If your boost level hasn't changed after locking veCLEV, you will need to conduct one transaction (deposit, withdraw or claim) from the gauge that you are providing liquidity to update your boost.">
+                <Tooltip title="If your boost level hasn't changed after locking vef(x), you will need to conduct one transaction (deposit, withdraw or claim) from the gauge that you are providing liquidity to update your boost.">
                   <span className="underline">apply your boost</span>
                 </Tooltip>
                 .
@@ -280,8 +281,10 @@ function VELockCom({
             <Visible visible={userHasLocked}>
               <div className="flex justify-center mt-4">
                 <Button
+                  width="300px"
                   disabled={extendDays > FOURYEARS}
                   onClick={handleIncreaseTime}
+                  loading={createLockLoading}
                 >
                   Extend
                 </Button>

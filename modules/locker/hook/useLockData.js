@@ -54,7 +54,7 @@ const useData = () => {
       const preWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400 - 86400 * 7
       const preTwoWeeksTimestamp =
-        Math.floor(current.unix() / (14 * 86400)) * 14 * 86400 - 86400 * 14
+        Math.floor(current.unix() / (7 * 86400)) * 7 * 86400 - 86400 * 14
       // console.log('preWeekTimestamp---', preWeekTimestamp, preTwoWeeksTimestamp)
 
       const { totalSupply, balanceOf: veBalanceOf } = veContract.methods

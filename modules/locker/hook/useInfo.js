@@ -112,12 +112,21 @@ const useInfo = () => {
     //     tokensPerWeekForFRAX * 52 * fraxPrice) /
     //     (veTotalSupply * clevPrice)) *
     //   100
-    const apr =
-      (((tokensPerWeekForCVX * 26 + tokensPerTwoWeeksForCVX * 26) * cvxPrice +
-        (tokensPerWeekForFRAX * 26 + tokensPerTwoWeeksForFRAX * 26) *
-          fraxPrice) /
-        (veTotalSupply * clevPrice)) *
-      100
+    const _weekCVXNum = cBN(tokensPerWeekForCVX).plus(tokensPerTwoWeeksForCVX)
+    const _weekFraxNum = cBN(tokensPerWeekForFRAX).plus(
+      tokensPerTwoWeeksForFRAX
+    )
+    const apr = cBN(_weekCVXNum)
+      .multipliedBy(52 / 2)
+      .multipliedBy(cvxPrice)
+      .plus(
+        cBN(_weekFraxNum)
+          .multipliedBy(52 / 2)
+          .multipliedBy(fraxPrice)
+      )
+      .div(cBN(veTotalSupply).multipliedBy(clevPrice))
+      .multipliedBy(100)
+
     const totalInfo = calcThisWeekAmount(info, currentTime, cvxPrice, fraxPrice)
     const percentage = cBN(veLockedCLEV)
       .div(clevCirculationSupply)
