@@ -22,9 +22,10 @@ import {
   useFx_FxETHTwapOracle,
   useFx_ReservePool,
 } from '@/hooks/useContracts'
-import abi from '@/config/abi'
 import useETH from './controller/useETH'
 import { get1inchParams } from '@/services/inch'
+
+const { stETH, fETH } = config.tokens
 
 export default function HomePage() {
   const { showSystemStatistics } = useGlobal()
@@ -100,22 +101,74 @@ export default function HomePage() {
     _liquidationRatio,
     _liquidationIncentiveRatio
   )
+
   const handlePool = async () => {
     await curve.init(
       'JsonRpc',
       {
+        // url: 'https://apitest.aladdin.club/rpc',
         url: 'https://eth-mainnet.alchemyapi.io/v2/NYoZTYs7oGkwlUItqoSHJeqpjqtlRT6m',
+        privateKey:
+          // Aladdin test 账号
+          '9aebaf40af161432e131cb91d49179bca54e25866e565f7daa120b3a08b45fe3',
       },
       { gasPrice: 0, maxFeePerGas: 0, maxPriorityFeePerGas: 0 }
     )
+    debugger
 
-    const pool1 = await curve.getPool('factory-crypto-299')
-    // const pool = await curve.getPool('mim')
-    const poolList = await curve.getPoolList()
+    await curve.factory.fetchPools()
+    await curve.cryptoFactory.fetchPools()
+    await curve.crvUSDFactory.fetchPools()
+    await curve.EYWAFactory.fetchPools()
+    await curve.tricryptoFactory.fetchPools()
+
+    const stETH_balance = await curve.getBalances([stETH])
+    const fETH_balance = await curve.getBalances([fETH])
+
+    console.log(
+      '---stETH_balance, fETH_balance----',
+      stETH_balance.toString(),
+      fETH_balance.toString()
+    )
+
+    const amount = 0.1
+
+    const { route, output } = await curve.router.getBestRouteAndOutput(
+      stETH,
+      fETH,
+      amount
+    )
+
+    console.log('---route---', route, output)
+
+    debugger
+
+    const isApproved = await curve.router.isApproved(stETH, amount)
+
+    console.log('---isApproved---', isApproved)
+
+    if (!isApproved) {
+      await curve.router.approve(stETH, amount)
+    }
+
+    const swapTx = await curve.router.swap(stETH, fETH, amount)
+
+    console.log('---swapTx---', swapTx)
+
+    const swappedAmount = await curve.router.getSwappedAmount(swapTx, fETH)
+
+    console.log('---swappedAmount---', swappedAmount)
+
+    const stETH_balance2 = await curve.getBalances([stETH])
+    const fETH_balance2 = await curve.getBalances([fETH])
+
+    console.log(
+      '---stETH_balance, fETH_balance--2--',
+      stETH_balance2.toString(),
+      fETH_balance2.toString()
+    )
 
     // const aaa = await pool.wallet.lpTokenBalances()
-
-    console.log('pool---', poolList, pool1)
 
     // const { route, output } = await curve.router.getBestRouteAndOutput(
     //   '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
