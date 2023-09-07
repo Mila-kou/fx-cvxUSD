@@ -256,9 +256,10 @@ export default function Mint({ slippage }) {
             dst: config.tokens.stETH,
             amount: _ETHtAmountAndGas.toString(),
             from: fxGatewayContractAddress,
-            slippage: Number(slippage),
+            slippage: Number(0),
             disableEstimate: true,
             allowPartialFill: false,
+            protocols: 'CURVE',
           }).catch((e) => {
             getMinAmount()
           })
