@@ -114,7 +114,6 @@ export default function HomePage() {
       },
       { gasPrice: 0, maxFeePerGas: 0, maxPriorityFeePerGas: 0 }
     )
-    debugger
 
     await curve.factory.fetchPools()
     await curve.cryptoFactory.fetchPools()
@@ -140,8 +139,6 @@ export default function HomePage() {
     )
 
     console.log('---route---', route, output)
-
-    debugger
 
     const isApproved = await curve.router.isApproved(stETH, amount)
 
