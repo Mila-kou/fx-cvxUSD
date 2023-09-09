@@ -2,6 +2,7 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import curve from '@curvefi/api'
 
 // import { Button, InputNumber } from 'antd'
+import { ethers, Contract, Networkish, BigNumberish, Numeric } from 'ethers'
 import SimpleInput from '@/components/SimpleInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
@@ -14,6 +15,7 @@ import Swap from './components/Swap'
 import SystemStatistics from './components/SystemStatistics'
 import styles from './styles.module.scss'
 import Button from '@/components/Button'
+
 import {
   useContract,
   useErc20Token,
@@ -24,6 +26,7 @@ import {
 } from '@/hooks/useContracts'
 import useETH from './controller/useETH'
 import { get1inchParams } from '@/services/inch'
+import abi from '@/config/abi'
 
 const { stETH, fETH } = config.tokens
 
@@ -78,6 +81,12 @@ export default function HomePage() {
   const [priceLoading, setPriceLoading] = useState(0)
   const ethMockTwapOracleAddr = '0x84496fc45b3b3fda16cc8786bfa07674ac556e84'
   const stEthMockTwapOracleAddr = '0x0f9d2ba589a9257f8432e88ff6d12a2ff684dc3c'
+  const CurvefiSwapRouterAddress = '0x99a58482bd75cbab83b27ec03ca68ff489b5788f'
+
+  const { contract: CurvefiSwapContract } = useContract(
+    CurvefiSwapRouterAddress,
+    abi.curveSwapABI
+  )
 
   // const { contract: ethMockTwapOracleContract } = useContract(
   //   ethMockTwapOracleAddr,
@@ -87,6 +96,36 @@ export default function HomePage() {
   //   stEthMockTwapOracleAddr,
   //   abi.MockTwapOracleAbi
   // )
+  // 定义一个编码函数
+  const encodeTransaction = async (to, data) => {
+    const encodedTx = await web3.eth.abi.encodeParameters(
+      ['address', 'bytes'],
+      [to, data]
+    )
+    // console.log('encodedTx---', encodedTx)
+    return encodedTx
+  }
+
+  const _getExchangeMultipleArgs = (route) => {
+    let _route = []
+    if (route.length > 0) _route.push(route[0].inputCoinAddress)
+    let _swapParams = []
+    let _factorySwapAddresses = []
+    for (const routeStep of route) {
+      _route.push(routeStep.poolAddress, routeStep.outputCoinAddress)
+      _swapParams.push([routeStep.i, routeStep.j, routeStep.swapType])
+      _factorySwapAddresses.push(routeStep.swapAddress)
+    }
+    _route = _route.concat(Array(9 - _route.length).fill(config.zeroAddress))
+    _swapParams = _swapParams.concat(
+      Array(4 - _swapParams.length).fill([0, 0, 0])
+    )
+    _factorySwapAddresses = _factorySwapAddresses.concat(
+      Array(4 - _factorySwapAddresses.length).fill(config.zeroAddress)
+    )
+
+    return { _route, _swapParams, _factorySwapAddresses }
+  }
 
   const { maxLiquidatable } = treasuryContract.methods
 
@@ -94,6 +133,8 @@ export default function HomePage() {
   const _liquidationRatio = baseInfo.marketConfigRes?.liquidationRatio || 0
   const _liquidationIncentiveRatio =
     baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0
+
+  // const aa = await ReservePoolContract.methods.liquidate()
 
   console.log(
     '_stabilityRatio,_liquidationRatio',
@@ -106,12 +147,15 @@ export default function HomePage() {
     await curve.init(
       'JsonRpc',
       {
-        // url: 'https://apitest.aladdin.club/rpc',
+        // url: 'http://13.229.217.38:10548',
         url: 'https://eth-mainnet.alchemyapi.io/v2/NYoZTYs7oGkwlUItqoSHJeqpjqtlRT6m',
         privateKey:
           // Aladdin test 账号
           '9aebaf40af161432e131cb91d49179bca54e25866e565f7daa120b3a08b45fe3',
       },
+      // {
+      //   externalProvider: web3,
+      // },
       { gasPrice: 0, maxFeePerGas: 0, maxPriorityFeePerGas: 0 }
     )
 
@@ -131,6 +175,7 @@ export default function HomePage() {
     )
 
     const amount = 0.1
+    const amountString = cBN(amount).times(1e18).toString(10)
 
     const { route, output } = await curve.router.getBestRouteAndOutput(
       stETH,
@@ -138,29 +183,59 @@ export default function HomePage() {
       amount
     )
 
-    console.log('---route---', route, output)
+    const { _route, _swapParams, _factorySwapAddresses } =
+      _getExchangeMultipleArgs(route)
+
+    console.log(
+      '_route, _swapParams, _factorySwapAddresses',
+      _route,
+      _swapParams,
+      _factorySwapAddresses
+    )
+    const gasLimit =
+      await CurvefiSwapContract.methods.exchange_multiple.estimateGas(
+        _route,
+        _swapParams,
+        amountString,
+        0,
+        _factorySwapAddresses,
+        { value: 0 }
+      )
+    console.log('gasLimit____', gasLimit)
+    return
+    const testSwapCall = await CurvefiSwapContract.methods.exchange_multiple(
+      _route,
+      _swapParams,
+      amountString,
+      0,
+      _factorySwapAddresses
+    )
+    return
+    console.log('ss---route---', route, output)
 
     const isApproved = await curve.router.isApproved(stETH, amount)
 
-    console.log('---isApproved---', isApproved)
+    console.log('ss---isApproved---', isApproved)
 
-    if (!isApproved) {
-      await curve.router.approve(stETH, amount)
-    }
+    // if (!isApproved) {
+    //   await curve.router.approve(stETH, amount)
+    // }
+    debugger
 
     const swapTx = await curve.router.swap(stETH, fETH, amount)
 
-    console.log('---swapTx---', swapTx)
+    console.log('ss---swapTx---', swapTx)
 
+    return
     const swappedAmount = await curve.router.getSwappedAmount(swapTx, fETH)
 
-    console.log('---swappedAmount---', swappedAmount)
+    console.log('ss---swappedAmount---', swappedAmount)
 
     const stETH_balance2 = await curve.getBalances([stETH])
     const fETH_balance2 = await curve.getBalances([fETH])
 
     console.log(
-      '---stETH_balance, fETH_balance--2--',
+      'ss---tETH_balance, fETH_balance--2--',
       stETH_balance2.toString(),
       fETH_balance2.toString()
     )
@@ -220,6 +295,7 @@ export default function HomePage() {
     //   console.log('data--data--', error)
     // }
   }
+  const handleSendPool = async () => {}
 
   const handleGetPoolAmount = async () => {
     console.log('handleGetPoolAmount')

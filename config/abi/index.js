@@ -43,6 +43,7 @@ import FX_StabilityPoolABI from './fx/StabilityPool.json'
 import FX_LiquidatorWithBonusTokenABI from './fx/LiquidatorWithBonusToken.json'
 
 import wstETHABI from './wstETH.json'
+import curveSwapABI from './common/curveSwap.json'
 
 export default {
   erc20ABI,
@@ -83,4 +84,6 @@ export default {
   Fx_Gateway,
   Fx_ReservePool,
   Fx_FxETHTwapOracle,
+
+  curveSwapABI,
 }
