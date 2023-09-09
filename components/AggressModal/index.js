@@ -23,10 +23,10 @@ export default function AggressModal() {
             <div className={styles.content}>
               <h2>Warning</h2>
               <p>
-                Citizens or residents of OFAC-sanctionedcountries or the U.S.
-                are not permitted touse Plutus in any capacity. By clickingagree
-                below you certify you are neitherfrom an OFAC sanctioned
-                country,nor a U.Scitizen or resident.
+                Citizens or residents of OFAC-sanctioned countries or the U.S.
+                are not permitted to use f(x) Protocol in any capacity. By
+                clicking agree below you certify you are neither from an OFAC
+                sanctioned country, nor a U.S citizen or resident.
               </p>
 
               <Button width="100%" onClick={() => setOpen(false)}>
