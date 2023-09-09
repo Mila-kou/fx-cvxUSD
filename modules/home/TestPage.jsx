@@ -97,10 +97,10 @@ export default function HomePage() {
   //   abi.MockTwapOracleAbi
   // )
   // 定义一个编码函数
-  const encodeTransaction = async (to, data) => {
+  const encodeTransaction = async (to, amount, data) => {
     const encodedTx = await web3.eth.abi.encodeParameters(
-      ['address', 'bytes'],
-      [to, data]
+      ['address', 'uint256', 'bytes'],
+      [to, amount, data]
     )
     // console.log('encodedTx---', encodedTx)
     return encodedTx
@@ -144,6 +144,34 @@ export default function HomePage() {
   )
 
   const handlePool = async () => {
+    const _swapData =
+      '0x9db4f7aa000000000000000000000000ae7ab96520de3a18e5e111b5eaab095312d7fe84000000000000000000000000dc24316b9ae028f1497c275eb9192a3ea0f67022000000000000000000000000eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee0000000000000000000000004ebdf703948ddcea3b11f675b4d1fba9d2414a14000000000000000000000000f939e0a03fb07f59a73314e73794be0e57ac1b4e000000000000000000000000e7e86c6055b964c7894d33e037ead34f2b62795d00000000000000000000000053805a76e1f5ebbfe7115f16f9c87c2f7e63372600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d02ab486cedc000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+    const amount = 15
+    const amountString = cBN(amount).times(1e18).toString(10)
+
+    try {
+      const _minOut = cBN(0).toString(10)
+      const apiCall = await ReservePoolContract.methods.liquidate(
+        [stETH, amountString, CurvefiSwapRouterAddress, _swapData],
+        0
+      )
+
+      const estimatedGas = await apiCall.estimateGas({
+        from: _currentAccount,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(
+        () => apiCall.send({ from: _currentAccount, gas }),
+        {
+          key: 'Price',
+          action: 'Price',
+        }
+      )
+    } catch (error) {
+      noPayableErrorAction(`error_mint`, error)
+    }
+
+    return
     await curve.init(
       'JsonRpc',
       {
@@ -174,8 +202,8 @@ export default function HomePage() {
       fETH_balance.toString()
     )
 
-    const amount = 0.1
-    const amountString = cBN(amount).times(1e18).toString(10)
+    // const amount = 0.1
+    // const amountString = cBN(amount).times(1e18).toString(10)
 
     const { route, output } = await curve.router.getBestRouteAndOutput(
       stETH,
@@ -192,24 +220,32 @@ export default function HomePage() {
       _swapParams,
       _factorySwapAddresses
     )
-    const gasLimit =
-      await CurvefiSwapContract.methods.exchange_multiple.estimateGas(
+    // const gasLimit =
+    //   await CurvefiSwapContract.methods.exchange_multiple.estimateGas(
+    //     _route,
+    //     _swapParams,
+    //     amountString,
+    //     0,
+    //     _factorySwapAddresses,
+    //     { value: 0 }
+    //   )
+    // console.log('gasLimit____', gasLimit)
+    // return
+    const testSwapCall = await CurvefiSwapContract.methods
+      .exchange_multiple(
         _route,
         _swapParams,
         amountString,
         0,
-        _factorySwapAddresses,
-        { value: 0 }
+        _factorySwapAddresses
       )
-    console.log('gasLimit____', gasLimit)
-    return
-    const testSwapCall = await CurvefiSwapContract.methods.exchange_multiple(
-      _route,
-      _swapParams,
+      .encodeABI()
+    const data = await encodeTransaction(
+      CurvefiSwapRouterAddress,
       amountString,
-      0,
-      _factorySwapAddresses
+      testSwapCall
     )
+    console.log('testSwapCall----', testSwapCall, data)
     return
     console.log('ss---route---', route, output)
 
