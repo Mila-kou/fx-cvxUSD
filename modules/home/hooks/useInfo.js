@@ -11,6 +11,7 @@ import {
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4 } from '@/utils/index'
+import config from '@/config/index'
 
 const useInfo = () => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
@@ -20,10 +21,15 @@ const useInfo = () => {
   const { contract: xETHContract } = useXETH()
   const { contract: marketContract } = useFX_Market()
   const { contract: treasuryContract } = useFX_stETHTreasury()
+  const { contract: stETHContract } = erc20Contract(config.tokens.stETH)
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
-    const { nav, totalSupply: fETHTotalSupplyFn } = fETHContract.methods
+    const {
+      nav,
+      totalSupply: fETHTotalSupplyFn,
+      balanceOf: fETHBalanceOf,
+    } = fETHContract.methods
     const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
     const {
       getCurrentNav,
@@ -78,6 +84,8 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePaused(),
         nav(),
         baseTokenCap(),
+        fETHBalanceOf(config.contracts.fx_StabilityPool),
+        stETHContract.methods.balanceOf(config.contracts.fx_ReservePool),
       ]
       const [
         fETHTotalSupplyRes,
@@ -99,6 +107,8 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
+        stabilityPoolFETHBalancesRes,
+        reservePoolBalancesRes,
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -113,7 +123,9 @@ const useInfo = () => {
         // fTokenMintInSystemStabilityModePausedRes,
         // xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
-        baseTokenCapRes
+        baseTokenCapRes,
+        stabilityPoolFETHBalancesRes,
+        reservePoolBalancesRes
       )
 
       return {
@@ -136,6 +148,8 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
+        stabilityPoolFETHBalancesRes,
+        reservePoolBalancesRes,
       }
     } catch (error) {
       console.log('baseInfoError==>', error)

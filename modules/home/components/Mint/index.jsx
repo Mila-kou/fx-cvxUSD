@@ -80,6 +80,7 @@ export default function Mint({ slippage }) {
     baseInfo,
     _redeemFETHFee,
     _redeemXETHFee,
+    isXETHBouns,
   } = useETH()
 
   const isSwap = useMemo(() => {
@@ -580,6 +581,11 @@ export default function Mint({ slippage }) {
         loading={isX && priceLoading}
         // onChange={hanldexETHAmountChanged}
       />
+
+      {isXETHBouns ? (
+        <DetailCell title="Mint xETH Bouns:" content={['true']} />
+      ) : null}
+
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
       {showMinReceive ? (
         <DetailCell title="Min. Received:" content={[received, receivedTvl]} />

@@ -1,12 +1,7 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import moment from 'moment'
-import {
-  useContract,
-  useFETH,
-  useFX_Market,
-  useXETH,
-} from 'hooks/useContracts'
+import { useContract, useFETH, useFX_Market, useXETH } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import abis from '@/config/abi'
 import config from '@/config/index'
@@ -272,8 +267,8 @@ const useFxCommon = () => {
         fx_info.baseInfo.marketConfigRes?.stabilityRatio
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.stabilityRatio)
-          .div(1e18)
-          .toString(10)
+            .div(1e18)
+            .toString(10)
         : 1.3055
       console.log(
         'limitCollecteralRatio----',
@@ -321,8 +316,8 @@ const useFxCommon = () => {
         fx_info.baseInfo.marketConfigRes?.liquidationRatio
       )
         ? cBN(fx_info.baseInfo.marketConfigRes?.liquidationRatio)
-          .div(1e18)
-          .toString(10)
+            .div(1e18)
+            .toString(10)
         : 1.2067
       const _p1 = cBN(1).minus(
         cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
@@ -360,8 +355,8 @@ const useFxCommon = () => {
       fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio
     )
       ? cBN(fx_info.baseInfo.marketConfigRes?.selfLiquidationRatio)
-        .div(1e18)
-        .toString(10)
+          .div(1e18)
+          .toString(10)
       : 1.1449
     const _p1 = cBN(1).minus(
       cBN(adjust_Rho).multipliedBy(limitCollecteralRatio)
@@ -435,9 +430,10 @@ const useFxCommon = () => {
    */
   const getMaxETHBonus = useCallback(
     (params) => {
-      // const _newMaxBaseInfETH = 
+      // const _newMaxBaseInfETH =
       const λ_f =
-        (fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0) / 1e18
+        (fx_info.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio || 0) /
+        1e18
       const fNav = (fx_info.baseInfo.CurrentNavRes?._fNav || 0) / 1e18
       const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
 
@@ -449,7 +445,9 @@ const useFxCommon = () => {
         .toString(10)
       // console.log('getMaxETHBonus--λ_f-fNav-s-MaxBaseInfETH', _res, λ_f.toString(10), fNav.toString(10), s.toString(10), params.MaxBaseInfETH)
       if (params.isUserType) {
-        _res = cBN(_res).isGreaterThan(params.maxETHBonus) ? params.maxETHBonus : _res
+        _res = cBN(_res).isGreaterThan(params.maxETHBonus)
+          ? params.maxETHBonus
+          : _res
       }
       return _res
     },
@@ -467,8 +465,8 @@ const useFxCommon = () => {
       // const MaxBaseInETH = fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn / 1e18
       try {
         const λ_f =
-          (fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio ||
-            0) / 1e18
+          (fx_info.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio || 0) /
+          1e18
         const s = (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
         const xNav = (fx_info.baseInfo.CurrentNavRes?._xNav || 0) / 1e18
         // console.log('MaxBaseInETH--', fx_info.maxMintableXTokenWithIncentiveRes?._maxBaseIn, MaxBaseInETH, λ_f, params.s, params.xNav)
@@ -483,7 +481,9 @@ const useFxCommon = () => {
           .div(xNav)
           .toString(10)
         if (params.isUserType) {
-          _res = cBN(_res).isGreaterThan(params.maxXETHBonus) ? params.maxXETHBonus : _res
+          _res = cBN(_res).isGreaterThan(params.maxXETHBonus)
+            ? params.maxXETHBonus
+            : _res
         }
         return _res
       } catch (error) {
@@ -521,6 +521,19 @@ const useFxCommon = () => {
     return [res, res_text]
   }, [fx_info])
 
+  const isXETHBouns = useMemo(() => {
+    if (
+      systemStatus > 1 &&
+      cBN(fx_info.baseInfo.reservePoolBalancesRes).isGreaterThan(1e18) &&
+      cBN(fx_info.baseInfo.stabilityPoolFETHBalancesRes).isLessThanOrEqualTo(
+        1e18
+      )
+    ) {
+      return true
+    }
+    return false
+  }, [fx_info])
+
   return {
     getStabilityModePrice,
     getUserLiquidationModePrice,
@@ -532,6 +545,7 @@ const useFxCommon = () => {
     xETHBeta,
     xETHBeta_text,
     ethPrice,
+    isXETHBouns,
   }
 }
 
