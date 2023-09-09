@@ -1,5 +1,6 @@
 import AppHeader from '../AppHeader'
 import AppFooter from '../AppFooter'
+import AggressModal from '../AggressModal'
 
 export default function Layout({ children }) {
   return (
@@ -7,6 +8,7 @@ export default function Layout({ children }) {
       <AppHeader />
       <main>{children}</main>
       <AppFooter />
+      <AggressModal />
     </div>
   )
 }
