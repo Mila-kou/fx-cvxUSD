@@ -78,7 +78,7 @@ const useInfo = () => {
         baseTokenCap(),
         fETHBalanceOf(config.contracts.fx_StabilityPool),
         stETHContract.methods.balanceOf(config.contracts.fx_ReservePool),
-        bonusRatio,
+        bonusRatio(config.tokens.stETH),
       ]
       const [
         fETHTotalSupplyRes,

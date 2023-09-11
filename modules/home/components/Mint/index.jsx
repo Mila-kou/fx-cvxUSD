@@ -604,7 +604,7 @@ export default function Mint({ slippage, isValidPrice }) {
         <>
           <DetailCell
             title={`${fb4(
-              cBN(baseInfo.reservePoolBalancesRes).div(100),
+              cBN(baseInfo.bonusRatioRes).times(100),
               false,
               18,
               2
