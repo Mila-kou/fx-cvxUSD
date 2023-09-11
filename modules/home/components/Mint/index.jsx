@@ -608,7 +608,7 @@ export default function Mint({ slippage, isValidPrice }) {
               false,
               18,
               2
-            )}% bonus ends after mint`}
+            )}% bonus ends after mint xETH`}
             content={['']}
           />
           <DetailCell title="Mint xETH Bouns:" content={['true']} />
