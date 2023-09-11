@@ -583,7 +583,18 @@ export default function Mint({ slippage }) {
       />
 
       {isXETHBouns ? (
-        <DetailCell title="Mint xETH Bouns:" content={['true']} />
+        <>
+          <DetailCell
+            title={`${fb4(
+              cBN(baseInfo.reservePoolBalancesRes).div(100),
+              false,
+              18,
+              2
+            )}% bonus ends after mint`}
+            content={['']}
+          />
+          <DetailCell title="Mint xETH Bouns:" content={['true']} />
+        </>
       ) : null}
 
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
