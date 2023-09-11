@@ -18,6 +18,7 @@ import useETH from '../../controller/useETH'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
+import notify from '@/components/notify'
 
 const OPTIONS = [
   ['ETH', config.tokens.eth],
@@ -28,7 +29,7 @@ const OPTIONS = [
   ['USDT', config.tokens.usdt],
 ]
 
-export default function Mint({ slippage }) {
+export default function Mint({ slippage, isValidPrice }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
@@ -38,7 +39,7 @@ export default function Mint({ slippage }) {
   // const [feeUsd, setFeeUsd] = useState(10)
 
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
-  const [errorMinout, setErrorMinout] = useState(false)
+  const [showRetry, setShowRetry] = useState(false)
   const [symbol, setSymbol] = useState('ETH')
   const { contract: FxGatewayContract, address: fxGatewayContractAddress } =
     useFx_FxGateway()
@@ -216,6 +217,8 @@ export default function Mint({ slippage }) {
   }
 
   const getMinAmount = async (needLoading) => {
+    setShowRetry(false)
+
     if (needLoading) {
       setPriceLoading(true)
     }
@@ -262,7 +265,13 @@ export default function Mint({ slippage }) {
             allowPartialFill: false,
             protocols: 'CURVE',
           }).catch((e) => {
-            getMinAmount()
+            if (e?.response?.data?.description) {
+              notify.error({
+                description: e.response.data.description,
+              })
+            }
+            setPriceLoading(false)
+            setShowRetry(true)
           })
 
           if (!res) return
@@ -495,6 +504,10 @@ export default function Mint({ slippage }) {
   )
 
   const canMint = useMemo(() => {
+    if (!isValidPrice) {
+      return false
+    }
+
     const _enableETH =
       cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
       cBN(fromAmount).isGreaterThan(0)
@@ -512,6 +525,7 @@ export default function Mint({ slippage }) {
     fTokenMintInSystemStabilityModePaused,
     isF,
     tokens.ETH.balance,
+    isValidPrice,
   ])
 
   useEffect(() => {
@@ -562,6 +576,8 @@ export default function Mint({ slippage }) {
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
         loading={isF && priceLoading}
+        showRetry={isF && showRetry}
+        onRetry={getMinAmount}
         // onChange={hanldefETHAmountChanged}
         // rightSuffix="Beta 0.1"
       />
@@ -579,6 +595,8 @@ export default function Mint({ slippage }) {
           <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
         }
         loading={isX && priceLoading}
+        showRetry={isF && showRetry}
+        onRetry={getMinAmount}
         // onChange={hanldexETHAmountChanged}
       />
 

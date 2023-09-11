@@ -29,7 +29,6 @@ function BalanceInput(props) {
     changeValue,
     maxAmount,
     className = '',
-    icon,
     symbol,
     tip,
     disabled,
@@ -41,6 +40,8 @@ function BalanceInput(props) {
     options = [],
     onSymbolChanged = () => {},
     loading,
+    showRetry,
+    onRetry = () => {},
   } = props
   const { theme } = useGlobal()
 
@@ -114,8 +115,12 @@ function BalanceInput(props) {
       <div className={styles.right}>
         {type == 'select' ? null : (
           <>
-            {loading ? (
-              <SyncOutlined spin />
+            {loading || showRetry ? (
+              loading ? (
+                <SyncOutlined spin />
+              ) : (
+                <span onClick={onRetry}>Retry</span>
+              )
             ) : (
               <>
                 <input

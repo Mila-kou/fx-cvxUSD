@@ -17,7 +17,7 @@ import SlippageModal, { useSlippage } from '../SlippageModal'
 
 const AUTO = 0.3
 
-export default function Swap() {
+export default function Swap({ isValidPrice }) {
   const { systemStatus, isShowBonusTab } = useETH()
   const [bonusIndex, setBonusIndex] = useState(0)
   const [tab, setTab] = useState(0)
@@ -59,7 +59,7 @@ export default function Swap() {
           </div>
         ))}
       </div>
-      {!!(tab == 0) && <Mint slippage={slippage} />}
+      {!!(tab == 0) && <Mint slippage={slippage} isValidPrice={isValidPrice} />}
       {!!(tab == 1) && <Redeem slippage={slippage} />}
       {!!(tab == 2) && (
         <div>
