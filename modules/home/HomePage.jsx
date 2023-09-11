@@ -26,7 +26,7 @@ export default function HomePage() {
 
   const { getContract } = useContract()
 
-  const contractContract = getContract(
+  const curveETHFETHContract = getContract(
     '0x21e27a5e5513d6e65c4f830167390997aa84843a',
     [
       {
@@ -627,8 +627,8 @@ export default function HomePage() {
 
   const { _currentAccount } = useWeb3()
   const [priceLoading, setPriceLoading] = useState(0)
-  const ethMockTwapOracleAddr = '0xca726e18766b8b0f8e1f47edc7f2298c6c1ad945'
-  const stEthMockTwapOracleAddr = '0x3a6337ab482280e0fbf46e3493f3626ddecbabb8'
+  const ethMockTwapOracleAddr = '0x41f959f53257965dcc6b22c8326b0ebf213d7f09'
+  const stEthMockTwapOracleAddr = '0xb33fdeb819ef5e00cd47b8939b43f41851fd6c1b'
 
   const { contract: ethMockTwapOracleContract } = useContract(
     ethMockTwapOracleAddr,
@@ -701,7 +701,7 @@ export default function HomePage() {
 
   const handlePrice = async () => {
     const _priceInfo = await fxETHTwapOracle.methods.getPrice().call()
-    const _ema_priceInfo = await contractContract.methods.ema_price().call()
+    const _ema_priceInfo = await curveETHFETHContract.methods.ema_price().call()
 
     setPriceInfo(_priceInfo)
     setEmaPrice(_ema_priceInfo)

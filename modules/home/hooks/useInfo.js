@@ -104,6 +104,9 @@ const useInfo = () => {
         reservePoolBalancesRes,
         bonusRatioRes,
       ] = await multiCallsV2(apiCalls)
+      // const stabilityPoolFETHBalancesRes = 1e18
+      // const reservePoolBalancesRes = 1e18
+      // const bonusRatioRes = 1e18
       console.log(
         'BaseInfo11111',
         // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,

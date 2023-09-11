@@ -149,29 +149,29 @@ export default function HomePage() {
     const amount = 15
     const amountString = cBN(amount).times(1e18).toString(10)
 
-    try {
-      const _minOut = cBN(0).toString(10)
-      const apiCall = await ReservePoolContract.methods.liquidate(
-        [stETH, amountString, CurvefiSwapRouterAddress, _swapData],
-        0
-      )
+    // try {
+    //   const _minOut = cBN(0).toString(10)
+    //   const apiCall = await ReservePoolContract.methods.liquidate(
+    //     [stETH, amountString, CurvefiSwapRouterAddress, _swapData],
+    //     0
+    //   )
 
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas }),
-        {
-          key: 'Price',
-          action: 'Price',
-        }
-      )
-    } catch (error) {
-      noPayableErrorAction(`error_mint`, error)
-    }
+    //   const estimatedGas = await apiCall.estimateGas({
+    //     from: _currentAccount,
+    //   })
+    //   const gas = parseInt(estimatedGas * 1.2, 10) || 0
+    //   await NoPayableAction(
+    //     () => apiCall.send({ from: _currentAccount, gas }),
+    //     {
+    //       key: 'Price',
+    //       action: 'Price',
+    //     }
+    //   )
+    // } catch (error) {
+    //   noPayableErrorAction(`error_mint`, error)
+    // }
 
-    return
+    // return
     await curve.init(
       'JsonRpc',
       {
@@ -206,8 +206,8 @@ export default function HomePage() {
     // const amountString = cBN(amount).times(1e18).toString(10)
 
     const { route, output } = await curve.router.getBestRouteAndOutput(
-      stETH,
       fETH,
+      stETH,
       amount
     )
 
