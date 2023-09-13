@@ -48,7 +48,7 @@ export default function Mint({ slippage, isValidPrice }) {
   const [fromAmount, setFromAmount] = useState(0)
   const [fETHtAmountIn, setFETHtAmountIn] = useState(0)
   const [xETHtAmountIn, setXETHtAmountIn] = useState(0)
-  const [manualNum, setManualNum] = useState(0)
+  const [mintXBouns, setMintXBouns] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState({
     minout_slippage: 0,
     minout_ETH: 0,
@@ -232,6 +232,9 @@ export default function Mint({ slippage, isValidPrice }) {
           minout_ETH = await FxGatewayContract.methods
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
             .call({ from: _currentAccount })
+          if (isX) {
+            // 用 market 的 mintXToken 算 bonus
+          }
         } else if (symbol === 'stETH') {
           minout_ETH = await stETHGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
@@ -600,7 +603,7 @@ export default function Mint({ slippage, isValidPrice }) {
         // onChange={hanldexETHAmountChanged}
       />
 
-      {isXETHBouns ? (
+      {isXETHBouns && isX ? (
         <>
           <DetailCell
             title={`${fb4(
@@ -611,7 +614,7 @@ export default function Mint({ slippage, isValidPrice }) {
             )}% bonus ends after mint xETH`}
             content={['']}
           />
-          <DetailCell title="Mint xETH Bouns:" content={['true']} />
+          <DetailCell title="Mint xETH Bouns:" content={[mintXBouns || '-']} />
         </>
       ) : null}
 
