@@ -324,3 +324,15 @@ export const useErc20Token = (tokenAddr, approveForAddr) => {
     tokenInfo,
   }
 }
+
+export const useAladdinClevVest = () => {
+  const address = config.contracts.aladdinCLEVVest
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.AladdinCLEVVestingABI),
+      address,
+    }),
+    [getContract]
+  )
+}

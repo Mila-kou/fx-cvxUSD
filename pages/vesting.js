@@ -1,14 +1,14 @@
 import React from 'react'
 import Head from 'next/head'
-import FarmingPage from '@/modules/farming/FarmingPage'
+import VestingPage from '@/modules/vesting/VestingPage'
 
-export default function Farming() {
+export default function Vesting() {
   return (
     <React.Fragment>
       <Head>
         <title>f(x) Protocol</title>
       </Head>
-      <FarmingPage />
+      <VestingPage />
     </React.Fragment>
   )
 }

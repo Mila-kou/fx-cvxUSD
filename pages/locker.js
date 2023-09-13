@@ -6,7 +6,7 @@ export default function Locker() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX ETH</title>
+        <title>f(x) Protocol</title>
       </Head>
       <LockerPage />
     </React.Fragment>
