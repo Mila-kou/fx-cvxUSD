@@ -76,6 +76,7 @@ export default function Mint({ slippage, isValidPrice }) {
     mintPaused,
     redeemPaused,
     fTokenMintInSystemStabilityModePaused,
+    xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
     systemStatus,
     baseInfo,
@@ -113,8 +114,6 @@ export default function Mint({ slippage, isValidPrice }) {
     selectTokenAddress,
     symbol == 'stETH' ? 'fx_stETH_mint' : 'fx_fxGateway'
   )
-
-  console.log('selectTokenInfo----', selectTokenInfo, selectTokenAddress)
 
   const { BtnWapper } = useApprove({
     approveAmount: fromAmount,
@@ -176,40 +175,9 @@ export default function Mint({ slippage, isValidPrice }) {
     return [fb4(_fee), 1, __mintXETHFee]
   }, [isF, systemStatus, ethPrice, isSwap])
 
-  // const ethAmount = useMemo(() => {
-  //   console.log(
-  //     'ethAmount',
-  //     manualNum,
-  //     fETHtAmountIn,
-  //     fnav,
-  //     xETHtAmountIn,
-  //     feeCBN
-  //   )
-  //   const _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
-  //   const _tokenNav = isF ? fnav : xnav
-  //   const _needETH = cBN(_tokenAmountIn)
-  //     .div(1e18)
-  //     .times(_tokenNav)
-  //     .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
-  //     .div(ethPrice)
-  //   console.log('ethAmount', _needETH.toString(10))
-  //   setFromAmount(_needETH.times(1e18).toString(10))
-  // }, [fETHtAmountIn, xETHtAmountIn, manualNum])
-
   const hanldeETHAmountChanged = (v) => {
     setFromAmount(v.toString(10))
   }
-
-  // const hanldefETHAmountChanged = (v) => {
-  //   setFETHtAmountIn(v.toString(10))
-  //   let _pre = manualNum + 1
-  //   setManualNum(_pre)
-  // }
-  // const hanldexETHAmountChanged = (v) => {
-  //   setXETHtAmountIn(v.toString(10))
-  //   let _pre = manualNum + 1
-  //   setManualNum(_pre)
-  // }
 
   const initPage = () => {
     clearInput()
@@ -278,7 +246,6 @@ export default function Mint({ slippage, isValidPrice }) {
 
           const { data } = res
 
-          console.log('FxGatewayContract.methods---', FxGatewayContract.methods)
           minout_ETH = await FxGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
           ](
@@ -326,7 +293,7 @@ export default function Mint({ slippage, isValidPrice }) {
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
-      console.log(error)
+      console.log('getMinAmount------', error)
       // if (error.message.indexOf('no cap to buy') > -1) {
       //   // noPayableErrorAction(`error_buy`, 'No cap to buy')
       // }
@@ -503,6 +470,33 @@ export default function Mint({ slippage, isValidPrice }) {
     [canReceived, selectTokenInfo.allowance, fromAmount]
   )
 
+  const checkMintPausedByType = useCallback(
+    (type) => {
+      let _fTokenMintInSystemStabilityModePaused = false
+      if (type == 'mintXETH') {
+        return mintPaused
+      }
+      _fTokenMintInSystemStabilityModePaused =
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+      return _fTokenMintInSystemStabilityModePaused || mintPaused
+    },
+    [mintPaused, systemStatus, fTokenMintInSystemStabilityModePaused]
+  )
+
+  const checkRedeemPausedByType = useCallback(
+    (type) => {
+      let _xTokenRedeemInSystemStabilityModePaused = false
+
+      if (type == 'redeemXETH') {
+        _xTokenRedeemInSystemStabilityModePaused =
+          _xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
+        return _xTokenRedeemInSystemStabilityModePaused || mintPaused
+      }
+      return mintPaused
+    },
+    [mintPaused, systemStatus, xTokenRedeemInSystemStabilityModePaused]
+  )
+
   const canMint = useMemo(() => {
     if (!isValidPrice) {
       return false
@@ -511,14 +505,15 @@ export default function Mint({ slippage, isValidPrice }) {
     const _enableETH =
       cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
       cBN(fromAmount).isGreaterThan(0)
-
-    let _fTokenMintInSystemStabilityModePaused = false
+    let isPausedMint = false
     if (isF) {
-      _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+      isPausedMint = checkMintPausedByType('mintfETH')
+    }
+    if (isSwap) {
+      isPausedMint = checkSwapPause()
     }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
-    return !mintPaused && _enableETH && !_fTokenMintInSystemStabilityModePaused
+    return !mintPaused && _enableETH && !isPausedMint
   }, [
     fromAmount,
     mintPaused,
@@ -528,24 +523,43 @@ export default function Mint({ slippage, isValidPrice }) {
     isValidPrice,
   ])
 
-  useEffect(() => {
-    let _fTokenMintInSystemStabilityModePaused = false
-    if (isF) {
-      _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+  const checkSwapPause = () => {
+    let isPaused = false
+    if (symbol == 'xETH') {
+      isPaused = checkRedeemPausedByType('redeemXETH')
+    } else {
+      isPaused = checkMintPausedByType('mintfETH')
     }
-    setShowDisabledNotice(mintPaused || _fTokenMintInSystemStabilityModePaused)
-  }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused])
+    return mintPaused || redeemPaused || isPaused
+  }
+  useEffect(() => {
+    const isPausedMintfETH = checkMintPausedByType('mintfETH')
+    if (isSwap) {
+      setShowDisabledNotice(checkSwapPause())
+    } else {
+      setShowDisabledNotice(mintPaused || isPausedMintfETH)
+    }
+  }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused, isSwap])
 
   useEffect(() => {
     getMinAmount(true)
     // handleGetAllMinAmount()
   }, [isF, slippage, fromAmount, symbol])
 
-  console.log('tokens----', tokens, fromAmount)
-
   return (
     <div className={styles.container}>
+      {isXETHBouns ? (
+        <DetailCell
+          title={`${fb4(
+            cBN(baseInfo.bonusRatioRes).times(100),
+            false,
+            18,
+            2
+          )}% bonus ends after mint xETH`}
+          content={['']}
+        />
+      ) : null}
+
       <BalanceInput
         placeholder="-"
         symbol={symbol}
@@ -601,18 +615,7 @@ export default function Mint({ slippage, isValidPrice }) {
       />
 
       {isXETHBouns ? (
-        <>
-          <DetailCell
-            title={`${fb4(
-              cBN(baseInfo.bonusRatioRes).times(100),
-              false,
-              18,
-              2
-            )}% bonus ends after mint xETH`}
-            content={['']}
-          />
-          <DetailCell title="Mint xETH Bouns:" content={['true']} />
-        </>
+        <DetailCell title="Mint xETH Bouns:" content={['true']} />
       ) : null}
 
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
