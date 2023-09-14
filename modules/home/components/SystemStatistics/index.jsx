@@ -131,7 +131,17 @@ export default function SystemStatistics() {
               <p>${StabilityModePrice}</p>
             </div>
             <div className={styles.cell}>
-              <div>ETH Last Price:</div>
+              <div>
+                ETH Reference Price:
+                <Tooltip
+                  placement="top"
+                  title="Aug-03-2023 02:55:11 PM +UTC"
+                  arrow
+                  color="#000"
+                >
+                  <InfoCircleOutlined />
+                </Tooltip>
+              </div>
               <p>${lastPermissionedPrice}</p>
             </div>
             {/* <div className={styles.cell}>
