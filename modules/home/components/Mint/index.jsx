@@ -559,6 +559,19 @@ export default function Mint({ slippage }) {
     // handleGetAllMinAmount()
   }, [isF, slippage, fromAmount, symbol])
 
+  const fromUsd = useMemo(() => {
+    if (['USDT', 'USDC'].includes(symbol)) {
+      return '1'
+    }
+    if (symbol === 'fETH') {
+      return fnav
+    }
+    if (symbol === 'xETH') {
+      return xnav
+    }
+    return ethPrice_text
+  }, [symbol, ethPrice_text, fnav, xnav])
+
   return (
     <div className={styles.container}>
       {isXETHBouns ? (
@@ -582,7 +595,7 @@ export default function Mint({ slippage }) {
           false,
           config.zapTokens[symbol].decimals
         )}
-        usd={`$${ethPrice_text}`}
+        usd={`$${fromUsd}`}
         maxAmount={tokens[symbol].balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
