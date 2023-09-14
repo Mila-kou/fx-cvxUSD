@@ -6,6 +6,7 @@ import {
   useFETH,
   useFX_Market,
   useFX_stETHTreasury,
+  useFx_FxETHTwapOracle,
   useFx_ReservePool,
   useXETH,
 } from 'hooks/useContracts'
@@ -23,6 +24,7 @@ const useInfo = () => {
   const { contract: marketContract } = useFX_Market()
   const { contract: treasuryContract } = useFX_stETHTreasury()
   const { contract: reservePoolContract } = useFx_ReservePool()
+  const { contract: fxETHTwapOracle } = useFx_FxETHTwapOracle()
   const stETHContract = erc20Contract(config.tokens.stETH)
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
   const fetchBaseInfo = useCallback(async () => {
@@ -79,6 +81,7 @@ const useInfo = () => {
         fETHBalanceOf(config.contracts.fx_StabilityPool),
         stETHContract.methods.balanceOf(config.contracts.fx_ReservePool),
         bonusRatio(config.tokens.stETH),
+        fxETHTwapOracle.methods.getPrice(),
       ]
       const [
         fETHTotalSupplyRes,
@@ -103,6 +106,7 @@ const useInfo = () => {
         stabilityPoolFETHBalancesRes,
         reservePoolBalancesRes,
         bonusRatioRes,
+        fxETHTwapOraclePriceeInfo,
       ] = await multiCallsV2(apiCalls)
       // const stabilityPoolFETHBalancesRes = 1e18
       // const reservePoolBalancesRes = 1e18
@@ -122,7 +126,8 @@ const useInfo = () => {
         baseTokenCapRes,
         stabilityPoolFETHBalancesRes,
         reservePoolBalancesRes,
-        bonusRatioRes
+        bonusRatioRes,
+        fxETHTwapOraclePriceeInfo
       )
 
       return {
@@ -148,6 +153,7 @@ const useInfo = () => {
         stabilityPoolFETHBalancesRes,
         reservePoolBalancesRes,
         bonusRatioRes,
+        fxETHTwapOraclePriceeInfo,
       }
     } catch (error) {
       console.log('baseInfoError==>', error)

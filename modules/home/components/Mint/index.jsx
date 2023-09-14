@@ -29,7 +29,7 @@ const OPTIONS = [
   ['USDT', config.tokens.usdt],
 ]
 
-export default function Mint({ slippage, isValidPrice }) {
+export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
@@ -84,6 +84,8 @@ export default function Mint({ slippage, isValidPrice }) {
     _redeemXETHFee,
     isXETHBouns,
   } = useETH()
+
+  const _isValidPrice = baseInfo?.fxETHTwapOraclePriceeInfo?._isValid
 
   const isSwap = useMemo(() => {
     if (symbol === 'fETH') {
@@ -496,9 +498,18 @@ export default function Mint({ slippage, isValidPrice }) {
     },
     [mintPaused, systemStatus, xTokenRedeemInSystemStabilityModePaused]
   )
+  const checkSwapPause = useCallback(() => {
+    let isPaused = false
+    if (symbol == 'xETH') {
+      isPaused = checkRedeemPausedByType('redeemXETH')
+    } else {
+      isPaused = checkMintPausedByType('mintfETH')
+    }
+    return mintPaused || redeemPaused || isPaused || !_isValidPrice
+  }, [mintPaused, redeemPaused, !_isValidPrice])
 
   const canMint = useMemo(() => {
-    if (!isValidPrice) {
+    if (!_isValidPrice) {
       return false
     }
 
@@ -520,24 +531,15 @@ export default function Mint({ slippage, isValidPrice }) {
     fTokenMintInSystemStabilityModePaused,
     isF,
     tokens.ETH.balance,
-    isValidPrice,
+    _isValidPrice,
   ])
 
-  const checkSwapPause = useCallback(() => {
-    let isPaused = false
-    if (symbol == 'xETH') {
-      isPaused = checkRedeemPausedByType('redeemXETH')
-    } else {
-      isPaused = checkMintPausedByType('mintfETH')
-    }
-    return mintPaused || redeemPaused || isPaused || !isValidPrice
-  }, [mintPaused, redeemPaused, isValidPrice])
   useEffect(() => {
     const isPausedMintfETH = checkMintPausedByType('mintfETH')
     if (isSwap) {
       setShowDisabledNotice(checkSwapPause())
     } else {
-      setShowDisabledNotice(mintPaused || isPausedMintfETH || !isValidPrice)
+      setShowDisabledNotice(mintPaused || isPausedMintfETH || !_isValidPrice)
     }
   }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused, isSwap])
 

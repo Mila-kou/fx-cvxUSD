@@ -711,7 +711,7 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <div className={styles.item}>
-        <Swap isValidPrice={pricePriceInfo._isValid} />
+        <Swap />
         New ETH Price: <SimpleInput onChange={handleChange_CurrentETHPrice} />
         <Button width="100%" loading={priceLoading} onClick={handleSetPrice}>
           ETH Price
