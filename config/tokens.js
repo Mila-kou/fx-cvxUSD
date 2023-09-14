@@ -28,6 +28,8 @@ const contracts = {
   fx_ReservePool: '0xe7FC6e314B8D399eEB8345362ea8CceF629e3CBc',
   fx_FxETHTwapOracle: '0xAd36C7B3C5E0e097884DE951C271eDf5e99EB567',
 
+  CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
+
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',
 

@@ -19,6 +19,7 @@ import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
 import notify from '@/components/notify'
+import useCurveSwap from '@/hooks/useCurveSwap'
 
 const OPTIONS = [
   ['ETH', config.tokens.eth],
@@ -34,6 +35,7 @@ export default function Mint({ slippage }) {
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+  const { getCurveSwapABI } = useCurveSwap()
 
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
@@ -223,27 +225,39 @@ export default function Mint({ slippage }) {
                 .toString()
             }
           }
-          const res = await get1inchParams({
+
+          const res = await getCurveSwapABI({
             src:
               symbol == 'ETH'
                 ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
                 : selectTokenAddress,
             dst: config.tokens.stETH,
             amount: _ETHtAmountAndGas.toString(),
-            from: fxGatewayContractAddress,
-            slippage: Number(0),
-            disableEstimate: true,
-            allowPartialFill: false,
-            protocols: 'CURVE',
-          }).catch((e) => {
-            if (e?.response?.data?.description) {
-              notify.error({
-                description: e.response.data.description,
-              })
-            }
-            setPriceLoading(false)
-            setShowRetry(true)
+            minout: 0,
           })
+          console.log('_resCurve----', res)
+
+          // const res = await get1inchParams({
+          //   src:
+          //     symbol == 'ETH'
+          //       ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+          //       : selectTokenAddress,
+          //   dst: config.tokens.stETH,
+          //   amount: _ETHtAmountAndGas.toString(),
+          //   from: fxGatewayContractAddress,
+          //   slippage: Number(0),
+          //   disableEstimate: true,
+          //   allowPartialFill: false,
+          //   protocols: 'CURVE',
+          // }).catch((e) => {
+          //   if (e?.response?.data?.description) {
+          //     notify.error({
+          //       description: e.response.data.description,
+          //     })
+          //   }
+          //   setPriceLoading(false)
+          //   setShowRetry(true)
+          // })
 
           if (!res) return
 
@@ -373,25 +387,35 @@ export default function Mint({ slippage }) {
       } else {
         _ETHtAmountAndGas = fromAmount
       }
+      const _minOut = await getMinAmount()
 
-      const { data } = await get1inchParams({
+      // const { data } = await get1inchParams({
+      //   src:
+      //     symbol == 'ETH'
+      //       ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+      //       : selectTokenAddress,
+      //   dst: config.tokens.stETH,
+      //   amount: _ETHtAmountAndGas.toString(),
+      //   from: fxGatewayContractAddress,
+      //   slippage: Number(slippage),
+      //   disableEstimate: true,
+      //   allowPartialFill: false,
+      // })
+      const { data } = await getCurveSwapABI({
         src:
           symbol == 'ETH'
             ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
             : selectTokenAddress,
         dst: config.tokens.stETH,
         amount: _ETHtAmountAndGas.toString(),
-        from: fxGatewayContractAddress,
-        slippage: Number(slippage),
-        disableEstimate: true,
-        allowPartialFill: false,
+        minout: 0,
       })
 
       const apiCall = await FxGatewayContract.methods[
         isF ? 'mintFToken' : 'mintXToken'
       ](
         [selectTokenAddress, _ETHtAmountAndGas, data.tx.to, data.tx.data],
-        _ETHtAmountAndGas
+        _minOut
       )
 
       const estimatedGas = await apiCall.estimateGas({
