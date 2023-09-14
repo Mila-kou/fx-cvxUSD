@@ -157,7 +157,7 @@ export default function FAQ({ open, onCancel }) {
                 staking yields earned by stETH in the reserve.
               </p>
 
-              <h2>10. What is the "reference price"? </h2>
+              <h2>10. What is the “reference price” ? </h2>
               <p>
                 When f(x) reports the price change of ETH, we compare the
                 current 30-minute TWAP from Chainlink with the reference price.
