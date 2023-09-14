@@ -157,8 +157,17 @@ export default function FAQ({ open, onCancel }) {
                 staking yields earned by stETH in the reserve.
               </p>
 
-              <h2>10. What am I waiting for?</h2>
-              <p>Good question!</p>
+              <h2>10. What is the "reference price"? </h2>
+              <p>
+                When f(x) reports the price change of ETH, we compare the
+                current 30-minute TWAP from Chainlink with the reference price.
+                To start with, the reference price was the price of ETH at the
+                moment the protocol was turned on, but we update the reference
+                price periodically whenever the current price deviates
+                significantly. Doing this helps the numbers reported on the UI
+                to reflect more recent price fluctuations Reference price
+                updates do not affect the NAV of fETH or xETH.
+              </p>
             </div>
           </div>
         </div>
