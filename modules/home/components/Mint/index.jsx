@@ -293,7 +293,7 @@ export default function Mint({ slippage, isValidPrice }) {
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
-      console.log('getMinAmount------', error)
+      console.log('minout_ETH------', error)
       // if (error.message.indexOf('no cap to buy') > -1) {
       //   // noPayableErrorAction(`error_buy`, 'No cap to buy')
       // }
@@ -523,21 +523,21 @@ export default function Mint({ slippage, isValidPrice }) {
     isValidPrice,
   ])
 
-  const checkSwapPause = () => {
+  const checkSwapPause = useCallback(() => {
     let isPaused = false
     if (symbol == 'xETH') {
       isPaused = checkRedeemPausedByType('redeemXETH')
     } else {
       isPaused = checkMintPausedByType('mintfETH')
     }
-    return mintPaused || redeemPaused || isPaused
-  }
+    return mintPaused || redeemPaused || isPaused || !isValidPrice
+  }, [mintPaused, redeemPaused, isValidPrice])
   useEffect(() => {
     const isPausedMintfETH = checkMintPausedByType('mintfETH')
     if (isSwap) {
       setShowDisabledNotice(checkSwapPause())
     } else {
-      setShowDisabledNotice(mintPaused || isPausedMintfETH)
+      setShowDisabledNotice(mintPaused || isPausedMintfETH || !isValidPrice)
     }
   }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused, isSwap])
 
