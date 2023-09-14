@@ -627,8 +627,8 @@ export default function HomePage() {
 
   const { _currentAccount } = useWeb3()
   const [priceLoading, setPriceLoading] = useState(0)
-  const ethMockTwapOracleAddr = '0x41f959f53257965dcc6b22c8326b0ebf213d7f09'
-  const stEthMockTwapOracleAddr = '0xb33fdeb819ef5e00cd47b8939b43f41851fd6c1b'
+  const ethMockTwapOracleAddr = '0x8da04c56fec95e4b76030272104c246ce5c93bd7'
+  const stEthMockTwapOracleAddr = '0x1fac89d15ec45c1c09a8b911d6c265f59732fa72'
 
   const { contract: ethMockTwapOracleContract } = useContract(
     ethMockTwapOracleAddr,
@@ -711,7 +711,7 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <div className={styles.item}>
-        <Swap isValidPrice={pricePriceInfo._isValid} />
+        <Swap />
         New ETH Price: <SimpleInput onChange={handleChange_CurrentETHPrice} />
         <Button width="100%" loading={priceLoading} onClick={handleSetPrice}>
           ETH Price

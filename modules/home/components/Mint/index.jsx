@@ -29,7 +29,7 @@ const OPTIONS = [
   ['USDT', config.tokens.usdt],
 ]
 
-export default function Mint({ slippage, isValidPrice }) {
+export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
@@ -58,6 +58,7 @@ export default function Mint({ slippage, isValidPrice }) {
     minout_slippage: 0,
     minout_ETH: 0,
     minout_slippage_tvl: 0,
+    bonus: 0,
   })
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
@@ -76,6 +77,7 @@ export default function Mint({ slippage, isValidPrice }) {
     mintPaused,
     redeemPaused,
     fTokenMintInSystemStabilityModePaused,
+    xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
     systemStatus,
     baseInfo,
@@ -83,6 +85,8 @@ export default function Mint({ slippage, isValidPrice }) {
     _redeemXETHFee,
     isXETHBouns,
   } = useETH()
+
+  const _isValidPrice = baseInfo?.fxETHTwapOraclePriceeInfo?._isValid
 
   const isSwap = useMemo(() => {
     if (symbol === 'fETH') {
@@ -113,8 +117,6 @@ export default function Mint({ slippage, isValidPrice }) {
     selectTokenAddress,
     symbol == 'stETH' ? 'fx_stETH_mint' : 'fx_fxGateway'
   )
-
-  console.log('selectTokenInfo----', selectTokenInfo, selectTokenAddress)
 
   const { BtnWapper } = useApprove({
     approveAmount: fromAmount,
@@ -176,40 +178,9 @@ export default function Mint({ slippage, isValidPrice }) {
     return [fb4(_fee), 1, __mintXETHFee]
   }, [isF, systemStatus, ethPrice, isSwap])
 
-  // const ethAmount = useMemo(() => {
-  //   console.log(
-  //     'ethAmount',
-  //     manualNum,
-  //     fETHtAmountIn,
-  //     fnav,
-  //     xETHtAmountIn,
-  //     feeCBN
-  //   )
-  //   const _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
-  //   const _tokenNav = isF ? fnav : xnav
-  //   const _needETH = cBN(_tokenAmountIn)
-  //     .div(1e18)
-  //     .times(_tokenNav)
-  //     .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
-  //     .div(ethPrice)
-  //   console.log('ethAmount', _needETH.toString(10))
-  //   setFromAmount(_needETH.times(1e18).toString(10))
-  // }, [fETHtAmountIn, xETHtAmountIn, manualNum])
-
   const hanldeETHAmountChanged = (v) => {
     setFromAmount(v.toString(10))
   }
-
-  // const hanldefETHAmountChanged = (v) => {
-  //   setFETHtAmountIn(v.toString(10))
-  //   let _pre = manualNum + 1
-  //   setManualNum(_pre)
-  // }
-  // const hanldexETHAmountChanged = (v) => {
-  //   setXETHtAmountIn(v.toString(10))
-  //   let _pre = manualNum + 1
-  //   setManualNum(_pre)
-  // }
 
   const initPage = () => {
     clearInput()
@@ -281,7 +252,6 @@ export default function Mint({ slippage, isValidPrice }) {
 
           const { data } = res
 
-          console.log('FxGatewayContract.methods---', FxGatewayContract.methods)
           minout_ETH = await FxGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
           ](
@@ -297,10 +267,12 @@ export default function Mint({ slippage, isValidPrice }) {
       }
       console.log('minout_ETH----', minout_ETH)
 
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
-      )
+      let _minOut_CBN = cBN(0)
       if (isF) {
+        _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+
         const _minOut_fETH_tvl = fb4(
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
@@ -313,26 +285,31 @@ export default function Mint({ slippage, isValidPrice }) {
           minout_slippage_tvl: _minOut_fETH_tvl,
         })
       } else {
-        const _minOut_xETH_tvl = fb4(
-          _minOut_CBN.multipliedBy(xnav).toString(10)
-        )
-        setXETHtAmount({
-          minout_ETH: checkNotZoroNumOption(
-            minout_ETH,
-            fb4(minout_ETH.toString(10))
-          ),
-          minout_slippage: fb4(_minOut_CBN.toString(10)),
-          minout_slippage_tvl: _minOut_xETH_tvl,
-        })
+        if (typeof minout_ETH !== 'number') {
+          const { _bonus, _xTokenMinted } = minout_ETH || {}
+          _minOut_CBN = (cBN(_xTokenMinted) || cBN(0)).multipliedBy(
+            cBN(1).minus(cBN(slippage).dividedBy(100))
+          )
+
+          const _minOut_xETH_tvl = fb4(
+            _minOut_CBN.multipliedBy(xnav).toString(10)
+          )
+          setXETHtAmount({
+            minout_ETH: checkNotZoroNumOption(
+              _xTokenMinted,
+              fb4(_xTokenMinted.toString(10))
+            ),
+            minout_slippage: fb4(_minOut_CBN.toString(10)),
+            minout_slippage_tvl: _minOut_xETH_tvl,
+            bonus: checkNotZoroNumOption(_bonus, fb4(_bonus.toString(10))),
+          })
+        }
       }
 
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
-      console.log(error)
-      // if (error.message.indexOf('no cap to buy') > -1) {
-      //   // noPayableErrorAction(`error_buy`, 'No cap to buy')
-      // }
+      console.log('minout_ETH------', error)
       setFETHtAmount({
         minout_ETH: 0,
         minout_slippage: 0,
@@ -506,49 +483,96 @@ export default function Mint({ slippage, isValidPrice }) {
     [canReceived, selectTokenInfo.allowance, fromAmount]
   )
 
+  const checkMintPausedByType = useCallback(
+    (type) => {
+      let _fTokenMintInSystemStabilityModePaused = false
+      if (type == 'mintXETH') {
+        return mintPaused
+      }
+      _fTokenMintInSystemStabilityModePaused =
+        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+      return _fTokenMintInSystemStabilityModePaused || mintPaused
+    },
+    [mintPaused, systemStatus, fTokenMintInSystemStabilityModePaused]
+  )
+
+  const checkRedeemPausedByType = useCallback(
+    (type) => {
+      let _xTokenRedeemInSystemStabilityModePaused = false
+
+      if (type == 'redeemXETH') {
+        _xTokenRedeemInSystemStabilityModePaused =
+          _xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
+        return _xTokenRedeemInSystemStabilityModePaused || mintPaused
+      }
+      return mintPaused
+    },
+    [mintPaused, systemStatus, xTokenRedeemInSystemStabilityModePaused]
+  )
+  const checkSwapPause = useCallback(() => {
+    let isPaused = false
+    if (symbol == 'xETH') {
+      isPaused = checkRedeemPausedByType('redeemXETH')
+    } else {
+      isPaused = checkMintPausedByType('mintfETH')
+    }
+    return mintPaused || redeemPaused || isPaused || !_isValidPrice
+  }, [mintPaused, redeemPaused, !_isValidPrice])
+
   const canMint = useMemo(() => {
-    if (!isValidPrice) {
+    if (!_isValidPrice) {
       return false
     }
 
     const _enableETH =
       cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
       cBN(fromAmount).isGreaterThan(0)
-
-    let _fTokenMintInSystemStabilityModePaused = false
+    let isPausedMint = false
     if (isF) {
-      _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+      isPausedMint = checkMintPausedByType('mintfETH')
+    }
+    if (isSwap) {
+      isPausedMint = checkSwapPause()
     }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
-    return !mintPaused && _enableETH && !_fTokenMintInSystemStabilityModePaused
+    return !mintPaused && _enableETH && !isPausedMint
   }, [
     fromAmount,
     mintPaused,
     fTokenMintInSystemStabilityModePaused,
     isF,
     tokens.ETH.balance,
-    isValidPrice,
+    _isValidPrice,
   ])
 
   useEffect(() => {
-    let _fTokenMintInSystemStabilityModePaused = false
-    if (isF) {
-      _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+    const isPausedMintfETH = checkMintPausedByType('mintfETH')
+    if (isSwap) {
+      setShowDisabledNotice(checkSwapPause())
+    } else {
+      setShowDisabledNotice(mintPaused || isPausedMintfETH || !_isValidPrice)
     }
-    setShowDisabledNotice(mintPaused || _fTokenMintInSystemStabilityModePaused)
-  }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused])
+  }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused, isSwap])
 
   useEffect(() => {
     getMinAmount(true)
     // handleGetAllMinAmount()
   }, [isF, slippage, fromAmount, symbol])
 
-  console.log('tokens----', tokens, fromAmount)
-
   return (
     <div className={styles.container}>
+      {isXETHBouns ? (
+        <DetailCell
+          title={`${fb4(
+            cBN(baseInfo.bonusRatioRes).times(100),
+            false,
+            18,
+            2
+          )}% bonus ends after mint xETH`}
+          content={['']}
+        />
+      ) : null}
+
       <BalanceInput
         placeholder="-"
         symbol={symbol}
@@ -603,19 +627,8 @@ export default function Mint({ slippage, isValidPrice }) {
         // onChange={hanldexETHAmountChanged}
       />
 
-      {isXETHBouns && isX ? (
-        <>
-          <DetailCell
-            title={`${fb4(
-              cBN(baseInfo.bonusRatioRes).times(100),
-              false,
-              18,
-              2
-            )}% bonus ends after mint xETH`}
-            content={['']}
-          />
-          <DetailCell title="Mint xETH Bouns:" content={[mintXBouns || '-']} />
-        </>
+      {isXETHBouns ? (
+        <DetailCell title="Mint xETH Bouns:" content={[mintXBouns]} />
       ) : null}
 
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />

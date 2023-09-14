@@ -106,8 +106,8 @@ export default function Redeem({ slippage }) {
 
   const fxTokenAmount = useMemo(() => {
     console.log('ethAmount', manualNum, ETHtAmountIn, fnav, feeCBN)
-    let _tokenAmountIn = ETHtAmountIn
-    let _tokenNav = isF ? fnav : xnav
+    const _tokenAmountIn = ETHtAmountIn
+    const _tokenNav = isF ? fnav : xnav
     const _needETH = cBN(_tokenAmountIn)
       .div(1e18)
       .times(ethPrice)
@@ -119,7 +119,7 @@ export default function Redeem({ slippage }) {
 
   const hanldeETHAmountChanged = (v) => {
     setETHtAmountIn(v.toString(10))
-    let _pre = manualNum + 1
+    const _pre = manualNum + 1
     setManualNum(_pre)
   }
 
@@ -170,13 +170,13 @@ export default function Redeem({ slippage }) {
       _xTokenRedeemInSystemStabilityModePaused =
         xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
     }
-    console.log(
-      'redeemPaused---',
-      redeemPaused,
-      xTokenRedeemInSystemStabilityModePaused,
-      systemStatus,
-      _xTokenRedeemInSystemStabilityModePaused
-    )
+    // console.log(
+    //   'redeemPaused---',
+    //   redeemPaused,
+    //   xTokenRedeemInSystemStabilityModePaused,
+    //   systemStatus,
+    //   _xTokenRedeemInSystemStabilityModePaused
+    // )
     setShowDisabledNotice(
       redeemPaused || _xTokenRedeemInSystemStabilityModePaused
     )
@@ -210,7 +210,7 @@ export default function Redeem({ slippage }) {
       }
       minout_ETH = await marketContract.methods
         .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
-        .call({ from: _currentAccount, from: _currentAccount })
+        .call({ from: _currentAccount })
 
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
