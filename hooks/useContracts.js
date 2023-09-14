@@ -326,7 +326,7 @@ export const useErc20Token = (tokenAddr, approveForAddr) => {
 }
 
 export const useAladdinClevVest = () => {
-  const address = config.contracts.aladdinCLEVVest
+  const address = config.contracts.fx_Vesting
   const { getContract } = useContract()
   return useMemo(
     () => ({

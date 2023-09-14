@@ -60,13 +60,8 @@ export default function VestingPage() {
 
   return (
     <div className="container text-center text-lg md:text-xl">
-      <div className="my-12">
-        Airdrop to beta users will be linearly vested over 1 year with a total
-        distribution of 100,000 CLEV.
-        <br />
-        <br />
-        Bonus for CLever Token Offering participants can be claimed from
-        2022/10/16 00:00:00 UTC.
+      <div className="mt-32 mb-16 text-[36px]">
+        FNX Token Offering participants can be claimed
       </div>
       <div className="mb-12">
         <div
@@ -80,15 +75,15 @@ export default function VestingPage() {
         <InfoItem
           title="Total of Your Airdrop"
           value={`${totalClaimAble}`}
-          unit="CLEV"
+          unit="FNX"
         />
-        <InfoItem title="Claimable" value={`${canClaimText}`} unit="CLEV" />
+        <InfoItem title="Claimable" value={`${canClaimText}`} unit="FNX" />
         <InfoItem
           title="Not Yet Vested"
           value={`${notYetVestedText}`}
-          unit="CLEV"
+          unit="FNX"
         />
-        <InfoItem title="Claimed" value={`${claimedAmount}`} unit="CLEV" />
+        <InfoItem title="Claimed" value={`${claimedAmount}`} unit="FNX" />
         {!!startTime && (
           <InfoItem title="Start Time" value={`${startTimeText}`} />
         )}
@@ -111,9 +106,7 @@ export default function VestingPage() {
                 <tr>
                   <td className={cn('border p-4')}>{item.startTime}</td>
                   <td className={cn('border p-4')}>{item.endTime}</td>
-                  <td className={cn('border p-4')}>
-                    {item.vestingAmount} CLEV
-                  </td>
+                  <td className={cn('border p-4')}>{item.vestingAmount} FNX</td>
                   <td className={cn('border p-4')}>
                     {item.vestingAmountPercent}
                   </td>

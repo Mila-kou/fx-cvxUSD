@@ -65,7 +65,7 @@ const useData = () => {
         veBalanceOf(_currentAccount),
         balanceOf(veAddress),
         clevTotalSupply(),
-        balanceOf(config.contracts.aladdinCLEVVest),
+        balanceOf(config.contracts.fx_Vesting),
         balanceOf(config.contracts.clevHoderTreasuyry),
         feeContractForCVX.methods.tokens_per_week(thisWeekTimestamp),
         feeContractForCVX.methods.tokens_per_week(preWeekTimestamp),

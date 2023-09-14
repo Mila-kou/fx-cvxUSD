@@ -28,6 +28,13 @@ const contracts = {
   fx_ReservePool: '0xe7FC6e314B8D399eEB8345362ea8CceF629e3CBc',
   fx_FxETHTwapOracle: '0xAd36C7B3C5E0e097884DE951C271eDf5e99EB567',
 
+  fx_Vesting: '0x8eD40AD1aeC467406925cf687c6c654c1D5D1C8f',
+
+  FNX: '0x5cBd5fb34489A61CCD2141c0f93712064528A38e',
+  veFNX: '0x435537c3Ee6A3E5d846bBC17485bE3d9357966b4',
+  TokenMinter: '0xa36a3f8e537d39f39fBFacC317d300ED30230C77',
+  GaugeController: '0x84C2f377DD809C6Eb8F5F1bfd61803ba13E8F115',
+
   // 需要对应合约
   // aladdinRewardClaimHelper
   // aladdinVeFeeForCVX
@@ -37,8 +44,8 @@ const contracts = {
   // aldCvx
   // lockCvx
   // transmuterCvx
-
   // aladdinVeCLEV
+
   CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
 
   //  ----

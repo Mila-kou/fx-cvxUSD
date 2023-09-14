@@ -24,7 +24,7 @@ const routers = [
   ['f(x) Protocol', '/home'],
   ['Rebalance Pool', '/rebalance-pool'],
   // ['Farming', '/farming'],
-  // ['Vesting', '/vesting'],
+  ['Vesting', '/vesting'],
   ['Lock', '/locker'],
   ['Offering', '/offering'],
 ]
