@@ -336,3 +336,16 @@ export const useAladdinClevVest = () => {
     [getContract]
   )
 }
+
+////// Curve ///////
+export const useCurvefiSwap = () => {
+  const address = config.contracts.CurvefiSwapRouterAddress
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.curveSwapABI),
+      address,
+    }),
+    [getContract]
+  )
+}

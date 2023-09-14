@@ -39,6 +39,7 @@ const contracts = {
   // transmuterCvx
 
   // aladdinVeCLEV
+  CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
 
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',
