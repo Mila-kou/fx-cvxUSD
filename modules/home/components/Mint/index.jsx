@@ -58,6 +58,7 @@ export default function Mint({ slippage }) {
     minout_slippage: 0,
     minout_ETH: 0,
     minout_slippage_tvl: 0,
+    bonus: 0,
   })
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
@@ -263,10 +264,12 @@ export default function Mint({ slippage }) {
       }
       console.log('minout_ETH----', minout_ETH)
 
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
-      )
+      let _minOut_CBN = cBN(0)
       if (isF) {
+        _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+
         const _minOut_fETH_tvl = fb4(
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
@@ -279,26 +282,31 @@ export default function Mint({ slippage }) {
           minout_slippage_tvl: _minOut_fETH_tvl,
         })
       } else {
-        const _minOut_xETH_tvl = fb4(
-          _minOut_CBN.multipliedBy(xnav).toString(10)
-        )
-        setXETHtAmount({
-          minout_ETH: checkNotZoroNumOption(
-            minout_ETH,
-            fb4(minout_ETH.toString(10))
-          ),
-          minout_slippage: fb4(_minOut_CBN.toString(10)),
-          minout_slippage_tvl: _minOut_xETH_tvl,
-        })
+        if (typeof minout_ETH !== 'number') {
+          const { _bonus, _xTokenMinted } = minout_ETH || {}
+          _minOut_CBN = (cBN(_xTokenMinted) || cBN(0)).multipliedBy(
+            cBN(1).minus(cBN(slippage).dividedBy(100))
+          )
+
+          const _minOut_xETH_tvl = fb4(
+            _minOut_CBN.multipliedBy(xnav).toString(10)
+          )
+          setXETHtAmount({
+            minout_ETH: checkNotZoroNumOption(
+              _xTokenMinted,
+              fb4(_xTokenMinted.toString(10))
+            ),
+            minout_slippage: fb4(_minOut_CBN.toString(10)),
+            minout_slippage_tvl: _minOut_xETH_tvl,
+            bonus: checkNotZoroNumOption(_bonus, fb4(_bonus.toString(10))),
+          })
+        }
       }
 
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
       console.log('minout_ETH------', error)
-      // if (error.message.indexOf('no cap to buy') > -1) {
-      //   // noPayableErrorAction(`error_buy`, 'No cap to buy')
-      // }
       setFETHtAmount({
         minout_ETH: 0,
         minout_slippage: 0,
