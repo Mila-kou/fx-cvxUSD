@@ -209,9 +209,12 @@ const useETH = () => {
         mintXETHFee: (_mintXETHFee || 0) / 1e18,
       })
 
-      const xETHBonus =
-        (fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0) * 0.08
-
+      const xETHBonus = checkNotZoroNumOption(
+        fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn,
+        cBN(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn)
+          .times(fxInfo.baseInfo?.bonusRatioRes)
+          .div(1e18)
+      )
       const maxXETHBonus_text = checkNotZoroNumOption(
         maxXETHBonus,
         fb4(maxXETHBonus, false, 0)

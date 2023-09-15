@@ -212,7 +212,10 @@ export default function Mint({ slippage }) {
           ](0).call({ value: _ETHtAmountAndGas, from: _currentAccount })
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
-            setMintXBouns(resData._bonus)
+            const _userXETHBonus = cBN(resData._bonus).gt(xETHBonus)
+              ? xETHBonus
+              : resData._bonus
+            setMintXBouns(_userXETHBonus)
           } else {
             minout_ETH = resData
           }
@@ -282,7 +285,10 @@ export default function Mint({ slippage }) {
 
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
-            setMintXBouns(resData._bonus)
+            const _userXETHBonus = cBN(resData._bonus).gt(xETHBonus)
+              ? xETHBonus
+              : resData._bonus
+            setMintXBouns(_userXETHBonus)
           } else {
             minout_ETH = resData
           }
