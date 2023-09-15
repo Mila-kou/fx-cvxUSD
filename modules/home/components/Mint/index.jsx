@@ -205,9 +205,6 @@ export default function Mint({ slippage }) {
           minout_ETH = await FxGatewayContract.methods
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
             .call({ from: _currentAccount })
-          if (isX) {
-            // 用 market 的 mintXToken 算 bonus
-          }
         } else if (symbol === 'stETH') {
           minout_ETH = await stETHGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
@@ -299,7 +296,7 @@ export default function Mint({ slippage }) {
           minout_slippage_tvl: _minOut_fETH_tvl,
         })
       } else {
-        if (typeof minout_ETH !== 'number') {
+        if (!checkNotZoroNum(minout_ETH)) {
           const { _bonus, _xTokenMinted } = minout_ETH || {}
           _minOut_CBN = (cBN(_xTokenMinted) || cBN(0)).multipliedBy(
             cBN(1).minus(cBN(slippage).dividedBy(100))
@@ -316,6 +313,23 @@ export default function Mint({ slippage }) {
             minout_slippage: fb4(_minOut_CBN.toString(10)),
             minout_slippage_tvl: _minOut_xETH_tvl,
             bonus: checkNotZoroNumOption(_bonus, fb4(_bonus.toString(10))),
+          })
+        } else {
+          _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
+            cBN(1).minus(cBN(slippage).dividedBy(100))
+          )
+
+          const _minOut_fETH_tvl = fb4(
+            _minOut_CBN.multipliedBy(fnav).toString(10)
+          )
+          setXETHtAmount({
+            minout_ETH: checkNotZoroNumOption(
+              minout_ETH,
+              fb4(minout_ETH.toString(10))
+            ),
+            minout_slippage: fb4(_minOut_CBN.toString(10)),
+            minout_slippage_tvl: _minOut_fETH_tvl,
+            bonus: 0,
           })
         }
       }
