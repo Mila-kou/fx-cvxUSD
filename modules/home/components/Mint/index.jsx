@@ -213,6 +213,8 @@ export default function Mint({ slippage }) {
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
             setMintXBouns(resData._bonus)
+          } else {
+            minout_ETH = resData
           }
         } else {
           if (symbol == 'ETH') {
@@ -277,9 +279,12 @@ export default function Mint({ slippage }) {
             value: _ETHtAmountAndGas,
             from: _currentAccount,
           })
+
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
             setMintXBouns(resData._bonus)
+          } else {
+            minout_ETH = resData
           }
         }
       } else {
