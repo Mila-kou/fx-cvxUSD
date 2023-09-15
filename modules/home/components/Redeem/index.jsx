@@ -11,8 +11,41 @@ import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
+import { useFx_FxGateway } from '@/hooks/useContracts'
 import { DetailCell, NoticeCard } from '../Common'
 import Button from '@/components/Button'
+
+const OPTIONS = [
+  ['stETH', config.tokens.stETH],
+  [
+    'WETH',
+    config.tokens.weth,
+    ['0x277090c5ae6b80a3c525f09d7ae464a8fa83d9c08804'],
+  ],
+  [
+    'USDC',
+    config.tokens.usdc,
+    [
+      '0x277090c5ae6b80a3c525f09d7ae464a8fa83d9c08804',
+      '0x49fe1afc5df753cd252e1068dfa0428d3755b20a6c08',
+    ],
+    // [
+    //   '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+    //   '0xdc24316b9ae028f1497c275eb9192a3ea0f67022',
+    //   '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    //   '0x7f86bf177dd4f3494b841a37e810a34dd56c829b',
+    //   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    // ],
+  ],
+  [
+    'USDT',
+    config.tokens.usdt,
+    [
+      '0x277090c5ae6b80a3c525f09d7ae464a8fa83d9c08804',
+      '0x4bd7d6e5d89150b5caa781bc12012fe06ea8578ad008',
+    ],
+  ],
+]
 
 export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
@@ -20,6 +53,10 @@ export default function Redeem({ slippage }) {
   const [redeeming, setRedeeming] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+
+  const [symbol, setSymbol] = useState('stETH')
+  const { contract: FxGatewayContract, address: fxGatewayContractAddress } =
+    useFx_FxGateway()
 
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
 
@@ -48,7 +85,7 @@ export default function Redeem({ slippage }) {
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
-  const [ETHtAmountIn, setETHtAmountIn] = useState(0)
+  const [priceLoading, setPriceLoading] = useState(false)
   const [manualNum, setManualNum] = useState(0)
   const [minOutETHtAmount, setMinOutETHtAmount] = useState({
     minout_slippage: 0,
@@ -104,24 +141,24 @@ export default function Redeem({ slippage }) {
     return [fb4(_fee), fb4(_feeUsd), _feeCBN]
   }, [isF, systemStatus, ethPrice])
 
-  const fxTokenAmount = useMemo(() => {
-    console.log('ethAmount', manualNum, ETHtAmountIn, fnav, feeCBN)
-    const _tokenAmountIn = ETHtAmountIn
-    const _tokenNav = isF ? fnav : xnav
-    const _needETH = cBN(_tokenAmountIn)
-      .div(1e18)
-      .times(ethPrice)
-      .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
-      .div(_tokenNav)
-    console.log('ethAmount', _needETH.toString(10))
-    // setETHtAmount(_needETH.times(1e18).toString(10))
-  }, [ETHtAmountIn, manualNum])
+  // const fxTokenAmount = useMemo(() => {
+  //   console.log('ethAmount', manualNum, ETHtAmountIn, fnav, feeCBN)
+  //   const _tokenAmountIn = ETHtAmountIn
+  //   const _tokenNav = isF ? fnav : xnav
+  //   const _needETH = cBN(_tokenAmountIn)
+  //     .div(1e18)
+  //     .times(ethPrice)
+  //     .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
+  //     .div(_tokenNav)
+  //   console.log('ethAmount', _needETH.toString(10))
+  //   // setETHtAmount(_needETH.times(1e18).toString(10))
+  // }, [ETHtAmountIn, manualNum])
 
-  const hanldeETHAmountChanged = (v) => {
-    setETHtAmountIn(v.toString(10))
-    const _pre = manualNum + 1
-    setManualNum(_pre)
-  }
+  // const hanldeETHAmountChanged = (v) => {
+  //   setETHtAmountIn(v.toString(10))
+  //   const _pre = manualNum + 1
+  //   setManualNum(_pre)
+  // }
 
   const hanldeFETHAmountChanged = (v) => {
     setFETHtAmount(v.toString(10))
@@ -131,7 +168,10 @@ export default function Redeem({ slippage }) {
     setXETHtAmount(v.toString(10))
   }
 
-  const selectTokenInfo = useToken(selectTokenAddress, 'fx_redeem')
+  const selectTokenInfo = useToken(
+    selectTokenAddress,
+    symbol == 'stETH' ? 'fx_redeem' : 'fx_fxGateway'
+  )
 
   const { BtnWapper } = useApprove({
     approveAmount: tokenAmount,
@@ -193,10 +233,13 @@ export default function Redeem({ slippage }) {
     })
   }
 
-  const getMinAmount = async () => {
+  const getMinAmount = async (needLoading) => {
     try {
       if (!checkNotZoroNum(tokenAmount)) {
         return 0
+      }
+      if (needLoading) {
+        setPriceLoading(true)
       }
       let minout_ETH
       let _fTokenIn = 0
@@ -208,10 +251,23 @@ export default function Redeem({ slippage }) {
         _xTokenIn = tokenAmount
         _fTokenIn = 0
       }
-      minout_ETH = await marketContract.methods
-        .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
-        .call({ from: _currentAccount })
-
+      if (symbol === 'stETH') {
+        minout_ETH = await marketContract.methods
+          .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
+          .call({ from: _currentAccount })
+      } else {
+        const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
+        const { _dstOut } = await FxGatewayContract.methods
+          .redeem(
+            ['0xAF345c813CE17Cc5837BfD14a910D365223F3B95', route],
+            _fTokenIn,
+            _xTokenIn,
+            0,
+            0
+          )
+          .call({ from: _currentAccount })
+        minout_ETH = _dstOut
+      }
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
@@ -220,14 +276,25 @@ export default function Redeem({ slippage }) {
       setMinOutETHtAmount({
         minout_ETH: checkNotZoroNumOption(
           minout_ETH,
-          fb4(minout_ETH.toString(10))
+          fb4(minout_ETH.toString(10), false, config.zapTokens[symbol].decimals)
         ),
-        minout_slippage: fb4(_minOut_CBN.toString(10)),
+        minout_slippage: fb4(
+          _minOut_CBN.toString(10),
+          false,
+          config.zapTokens[symbol].decimals
+        ),
         minout_slippage_tvl: _minOut_ETH_tvl,
       })
+      setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (e) {
       console.log(e)
+      setMinOutETHtAmount({
+        minout_ETH: 0,
+        minout_slippage: 0,
+        minout_slippage_tvl: 0,
+      })
+      setPriceLoading(false)
       return 0
     }
   }
@@ -245,12 +312,41 @@ export default function Redeem({ slippage }) {
         _xTokenIn = tokenAmount
         _fTokenIn = 0
       }
-      const apiCall = await marketContract.methods.redeem(
-        _fTokenIn,
-        _xTokenIn,
-        _currentAccount,
-        _minoutETH
-      )
+
+      let apiCall
+      if (symbol === 'stETH') {
+        apiCall = await marketContract.methods.redeem(
+          _fTokenIn,
+          _xTokenIn,
+          _currentAccount,
+          _minoutETH
+        )
+      } else {
+        const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
+
+        const { _dstOut, _baseOut } = await FxGatewayContract.methods
+          .redeem(
+            ['0xAF345c813CE17Cc5837BfD14a910D365223F3B95', route],
+            _fTokenIn,
+            _xTokenIn,
+            0,
+            0
+          )
+          .call({ from: _currentAccount })
+        const dstOut = (cBN(_dstOut) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
+        )
+        const baseOut = (cBN(_baseOut) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
+        )
+        apiCall = await FxGatewayContract.methods.redeem(
+          ['0xAF345c813CE17Cc5837BfD14a910D365223F3B95', route],
+          _fTokenIn,
+          _xTokenIn,
+          baseOut,
+          dstOut
+        )
+      }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
@@ -274,8 +370,15 @@ export default function Redeem({ slippage }) {
   }, [selected])
 
   useEffect(() => {
-    getMinAmount()
-  }, [isF, slippage, tokenAmount])
+    getMinAmount(true)
+  }, [isF, slippage, tokenAmount, symbol])
+
+  const toUsd = useMemo(() => {
+    if (['USDT', 'USDC'].includes(symbol)) {
+      return '1'
+    }
+    return ethPrice_text
+  }, [symbol, ethPrice_text, fnav, xnav])
 
   return (
     <div className={styles.container}>
@@ -310,12 +413,15 @@ export default function Redeem({ slippage }) {
       </div>
 
       <BalanceInput
-        symbol="stETH"
+        symbol={symbol}
         placeholder={canReceived ? minOutETHtAmount.minout_ETH : '-'}
-        usd={`$${ethPrice_text}`}
+        decimals={config.zapTokens[symbol].decimals}
+        usd={`$${toUsd}`}
         disabled
-        // onChange={hanldeETHAmountChanged}
+        loading={priceLoading}
         className={styles.inputItem}
+        options={OPTIONS.map((item) => item[0])}
+        onSymbolChanged={(v) => setSymbol(v)}
       />
 
       <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
@@ -324,7 +430,7 @@ export default function Redeem({ slippage }) {
           title="Min. Received:"
           content={[
             minOutETHtAmount.minout_slippage,
-            minOutETHtAmount.minout_slippage_tvl,
+            // minOutETHtAmount.minout_slippage_tvl,
           ]}
         />
       )}
@@ -338,22 +444,25 @@ export default function Redeem({ slippage }) {
       )}
 
       <div className={styles.action}>
-        {/* <BtnWapper
-          loading={redeeming}
-          disabled={!canRedeem}
-          onClick={handleRedeem}
-          width="100%"
-        >
-          Redeem
-        </BtnWapper> */}
-        <Button
-          loading={redeeming}
-          disabled={!canRedeem}
-          onClick={handleRedeem}
-          width="100%"
-        >
-          Redeem
-        </Button>
+        {symbol === 'stETH' ? (
+          <Button
+            loading={redeeming}
+            disabled={!canRedeem}
+            onClick={handleRedeem}
+            width="100%"
+          >
+            Redeem
+          </Button>
+        ) : (
+          <BtnWapper
+            loading={redeeming}
+            disabled={!canRedeem}
+            onClick={handleRedeem}
+            width="100%"
+          >
+            Redeem
+          </BtnWapper>
+        )}
       </div>
     </div>
   )
