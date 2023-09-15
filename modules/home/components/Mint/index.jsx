@@ -719,7 +719,10 @@ export default function Mint({ slippage }) {
       />
 
       {isX && mintXBouns ? (
-        <DetailCell title="Mint xETH Bouns:" content={[fb4(cBN(mintXBouns))]} />
+        <DetailCell
+          title="Mint xETH Bouns:"
+          content={[fb4(cBN(mintXBouns)), '', 'stETH']}
+        />
       ) : null}
 
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
