@@ -333,12 +333,12 @@ export default function Redeem({ slippage }) {
             0
           )
           .call({ from: _currentAccount })
-        const dstOut = (cBN(_dstOut) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
-        )
-        const baseOut = (cBN(_baseOut) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
-        )
+        const dstOut = (cBN(_dstOut) || cBN(0))
+          .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+          .toFixed(0)
+        const baseOut = (cBN(_baseOut) || cBN(0))
+          .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+          .toFixed(0)
         // console.log(
         //   '_fTokenIn----',
         //   _fTokenIn,
