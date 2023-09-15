@@ -6,7 +6,6 @@ import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
@@ -29,13 +28,6 @@ const OPTIONS = [
       '0x277090c5ae6b80a3c525f09d7ae464a8fa83d9c08804',
       '0x49fe1afc5df753cd252e1068dfa0428d3755b20a6c08',
     ],
-    // [
-    //   '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
-    //   '0xdc24316b9ae028f1497c275eb9192a3ea0f67022',
-    //   '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    //   '0x7f86bf177dd4f3494b841a37e810a34dd56c829b',
-    //   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    // ],
   ],
   [
     'USDT',
@@ -333,12 +325,13 @@ export default function Redeem({ slippage }) {
             0
           )
           .call({ from: _currentAccount })
-        const dstOut = (cBN(_dstOut) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
-        )
-        const baseOut = (cBN(_baseOut) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
-        )
+        const dstOut = (cBN(_dstOut) || cBN(0))
+          .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+          .toFixed(0)
+        const baseOut = (cBN(_baseOut) || cBN(0))
+          .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+          .toFixed(0)
+
         // console.log(
         //   '_fTokenIn----',
         //   _fTokenIn,
