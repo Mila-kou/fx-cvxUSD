@@ -238,7 +238,7 @@ export default function Mint({ slippage }) {
             amount: _ETHtAmountAndGas.toString(),
             minout: 0,
           })
-          console.log('_resCurve----', res)
+          console.log('_resCurve----', selectTokenAddress, res)
 
           // const res = await get1inchParams({
           //   src:
@@ -335,6 +335,9 @@ export default function Mint({ slippage }) {
         minout_slippage_tvl: 0,
       })
       setPriceLoading(false)
+      if (error?.message && error.message.includes('Exceed total cap')) {
+        noPayableErrorAction(`error_mint`, 'Exceed total cap')
+      }
       return 0
     }
   }
