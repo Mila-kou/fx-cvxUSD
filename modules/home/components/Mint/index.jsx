@@ -507,59 +507,86 @@ export default function Mint({ slippage }) {
     [canReceived, selectTokenInfo.allowance, fromAmount]
   )
 
-  const checkMintPausedByType = useCallback(
+  const checkMintPaused = useCallback(() => {
+    const _fTokenMintInSystemStabilityModePaused =
+      fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+    return _fTokenMintInSystemStabilityModePaused
+  }, [fTokenMintInSystemStabilityModePaused, systemStatus])
+  const checkMintRedeemPausedByType = useCallback(
     (type) => {
       let _fTokenMintInSystemStabilityModePaused = false
-      if (type == 'mintXETH') {
-        return mintPaused
-      }
-      _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
-      return _fTokenMintInSystemStabilityModePaused || mintPaused
-    },
-    [mintPaused, systemStatus, fTokenMintInSystemStabilityModePaused]
-  )
-
-  const checkRedeemPausedByType = useCallback(
-    (type) => {
       let _xTokenRedeemInSystemStabilityModePaused = false
-
-      if (type == 'redeemXETH') {
+      if (type == 'swapTofETH') {
         _xTokenRedeemInSystemStabilityModePaused =
-          _xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
-        return _xTokenRedeemInSystemStabilityModePaused || mintPaused
+          xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
+        _fTokenMintInSystemStabilityModePaused = checkMintPaused()
+        return (
+          mintPaused ||
+          _xTokenRedeemInSystemStabilityModePaused ||
+          _fTokenMintInSystemStabilityModePaused ||
+          !_isValidPrice
+        )
       }
-      return mintPaused
+      // swapToXETH
+      return mintPaused || redeemPaused || !_isValidPrice
     },
-    [mintPaused, systemStatus, xTokenRedeemInSystemStabilityModePaused]
+    [
+      mintPaused,
+      systemStatus,
+      xTokenRedeemInSystemStabilityModePaused,
+      fTokenMintInSystemStabilityModePaused,
+    ]
   )
   const checkSwapPause = useCallback(() => {
     let isPaused = false
     if (symbol == 'xETH') {
-      isPaused = checkRedeemPausedByType('redeemXETH')
+      isPaused = checkMintRedeemPausedByType('swapTofETH')
     } else {
-      isPaused = checkMintPausedByType('mintfETH')
+      isPaused = checkMintRedeemPausedByType('swapToXETH')
     }
     return mintPaused || redeemPaused || isPaused || !_isValidPrice
   }, [mintPaused, redeemPaused, !_isValidPrice])
 
+  const checkPause = useCallback(() => {
+    let isPaused = false
+    if (isSwap) {
+      isPaused = checkSwapPause()
+    } else {
+      if (isF) {
+        const isPausedMintfETH = checkMintPaused()
+        isPaused = mintPaused || isPausedMintfETH || !_isValidPrice
+      } else {
+        isPaused = mintPaused || !_isValidPrice
+      }
+    }
+    console.log(
+      'isPaused----',
+      isPaused,
+      isF,
+      isSwap,
+      mintPaused,
+      !_isValidPrice
+    )
+    setShowDisabledNotice(isPaused)
+    return isPaused
+  }, [
+    mintPaused,
+    isSwap,
+    isF,
+    redeemPaused,
+    !_isValidPrice,
+    fTokenMintInSystemStabilityModePaused,
+  ])
+
   const canMint = useMemo(() => {
-    if (!_isValidPrice) {
+    if (checkPause()) {
       return false
     }
-
     const _enableETH =
       cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
       cBN(fromAmount).isGreaterThan(0)
-    let isPausedMint = false
-    if (isF) {
-      isPausedMint = checkMintPausedByType('mintfETH')
-    }
-    if (isSwap) {
-      isPausedMint = checkSwapPause()
-    }
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
-    return !mintPaused && _enableETH && !isPausedMint
+    return !mintPaused && _enableETH
   }, [
     fromAmount,
     mintPaused,
@@ -570,13 +597,15 @@ export default function Mint({ slippage }) {
   ])
 
   useEffect(() => {
-    const isPausedMintfETH = checkMintPausedByType('mintfETH')
-    if (isSwap) {
-      setShowDisabledNotice(checkSwapPause())
-    } else {
-      setShowDisabledNotice(mintPaused || isPausedMintfETH || !_isValidPrice)
-    }
-  }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused, isSwap])
+    checkPause()
+  }, [
+    mintPaused,
+    isSwap,
+    isF,
+    redeemPaused,
+    !_isValidPrice,
+    fTokenMintInSystemStabilityModePaused,
+  ])
 
   useEffect(() => {
     getMinAmount(true)
