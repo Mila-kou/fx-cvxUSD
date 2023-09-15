@@ -87,7 +87,7 @@ function LockerUserInfo({ userData, userHasLocked, userLockExpired }) {
     <div className="user-info p-8">
       <Visible visible={!userHasLocked}>
         <div className="text-lg">
-          <div className="mb-2">Lock f(x) to earn protocol fees.</div>
+          <div className="mb-2">Lock FXN to earn protocol fees.</div>
         </div>
       </Visible>
       <Visible visible={userHasLocked}>
@@ -101,7 +101,7 @@ function LockerUserInfo({ userData, userHasLocked, userLockExpired }) {
             </Visible>
           ))}
         </div>
-        <div className="mb-14">
+        {/* <div className="mb-14">
           <div className="lock-rewards-title mb-3 text-xl">Lock Rewards</div>
           <div className="flex justify-between">
             {rewardTokens.map((item) => (
@@ -115,7 +115,7 @@ function LockerUserInfo({ userData, userHasLocked, userLockExpired }) {
               </div>
             ))}
           </div>
-        </div>
+            </div>
 
         <div className="flex justify-center">
           <Button
@@ -127,6 +127,7 @@ function LockerUserInfo({ userData, userHasLocked, userLockExpired }) {
             Claim ALL
           </Button>
         </div>
+         */}
       </Visible>
     </div>
   )

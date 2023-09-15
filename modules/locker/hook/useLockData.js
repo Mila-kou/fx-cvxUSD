@@ -4,9 +4,9 @@ import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
 import abi from '@/config/abi'
 import {
-  useVeClev,
   useVeFee,
-  useClev,
+  useFXN,
+  useVeFXN,
   usePlatformFeeDistributor,
   useContract,
 } from '@/hooks/useContracts'
@@ -26,8 +26,8 @@ const initContractInfo = {
 const useData = () => {
   const { _currentAccount, current, isAllReady } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
-  const { contract: veContract, address: veAddress } = useVeClev()
-  const { contract: clevContract } = useClev()
+  const { contract: veContract, address: veAddress } = useVeFXN()
+  const { contract: fxnContract } = useFXN()
   const {
     feeContractForCVX,
     feeContractForFrax,
@@ -58,7 +58,7 @@ const useData = () => {
       // console.log('preWeekTimestamp---', preWeekTimestamp, preTwoWeeksTimestamp)
 
       const { totalSupply, balanceOf: veBalanceOf } = veContract.methods
-      const { balanceOf, totalSupply: clevTotalSupply } = clevContract.methods
+      const { balanceOf, totalSupply: clevTotalSupply } = fxnContract.methods
 
       const abiCalls = [
         totalSupply(),
@@ -154,7 +154,7 @@ const useData = () => {
 
   return {
     info: contractInfo,
-    contracts: { veContract, clevContract },
+    contracts: { veContract, fxnContract },
   }
 }
 

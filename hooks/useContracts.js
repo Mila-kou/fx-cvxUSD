@@ -197,6 +197,19 @@ export const useClev = () => {
   )
 }
 
+export const useFXN = () => {
+  const address = config.contracts.FXN
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.AlaCLEV),
+      address,
+      tokenInfo: config.TOKENS_INFO.fxn,
+    }),
+    [getContract]
+  )
+}
+
 export const useAbcCVX = () => {
   const address = config.tokens.abcCVX
   const { getContract } = useContract()
@@ -241,6 +254,19 @@ export const useVeClev = () => {
       contract: getContract(address, abi.AlaVeCLEVABI),
       address,
       tokenInfo: config.TOKENS_INFO.veclev,
+    }),
+    [getContract]
+  )
+}
+
+export const useVeFXN = () => {
+  const address = config.contracts.veFXN
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.AlaVeCLEVABI),
+      address,
+      tokenInfo: config.TOKENS_INFO.veFXN,
     }),
     [getContract]
   )

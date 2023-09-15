@@ -62,12 +62,12 @@ const useInfo = () => {
           value: '0',
         },
         {
-          title: 'f(x) Locked',
+          title: 'FXN Locked',
           value: '0',
-          desc: '20% of f(x) Supply',
+          desc: '20% of FXN Supply',
         },
         {
-          title: 'vef(x)',
+          title: 'veFXN',
           value: '0',
           desc: '2.7 Years Average Lock',
         },
@@ -172,17 +172,17 @@ const useInfo = () => {
         info: [
           {
             title: 'Locking APR',
-            value: apr ? `${apr.toFixed(4)}%` : '-',
+            value: '0', // apr ? `${apr.toFixed(4)}%` : '-',
           },
           {
-            title: 'f(x) Locked',
+            title: 'FXN Locked',
             value: fb4(veLockedCLEV),
             desc: `${
               checkNotZoroNum(percentage) ? `${percentage}%` : '-'
-            } of f(x) Supply`,
+            } of FXN Supply`,
           },
           {
-            title: 'vef(x)',
+            title: 'veFXN',
             value: fb4(veTotalSupply),
             desc: `${avgTime()} Average Lock`,
           },
@@ -195,11 +195,11 @@ const useInfo = () => {
       userData: [
         {
           title: 'Your Locked',
-          value: `${fb4(amount)} f(x)`,
+          value: `${fb4(amount)} FXN`,
         },
         {
           title: 'Your Voting Power',
-          value: `${fb4(userVeShare)} vef(x)`,
+          value: `${fb4(userVeShare)} veFXN`,
         },
         {
           title: 'Locked Until',

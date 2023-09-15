@@ -8,7 +8,7 @@ import Tabs from '@/modules/home/components/Tabs'
 import useApprove from '@/hooks/useApprove'
 import config from '@/config/index'
 import Visible from '@/components/Visible'
-import Input from '@/components/Input'
+import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import { cBN, fb4 } from '@/utils/index'
 import useCreateLock from '../hook/useCreateLock'
 import { VeLockerRules } from './Info'
@@ -36,14 +36,16 @@ function VELockCom({
   const [userLockExpired, setUserLockExpired] = useState(false)
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
 
-  // Get f(x) token info
-  const { tokenContract: clevContract, tokenInfo: clevTokenInfo } =
-    useErc20Token(config.contracts.aladdinCLEV, config.contracts.aladdinVeCLEV)
+  // Get FXN token info
+  const { tokenContract: fxnContract, tokenInfo: fxnTokenInfo } = useErc20Token(
+    config.contracts.FXN,
+    config.contracts.veFXN
+  )
   const { BtnWapper } = useApprove({
     approveAmount: lockAmount,
-    allowance: clevTokenInfo.allowance,
-    tokenContract: clevContract,
-    approveAddress: config.contracts.aladdinVeCLEV,
+    allowance: fxnTokenInfo.allowance,
+    tokenContract: fxnContract,
+    approveAddress: config.contracts.veFXN,
   })
 
   useEffect(() => {
@@ -121,7 +123,7 @@ function VELockCom({
 
   const canCreateLock =
     cBN(lockAmount).isGreaterThan(0) &&
-    cBN(lockAmount).isLessThanOrEqualTo(clevTokenInfo.balance)
+    cBN(lockAmount).isLessThanOrEqualTo(fxnTokenInfo.balance)
 
   const addTime = ({ value: days, disabledDate: disabled }) => {
     if (disabled) {
@@ -172,7 +174,7 @@ function VELockCom({
           />
         </Visible>
         <Visible visible={!userHasLocked}>
-          <div className="title text-3xl mb-8 font-semibold">Lock f(x)</div>
+          <div className="title text-3xl mb-8 font-semibold">Lock FXN</div>
         </Visible>
 
         <Visible visible={userLockExpired}>
@@ -183,34 +185,20 @@ function VELockCom({
 
         <Visible visible={!userLockExpired}>
           <Visible visible={tabsActinveKey === 0 || status == 'no-lock'}>
-            <Input
-              label="Amount"
-              value={lockAmount}
-              labelDes={
-                <span>
-                  Available:{' '}
-                  <span className="color-blue">
-                    {fb4(clevTokenInfo.balance)} f(x)
-                  </span>
-                </span>
-              }
+            <BalanceInput
+              placeholder="0"
+              symbol="FXN"
+              balance={fb4(fxnTokenInfo.balance, false)}
+              maxAmount={fxnTokenInfo.balance}
               onChange={setLockAmount}
-              reset={clearInputTrigger}
-              hidePercent
-              balance={clevTokenInfo.balance}
-              onSetMax={() => setLockAmount(clevTokenInfo.balance)}
-              // eslint-disable-next-line react/no-unstable-nested-components
-              BottomElement={() => (
-                <div style={{ position: 'relative', top: 0 }}>
-                  <Visible visible={status === 'ing'}>
-                    Your starting voting power will be:{' '}
-                    <span className="color-blue">
-                      {fb4(lockMoreVePower)} vef(x)
-                    </span>
-                  </Visible>
-                </div>
-              )}
+              withUsd={false}
             />
+            <div className="mt-4">
+              <Visible visible={status === 'ing'}>
+                Your starting voting power will be:{' '}
+                <span className="color-blue">{fb4(lockMoreVePower)} veFXN</span>
+              </Visible>
+            </div>
 
             <Visible visible={userHasLocked}>
               <div className="flex justify-center mt-5">
@@ -262,16 +250,16 @@ function VELockCom({
               <div>
                 Your starting voting power will be:{' '}
                 <span className="color-blue">
-                  {fb4(status === 'no-lock' ? vePower : extendVePower)} vef(x)
+                  {fb4(status === 'no-lock' ? vePower : extendVePower)} veFXN
                 </span>
               </div>
 
               <Visible visible={!userHasLocked}>
-                <div>You can only claim your f(x) after lock expiration.</div>
+                <div>You can only claim your FXN after lock expiration.</div>
               </Visible>
               <div>
                 After creating your lock, you will need to{' '}
-                <Tooltip title="If your boost level hasn't changed after locking vef(x), you will need to conduct one transaction (deposit, withdraw or claim) from the gauge that you are providing liquidity to update your boost.">
+                <Tooltip title="If your boost level hasn't changed after locking veFXN, you will need to conduct one transaction (deposit, withdraw or claim) from the gauge that you are providing liquidity to update your boost.">
                   <span className="underline">apply your boost</span>
                 </Tooltip>
                 .

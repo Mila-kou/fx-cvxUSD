@@ -61,7 +61,7 @@ export default function VestingPage() {
   return (
     <div className="container text-center text-lg md:text-xl">
       <div className="mt-32 mb-16 text-[36px]">
-        FNX Token Offering participants can be claimed
+        FXN Token Offering participants can be claimed
       </div>
       <div className="mb-12">
         <div
@@ -75,15 +75,15 @@ export default function VestingPage() {
         <InfoItem
           title="Total of Your Airdrop"
           value={`${totalClaimAble}`}
-          unit="FNX"
+          unit="FXN"
         />
-        <InfoItem title="Claimable" value={`${canClaimText}`} unit="FNX" />
+        <InfoItem title="Claimable" value={`${canClaimText}`} unit="FXN" />
         <InfoItem
           title="Not Yet Vested"
           value={`${notYetVestedText}`}
-          unit="FNX"
+          unit="FXN"
         />
-        <InfoItem title="Claimed" value={`${claimedAmount}`} unit="FNX" />
+        <InfoItem title="Claimed" value={`${claimedAmount}`} unit="FXN" />
         {!!startTime && (
           <InfoItem title="Start Time" value={`${startTimeText}`} />
         )}
@@ -106,7 +106,7 @@ export default function VestingPage() {
                 <tr>
                   <td className={cn('border p-4')}>{item.startTime}</td>
                   <td className={cn('border p-4')}>{item.endTime}</td>
-                  <td className={cn('border p-4')}>{item.vestingAmount} FNX</td>
+                  <td className={cn('border p-4')}>{item.vestingAmount} FXN</td>
                   <td className={cn('border p-4')}>
                     {item.vestingAmountPercent}
                   </td>

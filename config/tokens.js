@@ -30,10 +30,13 @@ const contracts = {
 
   fx_Vesting: '0x8eD40AD1aeC467406925cf687c6c654c1D5D1C8f',
 
-  FNX: '0x5cBd5fb34489A61CCD2141c0f93712064528A38e',
-  veFNX: '0x435537c3Ee6A3E5d846bBC17485bE3d9357966b4',
+  FXN: '0x5cBd5fb34489A61CCD2141c0f93712064528A38e',
+  veFXN: '0x435537c3Ee6A3E5d846bBC17485bE3d9357966b4',
   TokenMinter: '0xa36a3f8e537d39f39fBFacC317d300ED30230C77',
   GaugeController: '0x84C2f377DD809C6Eb8F5F1bfd61803ba13E8F115',
+  FeeDistributor: '0xa22B2F44d142BC1E5D70aaB66b16924DFE35072D',
+
+  redeemConverter: '0xAF345c813CE17Cc5837BfD14a910D365223F3B95',
 
   // 需要对应合约
   // aladdinRewardClaimHelper
@@ -190,6 +193,8 @@ const TOKENS_INFO = {
   clevUSD: ['frax', tokens.clevUSD, 18],
   fETH: ['fETH', tokens.fETH, 18],
   xETH: ['xETH', tokens.xETH, 18],
+  veFXN: ['veFXN', tokens.veFXN, 18],
+  fxn: ['FXN', tokens.FXN, 18],
 }
 
 const zapTokens = {

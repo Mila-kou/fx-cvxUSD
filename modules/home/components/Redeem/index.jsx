@@ -29,13 +29,6 @@ const OPTIONS = [
       '0x277090c5ae6b80a3c525f09d7ae464a8fa83d9c08804',
       '0x49fe1afc5df753cd252e1068dfa0428d3755b20a6c08',
     ],
-    // [
-    //   '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
-    //   '0xdc24316b9ae028f1497c275eb9192a3ea0f67022',
-    //   '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    //   '0x7f86bf177dd4f3494b841a37e810a34dd56c829b',
-    //   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    // ],
   ],
   [
     'USDT',
@@ -259,7 +252,7 @@ export default function Redeem({ slippage }) {
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
         const { _dstOut } = await FxGatewayContract.methods
           .redeem(
-            ['0xAF345c813CE17Cc5837BfD14a910D365223F3B95', route],
+            [config.contracts.redeemConverter, route],
             _fTokenIn,
             _xTokenIn,
             0,
@@ -326,7 +319,7 @@ export default function Redeem({ slippage }) {
 
         const { _dstOut, _baseOut } = await FxGatewayContract.methods
           .redeem(
-            ['0xAF345c813CE17Cc5837BfD14a910D365223F3B95', route],
+            [config.contracts.redeemConverter, route],
             _fTokenIn,
             _xTokenIn,
             0,

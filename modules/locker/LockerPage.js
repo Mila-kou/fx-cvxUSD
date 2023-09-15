@@ -12,7 +12,7 @@ function LockerPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>f(x) Locker</h2>
+        <h2>FXN Locker</h2>
         <div className={styles.items}>
           {pageData.dashboard.info.map((item) => (
             <div className={styles.item} key={item.title}>
@@ -26,7 +26,7 @@ function LockerPage() {
 
       <div className={styles.content}>
         <div className={styles.left}>
-          <h2>vef(x) Voting Power</h2>
+          <h2>veFXN Voting Power</h2>
           <LockerChart
             data={pageData.dashboard?.chart}
             contracts={pageData.contracts}
