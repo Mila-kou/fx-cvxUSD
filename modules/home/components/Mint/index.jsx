@@ -12,7 +12,7 @@ import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import { DetailCell, NoticeCard } from '../Common'
+import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import config from '@/config/index'
@@ -86,6 +86,7 @@ export default function Mint({ slippage }) {
     _redeemFETHFee,
     _redeemXETHFee,
     isXETHBouns,
+    xETHBonus,
   } = useETH()
 
   const _isValidPrice = baseInfo?.fxETHTwapOraclePriceeInfo?._isValid
@@ -206,9 +207,13 @@ export default function Mint({ slippage }) {
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
             .call({ from: _currentAccount })
         } else if (symbol === 'stETH') {
-          minout_ETH = await stETHGatewayContract.methods[
+          const resData = await stETHGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
           ](0).call({ value: _ETHtAmountAndGas, from: _currentAccount })
+          if (typeof resData === 'object') {
+            minout_ETH = resData._xTokenMinted
+            setMintXBouns(resData._bonus)
+          }
         } else {
           if (symbol == 'ETH') {
             const getGasPrice = await getGas()
@@ -263,7 +268,7 @@ export default function Mint({ slippage }) {
 
           const { data } = res
 
-          minout_ETH = await FxGatewayContract.methods[
+          const resData = await FxGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
           ](
             [selectTokenAddress, _ETHtAmountAndGas, data.tx.to, data.tx.data],
@@ -272,6 +277,10 @@ export default function Mint({ slippage }) {
             value: _ETHtAmountAndGas,
             from: _currentAccount,
           })
+          if (typeof resData === 'object') {
+            minout_ETH = resData._xTokenMinted
+            setMintXBouns(resData._bonus)
+          }
         }
       } else {
         minout_ETH = 0
@@ -644,17 +653,16 @@ export default function Mint({ slippage }) {
 
   return (
     <div className={styles.container}>
-      {isXETHBouns ? (
-        <DetailCell
-          title={`${fb4(
-            cBN(baseInfo.bonusRatioRes).times(100),
-            false,
-            18,
-            2
-          )}% bonus ends after mint xETH`}
-          content={['']}
-        />
-      ) : null}
+      <BonusCard
+        title={`${fb4(
+          cBN(baseInfo.bonusRatioRes).times(100),
+          false,
+          18,
+          2
+        )}% bonus ends after mint xETH`}
+        amount={fb4(cBN(xETHBonus))}
+        symbol="stETH"
+      />
 
       <BalanceInput
         placeholder="-"
@@ -710,8 +718,8 @@ export default function Mint({ slippage }) {
         // onChange={hanldexETHAmountChanged}
       />
 
-      {isXETHBouns ? (
-        <DetailCell title="Mint xETH Bouns:" content={[mintXBouns]} />
+      {isX && mintXBouns ? (
+        <DetailCell title="Mint xETH Bouns:" content={[fb4(cBN(mintXBouns))]} />
       ) : null}
 
       <DetailCell title="Mint Fee:" content={[`${fee}%`]} />

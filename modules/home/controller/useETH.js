@@ -208,7 +208,10 @@ const useETH = () => {
           (fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0) / 1e18,
         mintXETHFee: (_mintXETHFee || 0) / 1e18,
       })
-      console.log('maxXETHBonus---', maxXETHBonus)
+
+      const xETHBonus =
+        (fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0) * 0.08
+
       const maxXETHBonus_text = checkNotZoroNumOption(
         maxXETHBonus,
         fb4(maxXETHBonus, false, 0)
@@ -315,6 +318,8 @@ const useETH = () => {
         maxETHBonus_Text,
         xETHBeta,
         xETHBeta_text,
+
+        xETHBonus,
 
         stabilityIncentiveRatio_text,
         liquidationIncentiveRatio_text,
