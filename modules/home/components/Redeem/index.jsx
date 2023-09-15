@@ -334,11 +334,12 @@ export default function Redeem({ slippage }) {
           )
           .call({ from: _currentAccount })
         const dstOut = (cBN(_dstOut) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
+          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0).toString()
         )
         const baseOut = (cBN(_baseOut) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0)
+          cBN(1).minus(cBN(slippage).dividedBy(100)).toFixed(0).toString()
         )
+        // console.log('dstOut---', dstOut, baseOut)
         apiCall = await FxGatewayContract.methods.redeem(
           ['0xAF345c813CE17Cc5837BfD14a910D365223F3B95', route],
           _fTokenIn,
