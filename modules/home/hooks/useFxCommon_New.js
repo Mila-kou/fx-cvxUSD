@@ -1,24 +1,36 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import useETH from '../controller/useETH'
 
 const PRECISION = 1e18
+const PRECISION_I256 = 1e18
+const initConfig = {
+  // Current supply of base token
+  baseSupply: 0,
+  // Current nav of base token
+  baseNav: 0,
+  // The multiple used to compute current nav.
+  fMultiple: 0,
+  // Current supply of fractional token
+  fSupply: 0,
+  // Current nav of fractional token
+  fNav: 0,
+  // Current supply of leveraged token
+  xSupply: 0,
+  // Current nav of leveraged token
+  xNav: 0,
+}
 const useFxCommon_New = () => {
-  const initConfig = {
-    // Current supply of base token
-    baseSupply: 0,
-    // Current nav of base token
-    baseNav: 0,
-    // The multiple used to compute current nav.
-    fMultiple: 0,
-    // Current supply of fractional token
-    fSupply: 0,
-    // Current nav of fractional token
-    fNav: 0,
-    // Current supply of leveraged token
-    xSupply: 0,
-    // Current nav of leveraged token
-    xNav: 0,
-  }
+  const fxInfo = useETH()
+  const [initConfig, setInitConfig] = useState(initConfig)
+  const [lastPermissionedPrice, beta] = useMemo(() => {
+    if (fxInfo.baseInfo) {
+      const { CurrentNavRes, betaRes } = fxInfo.baseInfo
+      const { _baseNav } = CurrentNavRes
+      return [_baseNav, betaRes]
+    }
+    return [0, 0]
+  }, [fxInfo])
 
   /// @notice Compute the amount of base token needed to reach the new collateral ratio.
   ///
@@ -406,6 +418,101 @@ const useFxCommon_New = () => {
     _fDeltaNav = _fDeltaNav.div(cBN(state.fSupply).minus(_fTokenIn))
   }
 
+  const _computeMultiple = (_newPrice) => {
+    const _lastPermissionedPrice = lastPermissionedPrice
+
+    const _ratio = cBN(_newPrice)
+      .minus(_lastPermissionedPrice)
+      .multipliedBy(PRECISION_I256)
+      .div(_lastPermissionedPrice)
+
+    const _fMultiple = _ratio.multipliedBy(beta).div(PRECISION_I256)
+    return _fMultiple
+  }
+
+  //////////////////////// Common Data /////////////////////////////////////////
+
+  /// @inheritdoc IFractionalToken
+  /// @dev Normally `multiple/1e18` should be in the range `(-1, 1e18)`.
+  const getNav = (multiple) => {
+    let _nav = fxInfo.baseInfo.CurrentNavRes._fNav
+    let _newNav = _nav
+    if (cBN(multiple).lt(0)) {
+      if (cBN(multiple).abs().gt(PRECISION)) {
+        // multiple too large
+        return _nav
+      }
+    } else {
+      if (cBN(multiple).gt(cBN(PRECISION).multipliedBy(PRECISION))) {
+        return _nav
+      }
+    }
+
+    _newNav = cBN(_nav)
+      .multipliedBy(cBN(PRECISION).plus(multiple))
+      .div(PRECISION)
+
+    return _newNav
+  }
+
+  /// @dev Internal function to fetch twap price.
+  /// @return _price The twap price of the base token.
+  const _fetchTwapPrice = (_kind, priceObj) => {
+    const { _isValid, _safePrice, _minPrice, _maxPrice } = priceObj
+
+    let _price = _safePrice
+    if (_kind == 'MintFToken' || _kind == 'MintXToken') {
+      if (!_isValid) {
+        // 'oracle price is invalid'
+        _price = false
+      }
+    } else if (!_isValid) {
+      if (_kind == 'RedeemFToken') {
+        _price = _maxPrice
+      } else if (_kind == 'RedeemXToken') {
+        _price = _minPrice
+      }
+    }
+    return _price
+  }
+
+  /// @dev Internal function to load swap variable to memory
+  const _loadSwapState = (_kind) => {
+    const _state = initConfig
+    _state.baseSupply = fxInfo.baseInfo.totalBaseTokenRes
+    _state.baseNav = _fetchTwapPrice(_kind)
+
+    if (_state.baseSupply == 0) {
+      _state.fNav = PRECISION
+      _state.xNav = PRECISION
+    } else {
+      _state.fMultiple = _computeMultiple(_state.baseNav)
+
+      _state.fSupply = fxInfo.baseInfo.fETHTotalSupplyRes
+      _state.fNav = getNav(_state.fMultiple)
+
+      _state.xSupply = fxInfo.baseInfo.xETHTotalSupplyRes
+      if (cBN(_state.xSupply).isZero()) {
+        // no xToken, treat the nav of xToken as 1.0
+        _state.xNav = PRECISION
+      } else {
+        _state.xNav = _state.baseSupply
+          .multipliedBy(_state.baseNav)
+          .minus(_state.fSupply.mul(_state.fNav))
+          .div(_state.xSupply)
+      }
+    }
+    if (_kind == 'none') {
+      setInitConfig(_state)
+    } else {
+      return _state
+    }
+  }
+
+  useEffect(() => {
+    _loadSwapState('none')
+  }, [fxInfo])
+
   return {
     initConfig,
     maxMintableFToken,
@@ -420,6 +527,7 @@ const useFxCommon_New = () => {
     mintXToken_1,
     redeem,
     liquidateWithIncentive,
+    _loadSwapState,
   }
 }
 
