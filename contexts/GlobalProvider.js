@@ -123,6 +123,7 @@ function GlobalProvider({ children }) {
     // ETH
     const { CurrentNavRes } = fx_info.baseInfo
     console.log('CurrentNavRes---', CurrentNavRes)
+    console.log('tokenPrice---', tokenPrice)
     return {
       ETH: {
         ...ethToken,
@@ -147,6 +148,7 @@ function GlobalProvider({ children }) {
             true
           )
         ),
+        price: tokenPrice?.stETH?.usd?.toFixed(4) ?? 0,
       },
       fETH: {
         ...fETHToken,
@@ -178,6 +180,7 @@ function GlobalProvider({ children }) {
           usdcToken.balance,
           fb4(cBN(usdcToken.balance).div(1e6) || 0, true)
         ),
+        price: tokenPrice?.USDC?.usd?.toFixed(4) ?? 0,
       },
       USDT: {
         ...usdtToken,
@@ -185,6 +188,11 @@ function GlobalProvider({ children }) {
           usdtToken.balance,
           fb4(cBN(usdtToken.balance).div(1e6) || 0, true)
         ),
+        // USDT 数据不正常，用DAI
+        price: tokenPrice?.DAI?.usd?.toFixed(4) ?? 0,
+      },
+      WETH: {
+        price: tokenPrice?.WETH?.usd?.toFixed(4) ?? 0,
       },
     }
   }, [

@@ -658,16 +658,16 @@ export default function Mint({ slippage }) {
   }, [isF, slippage, fromAmount, symbol])
 
   const fromUsd = useMemo(() => {
-    if (['USDT', 'USDC'].includes(symbol)) {
-      return '1'
-    }
     if (symbol === 'fETH') {
       return fnav
     }
     if (symbol === 'xETH') {
       return xnav
     }
-    return ethPrice_text
+    if (symbol === 'ETH') {
+      return ethPrice_text
+    }
+    return tokens[symbol].price
   }, [symbol, ethPrice_text, fnav, xnav])
 
   return (

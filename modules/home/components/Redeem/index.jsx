@@ -375,10 +375,16 @@ export default function Redeem({ slippage }) {
   }, [isF, slippage, tokenAmount, symbol])
 
   const toUsd = useMemo(() => {
-    if (['USDT', 'USDC'].includes(symbol)) {
-      return '1'
+    if (symbol === 'fETH') {
+      return fnav
     }
-    return ethPrice_text
+    if (symbol === 'xETH') {
+      return xnav
+    }
+    if (symbol === 'ETH') {
+      return ethPrice_text
+    }
+    return tokens[symbol].price
   }, [symbol, ethPrice_text, fnav, xnav])
 
   return (
