@@ -287,7 +287,7 @@ export default function Mint({ slippage }) {
             [selectTokenAddress, _ETHtAmountAndGas, data.tx.to, data.tx.data],
             0
           ).call({
-            value: _ETHtAmountAndGas,
+            value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
             from: _currentAccount,
           })
 
