@@ -116,6 +116,10 @@ export default function Mint({ slippage }) {
     return OPTIONS.find((item) => item[0] === symbol)[1]
   }, [symbol])
 
+  useEffect(() => {
+    initPage()
+  }, [symbol])
+
   const selectTokenInfo = useToken(
     selectTokenAddress,
     symbol == 'stETH' ? 'fx_stETH_mint' : 'fx_fxGateway'
@@ -187,7 +191,7 @@ export default function Mint({ slippage }) {
 
   const initPage = () => {
     clearInput()
-    setFromAmount(0)
+    setFromAmount('0')
     setMintXBouns(0)
   }
 
@@ -244,7 +248,12 @@ export default function Mint({ slippage }) {
             amount: _ETHtAmountAndGas.toString(),
             minout: 0,
           })
-          console.log('_resCurve----', selectTokenAddress, res)
+          console.log(
+            '_resCurve----',
+            selectTokenAddress,
+            res,
+            _ETHtAmountAndGas.toString()
+          )
 
           // const res = await get1inchParams({
           //   src:
@@ -282,6 +291,7 @@ export default function Mint({ slippage }) {
             from: _currentAccount,
           })
 
+          console.log('resData-----', resData)
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
             const _userXETHBonus = resData._bonus
@@ -322,6 +332,7 @@ export default function Mint({ slippage }) {
           const _minOut_xETH_tvl = fb4(
             _minOut_CBN.multipliedBy(xnav).toString(10)
           )
+
           setXETHtAmount({
             minout_ETH: checkNotZoroNumOption(
               _xTokenMinted,
@@ -336,8 +347,8 @@ export default function Mint({ slippage }) {
             cBN(1).minus(cBN(slippage).dividedBy(100))
           )
 
-          const _minOut_fETH_tvl = fb4(
-            _minOut_CBN.multipliedBy(fnav).toString(10)
+          const _minOut_xETH_tvl = fb4(
+            _minOut_CBN.multipliedBy(xnav).toString(10)
           )
           setXETHtAmount({
             minout_ETH: checkNotZoroNumOption(
@@ -345,7 +356,7 @@ export default function Mint({ slippage }) {
               fb4(minout_ETH.toString(10))
             ),
             minout_slippage: fb4(_minOut_CBN.toString(10)),
-            minout_slippage_tvl: _minOut_fETH_tvl,
+            minout_slippage_tvl: _minOut_xETH_tvl,
             bonus: 0,
           })
         }

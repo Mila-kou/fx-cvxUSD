@@ -60,6 +60,10 @@ function BalanceInput(props) {
     onChange(cBN(value || '').shiftedBy(decimals ?? 18))
   }
 
+  useEffect(() => {
+    onChange(cBN(val || '').shiftedBy(decimals ?? 18))
+  }, [decimals])
+
   const setMax = () => {
     onChange(maxAmount)
     setVal(fb4(maxAmount, false, decimals ?? 18))
