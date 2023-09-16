@@ -148,7 +148,6 @@ function GlobalProvider({ children }) {
             true
           )
         ),
-        price: tokenPrice?.stETH?.usd?.toFixed(4) ?? 0,
       },
       fETH: {
         ...fETHToken,

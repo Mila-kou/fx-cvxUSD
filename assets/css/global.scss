@@ -161,5 +161,62 @@ div[class='red'] {
 }
 
 .ant-picker-header-view {
-  color: #231f20;
+  color: var(--main-text-color);
+}
+
+.ant-picker-panel-container {
+  background: var(--modal-background-color) !important;
+}
+
+.ant-picker-header button {
+  color: var(--second-text-color);
+  &:hover {
+    color: var(--main-text-color);
+  }
+}
+
+.ant-picker-content th {
+  color: var(--main-text-color);
+}
+
+.ant-picker-cell-disabled {
+  color: var(--second-text-color);
+  opacity: 0.5;
+}
+
+.ant-picker-cell-in-view {
+  color: var(--main-text-color);
+}
+
+.ant-picker-cell-inner {
+  &:hover {
+    color: var(--blue-color);
+  }
+}
+
+.ant-picker.datePicker {
+  height: 50px;
+  color: #fff !important;
+  border-radius: 6px;
+  background: var(--input-background-color) !important;
+  input {
+    color: var(--main-text-color) !important;
+    font-size: 16px;
+    &::placeholder {
+      color: var(--second-text-color) !important;
+    }
+  }
+}
+
+.ant-picker-clear {
+  background: var(--modal-background-color);
+}
+
+.anticon {
+  svg {
+    g,
+    path {
+      fill: var(--main-text-color);
+    }
+  }
 }

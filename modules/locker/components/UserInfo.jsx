@@ -84,7 +84,8 @@ function LockerUserInfo({ userData, userHasLocked, userLockExpired }) {
   }
 
   return (
-    <div className="user-info p-8">
+    <div className="bg-[var(--background-color)] p-[56px] rounded-[10px]">
+      <h2>Lock</h2>
       <Visible visible={!userHasLocked}>
         <div className="text-lg">
           <div className="mb-2">Lock FXN to earn protocol fees.</div>

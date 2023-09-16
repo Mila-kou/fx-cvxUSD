@@ -33,7 +33,6 @@ function LockerPage() {
           />
         </div>
         <div className={styles.right}>
-          <h2>Lock</h2>
           <Lock data={pageData} actions={{ setRefreshTrigger }} />
         </div>
       </div>

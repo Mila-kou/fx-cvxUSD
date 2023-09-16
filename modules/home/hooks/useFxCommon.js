@@ -523,7 +523,7 @@ const useFxCommon = () => {
 
   const isXETHBouns = useMemo(() => {
     if (
-      systemStatus > 1 &&
+      systemStatus > 0 &&
       cBN(fx_info.baseInfo.reservePoolBalancesRes).isGreaterThan(1e18)
     ) {
       return true

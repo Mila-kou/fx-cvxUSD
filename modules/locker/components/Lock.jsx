@@ -154,7 +154,7 @@ function VELockCom({
   }
 
   return (
-    <div className="locker-dashboard w-full flex flex-col gap-8">
+    <div className="w-full flex flex-col gap-8">
       <UserInfo
         userData={userData}
         userHasLocked={userHasLocked}
@@ -162,7 +162,7 @@ function VELockCom({
       />
 
       <div
-        className={`lock-container locker-form  p-8 relative ${
+        className={`relative bg-[var(--background-color)]  p-[56px] rounded-[10px] ${
           !userHasLocked ? 'user-not-locked' : ''
         }`}
       >
@@ -185,15 +185,17 @@ function VELockCom({
 
         <Visible visible={!userLockExpired}>
           <Visible visible={tabsActinveKey === 0 || status == 'no-lock'}>
-            <BalanceInput
-              placeholder="0"
-              symbol="FXN"
-              balance={fb4(fxnTokenInfo.balance, false)}
-              maxAmount={fxnTokenInfo.balance}
-              onChange={setLockAmount}
-              withUsd={false}
-            />
-            <div className="mt-4">
+            <div className="pt-[16px]">
+              <BalanceInput
+                placeholder="0"
+                symbol="FXN"
+                balance={fb4(fxnTokenInfo.balance, false)}
+                maxAmount={fxnTokenInfo.balance}
+                onChange={setLockAmount}
+                withUsd={false}
+              />
+            </div>
+            <div className="mt-4 text-[16px]">
               <Visible visible={status === 'ing'}>
                 Your starting voting power will be:{' '}
                 <span className="color-blue">{fb4(lockMoreVePower)} veFXN</span>
@@ -234,8 +236,10 @@ function VELockCom({
                         key={i.value}
                         onClick={() => addTime(i)}
                         className={`text-center w-2/6 underline ${
-                          i.disabledDate ? 'text-gray-400' : 'text-blue-900'
-                        } cursor-pointer`}
+                          i.disabledDate
+                            ? 'text-[var(--second-text-color)] cursor-not-allowed'
+                            : 'text-[var(--main-text-color)] cursor-pointer'
+                        }`}
                       >
                         {i.lable}
                       </div>
@@ -247,7 +251,7 @@ function VELockCom({
             </div>
 
             <div className="text-base leading-normal mt-2">
-              <div>
+              <div className="text-[16px]">
                 Your starting voting power will be:{' '}
                 <span className="color-blue">
                   {fb4(status === 'no-lock' ? vePower : extendVePower)} veFXN
@@ -255,19 +259,23 @@ function VELockCom({
               </div>
 
               <Visible visible={!userHasLocked}>
-                <div>You can only claim your FXN after lock expiration.</div>
+                <div className="text-[16px]">
+                  You can only claim your FXN after lock expiration.
+                </div>
               </Visible>
+              {/* 
               <div>
                 After creating your lock, you will need to{' '}
                 <Tooltip title="If your boost level hasn't changed after locking veFXN, you will need to conduct one transaction (deposit, withdraw or claim) from the gauge that you are providing liquidity to update your boost.">
                   <span className="underline">apply your boost</span>
                 </Tooltip>
                 .
-              </div>
+                </div>
+              */}
             </div>
 
             <Visible visible={userHasLocked}>
-              <div className="flex justify-center mt-4">
+              <div className="flex justify-center pt-[26px]">
                 <Button
                   width="300px"
                   disabled={extendDays > FOURYEARS}

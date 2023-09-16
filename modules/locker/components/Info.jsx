@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tooltip } from 'antd'
+import { Popover } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 
 export default function Info({ title, value }) {
@@ -13,12 +13,12 @@ export default function Info({ title, value }) {
 
 export function VeLockerRules({ status }) {
   return (
-    <div className=" form-label text-xl mb-3 flex items-center gap-3 mt-4">
+    <div className="text-xl mb-3 flex items-center gap-3 mt-4">
       <div>{status == 'no-lock' ? 'Duration' : 'Extend To'}</div>
-      <Tooltip
-        overlayClassName="lock-to-tooltip"
-        title={
-          <div>
+      <Popover
+        color="rgba(0, 0, 0, 0.8)"
+        content={
+          <div style={{ color: '#fff' }}>
             Locking FXN will receive veFXN. <br />
             The longer the lock time, the more veFXN received.
             <br />
@@ -32,7 +32,7 @@ export function VeLockerRules({ status }) {
         }
       >
         <QuestionCircleOutlined />
-      </Tooltip>
+      </Popover>
     </div>
   )
 }
