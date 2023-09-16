@@ -10,6 +10,7 @@ import {
 import useETHPrice from '../hooks/useETHPrice'
 import useFxCommon, { getR } from '../hooks/useFxCommon'
 import { useGlobal } from '@/contexts/GlobalProvider'
+import useFxCommon_New from '../hooks/useFxCommon_New'
 
 const useETH = () => {
   const { fx_info: fxInfo } = useGlobal()
@@ -26,6 +27,7 @@ const useETH = () => {
     ethPrice,
     isXETHBouns,
   } = useFxCommon()
+  const fxCommonNew = useFxCommon_New()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
