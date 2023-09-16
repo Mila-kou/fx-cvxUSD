@@ -188,6 +188,7 @@ export default function Mint({ slippage }) {
   const initPage = () => {
     clearInput()
     setFromAmount(0)
+    setMintXBouns(0)
   }
 
   const getMinAmount = async (needLoading) => {
@@ -660,16 +661,18 @@ export default function Mint({ slippage }) {
 
   return (
     <div className={styles.container}>
-      <BonusCard
-        title={`${fb4(
-          cBN(baseInfo.bonusRatioRes).times(100),
-          false,
-          18,
-          2
-        )}% bonus ends after mint xETH`}
-        amount=""
-        symbol=""
-      />
+      {isXETHBouns ? (
+        <BonusCard
+          title={`${fb4(
+            cBN(baseInfo.bonusRatioRes).times(100),
+            false,
+            18,
+            2
+          )}% bonus ends after mint xETH`}
+          amount=""
+          symbol=""
+        />
+      ) : null}
 
       <BalanceInput
         placeholder="-"
