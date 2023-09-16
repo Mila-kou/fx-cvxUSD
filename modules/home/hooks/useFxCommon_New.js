@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
-import useETH from '../controller/useETH'
+import { useGlobal } from '@/contexts/GlobalProvider'
 
 const PRECISION = 1e18
 const PRECISION_I256 = 1e18
-const initConfig = {
+const _initConfig = {
   // Current supply of base token
   baseSupply: 0,
   // Current nav of base token
@@ -21,10 +21,10 @@ const initConfig = {
   xNav: 0,
 }
 const useFxCommon_New = () => {
-  const fxInfo = useETH()
-  const [initConfig, setInitConfig] = useState(initConfig)
+  const { fx_info: fxInfo } = useGlobal()
+  const [initConfig, setInitConfig] = useState(_initConfig)
   const [lastPermissionedPrice, beta] = useMemo(() => {
-    if (fxInfo.baseInfo) {
+    if (fxInfo.baseInfo && fxInfo.baseInfo.CurrentNavRes) {
       const { CurrentNavRes, betaRes } = fxInfo.baseInfo
       const { _baseNav } = CurrentNavRes
       return [_baseNav, betaRes]
@@ -426,38 +426,37 @@ const useFxCommon_New = () => {
       .multipliedBy(PRECISION_I256)
       .div(_lastPermissionedPrice)
 
-    const _fMultiple = _ratio.multipliedBy(beta).div(PRECISION_I256)
+    const _fMultiple = _ratio.multipliedBy(beta).div(PRECISION_I256).toFixed(0)
     return _fMultiple
   }
 
-  //////////////////////// Common Data /////////////////////////////////////////
+  /// Common Data ////////////////////////////////
 
   /// @inheritdoc IFractionalToken
   /// @dev Normally `multiple/1e18` should be in the range `(-1, 1e18)`.
   const getNav = (multiple) => {
-    let _nav = fxInfo.baseInfo.CurrentNavRes._fNav
+    const _nav = fxInfo.baseInfo.CurrentNavRes._fNav
     let _newNav = _nav
     if (cBN(multiple).lt(0)) {
       if (cBN(multiple).abs().gt(PRECISION)) {
         // multiple too large
         return _nav
       }
-    } else {
-      if (cBN(multiple).gt(cBN(PRECISION).multipliedBy(PRECISION))) {
-        return _nav
-      }
+    } else if (cBN(multiple).gt(cBN(PRECISION).multipliedBy(PRECISION))) {
+      return _nav
     }
 
     _newNav = cBN(_nav)
       .multipliedBy(cBN(PRECISION).plus(multiple))
       .div(PRECISION)
+      .toFixed(0)
 
     return _newNav
   }
 
   /// @dev Internal function to fetch twap price.
   /// @return _price The twap price of the base token.
-  const _fetchTwapPrice = (_kind, priceObj) => {
+  const _fetchTwapPrice = (_kind, priceObj = {}) => {
     const { _isValid, _safePrice, _minPrice, _maxPrice } = priceObj
 
     let _price = _safePrice
@@ -479,8 +478,9 @@ const useFxCommon_New = () => {
   /// @dev Internal function to load swap variable to memory
   const _loadSwapState = (_kind) => {
     const _state = initConfig
+    const _priceObj = fxInfo.baseInfo.fxETHTwapOraclePriceeInfo
     _state.baseSupply = fxInfo.baseInfo.totalBaseTokenRes
-    _state.baseNav = _fetchTwapPrice(_kind)
+    _state.baseNav = _fetchTwapPrice(_kind, _priceObj)
 
     if (_state.baseSupply == 0) {
       _state.fNav = PRECISION
@@ -496,12 +496,14 @@ const useFxCommon_New = () => {
         // no xToken, treat the nav of xToken as 1.0
         _state.xNav = PRECISION
       } else {
-        _state.xNav = _state.baseSupply
+        _state.xNav = cBN(_state.baseSupply)
           .multipliedBy(_state.baseNav)
-          .minus(_state.fSupply.mul(_state.fNav))
+          .minus(cBN(_state.fSupply).multipliedBy(_state.fNav))
           .div(_state.xSupply)
+          .toFixed(0)
       }
     }
+    console.log('_state----', _state)
     if (_kind == 'none') {
       setInitConfig(_state)
     } else {
@@ -510,7 +512,9 @@ const useFxCommon_New = () => {
   }
 
   useEffect(() => {
-    _loadSwapState('none')
+    if (fxInfo.baseInfo && fxInfo.baseInfo.CurrentNavRes) {
+      _loadSwapState('none')
+    }
   }, [fxInfo])
 
   return {
