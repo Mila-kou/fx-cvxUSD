@@ -381,7 +381,7 @@ export default function Redeem({ slippage }) {
     if (symbol === 'xETH') {
       return xnav
     }
-    if (symbol === 'ETH') {
+    if (['stETH', 'ETH'].includes(symbol)) {
       return ethPrice_text
     }
     return tokens[symbol].price

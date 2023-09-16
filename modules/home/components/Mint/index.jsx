@@ -664,7 +664,7 @@ export default function Mint({ slippage }) {
     if (symbol === 'xETH') {
       return xnav
     }
-    if (symbol === 'ETH') {
+    if (['stETH', 'ETH'].includes(symbol)) {
       return ethPrice_text
     }
     return tokens[symbol].price
