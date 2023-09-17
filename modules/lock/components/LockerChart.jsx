@@ -19,7 +19,7 @@ const LockerChart = () => {
       style: {
         color: '#fff',
       },
-      text: 'veCTR Voting Power',
+      text: 'veFXN Voting Power',
     },
     // credits: {
     //   enabled: false,

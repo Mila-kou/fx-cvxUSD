@@ -1,165 +1,46 @@
-.vaultPage {
-  background: #000015;
-  // padding-bottom: px;
+@import '../../assets/css/mixin.scss';
 
-  .bgBlue {
-    background: rgba(6, 26, 75, 1);
+.container {
+  max-width: 1163px;
+  margin: 60px auto;
+
+  .header {
+    border-radius: 10px;
+    background: var(--background-color);
+    padding: 24px 60px 20px;
+
+    .items {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+
+      .item {
+        flex: 1;
+        border-radius: 10px;
+        padding: 24px 0;
+        background: var(--input-background-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h2 {
+          color: var(--primary-color);
+        }
+      }
+    }
   }
-}
 
-.actionBoard {
-  background: rgba(6, 26, 75, 1);
-}
-
-.boardTitle {
-  color: #fff;
-  font-weight: 500;
-  font-size: 28px;
-  padding-bottom: 32px;
-  margin-bottom: 40px;
-  border-bottom: 1px solid rgba(0, 93, 234, 1);
-}
-
-.infoItem {
-  display: flex;
-  align-items: center;
-  // justify-content: space-between;
-  margin: 16px auto;
-  font-size: 18px;
-  color: #0096ff;
-  font-weight: 300;
-}
-
-.bannerData {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin: 44px 0 64px;
-
-  .item {
-    width: 33.3%;
-    text-align: center;
-    // padding: 48px 0;
-    justify-content: center;
+  .content {
+    margin-top: 16px;
     display: flex;
-    flex-direction: column;
-    height: 200px;
-    background: rgba(2, 14, 45, 0.8);
-    &:hover {
-      background: rgba(7, 32, 89, 0.8);
-      .title {
-        color: #fff;
-      }
-      .desc {
-        color: #fff;
-      }
-    }
-
-    .title {
-      font-size: 20px;
-      color: #0096ff;
-      margin-bottom: 8px;
-    }
-
-    .value {
-      font-size: 32px;
-      font-weight: 500;
-      color: #fff;
-      transition: all 0.3s;
-      margin-bottom: 6px;
-    }
-    .desc {
-      font-size: 18px;
-      font-weight: 500;
-      color: #0096ff;
-    }
-  }
-}
-
-.divider {
-  background: rgba(0, 93, 234, 1);
-  height: 1px;
-  width: 100%;
-}
-
-.poolsWrapper {
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  align-items: flex-start;
-  .poolsList {
-    width: 100%;
-  }
-  .poolsListHeader {
-    display: grid;
-    grid-template-columns: 200px 1fr 1fr 1fr 1fr 32px;
-    font-weight: 100;
-    color: #0096ff;
-    font-size: 16px;
-    margin-bottom: 16px;
-    text-align: center;
-    padding: 0 32px;
-  }
-}
-
-@media (max-width: 992px) {
-  .bannerData {
-    flex-direction: column;
-    .item {
-      width: 100%;
-    }
-  }
-  .slogan {
-    font-size: 24px;
-  }
-
-  .vaultsInfo {
-    // width: 100%;
-    padding: 12px 0;
-  }
-  .vaultsInfoTitle {
-    font-size: 20px;
-  }
-
-  .vaultsInfoValue {
-    font-size: 18px;
-  }
-  .poolsWrapper {
-    flex-wrap: wrap;
-    .poolsList {
-      width: 100%;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .slogan {
-    font-size: 20px;
-  }
-  .poolsWrapper {
-    .poolsListHeader {
-      grid-template-columns: 120px 1fr 1fr 1fr 24px;
-      font-size: 14px;
-      margin-bottom: 12px;
-      padding: 0 20px;
-    }
-  }
-}
-
-@media (max-width: 576px) {
-  .vaultsInfoTitle {
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
-  .vaultsInfoValue {
-    font-size: 16px;
-  }
-  .poolsWrapper {
-    .poolsListHeader {
-      grid-template-columns: 110px 1fr 1fr 16px;
-      div:nth-child(4) {
-        display: none;
-      }
+    gap: 14px;
+    .left {
+      flex: 1;
+      background: var(--background-color);
+      padding: 28px 56px;
+      border-radius: 10px;
+      height: 568px;
     }
   }
 }

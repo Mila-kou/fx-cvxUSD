@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import Modal from 'components/Modal'
 import moment from 'moment'
 import config from 'config'
-import Tip from 'components/Tip'
 import Input from 'components/Input'
 import useApprove from 'hooks/useApprove'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
@@ -106,9 +105,9 @@ export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
           available={fxnInfo.balance}
           hidePercent
           decimals={18}
-          token="CTR"
+          token="FXN"
         />
-        <div className="mt-1">Available: {fb4(fxnInfo.balance)} CTR</div>
+        <div className="mt-1">Available: {fb4(fxnInfo.balance)} FXN</div>
       </div>
 
       <div className="my-8">
@@ -117,7 +116,7 @@ export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
         </div>
         <div className="mb-1 flex items-center gap-1">
           Lock Time Until
-          <Tip title={lockTimeTipText} />:
+          {/* <Tip title={lockTimeTipText} />: */}
           {userLocked.end
             ? moment(userLocked.end * 1000).format('YYYY-MM-DD HH:mm:ss UTCZ')
             : '-'}

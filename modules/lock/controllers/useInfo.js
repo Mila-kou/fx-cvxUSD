@@ -22,11 +22,11 @@ const useInfo = (refreshTrigger) => {
         value: '-',
       },
       {
-        title: 'CTR Locked',
+        title: 'FXN Locked',
         value: '-',
       },
       {
-        title: 'Total veCTR',
+        title: 'Total veFXN',
         value: '-',
         desc: '- average lock',
       },
@@ -46,7 +46,7 @@ const useInfo = (refreshTrigger) => {
         value: '0',
       },
       {
-        title: 'aCRV Rewards',
+        title: 'stETH Rewards',
         amount: 0,
         value: '0',
       },
@@ -126,14 +126,14 @@ const useInfo = (refreshTrigger) => {
           value: apr ? `${apr.toFixed(2)}%` : '-',
         },
         {
-          title: 'CTR Locked',
+          title: 'FXN Locked',
           value: fb4(veLockedFXN),
           desc: `${
             checkNotZoroNum(percentage) ? `${percentage}%` : '-'
-          } of CTR Circulating Supply`,
+          } of FXN Circulating Supply`,
         },
         {
-          title: 'Total veCTR',
+          title: 'Total veFXN',
           value: fb4(veTotalSupply),
           desc: `${avgTime()} Average Lock`,
         },
@@ -162,11 +162,11 @@ const useInfo = (refreshTrigger) => {
       userData: [
         {
           title: 'Your Locked',
-          value: `${fb4(amount)} CTR`,
+          value: `${fb4(amount)} FXN`,
         },
         {
           title: 'Your Share',
-          value: `${fb4(userVeShare)} veCTR`,
+          value: `${fb4(userVeShare)} veFXN`,
         },
         {
           title: 'Locked to',
@@ -176,22 +176,22 @@ const useInfo = (refreshTrigger) => {
               : '-',
         },
         {
-          title: 'aCRV Rewards',
+          title: 'stETH Rewards',
           amount: userVeRewards,
           value: (
             <>
-              <p>{fb4(userVeRewards)} aCRV</p>
+              <p>{fb4(userVeRewards)} stETH</p>
               {checkNotZoroNum(userVeRewards1) && (
-                <p>{fb4(userVeRewards1)} aCRV</p>
+                <p>{fb4(userVeRewards1)} stETH</p>
               )}
               {checkNotZoroNum(userVeRewards2) && (
-                <p>{fb4(userVeRewards2)} aCRV</p>
+                <p>{fb4(userVeRewards2)} stETH</p>
               )}
               {checkNotZoroNum(userVeRewards3) && (
-                <p>{fb4(userVeRewards3)} aCRV</p>
+                <p>{fb4(userVeRewards3)} stETH</p>
               )}
               {checkNotZoroNum(userVeRewards4) && (
-                <p>{fb4(userVeRewards4)} aCRV</p>
+                <p>{fb4(userVeRewards4)} stETH</p>
               )}
             </>
           ),
@@ -208,20 +208,20 @@ const useInfo = (refreshTrigger) => {
         userData: [
           {
             title: 'Your Locked',
-            value: `- CTR`,
+            value: `- FXN`,
           },
           {
             title: 'Your Share',
-            value: `-veCTR`,
+            value: `-veFXN`,
           },
           {
             title: 'Locked to',
             value: '-',
           },
           {
-            title: 'aCRV Rewards',
+            title: 'stETH Rewards',
             amount: 0,
-            value: ` aCRV`,
+            value: ` stETH`,
           },
         ],
       }))

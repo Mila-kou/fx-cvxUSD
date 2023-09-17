@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import Visible from 'components/Visible'
-import Tip from 'components/Tip'
+import { Tooltip } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import useWeb3 from 'hooks/useWeb3'
 import { cBN, fb4 } from 'utils'
 import cn from 'classnames'
 import Button from 'components/Button'
-import Banner from 'components/Banner'
+import Tabs from '@/modules/home/components/Tabs'
 import useInfo from './controllers/useInfo'
 import LockModal from './components/LockModal'
 import LockMoreModal from './components/LockMoreModal'
@@ -17,61 +18,44 @@ import styles from './styles.module.scss'
 
 const InfoItem = ({ title, value }) => (
   <div className={`flex justify-between my-3 `}>
-    <span className="color-blue">{title}</span>
-    <span className="text-white">{value}</span>
+    <span>{title}</span>
+    <span className="text-[var(--primary-color)]">{value}</span>
   </div>
 )
 
-const BannerData = (props) => {
-  const { data } = props
-  return (
-    <div className={styles.bannerData}>
-      {data.map((i) => (
-        <div key={i.title} className={styles.item}>
-          <div className={styles.title}>{i.title}</div>
-          <div className={styles.value}>{i.value}</div>
-          <div className={styles.desc}>{i.desc}</div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 const RebateInfo = ({ info, preWeekData }) => {
   return (
-    <div
-      className={cn(
-        styles.bgBlue,
-        'flex flex-col justify-between p-6 text-base md:text-xl color-blue lg:p-12 mb-6'
-      )}
-    >
+    <div className="bg-[var(--background-color)] p-[56px] rounded-[10px]">
       <div>
-        {/* <div className={cn(styles.boardTitle, 'text-lg font-semibold')}>Total veFXN Revenue</div> */}
-        <div className="text-white font-medium mb-3">Total veFXN Revenue</div>
+        <div className="font-medium mb-6">Total veFXN Revenue</div>
         <div className="flex items-center justify-between my-3">
           <div className="flex items-center gap-1">
             <div>Cumulative This Week</div>
-            <Tip
+            <Tooltip
+              placement="top"
               title={`This week’s revenue sharing pool accumulates 50% of protocol fee starting from ${info.startTime}`}
-              style={{ width: '300px' }}
-            />
+              arrow
+              color="#000"
+            >
+              <InfoCircleOutlined />
+            </Tooltip>
           </div>
 
-          <div className="text-white">
-            {fb4(info.weekAmount)} FXN
+          <div className="text-[var(--primary-color)]">
+            {fb4(info.weekAmount)} stETH
             {/* ≈ {fb4(info.weekVal, true)} */}
           </div>
         </div>
         <div className="flex items-center justify-between my-3">
           <div>Previous Week</div>
-          <div className="text-white">
-            {fb4(preWeekData.weekAmount)} FXN
+          <div className="text-[var(--primary-color)]">
+            {fb4(preWeekData.weekAmount)} stETH
             {/* ≈ {fb4(preWeekData.weekVal, true)} */}
           </div>
         </div>
         <div className="flex items-center justify-between my-3">
           <div>Accumulate Till</div>
-          <div className="text-white">{info.untilTime}</div>
+          <div className="text-[var(--primary-color)]">{info.untilTime}</div>
         </div>
       </div>
     </div>
@@ -87,6 +71,7 @@ const LockPage = () => {
   const veContract = useVeFXNFee()
   const { isAllReady, currentAccount } = useWeb3()
   const { contract: veFXN } = useVeFXN()
+  const [tabsActinveKey, setTabsActinveKey] = useState(0)
 
   const handleWithdraw = async () => {
     if (!isAllReady) return
@@ -129,112 +114,104 @@ const LockPage = () => {
 
   // console.log('hook-usedata-', pageData.weekReabte);
   return (
-    <div className={styles.vaultPage}>
-      <div className="container">
-        <Banner
-          title="Lock CTR"
-          subtitle="Lock CTR to earn platform fee in FXN"
-        />
-        <BannerData data={pageData.overview} />
-        <div className="flex gap-6 flex-col lg:flex-row">
-          <div
-            className={cn(styles.actionBoard, 'p-12 lg:p-16 lg:w-1/2 w-full')}
-          >
-            <div className={cn(styles.boardTitle, 'text-lg font-semibold')}>
-              veFXN Voting Power
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h2>FXN Locker</h2>
+        <div className={styles.items}>
+          {pageData.overview.map((item) => (
+            <div className={styles.item} key={item.title}>
+              <p>{item.title}</p>
+              <h2>{item.value}</h2>
+              <p>{item.desc}</p>
             </div>
-            <LockerChart />
-          </div>
-          <div className="lg:w-1/2 w-full">
-            <RebateInfo
-              info={pageData.weekReabte}
-              preWeekData={pageData.preWeekReabte}
-              refresh={() => setRefreshTrigger((prev) => prev + 1)}
-            />
-            <div
-              className={cn(
-                styles.bgBlue,
-                'flex flex-col text-base md:text-xl justify-between p-6 lg:p-12'
-              )}
-            >
-              <div>
-                <div className="text-white font-medium mb-3">Lock CTR</div>
-                {/* <div className={cn(styles.boardTitle, 'text-lg font-semibold')}></div> */}
-                {pageData.userData.slice(0, 4).map((i) => (
-                  <InfoItem key={i.title} title={i.title} value={i.value} />
-                ))}
-              </div>
-              <div className="flex gap-3 justify-end mt-2">
-                {pageData.status === 'no-lock' && (
-                  <Button
-                    theme="lightBlue"
-                    onClick={() => setLockModalVisible(true)}
-                  >
-                    Create Lock
-                  </Button>
-                )}
-
-                {pageData.status === 'ing' && (
-                  <Button
-                    theme="deepBlue"
-                    onClick={() => setLockMoreModalVisible(true)}
-                  >
-                    Lock More
-                  </Button>
-                )}
-
-                {pageData.status === 'ing' && (
-                  <Button
-                    theme="deepBlue"
-                    onClick={() => setExtendModalVisible(true)}
-                  >
-                    Extend
-                  </Button>
-                )}
-
-                {/* Visible when lock end */}
-                {pageData.status === 'expired' && (
-                  <Button
-                    theme="deepBlue"
-                    locking={locking}
-                    onClick={() => handleWithdraw(true)}
-                  >
-                    Claim CTR
-                  </Button>
-                )}
-
-                <Visible visible={canClaimRewards}>
-                  <Button theme="deepBlue" onClick={handleClaimRewards}>
-                    Claim Rewards
-                  </Button>
-                </Visible>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      <Visible visible={lockModalVisible}>
-        <LockModal
-          onCancel={() => setLockModalVisible(false)}
-          refreshAction={setRefreshTrigger}
-        />
-      </Visible>
-      <Visible visible={lockMoreModalVisible}>
-        <LockMoreModal
-          pageData={pageData}
-          onCancel={() => setLockMoreModalVisible(false)}
-          refreshAction={setRefreshTrigger}
-        />
-      </Visible>
+      <div className={styles.content}>
+        <div className={styles.left}>
+          <h2 className="mb-10">veFXN Voting Power</h2>
+          <LockerChart />
+        </div>
 
-      <Visible visible={extendModalVisible}>
-        <ExtendModal
-          pageData={pageData}
-          onCancel={() => setExtendModalVisible(false)}
-          refreshAction={setRefreshTrigger}
-        />
-      </Visible>
+        <div className="w-full flex flex-col gap-8 flex-1">
+          <RebateInfo
+            info={pageData.weekReabte}
+            preWeekData={pageData.preWeekReabte}
+            refresh={() => setRefreshTrigger((prev) => prev + 1)}
+          />
+
+          <div className="bg-[var(--background-color)] p-[56px] rounded-[10px]">
+            <div>
+              <div className="mb-6">Lock FXN</div>
+              {pageData.userData.slice(0, 4).map((i) => (
+                <InfoItem key={i.title} title={i.title} value={i.value} />
+              ))}
+            </div>
+
+            <div className="flex gap-3 justify-end mt-2">
+              {pageData.status === 'no-lock' && (
+                <Button onClick={() => setLockModalVisible(true)}>
+                  Create Lock
+                </Button>
+              )}
+
+              <Visible visible={pageData.status === 'ing2'}>
+                <Tabs
+                  tabs={['Lock More', 'Extend']}
+                  onChange={(index) => setTabsActinveKey(index)}
+                  selecedIndex={tabsActinveKey}
+                />
+              </Visible>
+
+              {pageData.status === 'ing' && (
+                <Button onClick={() => setLockMoreModalVisible(true)}>
+                  Lock More
+                </Button>
+              )}
+
+              {pageData.status === 'ing' && (
+                <Button onClick={() => setExtendModalVisible(true)}>
+                  Extend
+                </Button>
+              )}
+
+              {/* Visible when lock end */}
+              {pageData.status === 'expired' && (
+                <Button locking={locking} onClick={() => handleWithdraw(true)}>
+                  Claim FXN
+                </Button>
+              )}
+
+              <Visible visible={canClaimRewards}>
+                <Button onClick={handleClaimRewards}>Claim Rewards</Button>
+              </Visible>
+            </div>
+
+            <Visible visible={lockModalVisible}>
+              <LockModal
+                onCancel={() => setLockModalVisible(false)}
+                refreshAction={setRefreshTrigger}
+              />
+            </Visible>
+            <Visible visible={lockMoreModalVisible}>
+              <LockMoreModal
+                pageData={pageData}
+                onCancel={() => setLockMoreModalVisible(false)}
+                refreshAction={setRefreshTrigger}
+              />
+            </Visible>
+
+            <Visible visible={extendModalVisible}>
+              <ExtendModal
+                pageData={pageData}
+                onCancel={() => setExtendModalVisible(false)}
+                refreshAction={setRefreshTrigger}
+              />
+            </Visible>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { DatePicker } from 'antd'
 import Modal from 'components/Modal'
 import moment from 'moment'
-import Tip from 'components/Tip'
 import useWeb3 from 'hooks/useWeb3'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import { cBN, fb4 } from 'utils'
@@ -145,10 +144,6 @@ export default function ExtendModal({ onCancel, pageData, refreshAction }) {
       </div>
 
       <div>
-        <div className="mb-1 flex items-center gap-1">
-          When do you want to lock to?
-          <Tip title={tipText} style={{ width: '300px' }} />
-        </div>
         <DatePicker
           value={locktime}
           onChange={setLocktime}
@@ -179,7 +174,7 @@ export default function ExtendModal({ onCancel, pageData, refreshAction }) {
         </div>
         <div className="mb-1 flex items-center gap-1">
           Lock Time Until
-          <Tip title={lockTimeTipText} />:
+          {/* <Tip title={lockTimeTipText} />: */}
           {locktime ? calc4(locktime).format('YYYY-MM-DD HH:mm:ss UTCZ') : '-'}
         </div>
       </div>

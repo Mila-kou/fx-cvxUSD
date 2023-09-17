@@ -6,7 +6,8 @@ import moment from 'moment'
 import config from 'config'
 import useApprove from 'hooks/useApprove'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
-import Tip from 'components/Tip'
+import { Tooltip } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import useWeb3 from 'hooks/useWeb3'
 import { checkNotZoroNum, cBN, fb4 } from 'utils'
 import styles from './styles.module.scss'
@@ -146,10 +147,6 @@ export default function LockModal({ onCancel, refreshAction }) {
       </div>
 
       <div>
-        <div className="mb-1 flex items-center gap-1" id="trigger">
-          When do you want to lock to?
-          <Tip title={tipText} style={{ width: '300px' }} />
-        </div>
         <DatePicker
           value={locktime}
           onChange={setLocktime}
@@ -181,7 +178,7 @@ export default function LockModal({ onCancel, refreshAction }) {
         </div>
         <div className="mb-1 flex items-center gap-1">
           Lock Time Until
-          <Tip title={lockTimeTipText} />:
+          {/* <Tip title={lockTimeTipText} />: */}
           {locktime ? calc4(locktime).format('YYYY-MM-DD HH:mm:ss UTCZ') : '-'}
         </div>
       </div>

@@ -59,10 +59,10 @@ export const shortDate = [
   },
 ]
 
-export const tipText = `Locking CTR will receive veCTR. The longer the lock time, the more veCTR received.<br/>
-1 CTR locked for 4 years = 1 veCTR<br/>
-1 CTR locked for 3 years = 0.75 veCTR<br/>
-1 CTR locked for 2 years = 0.5 veCTR<br/>
-1 CTR locked for 1 year = 0.25 veCTR`
+export const tipText = `Locking FXN will receive veFXN. The longer the lock time, the more veFXN received.<br/>
+1 FXN locked for 4 years = 1 veFXN<br/>
+1 FXN locked for 3 years = 0.75 veFXN<br/>
+1 FXN locked for 2 years = 0.5 veFXN<br/>
+1 FXN locked for 1 year = 0.25 veFXN`
 
 export const lockTimeTipText = `Locks are grouped into weekly "epochs" which start at 00:00 UTC every Thursday`
