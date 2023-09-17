@@ -41,7 +41,7 @@ const OPTIONS = [
   ],
 ]
 
-export default function Redeem({ slippage, isValidPrice }) {
+export default function Redeem({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const [redeeming, setRedeeming] = useState(0)
@@ -103,7 +103,7 @@ export default function Redeem({ slippage, isValidPrice }) {
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
 
-  const [_fnav, _xnav, _ethPrice_text] = useMemo(() => {
+  const [_fnav, _xnav, _ethPrice_text, _isPriceValid] = useMemo(() => {
     if (
       baseInfo.fxETHTwapOraclePriceeInfo &&
       !baseInfo.fxETHTwapOraclePriceeInfo._isValid
@@ -114,9 +114,14 @@ export default function Redeem({ slippage, isValidPrice }) {
       } else {
         _state = fxCommonNew._loadSwapState('RedeemXToken')
       }
-      return [fb4(_state.fNav), fb4(_state.xNav), fb4(_state.baseNav)]
+      return [
+        fb4(_state.fNav),
+        fb4(_state.xNav),
+        fb4(_state.baseNav),
+        baseInfo.fxETHTwapOraclePriceeInfo._isValid,
+      ]
     }
-    return [fnav, xnav, ethPrice_text]
+    return [fnav, xnav, ethPrice_text, true]
   }, [baseInfo, isF])
 
   const canReceived = useMemo(() => {
@@ -468,7 +473,7 @@ export default function Redeem({ slippage, isValidPrice }) {
           ]}
         />
       ) : null}
-      {!isValidPrice ? (
+      {!_isPriceValid ? (
         <NoticeCard content={['isValidPrice-----false']} />
       ) : null}
 
