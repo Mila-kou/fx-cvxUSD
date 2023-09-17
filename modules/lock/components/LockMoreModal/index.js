@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Modal from 'components/Modal'
+import { Modal } from 'antd'
 import moment from 'moment'
 import config from 'config'
 import Input from 'components/Input'
@@ -92,7 +92,7 @@ export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
     cBN(lockAmount).isLessThanOrEqualTo(fxnInfo.balance)
 
   return (
-    <Modal onCancel={onCancel}>
+    <Modal onCancel={onCancel} visible footer={null}>
       <div className={styles.info}>
         <div className="color-white">Lock More</div>
       </div>

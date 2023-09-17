@@ -7,7 +7,6 @@ import useWeb3 from 'hooks/useWeb3'
 import { cBN, fb4 } from 'utils'
 import cn from 'classnames'
 import Button from 'components/Button'
-import Tabs from '@/modules/home/components/Tabs'
 import useInfo from './controllers/useInfo'
 import LockModal from './components/LockModal'
 import LockMoreModal from './components/LockMoreModal'
@@ -147,31 +146,35 @@ const LockPage = () => {
               {pageData.userData.slice(0, 4).map((i) => (
                 <InfoItem key={i.title} title={i.title} value={i.value} />
               ))}
+
+              <Visible visible={canClaimRewards}>
+                <Button width="100%" onClick={handleClaimRewards}>
+                  Claim Rewards
+                </Button>
+              </Visible>
             </div>
 
-            <div className="flex gap-3 justify-end mt-2">
+            <div className="flex gap-3 justify-end mt-6">
               {pageData.status === 'no-lock' && (
                 <Button onClick={() => setLockModalVisible(true)}>
                   Create Lock
                 </Button>
               )}
 
-              <Visible visible={pageData.status === 'ing2'}>
-                <Tabs
-                  tabs={['Lock More', 'Extend']}
-                  onChange={(index) => setTabsActinveKey(index)}
-                  selecedIndex={tabsActinveKey}
-                />
-              </Visible>
-
               {pageData.status === 'ing' && (
-                <Button onClick={() => setLockMoreModalVisible(true)}>
+                <Button
+                  width="100%"
+                  onClick={() => setLockMoreModalVisible(true)}
+                >
                   Lock More
                 </Button>
               )}
 
               {pageData.status === 'ing' && (
-                <Button onClick={() => setExtendModalVisible(true)}>
+                <Button
+                  width="100%"
+                  onClick={() => setExtendModalVisible(true)}
+                >
                   Extend
                 </Button>
               )}
@@ -182,36 +185,32 @@ const LockPage = () => {
                   Claim FXN
                 </Button>
               )}
-
-              <Visible visible={canClaimRewards}>
-                <Button onClick={handleClaimRewards}>Claim Rewards</Button>
-              </Visible>
             </div>
-
-            <Visible visible={lockModalVisible}>
-              <LockModal
-                onCancel={() => setLockModalVisible(false)}
-                refreshAction={setRefreshTrigger}
-              />
-            </Visible>
-            <Visible visible={lockMoreModalVisible}>
-              <LockMoreModal
-                pageData={pageData}
-                onCancel={() => setLockMoreModalVisible(false)}
-                refreshAction={setRefreshTrigger}
-              />
-            </Visible>
-
-            <Visible visible={extendModalVisible}>
-              <ExtendModal
-                pageData={pageData}
-                onCancel={() => setExtendModalVisible(false)}
-                refreshAction={setRefreshTrigger}
-              />
-            </Visible>
           </div>
         </div>
       </div>
+
+      <Visible visible={lockModalVisible}>
+        <LockModal
+          onCancel={() => setLockModalVisible(false)}
+          refreshAction={setRefreshTrigger}
+        />
+      </Visible>
+      <Visible visible={lockMoreModalVisible}>
+        <LockMoreModal
+          pageData={pageData}
+          onCancel={() => setLockMoreModalVisible(false)}
+          refreshAction={setRefreshTrigger}
+        />
+      </Visible>
+
+      <Visible visible={extendModalVisible}>
+        <ExtendModal
+          pageData={pageData}
+          onCancel={() => setExtendModalVisible(false)}
+          refreshAction={setRefreshTrigger}
+        />
+      </Visible>
     </div>
   )
 }
