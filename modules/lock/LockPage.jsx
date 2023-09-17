@@ -32,7 +32,7 @@ const RebateInfo = ({ info, preWeekData }) => {
             <div>Cumulative This Week</div>
             <Tooltip
               placement="top"
-              title={`This week’s revenue sharing pool accumulates 50% of protocol fee starting from ${info.startTime}`}
+              title={`This week’s revenue sharing pool accumulates 75% of protocol fee starting from ${info.startTime}`}
               arrow
               color="#000"
             >
@@ -178,7 +178,11 @@ const LockPage = () => {
 
               {/* Visible when lock end */}
               {pageData.status === 'expired' && (
-                <Button locking={locking} onClick={() => handleWithdraw(true)}>
+                <Button
+                  width="100%"
+                  locking={locking}
+                  onClick={() => handleWithdraw(true)}
+                >
                   Claim FXN
                 </Button>
               )}

@@ -474,20 +474,21 @@ export default function Redeem({ slippage }) {
         />
       ) : null}
       {!_isPriceValid ? (
-        <NoticeCard content={['isValidPrice-----false']} />
+        <NoticeCard content={[`stETH price: $${_ethPrice_text}`]} />
       ) : null}
 
       <div className={styles.action}>
-        <Button
-          loading={redeeming}
-          disabled={!canRedeem}
-          onClick={handleRedeem}
-          width="100%"
-        >
-          Redeem
-        </Button>
-
-        {/* <BtnWapper
+        {symbol === 'stETH' ? (
+          <Button
+            loading={redeeming}
+            disabled={!canRedeem}
+            onClick={handleRedeem}
+            width="100%"
+          >
+            Redeem
+          </Button>
+        ) : (
+          <BtnWapper
             loading={redeeming}
             disabled={!canRedeem}
             onClick={handleRedeem}
@@ -495,7 +496,7 @@ export default function Redeem({ slippage }) {
           >
             Redeem
           </BtnWapper>
-        ) */}
+        )}
       </div>
     </div>
   )

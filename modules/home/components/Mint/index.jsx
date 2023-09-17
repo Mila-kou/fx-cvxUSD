@@ -43,13 +43,10 @@ export default function Mint({ slippage }) {
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
   const [showRetry, setShowRetry] = useState(false)
   const [symbol, setSymbol] = useState('ETH')
-  const { contract: FxGatewayContract, address: fxGatewayContractAddress } =
-    useFx_FxGateway()
+  const { contract: FxGatewayContract } = useFx_FxGateway()
 
   const minGas = 234854
   const [fromAmount, setFromAmount] = useState(0)
-  const [fETHtAmountIn, setFETHtAmountIn] = useState(0)
-  const [xETHtAmountIn, setXETHtAmountIn] = useState(0)
   const [mintXBouns, setMintXBouns] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState({
     minout_slippage: 0,
@@ -65,8 +62,6 @@ export default function Mint({ slippage }) {
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
   const {
-    fETHContract,
-    xETHContract,
     marketContract,
     treasuryContract,
     _mintFETHFee,
@@ -193,6 +188,16 @@ export default function Mint({ slippage }) {
     clearInput()
     setFromAmount('0')
     setMintXBouns(0)
+    setFETHtAmount({
+      minout_ETH: 0,
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
+    })
+    setXETHtAmount({
+      minout_ETH: 0,
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
+    })
   }
 
   const getMinAmount = async (needLoading) => {
@@ -739,7 +744,7 @@ export default function Mint({ slippage }) {
         // onChange={hanldexETHAmountChanged}
       />
 
-      {isX && mintXBouns ? (
+      {isXETHBouns && isX && mintXBouns ? (
         <DetailCell
           title="Mint xETH Bouns:"
           content={[fb4(cBN(mintXBouns)), '', 'stETH']}
