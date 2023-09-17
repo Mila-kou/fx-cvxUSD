@@ -67,7 +67,7 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
-        stETHContract.methods.balanceOf(veFXNFeeAddress),
+        stETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
         // veCTRFee.methods.claim(_currentAccount),
         veFXNFeeContract.methods.token_last_balance(),
         // veFXNFeeContract.methods.claim(_currentAccount),
