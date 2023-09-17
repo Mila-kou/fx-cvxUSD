@@ -139,8 +139,10 @@ export default function Mint({ slippage }) {
 
   const canReceived = useMemo(
     () =>
-      cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) && received,
-    [FETHtAmount, tokens, symbol, received]
+      checkNotZoroNum(fromAmount) &&
+      cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
+      received,
+    [fromAmount, tokens, symbol, received]
   )
 
   const [fee, feeUsd, feeCBN] = useMemo(() => {
