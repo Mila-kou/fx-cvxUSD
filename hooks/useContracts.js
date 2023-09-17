@@ -272,13 +272,20 @@ export const useVeFXN = () => {
   )
 }
 
-export const useVeFXNFee = () => {
+export const useVeFee = () => {
   const { contract: AladdinVeFeeContract } = useContract(
-    config.contracts.FeeDistributor,
+    config.contracts.aladdinVeFeeForCVX,
+    abi.AlaFeeDistributor
+  )
+  const { contract: AladdinVeFeeForFraxContract } = useContract(
+    config.contracts.aladdinVeFeeForFRAX,
     abi.AlaFeeDistributor
   )
   return {
-    contract: AladdinVeFeeContract,
+    feeContractForFrax: AladdinVeFeeForFraxContract,
+    feeContractForCVX: AladdinVeFeeContract,
+    cvxFeeDistributor: config.contracts.aladdinVeFeeForCVX,
+    fraxFeeDistributor: config.contracts.aladdinVeFeeForFRAX,
     address: config.contracts.aladdinVeFeeForCVX,
     tokenInfo: config.TOKENS_INFO.vefee,
   }
