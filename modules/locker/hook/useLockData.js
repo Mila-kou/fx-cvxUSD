@@ -3,6 +3,9 @@ import moment from 'moment'
 import config from 'config'
 import { cBN } from 'utils'
 import {
+  useVeCTR,
+  useCTR,
+  useACRV,
   useVeFXNFee,
   useVeFXN,
   useFXN,
@@ -17,7 +20,7 @@ const useData = (refreshTrigger) => {
   const { contract: FXNContract } = useFXN()
   const { contract: veFXNFeeContract, address: veFXNFeeAddress } = useVeFXNFee()
   const { tokenContract: stETHContract } = useErc20Token(
-    config.tokens.stETH,
+    config.tokens.seth,
     veFXNFeeAddress
   )
 
@@ -67,7 +70,7 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
-        stETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
+        stETHContract.methods.balanceOf(veFXNFeeAddress),
         // veCTRFee.methods.claim(_currentAccount),
         veFXNFeeContract.methods.token_last_balance(),
         // veFXNFeeContract.methods.claim(_currentAccount),
@@ -80,8 +83,8 @@ const useData = (refreshTrigger) => {
         { amount, end },
         tokensThisWeek,
         tokensPerWeek,
-        platformFeeSpliterStETH,
         feeBalance,
+        platformFeeSpliterSteth,
         // userVeRewards,
         veFXNFeeTokenLastBalance,
         userVeRewards,
@@ -91,13 +94,12 @@ const useData = (refreshTrigger) => {
         // userVeRewards4,
       ] = await multiCallsV2(tokensInfoList)
       console.log(
-        'timestamp---tokensThisWeek--tokensPerWeek--platformFeeSpliterStETH--feeBalance--veFXNFeeTokenLastBalance--userVeRewards--',
+        'timestamp---tokensThisWeek--platformFeeSpliterSteth--veFXNFeeTokenLastBalance--feeBalance--',
         thisWeekTimestamp,
         tokensThisWeek,
-        tokensPerWeek,
-        platformFeeSpliterStETH,
-        feeBalance,
+        platformFeeSpliterSteth,
         veFXNFeeTokenLastBalance,
+        feeBalance,
         userVeRewards
         // userVeRewards1,
         // userVeRewards2
@@ -121,12 +123,12 @@ const useData = (refreshTrigger) => {
         // userVeRewards4,
         fxnCirculationSupply,
         userLocked: { amount, end: moment(end * 1000).unix() },
-        platformFeeSpliterStETH,
+        platformFeeSpliterSteth,
         veFXNFeeTokenLastBalance,
       })
     } catch (error) {
       console.log(
-        'timestamp---tokensThisWeek--platformFeeSpliterStETH--veFXNFeeTokenLastBalance--feeBalance--error',
+        'timestamp---tokensThisWeek--platformFeeSpliterSteth--veFXNFeeTokenLastBalance--feeBalance--error',
         error
       )
     }
