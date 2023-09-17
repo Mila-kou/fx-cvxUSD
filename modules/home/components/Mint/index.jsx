@@ -188,16 +188,6 @@ export default function Mint({ slippage }) {
     clearInput()
     setFromAmount('0')
     setMintXBouns(0)
-    setFETHtAmount({
-      minout_ETH: 0,
-      minout_slippage: 0,
-      minout_slippage_tvl: 0,
-    })
-    setXETHtAmount({
-      minout_ETH: 0,
-      minout_slippage: 0,
-      minout_slippage_tvl: 0,
-    })
   }
 
   const getMinAmount = async (needLoading) => {
@@ -660,7 +650,7 @@ export default function Mint({ slippage }) {
   useEffect(() => {
     getMinAmount(true)
     // handleGetAllMinAmount()
-  }, [isF, slippage, fromAmount, symbol])
+  }, [isF, slippage, fromAmount])
 
   const fromUsd = useMemo(() => {
     if (symbol === 'fETH') {
