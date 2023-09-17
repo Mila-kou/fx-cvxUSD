@@ -274,7 +274,7 @@ export const useVeFXN = () => {
 
 export const useVeFXNFee = () => {
   const { contract: AladdinVeFeeContract } = useContract(
-    config.contracts.FeeDistributor,
+    config.contracts.fx_ve_FeeDistributor,
     abi.AlaFeeDistributor
   )
   return {

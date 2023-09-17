@@ -14,7 +14,7 @@ const useInfo = (refreshTrigger) => {
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
 
-  const rewardRate = 0.5
+  const platformFeeSpliterStETH_rewardRate = 0.5
   const [pageData, setPageData] = useState({
     overview: [
       {
@@ -78,7 +78,7 @@ const useInfo = (refreshTrigger) => {
       userVeRewards2,
       userVeRewards3,
       userVeRewards4,
-      veFXNFeeStEth,
+      platformFeeSpliterStETH,
       veFXNFeeTokenLastBalance,
     } = info
     const _tokensPerWeek = tokensPerWeek
@@ -142,13 +142,21 @@ const useInfo = (refreshTrigger) => {
       contractInfo: info,
       weekReabte: {
         weekAmount: cBN(tokensThisWeek)
-          .plus(veFXNFeeStEth)
+          .plus(
+            cBN(platformFeeSpliterStETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
           .minus(veFXNFeeTokenLastBalance)
-          .plus(cBN(feeBalance).times(rewardRate)),
+          .plus(feeBalance),
         weekVal: cBN(tokensThisWeek)
-          .plus(veFXNFeeStEth)
+          .plus(
+            cBN(platformFeeSpliterStETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
           .minus(veFXNFeeTokenLastBalance)
-          .plus(cBN(feeBalance).times(rewardRate))
+          .plus(feeBalance)
           .multipliedBy(stETHPrice),
         untilTime: moment(
           calc4(current, true) * 1000 + (86400 * 7 - 1) * 1000
