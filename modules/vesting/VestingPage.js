@@ -59,7 +59,7 @@ export default function VestingPage() {
   }
 
   return (
-    <div className="container text-center text-lg md:text-xl">
+    <div className="flex flex-col text-center text-lg md:text-xl">
       <div className="mt-32 mb-16 text-[36px]">
         FXN Token Offering participants can be claimed
       </div>
