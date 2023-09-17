@@ -110,7 +110,6 @@ export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
           onChange={setLockAmount}
           withUsd={false}
         />
-        <div className="mt-1">Available: {fb4(fxnInfo.balance)} FXN</div>
       </div>
 
       <div className="my-8">
