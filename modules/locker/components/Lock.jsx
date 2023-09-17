@@ -17,14 +17,12 @@ import { calc4, FOURYEARS } from '../util'
 import { useErc20Token } from '@/hooks/useContracts'
 
 function VELockCom({
-  data: {
-    status,
-    contractInfo,
-    userData,
-    contracts: { veFXNContract: veContract },
-  },
+  data: { status, contractInfo, userData, contracts },
   actions,
 }) {
+  console.log('contracts----', contracts)
+  const veContract = contracts.veFXNContract
+
   const { isAllReady, currentAccount, current } = useWeb3()
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [tabsActinveKey, setTabsActinveKey] = useState(0)
