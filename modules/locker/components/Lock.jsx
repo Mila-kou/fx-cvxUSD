@@ -21,7 +21,7 @@ function VELockCom({
     status,
     contractInfo,
     userData,
-    contracts: { veContract },
+    contracts: { veFXNContract: veContract },
   },
   actions,
 }) {
