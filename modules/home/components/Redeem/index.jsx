@@ -41,7 +41,7 @@ const OPTIONS = [
   ],
 ]
 
-export default function Redeem({ slippage }) {
+export default function Redeem({ slippage, isValidPrice }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const [redeeming, setRedeeming] = useState(0)
@@ -461,26 +461,28 @@ export default function Redeem({ slippage }) {
         />
       )}
 
-      {showDisabledNotice && (
+      {showDisabledNotice ? (
         <NoticeCard
           content={[
             'fx governance decision to temporarily disabled Redeem functionality.',
           ]}
         />
-      )}
+      ) : null}
+      {!isValidPrice ? (
+        <NoticeCard content={['isValidPrice-----false']} />
+      ) : null}
 
       <div className={styles.action}>
-        {symbol === 'stETH' ? (
-          <Button
-            loading={redeeming}
-            disabled={!canRedeem}
-            onClick={handleRedeem}
-            width="100%"
-          >
-            Redeem
-          </Button>
-        ) : (
-          <BtnWapper
+        <Button
+          loading={redeeming}
+          disabled={!canRedeem}
+          onClick={handleRedeem}
+          width="100%"
+        >
+          Redeem
+        </Button>
+
+        {/* <BtnWapper
             loading={redeeming}
             disabled={!canRedeem}
             onClick={handleRedeem}
@@ -488,7 +490,7 @@ export default function Redeem({ slippage }) {
           >
             Redeem
           </BtnWapper>
-        )}
+        ) */}
       </div>
     </div>
   )
