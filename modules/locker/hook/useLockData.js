@@ -1,151 +1,160 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import config from 'config'
-import { cBN } from 'utils'
-import {
-  useVeCTR,
-  useCTR,
-  useACRV,
-  useVeFXNFee,
-  useVeFXN,
-  useFXN,
-  useErc20Token,
-} from '@/hooks/useContracts'
+import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
+import abi from '@/config/abi'
+import {
+  useVeFee,
+  useFXN,
+  useVeFXN,
+  usePlatformFeeDistributor,
+  useContract,
+} from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
+import { cBN } from '@/utils/index'
 
-const useData = (refreshTrigger) => {
-  const { _currentAccount, blockNumber, current } = useWeb3()
-  const { contract: veFXNContract, address: veFXNAddress } = useVeFXN()
-  const { contract: FXNContract } = useFXN()
-  const { contract: veFXNFeeContract, address: veFXNFeeAddress } = useVeFXNFee()
-  const { tokenContract: stETHContract } = useErc20Token(
-    config.tokens.seth,
-    veFXNFeeAddress
+const initContractInfo = {
+  veTotalSupply: 0,
+  veLockedClev: 0,
+  userLocked: {},
+  userVeShare: 0,
+  userVeRewards: 0,
+  clevCirculationSupply: 1,
+}
+
+// hook
+const useData = () => {
+  const { _currentAccount, current, isAllReady } = useWeb3()
+  const multiCallsV2 = useMutiCallV2()
+  const { contract: veContract, address: veAddress } = useVeFXN()
+  const { contract: fxnContract } = useFXN()
+  const {
+    feeContractForCVX,
+    feeContractForFrax,
+    cvxFeeDistributor,
+    fraxFeeDistributor,
+  } = useVeFee()
+  const {
+    contract: platformFeeDistributorContract,
+    address: platformFeeDistributor,
+  } = usePlatformFeeDistributor()
+
+  const { contract: cvxContract } = useContract(config.tokens.cvx, abi.erc20ABI)
+  const { contract: fraxContract } = useContract(
+    config.tokens.frax,
+    abi.erc20ABI
   )
 
-  const multiCallsV2 = useMutiCallV2()
-
-  const [contractInfo, setContractInfo] = useState({
-    veTotalSupply: 0,
-    veLockedCTR: 0,
-    userLocked: {},
-    userVeShare: 0,
-    tokensPerWeek: 0,
-    userVeRewards: 0,
-    feeBalance: 0,
-    veFXNFeeAcrv: 0,
-    veFXNFeeTokenLastBalance: 0,
-  })
+  const [contractInfo, seTContractInfo] = useState(initContractInfo)
 
   const fetchCotractInfo = async () => {
     try {
-      const { totalSupply, balanceOf: veFXNBalanceOf } = veFXNContract.methods
-      const { balanceOf, totalSupply: fxnTotalSupply } = FXNContract.methods
-      const abiCalls = [
-        totalSupply(),
-        balanceOf(veFXNAddress),
-        balanceOf(config.contracts.fx_Vesting),
-        balanceOf(config.contracts.treasury), //TODO check address
-        veFXNBalanceOf(_currentAccount),
-        fxnTotalSupply(),
-      ]
-
-      const [
-        veTotalSupply,
-        veLockedFXN,
-        fxnVested,
-        fxnTreasury,
-        userVeShare,
-        fxnTotalAmount,
-      ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
       const thisWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400
       const preWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400 - 86400 * 7
+      const preTwoWeeksTimestamp =
+        Math.floor(current.unix() / (7 * 86400)) * 7 * 86400 - 86400 * 14
+      // console.log('preWeekTimestamp---', preWeekTimestamp, preTwoWeeksTimestamp)
 
-      const tokensInfoList = [
-        veFXNContract.methods.locked(_currentAccount),
-        veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
-        veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
-        stETHContract.methods.balanceOf(
-          config.contracts.PlatformFeeDistributor //TODO check address
-        ),
-        stETHContract.methods.balanceOf(veFXNFeeAddress),
-        // veCTRFee.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.token_last_balance(),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
+      const { totalSupply, balanceOf: veBalanceOf } = veContract.methods
+      const { balanceOf, totalSupply: clevTotalSupply } = fxnContract.methods
+
+      const abiCalls = [
+        totalSupply(),
+        veBalanceOf(_currentAccount),
+        balanceOf(veAddress),
+        clevTotalSupply(),
+        balanceOf(config.contracts.fx_Vesting),
+        balanceOf(config.contracts.clevHoderTreasuyry),
+        feeContractForCVX.methods.tokens_per_week(thisWeekTimestamp),
+        feeContractForCVX.methods.tokens_per_week(preWeekTimestamp),
+        feeContractForCVX.methods.tokens_per_week(preTwoWeeksTimestamp),
+        feeContractForFrax.methods.tokens_per_week(thisWeekTimestamp),
+        feeContractForFrax.methods.tokens_per_week(preWeekTimestamp),
+        feeContractForFrax.methods.tokens_per_week(preTwoWeeksTimestamp),
+        feeContractForCVX.methods.token_last_balance(),
+        feeContractForFrax.methods.token_last_balance(),
+        platformFeeDistributorContract.methods.rewards(0),
+        platformFeeDistributorContract.methods.rewards(1),
+        cvxContract.methods.balanceOf(cvxFeeDistributor),
+        cvxContract.methods.balanceOf(platformFeeDistributor),
+        fraxContract.methods.balanceOf(fraxFeeDistributor),
+        fraxContract.methods.balanceOf(platformFeeDistributor),
       ]
-      const [
-        { amount, end },
-        tokensThisWeek,
-        tokensPerWeek,
-        feeBalance,
-        veFXNFeeStEth,
-        // userVeRewards,
-        veFXNFeeTokenLastBalance,
-        userVeRewards,
-        userVeRewards1,
-        userVeRewards2,
-        userVeRewards3,
-        userVeRewards4,
-      ] = await multiCallsV2(tokensInfoList)
-      console.log(
-        'timestamp---tokensThisWeek--veFXNFeeStEth--veFXNFeeTokenLastBalance--feeBalance--',
-        thisWeekTimestamp,
-        tokensThisWeek,
-        veFXNFeeStEth,
-        veFXNFeeTokenLastBalance,
-        feeBalance,
-        userVeRewards,
-        userVeRewards1,
-        userVeRewards2
-      )
-      console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
-      const fxnCirculationSupply = cBN(fxnTotalAmount)
-        .minus(fxnVested)
-        .minus(fxnTreasury)
+      const { amount, end } = await veContract.methods
+        .locked(_currentAccount)
+        .call()
 
-      setContractInfo({
-        feeBalance,
+      const [
         veTotalSupply,
-        veLockedFXN,
         userVeShare,
-        tokensThisWeek,
-        tokensPerWeek,
-        userVeRewards,
-        userVeRewards1,
-        userVeRewards2,
-        userVeRewards3,
-        userVeRewards4,
-        fxnCirculationSupply,
+        veLockedCLEV,
+        clevTotalAmount,
+        clevVested,
+        clevHoderTreasuyry,
+        tokensThisWeekForCVX,
+        tokensPerWeekForCVX,
+        tokensPerTwoWeeksForCVX,
+        tokensThisWeekForFRAX,
+        tokensPerWeekForFRAX,
+        tokensPerTwoWeeksForFRAX,
+        cvxFeeTokenLastBalance,
+        fraxFeeTokenLastBalance,
+        cvxRewardInfo,
+        fraxRewardInfo,
+        feeDistributorCVXBalance,
+        platformFeeDistributorCVXBalance,
+        feeDistributorFRAXBalance,
+        platformFeeDistributorFRAXBalance,
+      ] = await multiCallsV2(abiCalls)
+      const clevCirculationSupply = cBN(clevTotalAmount)
+        .minus(clevVested)
+        .minus(clevHoderTreasuyry)
+
+      const cvxRewardRate =
+        1 -
+        cvxRewardInfo.gaugePercentage / 10e8 -
+        cvxRewardInfo.treasuryPercentage / 10e8
+      const fraxRewardRate =
+        1 -
+        fraxRewardInfo.gaugePercentage / 10e8 -
+        fraxRewardInfo.treasuryPercentage / 10e8
+      seTContractInfo({
+        veTotalSupply,
+        veLockedCLEV,
+        clevCirculationSupply,
+        userVeShare,
         userLocked: { amount, end: moment(end * 1000).unix() },
-        veFXNFeeStEth,
-        veFXNFeeTokenLastBalance,
+        tokensThisWeekForCVX,
+        tokensPerWeekForCVX,
+        tokensPerTwoWeeksForCVX,
+        tokensThisWeekForFRAX,
+        tokensPerWeekForFRAX,
+        tokensPerTwoWeeksForFRAX,
+        cvxFeeTokenLastBalance,
+        fraxFeeTokenLastBalance,
+        cvxRewardRate,
+        fraxRewardRate,
+        feeDistributorCVXBalance,
+        platformFeeDistributorCVXBalance,
+        feeDistributorFRAXBalance,
+        platformFeeDistributorFRAXBalance,
       })
-    } catch (error) {
-      console.log(
-        'timestamp---tokensThisWeek--veFXNFeeStEth--veFXNFeeTokenLastBalance--feeBalance--error',
-        error
-      )
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
-    fetchCotractInfo()
-  }, [_currentAccount, blockNumber, current, refreshTrigger])
+    if (cvxContract && fraxContract) {
+      fetchCotractInfo()
+    } else {
+      seTContractInfo(initContractInfo)
+    }
+  }, [_currentAccount, current, cvxContract, fraxContract])
 
   return {
     info: contractInfo,
-    contract: {
-      veFXNContract,
-      FXNContract,
-      veFXNFeeContract,
-    },
+    contracts: { veContract, fxnContract },
   }
 }
 

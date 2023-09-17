@@ -3,11 +3,11 @@ import cn from 'classnames'
 import Lock from './components/Lock'
 import LockerChart from './components/lockerChart'
 import styles from './styles.module.scss'
-import useInfo from './controllers/useInfo'
+import useLockInfo from './hook/useInfo'
 
 function LockerPage() {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const pageData = useInfo(refreshTrigger)
+  const pageData = useLockInfo()
 
   return (
     <div className={styles.container}>
