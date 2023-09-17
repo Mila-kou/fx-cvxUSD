@@ -68,13 +68,12 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
         stETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
-        // veCTRFee.methods.claim(_currentAccount),
         veFXNFeeContract.methods.token_last_balance(),
-        // veFXNFeeContract.methods.claim(_currentAccount),
-        // veFXNFeeContract.methods.claim(_currentAccount),
-        // veFXNFeeContract.methods.claim(_currentAccount),
-        // veFXNFeeContract.methods.claim(_currentAccount),
-        // veFXNFeeContract.methods.claim(_currentAccount),
+        veFXNFeeContract.methods.claim(_currentAccount),
+        veFXNFeeContract.methods.claim(_currentAccount),
+        veFXNFeeContract.methods.claim(_currentAccount),
+        veFXNFeeContract.methods.claim(_currentAccount),
+        veFXNFeeContract.methods.claim(_currentAccount),
       ]
       const [
         { amount, end },
@@ -82,13 +81,12 @@ const useData = (refreshTrigger) => {
         tokensPerWeek,
         platformFeeSpliterStETH,
         feeBalance,
-        // userVeRewards,
         veFXNFeeTokenLastBalance,
         userVeRewards,
-        // userVeRewards1,
-        // userVeRewards2,
-        // userVeRewards3,
-        // userVeRewards4,
+        userVeRewards1,
+        userVeRewards2,
+        userVeRewards3,
+        userVeRewards4,
       ] = await multiCallsV2(tokensInfoList)
       console.log(
         'timestamp---tokensThisWeek--tokensPerWeek--platformFeeSpliterStETH--feeBalance--veFXNFeeTokenLastBalance--userVeRewards--',
@@ -98,9 +96,9 @@ const useData = (refreshTrigger) => {
         platformFeeSpliterStETH,
         feeBalance,
         veFXNFeeTokenLastBalance,
-        userVeRewards
-        // userVeRewards1,
-        // userVeRewards2
+        userVeRewards,
+        userVeRewards1,
+        userVeRewards2
       )
       console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
       const fxnCirculationSupply = cBN(fxnTotalAmount)
@@ -115,10 +113,10 @@ const useData = (refreshTrigger) => {
         tokensThisWeek,
         tokensPerWeek,
         userVeRewards,
-        // userVeRewards1,
-        // userVeRewards2,
-        // userVeRewards3,
-        // userVeRewards4,
+        userVeRewards1,
+        userVeRewards2,
+        userVeRewards3,
+        userVeRewards4,
         fxnCirculationSupply,
         userLocked: { amount, end: moment(end * 1000).unix() },
         platformFeeSpliterStETH,
