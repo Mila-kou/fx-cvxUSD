@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { cBN, checkNotZoroNum, fb4 } from 'utils'
 import moment from 'moment'
-import useData from '../hook/useLockData'
+import useData from '../hook/useData'
 import { calc4 } from '../util'
 import useGlobal from '@/hooks/useGlobal'
 import useWeb3 from '@/hooks/useWeb3'

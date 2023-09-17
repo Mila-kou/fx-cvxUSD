@@ -1,0 +1,52 @@
+.banner {
+  padding: 88px 0;
+  text-align: center;
+  .title {
+    font-size: 64px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .subtitle {
+    font-weight: 500;
+    font-size: 28px;
+    color: #0096ff;
+  }
+  .bottomTitle {
+    margin-top: 8px;
+    font-size: 20px;
+    color: #0096ff;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner {
+    padding: 64px 0;
+    .title {
+      font-size: 24px;
+    }
+    .subtitle {
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .banner {
+    padding: 44px 0;
+    .title {
+      font-size: 20px;
+    }
+    .subtitle {
+      font-size: 14px;
+    }
+  }
+}
+
+div[class='default'] {
+  .banner {
+    .title {
+      color: #000;
+    }
+  }
+}

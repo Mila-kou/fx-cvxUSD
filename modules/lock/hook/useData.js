@@ -3,9 +3,6 @@ import moment from 'moment'
 import config from 'config'
 import { cBN } from 'utils'
 import {
-  useVeCTR,
-  useCTR,
-  useACRV,
   useVeFXNFee,
   useVeFXN,
   useFXN,
