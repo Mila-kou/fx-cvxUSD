@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Modal } from 'antd'
+import { Modal, Tooltip } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import config from 'config'
-import Input from 'components/Input'
+import BalanceInput from '@/components/BalanceInput'
 import useApprove from 'hooks/useApprove'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import useWeb3 from 'hooks/useWeb3'
@@ -98,25 +99,31 @@ export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
       </div>
 
       <div className="mb-8">
-        <div className="mb-1">How much do you want to lock?</div>
-        <Input
-          style={{ margin: 0 }}
+        <div className="mb-1" id="trigger">
+          How much do you want to lock?
+        </div>
+        <BalanceInput
+          placeholder="0"
+          symbol="FXN"
+          balance={fb4(fxnInfo.balance, false)}
+          maxAmount={fxnInfo.balance}
           onChange={setLockAmount}
-          available={fxnInfo.balance}
-          hidePercent
-          decimals={18}
-          token="FXN"
+          withUsd={false}
         />
         <div className="mt-1">Available: {fb4(fxnInfo.balance)} FXN</div>
       </div>
 
       <div className="my-8">
-        <div>
-          Your starting voting power will be: {fb4(vePower)} veFXNContract
+        <div className="text-[16px]">
+          Your starting voting power will be:{' '}
+          <span className="text-[var(--primary-color)]">{fb4(vePower)}</span>{' '}
+          veFXN
         </div>
-        <div className="mb-1 flex items-center gap-1">
+        <div className="mb-1 flex items-center gap-1 text-[16px]">
           Lock Time Until
-          {/* <Tip title={lockTimeTipText} />: */}
+          <Tooltip placement="top" title={lockTimeTipText} arrow color="#000">
+            <InfoCircleOutlined />:
+          </Tooltip>
           {userLocked.end
             ? moment(userLocked.end * 1000).format('YYYY-MM-DD HH:mm:ss UTCZ')
             : '-'}
@@ -125,7 +132,7 @@ export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
 
       <div className={styles.actions}>
         <BtnWapper
-          theme="lightBlue"
+          width="100%"
           onClick={handleLock}
           disabled={!canLock}
           loading={locking}

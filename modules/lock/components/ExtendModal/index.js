@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { DatePicker } from 'antd'
-import Modal from 'components/Modal'
+import { Modal, Tooltip, DatePicker } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import useWeb3 from 'hooks/useWeb3'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
@@ -138,7 +138,7 @@ export default function ExtendModal({ onCancel, pageData, refreshAction }) {
   }
 
   return (
-    <Modal onCancel={onCancel}>
+    <Modal onCancel={onCancel} visible footer={null}>
       <div className={styles.info}>
         <div className="color-white">Extend</div>
       </div>
@@ -169,19 +169,23 @@ export default function ExtendModal({ onCancel, pageData, refreshAction }) {
       </div>
 
       <div className="my-8">
-        <div>
-          Your starting voting power will be: {fb4(vePower)} veFXNContract
+        <div className="text-[16px]">
+          Your starting voting power will be:{' '}
+          <span className="text-[var(--primary-color)]">{fb4(vePower)}</span>{' '}
+          veFXN
         </div>
-        <div className="mb-1 flex items-center gap-1">
+        <div className="mb-1 flex items-center gap-1 text-[16px]">
           Lock Time Until
-          {/* <Tip title={lockTimeTipText} />: */}
+          <Tooltip placement="top" title={lockTimeTipText} arrow color="#000">
+            <InfoCircleOutlined />:
+          </Tooltip>
           {locktime ? calc4(locktime).format('YYYY-MM-DD HH:mm:ss UTCZ') : '-'}
         </div>
       </div>
 
       <div className={styles.actions}>
         <Button
-          theme="lightBlue"
+          width="100%"
           onClick={handleLock}
           disabled={days > 1457}
           loading={locking}

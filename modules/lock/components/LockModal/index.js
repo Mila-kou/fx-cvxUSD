@@ -1,22 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { DatePicker } from 'antd'
-import Input from 'components/Input'
-import Modal from 'components/Modal'
+import { Modal, Tooltip, DatePicker } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import config from 'config'
 import useApprove from 'hooks/useApprove'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
-import { Tooltip } from 'antd'
-import { InfoCircleOutlined } from '@ant-design/icons'
 import useWeb3 from 'hooks/useWeb3'
 import { checkNotZoroNum, cBN, fb4 } from 'utils'
+import BalanceInput from '@/components/BalanceInput'
 import styles from './styles.module.scss'
 import {
   WEEK,
   YEARS,
   FOURYEARS,
   calc4,
-  tipText,
   shortDate,
   lockTimeTipText,
 } from '../../util'
@@ -128,22 +125,23 @@ export default function LockModal({ onCancel, refreshAction }) {
     cBN(lockAmount).isLessThanOrEqualTo(fxnInfo.balance)
 
   return (
-    <Modal onCancel={onCancel}>
+    <Modal onCancel={onCancel} visible footer={null} width="600px">
       <div className={styles.info}>
         <div className="color-white">Lock FXN</div>
       </div>
 
       <div className="mb-8">
-        <div className="mb-1">How much do you want to lock?</div>
-        <Input
-          style={{ margin: 0 }}
+        <div className="mb-1" id="trigger">
+          How much do you want to lock?
+        </div>
+        <BalanceInput
+          placeholder="0"
+          symbol="FXN"
+          balance={fb4(fxnInfo.balance, false)}
+          maxAmount={fxnInfo.balance}
           onChange={setLockAmount}
-          available={fxnInfo.balance}
-          hidePercent
-          decimals={18}
-          token="FXN"
+          withUsd={false}
         />
-        <div className="">Available: {fb4(fxnInfo.balance)} FXN</div>
       </div>
 
       <div>
@@ -173,18 +171,27 @@ export default function LockModal({ onCancel, refreshAction }) {
       </div>
 
       <div className="my-8">
-        <div>
-          Your starting voting power will be: {fb4(vePower)} veFXNContract
+        <div className="text-[16px]">
+          Your starting voting power will be:{' '}
+          <span className="text-[var(--primary-color)]">{fb4(vePower)}</span>{' '}
+          veFXN
         </div>
-        <div className="mb-1 flex items-center gap-1">
+        <div className="mb-1 flex items-center gap-1 text-[16px]">
           Lock Time Until
-          {/* <Tip title={lockTimeTipText} />: */}
+          <Tooltip placement="top" title={lockTimeTipText} arrow color="#000">
+            <InfoCircleOutlined />:
+          </Tooltip>
           {locktime ? calc4(locktime).format('YYYY-MM-DD HH:mm:ss UTCZ') : '-'}
         </div>
       </div>
 
       <div className={styles.actions}>
-        <BtnWapper onClick={handleLock} disabled={!canLock} loading={locking}>
+        <BtnWapper
+          width="100%"
+          onClick={handleLock}
+          disabled={!canLock}
+          loading={locking}
+        >
           Lock
         </BtnWapper>
       </div>

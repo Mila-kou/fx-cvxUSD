@@ -42,14 +42,12 @@ const RebateInfo = ({ info, preWeekData }) => {
 
           <div className="text-[var(--primary-color)]">
             {fb4(info.weekAmount)} stETH
-            {/* ≈ {fb4(info.weekVal, true)} */}
           </div>
         </div>
         <div className="flex items-center justify-between my-3">
           <div>Previous Week</div>
           <div className="text-[var(--primary-color)]">
             {fb4(preWeekData.weekAmount)} stETH
-            {/* ≈ {fb4(preWeekData.weekVal, true)} */}
           </div>
         </div>
         <div className="flex items-center justify-between my-3">
@@ -70,7 +68,6 @@ const LockPage = () => {
   const veContract = useVeFXNFee()
   const { isAllReady, currentAccount } = useWeb3()
   const { contract: veFXN } = useVeFXN()
-  const [tabsActinveKey, setTabsActinveKey] = useState(0)
 
   const handleWithdraw = async () => {
     if (!isAllReady) return
@@ -156,7 +153,7 @@ const LockPage = () => {
 
             <div className="flex gap-3 justify-end mt-6">
               {pageData.status === 'no-lock' && (
-                <Button onClick={() => setLockModalVisible(true)}>
+                <Button width="100%" onClick={() => setLockModalVisible(true)}>
                   Create Lock
                 </Button>
               )}
