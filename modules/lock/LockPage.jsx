@@ -65,7 +65,7 @@ const LockPage = () => {
   const [lockMoreModalVisible, setLockMoreModalVisible] = useState(false)
   const [extendModalVisible, setExtendModalVisible] = useState(false)
   const [locking, setLocking] = useState(false)
-  const veContract = useVeFXNFee()
+  const { contract: veContract } = useVeFXNFee()
   const { isAllReady, currentAccount } = useWeb3()
   const { contract: veFXN } = useVeFXN()
 
