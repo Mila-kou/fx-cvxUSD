@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import LockerPage from '@/modules/locker/LockerPage'
+import LockPage from '@/modules/lock/LockPage'
 
 export default function Locker() {
   return (
@@ -8,7 +8,7 @@ export default function Locker() {
       <Head>
         <title>f(x) Protocol</title>
       </Head>
-      <LockerPage />
+      <LockPage />
     </React.Fragment>
   )
 }

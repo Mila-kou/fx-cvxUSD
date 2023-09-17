@@ -194,21 +194,6 @@ div[class='red'] {
   }
 }
 
-.ant-picker.datePicker {
-  height: 50px;
-  color: #fff !important;
-  border-radius: 6px;
-  border: none !important;
-  background: var(--input-background-color) !important;
-  input {
-    color: var(--main-text-color) !important;
-    font-size: 16px;
-    &::placeholder {
-      color: var(--second-text-color) !important;
-    }
-  }
-}
-
 .ant-picker-clear {
   background: var(--modal-background-color);
 }
@@ -219,5 +204,11 @@ div[class='red'] {
     path {
       fill: var(--main-text-color);
     }
+  }
+}
+
+.anticon-info-circle {
+  svg {
+    margin-top: -8px;
   }
 }
