@@ -8,8 +8,9 @@ import useWeb3 from '@/hooks/useWeb3'
 
 const useInfo = (refreshTrigger) => {
   const { global } = useGlobal()
-  const { initDataInfo: initData, tokenPrice } = global
-  const cvxPrice = tokenPrice['convex-finance']?.usd ?? 0
+  // const { initDataInfo: initData, tokenPrice } = global
+  const stETHPrice = 1300 //TO DO
+  const fxnPrice = 10
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
 
@@ -82,7 +83,7 @@ const useInfo = (refreshTrigger) => {
     } = info
     const _tokensPerWeek = tokensPerWeek
     const apr =
-      ((_tokensPerWeek * 52 * cvxPrice) / (veTotalSupply * cvxPrice)) * 100
+      ((_tokensPerWeek * 52 * stETHPrice) / (veTotalSupply * fxnPrice)) * 100
     const percentage = cBN(veLockedFXN)
       .div(fxnCirculationSupply)
       .multipliedBy(100)
@@ -148,7 +149,7 @@ const useInfo = (refreshTrigger) => {
           .plus(veFXNFeeStEth)
           .minus(veFXNFeeTokenLastBalance)
           .plus(cBN(feeBalance).times(rewardRate))
-          .multipliedBy(initData?.initDataInfo?.acrvPrice ?? 1),
+          .multipliedBy(stETHPrice),
         untilTime: moment(
           calc4(current, true) * 1000 + (86400 * 7 - 1) * 1000
         ).format('lll'),
@@ -156,9 +157,7 @@ const useInfo = (refreshTrigger) => {
       },
       preWeekReabte: {
         weekAmount: cBN(_tokensPerWeek),
-        weekVal: cBN(_tokensPerWeek).multipliedBy(
-          initData?.initDataInfo?.acrvPrice ?? 1
-        ),
+        weekVal: cBN(_tokensPerWeek).multipliedBy(stETHPrice),
       },
       userData: [
         {
@@ -199,7 +198,7 @@ const useInfo = (refreshTrigger) => {
         },
       ],
     }))
-  }, [info, initData, current])
+  }, [info, current])
 
   useEffect(() => {
     if (!currentAccount) {

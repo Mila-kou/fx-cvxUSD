@@ -39,14 +39,15 @@ const useData = (refreshTrigger) => {
   })
 
   const fetchCotractInfo = async () => {
+    const { totalSupply, balanceOf: veFXNBalanceOf } = veFXNContract.methods
+    const { balanceOf, totalSupply: fxnTotalSupply } = FXNContract.methods
+
     try {
-      const { totalSupply, balanceOf: veFXNBalanceOf } = veFXNContract.methods
-      const { balanceOf, totalSupply: fxnTotalSupply } = FXNContract.methods
       const abiCalls = [
         totalSupply(),
         balanceOf(veFXNAddress),
         balanceOf(config.contracts.fx_Vesting),
-        balanceOf(config.contracts.treasury), //TODO check address
+        balanceOf(config.contracts.fx_FXN_treasury), //TODO check address
         veFXNBalanceOf(_currentAccount),
         fxnTotalSupply(),
       ]
@@ -64,21 +65,60 @@ const useData = (refreshTrigger) => {
       const preWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400 - 86400 * 7
 
+      // const abiCalls_1 = [
+      //   veFXNContract.methods.locked(_currentAccount),
+      //   veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
+      //   veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
+      //   stETHContract.methods.balanceOf(
+      //     config.contracts.fx_FXN_PlatformFeeDistributor //TODO check address
+      //   ),
+      //   stETHContract.methods.balanceOf(veFXNFeeAddress),
+
+      //   veFXNFeeContract.methods.token_last_balance(),
+      //   veFXNFeeContract.methods.claim(_currentAccount),
+      //   // veFXNFeeContract.methods.claim(_currentAccount),
+      //   // veFXNFeeContract.methods.claim(_currentAccount),
+      //   // veFXNFeeContract.methods.claim(_currentAccount),
+      //   // veFXNFeeContract.methods.claim(_currentAccount),
+      // ]
+
+      // const [
+      //   res1,
+      //   res2,
+      //   res3,
+      //   res4,
+      //   res5,
+      //   res6,
+      //   res7,
+      //   // res7, res8
+      // ] = await multiCallsV2(abiCalls_1) // [0,0,0,0,0,0]
+      // console.log(
+      //   'veTotalSupply---12',
+      //   res1,
+      //   res2,
+      //   res3,
+      //   res4,
+      //   res5,
+      //   res6,
+      //   res7
+      // )
+      // return
+
       const tokensInfoList = [
         veFXNContract.methods.locked(_currentAccount),
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(
-          config.contracts.PlatformFeeDistributor //TODO check address
+          config.contracts.fx_FXN_PlatformFeeDistributor //TODO check address
         ),
         stETHContract.methods.balanceOf(veFXNFeeAddress),
         // veCTRFee.methods.claim(_currentAccount),
         veFXNFeeContract.methods.token_last_balance(),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
-        veFXNFeeContract.methods.claim(_currentAccount),
+        // veFXNFeeContract.methods.claim(_currentAccount),
+        // veFXNFeeContract.methods.claim(_currentAccount),
+        // veFXNFeeContract.methods.claim(_currentAccount),
+        // veFXNFeeContract.methods.claim(_currentAccount),
+        // veFXNFeeContract.methods.claim(_currentAccount),
       ]
       const [
         { amount, end },
@@ -89,10 +129,10 @@ const useData = (refreshTrigger) => {
         // userVeRewards,
         veFXNFeeTokenLastBalance,
         userVeRewards,
-        userVeRewards1,
-        userVeRewards2,
-        userVeRewards3,
-        userVeRewards4,
+        // userVeRewards1,
+        // userVeRewards2,
+        // userVeRewards3,
+        // userVeRewards4,
       ] = await multiCallsV2(tokensInfoList)
       console.log(
         'timestamp---tokensThisWeek--veFXNFeeStEth--veFXNFeeTokenLastBalance--feeBalance--',
@@ -101,9 +141,9 @@ const useData = (refreshTrigger) => {
         veFXNFeeStEth,
         veFXNFeeTokenLastBalance,
         feeBalance,
-        userVeRewards,
-        userVeRewards1,
-        userVeRewards2
+        userVeRewards
+        // userVeRewards1,
+        // userVeRewards2
       )
       console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
       const fxnCirculationSupply = cBN(fxnTotalAmount)
@@ -118,10 +158,10 @@ const useData = (refreshTrigger) => {
         tokensThisWeek,
         tokensPerWeek,
         userVeRewards,
-        userVeRewards1,
-        userVeRewards2,
-        userVeRewards3,
-        userVeRewards4,
+        // userVeRewards1,
+        // userVeRewards2,
+        // userVeRewards3,
+        // userVeRewards4,
         fxnCirculationSupply,
         userLocked: { amount, end: moment(end * 1000).unix() },
         veFXNFeeStEth,
