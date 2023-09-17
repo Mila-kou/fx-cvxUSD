@@ -178,8 +178,10 @@ function VELockCom({
         </Visible>
 
         <Visible visible={userLockExpired}>
-          <div className="text-center mt-32">
-            <Button onClick={handleClaim}>Claim</Button>
+          <div className="text-center mt-20 flex justify-center">
+            <Button onClick={handleClaim} width="300px">
+              Claim
+            </Button>
           </div>
         </Visible>
 
