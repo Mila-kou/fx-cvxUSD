@@ -14,6 +14,7 @@ import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
 import { DetailCell, NoticeCard } from '../Common'
 import Button from '@/components/Button'
+import useFxCommon_New from '../../hooks/useFxCommon_New'
 
 const OPTIONS = [
   ['stETH', config.tokens.stETH],
@@ -46,6 +47,8 @@ export default function Redeem({ slippage }) {
   const [redeeming, setRedeeming] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+
+  const fxCommonNew = useFxCommon_New()
 
   const [symbol, setSymbol] = useState('stETH')
   const { contract: FxGatewayContract, address: fxGatewayContractAddress } =
@@ -99,6 +102,22 @@ export default function Redeem({ slippage }) {
     }
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
+
+  const [_fnav, _xnav, _ethPrice_text] = useMemo(() => {
+    if (
+      baseInfo.fxETHTwapOraclePriceeInfo &&
+      !baseInfo.fxETHTwapOraclePriceeInfo._isValid
+    ) {
+      let _state
+      if (isF) {
+        _state = fxCommonNew._loadSwapState('RedeemFToken')
+      } else {
+        _state = fxCommonNew._loadSwapState('RedeemXToken')
+      }
+      return [fb4(_state.fNav), fb4(_state.xNav), fb4(_state.baseNav)]
+    }
+    return [fnav, xnav, ethPrice_text]
+  }, [baseInfo, isF])
 
   const canReceived = useMemo(() => {
     if (!minOutETHtAmount.minout_slippage) return false
@@ -376,16 +395,16 @@ export default function Redeem({ slippage }) {
 
   const toUsd = useMemo(() => {
     if (symbol === 'fETH') {
-      return fnav
+      return _fnav
     }
     if (symbol === 'xETH') {
-      return xnav
+      return _xnav
     }
     if (['stETH', 'ETH'].includes(symbol)) {
-      return ethPrice_text
+      return _ethPrice_text
     }
     return tokens[symbol].price
-  }, [symbol, ethPrice_text, fnav, xnav])
+  }, [symbol, _ethPrice_text, _fnav, _xnav])
 
   return (
     <div className={styles.container}>
@@ -395,7 +414,7 @@ export default function Redeem({ slippage }) {
         symbol="fETH"
         color={isF ? 'blue' : ''}
         className={styles.inputItem}
-        usd={`$${fnav}`}
+        usd={`$${_fnav}`}
         type={isF ? '' : 'select'}
         maxAmount={tokens.fETH.balance}
         onChange={hanldeFETHAmountChanged}
@@ -409,7 +428,7 @@ export default function Redeem({ slippage }) {
         type={isX ? '' : 'select'}
         color={isX ? 'red' : ''}
         className={styles.inputItem}
-        usd={`$${xnav}`}
+        usd={`$${_xnav}`}
         maxAmount={tokens.xETH.balance}
         onChange={hanldeXETHAmountChanged}
         onSelected={() => setSelected(1)}
