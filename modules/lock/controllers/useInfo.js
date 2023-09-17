@@ -7,9 +7,8 @@ import useGlobal from '@/hooks/useGlobal'
 import useWeb3 from '@/hooks/useWeb3'
 
 const useInfo = (refreshTrigger) => {
-  const { global } = useGlobal()
-  // const { initDataInfo: initData, tokenPrice } = global
-  const stETHPrice = 1300 //TO DO
+  const { tokens } = useGlobal()
+  const stETHPrice = tokens.stETH.price
   const fxnPrice = 10
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
