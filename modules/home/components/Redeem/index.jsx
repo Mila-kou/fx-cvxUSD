@@ -467,7 +467,7 @@ export default function Redeem({ slippage }) {
       {showDisabledNotice ? (
         <NoticeCard
           content={[
-            'fx governance decision to temporarily disabled Redeem functionality.',
+            ' f(x) governance decision to temporarily disable redemption.',
           ]}
         />
       ) : null}

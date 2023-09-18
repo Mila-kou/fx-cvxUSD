@@ -654,12 +654,12 @@ export default function Mint({ slippage }) {
     <div className={styles.container}>
       {isXETHBouns ? (
         <BonusCard
-          title={`${fb4(
+          title={`Minting xETH will earn ${fb4(
             cBN(baseInfo.bonusRatioRes).times(100),
             false,
             18,
             2
-          )}% bonus ends after mint xETH`}
+          )}% bonus now`}
           amount=""
           symbol=""
         />
@@ -721,7 +721,7 @@ export default function Mint({ slippage }) {
 
       {isXETHBouns && isX && mintXBouns ? (
         <DetailCell
-          title="Mint xETH Bouns:"
+          title="Mint xETH Bonus:"
           content={[fb4(cBN(mintXBouns)), '', 'stETH']}
         />
       ) : null}
@@ -733,9 +733,7 @@ export default function Mint({ slippage }) {
 
       {showDisabledNotice ? (
         <NoticeCard
-          content={[
-            'fx governance decision to temporarily disabled Mint functionality.',
-          ]}
+          content={['f(x) governance decision to temporarily disable minting.']}
         />
       ) : null}
 

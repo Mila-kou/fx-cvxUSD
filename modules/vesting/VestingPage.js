@@ -60,9 +60,7 @@ export default function VestingPage() {
 
   return (
     <div className="flex flex-col text-center text-lg md:text-xl">
-      <div className="mt-32 mb-16 text-[36px]">
-        FXN Token Offering participants can be claimed
-      </div>
+      <div className="mt-32 mb-16 text-[36px]">Claim FXN Tokens</div>
       <div className="mb-12">
         <div
           className={cn(
@@ -73,7 +71,7 @@ export default function VestingPage() {
           Your Vesting
         </div>
         <InfoItem
-          title="Total of Your Airdrop"
+          title="Total No FXN Tokens"
           value={`${totalClaimAble}`}
           unit="FXN"
         />

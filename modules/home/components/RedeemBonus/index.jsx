@@ -84,12 +84,12 @@ export default function RedeemBonus({ slippage }) {
   }, [FETHtAmount, tokens.fETH.balance])
 
   const [fee, useETHBonus_text] = useMemo(() => {
-    let _redeemFee = _redeemFETHFee
+    const _redeemFee = _redeemFETHFee
     // const _fee = cBN(minOutETHtAmount).multipliedBy(_redeemFee).div(1e18)
     const _fee = cBN(_redeemFee).multipliedBy(100)
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
 
-    let _userETHBonus = getMaxETHBonus({
+    const _userETHBonus = getMaxETHBonus({
       MaxBaseInfETH: tokenAmount / 1e18,
       redeemFETHFee: (_redeemFETHFee || 0) / 1e18,
       isUserType: true,
@@ -269,12 +269,10 @@ export default function RedeemBonus({ slippage }) {
       <NoticeCard
         content={
           showDisabledNotice
-            ? [
-              'fx governance decision to temporarily disabled Redeem functionality.',
-            ]
+            ? [' f(x) governance decision to temporarily disable redemption.']
             : [
-              'Excess payments will be refunded if rewards are fully allocated.',
-            ]
+                'Excess payments will be refunded if rewards are fully allocated.',
+              ]
         }
       />
 
@@ -291,7 +289,8 @@ export default function RedeemBonus({ slippage }) {
           loading={redeeming}
           disabled={!canRedeem}
           onClick={handleLiquidate}
-          width="100%">
+          width="100%"
+        >
           Redeem
         </Button>
       </div>
