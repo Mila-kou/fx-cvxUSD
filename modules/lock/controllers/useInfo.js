@@ -13,7 +13,7 @@ const useInfo = (refreshTrigger) => {
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
 
-  const platformFeeSpliterStETH_rewardRate = 0.5
+  const platformFeeSpliterStETH_rewardRate = 0.75
   const [pageData, setPageData] = useState({
     overview: [
       {
