@@ -63,7 +63,8 @@ const LockPage = () => {
   const [lockModalVisible, setLockModalVisible] = useState(false)
   const [lockMoreModalVisible, setLockMoreModalVisible] = useState(false)
   const [extendModalVisible, setExtendModalVisible] = useState(false)
-  const [locking, setLocking] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [crLoading, setCrLoading] = useState(false)
   const { contract: veContract } = useVeFXNFee()
   const { isAllReady, currentAccount } = useWeb3()
   const { contract: veFXN } = useVeFXN()
@@ -71,7 +72,7 @@ const LockPage = () => {
   const handleWithdraw = async () => {
     if (!isAllReady) return
 
-    setLocking(true)
+    setLoading(true)
     try {
       const apiCall = veFXN.methods.withdraw()
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
@@ -81,15 +82,16 @@ const LockPage = () => {
         action: 'withdraw',
       })
       setRefreshTrigger((prev) => prev + 1)
-      setLocking(false)
+      setLoading(false)
     } catch (error) {
-      setLocking(false)
+      setLoading(false)
       noPayableErrorAction(`error_ctr_withdraw`, error)
     }
   }
 
   const handleClaimRewards = async () => {
     if (!isAllReady) return
+    setCrLoading(true)
     try {
       const apiCall = veContract.methods.claim()
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
@@ -99,7 +101,9 @@ const LockPage = () => {
         action: 'claim',
       })
       setRefreshTrigger((prev) => prev + 1)
+      setCrLoading(false)
     } catch (error) {
+      setCrLoading(false)
       noPayableErrorAction(`error_ve_claim`, error)
     }
   }
@@ -144,7 +148,11 @@ const LockPage = () => {
               ))}
 
               <Visible visible={canClaimRewards}>
-                <Button width="100%" onClick={handleClaimRewards}>
+                <Button
+                  width="100%"
+                  onClick={handleClaimRewards}
+                  loading={crLoading}
+                >
                   Claim Rewards
                 </Button>
               </Visible>
@@ -179,7 +187,7 @@ const LockPage = () => {
               {pageData.status === 'expired' && (
                 <Button
                   width="100%"
-                  locking={locking}
+                  loading={loading}
                   onClick={() => handleWithdraw(true)}
                 >
                   Claim FXN
