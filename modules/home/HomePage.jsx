@@ -712,7 +712,7 @@ export default function HomePage() {
     <div className={styles.container}>
       <div className={styles.item}>
         <Swap isValidPrice={pricePriceInfo._isValid} />
-        New ETH Price: <SimpleInput onChange={handleChange_CurrentETHPrice} />
+        {/* New ETH Price: <SimpleInput onChange={handleChange_CurrentETHPrice} />
         <Button width="100%" loading={priceLoading} onClick={handleSetPrice}>
           ETH Price
         </Button>
@@ -750,7 +750,7 @@ export default function HomePage() {
         </div>
         <Button width="100%" loading={priceLoading} onClick={handlePrice}>
           getPrice
-        </Button>
+        </Button> */}
       </div>
       {showSystemStatistics ? (
         <div className={styles.item}>
