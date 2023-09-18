@@ -1,11 +1,8 @@
 /* eslint-disable no-lonely-if */
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
-
-import Button from '@/components/Button'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
-import { get1inchParams } from '@/services/inch'
 
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
@@ -18,7 +15,6 @@ import useETH from '../../controller/useETH'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
-import notify from '@/components/notify'
 import useCurveSwap from '@/hooks/useCurveSwap'
 
 const OPTIONS = [
@@ -433,19 +429,6 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = fromAmount
       }
       const _minOut = await getMinAmount()
-
-      // const { data } = await get1inchParams({
-      //   src:
-      //     symbol == 'ETH'
-      //       ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-      //       : selectTokenAddress,
-      //   dst: config.tokens.stETH,
-      //   amount: _ETHtAmountAndGas.toString(),
-      //   from: fxGatewayContractAddress,
-      //   slippage: Number(slippage),
-      //   disableEstimate: true,
-      //   allowPartialFill: false,
-      // })
       const { data } = await getCurveSwapABI({
         src:
           symbol == 'ETH'

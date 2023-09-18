@@ -284,18 +284,6 @@ export const useVeFXNFee = () => {
   }
 }
 
-export const usePlatformFeeDistributor = () => {
-  const address = config.contracts.PlatformFeeDistributor
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.PlatformFeeDistributorABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
 export const useAllInOneGateway = () => {
   const address = config.contracts.aladdinAllInOneGateway
   const { getContract } = useContract()

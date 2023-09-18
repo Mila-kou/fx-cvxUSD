@@ -6,7 +6,6 @@ import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
@@ -82,7 +81,6 @@ export default function Redeem({ slippage }) {
   const [FETHtAmount, setFETHtAmount] = useState(0)
   const [XETHtAmount, setXETHtAmount] = useState(0)
   const [priceLoading, setPriceLoading] = useState(false)
-  const [manualNum, setManualNum] = useState(0)
   const [minOutETHtAmount, setMinOutETHtAmount] = useState({
     minout_slippage: 0,
     minout_slippage_tvl: 0,

@@ -1,5 +1,4 @@
 const CLEVIcon = '/assets/tokens/clev.svg'
-const clevUsdIcons = '/assets/tokens/clevUSD.svg'
 
 const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
@@ -41,17 +40,6 @@ const contracts = {
 
   redeemConverter: '0xAF345c813CE17Cc5837BfD14a910D365223F3B95',
 
-  // 需要对应合约
-  // aladdinRewardClaimHelper
-  // aladdinVeFeeForCVX
-  // AlaFeeDistributor
-  // claimVeRewards
-
-  // aldCvx
-  // lockCvx
-  // transmuterCvx
-  // aladdinVeCLEV
-
   CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
 
   //  ----
@@ -77,17 +65,6 @@ const contracts = {
   aldCvx: '0xf05e58fCeA29ab4dA01A495140B349F8410Ba904',
   vlCVX: '0xD18140b4B819b895A3dba5442F959fA44994AF50',
 
-  // clevCRV
-  metaFurnace: '0xf5D1cA341e1BAadd986D43b226F92B778C75C8cA',
-  metaClever: '0x7059eAeBAd4f26c0FD4183fCeCBF93bB21E81E3C',
-
-  // clevUSD
-  metaFurnaceForFrax: '0x7f160EFC2436F1aF4E9E8a57d0a5beB8345761a9',
-  metaCleverForFrax: '0xEB0ea9D24235aB37196111eeDd656D56Ce4F53b1',
-  metaCleverForLUSDFraxBP: '0xb2Fcee71b25B62baFE442c58AF58c42143673cC1',
-  metaCleverForTUSDFraxBP: '0xad4caC207A0BFEd10dF8A4FC6A28D377caC730E0',
-  metaCleverForClevUSDFRAXBP: '0x2C37F1DcEd208530A05B061A183d8937F686157e',
-
   aladdinCLEV: '0x72953a5C32413614d24C29c84a66AE4B59581Bbf',
   aladdinVeFeeForCVX: '0x261E3aEB4cd1ebfD0Fa532d6AcDd4B21EbdCd2De', // FeeDistributor
   aladdinVeFeeForFRAX: '0xb5e7F9cb9d3897808658F1991AD32912959b42E2', // FeeDistributor
@@ -102,15 +79,6 @@ const contracts = {
   clevHoderTreasuyry: '0xfc08757c505ea28709df66e54870fb6de09f0c5e',
 
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
-
-  // cveCRV
-  CurveLockerProxy: '0x3330B5eca82115417Ae7A1Ab6F781295c0A0eB75',
-  CLeverVeCRV: '0xCD320b82010aD409d746c83d855Dd6F936d86Edf',
-  CrvDepositor: '0xF56213409F803ec11a029A7457ed9B1Aa53e2289',
-  CLeverVeCRVLiquidityStaking: '0xD12AC387057bFb93892Ec15E7C039AF93666F551',
-  CurveBooster: '0xFcecbBcd85eeb27FeC0850372a6e738cC303EAc7',
-  clevCRV: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
-  clevCRVFurnace: '0xF8d8fD35A3BAa5559ED67ed532072287AE9770D3',
 
   PlatformFeeDistributor: '0xD6eFa5B63531e9ae61e225b02CbACD59092a35bE',
 }
@@ -151,26 +119,8 @@ const tokens = {
   clev: '0x72953a5C32413614d24C29c84a66AE4B59581Bbf',
   clevCVX: '0xf05e58fCeA29ab4dA01A495140B349F8410Ba904',
 
-  // for cvx /page/accelerator-cvx
-  aldcvx: '0xf9Ee4aBCBA5823148850BA49d93238177accbB64',
-
-  // for clev /page/clevers
-  clevCRV: '0x41c94eA5A7724d8F4f6e67e529e809b9EAB11Db2', // clevers/aCrv
-  clevUSD: '0x3C20Ac688410bE8F391bE1fb00AFc5C212972F86', // clevers/clevUSD
-
-  aCRV: '0x2b95A1Dcc3D405535f9ed33c219ab38E8d7e0884',
-  cusdc: '0x39AA39c021dfbaE8faC545936693aC917d5E7563',
-  cyUSDC: '0x76Eb2FE28b36B3ee97F3Adae0C69606eeDB2A37c',
-  cyUSDT: '0x48759F220ED983dB51fA7A8C0D2AAb8f3ce4166a',
-  cdai: '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
-  cyDAI: '0x8e595470Ed749b85C6F7669de83EAe304C2ec68F',
-  ustTerra: '0xa47c8bf37f92aBed4A126BDA807A7b7498661acD',
-  cvxfxs: '0xFEEf77d3f69374f66429C91d732A244f074bdf74',
-
   // abcCVX
   abcCVX: '0xDEC800C2b17c9673570FDF54450dc1bd79c8E359',
-  // cveCRV
-  cleverVeCRV: '0xCD320b82010aD409d746c83d855Dd6F936d86Edf',
 }
 
 const TOKENS_INFO = {
@@ -192,8 +142,6 @@ const TOKENS_INFO = {
   busd: ['binance-usd', tokens.busd, 18, 'busd'],
   tusd: ['true-usd', tokens.tusd, 18, 'TUSD'],
   lusd: ['usd-coin', tokens.lusd, 18, 'lusd'],
-  cvxfxs: ['', tokens.cvxfxs, 18, 'cvxfxs'],
-  clevUSD: ['frax', tokens.clevUSD, 18],
   fETH: ['fETH', tokens.fETH, 18],
   xETH: ['xETH', tokens.xETH, 18],
   veFXN: ['veFXN', tokens.veFXN, 18],
@@ -297,20 +245,6 @@ const zapTokens = {
     icon: 'tusd',
     decimals: TOKENS_INFO.tusd[2],
     address: TOKENS_INFO.tusd[1],
-    needZap: true,
-  },
-  CVXFXS: {
-    symbol: 'cvxFXS',
-    icon: 'fxs',
-    decimals: TOKENS_INFO.cvxfxs[2],
-    address: TOKENS_INFO.cvxfxs[1],
-    needZap: true,
-  },
-  clevUSD: {
-    symbol: 'clevUSD',
-    icon: clevUsdIcons,
-    decimals: TOKENS_INFO.clevUSD[2],
-    address: TOKENS_INFO.clevUSD[1],
     needZap: true,
   },
 }

@@ -44,7 +44,7 @@ const useData = (refreshTrigger) => {
         totalSupply(),
         balanceOf(veFXNAddress),
         balanceOf(config.contracts.fx_Vesting),
-        balanceOf(config.contracts.fx_FXN_treasury), //TODO check address
+        balanceOf(config.contracts.fx_FXN_treasury),
         veFXNBalanceOf(_currentAccount),
         fxnTotalSupply(),
       ]

@@ -1,18 +1,9 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import curve from '@curvefi/api'
-
-// import { Button, InputNumber } from 'antd'
-import { ethers, Contract, Networkish, BigNumberish, Numeric } from 'ethers'
-import SimpleInput from '@/components/SimpleInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
-import { useToken } from '@/hooks/useTokenInfo'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import Swap from './components/Swap'
-import SystemStatistics from './components/SystemStatistics'
 import styles from './styles.module.scss'
 import Button from '@/components/Button'
 
@@ -25,7 +16,6 @@ import {
   useFx_ReservePool,
 } from '@/hooks/useContracts'
 import useETH from './controller/useETH'
-import { get1inchParams } from '@/services/inch'
 import abi from '@/config/abi'
 
 const { stETH, fETH } = config.tokens
