@@ -132,7 +132,7 @@ export default function SystemStatistics() {
             </div>
             <div className={styles.cell}>
               <div>
-                ETH Last Price:
+                ETH Reference Price:
                 <Tooltip
                   placement="top"
                   title="Aug-03-2023 02:55:11 PM +UTC"
