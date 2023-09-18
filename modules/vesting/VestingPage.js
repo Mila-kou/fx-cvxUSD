@@ -3,10 +3,18 @@ import cn from 'classnames'
 import Button from '@/components/Button'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from './hook/useVesting'
-import { useAladdinClevVest } from '@/hooks/useContracts'
+import { useFXNVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
+
+function InfoItem({ title, value, unit }) {
+  return (
+    <div className="my-2">
+      {title}: <span className="text-[var(--blue-color)]">{value}</span> {unit}
+    </div>
+  )
+}
 
 export default function VestingPage() {
   const { theme } = useGlobal()
@@ -16,7 +24,6 @@ export default function VestingPage() {
   const {
     canClaim,
     canClaimText,
-    claimedAmount,
     totalClaimAble,
     notYetVestedText,
     newList,
@@ -25,7 +32,7 @@ export default function VestingPage() {
     latestTime,
     latestTimeText,
   } = useVesting(refreshTrigger)
-  const { contract: vestContract } = useAladdinClevVest()
+  const { contract: vestContract } = useFXNVesting()
 
   const handleClaim = async () => {
     try {
@@ -45,15 +52,6 @@ export default function VestingPage() {
       setClaiming(false)
       noPayableErrorAction(`error_earn_approve`, error)
     }
-  }
-
-  function InfoItem({ title, value, unit }) {
-    return (
-      <div className="my-2">
-        {title}: <span className="text-[var(--blue-color)]">{value}</span>{' '}
-        {unit}
-      </div>
-    )
   }
 
   const itemData = [
@@ -100,12 +98,7 @@ export default function VestingPage() {
             </div>
             {!!(canClaim * 1) && (
               <div className="flex justify-center">
-                <Button
-                  className="w-40"
-                  onClick={handleClaim}
-                  loading={claiming}
-                  theme="lightBlue"
-                >
+                <Button width="200px" onClick={handleClaim} loading={claiming}>
                   Claim
                 </Button>
               </div>

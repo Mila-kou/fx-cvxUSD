@@ -2,12 +2,12 @@ import { useEffect, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
-import { useAladdinClevVest } from '@/hooks/useContracts'
+import { useFXNVesting } from '@/hooks/useContracts'
 
 const useVestingData = () => {
   const { blockNumber, _currentAccount, isAllReady } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
-  const { contract: VestingContract } = useAladdinClevVest()
+  const { contract: VestingContract } = useFXNVesting()
 
   const fetchUserVesting = useCallback(async () => {
     const { getUserVest, vested, claim } = VestingContract.methods
