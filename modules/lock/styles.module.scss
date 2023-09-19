@@ -44,3 +44,24 @@
     }
   }
 }
+
+@media (max-width: 1200px) {
+  .right {
+    flex: 1;
+  }
+}
+
+@media (max-width: 1000px) {
+  .container {
+    margin: 16px auto 0;
+  }
+  .content {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 900px) {
+  .items {
+    flex-direction: column;
+  }
+}

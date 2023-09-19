@@ -113,32 +113,31 @@ export default function VestingPage() {
         </div>
       </div>
 
-      <div className="bg-[var(--background-color)] mt-8 p-[56px] rounded-[10px]">
+      <div className={styles.content}>
         <table
           className={cn(
+            styles.table,
             'border-collapse border mx-auto',
             theme === 'blue' ? 'text-white' : 'text-[#231f20]'
           )}
         >
           <thead>
-            <th className={cn('border py-4 px-12')}>Start Date</th>
-            <th className={cn('border py-4 px-12')}>End Date</th>
-            <th className={cn('border py-4 px-12')}>Total Tokens</th>
-            <th className={cn('border py-4 px-12')}>% Vested</th>
+            <th className={cn('border py-4')}>Start Date</th>
+            <th className={cn('border py-4')}>End Date</th>
+            <th className={cn('border py-4')}>Total Tokens</th>
+            <th className={cn('border py-4')}>% Vested</th>
           </thead>
           <tbody>
             {newList && newList.length ? (
               newList.map((item) => {
                 return (
                   <tr>
-                    <td className={cn('border py-4 px-12')}>
-                      {item.startTime}
-                    </td>
-                    <td className={cn('border py-4 px-12')}>{item.endTime}</td>
-                    <td className={cn('border py-4 px-12 text-center')}>
+                    <td className={cn('border py-4')}>{item.startTime}</td>
+                    <td className={cn('border py-4')}>{item.endTime}</td>
+                    <td className={cn('border py-4 text-center')}>
                       {item.vestingAmount} FXN
                     </td>
-                    <td className={cn('border py-4 px-12 text-center')}>
+                    <td className={cn('border py-4 text-center')}>
                       {item.vestingAmountPercent}
                     </td>
                   </tr>

@@ -32,15 +32,36 @@
   }
 
   .content {
-    margin-top: 16px;
-    display: flex;
-    gap: 14px;
-    .left {
-      flex: 1;
-      background: var(--background-color);
-      padding: 28px 56px;
-      border-radius: 10px;
-      height: 568px;
+    background: var(--background-color);
+    margin-top: 32px;
+    padding: 56px;
+    border-radius: 10px;
+  }
+
+  .table {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .container {
+    margin: 16px auto 0;
+    .items {
+      flex-direction: column;
+    }
+    .table {
+      width: 90%;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    .content {
+      padding: 28px 16px;
+    }
+    .table {
+      width: calc(100vw - 32px);
     }
   }
 }
