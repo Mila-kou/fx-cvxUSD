@@ -22,6 +22,8 @@ export default function FAQ({ open, onCancel }) {
             </div>
 
             <div className={styles.content}>
+              <h1>f(x) FAQ</h1>
+
               <h2>1. What?</h2>
 
               <p>
@@ -167,6 +169,43 @@ export default function FAQ({ open, onCancel }) {
                 significantly. Doing this helps the numbers reported on the UI
                 to reflect more recent price fluctuations Reference price
                 updates do not affect the NAV of fETH or xETH.
+              </p>
+
+              <h1>What if bad things happen?</h1>
+
+              <h2>
+                11. What happens if there’s a huge flash crash in ETH price ?
+              </h2>
+              <p>
+                In the unlikely (&lt;0.1%; see whitepaper) event of a price
+                crash in ETH that’s so big that the rebalancing pool and minting
+                incentives fail to restabilize the system, the price of xETH can
+                fall to zero [this is the closest thing to a liquidation on
+                f(x)] and in that case fETH will have sole claim on the reserve.
+                If that happens, the fETH NAV will start following the full
+                price swings of ETH, rather than just 10%. As always, it would
+                be redeemable.
+              </p>
+              <p>
+                If this ever were to happen there are provisions for
+                recapitalizing the protocol described in the whitepaper.
+              </p>
+
+              <h2>12. What happens if stETH depegs from ETH ?</h2>
+              <p>
+                f(x) has an automatic emergency brake built-in which protects
+                fETH and xETH holders if there is a stETH depeg. Using multiple
+                oracle feeds f(x) can determine if the price of stETH has
+                diverged more than 1% from the price of ETH, and if so minting
+                is (temporarily) disabled. Redemptions remain enabled (as
+                always), however fETH redemptions use the higher of the two
+                prices (stETH, ETH) and xETH redemptions use the lower. When the
+                stETH peg normalizes, minting resumes. This mechanism ensures
+                fETH and xETH holders are protected, and ensures that{' '}
+                <b>
+                  no urgent action is ever needed in the event of a stETH depeg
+                </b>
+                .
               </p>
             </div>
           </div>
