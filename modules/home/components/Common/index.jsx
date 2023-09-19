@@ -4,13 +4,18 @@ import cn from 'classnames'
 import { dollarText } from '@/utils/index'
 import styles from './styles.module.scss'
 
-export function DetailCell({ title, isGreen, content: [num1 = '', num2] }) {
+export function DetailCell({
+  title,
+  isGreen,
+  content: [num1 = '', num2, num3],
+}) {
   return (
     <div className={cn(styles.detailCell, isGreen ? styles.green : '')}>
       <p>{title}</p>
       <div className={styles.content}>
         <span>{num1}</span>{' '}
         {num2 && num2 !== '-' ? `(${dollarText(num2)})` : ''}
+        {num3 || null}
       </div>
     </div>
   )

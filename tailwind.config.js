@@ -12,7 +12,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      colors: {},
+      colors: {
+        blue: '#5488fe',
+        red: '#fa2454',
+      },
     },
   },
   plugins: [],

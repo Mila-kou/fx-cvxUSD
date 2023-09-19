@@ -28,12 +28,12 @@
 
 .bonusCard {
   display: flex;
-  justify-content: space-around;
+  // justify-content: space-around;
   align-items: center;
   color: var(--second-text-color);
   background: var(--input-background-color);
   font-size: 16px;
-  padding: 30px 0;
+  padding: 30px 16px;
   border-radius: 6px;
   margin: 20px 0;
   span {

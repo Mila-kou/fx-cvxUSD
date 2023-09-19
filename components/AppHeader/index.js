@@ -22,9 +22,10 @@ import FAQ from '@/components/FAQ'
 
 const routers = [
   ['f(x) Protocol', '/home'],
-  // ['Farming', '/farming'],
-  // ['Locker', '/locker'],
   ['Rebalance Pool', '/rebalance-pool'],
+  // ['Farming', '/farming'],
+  ['Vesting', '/vesting'],
+  ['Lock', '/lock'],
   ['Offering', '/offering'],
 ]
 

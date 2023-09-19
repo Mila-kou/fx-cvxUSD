@@ -55,6 +55,7 @@
     flex-shrink: 0;
     flex: 1;
     min-width: 100px;
+    z-index: 10;
     .symbol {
       .tip {
         color: var(--yellow-color);

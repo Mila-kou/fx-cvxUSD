@@ -10,6 +10,7 @@ import {
 import useETHPrice from '../hooks/useETHPrice'
 import useFxCommon, { getR } from '../hooks/useFxCommon'
 import { useGlobal } from '@/contexts/GlobalProvider'
+import useFxCommon_New from '../hooks/useFxCommon_New'
 
 const useETH = () => {
   const { fx_info: fxInfo } = useGlobal()
@@ -24,7 +25,9 @@ const useETH = () => {
     xETHBeta,
     xETHBeta_text,
     ethPrice,
+    isXETHBouns,
   } = useFxCommon()
+  const fxCommonNew = useFxCommon_New()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
@@ -207,7 +210,13 @@ const useETH = () => {
           (fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn || 0) / 1e18,
         mintXETHFee: (_mintXETHFee || 0) / 1e18,
       })
-      console.log('maxXETHBonus---', maxXETHBonus)
+
+      const xETHBonus = checkNotZoroNumOption(
+        fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn,
+        cBN(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn)
+          .times(fxInfo.baseInfo?.bonusRatioRes)
+          .div(1e18)
+      )
       const maxXETHBonus_text = checkNotZoroNumOption(
         maxXETHBonus,
         fb4(maxXETHBonus, false, 0)
@@ -315,6 +324,8 @@ const useETH = () => {
         xETHBeta,
         xETHBeta_text,
 
+        xETHBonus,
+
         stabilityIncentiveRatio_text,
         liquidationIncentiveRatio_text,
         isShowBonusTab,
@@ -345,6 +356,7 @@ const useETH = () => {
   ])
   return {
     ...fxInfo,
+    isXETHBouns,
     fETHAddress,
     xETHAddress,
     fETHContract,

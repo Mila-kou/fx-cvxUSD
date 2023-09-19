@@ -1,14 +1,14 @@
 import moment from 'moment'
 import { cBN } from 'utils'
 import { useState, useEffect } from 'react'
-import { useMutiCall } from '@/hooks/useMutiCalls'
+import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
-import { useVeClev } from '@/hooks/useContracts'
+import { useVeFXN } from '@/hooks/useContracts'
 
 const useChart = () => {
-  const { currentAccount, blockTime } = useWeb3()
-  const { contract: veContract } = useVeClev()
-  const multiCall = useMutiCall()
+  const { _currentAccount, blockTime } = useWeb3()
+  const { contract: veContract } = useVeFXN()
+  const multiCallsV2 = useMutiCallV2()
   const [list, setList] = useState([])
 
   const fetchData = async () => {
@@ -26,7 +26,7 @@ const useChart = () => {
       i++
     }
 
-    const res = await multiCall(...calls)
+    const res = await multiCallsV2(calls)
 
     const x = calls.map((n) => n.arguments[0])
     const _list = res.map((j, index) => {
@@ -36,8 +36,8 @@ const useChart = () => {
   }
 
   useEffect(() => {
-    if ((multiCall, veContract)) fetchData()
-  }, [currentAccount, multiCall, blockTime, veContract])
+    if ((multiCallsV2, veContract)) fetchData()
+  }, [_currentAccount, multiCallsV2, blockTime, veContract])
 
   return list
 }

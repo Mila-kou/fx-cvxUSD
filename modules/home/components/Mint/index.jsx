@@ -1,36 +1,49 @@
+/* eslint-disable no-lonely-if */
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
-import Button from '@/components/Button'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
+
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import useGlobal from '@/hooks/useGlobal'
-import { DetailCell, NoticeCard } from '../Common'
+import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
+import { useFx_FxGateway } from '@/hooks/useContracts'
+import useCurveSwap from '@/hooks/useCurveSwap'
+
+const OPTIONS = [
+  ['ETH', config.tokens.eth],
+  ['stETH', config.tokens.stETH],
+  ['fETH', config.tokens.fETH],
+  ['xETH', config.tokens.xETH],
+  ['USDC', config.tokens.usdc],
+  ['USDT', config.tokens.usdt],
+]
 
 export default function Mint({ slippage }) {
   const { _currentAccount } = useWeb3()
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
+  const { getCurveSwapABI } = useCurveSwap()
+
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
 
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
-  const [errorMinout, setErrorMinout] = useState(false)
+  const [showRetry, setShowRetry] = useState(false)
   const [symbol, setSymbol] = useState('ETH')
+  const { contract: FxGatewayContract } = useFx_FxGateway()
 
   const minGas = 234854
-  const [ETHtAmount, setETHtAmount] = useState(0)
-  const [fETHtAmountIn, setFETHtAmountIn] = useState(0)
-  const [xETHtAmountIn, setXETHtAmountIn] = useState(0)
-  const [manualNum, setManualNum] = useState(0)
+  const [fromAmount, setFromAmount] = useState(0)
+  const [mintXBouns, setMintXBouns] = useState(0)
   const [FETHtAmount, setFETHtAmount] = useState({
     minout_slippage: 0,
     minout_ETH: 0,
@@ -40,11 +53,11 @@ export default function Mint({ slippage }) {
     minout_slippage: 0,
     minout_ETH: 0,
     minout_slippage_tvl: 0,
+    bonus: 0,
   })
+  const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
   const {
-    fETHContract,
-    xETHContract,
     marketContract,
     treasuryContract,
     _mintFETHFee,
@@ -57,18 +70,54 @@ export default function Mint({ slippage }) {
     mintPaused,
     redeemPaused,
     fTokenMintInSystemStabilityModePaused,
+    xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
     systemStatus,
     baseInfo,
+    _redeemFETHFee,
+    _redeemXETHFee,
+    isXETHBouns,
+    xETHBonus,
   } = useETH()
 
-  const selectTokenAddress = useMemo(() => {
-    return symbol == 'stETH' ? config.tokens.stETH : config.zeroAddress
+  const _isValidPrice = baseInfo?.fxETHTwapOraclePriceeInfo?._isValid
+
+  const isSwap = useMemo(() => {
+    if (symbol === 'fETH') {
+      setSelected(1)
+      return true
+    }
+    if (symbol === 'xETH') {
+      setSelected(0)
+      return true
+    }
+    return false
   }, [symbol])
-  const selectTokenInfo = useToken(selectTokenAddress, 'fx_stETH_mint')
+
+  useEffect(() => {
+    if (
+      (symbol == 'fETH' && selected === 0) ||
+      (symbol == 'xETH' && selected === 1)
+    ) {
+      setSymbol('ETH')
+    }
+  }, [symbol, selected])
+
+  const selectTokenAddress = useMemo(() => {
+    return OPTIONS.find((item) => item[0] === symbol)[1]
+  }, [symbol])
+
+  useEffect(() => {
+    initPage()
+  }, [symbol])
+
+  const selectTokenInfo = useToken(
+    selectTokenAddress,
+    symbol == 'stETH' ? 'fx_stETH_mint' : 'fx_fxGateway'
+  )
 
   const { BtnWapper } = useApprove({
-    approveAmount: ETHtAmount,
+    approveAmount: fromAmount,
     allowance: selectTokenInfo.allowance,
     tokenContract: selectTokenInfo.contract,
     approveAddress: selectTokenInfo.contractAddress,
@@ -86,106 +135,175 @@ export default function Mint({ slippage }) {
 
   const canReceived = useMemo(
     () =>
-      cBN(ETHtAmount).isLessThanOrEqualTo(tokens[symbol].balance) && received,
-    [FETHtAmount, tokens, symbol, received]
+      checkNotZoroNum(fromAmount) &&
+      cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
+      received,
+    [fromAmount, tokens, symbol, received]
   )
 
   const [fee, feeUsd, feeCBN] = useMemo(() => {
     let __mintFETHFee = _mintFETHFee
     let __mintXETHFee = _mintXETHFee
+    let __redeemFETHFee = _redeemFETHFee
+    let __redeemXETHFee = _redeemXETHFee
     if (systemStatus == 0) {
       __mintFETHFee = baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio || 0
       __mintXETHFee = baseInfo.xTokenMintFeeRatioRes?.defaultFeeRatio || 0
+
+      if (isSwap) {
+        __redeemFETHFee = baseInfo.fTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
+        __redeemXETHFee = baseInfo.xTokenRedeemFeeRatioRes?.defaultFeeRatio || 0
+      }
     }
+
     let _fee
     if (isF) {
-      _fee = cBN(__mintFETHFee).multipliedBy(100).toString(10)
+      _fee = cBN(__mintFETHFee)
+        .plus(cBN(isSwap ? __redeemXETHFee : 0))
+        .multipliedBy(100)
+        .toString(10)
     } else {
-      _fee = cBN(__mintXETHFee).multipliedBy(100).toString(10)
+      _fee = cBN(__mintXETHFee)
+        .plus(cBN(isSwap ? __redeemFETHFee : 0))
+        .multipliedBy(100)
+        .toString(10)
     }
     // const _feeUsd = cBN(_fee).multipliedBy(ethPrice)
     // console.log(
-    //   'ETHtAmount---_newETHPrice--',
+    //   'fromAmount---_newETHPrice--',
     //   _fee.toString(10),
     //   _feeUsd.toString(10),
     //   ethPrice
     // )
     return [fb4(_fee), 1, __mintXETHFee]
-  }, [isF, systemStatus, ethPrice])
-
-  const ethAmount = useMemo(() => {
-    console.log(
-      'ethAmount',
-      manualNum,
-      fETHtAmountIn,
-      fnav,
-      xETHtAmountIn,
-      feeCBN
-    )
-    let _tokenAmountIn = isF ? fETHtAmountIn : xETHtAmountIn
-    let _tokenNav = isF ? fnav : xnav
-    const _needETH = cBN(_tokenAmountIn)
-      .div(1e18)
-      .times(_tokenNav)
-      .times(cBN(1).minus(cBN(feeCBN).div(1e18)))
-      .div(ethPrice)
-    console.log('ethAmount', _needETH.toString(10))
-    setETHtAmount(_needETH.times(1e18).toString(10))
-  }, [fETHtAmountIn, xETHtAmountIn, manualNum])
+  }, [isF, systemStatus, ethPrice, isSwap])
 
   const hanldeETHAmountChanged = (v) => {
-    setETHtAmount(v.toString(10))
-  }
-  const hanldefETHAmountChanged = (v) => {
-    setFETHtAmountIn(v.toString(10))
-    let _pre = manualNum + 1
-    setManualNum(_pre)
-  }
-  const hanldexETHAmountChanged = (v) => {
-    setXETHtAmountIn(v.toString(10))
-    let _pre = manualNum + 1
-    setManualNum(_pre)
-  }
-  const initPage = () => {
-    clearInput()
-    setETHtAmount(0)
+    setFromAmount(v.toString(10))
   }
 
-  const getMinAmount = async () => {
+  const initPage = () => {
+    clearInput()
+    setFromAmount('0')
+    setMintXBouns(0)
+  }
+
+  const getMinAmount = async (needLoading) => {
+    setShowRetry(false)
+
+    if (needLoading) {
+      setPriceLoading(true)
+    }
+
     try {
       let minout_ETH
-      if (checkNotZoroNum(ETHtAmount)) {
-        const getGasPrice = await getGas()
-        const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
-        let _ETHtAmountAndGas
-        if (
-          cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) &&
-          symbol == 'ETH'
-        ) {
-          _ETHtAmountAndGas = cBN(tokens.ETH.balance)
-            .minus(gasFee)
-            .toFixed(0, 1)
-            .toString()
+      if (checkNotZoroNum(fromAmount)) {
+        let _ETHtAmountAndGas = fromAmount
+
+        if (isSwap) {
+          minout_ETH = await FxGatewayContract.methods
+            .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
+            .call({ from: _currentAccount })
+        } else if (symbol === 'stETH') {
+          const resData = await stETHGatewayContract.methods[
+            isF ? 'mintFToken' : 'mintXToken'
+          ](0).call({ value: _ETHtAmountAndGas, from: _currentAccount })
+          if (typeof resData === 'object') {
+            minout_ETH = resData._xTokenMinted
+            const _userXETHBonus = resData._bonus
+            setMintXBouns(_userXETHBonus)
+          } else {
+            minout_ETH = resData
+          }
         } else {
-          _ETHtAmountAndGas = ETHtAmount
-        }
-        if (isF) {
-          minout_ETH = await stETHGatewayContract.methods
-            .mintFToken(0)
-            .call({ value: _ETHtAmountAndGas, from: _currentAccount })
-        } else {
-          minout_ETH = await stETHGatewayContract.methods
-            .mintXToken(0)
-            .call({ value: _ETHtAmountAndGas, from: _currentAccount })
+          if (symbol == 'ETH') {
+            const getGasPrice = await getGas()
+            const gasFee = cBN(minGas)
+              .times(1e9)
+              .times(getGasPrice)
+              .toFixed(0, 1)
+            if (
+              cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+            ) {
+              _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+                .minus(gasFee)
+                .toFixed(0, 1)
+                .toString()
+            }
+          }
+
+          const res = await getCurveSwapABI({
+            src:
+              symbol == 'ETH'
+                ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+                : selectTokenAddress,
+            dst: config.tokens.stETH,
+            amount: _ETHtAmountAndGas.toString(),
+            minout: 0,
+          })
+          console.log(
+            '_resCurve----',
+            selectTokenAddress,
+            res,
+            _ETHtAmountAndGas.toString()
+          )
+
+          // const res = await get1inchParams({
+          //   src:
+          //     symbol == 'ETH'
+          //       ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+          //       : selectTokenAddress,
+          //   dst: config.tokens.stETH,
+          //   amount: _ETHtAmountAndGas.toString(),
+          //   from: fxGatewayContractAddress,
+          //   slippage: Number(0),
+          //   disableEstimate: true,
+          //   allowPartialFill: false,
+          //   protocols: 'CURVE',
+          // }).catch((e) => {
+          //   if (e?.response?.data?.description) {
+          //     notify.error({
+          //       description: e.response.data.description,
+          //     })
+          //   }
+          //   setPriceLoading(false)
+          //   setShowRetry(true)
+          // })
+
+          if (!res) return
+
+          const { data } = res
+
+          const resData = await FxGatewayContract.methods[
+            isF ? 'mintFToken' : 'mintXToken'
+          ](
+            [selectTokenAddress, _ETHtAmountAndGas, data.tx.to, data.tx.data],
+            0
+          ).call({
+            value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+            from: _currentAccount,
+          })
+
+          console.log('resData-----', resData)
+          if (typeof resData === 'object') {
+            minout_ETH = resData._xTokenMinted
+            const _userXETHBonus = resData._bonus
+            setMintXBouns(_userXETHBonus)
+          } else {
+            minout_ETH = resData
+          }
         }
       } else {
         minout_ETH = 0
       }
       console.log('minout_ETH----', minout_ETH)
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
-      )
+
+      let _minOut_CBN = cBN(0)
       if (isF) {
+        _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+
         const _minOut_fETH_tvl = fb4(
           _minOut_CBN.multipliedBy(fnav).toString(10)
         )
@@ -198,37 +316,109 @@ export default function Mint({ slippage }) {
           minout_slippage_tvl: _minOut_fETH_tvl,
         })
       } else {
-        const _minOut_xETH_tvl = fb4(
-          _minOut_CBN.multipliedBy(xnav).toString(10)
-        )
-        setXETHtAmount({
-          minout_ETH: checkNotZoroNumOption(
-            minout_ETH,
-            fb4(minout_ETH.toString(10))
-          ),
-          minout_slippage: fb4(_minOut_CBN.toString(10)),
-          minout_slippage_tvl: _minOut_xETH_tvl,
-        })
+        if (!checkNotZoroNum(minout_ETH)) {
+          const { _bonus, _xTokenMinted } = minout_ETH || {}
+          _minOut_CBN = (cBN(_xTokenMinted) || cBN(0)).multipliedBy(
+            cBN(1).minus(cBN(slippage).dividedBy(100))
+          )
+
+          const _minOut_xETH_tvl = fb4(
+            _minOut_CBN.multipliedBy(xnav).toString(10)
+          )
+
+          setXETHtAmount({
+            minout_ETH: checkNotZoroNumOption(
+              _xTokenMinted,
+              fb4(_xTokenMinted.toString(10))
+            ),
+            minout_slippage: fb4(_minOut_CBN.toString(10)),
+            minout_slippage_tvl: _minOut_xETH_tvl,
+            bonus: checkNotZoroNumOption(_bonus, fb4(_bonus.toString(10))),
+          })
+        } else {
+          _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
+            cBN(1).minus(cBN(slippage).dividedBy(100))
+          )
+
+          const _minOut_xETH_tvl = fb4(
+            _minOut_CBN.multipliedBy(xnav).toString(10)
+          )
+          setXETHtAmount({
+            minout_ETH: checkNotZoroNumOption(
+              minout_ETH,
+              fb4(minout_ETH.toString(10))
+            ),
+            minout_slippage: fb4(_minOut_CBN.toString(10)),
+            minout_slippage_tvl: _minOut_xETH_tvl,
+            bonus: 0,
+          })
+        }
       }
+
+      setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
-      console.log(error)
-      // if (error.message.indexOf('no cap to buy') > -1) {
-      //   // noPayableErrorAction(`error_buy`, 'No cap to buy')
-      // }
+      console.log('minout_ETH------', error)
+      setFETHtAmount({
+        minout_ETH: 0,
+        minout_slippage: 0,
+        minout_slippage_tvl: 0,
+      })
+      setXETHtAmount({
+        minout_ETH: 0,
+        minout_slippage: 0,
+        minout_slippage_tvl: 0,
+      })
+      setPriceLoading(false)
+      if (error?.message && error.message.includes('Exceed total cap')) {
+        noPayableErrorAction(`error_mint`, 'Exceed total cap')
+      }
       return 0
     }
   }
 
-  const handleMint = async () => {
+  const handleSwap = async () => {
     try {
       setMintLoading(true)
+
       const _minOut = await getMinAmount()
+
+      const apiCall = await FxGatewayContract.methods.swap(
+        fromAmount,
+        symbol === 'fETH',
+        _minOut
+      )
+      const estimatedGas = await apiCall.estimateGas({
+        from: _currentAccount,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(
+        () =>
+          apiCall.send({
+            from: _currentAccount,
+            gas,
+          }),
+        {
+          key: 'Mint',
+          action: 'Mint',
+        }
+      )
+      setMintLoading(false)
+      initPage()
+    } catch (error) {
+      setMintLoading(false)
+      noPayableErrorAction(`error_mint`, error)
+    }
+  }
+
+  const handleZap = async () => {
+    try {
+      setMintLoading(true)
       const getGasPrice = await getGas()
       const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
       let _ETHtAmountAndGas
       if (
-        cBN(ETHtAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) &&
+        cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance) &&
         symbol == 'ETH'
       ) {
         _ETHtAmountAndGas = cBN(tokens.ETH.balance)
@@ -236,63 +426,97 @@ export default function Mint({ slippage }) {
           .toFixed(0, 1)
           .toString()
       } else {
-        _ETHtAmountAndGas = ETHtAmount
+        _ETHtAmountAndGas = fromAmount
       }
-      let apiCall
-      let estimatedGas
-      if (symbol == 'stETH') {
-        if (isF) {
-          apiCall = await marketContract.methods.mintFToken(
-            _ETHtAmountAndGas,
-            _currentAccount,
-            _minOut
-          )
-        } else {
-          apiCall = await marketContract.methods.mintXToken(
-            _ETHtAmountAndGas,
-            _currentAccount,
-            _minOut
-          )
+      const _minOut = await getMinAmount()
+      const { data } = await getCurveSwapABI({
+        src:
+          symbol == 'ETH'
+            ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+            : selectTokenAddress,
+        dst: config.tokens.stETH,
+        amount: _ETHtAmountAndGas.toString(),
+        minout: 0,
+      })
+
+      const apiCall = await FxGatewayContract.methods[
+        isF ? 'mintFToken' : 'mintXToken'
+      ](
+        [selectTokenAddress, _ETHtAmountAndGas, data.tx.to, data.tx.data],
+        _minOut
+      )
+
+      const estimatedGas = await apiCall.estimateGas({
+        from: _currentAccount,
+        value: _ETHtAmountAndGas,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(
+        () =>
+          apiCall.send({
+            from: _currentAccount,
+            gas,
+            value: _ETHtAmountAndGas,
+          }),
+        {
+          key: 'Mint',
+          action: 'Mint',
         }
-        estimatedGas = await apiCall.estimateGas({
-          from: _currentAccount,
-        })
-        const gas = parseInt(estimatedGas * 1.2, 10) || 0
-        await NoPayableAction(
-          () =>
-            apiCall.send({
-              from: _currentAccount,
-              gas,
-            }),
-          {
-            key: 'Mint',
-            action: 'Mint',
-          }
+      )
+      setMintLoading(false)
+      initPage()
+    } catch (error) {
+      setMintLoading(false)
+      noPayableErrorAction(`error_mint`, error)
+    }
+  }
+
+  const handleMint = async () => {
+    if (isSwap) {
+      handleSwap()
+      return
+    }
+
+    if (symbol !== 'stETH') {
+      handleZap()
+      return
+    }
+
+    try {
+      setMintLoading(true)
+      const _minOut = await getMinAmount()
+
+      const _ETHtAmountAndGas = fromAmount
+      let apiCall
+
+      if (isF) {
+        apiCall = await marketContract.methods.mintFToken(
+          _ETHtAmountAndGas,
+          _currentAccount,
+          _minOut
         )
       } else {
-        if (isF) {
-          apiCall = await stETHGatewayContract.methods.mintFToken(_minOut)
-        } else {
-          apiCall = await stETHGatewayContract.methods.mintXToken(_minOut)
-        }
-        estimatedGas = await apiCall.estimateGas({
-          from: _currentAccount,
-          value: _ETHtAmountAndGas,
-        })
-        const gas = parseInt(estimatedGas * 1.2, 10) || 0
-        await NoPayableAction(
-          () =>
-            apiCall.send({
-              from: _currentAccount,
-              gas,
-              value: _ETHtAmountAndGas,
-            }),
-          {
-            key: 'Mint',
-            action: 'Mint',
-          }
+        apiCall = await marketContract.methods.mintXToken(
+          _ETHtAmountAndGas,
+          _currentAccount,
+          _minOut
         )
       }
+      const estimatedGas = await apiCall.estimateGas({
+        from: _currentAccount,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(
+        () =>
+          apiCall.send({
+            from: _currentAccount,
+            gas,
+          }),
+        {
+          key: 'Mint',
+          action: 'Mint',
+        }
+      )
       setMintLoading(false)
       initPage()
     } catch (error) {
@@ -304,62 +528,158 @@ export default function Mint({ slippage }) {
   const showMinReceive = useMemo(
     () =>
       canReceived &&
-      cBN(selectTokenInfo.allowance).isGreaterThanOrEqualTo(ETHtAmount),
-    [canReceived, selectTokenInfo.allowance, ETHtAmount]
+      cBN(selectTokenInfo.allowance).isGreaterThanOrEqualTo(fromAmount),
+    [canReceived, selectTokenInfo.allowance, fromAmount]
   )
 
-  const canMint = useMemo(() => {
-    let _enableETH = false
-    if (symbol == 'stETH') {
-      _enableETH =
-        cBN(ETHtAmount).isLessThanOrEqualTo(tokens.stETH.balance) &&
-        cBN(ETHtAmount).isGreaterThan(0)
+  const checkMintPaused = useCallback(() => {
+    const _fTokenMintInSystemStabilityModePaused =
+      fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+    return _fTokenMintInSystemStabilityModePaused
+  }, [fTokenMintInSystemStabilityModePaused, systemStatus])
+  const checkMintRedeemPausedByType = useCallback(
+    (type) => {
+      let _fTokenMintInSystemStabilityModePaused = false
+      let _xTokenRedeemInSystemStabilityModePaused = false
+      if (type == 'swapTofETH') {
+        _xTokenRedeemInSystemStabilityModePaused =
+          xTokenRedeemInSystemStabilityModePaused && systemStatus * 1 > 0
+        _fTokenMintInSystemStabilityModePaused = checkMintPaused()
+        return (
+          mintPaused ||
+          _xTokenRedeemInSystemStabilityModePaused ||
+          _fTokenMintInSystemStabilityModePaused ||
+          !_isValidPrice
+        )
+      }
+      // swapToXETH
+      return mintPaused || redeemPaused || !_isValidPrice
+    },
+    [
+      mintPaused,
+      systemStatus,
+      xTokenRedeemInSystemStabilityModePaused,
+      fTokenMintInSystemStabilityModePaused,
+    ]
+  )
+  const checkSwapPause = useCallback(() => {
+    let isPaused = false
+    if (symbol == 'xETH') {
+      isPaused = checkMintRedeemPausedByType('swapTofETH')
     } else {
-      _enableETH =
-        cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
-        cBN(ETHtAmount).isGreaterThan(0)
+      isPaused = checkMintRedeemPausedByType('swapToXETH')
     }
-    let _fTokenMintInSystemStabilityModePaused = false
-    if (isF) {
-      _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
+    return mintPaused || redeemPaused || isPaused || !_isValidPrice
+  }, [mintPaused, redeemPaused, !_isValidPrice])
+
+  const checkPause = useCallback(() => {
+    let isPaused = false
+    if (isSwap) {
+      isPaused = checkSwapPause()
+    } else {
+      if (isF) {
+        const isPausedMintfETH = checkMintPaused()
+        isPaused = mintPaused || isPausedMintfETH || !_isValidPrice
+      } else {
+        isPaused = mintPaused || !_isValidPrice
+      }
     }
-    // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
-    return !mintPaused && _enableETH & !_fTokenMintInSystemStabilityModePaused
+    console.log(
+      'isPaused----',
+      isPaused,
+      isF,
+      isSwap,
+      mintPaused,
+      !_isValidPrice
+    )
+    setShowDisabledNotice(isPaused)
+    return isPaused
   }, [
-    ETHtAmount,
+    mintPaused,
+    isSwap,
+    isF,
+    redeemPaused,
+    !_isValidPrice,
+    fTokenMintInSystemStabilityModePaused,
+  ])
+
+  const canMint = useMemo(() => {
+    if (checkPause()) {
+      return false
+    }
+    const _enableETH =
+      cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
+      cBN(fromAmount).isGreaterThan(0)
+    // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
+    return !mintPaused && _enableETH
+  }, [
+    fromAmount,
     mintPaused,
     fTokenMintInSystemStabilityModePaused,
     isF,
     tokens.ETH.balance,
+    _isValidPrice,
   ])
 
   useEffect(() => {
-    let _fTokenMintInSystemStabilityModePaused = false
-    if (isF) {
-      _fTokenMintInSystemStabilityModePaused =
-        fTokenMintInSystemStabilityModePaused && systemStatus * 1 > 0
-    }
-    setShowDisabledNotice(mintPaused || _fTokenMintInSystemStabilityModePaused)
-  }, [mintPaused, isF, fTokenMintInSystemStabilityModePaused])
+    checkPause()
+  }, [
+    mintPaused,
+    isSwap,
+    isF,
+    redeemPaused,
+    !_isValidPrice,
+    fTokenMintInSystemStabilityModePaused,
+  ])
 
   useEffect(() => {
-    getMinAmount()
+    getMinAmount(true)
     // handleGetAllMinAmount()
-  }, [isF, slippage, ETHtAmount])
+  }, [isF, slippage, fromAmount])
+
+  const fromUsd = useMemo(() => {
+    if (symbol === 'fETH') {
+      return fnav
+    }
+    if (symbol === 'xETH') {
+      return xnav
+    }
+    if (['stETH', 'ETH'].includes(symbol)) {
+      return ethPrice_text
+    }
+    return tokens[symbol].price
+  }, [symbol, ethPrice_text, fnav, xnav])
 
   return (
     <div className={styles.container}>
+      {isXETHBouns ? (
+        <BonusCard
+          title={`Minting xETH will earn ${fb4(
+            cBN(baseInfo.bonusRatioRes).times(100),
+            false,
+            18,
+            2
+          )}% bonus now`}
+          amount=""
+          symbol=""
+        />
+      ) : null}
+
       <BalanceInput
         placeholder="-"
         symbol={symbol}
-        balance={fb4(tokens[symbol].balance, false)}
-        usd={`$${ethPrice_text}`}
+        decimals={config.zapTokens[symbol].decimals}
+        balance={fb4(
+          tokens[symbol].balance,
+          false,
+          config.zapTokens[symbol].decimals
+        )}
+        usd={`$${fromUsd}`}
         maxAmount={tokens[symbol].balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
-        // changeValue={cBN(ETHtAmount)}
-        options={['ETH', 'stETH']}
+        // changeValue={cBN(fromAmount)}
+        options={OPTIONS.map((item) => item[0])}
         onSymbolChanged={(v) => setSymbol(v)}
       />
       <div className={styles.arrow}>
@@ -374,6 +694,9 @@ export default function Mint({ slippage }) {
         usd={`$${fnav}`}
         type={isF ? '' : 'select'}
         onSelected={() => setSelected(0)}
+        loading={isF && priceLoading}
+        showRetry={isF && showRetry}
+        onRetry={getMinAmount}
         // onChange={hanldefETHAmountChanged}
         // rightSuffix="Beta 0.1"
       />
@@ -390,20 +713,29 @@ export default function Mint({ slippage }) {
         rightSuffix={
           <span className={styles.yellow}>Leverage + {xETHBeta_text}x</span>
         }
+        loading={isX && priceLoading}
+        showRetry={isF && showRetry}
+        onRetry={getMinAmount}
         // onChange={hanldexETHAmountChanged}
       />
-      <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
-      {showMinReceive && (
-        <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
-      )}
 
-      {showDisabledNotice && (
-        <NoticeCard
-          content={[
-            'fx governance decision to temporarily disabled Mint functionality.',
-          ]}
+      {isXETHBouns && isX && mintXBouns ? (
+        <DetailCell
+          title="Mint xETH Bonus:"
+          content={[fb4(cBN(mintXBouns)), '', 'stETH']}
         />
-      )}
+      ) : null}
+
+      <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
+      {showMinReceive ? (
+        <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
+      ) : null}
+
+      {showDisabledNotice ? (
+        <NoticeCard
+          content={['f(x) governance decision to temporarily disable minting.']}
+        />
+      ) : null}
 
       <div className={styles.action}>
         <BtnWapper
@@ -414,14 +746,6 @@ export default function Mint({ slippage }) {
         >
           {isF ? 'Mint Stable fETH' : 'Mint Leveraged Long xETH'}
         </BtnWapper>
-        {/* <Button
-          width="100%"
-          loading={mintLoading}
-          disabled={!canMint}
-          onClick={handleMint}
-        >
-          Mint {isF ? 'Stable fETH' : 'Volatile xETH'}
-        </Button> */}
       </div>
     </div>
   )

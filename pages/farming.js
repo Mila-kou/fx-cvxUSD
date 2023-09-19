@@ -6,7 +6,7 @@ export default function Farming() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX ETH</title>
+        <title>f(x) Protocol</title>
       </Head>
       <FarmingPage />
     </React.Fragment>

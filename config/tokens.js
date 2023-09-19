@@ -1,5 +1,4 @@
 const CLEVIcon = '/assets/tokens/clev.svg'
-const clevUsdIcons = '/assets/tokens/clevUSD.svg'
 
 const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
@@ -10,12 +9,12 @@ const contracts = {
   fundsRaisedToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // weth
 
   // fx ----
-  ChainlinkTwapOracleV3: '0x460B3CdE57DfbA90DBed02fd83d3990a92DA1230',
+  ChainlinkTwapOracleV3: '0xD24AC180e6769Fd5F624e7605B93084171074A77',
   fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
   xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
   fx_Market: '0xe7b9c7c9cA85340b8c06fb805f7775e3015108dB',
   fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
-  fx_stETHGateway: '0x4C5C52d507066780500e627d592DbE11476E7c21',
+  fx_stETHGateway: '0x9bF5fFABbF97De0a47843A7Ba0A9DDB40f2e2ed5',
 
   fx_StabilityPool: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
   LiquidatorWithBonusToken: '0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2',
@@ -24,6 +23,24 @@ const contracts = {
   fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
   fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
   fx_Minter: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
+  fx_FxGateway: '0x49e51067E695bd79d6275eCaB6E9E527a72AbdE4',
+  fx_ReservePool: '0x5d0Aacf75116d1645Db2B3d1Ca4b303ef0CA3752',
+  fx_FxETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
+
+  fx_Vesting: '0x2290eeFEa24A6E43b26C27187742bD1FEDC10BDB',
+
+  FXN: '0x365AccFCa291e7D3914637ABf1F7635dB165Bb09',
+  fx_FXN_treasury: '0x26B2ec4E02ebe2F54583af25b647b1D619e67BbF',
+  fx_FXN_PlatformFeeDistributor: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
+  fx_PlatformFeeSpliter: '0x0084C2e1B1823564e597Ff4848a88D61ac63D703',
+  veFXN: '0xEC6B8A3F3605B083F7044C0F31f2cac0caf1d469',
+  TokenMinter: '0xC8b194925D55d5dE9555AD1db74c149329F71DeF',
+  GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
+  fx_ve_FeeDistributor: '0x851AAEA3A2757D457E1Ce88C3808C1690213e432',
+
+  redeemConverter: '0xAF345c813CE17Cc5837BfD14a910D365223F3B95',
+
+  CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
 
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',
@@ -48,17 +65,6 @@ const contracts = {
   aldCvx: '0xf05e58fCeA29ab4dA01A495140B349F8410Ba904',
   vlCVX: '0xD18140b4B819b895A3dba5442F959fA44994AF50',
 
-  // clevCRV
-  metaFurnace: '0xf5D1cA341e1BAadd986D43b226F92B778C75C8cA',
-  metaClever: '0x7059eAeBAd4f26c0FD4183fCeCBF93bB21E81E3C',
-
-  // clevUSD
-  metaFurnaceForFrax: '0x7f160EFC2436F1aF4E9E8a57d0a5beB8345761a9',
-  metaCleverForFrax: '0xEB0ea9D24235aB37196111eeDd656D56Ce4F53b1',
-  metaCleverForLUSDFraxBP: '0xb2Fcee71b25B62baFE442c58AF58c42143673cC1',
-  metaCleverForTUSDFraxBP: '0xad4caC207A0BFEd10dF8A4FC6A28D377caC730E0',
-  metaCleverForClevUSDFRAXBP: '0x2C37F1DcEd208530A05B061A183d8937F686157e',
-
   aladdinCLEV: '0x72953a5C32413614d24C29c84a66AE4B59581Bbf',
   aladdinVeFeeForCVX: '0x261E3aEB4cd1ebfD0Fa532d6AcDd4B21EbdCd2De', // FeeDistributor
   aladdinVeFeeForFRAX: '0xb5e7F9cb9d3897808658F1991AD32912959b42E2', // FeeDistributor
@@ -73,15 +79,6 @@ const contracts = {
   clevHoderTreasuyry: '0xfc08757c505ea28709df66e54870fb6de09f0c5e',
 
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
-
-  // cveCRV
-  CurveLockerProxy: '0x3330B5eca82115417Ae7A1Ab6F781295c0A0eB75',
-  CLeverVeCRV: '0xCD320b82010aD409d746c83d855Dd6F936d86Edf',
-  CrvDepositor: '0xF56213409F803ec11a029A7457ed9B1Aa53e2289',
-  CLeverVeCRVLiquidityStaking: '0xD12AC387057bFb93892Ec15E7C039AF93666F551',
-  CurveBooster: '0xFcecbBcd85eeb27FeC0850372a6e738cC303EAc7',
-  clevCRV: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
-  clevCRVFurnace: '0xF8d8fD35A3BAa5559ED67ed532072287AE9770D3',
 
   PlatformFeeDistributor: '0xD6eFa5B63531e9ae61e225b02CbACD59092a35bE',
 }
@@ -122,31 +119,14 @@ const tokens = {
   clev: '0x72953a5C32413614d24C29c84a66AE4B59581Bbf',
   clevCVX: '0xf05e58fCeA29ab4dA01A495140B349F8410Ba904',
 
-  // for cvx /page/accelerator-cvx
-  aldcvx: '0xf9Ee4aBCBA5823148850BA49d93238177accbB64',
-
-  // for clev /page/clevers
-  clevCRV: '0x41c94eA5A7724d8F4f6e67e529e809b9EAB11Db2', // clevers/aCrv
-  clevUSD: '0x3C20Ac688410bE8F391bE1fb00AFc5C212972F86', // clevers/clevUSD
-
-  aCRV: '0x2b95A1Dcc3D405535f9ed33c219ab38E8d7e0884',
-  cusdc: '0x39AA39c021dfbaE8faC545936693aC917d5E7563',
-  cyUSDC: '0x76Eb2FE28b36B3ee97F3Adae0C69606eeDB2A37c',
-  cyUSDT: '0x48759F220ED983dB51fA7A8C0D2AAb8f3ce4166a',
-  cdai: '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
-  cyDAI: '0x8e595470Ed749b85C6F7669de83EAe304C2ec68F',
-  ustTerra: '0xa47c8bf37f92aBed4A126BDA807A7b7498661acD',
-  cvxfxs: '0xFEEf77d3f69374f66429C91d732A244f074bdf74',
-
   // abcCVX
   abcCVX: '0xDEC800C2b17c9673570FDF54450dc1bd79c8E359',
-  // cveCRV
-  cleverVeCRV: '0xCD320b82010aD409d746c83d855Dd6F936d86Edf',
 }
 
 const TOKENS_INFO = {
   eth: ['ethereum', tokens.eth, 18, 'eth'],
   usdc: ['usd-coin', tokens.usdc, 6, 'usdc'],
+  usdt: ['usdt', tokens.usdt, 6, 'usdt'],
   dai: ['dai', tokens.dai, 18, 'dai'],
   weth: ['weth', tokens.weth, 18, 'weth'],
   wbtc: ['bitcoin', tokens.wbtc, 8, 'wbtc'],
@@ -162,9 +142,10 @@ const TOKENS_INFO = {
   busd: ['binance-usd', tokens.busd, 18, 'busd'],
   tusd: ['true-usd', tokens.tusd, 18, 'TUSD'],
   lusd: ['usd-coin', tokens.lusd, 18, 'lusd'],
-  cvxfxs: ['', tokens.cvxfxs, 18, 'cvxfxs'],
-  clevUSD: ['frax', tokens.clevUSD, 18],
   fETH: ['fETH', tokens.fETH, 18],
+  xETH: ['xETH', tokens.xETH, 18],
+  veFXN: ['veFXN', tokens.veFXN, 18],
+  fxn: ['FXN', tokens.FXN, 18],
 }
 
 const zapTokens = {
@@ -173,6 +154,13 @@ const zapTokens = {
     icon: 'usdc',
     decimals: TOKENS_INFO.usdc[2],
     address: TOKENS_INFO.usdc[1],
+    needZap: true,
+  },
+  USDT: {
+    symbol: 'USDT',
+    icon: 'usdt',
+    decimals: TOKENS_INFO.usdt[2],
+    address: TOKENS_INFO.usdt[1],
     needZap: true,
   },
   ETH: {
@@ -187,6 +175,20 @@ const zapTokens = {
     icon: 'weth',
     decimals: TOKENS_INFO.stETH[2],
     address: TOKENS_INFO.stETH[1],
+    needZap: true,
+  },
+  fETH: {
+    symbol: 'fETH',
+    icon: 'eth',
+    decimals: TOKENS_INFO.fETH[2],
+    address: TOKENS_INFO.fETH[1],
+    needZap: true,
+  },
+  xETH: {
+    symbol: 'xETH',
+    icon: 'eth',
+    decimals: TOKENS_INFO.xETH[2],
+    address: TOKENS_INFO.xETH[1],
     needZap: true,
   },
   WETH: {
@@ -243,27 +245,6 @@ const zapTokens = {
     icon: 'tusd',
     decimals: TOKENS_INFO.tusd[2],
     address: TOKENS_INFO.tusd[1],
-    needZap: true,
-  },
-  CVXFXS: {
-    symbol: 'cvxFXS',
-    icon: 'fxs',
-    decimals: TOKENS_INFO.cvxfxs[2],
-    address: TOKENS_INFO.cvxfxs[1],
-    needZap: true,
-  },
-  clevUSD: {
-    symbol: 'clevUSD',
-    icon: clevUsdIcons,
-    decimals: TOKENS_INFO.clevUSD[2],
-    address: TOKENS_INFO.clevUSD[1],
-    needZap: true,
-  },
-  fETH: {
-    symbol: 'fETH',
-    icon: 'eth',
-    decimals: TOKENS_INFO.fETH[2],
-    address: TOKENS_INFO.fETH[1],
     needZap: true,
   },
 }

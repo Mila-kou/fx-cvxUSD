@@ -2,22 +2,24 @@ import React from 'react'
 import HighchartsReact from 'highcharts-react-official'
 import Highcharts from 'highcharts/highstock'
 import useChart from '../hook/useChart'
-import useGlobal from '@/hooks/useGlobal'
 
-function LockerChart() {
-  const { theme } = useGlobal()
+const LockerChart = () => {
   const list = useChart()
 
   const basicOptions = {
     name: 'AAPL',
     chart: {
+      backgroundColor: '#000015',
       panning: true,
       zoomType: 'x',
       panKey: 'ctrl',
       type: 'line',
     },
     title: {
-      text: '',
+      style: {
+        color: '#fff',
+      },
+      text: 'veFXN Voting Power',
     },
     // credits: {
     //   enabled: false,
@@ -25,7 +27,7 @@ function LockerChart() {
     xAxis: {
       labels: {
         style: {
-          color: theme === 'red' ? '#231f20' : '#fff',
+          color: '#fff',
         },
       },
       dateTimeLabelFormats: {
@@ -45,8 +47,6 @@ function LockerChart() {
         text: 'Amount locked',
       },
     },
-    backgroundColor:
-      theme === 'red' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
     tooltip: {
       valueDecimals: 2,
     },

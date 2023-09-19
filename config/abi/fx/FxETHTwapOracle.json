@@ -1,0 +1,90 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_chainlinkStETHTwapOracle",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_chainlinkETHTwapOracle",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_curvePool",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "chainlinkETHTwapOracle",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "chainlinkStETHTwapOracle",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "curvePool",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPrice",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "_isValid",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_safePrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minUnsafePrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxUnsafePrice",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

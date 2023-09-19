@@ -1,14 +1,14 @@
 import React from 'react'
 import Head from 'next/head'
-import LockerPage from '@/modules/locker/LockerPage'
+import LockPage from '@/modules/lock/LockPage'
 
-export default function Locker() {
+export default function Lock() {
   return (
     <React.Fragment>
       <Head>
-        <title>FX ETH</title>
+        <title>f(x) Protocol</title>
       </Head>
-      <LockerPage />
+      <LockPage />
     </React.Fragment>
   )
 }

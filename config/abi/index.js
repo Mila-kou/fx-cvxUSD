@@ -11,6 +11,9 @@ import FX_FractionalToken from './fx/FractionalToken.json'
 import FX_LeveragedToken from './fx/LeveragedToken.json'
 import FX_Treasury from './fx/Treasury.json'
 import FX_ETHGateway from './fx/ETHGateway.json'
+import Fx_Gateway from './fx/FxGateway.json'
+import Fx_ReservePool from './fx/ReservePool.json'
+import Fx_FxETHTwapOracle from './fx/FxETHTwapOracle.json'
 
 //test
 import MockTwapOracle from './fx/MockTwapOracle.json'
@@ -40,7 +43,9 @@ import FX_StabilityPoolABI from './fx/StabilityPool.json'
 import FX_LiquidatorWithBonusTokenABI from './fx/LiquidatorWithBonusToken.json'
 
 import wstETHABI from './wstETH.json'
+import curveSwapABI from './common/curveSwap.json'
 
+import AladdinCLEVVestingABI from './airdrop/vesting.json'
 
 export default {
   erc20ABI,
@@ -77,5 +82,12 @@ export default {
   PlatformFeeDistributorABI,
   AladdinbcCVXABI,
   RewardClaimHelperABI,
-  wstETHABI
+  wstETHABI,
+  Fx_Gateway,
+  Fx_ReservePool,
+  Fx_FxETHTwapOracle,
+
+  curveSwapABI,
+
+  AladdinCLEVVestingABI,
 }

@@ -6,11 +6,14 @@ import {
   useFETH,
   useFX_Market,
   useFX_stETHTreasury,
+  useFx_FxETHTwapOracle,
+  useFx_ReservePool,
   useXETH,
 } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4 } from '@/utils/index'
+import config from '@/config/index'
 
 const useInfo = () => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
@@ -20,10 +23,16 @@ const useInfo = () => {
   const { contract: xETHContract } = useXETH()
   const { contract: marketContract } = useFX_Market()
   const { contract: treasuryContract } = useFX_stETHTreasury()
+  const { contract: reservePoolContract } = useFx_ReservePool()
+  const { contract: fxETHTwapOracle } = useFx_FxETHTwapOracle()
+  const stETHContract = erc20Contract(config.tokens.stETH)
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
-
   const fetchBaseInfo = useCallback(async () => {
-    const { nav, totalSupply: fETHTotalSupplyFn } = fETHContract.methods
+    const {
+      nav,
+      totalSupply: fETHTotalSupplyFn,
+      balanceOf: fETHBalanceOf,
+    } = fETHContract.methods
     const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
     const {
       getCurrentNav,
@@ -45,17 +54,8 @@ const useInfo = () => {
       mintPaused,
       redeemPaused,
     } = marketContract.methods
-    // const wethContract = erc20Contract(config.tokens.weth)
+    const { bonusRatio } = reservePoolContract.methods
     try {
-      // const testApiCalls = [
-      //     web3.eth.getBalance(treasuryAddress),
-      //     web3.eth.getBalance("0x07dA2d30E26802ED65a52859a50872cfA615bD0A"),
-      //     wethContract.methods.balanceOf(treasuryAddress),
-      //     wethContract.methods.balanceOf('0x07dA2d30E26802ED65a52859a50872cfA615bD0A'),
-      // ]
-      // const [treasury_ethBalance, platform_ethBalance, treasury_wethBalance, platform_wethBalance] =
-      //     await multiCallsV2(testApiCalls)
-      // console.log('treasury_ethBalance--treasury_wethBalance--platform_ethBalance--platform_wethBalance--', treasury_ethBalance, treasury_wethBalance, platform_ethBalance, platform_wethBalance)
       const apiCalls = [
         fETHTotalSupplyFn(),
         xETHTotalSupplyFn(),
@@ -78,6 +78,10 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePaused(),
         nav(),
         baseTokenCap(),
+        fETHBalanceOf(config.contracts.fx_StabilityPool),
+        stETHContract.methods.balanceOf(config.contracts.fx_ReservePool),
+        bonusRatio(config.tokens.stETH),
+        fxETHTwapOracle.methods.getPrice(),
       ]
       const [
         fETHTotalSupplyRes,
@@ -99,8 +103,14 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
+        stabilityPoolFETHBalancesRes,
+        reservePoolBalancesRes,
+        bonusRatioRes,
+        fxETHTwapOraclePriceeInfo,
       ] = await multiCallsV2(apiCalls)
-
+      // const stabilityPoolFETHBalancesRes = 1e18
+      // const reservePoolBalancesRes = 1e18
+      // const bonusRatioRes = 1e18
       console.log(
         'BaseInfo11111',
         // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
@@ -113,7 +123,11 @@ const useInfo = () => {
         // fTokenMintInSystemStabilityModePausedRes,
         // xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
-        baseTokenCapRes
+        baseTokenCapRes,
+        stabilityPoolFETHBalancesRes,
+        reservePoolBalancesRes,
+        bonusRatioRes,
+        fxETHTwapOraclePriceeInfo
       )
 
       return {
@@ -136,6 +150,10 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
+        stabilityPoolFETHBalancesRes,
+        reservePoolBalancesRes,
+        bonusRatioRes,
+        fxETHTwapOraclePriceeInfo,
       }
     } catch (error) {
       console.log('baseInfoError==>', error)

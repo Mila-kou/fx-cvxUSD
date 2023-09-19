@@ -116,7 +116,7 @@ export default function MintBonus({ slippage }) {
       } else {
         _ETHtAmountAndGas = ETHtAmount
       }
-      let minout_ETH = await stETHGatewayContract.methods
+      const minout_ETH = await stETHGatewayContract.methods
         .addBaseToken(0)
         .call({ value: _ETHtAmountAndGas, from: _currentAccount })
       console.log('minout_ETH----', minout_ETH)
@@ -207,7 +207,7 @@ export default function MintBonus({ slippage }) {
   }
 
   const canMint = useMemo(() => {
-    let _enableETH =
+    const _enableETH =
       cBN(ETHtAmount).isLessThanOrEqualTo(tokens.ETH.balance) &&
       cBN(ETHtAmount).isGreaterThan(0)
     return !mintPaused && _enableETH
@@ -287,9 +287,7 @@ export default function MintBonus({ slippage }) {
       <NoticeCard
         content={
           showDisabledNotice
-            ? [
-                'fx governance decision to temporarily disabled Mint functionality.',
-              ]
+            ? ['f(x) governance decision to temporarily disable minting.']
             : [
                 'Excess payments will be refunded if rewards are fully allocated.',
               ]

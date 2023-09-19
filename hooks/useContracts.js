@@ -86,6 +86,42 @@ export const useFX_stETHTreasury = () => {
     [getContract]
   )
 }
+
+export const useFx_FxGateway = () => {
+  const address = config.contracts.fx_FxGateway
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.Fx_Gateway),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useFx_ReservePool = () => {
+  const address = config.contracts.fx_ReservePool
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.Fx_ReservePool),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useFx_FxETHTwapOracle = () => {
+  const address = config.contracts.fx_FxETHTwapOracle
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.Fx_FxETHTwapOracle),
+      address,
+    }),
+    [getContract]
+  )
+}
 /////////////////////////////
 export const useFX_stETHGateway = () => {
   const address = config.contracts.fx_stETHGateway
@@ -123,8 +159,6 @@ export const useFX_LiquidatorWithBonusToken = () => {
   )
 }
 
-
-
 export const useFX_ETHGateway = () => {
   const address = config.contracts.fx_ETHGateway
   const { getContract } = useContract()
@@ -158,6 +192,19 @@ export const useClev = () => {
       contract: getContract(address, abi.AlaCLEV),
       address,
       tokenInfo: config.TOKENS_INFO.clev,
+    }),
+    [getContract]
+  )
+}
+
+export const useFXN = () => {
+  const address = config.contracts.FXN
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.AlaCLEV),
+      address,
+      tokenInfo: config.TOKENS_INFO.fxn,
     }),
     [getContract]
   )
@@ -212,35 +259,29 @@ export const useVeClev = () => {
   )
 }
 
-export const useVeFee = () => {
-  const { contract: AladdinVeFeeContract } = useContract(
-    config.contracts.aladdinVeFeeForCVX,
-    abi.AlaFeeDistributor
-  )
-  const { contract: AladdinVeFeeForFraxContract } = useContract(
-    config.contracts.aladdinVeFeeForFRAX,
-    abi.AlaFeeDistributor
-  )
-  return {
-    feeContractForFrax: AladdinVeFeeForFraxContract,
-    feeContractForCVX: AladdinVeFeeContract,
-    cvxFeeDistributor: config.contracts.aladdinVeFeeForCVX,
-    fraxFeeDistributor: config.contracts.aladdinVeFeeForFRAX,
-    address: config.contracts.aladdinVeFeeForCVX,
-    tokenInfo: config.TOKENS_INFO.vefee,
-  }
-}
-
-export const usePlatformFeeDistributor = () => {
-  const address = config.contracts.PlatformFeeDistributor
+export const useVeFXN = () => {
+  const address = config.contracts.veFXN
   const { getContract } = useContract()
   return useMemo(
     () => ({
-      contract: getContract(address, abi.PlatformFeeDistributorABI),
+      contract: getContract(address, abi.AlaVeCLEVABI),
       address,
+      tokenInfo: config.TOKENS_INFO.veFXN,
     }),
     [getContract]
   )
+}
+
+export const useVeFXNFee = () => {
+  const { contract: AladdinVeFeeContract } = useContract(
+    config.contracts.fx_ve_FeeDistributor,
+    abi.AlaFeeDistributor
+  )
+  return {
+    contract: AladdinVeFeeContract,
+    address: config.contracts.aladdinVeFeeForCVX,
+    tokenInfo: config.TOKENS_INFO.vefee,
+  }
 }
 
 export const useAllInOneGateway = () => {
@@ -289,4 +330,29 @@ export const useErc20Token = (tokenAddr, approveForAddr) => {
     tokenContract,
     tokenInfo,
   }
+}
+
+export const useFXNVesting = () => {
+  const address = config.contracts.fx_Vesting
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.AladdinCLEVVestingABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+////// Curve ///////
+export const useCurvefiSwap = () => {
+  const address = config.contracts.CurvefiSwapRouterAddress
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.curveSwapABI),
+      address,
+    }),
+    [getContract]
+  )
 }

@@ -41,6 +41,8 @@ function GlobalProvider({ children }) {
   const stETHToken = useTokenBalance(config.tokens.stETH)
   const fETHToken = useTokenBalance(config.tokens.fETH)
   const xETHToken = useTokenBalance(config.tokens.xETH)
+  const usdcToken = useTokenBalance(config.tokens.usdc)
+  const usdtToken = useTokenBalance(config.tokens.usdt)
 
   const [
     { data: tokenPrice, refetch: refetch1 },
@@ -121,6 +123,7 @@ function GlobalProvider({ children }) {
     // ETH
     const { CurrentNavRes } = fx_info.baseInfo
     console.log('CurrentNavRes---', CurrentNavRes)
+    console.log('tokenPrice---', tokenPrice)
     return {
       ETH: {
         ...ethToken,
@@ -145,6 +148,7 @@ function GlobalProvider({ children }) {
             true
           )
         ),
+        price: tokenPrice?.stETH?.usd?.toFixed(4) ?? 0,
       },
       fETH: {
         ...fETHToken,
@@ -170,8 +174,37 @@ function GlobalProvider({ children }) {
           )
         ),
       },
+      USDC: {
+        ...usdcToken,
+        usd: checkNotZoroNumOption(
+          usdcToken.balance,
+          fb4(cBN(usdcToken.balance).div(1e6) || 0, true)
+        ),
+        price: tokenPrice?.USDC?.usd?.toFixed(4) ?? 0,
+      },
+      USDT: {
+        ...usdtToken,
+        usd: checkNotZoroNumOption(
+          usdtToken.balance,
+          fb4(cBN(usdtToken.balance).div(1e6) || 0, true)
+        ),
+        // USDT 数据不正常，用DAI
+        price: tokenPrice?.DAI?.usd?.toFixed(4) ?? 0,
+      },
+      WETH: {
+        price: tokenPrice?.WETH?.usd?.toFixed(4) ?? 0,
+      },
     }
-  }, [ethToken, stETHToken, fETHToken, xETHToken, tokenPrice, fx_info.baseInfo])
+  }, [
+    ethToken,
+    stETHToken,
+    fETHToken,
+    xETHToken,
+    usdcToken,
+    usdtToken,
+    tokenPrice,
+    fx_info.baseInfo,
+  ])
 
   const value = useMemo(
     () => ({
