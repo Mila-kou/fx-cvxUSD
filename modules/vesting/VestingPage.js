@@ -56,7 +56,7 @@ export default function VestingPage() {
 
   const itemData = [
     {
-      title: 'Total No FXN Tokens',
+      title: 'Total No of FXN Tokens',
       value: totalClaimAble,
     },
     {
@@ -129,10 +129,10 @@ export default function VestingPage() {
                       {item.startTime}
                     </td>
                     <td className={cn('border py-4 px-12')}>{item.endTime}</td>
-                    <td className={cn('border py-4 px-12')}>
+                    <td className={cn('border py-4 px-12 text-center')}>
                       {item.vestingAmount} FXN
                     </td>
-                    <td className={cn('border py-4 px-12')}>
+                    <td className={cn('border py-4 px-12 text-center')}>
                       {item.vestingAmountPercent}
                     </td>
                   </tr>
