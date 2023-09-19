@@ -77,7 +77,13 @@ export default function VestingPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <h2>Claim FXN Tokens</h2>
+          <h2 className="flex gap-[6px]">
+            <img
+              className="h-[22px]"
+              src={`/images/vesting${theme === 'red' ? '' : '-white'}.svg`}
+            />
+            Claim FXN Tokens
+          </h2>
           <div className={styles.items}>
             {itemData.map((item) => (
               <div className={styles.item} key={item.title}>

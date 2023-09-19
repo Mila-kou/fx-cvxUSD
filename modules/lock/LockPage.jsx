@@ -4,6 +4,7 @@ import { Tooltip } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import useWeb3 from 'hooks/useWeb3'
+import useGlobal from 'hooks/useGlobal'
 import { cBN, fb4 } from 'utils'
 import Button from 'components/Button'
 import useInfo from './controllers/useInfo'
@@ -68,6 +69,7 @@ const LockPage = () => {
   const { contract: veContract } = useVeFXNFee()
   const { isAllReady, currentAccount } = useWeb3()
   const { contract: veFXN } = useVeFXN()
+  const { theme } = useGlobal()
 
   const handleWithdraw = async () => {
     if (!isAllReady) return
@@ -115,7 +117,13 @@ const LockPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>FXN Locker</h2>
+        <h2 className="flex gap-[6px]">
+          <img
+            className="h-[22px]"
+            src={`/images/locker${theme === 'red' ? '' : '-white'}.svg`}
+          />
+          FXN Locker
+        </h2>
         <div className={styles.items}>
           {pageData.overview.map((item) => (
             <div className={styles.item} key={item.title}>
