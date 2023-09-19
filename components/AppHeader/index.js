@@ -25,7 +25,7 @@ const routers = [
   ['Rebalance Pool', '/rebalance-pool'],
   // ['Farming', '/farming'],
   ['Vesting', '/vesting'],
-  ['Lock', '/locker'],
+  ['Lock', '/lock'],
   ['Offering', '/offering'],
 ]
 
