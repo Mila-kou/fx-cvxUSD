@@ -92,6 +92,22 @@ const useCurveSwap = () => {
   const multiCallsV2 = useMutiCallV2()
   const { erc20Contract } = useContract()
 
+  const getCurveSwapMinout = useCallback(
+    async ({ src, dst, amount }) => {
+      const swapData =
+        curveRouter[`${src.toLocaleLowerCase()}_${dst.toLocaleLowerCase()}`]
+      const minout = await curveSwapContract.methods
+        .get_exchange_multiple_amount(
+          swapData.route,
+          swapData.swapParams,
+          amount
+        )
+        .call({ from: _currentAccount })
+      return minout
+    },
+    [multiCallsV2, erc20Contract, _currentAccount, web3]
+  )
+
   const getCurveSwapABI = useCallback(
     async ({ src, dst, amount, minout }) => {
       try {
@@ -125,6 +141,7 @@ const useCurveSwap = () => {
   return {
     curveSwapContract,
     getCurveSwapABI,
+    getCurveSwapMinout,
   }
 }
 

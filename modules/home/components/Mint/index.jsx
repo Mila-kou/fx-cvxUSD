@@ -31,7 +31,7 @@ export default function Mint({ slippage }) {
   const [selected, setSelected] = useState(0)
   const { tokens } = useGlobal()
   const [clearTrigger, clearInput] = useClearInput()
-  const { getCurveSwapABI } = useCurveSwap()
+  const { getCurveSwapABI, getCurveSwapMinout } = useCurveSwap()
 
   // const [fee, setFee] = useState(0.01)
   // const [feeUsd, setFeeUsd] = useState(10)
@@ -429,6 +429,19 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = fromAmount
       }
       const _minOut = await getMinAmount()
+      const _curveCallOut = await getCurveSwapMinout({
+        src:
+          symbol == 'ETH'
+            ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+            : selectTokenAddress,
+        dst: config.tokens.stETH,
+        amount: _ETHtAmountAndGas.toString(),
+      })
+
+      const _curveMinout = cBN(_curveCallOut).multipliedBy(
+        cBN(1).minus(cBN(slippage).dividedBy(100))
+      )
+
       const { data } = await getCurveSwapABI({
         src:
           symbol == 'ETH'
@@ -436,7 +449,7 @@ export default function Mint({ slippage }) {
             : selectTokenAddress,
         dst: config.tokens.stETH,
         amount: _ETHtAmountAndGas.toString(),
-        minout: 0,
+        minout: _curveMinout.toFixed(0),
       })
 
       const apiCall = await FxGatewayContract.methods[
