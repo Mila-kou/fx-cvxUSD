@@ -132,8 +132,12 @@ export default function VestingPage() {
               newList.map((item) => {
                 return (
                   <tr>
-                    <td className={cn('border py-4')}>{item.startTime}</td>
-                    <td className={cn('border py-4')}>{item.endTime}</td>
+                    <td className={cn('border py-4 text-center')}>
+                      {item.startTime}
+                    </td>
+                    <td className={cn('border py-4 text-center')}>
+                      {item.endTime}
+                    </td>
                     <td className={cn('border py-4 text-center')}>
                       {item.vestingAmount} FXN
                     </td>
