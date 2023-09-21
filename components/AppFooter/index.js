@@ -17,7 +17,7 @@ const socialLinks = [
   {
     key: 'gitbook',
     icon: <img src="/socials/gitBook.svg" className={style.socialIcons} />,
-    link: 'https://docs.aladdin.club/',
+    link: 'https://docs.aladdin.club/f-x-protocol',
   },
   {
     key: 'github',
