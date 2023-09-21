@@ -375,6 +375,9 @@ export default function AppHeader() {
           {config.allowChains.map((item) => item.label).join(' or ')}
         </p>
       )}
+      <p className={styles.notice}>
+        🎉The TGE for $FXN will take place on 28th Sept at 1pm UTC !
+      </p>
 
       <FAQ open={openFAQ} onCancel={toggleFAQ} />
     </div>

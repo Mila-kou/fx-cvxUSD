@@ -215,6 +215,14 @@
   margin-top: 10px;
   text-align: center;
 }
+.notice {
+  color: #fff;
+  padding: 10px 0;
+  background: var(--green-color);
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: center;
+}
 
 @media (max-width: 474px) {
   .accountPanel {
