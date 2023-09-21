@@ -376,7 +376,7 @@ export default function AppHeader() {
         </p>
       )}
       <p className={styles.notice}>
-        🎉The TGE for $FXN will take place on 28th Sept at 1pm UTC !
+        🎉 The TGE for $FXN will take place at 1pm UTC 28th Sept!
       </p>
 
       <FAQ open={openFAQ} onCancel={toggleFAQ} />
