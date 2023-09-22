@@ -176,10 +176,7 @@ export default function AppHeader() {
       <div className={styles.container}>
         <div className={styles.mobile}>
           <Link href="/home">
-            <img
-              className={styles.logo}
-              src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
-            />
+            <img className={styles.logo} src="/images/FXN.svg" />
           </Link>
           <div
             onClick={currentAccount ? toggleShowAccountPanel : handleConnect}
@@ -195,10 +192,7 @@ export default function AppHeader() {
 
         <div className={styles.left}>
           <Link href="/home">
-            <img
-              className={styles.logo}
-              src={`/images/${theme === 'red' ? 'x' : 'f'}-logo.svg`}
-            />
+            <img className={styles.logo} src="/images/FXN.svg" />
           </Link>
           {routers.map(([label, href]) => (
             <Link
