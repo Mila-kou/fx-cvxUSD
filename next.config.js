@@ -9,6 +9,7 @@ module.exports = {
     removeConsole: isProd ? { exclude: ['error'] } : false,
   },
   images: {
+    unoptimized: true,
     // loader: 'custom',
     // dangerouslyAllowSVG: true,
   },
