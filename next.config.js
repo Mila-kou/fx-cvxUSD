@@ -3,6 +3,7 @@ const { version } = require('./package.json')
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
+  output: 'export',
   trailingSlash: true,
   compiler: {
     removeConsole: isProd ? { exclude: ['error'] } : false,
@@ -31,5 +32,10 @@ module.exports = {
         permanent: false,
       },
     ]
+  },
+  exportPathMap(defaultPathMap, { dev, dir, outDir, distDir, buildId }) {
+    return {
+      '/': { page: '/vaults' },
+    }
   },
 }

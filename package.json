@@ -4,6 +4,7 @@
     "dev": "cross-env NETWORK_ENV=mainnet next",
     "dev:mainnet-fork": "cross-env NETWORK_ENV=mainnet-fork next",
     "build": "cross-env NETWORK_ENV=mainnet next build",
+    "export": "next export",
     "build:mainnet-fork": "cross-env NETWORK_ENV=mainnet-fork next build",
     "start": "cross-env NETWORK_ENV=mainnet next start",
     "start:mainnet-fork": "cross-env NETWORK_ENV=mainnet-fork next start",
