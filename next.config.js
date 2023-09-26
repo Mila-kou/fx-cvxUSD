@@ -3,7 +3,7 @@ const { version } = require('./package.json')
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  output: 'export',
+  // output: 'export',
   trailingSlash: true,
   compiler: {
     removeConsole: isProd ? { exclude: ['error'] } : false,
