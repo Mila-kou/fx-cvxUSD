@@ -205,14 +205,14 @@ export default function AppHeader() {
               {label}
             </Link>
           ))}
-          {/* <a
+          <a
             className={styles.route}
             target="_blank"
-            href="https://offering.aladdin.club/"
+            href="https://snapshot.org/#/fxn.eth"
             rel="noreferrer"
           >
-            Offering
-          </a> */}
+            Governance
+          </a>
           <span className={styles.route} onClick={toggleFAQ}>
             FAQ
           </span>
@@ -311,14 +311,14 @@ export default function AppHeader() {
                     {label}
                   </Link>
                 ))}
-                {/* <a
+                <a
                   className={styles.route}
                   target="_blank"
-                  href="https://offering.aladdin.club/"
+                  href="https://snapshot.org/#/fxn.eth"
                   rel="noreferrer"
                 >
-                  Offering
-                </a> */}
+                  Governance
+                </a>
                 <p className={styles.route} onClick={toggleFAQ}>
                   FAQ
                 </p>
