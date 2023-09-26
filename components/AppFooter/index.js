@@ -112,7 +112,15 @@ export default function AppFooter() {
           <div className={style.risk}>
             This project is in beta. Use at your own risk.
           </div>
-          Copyright © 2023 Aladdin
+          Copyright © 2023 Aladdin ENS:
+          <a
+            className="text-[#5488fe] text-[14px] ml-[4px]"
+            href="https://fxn.eth.limo/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            fxn.eth
+          </a>
         </div>
       </div>
     </div>
