@@ -20,6 +20,10 @@ const useData = (refreshTrigger) => {
     config.tokens.stETH,
     veFXNFeeAddress
   )
+  const { tokenContract: wstETHContract } = useErc20Token(
+    config.tokens.wstETH,
+    veFXNFeeAddress
+  )
 
   const multiCallsV2 = useMutiCallV2()
 
@@ -67,7 +71,7 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
-        stETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
+        wstETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
         veFXNFeeContract.methods.token_last_balance(),
         veFXNFeeContract.methods.claim(_currentAccount),
         veFXNFeeContract.methods.claim(_currentAccount),

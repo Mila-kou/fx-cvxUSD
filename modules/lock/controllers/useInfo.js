@@ -183,22 +183,22 @@ const useInfo = (refreshTrigger) => {
               : '-',
         },
         {
-          title: 'stETH Rewards',
+          title: 'wstETH Rewards',
           amount: userVeRewards,
           value: (
             <>
-              <p>{fb4(userVeRewards)} stETH</p>
+              <p>{fb4(userVeRewards)} wstETH</p>
               {checkNotZoroNum(userVeRewards1) && (
-                <p>{fb4(userVeRewards1)} stETH</p>
+                <p>{fb4(userVeRewards1)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards2) && (
-                <p>{fb4(userVeRewards2)} stETH</p>
+                <p>{fb4(userVeRewards2)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards3) && (
-                <p>{fb4(userVeRewards3)} stETH</p>
+                <p>{fb4(userVeRewards3)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards4) && (
-                <p>{fb4(userVeRewards4)} stETH</p>
+                <p>{fb4(userVeRewards4)} wstETH</p>
               )}
             </>
           ),

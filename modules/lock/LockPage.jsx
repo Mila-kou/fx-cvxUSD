@@ -41,13 +41,13 @@ const RebateInfo = ({ info, preWeekData }) => {
           </div>
 
           <div className="text-[var(--primary-color)]">
-            {fb4(info.weekAmount)} stETH
+            {fb4(info.weekAmount)} wstETH
           </div>
         </div>
         <div className="flex items-center justify-between my-3">
           <div>Previous Week</div>
           <div className="text-[var(--primary-color)]">
-            {fb4(preWeekData.weekAmount)} stETH
+            {fb4(preWeekData.weekAmount)} wstETH
           </div>
         </div>
         <div className="flex items-center justify-between my-3">
