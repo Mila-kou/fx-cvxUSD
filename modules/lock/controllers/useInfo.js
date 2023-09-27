@@ -79,6 +79,7 @@ const useInfo = (refreshTrigger) => {
       userVeRewards4,
       platformFeeSpliterStETH,
       veFXNFeeTokenLastBalance,
+      stETHTowstETHRate,
     } = info
     const _tokensPerWeek = tokensPerWeek
     const apr =
@@ -142,17 +143,19 @@ const useInfo = (refreshTrigger) => {
       weekReabte: {
         weekAmount: cBN(tokensThisWeek)
           .plus(
-            cBN(platformFeeSpliterStETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
+            cBN(platformFeeSpliterStETH)
+              .times(platformFeeSpliterStETH_rewardRate)
+              .times(stETHTowstETHRate) // to wstETH
+              .div(1e18)
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance),
         weekVal: cBN(tokensThisWeek)
           .plus(
-            cBN(platformFeeSpliterStETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
+            cBN(platformFeeSpliterStETH)
+              .times(platformFeeSpliterStETH_rewardRate)
+              .times(stETHTowstETHRate) // to wstETH
+              .div(1e18)
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance)
