@@ -8,7 +8,7 @@ import useWeb3 from '@/hooks/useWeb3'
 
 const useInfo = (refreshTrigger) => {
   const { tokens } = useGlobal()
-  const wstETHPrice = tokens.stETH.price
+  const wstETHPrice = tokens.wstETH.price
   const fxnPrice = 10
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
