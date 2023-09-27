@@ -48,6 +48,7 @@ export default function AppHeader() {
     currentChainId,
     settingChain,
     isAllowChain,
+    blockTime,
   } = useWeb3()
   const { route } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
@@ -170,6 +171,11 @@ export default function AppHeader() {
       switchChain()
     }
   }, [isAllowChain, switchChain])
+
+  const showNotice = useMemo(
+    () => new Date().getTime() < 1695906000000,
+    [blockTime]
+  )
 
   return (
     <div>
@@ -369,9 +375,11 @@ export default function AppHeader() {
           {config.allowChains.map((item) => item.label).join(' or ')}
         </p>
       )}
-      <p className={styles.notice}>
-        🎉 The TGE for $FXN will take place at 1pm UTC 28th Sept!
-      </p>
+      {showNotice ? (
+        <p className={styles.notice}>
+          🎉 The TGE for $FXN will take place at 1pm UTC 28th Sept!
+        </p>
+      ) : null}
 
       <FAQ open={openFAQ} onCancel={toggleFAQ} />
     </div>
