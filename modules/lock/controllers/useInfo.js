@@ -8,7 +8,7 @@ import useWeb3 from '@/hooks/useWeb3'
 
 const useInfo = (refreshTrigger) => {
   const { tokens } = useGlobal()
-  const stETHPrice = tokens.stETH.price
+  const wstETHPrice = tokens.stETH.price
   const fxnPrice = 10
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
@@ -82,7 +82,7 @@ const useInfo = (refreshTrigger) => {
     } = info
     const _tokensPerWeek = tokensPerWeek
     const apr =
-      ((_tokensPerWeek * 52 * stETHPrice) / (veTotalSupply * fxnPrice)) * 100
+      ((_tokensPerWeek * 52 * wstETHPrice) / (veTotalSupply * fxnPrice)) * 100
     const percentage = cBN(veLockedFXN)
       .div(fxnCirculationSupply)
       .multipliedBy(100)
@@ -156,7 +156,7 @@ const useInfo = (refreshTrigger) => {
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance)
-          .multipliedBy(stETHPrice),
+          .multipliedBy(wstETHPrice),
         untilTime: moment(
           calc4(current, true) * 1000 + (86400 * 7 - 1) * 1000
         ).format('lll'),
@@ -164,7 +164,7 @@ const useInfo = (refreshTrigger) => {
       },
       preWeekReabte: {
         weekAmount: cBN(_tokensPerWeek),
-        weekVal: cBN(_tokensPerWeek).multipliedBy(stETHPrice),
+        weekVal: cBN(_tokensPerWeek).multipliedBy(wstETHPrice),
       },
       userData: [
         {
