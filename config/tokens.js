@@ -38,7 +38,7 @@ const contracts = {
   GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
   fx_ve_FeeDistributor: '0x851AAEA3A2757D457E1Ce88C3808C1690213e432',
 
-  redeemConverter: '0xAF345c813CE17Cc5837BfD14a910D365223F3B95',
+  redeemConverter: '0xa3F4fB87e19B60622bEA119C4469c0Df2c7c4739',
 
   CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
 
