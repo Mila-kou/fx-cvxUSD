@@ -116,12 +116,17 @@ export default function Mint({ slippage }) {
     symbol == 'stETH' ? 'fx_stETH_mint' : 'fx_fxGateway'
   )
 
-  const { BtnWapper } = useApprove({
+  const { BtnWapper, needApprove } = useApprove({
     approveAmount: fromAmount,
     allowance: selectTokenInfo.allowance,
     tokenContract: selectTokenInfo.contract,
     approveAddress: selectTokenInfo.contractAddress,
   })
+
+  const _account = useMemo(
+    () => (needApprove ? config.approvedAddress : _currentAccount),
+    [needApprove, _currentAccount]
+  )
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -203,11 +208,14 @@ export default function Mint({ slippage }) {
         if (isSwap) {
           minout_ETH = await FxGatewayContract.methods
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
-            .call({ from: _currentAccount })
+            .call({ from: _account })
         } else if (symbol === 'stETH') {
           const resData = await stETHGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
-          ](0).call({ value: _ETHtAmountAndGas, from: _currentAccount })
+          ](0).call({
+            value: _ETHtAmountAndGas,
+            from: _account,
+          })
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
             const _userXETHBonus = resData._bonus
@@ -281,7 +289,7 @@ export default function Mint({ slippage }) {
             0
           ).call({
             value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-            from: _currentAccount,
+            from: _account,
           })
 
           console.log('resData-----', resData)
@@ -429,14 +437,17 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = fromAmount
       }
       const _minOut = await getMinAmount()
-      const _curveCallOut = await getCurveSwapMinout({
-        src:
-          symbol == 'ETH'
-            ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-            : selectTokenAddress,
-        dst: config.tokens.stETH,
-        amount: _ETHtAmountAndGas.toString(),
-      })
+      const _curveCallOut = await getCurveSwapMinout(
+        {
+          src:
+            symbol == 'ETH'
+              ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+              : selectTokenAddress,
+          dst: config.tokens.stETH,
+          amount: _ETHtAmountAndGas.toString(),
+        },
+        _account
+      )
 
       const _curveMinout = cBN(_curveCallOut).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))

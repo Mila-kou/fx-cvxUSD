@@ -188,12 +188,17 @@ export default function Redeem({ slippage }) {
     symbol == 'stETH' ? 'fx_redeem' : 'fx_fxGateway'
   )
 
-  const { BtnWapper } = useApprove({
+  const { BtnWapper, needApprove } = useApprove({
     approveAmount: tokenAmount,
     allowance: selectTokenInfo.allowance,
     tokenContract: selectTokenInfo.contract,
     approveAddress: selectTokenInfo.contractAddress,
   })
+
+  const _account = useMemo(
+    () => (needApprove ? config.approvedAddress : _currentAccount),
+    [needApprove, _currentAccount]
+  )
 
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
@@ -268,8 +273,8 @@ export default function Redeem({ slippage }) {
       }
       if (symbol === 'stETH') {
         minout_ETH = await marketContract.methods
-          .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
-          .call({ from: _currentAccount })
+          .redeem(_fTokenIn, _xTokenIn, _account, 0)
+          .call({ from: _account })
       } else {
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
         const { _dstOut } = await FxGatewayContract.methods
@@ -280,7 +285,7 @@ export default function Redeem({ slippage }) {
             0,
             0
           )
-          .call({ from: _currentAccount })
+          .call({ from: _account })
         minout_ETH = _dstOut
       }
       console.log('minout_ETH----', minout_ETH)
