@@ -196,8 +196,11 @@ export default function Redeem({ slippage }) {
   })
 
   const _account = useMemo(
-    () => (needApprove ? config.approvedAddress : _currentAccount),
-    [needApprove, _currentAccount]
+    () =>
+      needApprove && symbol !== 'stETH'
+        ? config.approvedAddress
+        : _currentAccount,
+    [needApprove, _currentAccount, symbol == 'stETH']
   )
 
   const canRedeem = useMemo(() => {
@@ -261,14 +264,23 @@ export default function Redeem({ slippage }) {
       if (needLoading) {
         setPriceLoading(true)
       }
+
+      let _mockAmount = tokenAmount
+      let _mockRatio = 1
+      if (_account !== _currentAccount) {
+        _mockAmount = cBN(1).shiftedBy(18).toString()
+        _mockRatio = cBN(tokenAmount).div(cBN(10).pow(18)).toFixed(4, 1)
+        // console.log('fromAmount----', _mockAmount, _mockRatio)
+      }
+
       let minout_ETH
       let _fTokenIn = 0
       let _xTokenIn = 0
       if (isF) {
-        _fTokenIn = tokenAmount
+        _fTokenIn = _mockAmount
         _xTokenIn = 0
       } else {
-        _xTokenIn = tokenAmount
+        _xTokenIn = _mockAmount
         _fTokenIn = 0
       }
       if (symbol === 'stETH') {
@@ -292,6 +304,8 @@ export default function Redeem({ slippage }) {
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
+      // 比例计算
+      minout_ETH *= _mockRatio
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
       setMinOutETHtAmount({
         minout_ETH: checkNotZoroNumOption(
@@ -307,14 +321,20 @@ export default function Redeem({ slippage }) {
       })
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log(error)
       setMinOutETHtAmount({
         minout_ETH: 0,
         minout_slippage: 0,
         minout_slippage_tvl: 0,
       })
       setPriceLoading(false)
+      if (
+        error?.message &&
+        error.message.includes('burn amount exceeds balance')
+      ) {
+        noPayableErrorAction(`error_mint`, 'ERC20: burn amount exceeds balance')
+      }
       return 0
     }
   }

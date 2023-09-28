@@ -124,8 +124,11 @@ export default function Mint({ slippage }) {
   })
 
   const _account = useMemo(
-    () => (needApprove ? config.approvedAddress : _currentAccount),
-    [needApprove, _currentAccount]
+    () =>
+      needApprove && symbol !== 'stETH'
+        ? config.approvedAddress
+        : _currentAccount,
+    [needApprove, _currentAccount, symbol == 'stETH']
   )
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -200,10 +203,22 @@ export default function Mint({ slippage }) {
       setPriceLoading(true)
     }
 
+    let _mockAmount = fromAmount
+    let _mockRatio = 1
+    if (_account !== _currentAccount) {
+      _mockAmount = cBN(1)
+        .shiftedBy(config.zapTokens[symbol].decimals)
+        .toString()
+      _mockRatio = cBN(fromAmount)
+        .div(cBN(10).pow(config.zapTokens[symbol].decimals))
+        .toFixed(4, 1)
+      // console.log('fromAmount----', _mockAmount, _mockRatio)
+    }
+
     try {
       let minout_ETH
       if (checkNotZoroNum(fromAmount)) {
-        let _ETHtAmountAndGas = fromAmount
+        let _ETHtAmountAndGas = _mockAmount
 
         if (isSwap) {
           minout_ETH = await FxGatewayContract.methods
@@ -256,28 +271,6 @@ export default function Mint({ slippage }) {
             _ETHtAmountAndGas.toString()
           )
 
-          // const res = await get1inchParams({
-          //   src:
-          //     symbol == 'ETH'
-          //       ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-          //       : selectTokenAddress,
-          //   dst: config.tokens.stETH,
-          //   amount: _ETHtAmountAndGas.toString(),
-          //   from: fxGatewayContractAddress,
-          //   slippage: Number(0),
-          //   disableEstimate: true,
-          //   allowPartialFill: false,
-          //   protocols: 'CURVE',
-          // }).catch((e) => {
-          //   if (e?.response?.data?.description) {
-          //     notify.error({
-          //       description: e.response.data.description,
-          //     })
-          //   }
-          //   setPriceLoading(false)
-          //   setShowRetry(true)
-          // })
-
           if (!res) return
 
           const { data } = res
@@ -307,6 +300,8 @@ export default function Mint({ slippage }) {
       console.log('minout_ETH----', minout_ETH)
 
       let _minOut_CBN = cBN(0)
+      // 比例计算
+      minout_ETH *= _mockRatio
       if (isF) {
         _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
           cBN(1).minus(cBN(slippage).dividedBy(100))
