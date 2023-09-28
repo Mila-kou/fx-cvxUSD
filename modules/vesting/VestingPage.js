@@ -31,6 +31,8 @@ export default function VestingPage() {
     startTimeText,
     latestTime,
     latestTimeText,
+    claimedAmount,
+    claimedAmountInWei,
   } = useVesting(refreshTrigger)
   const { contract: vestContract } = useFXNVesting()
 
@@ -69,7 +71,7 @@ export default function VestingPage() {
     },
     {
       title: 'Claimed Amount',
-      value: totalClaimAble,
+      value: claimedAmount,
     },
   ]
 
