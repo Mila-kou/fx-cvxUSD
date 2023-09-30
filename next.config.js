@@ -3,7 +3,7 @@ const { version } = require('./package.json')
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  // output: 'export',
+  output: 'export',
   trailingSlash: true,
   compiler: {
     removeConsole: isProd ? { exclude: ['error'] } : false,
@@ -25,18 +25,19 @@ module.exports = {
       },
     ]
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/home',
-        permanent: false,
-      },
-    ]
-  },
-  // exportPathMap(defaultPathMap, { dev, dir, outDir, distDir, buildId }) {
-  //   return {
-  //     '/': { page: '/home' },
-  //   }
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/home',
+  //       permanent: false,
+  //     },
+  //   ]
   // },
+  exportPathMap(defaultPathMap, { dev, dir, outDir, distDir, buildId }) {
+    return {
+      ...defaultPathMap,
+      '/': { page: '/home' },
+    }
+  },
 }
