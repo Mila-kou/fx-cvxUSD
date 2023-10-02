@@ -16,6 +16,7 @@ import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
 import useCurveSwap from '@/hooks/useCurveSwap'
+import BigNumber from 'bignumber.js'
 
 const OPTIONS = [
   ['ETH', config.tokens.eth],
@@ -78,6 +79,7 @@ export default function Mint({ slippage }) {
     _redeemXETHFee,
     isXETHBouns,
     xETHBonus,
+    maxMintableFTokenRes,
   } = useETH()
 
   const _isValidPrice = baseInfo?.fxETHTwapOraclePriceeInfo?._isValid
@@ -305,6 +307,11 @@ export default function Mint({ slippage }) {
       if (isF) {
         _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
           cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+
+        minout_ETH = BigNumber.min(
+          maxMintableFTokenRes._maxFTokenMintable,
+          minout_ETH
         )
 
         const _minOut_fETH_tvl = fb4(

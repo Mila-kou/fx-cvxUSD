@@ -223,6 +223,7 @@ const useInfo = () => {
           ...pre,
           maxMintableXTokenWithIncentiveRes,
           maxLiquidatableRes,
+          maxMintableFTokenRes,
         }
       })
     } catch (e) {
