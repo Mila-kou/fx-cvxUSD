@@ -20,8 +20,8 @@ import sepolia from './network/sepolia'
 const mainnetFork = mainnetFork_10548
 const chainMap = {
   // [sepolia.chainInfo.id]: sepolia,
-  // [ethereum.chainInfo.id]: ethereum,
-  [mainnetFork.chainInfo.id]: mainnetFork,
+  [ethereum.chainInfo.id]: ethereum,
+  // [mainnetFork.chainInfo.id]: mainnetFork,
 }
 
 const allowChains = Object.values(chainMap).map((item) => item.chainInfo)
@@ -33,7 +33,7 @@ const yearSecond = 31536000
 const uint256Max =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
 
-const approvedAddress = '0xb9a1649b31FC2De6bbE78672A3d6EbecFa69B56b'
+const approvedAddress = '0x11E91BB6d1334585AA37D8F4fde3932C7960B938'
 
 const config = {
   concentratorAPI: 'https://api.aladdin.club',
