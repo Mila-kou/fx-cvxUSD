@@ -1,5 +1,6 @@
 /* eslint-disable no-lonely-if */
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -16,7 +17,6 @@ import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
 import useCurveSwap from '@/hooks/useCurveSwap'
-import BigNumber from 'bignumber.js'
 
 const OPTIONS = [
   ['ETH', config.tokens.eth],
@@ -126,11 +126,8 @@ export default function Mint({ slippage }) {
   })
 
   const _account = useMemo(
-    () =>
-      needApprove && symbol !== 'stETH'
-        ? config.approvedAddress
-        : _currentAccount,
-    [needApprove, _currentAccount, symbol == 'stETH']
+    () => (needApprove ? config.approvedAddress : _currentAccount),
+    [needApprove, _currentAccount]
   )
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
@@ -207,12 +204,14 @@ export default function Mint({ slippage }) {
 
     let _mockAmount = fromAmount
     let _mockRatio = 1
+    // 默认比例 0.01
     if (_account !== _currentAccount) {
-      _mockAmount = cBN(1)
+      _mockAmount = cBN(0.01)
         .shiftedBy(config.zapTokens[symbol].decimals)
         .toString()
       _mockRatio = cBN(fromAmount)
         .div(cBN(10).pow(config.zapTokens[symbol].decimals))
+        .multipliedBy(100)
         .toFixed(4, 1)
       // console.log('fromAmount----', _mockAmount, _mockRatio)
     }
@@ -227,10 +226,9 @@ export default function Mint({ slippage }) {
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
             .call({ from: _account })
         } else if (symbol === 'stETH') {
-          const resData = await stETHGatewayContract.methods[
+          const resData = await marketContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
-          ](0).call({
-            value: _ETHtAmountAndGas,
+          ](_ETHtAmountAndGas, _account, 0).call({
             from: _account,
           })
           if (typeof resData === 'object') {
@@ -513,21 +511,10 @@ export default function Mint({ slippage }) {
       const _minOut = await getMinAmount()
 
       const _ETHtAmountAndGas = fromAmount
-      let apiCall
+      const apiCall = await marketContract.methods[
+        isF ? 'mintFToken' : 'mintXToken'
+      ](_ETHtAmountAndGas, _currentAccount, _minOut)
 
-      if (isF) {
-        apiCall = await marketContract.methods.mintFToken(
-          _ETHtAmountAndGas,
-          _currentAccount,
-          _minOut
-        )
-      } else {
-        apiCall = await marketContract.methods.mintXToken(
-          _ETHtAmountAndGas,
-          _currentAccount,
-          _minOut
-        )
-      }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })

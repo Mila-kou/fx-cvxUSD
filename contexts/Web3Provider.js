@@ -38,9 +38,9 @@ function Web3ContextProvider({ children }) {
   const currentAccount = useMemo(() => {
     if (wallet?.accounts?.length) {
       window.localStorage.setItem('selectedWallet', wallet.label)
-      // return ['0x741be0a7f5f373d31c70a7a655c174162fb38657', wallet.chains[0].id]
-      // return ['0x9a27B56cf576E45ad10D8d3Cf26Dbe207463e813', wallet.chains[0].id]
       return wallet.accounts[0].address
+      // return 0x0aF766927D25a53352664eA94825aDbaaA6bA770
+      // return '0x11E91BB6d1334585AA37D8F4fde3932C7960B938'
     }
     return ''
   }, [wallet])
@@ -65,7 +65,7 @@ function Web3ContextProvider({ children }) {
     return [
       !currentAccount || currentChainId === connectedChain?.id,
       !currentAccount ||
-      config.allowChains.find((item) => connectedChain?.id === item.id),
+        config.allowChains.find((item) => connectedChain?.id === item.id),
     ]
   }, [currentAccount, currentChainId, connectedChain])
 
