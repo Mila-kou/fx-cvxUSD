@@ -59,7 +59,7 @@ export default function LockModal({ onCancel, refreshAction }) {
 
   const handleLock = async () => {
     if (!isAllReady) return
-    const lockAmountInWei = lockAmount.toFixed(0, 1)
+    const lockAmountInWei = cBN(lockAmount).toFixed(0, 1)
     setLocking(true)
     try {
       const timestamp = locktime.startOf('day').add(8, 'hours').unix()
