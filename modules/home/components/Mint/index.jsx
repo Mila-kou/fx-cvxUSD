@@ -1,5 +1,6 @@
 /* eslint-disable no-lonely-if */
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -78,6 +79,7 @@ export default function Mint({ slippage }) {
     _redeemXETHFee,
     isXETHBouns,
     xETHBonus,
+    maxMintableFTokenRes,
   } = useETH()
 
   const _isValidPrice = baseInfo?.fxETHTwapOraclePriceeInfo?._isValid
@@ -116,12 +118,17 @@ export default function Mint({ slippage }) {
     symbol == 'stETH' ? 'fx_stETH_mint' : 'fx_fxGateway'
   )
 
-  const { BtnWapper } = useApprove({
+  const { BtnWapper, needApprove } = useApprove({
     approveAmount: fromAmount,
     allowance: selectTokenInfo.allowance,
     tokenContract: selectTokenInfo.contract,
     approveAddress: selectTokenInfo.contractAddress,
   })
+
+  const _account = useMemo(
+    () => (needApprove ? config.approvedAddress : _currentAccount),
+    [needApprove, _currentAccount]
+  )
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -195,19 +202,35 @@ export default function Mint({ slippage }) {
       setPriceLoading(true)
     }
 
+    let _mockAmount = fromAmount
+    let _mockRatio = 1
+    // 默认比例 0.01
+    if (_account !== _currentAccount) {
+      _mockAmount = cBN(0.01)
+        .shiftedBy(config.zapTokens[symbol].decimals)
+        .toString()
+      _mockRatio = cBN(fromAmount)
+        .div(cBN(10).pow(config.zapTokens[symbol].decimals))
+        .multipliedBy(100)
+        .toFixed(4, 1)
+      // console.log('fromAmount----', _mockAmount, _mockRatio)
+    }
+
     try {
       let minout_ETH
       if (checkNotZoroNum(fromAmount)) {
-        let _ETHtAmountAndGas = fromAmount
+        let _ETHtAmountAndGas = _mockAmount
 
         if (isSwap) {
           minout_ETH = await FxGatewayContract.methods
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
-            .call({ from: _currentAccount })
+            .call({ from: _account })
         } else if (symbol === 'stETH') {
-          const resData = await stETHGatewayContract.methods[
+          const resData = await marketContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
-          ](0).call({ value: _ETHtAmountAndGas, from: _currentAccount })
+          ](_ETHtAmountAndGas, _account, 0).call({
+            from: _account,
+          })
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
             const _userXETHBonus = resData._bonus
@@ -248,28 +271,6 @@ export default function Mint({ slippage }) {
             _ETHtAmountAndGas.toString()
           )
 
-          // const res = await get1inchParams({
-          //   src:
-          //     symbol == 'ETH'
-          //       ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-          //       : selectTokenAddress,
-          //   dst: config.tokens.stETH,
-          //   amount: _ETHtAmountAndGas.toString(),
-          //   from: fxGatewayContractAddress,
-          //   slippage: Number(0),
-          //   disableEstimate: true,
-          //   allowPartialFill: false,
-          //   protocols: 'CURVE',
-          // }).catch((e) => {
-          //   if (e?.response?.data?.description) {
-          //     notify.error({
-          //       description: e.response.data.description,
-          //     })
-          //   }
-          //   setPriceLoading(false)
-          //   setShowRetry(true)
-          // })
-
           if (!res) return
 
           const { data } = res
@@ -281,7 +282,7 @@ export default function Mint({ slippage }) {
             0
           ).call({
             value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-            from: _currentAccount,
+            from: _account,
           })
 
           console.log('resData-----', resData)
@@ -299,9 +300,16 @@ export default function Mint({ slippage }) {
       console.log('minout_ETH----', minout_ETH)
 
       let _minOut_CBN = cBN(0)
+      // 比例计算
+      minout_ETH *= _mockRatio
       if (isF) {
         _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
           cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+
+        minout_ETH = BigNumber.min(
+          maxMintableFTokenRes._maxFTokenMintable,
+          minout_ETH
         )
 
         const _minOut_fETH_tvl = fb4(
@@ -429,14 +437,17 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = fromAmount
       }
       const _minOut = await getMinAmount()
-      const _curveCallOut = await getCurveSwapMinout({
-        src:
-          symbol == 'ETH'
-            ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-            : selectTokenAddress,
-        dst: config.tokens.stETH,
-        amount: _ETHtAmountAndGas.toString(),
-      })
+      const _curveCallOut = await getCurveSwapMinout(
+        {
+          src:
+            symbol == 'ETH'
+              ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+              : selectTokenAddress,
+          dst: config.tokens.stETH,
+          amount: _ETHtAmountAndGas.toString(),
+        },
+        _account
+      )
 
       const _curveMinout = cBN(_curveCallOut).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
@@ -500,21 +511,10 @@ export default function Mint({ slippage }) {
       const _minOut = await getMinAmount()
 
       const _ETHtAmountAndGas = fromAmount
-      let apiCall
+      const apiCall = await marketContract.methods[
+        isF ? 'mintFToken' : 'mintXToken'
+      ](_ETHtAmountAndGas, _currentAccount, _minOut)
 
-      if (isF) {
-        apiCall = await marketContract.methods.mintFToken(
-          _ETHtAmountAndGas,
-          _currentAccount,
-          _minOut
-        )
-      } else {
-        apiCall = await marketContract.methods.mintXToken(
-          _ETHtAmountAndGas,
-          _currentAccount,
-          _minOut
-        )
-      }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })

@@ -33,6 +33,8 @@ const yearSecond = 31536000
 const uint256Max =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
 
+const approvedAddress = '0x11E91BB6d1334585AA37D8F4fde3932C7960B938'
+
 const config = {
   concentratorAPI: 'https://api.aladdin.club',
   zeroAddress,
@@ -41,6 +43,7 @@ const config = {
   daySecond,
   yearSecond,
   uint256Max,
+  approvedAddress,
   ...Object.values(chainMap)[0],
 }
 

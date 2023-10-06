@@ -93,7 +93,7 @@ const useCurveSwap = () => {
   const { erc20Contract } = useContract()
 
   const getCurveSwapMinout = useCallback(
-    async ({ src, dst, amount }) => {
+    async ({ src, dst, amount }, _account) => {
       const swapData =
         curveRouter[`${src.toLocaleLowerCase()}_${dst.toLocaleLowerCase()}`]
       const minout = await curveSwapContract.methods
@@ -102,7 +102,7 @@ const useCurveSwap = () => {
           swapData.swapParams,
           amount
         )
-        .call({ from: _currentAccount })
+        .call({ from: _account })
       return minout
     },
     [multiCallsV2, erc20Contract, _currentAccount, web3]

@@ -188,12 +188,20 @@ export default function Redeem({ slippage }) {
     symbol == 'stETH' ? 'fx_redeem' : 'fx_fxGateway'
   )
 
-  const { BtnWapper } = useApprove({
+  const { BtnWapper, needApprove } = useApprove({
     approveAmount: tokenAmount,
     allowance: selectTokenInfo.allowance,
     tokenContract: selectTokenInfo.contract,
     approveAddress: selectTokenInfo.contractAddress,
   })
+
+  const _account = useMemo(
+    () =>
+      needApprove && symbol !== 'stETH'
+        ? config.approvedAddress
+        : _currentAccount,
+    [needApprove, _currentAccount, symbol == 'stETH']
+  )
 
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
@@ -256,20 +264,29 @@ export default function Redeem({ slippage }) {
       if (needLoading) {
         setPriceLoading(true)
       }
+
+      let _mockAmount = tokenAmount
+      let _mockRatio = 1
+      if (_account !== _currentAccount) {
+        _mockAmount = cBN(1).shiftedBy(18).toString()
+        _mockRatio = cBN(tokenAmount).div(cBN(10).pow(18)).toFixed(4, 1)
+        // console.log('fromAmount----', _mockAmount, _mockRatio)
+      }
+
       let minout_ETH
       let _fTokenIn = 0
       let _xTokenIn = 0
       if (isF) {
-        _fTokenIn = tokenAmount
+        _fTokenIn = _mockAmount
         _xTokenIn = 0
       } else {
-        _xTokenIn = tokenAmount
+        _xTokenIn = _mockAmount
         _fTokenIn = 0
       }
       if (symbol === 'stETH') {
         minout_ETH = await marketContract.methods
-          .redeem(_fTokenIn, _xTokenIn, _currentAccount, 0)
-          .call({ from: _currentAccount })
+          .redeem(_fTokenIn, _xTokenIn, _account, 0)
+          .call({ from: _account })
       } else {
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
         const { _dstOut } = await FxGatewayContract.methods
@@ -280,13 +297,15 @@ export default function Redeem({ slippage }) {
             0,
             0
           )
-          .call({ from: _currentAccount })
+          .call({ from: _account })
         minout_ETH = _dstOut
       }
       console.log('minout_ETH----', minout_ETH)
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
+      // 比例计算
+      minout_ETH *= _mockRatio
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
       setMinOutETHtAmount({
         minout_ETH: checkNotZoroNumOption(
@@ -302,14 +321,20 @@ export default function Redeem({ slippage }) {
       })
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log(error)
       setMinOutETHtAmount({
         minout_ETH: 0,
         minout_slippage: 0,
         minout_slippage_tvl: 0,
       })
       setPriceLoading(false)
+      if (
+        error?.message &&
+        error.message.includes('burn amount exceeds balance')
+      ) {
+        noPayableErrorAction(`error_mint`, 'ERC20: burn amount exceeds balance')
+      }
       return 0
     }
   }
