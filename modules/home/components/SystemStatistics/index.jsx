@@ -61,6 +61,9 @@ export default function SystemStatistics() {
     isETHPriceGreatThanETHLastPrice,
     baseTokenCap,
     baseTokenCap_text,
+
+    fMarketCap,
+    xMarketCap,
   } = useETH()
   const navsData = useNavs()
 
@@ -116,6 +119,7 @@ export default function SystemStatistics() {
                 nav: fnav,
                 totalSupply: fETHTotalSupply,
                 ratio: p_f,
+                marketCap: fMarketCap,
               }}
               dateList={navsData.dateList}
               navs={navsData.fETH}
@@ -192,6 +196,7 @@ export default function SystemStatistics() {
                 totalSupply: xETHTotalSupply,
                 ratio: p_x,
                 xETHBeta_text,
+                marketCap: xMarketCap,
               }}
               dateList={navsData.dateList}
               navs={navsData.xETH}

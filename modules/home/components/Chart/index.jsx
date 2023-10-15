@@ -106,12 +106,15 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
       />
 
       <div className={styles.footer}>
-        <div>
-          {/* <img src={icon} /> */}
-          {symbol} Total Supply:
+        <div className={styles.footerItem}>
+          <div>{symbol} Total Supply:</div>
+          <div>
+            {fxData.totalSupply} ({fxData.ratio}%)
+          </div>
         </div>
-        <div>
-          {fxData.totalSupply} ({fxData.ratio}%)
+        <div className={styles.footerItem}>
+          <div>{symbol} Market Cap:</div>
+          <div>{fxData.marketCap}</div>
         </div>
       </div>
     </div>

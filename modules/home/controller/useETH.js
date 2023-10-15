@@ -70,6 +70,16 @@ const useETH = () => {
         fb4(fxInfo.baseInfo.baseTokenCapRes)
       )
 
+      const _fMarketCap = fb4(
+        cBN(fxInfo.baseInfo.fETHTotalSupplyRes).multipliedBy(_fnav),
+        true
+      )
+
+      const _xMarketCap = fb4(
+        cBN(fxInfo.baseInfo.xETHTotalSupplyRes).multipliedBy(_xnav),
+        true
+      )
+
       const _mintFETHFee =
         checkNotZoroNum(
           fxInfo.baseInfo.fTokenMintFeeRatioRes?.defaultFeeRatio
@@ -279,6 +289,8 @@ const useETH = () => {
       return {
         fnav: _fnav,
         xnav: _xnav,
+        fMarketCap: _fMarketCap,
+        xMarketCap: _xMarketCap,
         ethPrice,
         ethPrice_text: _ethPrice_text,
         baseTokenCap_text: _baseTokenCap_text,

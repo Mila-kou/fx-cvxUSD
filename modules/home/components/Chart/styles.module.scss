@@ -40,10 +40,15 @@
   }
 
   .footer {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-top: 16px;
+    .footerItem {
+      display: flex;
+      justify-content: space-between;
+      &:first-child {
+        padding-bottom: 6px;
+      }
+    }
     div {
       font-size: 16px;
       img {
