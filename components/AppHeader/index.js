@@ -217,7 +217,7 @@ export default function AppHeader() {
             href="https://bridge.aladdin.club"
             rel="noreferrer"
           >
-            Cross Chain
+            Bridge
           </a>
           <a
             className={styles.route}
@@ -332,7 +332,7 @@ export default function AppHeader() {
                   href="https://bridge.aladdin.club"
                   rel="noreferrer"
                 >
-                  Cross Chain
+                  Bridge
                 </a>
                 <a
                   className={styles.route}
