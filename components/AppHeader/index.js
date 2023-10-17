@@ -26,7 +26,7 @@ const routers = [
   // ['Farming', '/farming'],
   ['Vesting', '/vesting'],
   ['Lock', '/lock'],
-  ['Offering', '/offering'],
+  // ['Offering', '/offering'],
 ]
 
 export default function AppHeader() {
@@ -214,6 +214,14 @@ export default function AppHeader() {
           <a
             className={styles.route}
             target="_blank"
+            href="https://bridge.aladdin.club"
+            rel="noreferrer"
+          >
+            Cross Chain
+          </a>
+          <a
+            className={styles.route}
+            target="_blank"
             href="https://snapshot.org/#/fxn.eth"
             rel="noreferrer"
           >
@@ -317,6 +325,15 @@ export default function AppHeader() {
                     {label}
                   </Link>
                 ))}
+
+                <a
+                  className={styles.route}
+                  target="_blank"
+                  href="https://bridge.aladdin.club"
+                  rel="noreferrer"
+                >
+                  Cross Chain
+                </a>
                 <a
                   className={styles.route}
                   target="_blank"
