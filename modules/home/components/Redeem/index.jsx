@@ -301,11 +301,11 @@ export default function Redeem({ slippage }) {
         minout_ETH = _dstOut
       }
       console.log('minout_ETH----', minout_ETH)
+      // 比例计算
+      minout_ETH *= _mockRatio
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      // 比例计算
-      minout_ETH *= _mockRatio
       const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
       setMinOutETHtAmount({
         minout_ETH: checkNotZoroNumOption(
