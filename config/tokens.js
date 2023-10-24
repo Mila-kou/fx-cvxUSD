@@ -27,7 +27,13 @@ const contracts = {
   fx_ReservePool: '0x5d0Aacf75116d1645Db2B3d1Ca4b303ef0CA3752',
   fx_FxETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
 
+  // ManageableVesting
   fx_Vesting: '0x2290eeFEa24A6E43b26C27187742bD1FEDC10BDB',
+  fx_ManageableVesting: '0x8DA04c56FEc95e4B76030272104c246cE5c93BD7',
+  fx_ManageableVesting_CvxFxnVestingManager:
+    '0x1FAc89d15eC45C1c09A8b911d6C265F59732Fa72',
+  fx_ManageableVesting_SdFxnVestingManager:
+    '0xAd36C7B3C5E0e097884DE951C271eDf5e99EB567',
 
   FXN: '0x365AccFCa291e7D3914637ABf1F7635dB165Bb09',
   fx_FXN_treasury: '0x26B2ec4E02ebe2F54583af25b647b1D619e67BbF',

@@ -46,6 +46,7 @@ import wstETHABI from './wstETH.json'
 import curveSwapABI from './common/curveSwap.json'
 
 import AladdinCLEVVestingABI from './airdrop/vesting.json'
+import FX_ManageableVestingABI from './fx/FX_ManageableVesting.json'
 
 export default {
   erc20ABI,
@@ -90,4 +91,5 @@ export default {
   curveSwapABI,
 
   AladdinCLEVVestingABI,
+  FX_ManageableVestingABI,
 }

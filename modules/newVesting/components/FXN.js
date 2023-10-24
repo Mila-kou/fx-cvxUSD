@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../hook/useVesting'
-import { useFXNVesting } from '@/hooks/useContracts'
+import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
 
@@ -24,6 +24,7 @@ export default function FXN() {
     claimedAmountInWei,
   } = useVesting(refreshTrigger)
   const { contract: vestContract } = useFXNVesting()
+  const { contract: ManageableVestingContract } = useFX_ManageableVesting()
 
   const handleClaim = async () => {
     try {
@@ -45,7 +46,28 @@ export default function FXN() {
     }
   }
 
-  const handleConvert = async () => {}
+  const handleConvert = async () => {
+    // TODO _indices
+    const _indices = []
+    const _index = 1
+    try {
+      // setClaiming(true)
+      const apiCall = ManageableVestingContract.methods.manage(_indices, _index)
+      const estimatedGas = await apiCall.estimateGas({
+        from: currentAccount,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'Manage',
+        action: 'Manage',
+      })
+      // setClaiming(false)
+      setRefreshTrigger((prev) => prev + 1)
+    } catch (error) {
+      // setClaiming(false)
+      noPayableErrorAction(`error_Manage`, error)
+    }
+  }
 
   const data = {
     canClaim,

@@ -344,6 +344,18 @@ export const useFXNVesting = () => {
   )
 }
 
+export const useFX_ManageableVesting = () => {
+  const address = config.contracts.fx_ManageableVesting
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_ManageableVestingABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
 ////// Curve ///////
 export const useCurvefiSwap = () => {
   const address = config.contracts.CurvefiSwapRouterAddress
