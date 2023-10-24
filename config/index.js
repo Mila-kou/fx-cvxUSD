@@ -20,8 +20,8 @@ import sepolia from './network/sepolia'
 const mainnetFork = mainnetFork_10548
 const chainMap = {
   // [sepolia.chainInfo.id]: sepolia,
-  [ethereum.chainInfo.id]: ethereum,
-  // [mainnetFork.chainInfo.id]: mainnetFork,
+  // [ethereum.chainInfo.id]: ethereum,
+  [mainnetFork.chainInfo.id]: mainnetFork,
 }
 
 const allowChains = Object.values(chainMap).map((item) => item.chainInfo)
