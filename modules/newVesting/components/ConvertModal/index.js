@@ -67,7 +67,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
   }, [newList])
 
   const handleConvertFn = () => {
-    const _indices = []
+    const _indices = selected
     handleConvert(activeIndex + 1, _indices)
   }
   const onChange = (e) => {
@@ -84,6 +84,9 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     return strategy[activeIndex]
   }, [activeIndex])
 
+  const canConvert = useMemo(() => {
+    return selected.length
+  }, [selected])
   return (
     <Modal onCancel={onCancel} visible footer={null} width="600px">
       <div className={styles.info}>
@@ -138,11 +141,11 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
             <div className="text-[14px]">End Date</div>
             <div className="text-[14px]">Not Yet Vested</div>
           </div>
-          {batchs.map((item) => (
+          {batchs.map((item, index) => (
             <div className="flex mt-[8px]">
               <Checkbox
                 className="w-[60px]"
-                value={item.index}
+                value={index}
                 onChange={onChange}
               />
               <div className="flex-1 text-[16px]">{item.endTime}</div>
@@ -164,6 +167,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
         height="56px"
         onClick={handleConvertFn}
         loading={converting}
+        disabled={!canConvert}
       >
         Convert
       </Button>
