@@ -4,8 +4,8 @@ import styles from '../styles.module.scss'
 
 function InfoItem({ title, value, unit }) {
   return (
-    <div className="my-2">
-      {title}: <span className="text-[var(--blue-color)]">{value}</span> {unit}
+    <div className="my-2 text-[14px]">
+      {title}: <span className="text-[var(--blue-color)] ">{value}</span> {unit}
     </div>
   )
 }
@@ -15,7 +15,7 @@ export default function Cell({
   claiming,
   handleClaim,
 
-  handleConvert,
+  onConvert,
   converting,
 
   totalClaimAble,
@@ -74,8 +74,8 @@ export default function Cell({
           ))}
         </div>
 
-        <div className="flex justify-between pt-10 items-center">
-          <div className="">
+        <div className="flex justify-between pt-[16px] items-center">
+          <div>
             {!!startTime && (
               <InfoItem title="Start Time" value={`${startTimeText}`} />
             )}
@@ -84,17 +84,23 @@ export default function Cell({
             )}
           </div>
           <div className="flex justify-center gap-4">
-            {handleConvert ? (
+            {onConvert ? (
               <Button
                 width="150px"
-                onClick={handleConvert}
+                height="56px"
+                onClick={onConvert}
                 loading={converting}
               >
                 Convert
               </Button>
             ) : null}
             {!!(canClaim * 1) && (
-              <Button width="150px" onClick={handleClaim} loading={claiming}>
+              <Button
+                width="150px"
+                height="56px"
+                onClick={handleClaim}
+                loading={claiming}
+              >
                 Claim
               </Button>
             )}
@@ -103,17 +109,17 @@ export default function Cell({
       </div>
 
       {rewards.length ? (
-        <div className="mt-32px">
-          <h2>Rewards</h2>
+        <div className="mt-[32px]">
+          <h2 className="text-[18px]">Rewards</h2>
           <div className="flex justify-between">
             <div className="flex gap-[32px] items-center">
               {rewards.map((item) => (
                 <div className="flex items-center gap-[8px]">
                   <div className="w-[26px] h-[26px] bg-[#fff] flex items-center justify-center rounded-full">
                     <img
-                      className={`w-[${item.iconSize || '24px'}] h-[${
-                        item.iconSize || '24px'
-                      }]`}
+                      className={`w-[${item.iconSize || '24'}px] h-[${
+                        item.iconSize || '24'
+                      }px]`}
                       src={item.icon}
                     />
                   </div>
@@ -125,6 +131,7 @@ export default function Cell({
             </div>
             <Button
               width="200px"
+              height="56px"
               onClick={handleClaimReward}
               loading={claimRewarding}
             >

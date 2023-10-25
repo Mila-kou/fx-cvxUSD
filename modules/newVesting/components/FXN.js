@@ -4,10 +4,12 @@ import useVesting from '../controller/useVesting'
 import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
+import ConvertModal from './ConvertModal'
 
 export default function FXN() {
   const { currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
+  const [showConvert, setShowConvert] = useState(false)
   const [converting, setConverting] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const {
@@ -32,6 +34,7 @@ export default function FXN() {
   }
 
   const handleConvert = async (_index) => {
+    setConverting(true)
     // TODO _indices _index
     const _indices = []
     const __index = _index
@@ -54,6 +57,7 @@ export default function FXN() {
     } catch (error) {
       // setClaiming(false)
       noPayableErrorAction(`error_Manage`, error)
+      setConverting(false)
     }
   }
 
@@ -62,7 +66,9 @@ export default function FXN() {
     claiming,
     handleClaim,
 
-    handleConvert,
+    onConvert: () => {
+      setShowConvert(true)
+    },
     converting,
 
     totalClaimAble,
@@ -78,5 +84,16 @@ export default function FXN() {
     symbol: 'FXN',
   }
 
-  return <Cell {...data} title="Vesting FXN Tokens" />
+  return (
+    <>
+      <Cell {...data} title="Vesting FXN Tokens" />
+      {showConvert ? (
+        <ConvertModal
+          onCancel={() => setShowConvert(false)}
+          converting={converting}
+          handleConvert={handleConvert}
+        />
+      ) : null}
+    </>
+  )
 }

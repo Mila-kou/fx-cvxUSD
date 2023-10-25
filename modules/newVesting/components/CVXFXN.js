@@ -85,7 +85,7 @@ export default function CVXFXN() {
         icon: '/tokens/steth.svg',
         symbol: 'wstETH',
         amount: getRewardsData(config.tokens.wstETH),
-        iconSize: '20px',
+        iconSize: '22',
       },
     ],
 

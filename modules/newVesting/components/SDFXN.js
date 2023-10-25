@@ -59,7 +59,7 @@ export default function SDFXN() {
         icon: '/tokens/sdt.svg',
         symbol: 'SDT',
         amount: fb4(statkeDaoRewards),
-        iconSize: '18px',
+        iconSize: '18',
       },
       // {
       //   icon: '/images/FXN.svg',
