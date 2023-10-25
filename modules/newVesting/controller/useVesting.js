@@ -43,7 +43,8 @@ const useVesting = (refreshTrigger) => {
         const {
           cancleTime,
           claimedAmount: _claimedAmount,
-          endTime: _endTime,
+          // endTime: _endTime,
+          finishTime: _endTime,
           startTime: _startTime,
           vestingAmount: _vestingAmount,
         } = item
@@ -69,6 +70,7 @@ const useVesting = (refreshTrigger) => {
           _vestingAmount,
           fb4(_vestingAmount)
         )
+        _newItem.vestingAmount_og = _vestingAmount
         const _percent =
           ((current.valueOf() - _startTime * 1000) /
             (_endTime * 1000 - _startTime * 1000)) *

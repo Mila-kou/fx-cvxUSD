@@ -33,15 +33,14 @@ export default function FXN() {
     handleClaimFn(_index, setClaiming, setRefreshTrigger)
   }
 
-  const handleConvert = async (_index) => {
+  const handleConvert = async (_index, _indices) => {
     setConverting(true)
-    // TODO _indices _index
-    const _indices = []
+    const __indices = _indices
     const __index = _index
     try {
       // setClaiming(true)
       const apiCall = ManageableVestingContract.methods.manage(
-        _indices,
+        __indices,
         __index
       )
       const estimatedGas = await apiCall.estimateGas({
