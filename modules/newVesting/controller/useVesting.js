@@ -15,16 +15,20 @@ const useVesting = (refreshTrigger) => {
     vestedData,
     convexRewards,
     statkeDaoRewards,
+    cvxFxnStakingBalances,
+    sdFxnStakingBalances,
   } = useVestingData(refreshTrigger)
   console.log(
-    'canClaim,canClaim_1,canClaim_2,userVest,vestedData,convexRewards,statkeDaoRewards,',
+    'canClaim,canClaim_1,canClaim_2,userVest,vestedData,convexRewards,statkeDaoRewards,cvxFxnStakingBalances,sdFxnStakingBalances,',
     canClaim,
     canClaim_1,
     canClaim_2,
     userVest,
     vestedData,
     convexRewards,
-    statkeDaoRewards
+    statkeDaoRewards,
+    cvxFxnStakingBalances,
+    sdFxnStakingBalances
   )
   const { contract: ManageableVestingContract } = useFX_ManageableVesting()
 

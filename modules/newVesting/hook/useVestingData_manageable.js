@@ -19,8 +19,10 @@ const useVestingData = () => {
   const fetchUserVesting = useCallback(async () => {
     try {
       const { getUserVest, vested, claim } = ManageableVestingContract.methods
-      const { claimableRewards } = Convex_cvxFxnStakingContract.methods
-      const { claimable_reward } = StakeDao_sdFxnStakingContract.methods
+      const { claimableRewards, balanceOf: cvxFxnStakingBalanceOf } =
+        Convex_cvxFxnStakingContract.methods
+      const { claimable_reward, balanceOf: sdFxnStakingBalanceOf } =
+        StakeDao_sdFxnStakingContract.methods
       const canClaim_0 = await claim().call({ from: _currentAccount })
       const canClaim_1 = await claim(1).call({ from: _currentAccount })
       const canClaim_2 = await claim(2).call({ from: _currentAccount })
@@ -29,9 +31,17 @@ const useVestingData = () => {
         vested(_currentAccount),
         claimableRewards(_currentAccount),
         claimable_reward(_currentAccount, config.tokens.SDT),
+        cvxFxnStakingBalanceOf(_currentAccount),
+        sdFxnStakingBalanceOf(_currentAccount),
       ]
-      const [userVest, vestedData, convexRewards, statkeDaoRewards] =
-        await multiCallsV2(apis)
+      const [
+        userVest,
+        vestedData,
+        convexRewards,
+        statkeDaoRewards,
+        cvxFxnStakingBalances,
+        sdFxnStakingBalances,
+      ] = await multiCallsV2(apis)
       // console.log(
       //   'userVest--vestedData--convexRewards--statkeDaoRewards--',
       //   userVest,
@@ -47,6 +57,8 @@ const useVestingData = () => {
         vestedData,
         convexRewards,
         statkeDaoRewards,
+        cvxFxnStakingBalances,
+        sdFxnStakingBalances,
       }
     } catch (error) {
       console.log('useVestingData', error)
