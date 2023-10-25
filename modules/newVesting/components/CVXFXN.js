@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
 import { useFX_ManageableVesting } from '@/hooks/useContracts'
@@ -15,19 +15,29 @@ export default function CVXFXN() {
   const {
     canClaim,
     canClaimText,
-    totalClaimAble,
-    notYetVestedText,
-    newList,
-    startTime,
-    startTimeText,
-    latestTime,
-    latestTimeText,
-    claimedAmount,
-    claimedAmountInWei,
     convexRewards,
+    getBatchsInfo,
+    newList_convex,
     handleClaim: handleClaimFn,
     handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
+
+  const {
+    startTime,
+    latestTime,
+    claimedAmountInWei,
+    totalClaimAbleInWei,
+    claimedAmount,
+    totalClaimAble,
+    notYetVested,
+    notYetVestedText,
+    startTimeText,
+    latestTimeText,
+  } = useMemo(() => {
+    return getBatchsInfo(newList_convex)
+  }, [newList_convex])
+
+  console.log('newList_convex--', newList_convex)
 
   const handleClaim = async () => {
     const _index = 1

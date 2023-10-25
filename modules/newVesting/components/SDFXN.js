@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
 import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
@@ -14,19 +14,27 @@ export default function SDFXN() {
   const {
     canClaim,
     canClaimText,
-    totalClaimAble,
-    notYetVestedText,
-    newList,
-    startTime,
-    startTimeText,
-    latestTime,
-    latestTimeText,
-    claimedAmount,
-    claimedAmountInWei,
     statkeDaoRewards,
+    getBatchsInfo,
+    newList_stakeDao,
     handleClaim: handleClaimFn,
     handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
+
+  const {
+    startTime,
+    latestTime,
+    claimedAmountInWei,
+    totalClaimAbleInWei,
+    claimedAmount,
+    totalClaimAble,
+    notYetVested,
+    notYetVestedText,
+    startTimeText,
+    latestTimeText,
+  } = useMemo(() => {
+    return getBatchsInfo(newList_stakeDao)
+  }, [newList_stakeDao])
 
   const handleClaim = async () => {
     const _index = 2

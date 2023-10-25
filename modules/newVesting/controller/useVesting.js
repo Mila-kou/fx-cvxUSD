@@ -20,26 +20,13 @@ const useVesting = (refreshTrigger) => {
     latestTimeText: '',
   })
 
-  const getVestingInfo = () => {
-    // const { cancleTime, claimedAmount, endTime, startTime, vestingAmount } = vestedData;
+  const getBatchsInfo = (BatchList) => {
     let startTime = 0
     let latestTime = 0
     let claimedAmountInWei = cBN(0)
     let totalClaimAbleInWei = cBN(0)
-    let hasCVXFXN = false
-    let hasSDFXN = false
-    const newList = []
-    if (userVest.length) {
-      userVest.forEach((item, index) => {
-        const _newItem = {
-          ...item,
-        }
-        if (item.managerIndex * 1 == 1) {
-          hasCVXFXN = true
-        }
-        if (item.managerIndex * 1 == 2) {
-          hasSDFXN = true
-        }
+    if (BatchList && BatchList.length) {
+      BatchList.forEach((item) => {
         const {
           cancleTime,
           claimedAmount: _claimedAmount,
@@ -64,25 +51,9 @@ const useVesting = (refreshTrigger) => {
           totalClaimAbleInWei = totalClaimAbleInWei.plus(_claimedAmount)
         }
         claimedAmountInWei = claimedAmountInWei.plus(_claimedAmount)
-        _newItem.startTime = new Date(_startTime * 1000).toLocaleString()
-        _newItem.endTime = new Date(_endTime * 1000).toLocaleString()
-        _newItem.vestingAmount = checkNotZoroNumOption(
-          _vestingAmount,
-          fb4(_vestingAmount)
-        )
-        _newItem.vestingAmount_og = _vestingAmount
-        _newItem.index = index
-        const _percent =
-          ((current.valueOf() - _startTime * 1000) /
-            (_endTime * 1000 - _startTime * 1000)) *
-          100
-        _newItem.vestingAmountPercent =
-          _percent >= 100
-            ? `100%`
-            : `${_percent <= 0 ? '0.00' : _percent.toFixed(2)}%`
-        newList.push(_newItem)
       })
     }
+
     // const claimable = claimableInWei.shiftedBy(-18).toString(10)
     const claimedAmount = fb4(cBN(claimedAmountInWei).toString(10), false, 18)
     const totalClaimAble = fb4(cBN(totalClaimAbleInWei).toString(10), false, 18)
@@ -93,12 +64,88 @@ const useVesting = (refreshTrigger) => {
       notYetVested,
       fb4(notYetVested)
     )
-    // const startTimeText = startTime != 0 ? moment(startTime * 1000).format('LLLL') : 0
-    // const latestTimeText = latestTime != 0 ? moment(latestTime * 1000).format('LLLL') : 0
+
     const startTimeText =
       startTime != 0 ? new Date(startTime * 1000).toLocaleString() : 0
     const latestTimeText =
       latestTime != 0 ? new Date(latestTime * 1000).toLocaleString() : 0
+
+    return {
+      startTime,
+      latestTime,
+      claimedAmountInWei,
+      totalClaimAbleInWei,
+      claimedAmount,
+      totalClaimAble,
+      notYetVested,
+      notYetVestedText,
+      startTimeText,
+      latestTimeText,
+    }
+  }
+
+  const getVestingInfo = () => {
+    let hasCVXFXN = false
+    let hasSDFXN = false
+    const newList = []
+    const newList_convex = []
+    const newList_stakeDao = []
+    const {
+      startTime,
+      latestTime,
+      claimedAmountInWei,
+      totalClaimAbleInWei,
+      claimedAmount,
+      totalClaimAble,
+      notYetVested,
+      notYetVestedText,
+      startTimeText,
+      latestTimeText,
+    } = getBatchsInfo(userVest)
+    if (userVest.length) {
+      userVest.forEach((item, index) => {
+        const _newItem = {
+          ...item,
+        }
+        const {
+          cancleTime,
+          claimedAmount: _claimedAmount,
+          // endTime: _endTime,
+          finishTime: _endTime,
+          startTime: _startTime,
+          vestingAmount: _vestingAmount,
+          managerIndex,
+        } = item
+        _newItem.startTime_text = new Date(_startTime * 1000).toLocaleString()
+        _newItem.endTime_text = new Date(_endTime * 1000).toLocaleString()
+        _newItem.vestingAmount_text = checkNotZoroNumOption(
+          _vestingAmount,
+          fb4(_vestingAmount)
+        )
+        _newItem.index = index
+        const _percent =
+          ((current.valueOf() - _startTime * 1000) /
+            (_endTime * 1000 - _startTime * 1000)) *
+          100
+        _newItem.vestingAmountPercent =
+          _percent >= 100
+            ? `100%`
+            : `${_percent <= 0 ? '0.00' : _percent.toFixed(2)}%`
+        newList.push(_newItem)
+        if (managerIndex * 1 == 1) {
+          newList_convex.push(_newItem)
+        }
+        if (managerIndex * 1 == 2) {
+          newList_stakeDao.push(_newItem)
+        }
+        if (newList_convex.length) {
+          hasCVXFXN = true
+        }
+        if (newList_stakeDao.length) {
+          hasSDFXN = true
+        }
+      })
+    }
     const canClaimText = fb4(cBN(canClaim).toString(10), false, 18)
     setData((pre) => {
       return {
@@ -118,6 +165,8 @@ const useVesting = (refreshTrigger) => {
         startTimeText,
         convexRewards,
         statkeDaoRewards,
+        newList_convex,
+        newList_stakeDao,
         hasCVXFXN,
         hasSDFXN,
       }
@@ -182,6 +231,7 @@ const useVesting = (refreshTrigger) => {
     ...data,
     handleClaim,
     handleClaimReward,
+    getBatchsInfo,
   }
 }
 

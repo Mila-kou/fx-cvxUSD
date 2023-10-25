@@ -55,9 +55,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     if (newList && newList.length) {
       const _newList = newList.filter((item) => {
         if (item.managerIndex * 1 == 0) {
-          _total_batchs_amonut = _total_batchs_amonut.plus(
-            item.vestingAmount_og
-          )
+          _total_batchs_amonut = _total_batchs_amonut.plus(item.vestingAmount)
           return true
         }
       })

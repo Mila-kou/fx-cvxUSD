@@ -38,13 +38,13 @@ export default function VestingPage() {
                 return (
                   <tr>
                     <td className={cn('border py-4 text-center')}>
-                      {item.startTime}
+                      {item.startTime_text}
                     </td>
                     <td className={cn('border py-4 text-center')}>
-                      {item.endTime}
+                      {item.endTime_text}
                     </td>
                     <td className={cn('border py-4 text-center')}>
-                      {item.vestingAmount} FXN
+                      {item.vestingAmount_text} FXN
                     </td>
                     <td className={cn('border py-4 text-center')}>
                       {item.vestingAmountPercent}
