@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
-import { useFXNVesting } from '@/hooks/useContracts'
+import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
 import { fb4 } from '@/utils/index'
@@ -24,30 +24,19 @@ export default function SDFXN() {
     claimedAmount,
     claimedAmountInWei,
     statkeDaoRewards,
+    handleClaim: handleClaimFn,
+    handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
-  const { contract: vestContract } = useFXNVesting()
 
   const handleClaim = async () => {
-    try {
-      setClaiming(true)
-      const apiCall = vestContract.methods.claim()
-      const estimatedGas = await apiCall.estimateGas({
-        from: currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'Claim',
-        action: 'Claim',
-      })
-      setClaiming(false)
-      setRefreshTrigger((prev) => prev + 1)
-    } catch (error) {
-      setClaiming(false)
-      noPayableErrorAction(`error_Claim`, error)
-    }
+    const _index = 2
+    handleClaimFn(_index, setClaiming, setRefreshTrigger)
   }
 
-  const handleClaimReward = async () => {}
+  const handleClaimReward = async () => {
+    const _index = 2
+    handleClaimRewardFn(_index, setClaiming, setRefreshTrigger)
+  }
 
   const data = {
     canClaim,

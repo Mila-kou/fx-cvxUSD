@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import { cBN, fb4, checkNotZoroNum, checkNotZoroNumOption } from 'utils'
+import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVestingData from '../hook/useVestingData_manageable'
 import useWeb3 from '@/hooks/useWeb3'
+import { useFX_ManageableVesting } from '@/hooks/useContracts'
 
 const useVesting = (refreshTrigger) => {
-  const { current } = useWeb3()
+  const { current, currentAccount } = useWeb3()
   const { canClaim, userVest, vestedData, convexRewards, statkeDaoRewards } =
     useVestingData(refreshTrigger)
+  const { contract: ManageableVestingContract } = useFX_ManageableVesting()
 
   const [data, setData] = useState({
     canClaim: 0,
@@ -108,13 +111,65 @@ const useVesting = (refreshTrigger) => {
     })
   }
 
+  const handleClaim = async (_index, loadingFn, setRefreshTriggerFn) => {
+    try {
+      loadingFn(true)
+      let apiCall = ManageableVestingContract.methods.claim()
+      if (_index) {
+        apiCall = ManageableVestingContract.methods.claim(2)
+      }
+
+      const estimatedGas = await apiCall.estimateGas({
+        from: currentAccount,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'Claim',
+        action: 'Claim',
+      })
+      loadingFn(false)
+      setRefreshTriggerFn((prev) => prev + 1)
+    } catch (error) {
+      loadingFn(false)
+      noPayableErrorAction(`error_Claim`, error)
+    }
+  }
+
+  const handleClaimReward = async (_index, loadingFn, setRefreshTriggerFn) => {
+    const __index = _index
+    try {
+      loadingFn(true)
+      const apiCall = ManageableVestingContract.methods.getReward(
+        __index,
+        currentAccount
+      )
+      const estimatedGas = await apiCall.estimateGas({
+        from: currentAccount,
+      })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'ClaimReward',
+        action: 'ClaimReward',
+      })
+      loadingFn(false)
+      setRefreshTriggerFn((prev) => prev + 1)
+    } catch (error) {
+      loadingFn(false)
+      noPayableErrorAction(`error_ClaimReward`, error)
+    }
+  }
+
   useEffect(() => {
     if (userVest && vestedData) {
       getVestingInfo()
     }
   }, [userVest, vestedData])
 
-  return data
+  return {
+    ...data,
+    handleClaim,
+    handleClaimReward,
+  }
 }
 
 export default useVesting
