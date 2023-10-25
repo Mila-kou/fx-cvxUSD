@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { cBN, fb4, checkNotZoroNum, checkNotZoroNumOption } from 'utils'
-import useVestingData from './useVestingData'
+import useVestingData from '../hook/useVestingData_manageable'
 import useWeb3 from '@/hooks/useWeb3'
 
 const useVesting = (refreshTrigger) => {
   const { current } = useWeb3()
-  const { canClaim, userVest, vestedData } = useVestingData(refreshTrigger)
+  const { canClaim, userVest, vestedData, convexRewards, statkeDaoRewards } =
+    useVestingData(refreshTrigger)
 
   const [data, setData] = useState({
     canClaim: 0,
@@ -101,6 +102,8 @@ const useVesting = (refreshTrigger) => {
         startTime,
         latestTimeText,
         startTimeText,
+        convexRewards,
+        statkeDaoRewards,
       }
     })
   }

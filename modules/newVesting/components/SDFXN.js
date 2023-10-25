@@ -4,6 +4,7 @@ import useVesting from '../controller/useVesting'
 import { useFXNVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
+import { fb4 } from '@/utils/index'
 
 export default function SDFXN() {
   const { currentAccount } = useWeb3()
@@ -22,6 +23,7 @@ export default function SDFXN() {
     latestTimeText,
     claimedAmount,
     claimedAmountInWei,
+    statkeDaoRewards,
   } = useVesting(refreshTrigger)
   const { contract: vestContract } = useFXNVesting()
 
@@ -41,7 +43,7 @@ export default function SDFXN() {
       setRefreshTrigger((prev) => prev + 1)
     } catch (error) {
       setClaiming(false)
-      noPayableErrorAction(`error_earn_approve`, error)
+      noPayableErrorAction(`error_Claim`, error)
     }
   }
 
@@ -67,20 +69,20 @@ export default function SDFXN() {
       {
         icon: '/tokens/sdt.svg',
         symbol: 'SDT',
-        amount: '100,000',
+        amount: fb4(statkeDaoRewards),
         iconSize: '18px',
       },
-      {
-        icon: '/images/FXN.svg',
-        symbol: 'FXN',
-        amount: '100,000',
-      },
-      {
-        icon: '/tokens/steth.svg',
-        symbol: 'wstETH',
-        amount: '100,000',
-        iconSize: '20px',
-      },
+      // {
+      //   icon: '/images/FXN.svg',
+      //   symbol: 'FXN',
+      //   amount: '100,000',
+      // },
+      // {
+      //   icon: '/tokens/steth.svg',
+      //   symbol: 'wstETH',
+      //   amount: '100,000',
+      //   iconSize: '20px',
+      // },
     ],
 
     claimRewarding,

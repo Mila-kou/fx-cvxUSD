@@ -29,11 +29,11 @@ const contracts = {
 
   // ManageableVesting
   fx_Vesting: '0x2290eeFEa24A6E43b26C27187742bD1FEDC10BDB',
-  fx_ManageableVesting: '0x8DA04c56FEc95e4B76030272104c246cE5c93BD7',
+  fx_ManageableVesting: '0xdddCAae9608D63C90017f700E3C51B9C781b97C7',
   fx_ManageableVesting_CvxFxnVestingManager:
-    '0x1FAc89d15eC45C1c09A8b911d6C265F59732Fa72',
+    '0xbEfe612CeCAeBA0111307Ee9967609B07DA52E17',
   fx_ManageableVesting_SdFxnVestingManager:
-    '0xAd36C7B3C5E0e097884DE951C271eDf5e99EB567',
+    '0x45F8C8194506b5026a7e198f5120d5913BbacFEe',
   convex_cvxFxnStaking: '0xEC60Cd4a5866fb3B0DD317A46d3B474a24e06beF',
   stakeDao_sdFxnStaking: '0xbcfE5c47129253C6B8a9A00565B3358b488D42E0',
 

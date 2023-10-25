@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
 import { useFXNVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
+import { fb4 } from '@/utils/index'
+import config from '@/config/index'
 
 export default function CVXFXN() {
   const { currentAccount } = useWeb3()
@@ -22,6 +24,7 @@ export default function CVXFXN() {
     latestTimeText,
     claimedAmount,
     claimedAmountInWei,
+    convexRewards,
   } = useVesting(refreshTrigger)
   const { contract: vestContract } = useFXNVesting()
 
@@ -47,6 +50,21 @@ export default function CVXFXN() {
 
   const handleClaimReward = async () => {}
 
+  const getRewardsData = useCallback(
+    (token) => {
+      if (convexRewards) {
+        const _data = convexRewards.find(
+          (item) => item.token.toLowerCase() == token.toLowerCase()
+        )
+        if (_data) {
+          return fb4(_data.amount)
+        }
+      }
+      return 0
+    },
+    [convexRewards]
+  )
+
   const data = {
     canClaim,
     claiming,
@@ -67,17 +85,17 @@ export default function CVXFXN() {
       {
         icon: '/tokens/cvx.svg',
         symbol: 'CVX',
-        amount: '100,000',
+        amount: getRewardsData(config.tokens.cvx),
       },
       {
         icon: '/images/FXN.svg',
         symbol: 'FXN',
-        amount: '100,000',
+        amount: getRewardsData(config.contracts.FXN),
       },
       {
         icon: '/tokens/steth.svg',
         symbol: 'wstETH',
-        amount: '100,000',
+        amount: getRewardsData(config.tokens.wstETH),
         iconSize: '20px',
       },
     ],
