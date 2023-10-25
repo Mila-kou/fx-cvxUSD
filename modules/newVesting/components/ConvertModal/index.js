@@ -146,7 +146,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
                 value={item.index}
                 onChange={onChange}
               />
-              <div className="flex-1 text-[16px]">{item.endTime}</div>
+              <div className="flex-1 text-[16px]">{item.endTime_text}</div>
               <div className="text-[16px]">{fb4(item.vestingAmount)} FXN</div>
             </div>
           ))}
