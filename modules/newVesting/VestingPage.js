@@ -9,13 +9,13 @@ import styles from './styles.module.scss'
 
 export default function VestingPage() {
   const { theme } = useGlobal()
-  const { newList } = useVesting()
+  const { newList, hasCVXFXN, hasSDFXN } = useVesting()
 
   return (
     <div className={styles.container}>
       <FXN />
-      <CVXFXN />
-      <SDFXN />
+      {hasCVXFXN && <CVXFXN />}
+      {hasSDFXN && <SDFXN />}
 
       <div className={styles.content}>
         <h2 className="flex gap-[6px] mb-[32px]">FXN Vesting Detail</h2>
