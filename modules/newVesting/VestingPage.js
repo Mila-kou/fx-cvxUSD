@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
-import useVesting from './hook/useVesting'
+import useVesting from './controller/useVesting'
 import useGlobal from '@/hooks/useGlobal'
 import FXN from './components/FXN'
 import CVXFXN from './components/CVXFXN'

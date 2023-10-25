@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import useVesting from '../hook/useVesting'
+import useVesting from '../controller/useVesting'
 import { useFXNVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
