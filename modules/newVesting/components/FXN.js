@@ -51,10 +51,10 @@ export default function FXN() {
         key: 'Manage',
         action: 'Manage',
       })
-      // setClaiming(false)
+      setClaiming(false)
       setRefreshTrigger((prev) => prev + 1)
     } catch (error) {
-      // setClaiming(false)
+      setClaiming(false)
       noPayableErrorAction(`error_Manage`, error)
       setConverting(false)
     }

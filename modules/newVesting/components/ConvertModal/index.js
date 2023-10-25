@@ -141,11 +141,11 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
             <div className="text-[14px]">End Date</div>
             <div className="text-[14px]">Not Yet Vested</div>
           </div>
-          {batchs.map((item, index) => (
+          {batchs.map((item) => (
             <div className="flex mt-[8px]">
               <Checkbox
                 className="w-[60px]"
-                value={index}
+                value={item.index}
                 onChange={onChange}
               />
               <div className="flex-1 text-[16px]">{item.endTime}</div>

@@ -30,7 +30,7 @@ const useVesting = (refreshTrigger) => {
     let hasSDFXN = false
     const newList = []
     if (userVest.length) {
-      userVest.forEach((item) => {
+      userVest.forEach((item, index) => {
         const _newItem = {
           ...item,
         }
@@ -71,6 +71,7 @@ const useVesting = (refreshTrigger) => {
           fb4(_vestingAmount)
         )
         _newItem.vestingAmount_og = _vestingAmount
+        _newItem.index = index
         const _percent =
           ((current.valueOf() - _startTime * 1000) /
             (_endTime * 1000 - _startTime * 1000)) *
