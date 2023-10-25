@@ -332,6 +332,7 @@ export const useErc20Token = (tokenAddr, approveForAddr) => {
   }
 }
 
+/// Vesting ///
 export const useFXNVesting = () => {
   const address = config.contracts.fx_Vesting
   const { getContract } = useContract()
@@ -356,7 +357,31 @@ export const useFX_ManageableVesting = () => {
   )
 }
 
-////// Curve ///////
+export const useConvex_cvxFxnStaking = () => {
+  const address = config.contracts.convex_cvxFxnStaking
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.convex_cvxFxnStakingABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useStakeDao_sdFxnStaking = () => {
+  const address = config.contracts.stakeDao_sdFxnStaking
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.stakeDao_sdFxnStakingABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+/// Curve ///
 export const useCurvefiSwap = () => {
   const address = config.contracts.CurvefiSwapRouterAddress
   const { getContract } = useContract()

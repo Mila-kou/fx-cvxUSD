@@ -34,6 +34,8 @@ const contracts = {
     '0x1FAc89d15eC45C1c09A8b911d6C265F59732Fa72',
   fx_ManageableVesting_SdFxnVestingManager:
     '0xAd36C7B3C5E0e097884DE951C271eDf5e99EB567',
+  convex_cvxFxnStaking: '0xEC60Cd4a5866fb3B0DD317A46d3B474a24e06beF',
+  stakeDao_sdFxnStaking: '0xbcfE5c47129253C6B8a9A00565B3358b488D42E0',
 
   FXN: '0x365AccFCa291e7D3914637ABf1F7635dB165Bb09',
   fx_FXN_treasury: '0x26B2ec4E02ebe2F54583af25b647b1D619e67BbF',
@@ -127,6 +129,7 @@ const tokens = {
 
   // abcCVX
   abcCVX: '0xDEC800C2b17c9673570FDF54450dc1bd79c8E359',
+  SDT: '0x73968b9a57c6E53d41345FD57a6E6ae27d6CDB2F',
 }
 
 const TOKENS_INFO = {
