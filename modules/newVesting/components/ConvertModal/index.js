@@ -10,6 +10,7 @@ import styles from './styles.module.scss'
 export default function ConvertModal({ onCancel, converting, handleConvert }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [showDetail, setShowDetail] = useState(false)
+  const [selected, setSelected] = useState([])
 
   const strategy = [
     {
@@ -48,8 +49,15 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
   ]
 
   const onChange = (e) => {
-    console.log('onChange----', e.target.checked, e.target.value)
+    const { checked, value } = e.target
+    if (checked) {
+      setSelected([...new Set(selected).add(value)])
+    } else {
+      setSelected([...selected.filter((item) => item !== value)])
+    }
   }
+
+  console.log('selected----', selected)
 
   return (
     <Modal onCancel={onCancel} visible footer={null} width="600px">
