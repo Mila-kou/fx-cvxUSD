@@ -89,8 +89,12 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
 
       <div className="mt-[32px] mb-[16px] flex justify-between">
         <p>Vesting FXN Amount: 3,000</p>
-        <p className="cursor-pointer" onClick={() => setShowDetail(true)}>
-          Advance{' >'}
+        <p
+          className="cursor-pointer text-[var(--a-button-color)]"
+          onClick={() => setShowDetail(!showDetail)}
+        >
+          {showDetail ? 'Default' : 'Advance'}
+          {' >'}
         </p>
       </div>
 
