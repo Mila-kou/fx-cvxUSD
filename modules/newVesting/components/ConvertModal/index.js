@@ -6,10 +6,17 @@ import { NoticeCard } from '@/modules/home/components/Common'
 import Button from '@/components/Button'
 import Tabs from '@/modules/home/components/Tabs'
 import styles from './styles.module.scss'
+import useVesting from '../../controller/useVesting'
 
 export default function ConvertModal({ onCancel, converting, handleConvert }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [showDetail, setShowDetail] = useState(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const {
+    newList,
+    handleClaim: handleClaimFn,
+    handleClaimReward: handleClaimRewardFn,
+  } = useVesting(refreshTrigger)
 
   const strategy = [
     {
@@ -42,14 +49,33 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     },
   ]
 
-  const batchs = [
-    { index: 0, endDate: '2023/09/28 20:00:00', notVested: '3000' },
-    { index: 1, endDate: '2023/10/28 20:00:00', notVested: '2000' },
-  ]
+  const [batchs, total_batchs_amonut] = useMemo(() => {
+    let _total_batchs_amonut = cBN(0)
+    if (newList && newList.length) {
+      const _newList = newList.filter((item) => {
+        if (item.managerIndex * 1 == 0) {
+          _total_batchs_amonut = _total_batchs_amonut.plus(
+            item.vestingAmount_og
+          )
+          return true
+        }
+      })
+      return [_newList, fb4(_total_batchs_amonut)]
+    }
+    return [[], 0]
+  }, [newList])
 
+  const handleConvertFn = () => {
+    const _indices = []
+    handleConvert(activeIndex + 1, _indices)
+  }
   const onChange = (e) => {
     console.log('onChange----', e.target.checked, e.target.value)
   }
+
+  const _currentStrategy = useMemo(() => {
+    return strategy[activeIndex]
+  }, [activeIndex])
 
   return (
     <Modal onCancel={onCancel} visible footer={null} width="600px">
@@ -88,7 +114,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
       </div>
 
       <div className="mt-[32px] mb-[16px] flex justify-between">
-        <p>Vesting FXN Amount: 3,000</p>
+        <p>Vesting FXN Amount: {total_batchs_amonut}</p>
         <p
           className="cursor-pointer text-[var(--a-button-color)]"
           onClick={() => setShowDetail(!showDetail)}
@@ -112,8 +138,8 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
                 value={item.index}
                 onChange={onChange}
               />
-              <div className="flex-1 text-[16px]">{item.endDate}</div>
-              <div className="text-[16px]">{item.notVested} FXN</div>
+              <div className="flex-1 text-[16px]">{item.endTime}</div>
+              <div className="text-[16px]">{item.vestingAmount} FXN</div>
             </div>
           ))}
         </div>
@@ -121,7 +147,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
 
       <NoticeCard
         content={[
-          'Once you convert, your vesting FXN will convert to cvxFXN, and you will receive extra rewards. This action is irreversible.',
+          `Once you convert, your vesting FXN will convert to ${_currentStrategy.title}, and you will receive extra rewards. This action is irreversible.`,
         ]}
       />
 
@@ -129,7 +155,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
         className="mt-[32px]"
         width="100%"
         height="56px"
-        onClick={handleConvert}
+        onClick={handleConvertFn}
         loading={converting}
       >
         Convert
