@@ -46,7 +46,7 @@ export default function CVXFXN() {
 
   const handleClaimReward = async () => {
     const _index = 1
-    handleClaimRewardFn(_index, setClaiming, setRefreshTrigger)
+    handleClaimRewardFn(_index, setClaimRewarding, setRefreshTrigger)
   }
 
   const getRewardsData = useCallback(
@@ -64,6 +64,25 @@ export default function CVXFXN() {
     [convexRewards]
   )
 
+  const rewards = [
+    {
+      icon: '/tokens/cvx.svg',
+      symbol: 'CVX',
+      amount: getRewardsData(config.tokens.cvx),
+    },
+    {
+      icon: '/images/FXN.svg',
+      symbol: 'FXN',
+      amount: getRewardsData(config.contracts.FXN),
+    },
+    {
+      icon: '/tokens/steth.svg',
+      symbol: 'wstETH',
+      amount: getRewardsData(config.tokens.wstETH),
+      iconSize: '22',
+    },
+  ]
+
   const data = {
     canClaim,
     claiming,
@@ -80,27 +99,12 @@ export default function CVXFXN() {
     latestTimeText,
 
     symbol: 'cvxFXN',
-    rewards: [
-      {
-        icon: '/tokens/cvx.svg',
-        symbol: 'CVX',
-        amount: getRewardsData(config.tokens.cvx),
-      },
-      {
-        icon: '/images/FXN.svg',
-        symbol: 'FXN',
-        amount: getRewardsData(config.contracts.FXN),
-      },
-      {
-        icon: '/tokens/steth.svg',
-        symbol: 'wstETH',
-        amount: getRewardsData(config.tokens.wstETH),
-        iconSize: '22',
-      },
-    ],
+    rewards,
 
     claimRewarding,
     handleClaimReward,
+
+    canClaimReward: !!rewards.find((item) => item.amount !== '-'),
   }
 
   return <Cell {...data} title="Converted cvxFXN Token" />

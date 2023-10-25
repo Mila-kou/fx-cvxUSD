@@ -35,6 +35,8 @@ export default function Cell({
 
   handleClaimReward,
   claimRewarding,
+
+  canClaimReward,
 }) {
   const itemData = [
     {
@@ -108,7 +110,7 @@ export default function Cell({
         </div>
       </div>
 
-      {rewards.length ? (
+      {canClaimReward ? (
         <div className="mt-[32px]">
           <h2 className="text-[18px]">Rewards</h2>
           <div className="flex justify-between">
@@ -130,7 +132,7 @@ export default function Cell({
               ))}
             </div>
             <Button
-              width="200px"
+              width="220px"
               height="56px"
               onClick={handleClaimReward}
               loading={claimRewarding}

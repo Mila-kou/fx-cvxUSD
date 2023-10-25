@@ -43,12 +43,32 @@ export default function SDFXN() {
 
   const handleClaimReward = async () => {
     const _index = 2
-    handleClaimRewardFn(_index, setClaiming, setRefreshTrigger)
+    handleClaimRewardFn(_index, setClaimRewarding, setRefreshTrigger)
   }
 
+  const rewards = [
+    {
+      icon: '/tokens/sdt.svg',
+      symbol: 'SDT',
+      amount: fb4(statkeDaoRewards),
+      iconSize: '18',
+    },
+    // {
+    //   icon: '/images/FXN.svg',
+    //   symbol: 'FXN',
+    //   amount: '100,000',
+    // },
+    // {
+    //   icon: '/tokens/steth.svg',
+    //   symbol: 'wstETH',
+    //   amount: '100,000',
+    //   iconSize: '20px',
+    // },
+  ]
+
   const data = {
-    canClaim_2: canClaim,
-    canClaim_2_Text: canClaimText,
+    canClaim,
+    claiming,
     handleClaim,
 
     totalClaimAble,
@@ -62,28 +82,12 @@ export default function SDFXN() {
     latestTimeText,
 
     symbol: 'sdFXN',
-    rewards: [
-      {
-        icon: '/tokens/sdt.svg',
-        symbol: 'SDT',
-        amount: fb4(statkeDaoRewards),
-        iconSize: '18',
-      },
-      // {
-      //   icon: '/images/FXN.svg',
-      //   symbol: 'FXN',
-      //   amount: '100,000',
-      // },
-      // {
-      //   icon: '/tokens/steth.svg',
-      //   symbol: 'wstETH',
-      //   amount: '100,000',
-      //   iconSize: '20px',
-      // },
-    ],
+    rewards,
 
     claimRewarding,
     handleClaimReward,
+
+    canClaimReward: !!rewards.find((item) => item.amount !== '-'),
   }
 
   return <Cell {...data} title="Converted sdFXN Token" />
