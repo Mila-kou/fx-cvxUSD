@@ -26,11 +26,19 @@ const useVesting = (refreshTrigger) => {
     let latestTime = 0
     let claimedAmountInWei = cBN(0)
     let totalClaimAbleInWei = cBN(0)
+    let hasCVXFXN = false
+    let hasSDFXN = false
     const newList = []
     if (userVest.length) {
       userVest.forEach((item) => {
         const _newItem = {
           ...item,
+        }
+        if (item.managerIndex * 1 == 1) {
+          hasCVXFXN = true
+        }
+        if (item.managerIndex * 1 == 2) {
+          hasSDFXN = true
         }
         const {
           cancleTime,
@@ -107,6 +115,8 @@ const useVesting = (refreshTrigger) => {
         startTimeText,
         convexRewards,
         statkeDaoRewards,
+        hasCVXFXN,
+        hasSDFXN,
       }
     })
   }
