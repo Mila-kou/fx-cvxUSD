@@ -32,13 +32,13 @@ const useVestingData = () => {
       ]
       const [userVest, vestedData, convexRewards, statkeDaoRewards] =
         await multiCallsV2(apis)
-      console.log(
-        'userVest--vestedData--convexRewards--statkeDaoRewards--',
-        userVest,
-        vestedData,
-        convexRewards,
-        statkeDaoRewards
-      )
+      // console.log(
+      //   'userVest--vestedData--convexRewards--statkeDaoRewards--',
+      //   userVest,
+      //   vestedData,
+      //   convexRewards,
+      //   statkeDaoRewards
+      // )
       return {
         canClaim: canClaim_0,
         canClaim_1,

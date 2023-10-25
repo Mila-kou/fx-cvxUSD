@@ -13,8 +13,8 @@ export default function CVXFXN() {
   const [claimRewarding, setClaimRewarding] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const {
-    canClaim,
-    canClaimText,
+    canClaim_1: canClaim,
+    canClaim_1_Text: canClaimText,
     convexRewards,
     getBatchsInfo,
     newList_convex,

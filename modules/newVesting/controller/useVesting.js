@@ -7,8 +7,25 @@ import { useFX_ManageableVesting } from '@/hooks/useContracts'
 
 const useVesting = (refreshTrigger) => {
   const { current, currentAccount } = useWeb3()
-  const { canClaim, userVest, vestedData, convexRewards, statkeDaoRewards } =
-    useVestingData(refreshTrigger)
+  const {
+    canClaim,
+    canClaim_1,
+    canClaim_2,
+    userVest,
+    vestedData,
+    convexRewards,
+    statkeDaoRewards,
+  } = useVestingData(refreshTrigger)
+  console.log(
+    'canClaim,canClaim_1,canClaim_2,userVest,vestedData,convexRewards,statkeDaoRewards,',
+    canClaim,
+    canClaim_1,
+    canClaim_2,
+    userVest,
+    vestedData,
+    convexRewards,
+    statkeDaoRewards
+  )
   const { contract: ManageableVestingContract } = useFX_ManageableVesting()
 
   const [data, setData] = useState({
@@ -20,7 +37,7 @@ const useVesting = (refreshTrigger) => {
     latestTimeText: '',
   })
 
-  const getBatchsInfo = (BatchList) => {
+  const getBatchsInfo = (BatchList, type = 'all') => {
     let startTime = 0
     let latestTime = 0
     let claimedAmountInWei = cBN(0)
@@ -109,7 +126,6 @@ const useVesting = (refreshTrigger) => {
         }
         const {
           cancleTime,
-          claimedAmount: _claimedAmount,
           // endTime: _endTime,
           finishTime: _endTime,
           startTime: _startTime,
@@ -147,11 +163,18 @@ const useVesting = (refreshTrigger) => {
       })
     }
     const canClaimText = fb4(cBN(canClaim).toString(10), false, 18)
+    const canClaim_1_Text = fb4(cBN(canClaim_1).toString(10), false, 18)
+    const canClaim_2_Text = fb4(cBN(canClaim_2).toString(10), false, 18)
+
     setData((pre) => {
       return {
         ...pre,
         canClaim,
         canClaimText,
+        canClaim_1,
+        canClaim_1_Text,
+        canClaim_2,
+        canClaim_2_Text,
         claimedAmount,
         claimedAmountInWei,
         totalClaimAbleInWei,

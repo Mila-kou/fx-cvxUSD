@@ -47,8 +47,8 @@ export default function SDFXN() {
   }
 
   const data = {
-    canClaim,
-    claiming,
+    canClaim_2: canClaim,
+    canClaim_2_Text: canClaimText,
     handleClaim,
 
     totalClaimAble,
