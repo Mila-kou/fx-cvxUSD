@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Modal, Checkbox } from 'antd'
 import moment from 'moment'
 import { cBN, fb4, checkNotZoroNum } from 'utils'
@@ -7,44 +7,67 @@ import Button from '@/components/Button'
 import Tabs from '@/modules/home/components/Tabs'
 import styles from './styles.module.scss'
 import useVesting from '../../controller/useVesting'
+import { useGlobal } from '@/contexts/GlobalProvider'
 
 export default function ConvertModal({ onCancel, converting, handleConvert }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [showDetail, setShowDetail] = useState(false)
   const [selected, setSelected] = useState([])
   const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const { cvxFXN_sdFXN_apy } = useGlobal()
   const {
     newList,
     handleClaim: handleClaimFn,
     handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
 
+  console.log('cvxFXN_sdFXN_apy--', cvxFXN_sdFXN_apy)
+  const getApy = useCallback(
+    (type, tokenName) => {
+      let _apy = 0
+      if (cvxFXN_sdFXN_apy.cvxFXN) {
+        const _typeData = cvxFXN_sdFXN_apy[type]
+        if (tokenName == 'All') {
+          _apy = _typeData.reduce((old, item) => {
+            return old + item.apy * 1
+          }, 0)
+        } else {
+          const _itemObj = _typeData.find((item) => item.tokenName == tokenName)
+          if (_itemObj) {
+            _apy = _itemObj.apy
+          }
+        }
+      }
+      return _apy
+    },
+    [cvxFXN_sdFXN_apy]
+  )
   const strategy = [
     {
       title: 'cvxFXN',
-      apy: '100',
+      apy: getApy('cvxFXN', 'All'),
       rewards: [
         {
           token: 'CVX',
-          apy: '100',
+          apy: getApy('cvxFXN', 'cvx'),
         },
         {
           token: 'FXN',
-          apy: '0',
+          apy: getApy('cvxFXN', 'FXN'),
         },
         {
           token: 'wstETH',
-          apy: '0',
+          apy: getApy('cvxFXN', 'wstETH'),
         },
       ],
     },
     {
       title: 'sdFXN',
-      apy: '100',
+      apy: getApy('sdFXN', 'All'),
       rewards: [
         {
           token: 'SDT',
-          apy: '100',
+          apy: getApy('sdFXN', 'SDT'),
         },
       ],
     },

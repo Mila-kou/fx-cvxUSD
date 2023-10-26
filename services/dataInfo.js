@@ -28,3 +28,8 @@ export const getLpPrice = () =>
   fetcher(`${_fetchUrl}/api/lp/price`)
     .then((res) => res.data)
     .catch(() => ({}))
+
+export const getFX_cvxFXN_sdFXN_apy = () =>
+  fetcher(`${_fetchUrl}/api1/getFX_cvxFXN_sdFXN_apy`)
+    .then((res) => res.data)
+    .catch(() => ({}))

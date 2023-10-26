@@ -20,6 +20,7 @@ import {
   getConvexVaultsAPY,
   getConcentratorInit,
   getLpPrice,
+  getFX_cvxFXN_sdFXN_apy,
 } from '@/services/dataInfo'
 import useInfo from '@/modules/home/hooks/useInfo'
 import stabilityPoolUseInfo from '@/modules/stabilityPool/hooks/h_useInfo'
@@ -51,6 +52,7 @@ function GlobalProvider({ children }) {
     { data: concentratorInitData, refetch: refetch4 },
     { data: lpPrice, refetch: refetch5 },
     { data: stETHRate, refetch: refetch6 },
+    { data: cvxFXN_sdFXN_apy, refetch: refetch7 },
   ] = useQueries({
     queries: [
       {
@@ -83,6 +85,12 @@ function GlobalProvider({ children }) {
         refetchInterval: 600000,
         initialData: 1,
       },
+      {
+        queryKey: ['cvxFXN_sdFXN_apy'],
+        queryFn: getFX_cvxFXN_sdFXN_apy,
+        refetchInterval: 600000,
+        initialData: {},
+      },
     ],
   })
 
@@ -105,6 +113,7 @@ function GlobalProvider({ children }) {
       refetch4()
       refetch5()
       refetch6()
+      refetch7()
     },
     [blockNumber],
     { wait: 30000 }
@@ -227,6 +236,7 @@ function GlobalProvider({ children }) {
       concentratorInitData,
       ifoVaultWithdrawFee,
       stETHRate,
+      cvxFXN_sdFXN_apy,
     }),
     [
       theme,
@@ -247,6 +257,7 @@ function GlobalProvider({ children }) {
       ConvexVaultsAPY,
       concentratorInitData,
       ifoVaultWithdrawFee,
+      cvxFXN_sdFXN_apy,
     ]
   )
 
