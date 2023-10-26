@@ -21,7 +21,6 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
 
-  console.log('cvxFXN_sdFXN_apy--', cvxFXN_sdFXN_apy)
   const getApy = useCallback(
     (type, tokenName) => {
       let _apy = 0
@@ -77,8 +76,9 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     let _total_batchs_amonut = cBN(0)
     if (newList && newList.length) {
       const _newList = newList.filter((item) => {
-        if (item.managerIndex * 1 == 0) {
-          _total_batchs_amonut = _total_batchs_amonut.plus(item.vestingAmount)
+        const { lastClaimTime, managerIndex, lastAmount } = item
+        if (managerIndex * 1 == 0 && cBN(lastAmount).gt(0)) {
+          _total_batchs_amonut = _total_batchs_amonut.plus(item.lastAmount)
           return true
         }
       })
@@ -170,7 +170,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
                 onChange={onChange}
               />
               <div className="flex-1 text-[16px]">{item.endTime_text}</div>
-              <div className="text-[16px]">{fb4(item.vestingAmount)} FXN</div>
+              <div className="text-[16px]">{fb4(item.lastAmount)} FXN</div>
             </div>
           ))}
         </div>

@@ -58,11 +58,15 @@ const useVesting = (refreshTrigger) => {
         } = item
         let _claimedAmount = 0
         if (lastClaimTime && cBN(lastClaimTime).gt(_startTime)) {
-          _claimedAmount = cBN(lastClaimTime)
-            .minus(_startTime)
-            .div(cBN(_endTime).minus(_startTime))
-            .times(_vestingAmount)
-            .toFixed(0)
+          if (cBN(lastClaimTime).gt(_endTime)) {
+            _claimedAmount = _vestingAmount
+          } else {
+            _claimedAmount = cBN(lastClaimTime)
+              .minus(_startTime)
+              .div(cBN(_endTime).minus(_startTime))
+              .times(_vestingAmount)
+              .toFixed(0)
+          }
         }
 
         if (latestTime == 0 || _endTime * 1 > latestTime * 1) {
@@ -162,14 +166,17 @@ const useVesting = (refreshTrigger) => {
           fb4(_vestingAmount)
         )
         _newItem.index = index
-        const _percent =
+        let _percent =
           ((current.valueOf() - _startTime * 1000) /
             (_endTime * 1000 - _startTime * 1000)) *
           100
-        _newItem.vestingAmountPercent =
-          _percent >= 100
-            ? `100%`
-            : `${_percent <= 0 ? '0.00' : _percent.toFixed(2)}%`
+        _percent = Math.min(100, _percent)
+        _percent = Math.max(0, _percent)
+        _newItem.vestingAmountPercent = `${_percent.toFixed(2)}%`
+        _newItem.lastAmount = cBN(_vestingAmount)
+          .times(100 - _percent)
+          .div(100)
+          .toFixed(0)
         newList.push(_newItem)
         if (managerIndex * 1 == 1) {
           newList_convex.push(_newItem)
