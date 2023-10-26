@@ -33,7 +33,7 @@ export default function SDFXN() {
     startTimeText,
     latestTimeText,
   } = useMemo(() => {
-    return getBatchsInfo(newList_stakeDao)
+    return getBatchsInfo(newList_stakeDao, '2')
   }, [newList_stakeDao])
 
   const handleClaim = async () => {

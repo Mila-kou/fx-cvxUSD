@@ -34,7 +34,7 @@ export default function CVXFXN() {
     startTimeText,
     latestTimeText,
   } = useMemo(() => {
-    return getBatchsInfo(newList_convex)
+    return getBatchsInfo(newList_convex, '1')
   }, [newList_convex])
 
   console.log('newList_convex--', newList_convex)
