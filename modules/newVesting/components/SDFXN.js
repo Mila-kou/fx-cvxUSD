@@ -4,7 +4,7 @@ import useVesting from '../controller/useVesting'
 import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
-import { fb4 } from '@/utils/index'
+import { checkNotZoroNum, fb4 } from '@/utils/index'
 
 export default function SDFXN() {
   const { currentAccount } = useWeb3()
@@ -12,8 +12,8 @@ export default function SDFXN() {
   const [claimRewarding, setClaimRewarding] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const {
-    canClaim,
-    canClaimText,
+    canClaim_2: canClaim,
+    canClaim_2_Text: canClaimText,
     statkeDaoRewards,
     getBatchsInfo,
     newList_stakeDao,

@@ -18,7 +18,8 @@ const useVestingData = () => {
 
   const fetchUserVesting = useCallback(async () => {
     try {
-      const { getUserVest, vested, claim } = ManageableVestingContract.methods
+      const { getUserVest, vested, claim, proxy } =
+        ManageableVestingContract.methods
       const { claimableRewards, balanceOf: cvxFxnStakingBalanceOf } =
         Convex_cvxFxnStakingContract.methods
       const { claimable_reward, balanceOf: sdFxnStakingBalanceOf } =
@@ -26,29 +27,24 @@ const useVestingData = () => {
       const canClaim_0 = await claim().call({ from: _currentAccount })
       const canClaim_1 = await claim(1).call({ from: _currentAccount })
       const canClaim_2 = await claim(2).call({ from: _currentAccount })
+      const propyUser = await proxy(_currentAccount).call({
+        from: _currentAccount,
+      })
       const apis = [
         getUserVest(_currentAccount),
         vested(_currentAccount),
-        claimableRewards(_currentAccount),
-        claimable_reward(_currentAccount, config.tokens.SDT),
-        cvxFxnStakingBalanceOf(_currentAccount),
-        sdFxnStakingBalanceOf(_currentAccount),
+        claimableRewards(propyUser),
+        claimable_reward(propyUser, config.tokens.SDT),
       ]
-      const [
+      const [userVest, vestedData, convexRewards, statkeDaoRewards] =
+        await multiCallsV2(apis)
+      console.log(
+        'userVest--vestedData--convexRewards--statkeDaoRewards--cvxFxnStakingBalances--sdFxnStakingBalances--',
         userVest,
         vestedData,
         convexRewards,
-        statkeDaoRewards,
-        cvxFxnStakingBalances,
-        sdFxnStakingBalances,
-      ] = await multiCallsV2(apis)
-      // console.log(
-      //   'userVest--vestedData--convexRewards--statkeDaoRewards--',
-      //   userVest,
-      //   vestedData,
-      //   convexRewards,
-      //   statkeDaoRewards
-      // )
+        statkeDaoRewards
+      )
       return {
         canClaim: canClaim_0,
         canClaim_1,
@@ -57,8 +53,6 @@ const useVestingData = () => {
         vestedData,
         convexRewards,
         statkeDaoRewards,
-        cvxFxnStakingBalances,
-        sdFxnStakingBalances,
       }
     } catch (error) {
       console.log('useVestingData', error)
