@@ -50,12 +50,21 @@ const useVesting = (refreshTrigger) => {
       BatchList.forEach((item) => {
         const {
           cancleTime,
-          claimedAmount: _claimedAmount,
+          lastClaimTime,
           // endTime: _endTime,
           finishTime: _endTime,
           startTime: _startTime,
           vestingAmount: _vestingAmount,
         } = item
+        let _claimedAmount = 0
+        if (lastClaimTime && cBN(lastClaimTime).gt(_startTime)) {
+          _claimedAmount = cBN(lastClaimTime)
+            .minus(_startTime)
+            .div(cBN(_endTime).minus(_startTime))
+            .times(_vestingAmount)
+            .toFixed(0)
+        }
+
         if (latestTime == 0 || _endTime * 1 > latestTime * 1) {
           if (!checkNotZoroNum(cancleTime)) {
             latestTime = _endTime
@@ -72,6 +81,16 @@ const useVesting = (refreshTrigger) => {
           totalClaimAbleInWei = totalClaimAbleInWei.plus(_claimedAmount)
         }
         claimedAmountInWei = claimedAmountInWei.plus(_claimedAmount)
+        // console.log(
+        //   'totalClaimAbleInWei--claimedAmountInWei---',
+        //   _claimedAmount,
+        //   lastClaimTime,
+        //   _startTime,
+        //   _endTime,
+        //   _vestingAmount,
+        //   totalClaimAbleInWei.toFixed(0),
+        //   claimedAmountInWei.toFixed(0)
+        // )
       })
     }
 
@@ -205,7 +224,7 @@ const useVesting = (refreshTrigger) => {
       loadingFn(true)
       let apiCall = ManageableVestingContract.methods.claim()
       if (_index) {
-        apiCall = ManageableVestingContract.methods.claim(2)
+        apiCall = ManageableVestingContract.methods.claim(_index)
       }
 
       const estimatedGas = await apiCall.estimateGas({
