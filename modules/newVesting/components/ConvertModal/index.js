@@ -28,12 +28,19 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
         const _typeData = cvxFXN_sdFXN_apy[type]
         if (tokenName == 'All') {
           _apy = _typeData.reduce((old, item) => {
+            if (item.tokenName == 'SDT') {
+              return old + item.apy / 2.5
+            }
             return old + item.apy * 1
           }, 0)
         } else {
           const _itemObj = _typeData.find((item) => item.tokenName == tokenName)
           if (_itemObj) {
-            _apy = _itemObj.apy
+            if (tokenName == 'SDT') {
+              _apy = _itemObj.apy / 2.5
+            } else {
+              _apy = _itemObj.apy
+            }
           }
         }
       }
@@ -44,29 +51,29 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
   const strategy = [
     {
       title: 'cvxFXN',
-      apy: getApy('cvxFXN', 'All'),
+      apy: cBN(getApy('cvxFXN', 'All')).toFixed(2),
       rewards: [
         {
           token: 'CVX',
-          apy: getApy('cvxFXN', 'cvx'),
+          apy: cBN(getApy('cvxFXN', 'cvx')).toFixed(2),
         },
         {
           token: 'FXN',
-          apy: getApy('cvxFXN', 'FXN'),
+          apy: cBN(getApy('cvxFXN', 'FXN')).toFixed(2),
         },
         {
           token: 'wstETH',
-          apy: getApy('cvxFXN', 'wstETH'),
+          apy: cBN(getApy('cvxFXN', 'wstETH')).toFixed(2),
         },
       ],
     },
     {
       title: 'sdFXN',
-      apy: getApy('sdFXN', 'All'),
+      apy: cBN(getApy('sdFXN', 'All')).toFixed(2),
       rewards: [
         {
           token: 'SDT',
-          apy: getApy('sdFXN', 'SDT'),
+          apy: cBN(getApy('sdFXN', 'SDT')).toFixed(2),
         },
       ],
     },
@@ -133,10 +140,10 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
             onClick={() => setActiveIndex(index)}
           >
             <div className="pt-[8px]">
-              <div>APY: {item.apy}%</div>
+              <div>APY: {item.apy} %</div>
               {item.rewards.map((reward) => (
                 <div className="ml-[16px] text-[16px]">
-                  - {reward.token}: {reward.apy}%
+                  - {reward.token}: {reward.apy} %
                 </div>
               ))}
             </div>
