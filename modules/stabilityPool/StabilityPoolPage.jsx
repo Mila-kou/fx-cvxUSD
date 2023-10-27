@@ -190,7 +190,7 @@ export default function StabilityPoolPage() {
           {`CR < 130% fETH will be used for rebalance`} {` `}
           <Tooltip
             placement="topLeft"
-            title="The deposited, unlocking, unclaimed fETH will be used for rebalance. Unlocking takes 14 days from the last unlocking transaction."
+            title="The deposited, unlocking, unclaimed fETH will be used for rebalance. Unlocking takes 1 day from the last unlocking transaction."
             arrow
             color="#000"
             overlayInnerStyle={{ width: '300px' }}

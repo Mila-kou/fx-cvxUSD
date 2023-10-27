@@ -134,7 +134,7 @@ export default function FAQ({ open, onCancel }) {
                 notes:
               </p>
               <p>
-                * 2-week waiting period after latest withdraw request, before
+                * 1-day waiting period after latest withdraw request, before
                 withdrawal-requested fETH is claimable
               </p>
               <p>
