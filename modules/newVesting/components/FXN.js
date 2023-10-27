@@ -57,10 +57,11 @@ export default function FXN() {
       })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'Manage',
-        action: 'Manage',
+        key: 'Convert',
+        action: 'Convert',
       })
       setClaiming(false)
+      setConverting(false)
       setRefreshTrigger((prev) => prev + 1)
     } catch (error) {
       setClaiming(false)
