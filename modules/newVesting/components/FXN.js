@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
 import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
@@ -15,17 +15,26 @@ export default function FXN() {
   const {
     canClaim,
     canClaimText,
-    totalClaimAble,
-    notYetVestedText,
-    newList,
-    startTime,
-    startTimeText,
-    latestTime,
-    latestTimeText,
-    claimedAmount,
-    claimedAmountInWei,
+    getBatchsInfo,
+    newList_fx,
     handleClaim: handleClaimFn,
   } = useVesting(refreshTrigger)
+
+  const {
+    startTime,
+    latestTime,
+    claimedAmountInWei,
+    totalClaimAbleInWei,
+    claimedAmount,
+    totalClaimAble,
+    notYetVested,
+    notYetVestedText,
+    startTimeText,
+    latestTimeText,
+  } = useMemo(() => {
+    return getBatchsInfo(newList_fx, '0')
+  }, [newList_fx])
+
   const { contract: ManageableVestingContract } = useFX_ManageableVesting()
 
   const handleClaim = async () => {

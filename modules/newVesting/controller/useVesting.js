@@ -41,6 +41,27 @@ const useVesting = (refreshTrigger) => {
     latestTimeText: '',
   })
 
+  const getClaimedInfo = (item) => {
+    const {
+      lastClaimTime,
+      finishTime: _endTime,
+      startTime: _startTime,
+      vestingAmount: _vestingAmount,
+    } = item
+    let _claimedAmount = 0
+    if (lastClaimTime && cBN(lastClaimTime).gt(_startTime)) {
+      if (cBN(lastClaimTime).gt(_endTime)) {
+        _claimedAmount = _vestingAmount
+      } else {
+        _claimedAmount = cBN(lastClaimTime)
+          .minus(_startTime)
+          .div(cBN(_endTime).minus(_startTime))
+          .times(_vestingAmount)
+          .toFixed(0)
+      }
+    }
+    return _claimedAmount
+  }
   const getBatchsInfo = (BatchList, type = 'all') => {
     let startTime = 0
     let latestTime = 0
@@ -56,18 +77,7 @@ const useVesting = (refreshTrigger) => {
           startTime: _startTime,
           vestingAmount: _vestingAmount,
         } = item
-        let _claimedAmount = 0
-        if (lastClaimTime && cBN(lastClaimTime).gt(_startTime)) {
-          if (cBN(lastClaimTime).gt(_endTime)) {
-            _claimedAmount = _vestingAmount
-          } else {
-            _claimedAmount = cBN(lastClaimTime)
-              .minus(_startTime)
-              .div(cBN(_endTime).minus(_startTime))
-              .times(_vestingAmount)
-              .toFixed(0)
-          }
-        }
+        const _claimedAmount = getClaimedInfo(item)
 
         if (latestTime == 0 || _endTime * 1 > latestTime * 1) {
           if (!checkNotZoroNum(cancleTime)) {
@@ -83,7 +93,7 @@ const useVesting = (refreshTrigger) => {
         if (!checkNotZoroNum(cancleTime)) {
           totalClaimAbleInWei = totalClaimAbleInWei.plus(_vestingAmount)
         } else {
-          totalClaimAbleInWei = totalClaimAbleInWei.plus(_vestingAmount)
+          totalClaimAbleInWei = totalClaimAbleInWei.plus(_claimedAmount)
         }
         claimedAmountInWei = claimedAmountInWei.plus(_claimedAmount)
         // console.log(
@@ -99,23 +109,30 @@ const useVesting = (refreshTrigger) => {
       })
     }
     let _canClaim = canClaim
+    let _totalClaimAbleInWei = totalClaimAbleInWei
     switch (type) {
       case '1':
         _canClaim = canClaim_1
+        _totalClaimAbleInWei = cvxFxnStakingBalances
         break
       case '2':
         _canClaim = canClaim_2
+        _totalClaimAbleInWei = sdFxnStakingBalances
         break
       default:
         _canClaim = canClaim
+        _totalClaimAbleInWei = totalClaimAbleInWei
         break
     }
     // const claimable = claimableInWei.shiftedBy(-18).toString(10)
     const claimedAmount = fb4(cBN(claimedAmountInWei).toString(10), false, 18)
-    const totalClaimAble = fb4(cBN(totalClaimAbleInWei).toString(10), false, 18)
-    const notYetVested = cBN(totalClaimAbleInWei)
-      .minus(_canClaim)
-      .minus(claimedAmountInWei)
+    const totalClaimAble = fb4(
+      cBN(_totalClaimAbleInWei).toString(10),
+      false,
+      18
+    )
+    const notYetVested = cBN(_totalClaimAbleInWei).minus(_canClaim)
+    // .minus(claimedAmountInWei)
     const notYetVestedText = checkNotZoroNumOption(
       notYetVested,
       fb4(notYetVested)
@@ -144,6 +161,7 @@ const useVesting = (refreshTrigger) => {
     let hasCVXFXN = false
     let hasSDFXN = false
     const newList = []
+    const newList_fx = []
     const newList_convex = []
     const newList_stakeDao = []
     const {
@@ -189,12 +207,19 @@ const useVesting = (refreshTrigger) => {
           .times(100 - _percent)
           .div(100)
           .toFixed(0)
+        const _claimedAmount = getClaimedInfo(item)
+        _newItem.claimedAmount = _claimedAmount
+        _newItem.unClaimedAmount = cBN(_vestingAmount)
+          .minus(_claimedAmount)
+          .toFixed(0)
+
         newList.push(_newItem)
         if (managerIndex * 1 == 1) {
           newList_convex.push(_newItem)
-        }
-        if (managerIndex * 1 == 2) {
+        } else if (managerIndex * 1 == 2) {
           newList_stakeDao.push(_newItem)
+        } else {
+          newList_fx.push(_newItem)
         }
         if (newList_convex.length) {
           hasCVXFXN = true
@@ -230,6 +255,7 @@ const useVesting = (refreshTrigger) => {
         startTimeText,
         convexRewards,
         statkeDaoRewards,
+        newList_fx,
         newList_convex,
         newList_stakeDao,
         hasCVXFXN,

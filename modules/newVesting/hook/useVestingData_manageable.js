@@ -24,26 +24,40 @@ const useVestingData = () => {
         Convex_cvxFxnStakingContract.methods
       const { claimable_reward, balanceOf: sdFxnStakingBalanceOf } =
         StakeDao_sdFxnStakingContract.methods
+
       const canClaim_0 = await claim().call({ from: _currentAccount })
       const canClaim_1 = await claim(1).call({ from: _currentAccount })
       const canClaim_2 = await claim(2).call({ from: _currentAccount })
       const propyUser = await proxy(_currentAccount).call({
         from: _currentAccount,
       })
+      const _cvxFxnStakingBalanceOf = await cvxFxnStakingBalanceOf(
+        propyUser
+      ).call({ from: propyUser })
       const apis = [
         getUserVest(_currentAccount),
         vested(_currentAccount),
         claimableRewards(propyUser),
         claimable_reward(propyUser, config.tokens.SDT),
+        cvxFxnStakingBalanceOf(propyUser),
+        sdFxnStakingBalanceOf(propyUser),
       ]
-      const [userVest, vestedData, convexRewards, statkeDaoRewards] =
-        await multiCallsV2(apis)
+      const [
+        userVest,
+        vestedData,
+        convexRewards,
+        statkeDaoRewards,
+        cvxFxnStakingBalances,
+        sdFxnStakingBalances,
+      ] = await multiCallsV2(apis)
       console.log(
         'userVest--vestedData--convexRewards--statkeDaoRewards--cvxFxnStakingBalances--sdFxnStakingBalances--',
         userVest,
         vestedData,
         convexRewards,
-        statkeDaoRewards
+        statkeDaoRewards,
+        cvxFxnStakingBalances,
+        sdFxnStakingBalances
       )
       return {
         canClaim: canClaim_0,
@@ -53,6 +67,8 @@ const useVestingData = () => {
         vestedData,
         convexRewards,
         statkeDaoRewards,
+        cvxFxnStakingBalances,
+        sdFxnStakingBalances,
       }
     } catch (error) {
       console.log('useVestingData', error)

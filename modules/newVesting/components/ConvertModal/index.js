@@ -83,9 +83,9 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     let _total_batchs_amonut = cBN(0)
     if (newList && newList.length) {
       const _newList = newList.filter((item) => {
-        const { lastClaimTime, managerIndex, lastAmount } = item
-        if (managerIndex * 1 == 0 && cBN(lastAmount).gt(0)) {
-          _total_batchs_amonut = _total_batchs_amonut.plus(item.lastAmount)
+        const { managerIndex, unClaimedAmount } = item
+        if (managerIndex * 1 == 0 && cBN(unClaimedAmount).gt(0)) {
+          _total_batchs_amonut = _total_batchs_amonut.plus(unClaimedAmount)
           return true
         }
       })
@@ -177,7 +177,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
                 onChange={onChange}
               />
               <div className="flex-1 text-[16px]">{item.endTime_text}</div>
-              <div className="text-[16px]">{fb4(item.lastAmount)} FXN</div>
+              <div className="text-[16px]">{fb4(item.unClaimedAmount)} FXN</div>
             </div>
           ))}
         </div>
