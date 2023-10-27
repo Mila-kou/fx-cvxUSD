@@ -51,10 +51,10 @@ export default function Cell({
       title: 'Not Yet Vested',
       value: notYetVestedText,
     },
-    {
-      title: 'Claimed Amount',
-      value: claimedAmount,
-    },
+    // {
+    //   title: 'Claimed Amount',
+    //   value: claimedAmount,
+    // },
   ]
 
   return (
