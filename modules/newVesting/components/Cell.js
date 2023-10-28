@@ -38,7 +38,7 @@ export default function Cell({
 
   canClaimReward,
 }) {
-  const itemData = [
+  let itemData = [
     {
       title: `Total No of ${symbol} Tokens`,
       value: totalClaimAble,
@@ -56,7 +56,15 @@ export default function Cell({
     //   value: claimedAmount,
     // },
   ]
-
+  if (symbol == 'FXN') {
+    itemData = [
+      ...itemData,
+      {
+        title: 'Claimed Amount',
+        value: claimedAmount,
+      },
+    ]
+  }
   return (
     <div className={styles.cell}>
       <div>

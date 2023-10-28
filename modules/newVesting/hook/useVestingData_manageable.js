@@ -57,7 +57,10 @@ const useVestingData = () => {
         convexRewards,
         statkeDaoRewards,
         cvxFxnStakingBalances,
-        sdFxnStakingBalances
+        sdFxnStakingBalances,
+        canClaim_0,
+        canClaim_1,
+        canClaim_2
       )
       return {
         canClaim: canClaim_0,

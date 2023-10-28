@@ -96,16 +96,6 @@ const useVesting = (refreshTrigger) => {
           totalClaimAbleInWei = totalClaimAbleInWei.plus(_claimedAmount)
         }
         claimedAmountInWei = claimedAmountInWei.plus(_claimedAmount)
-        // console.log(
-        //   'totalClaimAbleInWei--claimedAmountInWei---',
-        //   _claimedAmount,
-        //   lastClaimTime,
-        //   _startTime,
-        //   _endTime,
-        //   _vestingAmount,
-        //   totalClaimAbleInWei.toFixed(0),
-        //   claimedAmountInWei.toFixed(0)
-        // )
       })
     }
     let _canClaim = canClaim
@@ -131,8 +121,13 @@ const useVesting = (refreshTrigger) => {
       false,
       18
     )
-    const notYetVested = cBN(_totalClaimAbleInWei).minus(_canClaim)
-    // .minus(claimedAmountInWei)
+    let notYetVested = cBN(_totalClaimAbleInWei).minus(_canClaim)
+    if (type == '0') {
+      notYetVested = cBN(_totalClaimAbleInWei)
+        .minus(_canClaim)
+        .minus(claimedAmountInWei)
+    }
+
     const notYetVestedText = checkNotZoroNumOption(
       notYetVested,
       fb4(notYetVested)
