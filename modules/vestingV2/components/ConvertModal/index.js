@@ -11,7 +11,7 @@ import { useGlobal } from '@/contexts/GlobalProvider'
 
 export default function ConvertModal({ onCancel, converting, handleConvert }) {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [showDetail, setShowDetail] = useState(false)
+  const [showDetail, setShowDetail] = useState(true)
   const [selected, setSelected] = useState([])
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const { cvxFXN_sdFXN_apy } = useGlobal()

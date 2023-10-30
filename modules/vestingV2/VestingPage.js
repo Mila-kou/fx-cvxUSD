@@ -11,6 +11,14 @@ export default function VestingPage() {
   const { theme } = useGlobal()
   const { newList, hasCVXFXN, hasSDFXN } = useVesting()
 
+  const getSymbol = (type) => {
+    if (type * 1 == 1) {
+      return 'cvxFXN'
+    } else if (type * 1 == 2) {
+      return 'sdFXN'
+    }
+    return 'FXN'
+  }
   return (
     <div className={styles.container}>
       <FXN />
@@ -44,7 +52,7 @@ export default function VestingPage() {
                       {item.endTime_text}
                     </td>
                     <td className={cn('border py-4 text-center')}>
-                      {item.vestingAmount_text} FXN
+                      {item.vestingAmount_text} {getSymbol(item.managerIndex)}
                     </td>
                     <td className={cn('border py-4 text-center')}>
                       {item.vestingAmountPercent}
