@@ -1,17 +1,10 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
+import moment from 'moment'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
-import {
-  useFETH,
-  useXETH,
-  useFX_Market,
-  useFX_stETHTreasury,
-  useFX_stETHGateway,
-} from '@/hooks/useContracts'
 import { useGlobal } from '@/contexts/GlobalProvider'
 import useFxCommon from '@/modules/home/hooks/useFxCommon'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
-import moment from 'moment'
 
 const useStabiltyPool_c = () => {
   const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo } = useGlobal()
@@ -141,7 +134,6 @@ const useStabiltyPool_c = () => {
           .times(stabilityPoolInfo.userInfo.unlockedBalanceOfRes)
           .div(1e18)
       }
-      const userUnlockedBalanceTvl_text = fb4(userUnlockedBalanceTvl, false, 0)
 
       let userUnlockingBalance = checkNotZoroNumOption(
         stabilityPoolInfo.userInfo?.unlockingBalanceOfRes?._balance,
@@ -166,11 +158,6 @@ const useStabiltyPool_c = () => {
           .times(stabilityPoolInfo.userInfo.unlockingBalanceOfRes?._balance)
           .div(1e18)
       }
-      const userUnlockingBalanceTvl_text = fb4(
-        userUnlockingBalanceTvl,
-        false,
-        0
-      )
 
       const myTotalValue = userDepositTvl
         .plus(userWstETHClaimableTvl)
@@ -191,11 +178,9 @@ const useStabiltyPool_c = () => {
         userWstETHClaimable,
         userWstETHClaimableTvl_text,
         myTotalValue_text,
-        userUnlockingBalanceTvl_text,
         userUnlockingBalance,
         userUnlockingUnlockAt,
         userUnlockedBalanceTvl,
-        userUnlockedBalanceTvl_text,
         userUnlockedBalance,
         apy,
       }
@@ -210,9 +195,7 @@ const useStabiltyPool_c = () => {
         userWstETHClaimable: '-',
         userWstETHClaimableTvl_text: '-',
         myTotalValue_text: '-',
-        userUnlockingBalanceTvl_text: '-',
         userUnlockingBalance: '-',
-        userUnlockedBalanceTvl_text: '-',
         userUnlockedBalance: '-',
       }
     }

@@ -1,16 +1,6 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 import { useQueries } from '@tanstack/react-query'
-import moment from 'moment'
-import {
-  useContract,
-  useErc20Token,
-  useFETH,
-  useFX_Market,
-  useFX_stETHTreasury,
-  useFX_stabilityPool,
-  useXETH,
-  useWstETH,
-} from 'hooks/useContracts'
+import { useFX_stabilityPool, useWstETH } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
@@ -20,24 +10,28 @@ const useInfo = () => {
   const multiCallsV2 = useMutiCallV2()
   const { contract: fx_stabilityPoolContract } = useFX_stabilityPool()
   const { contract: wstETHContract } = useWstETH()
-  const [maxAbleFToken, setMaxAbleFToken] = useState({})
 
   const fetchBaseInfo = useCallback(async () => {
-    const { totalSupply: stabilityPoolTotalSupplyFn, totalUnlocking, extraRewardState: extraRewardStateFn, baseRewardToken: rewardsFn } = fx_stabilityPoolContract.methods
+    const {
+      totalSupply: stabilityPoolTotalSupplyFn,
+      totalUnlocking,
+      extraRewardState: extraRewardStateFn,
+      baseRewardToken: rewardsFn,
+    } = fx_stabilityPoolContract.methods
     try {
       const apiCalls = [
         stabilityPoolTotalSupplyFn(),
         totalUnlocking(),
         rewardsFn(),
         extraRewardStateFn(config.tokens.wstETH),
-        wstETHContract.methods.tokensPerStEth()
+        wstETHContract.methods.tokensPerStEth(),
       ]
       const [
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,
         rewardsRes,
         extraRewardState,
-        tokensPerStEth
+        tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -57,7 +51,7 @@ const useInfo = () => {
         totalUnlockingRes,
         rewardsRes,
         extraRewardState,
-        tokensPerStEth
+        tokensPerStEth,
       }
     } catch (error) {
       console.log('baseInfoError==>', error)
@@ -66,8 +60,13 @@ const useInfo = () => {
   }, [fx_stabilityPoolContract, multiCallsV2, _currentAccount])
 
   const fetchUserInfo = useCallback(async () => {
-
-    const { updateAccountSnapshot, balanceOf: stabilityPoolBalanceOfFn, unlockedBalanceOf: unlockedBalanceOfFn, unlockingBalanceOf: unlockingBalanceOfFn, claimable: claimableFn } = fx_stabilityPoolContract.methods
+    const {
+      updateAccountSnapshot,
+      balanceOf: stabilityPoolBalanceOfFn,
+      unlockedBalanceOf: unlockedBalanceOfFn,
+      unlockingBalanceOf: unlockingBalanceOfFn,
+      claimable: claimableFn,
+    } = fx_stabilityPoolContract.methods
     console.log('_currentAccount---', _currentAccount)
 
     try {
@@ -76,14 +75,14 @@ const useInfo = () => {
         stabilityPoolBalanceOfFn(_currentAccount),
         unlockedBalanceOfFn(_currentAccount),
         unlockingBalanceOfFn(_currentAccount),
-        claimableFn(_currentAccount, config.tokens.wstETH)
+        claimableFn(_currentAccount, config.tokens.wstETH),
       ]
       const [
         ,
         stabilityPoolBalanceOfRes,
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,
-        claimableRes
+        claimableRes,
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -101,18 +100,13 @@ const useInfo = () => {
         stabilityPoolBalanceOfRes,
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,
-        claimableRes
+        claimableRes,
       }
     } catch (error) {
       console.log('UserInfoError==>', error)
       return {}
     }
-  }, [
-    fx_stabilityPoolContract,
-    multiCallsV2,
-    _currentAccount,
-    web3,
-  ])
+  }, [fx_stabilityPoolContract, multiCallsV2, _currentAccount, web3])
 
   const [
     { data: stabilityPool_baseInfo, refetch: refetchBaseInfo },

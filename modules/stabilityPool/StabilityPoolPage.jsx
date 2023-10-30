@@ -8,25 +8,16 @@ import useWeb3 from '@/hooks/useWeb3'
 import Button from '@/components/Button'
 import DepositModal from './components/DepositModal'
 import WithdrawModal from './components/WithdrawModal'
-import UnlockingModal from './components/UnlockingModal'
 
 import { POOLS_LIST } from '@/config/aladdinVault'
 
 import styles from './styles.module.scss'
-import useStabiltyPool_c from './controller/c_stabiltyPool'
-import {
-  useFX_LiquidatorWithBonusToken,
-  useFX_stabilityPool,
-  useFX_stETHTreasury,
-} from '@/hooks/useContracts'
+import useStabiltyPool from './controller/stabiltyPool'
+import { useFX_stabilityPool } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
-import Warning from '../../public/images/warning.svg'
-// import Waiting from '../../public/images/waiting.svg'
-// <Waiting onClick={toggle} />
 
-// const ETHImg = '/tokens/crypto-icons-stack.svg#eth'
 const stETHImg = '/tokens/steth.svg'
 
 const item = POOLS_LIST[0]
@@ -34,9 +25,6 @@ const item = POOLS_LIST[0]
 export default function StabilityPoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
-  const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
-  const { contract: FX_LiquidatorWithBonusContract } =
-    useFX_LiquidatorWithBonusToken()
   const {
     stabilityPoolInfo,
     stabilityPoolTotalSupply,
@@ -48,34 +36,15 @@ export default function StabilityPoolPage() {
     userWstETHClaimable,
     userUnlockingBalance,
     userUnlockingUnlockAt,
-    userUnlockingBalanceTvl_text,
     userUnlockedBalance,
     userUnlockedBalanceTvl,
-    userUnlockedBalanceTvl_text,
     apy,
-  } = useStabiltyPool_c()
+  } = useStabiltyPool()
 
-  const [visible, { toggle }] = useToggle()
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
   const [claiming, setClaiming] = useState(false)
   const [unlocking, setUnlocking] = useState(false)
-  const [harvesting, setHarvesting] = useState(false)
-
-  const unlockingList = [
-    {
-      amount: '30,000',
-      unlockTime: '2023/09/30 08:00:23',
-    },
-    {
-      amount: '30,000',
-      unlockTime: '2023/09/30 08:00:23',
-    },
-    {
-      amount: '30,000',
-      unlockTime: '2023/09/30 08:00:23',
-    },
-  ]
 
   const handleDeposit = () => {
     if (!isAllReady) return
@@ -128,38 +97,6 @@ export default function StabilityPoolPage() {
       setClaiming(false)
       console.log('claim-error---', error)
       noPayableErrorAction(`error_claim`, error)
-    }
-  }
-
-  const handleHarvest = async () => {
-    if (!isAllReady) return
-    try {
-      setHarvesting(true)
-      const apiCall = FX_stETHTreasuryContract.methods.harvest()
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Harvest',
-      })
-      setHarvesting(false)
-    } catch (error) {
-      setHarvesting(false)
-      console.log('harvest-error---', error)
-      noPayableErrorAction(`error_harvest`, error)
-    }
-  }
-
-  const handleLiquidatorWithBonus = async () => {
-    try {
-      // const _totalFETH = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(stabilityPoolInfo.baseInfo?.totalUnlockingRes).toString(10)
-      const apiCall = FX_LiquidatorWithBonusContract.methods.liquidate(0)
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      const tx = await apiCall.send({ from: currentAccount, gas })
-      console.log('stabilityPool liquidate success---', tx)
-    } catch (error) {
-      console.log('stabilityPool liquidate error', error)
     }
   }
 
@@ -272,17 +209,6 @@ export default function StabilityPoolPage() {
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
-                {/*                 
-                <Button
-                  loading={harvesting}
-                  onClick={handleHarvest}
-                  type="second"
-                >
-                  Harvest
-                </Button>
-                <Button onClick={handleLiquidatorWithBonus} type="second">
-                  Liquidator
-                </Button> */}
               </div>
             </div>
 
@@ -308,15 +234,6 @@ export default function StabilityPoolPage() {
                 </Button>
               </div>
             </div>
-
-            {/* <div className={cn(styles.cell, 'mt-[20px]')}>
-              <img src={ETHImg} />
-              <div className={styles.cellContent}>
-                <p className="text-[16px]">fx Earned</p>
-                <p className="text-[24px]">{dollarText(userUnlockingBalanceTvl_text)}</p>
-                <p className="text-[16px]">{userUnlockingBalance} fETH</p>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
@@ -335,7 +252,6 @@ export default function StabilityPoolPage() {
           onCancel={() => setWithdrawVisible(false)}
         />
       )}
-      <UnlockingModal visible={visible} toggle={toggle} list={unlockingList} />
     </div>
   )
 }

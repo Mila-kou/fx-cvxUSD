@@ -37,12 +37,11 @@ const contracts = {
   fx_StabilityPool: '0x7d42f87D19D872B5d343aaC09D8436ab276F9d38',
 
   LiquidatorWithBonusToken: '0x2394b0433Bd5769Dc16FdBaf5d24f862fc855fFc',
-  wstETHWrapper: '0x0338B5CCEe1B9297d242A2f0836379470D2e857C'
+  wstETHWrapper: '0x0338B5CCEe1B9297d242A2f0836379470D2e857C',
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
-
 
 const tokens = {
   ...tokensInfo.tokens,
@@ -67,7 +66,7 @@ const zapTokens = {
     decimals: TOKENS_INFO.fETH[2],
     address: TOKENS_INFO.fETH[1],
     needZap: true,
-  }
+  },
 }
 
 export default {

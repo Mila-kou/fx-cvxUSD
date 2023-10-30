@@ -6,10 +6,8 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
 import { useContract, useFX_stabilityPool } from '@/hooks/useContracts'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
-import abi from '@/config/abi'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import styles from './styles.module.scss'
-import useStabiltyPool_c from '../../controller/c_stabiltyPool'
 
 export default function WithdrawModal(props) {
   const { onCancel, info, poolData } = props
@@ -50,7 +48,13 @@ export default function WithdrawModal(props) {
     }
   }
   const canWithdraw = useMemo(() => {
-    return !!(withdrawAmount * 1) && isAllReady && cBN(withdrawAmount).isLessThanOrEqualTo(userInfo.stabilityPoolBalanceOfRes)
+    return (
+      !!(withdrawAmount * 1) &&
+      isAllReady &&
+      cBN(withdrawAmount).isLessThanOrEqualTo(
+        userInfo.stabilityPoolBalanceOfRes
+      )
+    )
   }, [withdrawAmount, isAllReady])
 
   return (
