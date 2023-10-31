@@ -22,7 +22,7 @@ import {
   getLpPrice,
 } from '@/services/dataInfo'
 import useInfo from '@/modules/home/hooks/useInfo'
-import stabilityPoolUseInfo from '@/modules/stabilityPool/hooks/h_useInfo'
+import rebalancePoolUseInfo from '@/modules/rebalancePool/hooks/h_useInfo'
 import { getStETHRate } from '@/utils/stETHRate'
 
 const GlobalContext = createContext(null)
@@ -36,7 +36,7 @@ function GlobalProvider({ children }) {
   const refMenu2 = useRef(null)
 
   const fx_info = useInfo()
-  const stabilityPool_info = stabilityPoolUseInfo()
+  const stabilityPool_info = rebalancePoolUseInfo()
   const ethToken = useToken(config.tokens.eth)
   const stETHToken = useTokenBalance(config.tokens.stETH)
   const fETHToken = useTokenBalance(config.tokens.fETH)

@@ -22,7 +22,7 @@ const stETHImg = '/tokens/steth.svg'
 
 const item = POOLS_LIST[0]
 
-export default function StabilityPoolPage() {
+export default function RebalancePoolPage() {
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
   const {

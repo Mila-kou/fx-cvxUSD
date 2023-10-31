@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import StabilityPoolPage from '@/modules/stabilityPool/StabilityPoolPage'
+import RebalancePoolPage from '@/modules/rebalancePool/RebalancePoolPage'
 
 export default function StabilityPool() {
   return (
@@ -8,7 +8,7 @@ export default function StabilityPool() {
       <Head>
         <title>f(x) Protocol</title>
       </Head>
-      <StabilityPoolPage />
+      <RebalancePoolPage />
     </React.Fragment>
   )
 }
