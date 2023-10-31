@@ -6,8 +6,11 @@ import useFxCommon from '@/modules/home/hooks/useFxCommon'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
 
-const useStabiltyPool_c = () => {
-  const { stabilityPool_info: stabilityPoolInfo, fx_info: fxInfo } = useGlobal()
+const useStabiltyPool = (infoKey) => {
+  const globalState = useGlobal()
+  const fxInfo = globalState.fx_info
+  const stabilityPoolInfo = globalState[infoKey]
+
   const { current } = useWeb3()
   const { ethPrice } = useFxCommon()
   console.log(
@@ -16,7 +19,7 @@ const useStabiltyPool_c = () => {
     fxInfo,
     ethPrice
   )
-  const { extraRewardState, tokensPerStEth } = stabilityPoolInfo?.baseInfo
+  const { extraRewardState, tokensPerStEth } = stabilityPoolInfo?.baseInfo || {}
   const stETHRate = checkNotZoroNum(tokensPerStEth)
     ? cBN(1).div(cBN(tokensPerStEth).div(1e18)).toFixed(4)
     : 1
@@ -85,7 +88,7 @@ const useStabiltyPool_c = () => {
         0
       )
 
-      let userDeposit = checkNotZoroNumOption(
+      const userDeposit = checkNotZoroNumOption(
         stabilityPoolInfo.userInfo?.stabilityPoolBalanceOfRes,
         fb4(stabilityPoolInfo.userInfo.stabilityPoolBalanceOfRes)
       )
@@ -104,7 +107,7 @@ const useStabiltyPool_c = () => {
       const userWstETHClaimable_res = cBN(
         stabilityPoolInfo.userInfo?.claimableRes
       ).times(stETHRate)
-      let userWstETHClaimable = checkNotZoroNumOption(
+      const userWstETHClaimable = checkNotZoroNumOption(
         userWstETHClaimable_res,
         fb4(userWstETHClaimable_res)
       )
@@ -120,7 +123,7 @@ const useStabiltyPool_c = () => {
       }
       const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, false, 0)
 
-      let userUnlockedBalance = checkNotZoroNumOption(
+      const userUnlockedBalance = checkNotZoroNumOption(
         stabilityPoolInfo.userInfo?.unlockedBalanceOfRes,
         fb4(stabilityPoolInfo.userInfo.unlockedBalanceOfRes)
       )
@@ -135,11 +138,11 @@ const useStabiltyPool_c = () => {
           .div(1e18)
       }
 
-      let userUnlockingBalance = checkNotZoroNumOption(
+      const userUnlockingBalance = checkNotZoroNumOption(
         stabilityPoolInfo.userInfo?.unlockingBalanceOfRes?._balance,
         fb4(stabilityPoolInfo.userInfo.unlockingBalanceOfRes?._balance)
       )
-      let userUnlockingUnlockAt = checkNotZoroNumOption(
+      const userUnlockingUnlockAt = checkNotZoroNumOption(
         stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt,
         moment(
           stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt * 1000
@@ -205,4 +208,4 @@ const useStabiltyPool_c = () => {
   }
 }
 
-export default useStabiltyPool_c
+export default useStabiltyPool

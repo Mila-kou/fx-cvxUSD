@@ -1,14 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import useWeb3 from '@/hooks/useWeb3'
-import useStabiltyPool from '../controller/stabiltyPool'
-import { useFX_stabilityPool } from '@/hooks/useContracts'
+import useStabiltyPool from '../controller/useStabiltyPool'
+import { useContract } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
+import abi from '@/config/abi'
 
-export default function usePoolA() {
+export default function usePool({ rebalancePoolAddress, infoKey }) {
   const { currentAccount, isAllReady } = useWeb3()
-  const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
+  const { contract: FX_RebalancePoolContract } = useContract(
+    rebalancePoolAddress,
+    abi.FX_RebalancePoolABI
+  )
+
   const {
     stabilityPoolTotalSupplyTvl_text,
     stabilityPoolTotalSupply,
@@ -23,7 +28,7 @@ export default function usePoolA() {
     userUnlockedBalance,
     userUnlockedBalanceTvl,
     apy,
-  } = useStabiltyPool()
+  } = useStabiltyPool(infoKey)
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -44,7 +49,7 @@ export default function usePoolA() {
     if (!isAllReady) return
     try {
       setUnlocking(true)
-      const apiCall = FX_StabilityPoolContract.methods.withdrawUnlocked(
+      const apiCall = FX_RebalancePoolContract.methods.withdrawUnlocked(
         false,
         true
       )
@@ -66,7 +71,7 @@ export default function usePoolA() {
     if (!isAllReady) return
     try {
       setClaiming(true)
-      const apiCall = FX_StabilityPoolContract.methods.claim(
+      const apiCall = FX_RebalancePoolContract.methods.claim(
         config.tokens.wstETH,
         true
       )
@@ -125,5 +130,7 @@ export default function usePoolA() {
     setDepositVisible,
     withdrawVisible,
     setWithdrawVisible,
+
+    FX_RebalancePoolContract,
   }
 }

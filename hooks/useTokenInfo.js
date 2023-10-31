@@ -109,6 +109,7 @@ export const useToken = (address, contractType, lpInfo) => {
         })
       } else {
         let _contractAddress
+        console.log('contractType------', contractType)
         switch (contractType) {
           case 'ido':
             _contractAddress = config.contracts.idoSale
@@ -125,8 +126,11 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fx_fxGateway':
             _contractAddress = config.contracts.fx_FxGateway
             break
-          case 'fx_stabiltityPool':
-            _contractAddress = config.contracts.fx_StabilityPool
+          case 'fx_RebalancePool_A':
+            _contractAddress = config.contracts.fx_RebalancePool_A
+            break
+          case 'fx_RebalancePool_B':
+            _contractAddress = config.contracts.fx_RebalancePool_B
             break
           default:
             _contractAddress = config.contracts.idoSale

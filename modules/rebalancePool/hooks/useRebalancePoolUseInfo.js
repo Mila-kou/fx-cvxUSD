@@ -1,14 +1,19 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 import { useQueries } from '@tanstack/react-query'
-import { useFX_stabilityPool, useWstETH } from 'hooks/useContracts'
+import { useContract, useWstETH } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
+import abi from '@/config/abi'
 
-const useInfo = () => {
+const useRebalancePoolUseInfo = (contractAddress) => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
-  const { contract: fx_stabilityPoolContract } = useFX_stabilityPool()
+  const { contract: fx_rebalancePoolContract } = useContract(
+    contractAddress,
+    abi.FX_RebalancePoolABI
+  )
+
   const { contract: wstETHContract } = useWstETH()
 
   const fetchBaseInfo = useCallback(async () => {
@@ -17,7 +22,7 @@ const useInfo = () => {
       totalUnlocking,
       extraRewardState: extraRewardStateFn,
       baseRewardToken: rewardsFn,
-    } = fx_stabilityPoolContract.methods
+    } = fx_rebalancePoolContract.methods
     try {
       const apiCalls = [
         stabilityPoolTotalSupplyFn(),
@@ -57,7 +62,7 @@ const useInfo = () => {
       console.log('baseInfoError==>', error)
       return {}
     }
-  }, [fx_stabilityPoolContract, multiCallsV2, _currentAccount])
+  }, [fx_rebalancePoolContract, multiCallsV2, _currentAccount])
 
   const fetchUserInfo = useCallback(async () => {
     const {
@@ -66,7 +71,7 @@ const useInfo = () => {
       unlockedBalanceOf: unlockedBalanceOfFn,
       unlockingBalanceOf: unlockingBalanceOfFn,
       claimable: claimableFn,
-    } = fx_stabilityPoolContract.methods
+    } = fx_rebalancePoolContract.methods
     console.log('_currentAccount---', _currentAccount)
 
     try {
@@ -106,7 +111,7 @@ const useInfo = () => {
       console.log('UserInfoError==>', error)
       return {}
     }
-  }, [fx_stabilityPoolContract, multiCallsV2, _currentAccount, web3])
+  }, [fx_rebalancePoolContract, multiCallsV2, _currentAccount, web3])
 
   const [
     { data: stabilityPool_baseInfo, refetch: refetchBaseInfo },
@@ -114,13 +119,13 @@ const useInfo = () => {
   ] = useQueries({
     queries: [
       {
-        queryKey: ['stabilityPool_baseInfo'],
+        queryKey: ['stabilityPool_baseInfo', contractAddress],
         queryFn: () => fetchBaseInfo(),
         initialData: {},
         enabled: !!web3,
       },
       {
-        queryKey: ['stabilityPool_userInfo'],
+        queryKey: ['stabilityPool_userInfo', contractAddress],
         queryFn: () => fetchUserInfo(),
         initialData: {},
         enabled: !!web3,
@@ -138,4 +143,4 @@ const useInfo = () => {
     userInfo: stabilityPool_userInfo,
   }
 }
-export default useInfo
+export default useRebalancePoolUseInfo

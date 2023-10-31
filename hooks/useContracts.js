@@ -122,37 +122,13 @@ export const useFx_FxETHTwapOracle = () => {
     [getContract]
   )
 }
-/////////////////////////////
+
 export const useFX_stETHGateway = () => {
   const address = config.contracts.fx_stETHGateway
   const { getContract } = useContract()
   return useMemo(
     () => ({
       contract: getContract(address, abi.FX_stETHGatewayABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useFX_stabilityPool = () => {
-  const address = config.contracts.fx_StabilityPool
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FX_StabilityPoolABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useFX_LiquidatorWithBonusToken = () => {
-  const address = config.contracts.LiquidatorWithBonusToken
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FX_LiquidatorWithBonusTokenABI),
       address,
     }),
     [getContract]

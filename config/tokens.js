@@ -16,9 +16,8 @@ const contracts = {
   fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
   fx_stETHGateway: '0x9bF5fFABbF97De0a47843A7Ba0A9DDB40f2e2ed5',
 
-  fx_StabilityPool: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
-  LiquidatorWithBonusToken: '0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2',
-  wstETHWrapper: '0xb09e34dD25d5E88a1E9Ff6F6418109927675B658',
+  fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
+  fx_RebalancePool_B: '0xb3E264e2E556e6986461378E8A92f4244EAc2C4C',
 
   fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
   fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
@@ -75,12 +74,7 @@ const contracts = {
   aladdinCLEVMinter: '0x4aa2afd5616bEEC2321a9EfD7349400d4F18566A',
   aladdinAllInOneGateway: '0x6e513d492Ded19AD8211a57Cc6B4493C9E6C857B',
 
-  aladdinCLEVVest: '0x84C82d43f1Cc64730849f3E389fE3f6d776F7A4E',
-  clevHoderTreasuyry: '0xfc08757c505ea28709df66e54870fb6de09f0c5e',
-
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
-
-  PlatformFeeDistributor: '0xD6eFa5B63531e9ae61e225b02CbACD59092a35bE',
 }
 
 const tokens = {

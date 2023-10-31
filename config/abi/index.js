@@ -29,7 +29,6 @@ import AlaCLEV from './ve/AlaCLEV.json'
 import AlaMinterABI from './ve/AlaMinter.json'
 import AlaGaugeControllerABI from './ve/AlaGaugeController.json'
 import AlaAllInOneGatewayABI from './ve/AllInOneGateway.json'
-import PlatformFeeDistributorABI from './PlatformFeeDistributor.json'
 import CommonABI from './common/abi.json'
 import BalancerABI from './common/Balancer.json'
 import CurveCopytoABI from './common/curveCopyto.json'
@@ -39,8 +38,7 @@ import RewardClaimHelperABI from './RewardClaimHelper.json'
 
 import FX_stETHGatewayABI from './fx/stETHGateway.json'
 import FX_stETHTreasuryABI from './fx/stETHTreasury.json'
-import FX_StabilityPoolABI from './fx/StabilityPool.json'
-import FX_LiquidatorWithBonusTokenABI from './fx/LiquidatorWithBonusToken.json'
+import FX_RebalancePoolABI from './fx/RebalancePool.json'
 
 import wstETHABI from './wstETH.json'
 import curveSwapABI from './common/curveSwap.json'
@@ -60,8 +58,7 @@ export default {
   FX_ETHGateway,
   FX_stETHGatewayABI,
   FX_stETHTreasuryABI,
-  FX_StabilityPoolABI,
-  FX_LiquidatorWithBonusTokenABI,
+  FX_RebalancePoolABI,
 
   MockTwapOracleAbi: MockTwapOracle,
 
@@ -79,7 +76,6 @@ export default {
   BalancerABI,
   CurveCopytoABI,
   CurveStaticCoinABI,
-  PlatformFeeDistributorABI,
   AladdinbcCVXABI,
   RewardClaimHelperABI,
   wstETHABI,

@@ -1,14 +1,22 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import tokens from '@/config/tokens'
 import PoolItem from './components/PoolItem'
-import usePoolA from './hooks/usePoolA'
+import usePool from './hooks/usePool'
 
 import styles from './styles.module.scss'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
 export default function RebalancePoolPage() {
-  const poolAData = usePoolA()
+  const poolAData = usePool({
+    rebalancePoolAddress: tokens.contracts.fx_RebalancePool_A,
+    infoKey: 'rebalancePool_info_A',
+  })
+  const poolBData = usePool({
+    rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
+    infoKey: 'rebalancePool_info_B',
+  })
 
   return (
     <div className={styles.container}>
@@ -47,8 +55,16 @@ export default function RebalancePoolPage() {
         </div>
       </div>
 
-      <PoolItem {...poolAData} />
-      <PoolItem />
+      <PoolItem
+        title="My Rebalance Pool A"
+        contractType="fx_RebalancePool_A"
+        {...poolAData}
+      />
+      <PoolItem
+        title="My Rebalance Pool B"
+        contractType="fx_RebalancePool_B"
+        {...poolBData}
+      />
     </div>
   )
 }

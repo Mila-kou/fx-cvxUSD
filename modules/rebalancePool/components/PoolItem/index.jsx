@@ -36,13 +36,18 @@ export default function PoolItem({
   setDepositVisible,
   withdrawVisible,
   setWithdrawVisible,
+
+  contractType,
+  FX_RebalancePoolContract,
+
+  title,
 }) {
   return (
     <div>
       <div className={styles.poolWrap}>
         <div className={styles.content}>
           <div className={styles.left}>
-            <p className="text-[22px]">My Rebalance Pool</p>
+            <p className="text-[22px]">{title}</p>
             <h2 className="text-[32px] mt-[10px]">
               {dollarText(myTotalValue_text)}
             </h2>
@@ -131,6 +136,8 @@ export default function PoolItem({
       {depositVisible && (
         <DepositModal
           info={item}
+          contractType={contractType}
+          FX_RebalancePoolContract={FX_RebalancePoolContract}
           poolData={stabilityPoolInfo}
           onCancel={() => setDepositVisible(false)}
         />
@@ -138,6 +145,7 @@ export default function PoolItem({
       {withdrawVisible && (
         <WithdrawModal
           info={item}
+          FX_RebalancePoolContract={FX_RebalancePoolContract}
           poolData={stabilityPoolInfo}
           onCancel={() => setWithdrawVisible(false)}
         />

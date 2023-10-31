@@ -6,23 +6,17 @@ import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import { useFX_stabilityPool } from '@/hooks/useContracts'
 import styles from './styles.module.scss'
 
 export default function DepositModal(props) {
-  const { onCancel, info } = props
-  const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
+  const { onCancel, info, contractType, FX_RebalancePoolContract } = props
   const [depositing, setDepositing] = useState(false)
   const { currentAccount, isAllReady } = useWeb3()
   const [selectToken, setSelectToken] = useState(info.zapTokens[0])
 
   const [depositAmount, setDepositAmount] = useState(0)
 
-  const selectTokenInfo = useToken(
-    selectToken.address,
-    'fx_stabiltityPool',
-    info
-  )
+  const selectTokenInfo = useToken(selectToken.address, contractType, info)
   const tokenContract = selectTokenInfo.contract
   const tokenApproveContractAddress = selectTokenInfo.contractAddress
   const userTokenBalance = selectTokenInfo.balance
@@ -39,7 +33,7 @@ export default function DepositModal(props) {
     const depositAmountInWei = cBN(depositAmount || 0).toFixed(0, 1)
     setDepositing(true)
     try {
-      const apiCall = FX_StabilityPoolContract.methods.deposit(
+      const apiCall = FX_RebalancePoolContract.methods.deposit(
         depositAmountInWei,
         currentAccount
       )

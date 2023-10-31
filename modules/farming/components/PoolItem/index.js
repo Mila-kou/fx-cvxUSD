@@ -14,9 +14,6 @@ import Button from '@/components/Button'
 import useLiquidityLimit from '../../hooks/useLiquidityLimit'
 import useCalc from '../../hooks/useCalc'
 
-const IconClev = '/assets/ctr.svg'
-const cryptoIcons = '/assets/crypto-icons-stack.svg'
-
 export default function PoolItem({ item }) {
   const { currentAccount, isAllReady } = useWeb3()
   const [claiming, setClaiming] = useState(false)
@@ -27,17 +24,12 @@ export default function PoolItem({ item }) {
     totalSupply,
     lpGaugeAddress,
     userInfo = {},
-    otherTokenData = {},
     rewardApyMin,
     rewardApy,
     baseApy,
-    baseApyText,
-    rewardApyMinText,
     apyMinText,
     apyText,
     apyMaxText,
-    clevUSD_FraxBP_apy,
-    rewardApyMaxText,
   } = item
   const { veTotalSupply, userVeCLEV } = useCalc()
   const { contract: ClevMinterContract } = useClevMinter()

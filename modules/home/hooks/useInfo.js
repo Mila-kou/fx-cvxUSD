@@ -78,7 +78,6 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePaused(),
         nav(),
         baseTokenCap(),
-        fETHBalanceOf(config.contracts.fx_StabilityPool),
         stETHContract.methods.balanceOf(config.contracts.fx_ReservePool),
         bonusRatio(config.tokens.stETH),
         fxETHTwapOracle.methods.getPrice(),
@@ -103,12 +102,10 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
-        stabilityPoolFETHBalancesRes,
         reservePoolBalancesRes,
         bonusRatioRes,
         fxETHTwapOraclePriceeInfo,
       ] = await multiCallsV2(apiCalls)
-      // const stabilityPoolFETHBalancesRes = 1e18
       // const reservePoolBalancesRes = 1e18
       // const bonusRatioRes = 1e18
       console.log(
@@ -124,7 +121,6 @@ const useInfo = () => {
         // xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
-        stabilityPoolFETHBalancesRes,
         reservePoolBalancesRes,
         bonusRatioRes,
         fxETHTwapOraclePriceeInfo
@@ -150,7 +146,6 @@ const useInfo = () => {
         xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
-        stabilityPoolFETHBalancesRes,
         reservePoolBalancesRes,
         bonusRatioRes,
         fxETHTwapOraclePriceeInfo,

@@ -4,17 +4,15 @@ import Input from '@/components/Input'
 import Button from '@/components/Button'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
-import { useContract, useFX_stabilityPool } from '@/hooks/useContracts'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import styles from './styles.module.scss'
 
 export default function WithdrawModal(props) {
-  const { onCancel, info, poolData } = props
+  const { onCancel, info, poolData, FX_RebalancePoolContract } = props
   const { currentAccount, isAllReady } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
-  const { contract: stabilityPoolContract } = useFX_stabilityPool()
 
   const { logo, name, stakeTokenDecimals } = info
   const { userInfo, baseInfo } = poolData
@@ -32,7 +30,7 @@ export default function WithdrawModal(props) {
       ) {
         sharesInWei = userInfo.stabilityPoolBalanceOfRes
       }
-      const apiCall = stabilityPoolContract.methods.unlock(sharesInWei)
+      const apiCall = FX_RebalancePoolContract.methods.unlock(sharesInWei)
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
