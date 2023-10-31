@@ -1,119 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
 import { Tooltip } from 'antd'
-import cn from 'classnames'
-import { useToggle, useSetState } from 'ahooks'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import useWeb3 from '@/hooks/useWeb3'
-import Button from '@/components/Button'
-import DepositModal from './components/DepositModal'
-import WithdrawModal from './components/WithdrawModal'
-
-import { POOLS_LIST } from '@/config/aladdinVault'
+import PoolItem from './components/PoolItem'
+import usePoolA from './hooks/usePoolA'
 
 import styles from './styles.module.scss'
-import useStabiltyPool from './controller/stabiltyPool'
-import { useFX_stabilityPool } from '@/hooks/useContracts'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import config from '@/config/index'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
-const stETHImg = '/tokens/steth.svg'
-
-const item = POOLS_LIST[0]
-
 export default function RebalancePoolPage() {
-  const { currentAccount, isAllReady } = useWeb3()
-  const { contract: FX_StabilityPoolContract } = useFX_stabilityPool()
-  const {
-    stabilityPoolInfo,
-    stabilityPoolTotalSupply,
-    stabilityPoolTotalSupplyTvl_text,
-    userDeposit,
-    userDepositTvl_text,
-    userWstETHClaimableTvl_text,
-    myTotalValue_text,
-    userWstETHClaimable,
-    userUnlockingBalance,
-    userUnlockingUnlockAt,
-    userUnlockedBalance,
-    userUnlockedBalanceTvl,
-    apy,
-  } = useStabiltyPool()
-
-  const [depositVisible, setDepositVisible] = useState(false)
-  const [withdrawVisible, setWithdrawVisible] = useState(false)
-  const [claiming, setClaiming] = useState(false)
-  const [unlocking, setUnlocking] = useState(false)
-
-  const handleDeposit = () => {
-    if (!isAllReady) return
-    setDepositVisible(true)
-  }
-  const handleWithdraw = () => {
-    if (!isAllReady) return
-    setWithdrawVisible(true)
-  }
-
-  const handleUnlock = async () => {
-    if (unlocking || !canUnlock) return
-    if (!isAllReady) return
-    try {
-      setUnlocking(true)
-      const apiCall = FX_StabilityPoolContract.methods.withdrawUnlocked(
-        false,
-        true
-      )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Unlock',
-      })
-      setUnlocking(false)
-    } catch (error) {
-      setUnlocking(false)
-      console.log('unlock-error---', error)
-      noPayableErrorAction(`error_unlock`, error)
-    }
-  }
-
-  const handleClaim = async () => {
-    if (!isAllReady) return
-    try {
-      setClaiming(true)
-      const apiCall = FX_StabilityPoolContract.methods.claim(
-        config.tokens.wstETH,
-        true
-      )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Claim',
-      })
-      setClaiming(false)
-    } catch (error) {
-      setClaiming(false)
-      console.log('claim-error---', error)
-      noPayableErrorAction(`error_claim`, error)
-    }
-  }
-
-  const canClaim = useMemo(() => {
-    console.log(
-      'stabilityPoolInfo.userInfo?.claimableResd--',
-      stabilityPoolInfo.userInfo?.claimableRes
-    )
-    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableRes)) {
-      return true
-    }
-    return false
-  }, [userWstETHClaimable])
-
-  const canUnlock = useMemo(() => {
-    return !!checkNotZoroNum(userUnlockedBalanceTvl)
-  }, [userUnlockedBalanceTvl])
+  const poolAData = usePoolA()
 
   return (
     <div className={styles.container}>
@@ -138,120 +33,22 @@ export default function RebalancePoolPage() {
         <div className={styles.items}>
           <div className={styles.item}>
             <p>Total Deposited Value</p>
-            <h2>{dollarText(stabilityPoolTotalSupplyTvl_text)}</h2>
-            <p>{stabilityPoolTotalSupply} fETH</p>
+            <h2>{dollarText(poolAData.stabilityPoolTotalSupplyTvl_text)}</h2>
+            <p>{poolAData.stabilityPoolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
-            <p>APR</p>
-            <h2>{apy}%</h2>
+            <p>A Pool APR (stETH)</p>
+            <h2>{poolAData.apy}%</h2>
+          </div>
+          <div className={styles.item}>
+            <p>B Pool APR (xETH)</p>
+            <h2>{poolAData.apy}%</h2>
           </div>
         </div>
       </div>
 
-      <div className={styles.wrap}>
-        <div className={styles.content}>
-          <div className={styles.left}>
-            <p className="text-[22px]">My Rebalance Pool</p>
-            <h2 className="text-[32px] mt-[10px]">
-              {dollarText(myTotalValue_text)}
-            </h2>
-            <div className={cn(styles.item, styles.itemWrap, 'mt-[40px]')}>
-              <div>
-                <img src="/images/f-logo.svg" />
-                <Link href="/home">
-                  <p>Get fETH to Deposit →</p>
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className={styles.right}>
-            <div className={styles.cell}>
-              <img src="/images/f-logo.svg" />
-              <div className={styles.cellContent}>
-                <p className="text-[18px]">Deposited fETH</p>
-                <h2 className="text-[24px]">
-                  {dollarText(userDepositTvl_text)}
-                </h2>
-                <p className="text-[16px]">{userDeposit} fETH</p>
-                {userUnlockingBalance && userUnlockingBalance !== '-' ? (
-                  <p className="text-[16px]">
-                    Unlocking: {userUnlockingBalance} fETH
-                  </p>
-                ) : null}
-                {checkNotZoroNum(
-                  stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._balance
-                ) ? (
-                  <p className="text-[16px]">
-                    UnlockAt: {userUnlockingUnlockAt}
-                  </p>
-                ) : (
-                  ''
-                )}
-                {userUnlockedBalance && userUnlockedBalance !== '-' ? (
-                  <p className="text-[16px]">
-                    Unlocked: {userUnlockedBalance} fETH{'  '}
-                    <span
-                      className={cn(
-                        'text-[#6B79FC] underline',
-                        canUnlock
-                          ? 'cursor-pointer'
-                          : 'cursor-not-allowed opacity-[0.6]'
-                      )}
-                      onClick={handleUnlock}
-                    >
-                      Claim Funds
-                    </span>
-                  </p>
-                ) : null}
-              </div>
-              <div className={styles.actions}>
-                <Button onClick={handleDeposit}>Deposit</Button>
-                <Button onClick={handleWithdraw} type="second">
-                  Withdraw
-                </Button>
-              </div>
-            </div>
-
-            <div className={cn(styles.cell, 'mt-[50px]')}>
-              <div className={styles.stETHWrap}>
-                <img src={stETHImg} />
-              </div>
-              <div className={styles.cellContent}>
-                <p className="text-[18px]">Earned</p>
-                <h2 className="text-[24px]">
-                  {dollarText(userWstETHClaimableTvl_text)}
-                </h2>
-                <p className="text-[16px]">{userWstETHClaimable} stETH</p>
-              </div>
-              <div>
-                <Button
-                  disabled={!canClaim}
-                  loading={claiming}
-                  onClick={handleClaim}
-                  type="second"
-                >
-                  Claim
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {depositVisible && (
-        <DepositModal
-          info={item}
-          poolData={stabilityPoolInfo}
-          onCancel={() => setDepositVisible(false)}
-        />
-      )}
-      {withdrawVisible && (
-        <WithdrawModal
-          info={item}
-          poolData={stabilityPoolInfo}
-          onCancel={() => setWithdrawVisible(false)}
-        />
-      )}
+      <PoolItem {...poolAData} />
+      <PoolItem />
     </div>
   )
 }
