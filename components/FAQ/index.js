@@ -74,7 +74,24 @@ export default function FAQ({ open, onCancel }) {
                 gains on a long-term bet on ETH price growth.
               </p>
 
-              <h2>6. Where can I trade it?</h2>
+              <h2>
+                6. What the heck does “low risk of liquidation” for xETH even
+                mean?
+              </h2>
+              <p>
+                xETH has no concept of ‘liquidation’ (unlike leveraged perps or
+                CDPs). When we talk about risk of xETH “liquidation”, we really
+                mean the risk of xETH’s price going to zero due to an extreme
+                drop in ETH price (see Bad Things section). We used analysis of
+                ETH daily price data back to 2017 to characterize this risk at
+                various collateral ratios. As long as the f(x) collateral ratio
+                is above 130%, the risk is below 0.1%, and that doesn’t even
+                factor in stability mode which automatically kicks in and
+                deploys rebalance pool capital to push the CR back up if it ever
+                drops below 130%.
+              </p>
+
+              <h2>7. Where can I trade fETH/xETH?</h2>
 
               <p>
                 Mint and redeem on the f(x) website, or trade on{' '}
@@ -88,7 +105,7 @@ export default function FAQ({ open, onCancel }) {
                 !
               </p>
 
-              <h2>7. What risks am I taking when I hold fETH/xETH?</h2>
+              <h2>8. What risks am I taking when I hold fETH/xETH?</h2>
 
               <p>
                 f(x) was created to avoid centralized risks from real-world
@@ -113,7 +130,7 @@ export default function FAQ({ open, onCancel }) {
                 </a>
               </p>
 
-              <h2>8. What’s the Rebalancing Pool?</h2>
+              <h2>9. What’s the Rebalancing Pool?</h2>
 
               <p>
                 The Rebalancing pool is a farming vault for fETH which earns
@@ -146,7 +163,7 @@ export default function FAQ({ open, onCancel }) {
                 yields and periodically DCA into stETH 🙂
               </p>
 
-              <h2>9. How much does it cost?</h2>
+              <h2>10. How much does it cost?</h2>
 
               <p>
                 f(x) charges very small minting and redemption fees. Those can
@@ -159,7 +176,7 @@ export default function FAQ({ open, onCancel }) {
                 staking yields earned by stETH in the reserve.
               </p>
 
-              <h2>10. What is the “reference price” ? </h2>
+              <h2>11. What is the “reference price” ? </h2>
               <p>
                 When f(x) reports the price change of ETH, we compare the
                 current 30-minute TWAP from Chainlink with the reference price.
@@ -174,7 +191,7 @@ export default function FAQ({ open, onCancel }) {
               <h1>What if bad things happen?</h1>
 
               <h2>
-                11. What happens if there’s a huge flash crash in ETH price ?
+                12. What happens if there’s a huge flash crash in ETH price?
               </h2>
               <p>
                 In the unlikely (&lt;0.1%; see whitepaper) event of a price
@@ -191,7 +208,7 @@ export default function FAQ({ open, onCancel }) {
                 recapitalizing the protocol described in the whitepaper.
               </p>
 
-              <h2>12. What happens if stETH depegs from ETH ?</h2>
+              <h2>13. What happens if stETH depegs from ETH?</h2>
               <p>
                 f(x) has an automatic emergency brake built-in which protects
                 fETH and xETH holders if there is a stETH depeg. Using multiple
