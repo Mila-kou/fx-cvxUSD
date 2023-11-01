@@ -10,10 +10,15 @@ import styles from './styles.module.scss'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
 const stETHImg = '/tokens/steth.svg'
+const xETHImg = '/images/x-logo.svg'
 
 const item = POOLS_LIST[0]
 
 export default function PoolItem({
+  harvesting,
+  handleHarvest,
+  handleLiquidatorWithBonus,
+
   handleDeposit,
   handleWithdraw,
   canUnlock,
@@ -25,9 +30,12 @@ export default function PoolItem({
   stabilityPoolInfo,
   userDeposit,
   userDepositTvl_text,
-  userWstETHClaimableTvl_text,
   myTotalValue_text,
   userWstETHClaimable,
+  userWstETHClaimableTvl_text,
+  // TODO:
+  userXETHClaimable,
+  userXETHClaimableTvl_text,
   userUnlockingBalance,
   userUnlockingUnlockAt,
   userUnlockedBalance,
@@ -41,6 +49,7 @@ export default function PoolItem({
   FX_RebalancePoolContract,
 
   title,
+  hasXETH,
 }) {
   return (
     <div>
@@ -105,19 +114,47 @@ export default function PoolItem({
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
+                <Button
+                  loading={harvesting}
+                  onClick={handleHarvest}
+                  type="second"
+                >
+                  Harvest
+                </Button>
+                {/*        
+                <Button onClick={handleLiquidatorWithBonus} type="second">
+                  Liquidator
+                </Button> */}
               </div>
             </div>
 
             <div className={cn(styles.cell, 'mt-[50px]')}>
-              <div className={styles.stETHWrap}>
-                <img src={stETHImg} />
-              </div>
-              <div className={styles.cellContent}>
-                <p className="text-[18px]">Earned</p>
-                <h2 className="text-[24px]">
-                  {dollarText(userWstETHClaimableTvl_text)}
-                </h2>
-                <p className="text-[16px]">{userWstETHClaimable} stETH</p>
+              <div>
+                {hasXETH ? (
+                  <div className={styles.cell}>
+                    <img src={xETHImg} />
+                    <div className={styles.cellContent}>
+                      <p className="text-[18px]">Earned</p>
+                      <h2 className="text-[24px]">
+                        {dollarText(userXETHClaimableTvl_text)}
+                      </h2>
+                      <p className="text-[16px]">{userXETHClaimable} xETH</p>
+                    </div>
+                  </div>
+                ) : null}
+
+                <div className={cn(styles.cell, 'mt-[50px]')}>
+                  <div className={styles.stETHWrap}>
+                    <img src={stETHImg} />
+                  </div>
+                  <div className={styles.cellContent}>
+                    <p className="text-[18px]">Earned</p>
+                    <h2 className="text-[24px]">
+                      {dollarText(userWstETHClaimableTvl_text)}
+                    </h2>
+                    <p className="text-[16px]">{userWstETHClaimable} stETH</p>
+                  </div>
+                </div>
               </div>
               <div>
                 <Button

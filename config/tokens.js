@@ -18,6 +18,8 @@ const contracts = {
 
   fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
   fx_RebalancePool_B: '0xb3E264e2E556e6986461378E8A92f4244EAc2C4C',
+  fx_RebalanceWithBonusToken_A: '0x203aeE406d26AE5C1Cc12b2F884d2B5814A44948',
+  fx_RebalanceWithBonusToken_B: '0x7d23e21Be2bf68De4d3D6C06340cE66F192B185a',
 
   fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
   fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',

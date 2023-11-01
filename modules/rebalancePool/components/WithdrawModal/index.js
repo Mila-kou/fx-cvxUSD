@@ -15,7 +15,7 @@ export default function WithdrawModal(props) {
   const [withdrawing, setWithdrawing] = useState(false)
 
   const { logo, name, stakeTokenDecimals } = info
-  const { userInfo, baseInfo } = poolData
+  const { userInfo } = poolData
 
   const handleInputChange = (val) => setWithdrawAmount(val)
 

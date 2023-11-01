@@ -107,6 +107,10 @@ const useStabiltyPool = (infoKey) => {
       const userWstETHClaimable_res = cBN(
         stabilityPoolInfo.userInfo?.claimableRes
       ).times(stETHRate)
+
+      // TODO:
+      // userXETHClaimable
+      // userXETHClaimableTvl_text
       const userWstETHClaimable = checkNotZoroNumOption(
         userWstETHClaimable_res,
         fb4(userWstETHClaimable_res)
@@ -174,7 +178,9 @@ const useStabiltyPool = (infoKey) => {
       const apy = getStabiltyPoolApy(stabilityPoolTotalSupplyTvl)
       return {
         stabilityPoolInfo,
+        stabilityPoolTotalSupplyTvl: stabilityPoolTotalSupplyTvl.toString(),
         stabilityPoolTotalSupplyTvl_text,
+        stabilityPoolTotalSupply_res: stabilityPoolTotalSupply_res.toString(),
         stabilityPoolTotalSupply,
         userDeposit,
         userDepositTvl_text,
@@ -191,7 +197,9 @@ const useStabiltyPool = (infoKey) => {
       console.log('error--', error)
       return {
         stabilityPoolInfo: {},
+        stabilityPoolTotalSupply_res: 0,
         stabilityPoolTotalSupply: '-',
+        stabilityPoolTotalSupplyTvl: 0,
         stabilityPoolTotalSupplyTvl_text: '-',
         userDeposit: '-',
         userDepositTvl_text: '-',

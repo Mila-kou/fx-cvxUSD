@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "cross-env NETWORK_ENV=mainnet next",
+    "dev": "cross-env NETWORK_ENV=mainnet next -p 3002",
     "dev:mainnet-fork": "cross-env NETWORK_ENV=mainnet-fork next",
     "build": "cross-env NETWORK_ENV=mainnet next build",
     "export": "next export",
