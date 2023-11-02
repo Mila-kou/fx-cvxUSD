@@ -33,7 +33,6 @@ export default function PoolItem({
   myTotalValue_text,
   userWstETHClaimable,
   userWstETHClaimableTvl_text,
-  // TODO:
   userXETHClaimable,
   userXETHClaimableTvl_text,
   userUnlockingBalance,
@@ -114,6 +113,7 @@ export default function PoolItem({
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
+                {/*        
                 <Button
                   loading={harvesting}
                   onClick={handleHarvest}
@@ -121,7 +121,6 @@ export default function PoolItem({
                 >
                   Harvest
                 </Button>
-                {/*        
                 <Button onClick={handleLiquidatorWithBonus} type="second">
                   Liquidator
                 </Button> */}
@@ -131,7 +130,7 @@ export default function PoolItem({
             <div className={cn(styles.cell, 'mt-[50px]')}>
               <div>
                 {hasXETH ? (
-                  <div className={styles.cell}>
+                  <div className={cn(styles.cell, 'mb-[50px]')}>
                     <img src={xETHImg} />
                     <div className={styles.cellContent}>
                       <p className="text-[18px]">Earned</p>
@@ -143,7 +142,7 @@ export default function PoolItem({
                   </div>
                 ) : null}
 
-                <div className={cn(styles.cell, 'mt-[50px]')}>
+                <div className={styles.cell}>
                   <div className={styles.stETHWrap}>
                     <img src={stETHImg} />
                   </div>

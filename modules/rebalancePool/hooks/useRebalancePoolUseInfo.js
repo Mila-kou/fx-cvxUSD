@@ -81,6 +81,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         unlockedBalanceOfFn(_currentAccount),
         unlockingBalanceOfFn(_currentAccount),
         claimableFn(_currentAccount, config.tokens.wstETH),
+        claimableFn(_currentAccount, config.tokens.xETH),
       ]
       const [
         ,
@@ -88,17 +89,19 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,
         claimableRes,
+        claimableXETHRes,
       ] = await multiCallsV2(apiCalls)
 
       console.log(
-        'fetchUserInfo222222',
+        'fetchUserInfo-----',
         // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
         // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
-        //  betaRes,
+        //  betaRes,  mock: 38963624338621390
         stabilityPoolBalanceOfRes,
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,
-        claimableRes
+        claimableRes,
+        claimableXETHRes
       )
 
       return {
@@ -106,6 +109,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,
         claimableRes,
+        claimableXETHRes,
       }
     } catch (error) {
       console.log('UserInfoError==>', error)

@@ -26,8 +26,12 @@ export default function usePool({
 
   const poolData = useStabiltyPool(infoKey)
 
-  const { stabilityPoolInfo, userWstETHClaimable, userUnlockedBalanceTvl } =
-    poolData
+  const {
+    stabilityPoolInfo,
+    userWstETHClaimable,
+    userXETHClaimable,
+    userUnlockedBalanceTvl,
+  } = poolData
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -92,14 +96,18 @@ export default function usePool({
 
   const canClaim = useMemo(() => {
     console.log(
-      'stabilityPoolInfo.userInfo?.claimableResd--',
-      stabilityPoolInfo.userInfo?.claimableRes
+      'stabilityPoolInfo.userInfo?.claimableResd----claimableXETHRes---',
+      stabilityPoolInfo.userInfo?.claimableRes,
+      stabilityPoolInfo.userInfo?.claimableXETHRes
     )
     if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableRes)) {
       return true
     }
+    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableXETHRes)) {
+      return true
+    }
     return false
-  }, [userWstETHClaimable])
+  }, [userWstETHClaimable, userXETHClaimable])
 
   const canUnlock = useMemo(() => {
     return !!checkNotZoroNum(userUnlockedBalanceTvl)

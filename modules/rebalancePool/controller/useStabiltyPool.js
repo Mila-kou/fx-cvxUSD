@@ -11,6 +11,8 @@ const useStabiltyPool = (infoKey) => {
   const fxInfo = globalState.fx_info
   const stabilityPoolInfo = globalState[infoKey]
 
+  const { CurrentNavRes } = fxInfo.baseInfo
+
   const { current } = useWeb3()
   const { ethPrice } = useFxCommon()
   console.log(
@@ -104,13 +106,11 @@ const useStabiltyPool = (infoKey) => {
       }
       const userDepositTvl_text = fb4(userDepositTvl, false, 0)
 
+      // stETH
       const userWstETHClaimable_res = cBN(
         stabilityPoolInfo.userInfo?.claimableRes
       ).times(stETHRate)
 
-      // TODO:
-      // userXETHClaimable
-      // userXETHClaimableTvl_text
       const userWstETHClaimable = checkNotZoroNumOption(
         userWstETHClaimable_res,
         fb4(userWstETHClaimable_res)
@@ -126,6 +126,28 @@ const useStabiltyPool = (infoKey) => {
           .div(1e18)
       }
       const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, false, 0)
+
+      // xETH
+      const userXETHClaimable_res = cBN(
+        stabilityPoolInfo.userInfo?.claimableXETHRes
+      )
+
+      const userXETHClaimable = checkNotZoroNumOption(
+        userXETHClaimable_res,
+        fb4(userXETHClaimable_res)
+      )
+      let userXETHClaimableTvl = cBN(0)
+      const { _xNav = 0 } = CurrentNavRes
+      if (
+        checkNotZoroNum(_xNav) &&
+        checkNotZoroNum(stabilityPoolInfo.userInfo.claimableXETHRes)
+      ) {
+        userXETHClaimableTvl = cBN(_xNav)
+          .div(1e18)
+          .times(stabilityPoolInfo.userInfo.claimableXETHRes)
+          .div(1e18)
+      }
+      const userXETHClaimableTvl_text = fb4(userXETHClaimableTvl, false, 0)
 
       const userUnlockedBalance = checkNotZoroNumOption(
         stabilityPoolInfo.userInfo?.unlockedBalanceOfRes,
@@ -168,6 +190,7 @@ const useStabiltyPool = (infoKey) => {
 
       const myTotalValue = userDepositTvl
         .plus(userWstETHClaimableTvl)
+        .plus(userXETHClaimableTvl)
         .plus(userUnlockingBalanceTvl)
         .plus(userUnlockedBalanceTvl)
       const myTotalValue_text = checkNotZoroNumOption(
@@ -186,6 +209,8 @@ const useStabiltyPool = (infoKey) => {
         userDepositTvl_text,
         userWstETHClaimable,
         userWstETHClaimableTvl_text,
+        userXETHClaimable,
+        userXETHClaimableTvl_text,
         myTotalValue_text,
         userUnlockingBalance,
         userUnlockingUnlockAt,
@@ -205,6 +230,8 @@ const useStabiltyPool = (infoKey) => {
         userDepositTvl_text: '-',
         userWstETHClaimable: '-',
         userWstETHClaimableTvl_text: '-',
+        userXETHClaimable: '-',
+        userXETHClaimableTvl_text: '-',
         myTotalValue_text: '-',
         userUnlockingBalance: '-',
         userUnlockedBalance: '-',
