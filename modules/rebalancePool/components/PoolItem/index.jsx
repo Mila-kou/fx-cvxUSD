@@ -121,9 +121,10 @@ export default function PoolItem({
                 >
                   Harvest
                 </Button>
+                */}
                 <Button onClick={handleLiquidatorWithBonus} type="second">
                   Liquidator
-                </Button> */}
+                </Button>
               </div>
             </div>
 

@@ -139,9 +139,9 @@ export default function usePool({
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       const tx = await apiCall.send({ from: currentAccount, gas })
-      console.log('stabilityPool liquidate success---', tx)
+      console.log('liquidate success---', tx)
     } catch (error) {
-      console.log('stabilityPool liquidate error', error)
+      console.log('liquidate error', error)
     }
   }
 
