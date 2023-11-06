@@ -158,7 +158,7 @@ export default function PoolItem({
             {hasXETH ? (
               <div className={cn(styles.cell, 'mt-[50px]')}>
                 <div>
-                  <div className={cn(styles.cell, 'mb-[50px]')}>
+                  <div className={cn(styles.cell)}>
                     <img src={xETHImg} />
                     <div className={styles.cellContent}>
                       <p className="text-[18px]">From liquidation</p>
