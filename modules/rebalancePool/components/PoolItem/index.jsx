@@ -145,7 +145,7 @@ export default function PoolItem({
               </div>
               <div>
                 <Button
-                  disabled={!canClaim}
+                  disabled={!canClaim.wstETH}
                   loading={claiming.wstETH}
                   onClick={() => handleClaim('wstETH', true)}
                   type="second"
@@ -171,7 +171,7 @@ export default function PoolItem({
                 </div>
                 <div>
                   <Button
-                    disabled={!canClaim}
+                    disabled={!canClaim.xETH}
                     loading={claiming.xETH}
                     onClick={() => handleClaim('xETH', false)}
                     type="second"

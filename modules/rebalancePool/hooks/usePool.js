@@ -83,6 +83,8 @@ export default function usePool({
         [symbol]: true,
       })
 
+      console.log('handleClaim-----', symbol, wrap)
+
       const apiCall = FX_RebalancePoolContract.methods.claim(
         config.tokens[symbol],
         wrap
@@ -113,13 +115,10 @@ export default function usePool({
       stabilityPoolInfo.userInfo?.claimableRes,
       stabilityPoolInfo.userInfo?.claimableXETHRes
     )
-    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableRes)) {
-      return true
+    return {
+      wstETH: checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableRes),
+      xETH: checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableXETHRes),
     }
-    if (checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableXETHRes)) {
-      return true
-    }
-    return false
   }, [userWstETHClaimable, userXETHClaimable])
 
   const canUnlock = useMemo(() => {

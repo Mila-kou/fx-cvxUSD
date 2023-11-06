@@ -115,6 +115,12 @@ const useStabiltyPool = (infoKey) => {
         userWstETHClaimable_res,
         fb4(userWstETHClaimable_res)
       )
+      console.log(
+        'userWstETHClaimable-----',
+        stETHRate,
+        userWstETHClaimable_res,
+        stabilityPoolInfo.userInfo?.claimableRes
+      )
       let userWstETHClaimableTvl = cBN(0)
       if (
         checkNotZoroNum(ethPrice) &&
