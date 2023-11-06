@@ -76,7 +76,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
 
     try {
       const apiCalls = [
-        updateAccountSnapshot(config.zeroAddress),
+        updateAccountSnapshot(_currentAccount),
         stabilityPoolBalanceOfFn(_currentAccount),
         unlockedBalanceOfFn(_currentAccount),
         unlockingBalanceOfFn(_currentAccount),
