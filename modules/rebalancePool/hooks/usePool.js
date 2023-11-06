@@ -35,7 +35,10 @@ export default function usePool({
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
-  const [claiming, setClaiming] = useState(false)
+  const [claiming, setClaiming] = useState({
+    wstETH: false,
+    xETH: false,
+  })
   const [unlocking, setUnlocking] = useState(false)
 
   const [harvesting, setHarvesting] = useState(false)
@@ -72,13 +75,17 @@ export default function usePool({
     }
   }
 
-  const handleClaim = async () => {
+  const handleClaim = async (symbol, wrap) => {
     if (!isAllReady) return
     try {
-      setClaiming(true)
+      setClaiming({
+        ...claiming,
+        [symbol]: true,
+      })
+
       const apiCall = FX_RebalancePoolContract.methods.claim(
-        config.tokens.wstETH,
-        true
+        config.tokens[symbol],
+        wrap
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
@@ -86,9 +93,15 @@ export default function usePool({
         key: 'lp',
         action: 'Claim',
       })
-      setClaiming(false)
+      setClaiming({
+        ...claiming,
+        [symbol]: false,
+      })
     } catch (error) {
-      setClaiming(false)
+      setClaiming({
+        ...claiming,
+        [symbol]: false,
+      })
       console.log('claim-error---', error)
       noPayableErrorAction(`error_claim`, error)
     }

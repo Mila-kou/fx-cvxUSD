@@ -130,19 +130,6 @@ export default function PoolItem({
 
             <div className={cn(styles.cell, 'mt-[50px]')}>
               <div>
-                {hasXETH ? (
-                  <div className={cn(styles.cell, 'mb-[50px]')}>
-                    <img src={xETHImg} />
-                    <div className={styles.cellContent}>
-                      <p className="text-[18px]">Earned</p>
-                      <h2 className="text-[24px]">
-                        {dollarText(userXETHClaimableTvl_text)}
-                      </h2>
-                      <p className="text-[16px]">{userXETHClaimable} xETH</p>
-                    </div>
-                  </div>
-                ) : null}
-
                 <div className={styles.cell}>
                   <div className={styles.stETHWrap}>
                     <img src={stETHImg} />
@@ -159,14 +146,41 @@ export default function PoolItem({
               <div>
                 <Button
                   disabled={!canClaim}
-                  loading={claiming}
-                  onClick={handleClaim}
+                  loading={claiming.wstETH}
+                  onClick={() => handleClaim('wstETH', true)}
                   type="second"
                 >
                   Claim
                 </Button>
               </div>
             </div>
+
+            {hasXETH ? (
+              <div className={cn(styles.cell, 'mt-[50px]')}>
+                <div>
+                  <div className={cn(styles.cell, 'mb-[50px]')}>
+                    <img src={xETHImg} />
+                    <div className={styles.cellContent}>
+                      <p className="text-[18px]">From liquidation</p>
+                      <h2 className="text-[24px]">
+                        {dollarText(userXETHClaimableTvl_text)}
+                      </h2>
+                      <p className="text-[16px]">{userXETHClaimable} xETH</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    disabled={!canClaim}
+                    loading={claiming.xETH}
+                    onClick={() => handleClaim('xETH', false)}
+                    type="second"
+                  >
+                    Claim
+                  </Button>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
