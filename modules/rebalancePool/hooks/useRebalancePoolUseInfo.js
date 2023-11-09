@@ -72,11 +72,10 @@ const useRebalancePoolUseInfo = (contractAddress) => {
       unlockingBalanceOf: unlockingBalanceOfFn,
       claimable: claimableFn,
     } = fx_rebalancePoolContract.methods
-    console.log('_currentAccount---', _currentAccount)
 
     try {
       const apiCalls = [
-        updateAccountSnapshot(_currentAccount),
+        // updateAccountSnapshot(_currentAccount),
         stabilityPoolBalanceOfFn(_currentAccount),
         unlockedBalanceOfFn(_currentAccount),
         unlockingBalanceOfFn(_currentAccount),
@@ -84,7 +83,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         claimableFn(_currentAccount, config.tokens.xETH),
       ]
       const [
-        ,
+        // ,
         stabilityPoolBalanceOfRes,
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,
