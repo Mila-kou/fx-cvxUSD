@@ -405,6 +405,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "registry",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateRebalancePoolRegistry",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint128",
         "name": "defaultFeeRatio",
         "type": "uint128"
@@ -951,30 +964,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_baseSwapAmt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_data",
-        "type": "bytes"
-      }
-    ],
-    "name": "onSelfLiquidate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_fTokenAmt",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bool",
         "name": "_status",
         "type": "bool"
@@ -1085,6 +1074,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "registry",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -1130,40 +1132,6 @@
     ],
     "name": "revokeRole",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_baseSwapAmt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_minFTokenLiquidated",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_data",
-        "type": "bytes"
-      }
-    ],
-    "name": "selfLiquidate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_baseOut",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_fTokenLiquidated",
-        "type": "uint256"
-      }
-    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -1281,6 +1249,19 @@
       }
     ],
     "name": "updatePlatform",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      }
+    ],
+    "name": "updateRebalancePoolRegistry",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

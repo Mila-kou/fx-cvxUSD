@@ -28,7 +28,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "stabilityPoolRewards",
+        "name": "rebalancePoolRewards",
         "type": "uint256"
       },
       {
@@ -149,8 +149,21 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "rebalancePool",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateRebalancePool",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "stabilityPoolRatio",
+        "name": "rebalancePoolRatio",
         "type": "uint256"
       },
       {
@@ -180,19 +193,6 @@
       }
     ],
     "name": "UpdateSettleWhitelist",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "stabilityPool",
-        "type": "address"
-      }
-    ],
-    "name": "UpdateStabilityPool",
     "type": "event"
   },
   {
@@ -754,6 +754,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "rebalancePool",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rebalancePoolRatio",
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -792,45 +818,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_baseAmt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_incentiveRatio",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_recipient",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_data",
-        "type": "bytes"
-      }
-    ],
-    "name": "selfLiquidate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "_baseOut",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_fAmt",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -842,32 +829,6 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "stabilityPool",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "stabilityPoolRatio",
-    "outputs": [
-      {
-        "internalType": "uint128",
-        "name": "",
-        "type": "uint128"
       }
     ],
     "stateMutability": "view",
@@ -1006,8 +967,21 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_rebalancePool",
+        "type": "address"
+      }
+    ],
+    "name": "updateRebalancePool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint128",
-        "name": "_stabilityPoolRatio",
+        "name": "_rebalancePoolRatio",
         "type": "uint128"
       },
       {
@@ -1035,19 +1009,6 @@
       }
     ],
     "name": "updateSettleWhitelist",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_stabilityPool",
-        "type": "address"
-      }
-    ],
-    "name": "updateStabilityPool",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
