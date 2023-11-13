@@ -9,7 +9,7 @@ const contracts = {
   fundsRaisedToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // weth
 
   // fx ----
-  ChainlinkTwapOracleV3: '0xD24AC180e6769Fd5F624e7605B93084171074A77',
+  ChainlinkTwapOracleV3: '0xce3b7f32b98599260F4a057b47fa55DcBDa0A757',
   fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
   xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
   fx_Market: '0xe7b9c7c9cA85340b8c06fb805f7775e3015108dB',
@@ -17,9 +17,9 @@ const contracts = {
   fx_stETHGateway: '0x9bF5fFABbF97De0a47843A7Ba0A9DDB40f2e2ed5',
 
   fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
-  fx_RebalancePool_B: '0xb3E264e2E556e6986461378E8A92f4244EAc2C4C',
-  fx_RebalanceWithBonusToken_A: '0x203aeE406d26AE5C1Cc12b2F884d2B5814A44948',
-  fx_RebalanceWithBonusToken_B: '0x7d23e21Be2bf68De4d3D6C06340cE66F192B185a',
+  fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
+  fx_RebalanceWithBonusToken_A: '0x17f21f468d77E6e35702a9Ae7a9da50Db7F6a4f4',
+  fx_RebalanceWithBonusToken_B: '0xFf71c3AF2d66E2bAFc8088000fFB4CbFf4Ed7814',
 
   fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
   fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
@@ -33,7 +33,7 @@ const contracts = {
   FXN: '0x365AccFCa291e7D3914637ABf1F7635dB165Bb09',
   fx_FXN_treasury: '0x26B2ec4E02ebe2F54583af25b647b1D619e67BbF',
   fx_FXN_PlatformFeeDistributor: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
-  fx_PlatformFeeSpliter: '0x0084C2e1B1823564e597Ff4848a88D61ac63D703',
+  fx_PlatformFeeSpliter: '0xc6dEe5913e010895F3702bc43a40d661B13a40BD',
   veFXN: '0xEC6B8A3F3605B083F7044C0F31f2cac0caf1d469',
   TokenMinter: '0xC8b194925D55d5dE9555AD1db74c149329F71DeF',
   GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
