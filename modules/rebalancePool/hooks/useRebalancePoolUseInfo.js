@@ -75,7 +75,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
 
     try {
       const apiCalls = [
-        // updateAccountSnapshot(_currentAccount),
+        updateAccountSnapshot(_currentAccount),
         stabilityPoolBalanceOfFn(_currentAccount),
         unlockedBalanceOfFn(_currentAccount),
         unlockingBalanceOfFn(_currentAccount),
@@ -83,7 +83,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         claimableFn(_currentAccount, config.tokens.xETH),
       ]
       const [
-        // ,
+        ,
         stabilityPoolBalanceOfRes,
         unlockedBalanceOfRes,
         unlockingBalanceOfRes,
