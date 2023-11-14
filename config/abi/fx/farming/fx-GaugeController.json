@@ -223,27 +223,6 @@
   {
     "stateMutability": "nonpayable",
     "type": "function",
-    "name": "add_gauge",
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "name": "gauge_type",
-        "type": "int128"
-      },
-      {
-        "name": "weight",
-        "type": "uint256"
-      }
-    ],
-    "outputs": [],
-    "gas": 9355936476
-  },
-  {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "name": "checkpoint",
     "inputs": [],
     "outputs": [],
@@ -341,19 +320,6 @@
       }
     ],
     "gas": 9320264858
-  },
-  {
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "name": "add_type",
-    "inputs": [
-      {
-        "name": "_name",
-        "type": "string"
-      }
-    ],
-    "outputs": [],
-    "gas": 9355872388
   },
   {
     "stateMutability": "nonpayable",
