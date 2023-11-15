@@ -1,11 +1,11 @@
 import erc20ABI from './ERC20.json'
 import multiCallABI from './MultiCall.json'
 
-//IDO
+// IDO
 import IdoSale from './ido/IdoSale.json'
 import IdoGovernanceVesting from './ido/IdoGovernanceVesting.json'
 
-//fxETH
+// fxETH
 import FX_Market from './fx/Market.json'
 import FX_FractionalToken from './fx/FractionalToken.json'
 import FX_LeveragedToken from './fx/LeveragedToken.json'
@@ -15,7 +15,7 @@ import Fx_Gateway from './fx/FxGateway.json'
 import Fx_ReservePool from './fx/ReservePool.json'
 import Fx_FxETHTwapOracle from './fx/FxETHTwapOracle.json'
 
-//test
+// test
 import MockTwapOracle from './fx/MockTwapOracle.json'
 
 import AladdinCVXLockerABI from './AladdinCVXLocker.json'
@@ -45,6 +45,13 @@ import wstETHABI from './wstETH.json'
 import curveSwapABI from './common/curveSwap.json'
 
 import AladdinCLEVVestingABI from './airdrop/vesting.json'
+
+// farming
+import FX_GaugeControllerABI from './fx/farming/fx-GaugeController.json'
+import FX_ConvexCurveManagerABI from './fx/farming/fx-ConvexCurveManager.json'
+import FX_VotingEscrowBoostABI from './fx/farming/fx-VotingEscrowBoost.json'
+import FX_VotingEscrowProxyABI from './fx/farming/fx-VotingEscrowProxy.json'
+import FX_fx_SharedLiquidityGaugeABI from './fx/farming/fx_SharedLiquidityGauge.json'
 
 export default {
   erc20ABI,
@@ -88,4 +95,10 @@ export default {
   curveSwapABI,
 
   AladdinCLEVVestingABI,
+
+  FX_GaugeControllerABI,
+  FX_ConvexCurveManagerABI,
+  FX_VotingEscrowBoostABI,
+  FX_VotingEscrowProxyABI,
+  FX_fx_SharedLiquidityGaugeABI,
 }

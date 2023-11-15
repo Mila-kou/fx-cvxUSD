@@ -278,38 +278,28 @@ const zapTokens = {
 }
 
 const POOLS_LIST_GAUGE = {
-  Curve_CLEV_ETH: {
-    lpPoolCurveToken: '0x342D1C4Aa76EA6F5E5871b7f11A019a0eB713A4f',
-    token: '0x6C280dB098dB673d30d5B34eC04B6387185D3620',
-    gauge: '0x86e917ad6Cb44F9E6C8D9fA012acF0d0CfcF114f',
-    underlyingAssets: [TOKENS_INFO.weth, TOKENS_INFO.clev],
-    otherTokenName: 'CLEV',
-    otherTokenIndex: 1,
-    checkLpPriceTokenIndex: 0,
-    checkLpTokenName: 'ETH',
-    abiType: 'balances',
+  ETH_xETH: {
+    lpPoolCurveToken: '0x053d5be7c653325b58d88b942fb2454f8ffd8673',
+    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+    token: '0x16ead9a10b1a77007e6e329b076ad1fe97a6f7c0',
+    gauge: gaugeTokenList.fx_ETH_xETH,
   },
-  Curve_clevCVX_CVX: {
-    lpPoolCurveToken: '0xF9078Fb962A7D13F55d40d49C8AA6472aBD1A5a6',
-    token: '0xF9078Fb962A7D13F55d40d49C8AA6472aBD1A5a6',
-    gauge: '0xF758BE28E93672d1a8482BE15EAf21aa5450F979',
-    underlyingAssets: [TOKENS_INFO.cvx, TOKENS_INFO.clevCVX],
-    otherTokenName: 'clevCVX',
-    otherTokenIndex: 1,
-    checkLpPriceTokenIndex: 0,
-    checkLpTokenName: 'CVX',
-    abiType: 'balances',
+  ETH_FXN: {
+    lpPoolCurveToken: '0xc15f285679a1ef2d25f53d4cbd0265e1d02f2a92',
+    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+    token: '0xE06A65e09Ae18096B99770A809BA175FA05960e2',
+    gauge: gaugeTokenList.fx_ETH_FXN,
   },
-  Concentrator_abcCVX: {
-    lpPoolCurveToken: '',
-    token: tokens.abcCVX,
-    gauge: '0xc5022291cA8281745d173bB855DCd34dda67F2f0',
-    underlyingAssets: [TOKENS_INFO.cvx, TOKENS_INFO.clevCVX],
-    otherTokenName: 'clevCVX',
-    otherTokenIndex: 1,
-    checkLpPriceTokenIndex: 0,
-    checkLpTokenName: 'CVX',
-    abiType: 'balances',
+  crvUSD_fETH: {
+    lpPoolCurveToken: '0xe7e86c6055b964c7894d33e037ead34f2b62795d',
+    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+    token: '0x19033d99a7b7010157b81e5ee5a8e63a583fb735',
+    gauge: gaugeTokenList.fx_crvUSD_fETH,
+  },
+  fETH_FRAXBP: {
+    lpPoolCurveToken: '0x5f5fe47fed55eae627386995198294c39e1d17a5',
+    token: '0x3d28f9192e34e51414e69fbee5b11b35590fb9fb',
+    gauge: gaugeTokenList.fx_fETH_FRAXBP,
   },
 }
 export default {
