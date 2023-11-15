@@ -21,9 +21,31 @@ const contracts = {
   fx_RebalanceWithBonusToken_A: '0x17f21f468d77E6e35702a9Ae7a9da50Db7F6a4f4',
   fx_RebalanceWithBonusToken_B: '0xFf71c3AF2d66E2bAFc8088000fFB4CbFf4Ed7814',
 
-  fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
-  fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
-  fx_Minter: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
+  fx_VotingEscrowBoost: '0x1DC94c4Dba60f2880A40327EF465E364C57df03F',
+  fx_VotingEscrowProxy: '0x9B487bA5eB7848352cbFFE20DE7bC3384660E945',
+  fx_GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
+
+  // ETH+xETH
+  fx_SharedLiquidityGauge_ETH_xETH:
+    '0x82E535428b3034Ca74ce738949954715627cb140',
+  fx_ConvexCurveManager_ETH_xETH: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
+
+  // ETH+FXN
+  fx_SharedLiquidityGauge_ETH_FXN: '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
+  fx_ConvexCurveManager_ETH_FXN: '0x23831E29db590BbbAcF267EE2Cf377cD3E54A718',
+
+  // crvUSD+fETH
+  fx_SharedLiquidityGauge_crvUSD_fETH:
+    '0x12B295D12a4D4DF2F3F5B2B8E151bbE000564fa5',
+  fx_ConvexCurveManager_crvUSD_fETH:
+    '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
+
+  // fETH+FRAXBP
+  fx_SharedLiquidityGauge_fETH_FRAXBP:
+    '0x5c28b966aB37cFB9397bBc04595f91F0fBf06d9b',
+  fx_ConvexCurveManager_fETH_FRAXBP:
+    '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
+
   fx_FxGateway: '0x49e51067E695bd79d6275eCaB6E9E527a72AbdE4',
   fx_ReservePool: '0x5d0Aacf75116d1645Db2B3d1Ca4b303ef0CA3752',
   fx_FxETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
