@@ -17,6 +17,9 @@ const tokens = {
 const TOKENS_INFO = {
   ...tokensInfo.TOKENS_INFO,
 }
+const gaugeTokenList = {
+  ...tokensInfo.gaugeTokenList,
+}
 
 export default {
   CHAIN_ID,
@@ -25,4 +28,5 @@ export default {
   tokens,
   contracts,
   TOKENS_INFO,
+  gaugeTokenList,
 }

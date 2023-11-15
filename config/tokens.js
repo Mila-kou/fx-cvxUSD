@@ -64,7 +64,6 @@ const contracts = {
   redeemConverter: '0xAF345c813CE17Cc5837BfD14a910D365223F3B95',
 
   CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
-
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',
 
@@ -99,6 +98,17 @@ const contracts = {
   aladdinAllInOneGateway: '0x6e513d492Ded19AD8211a57Cc6B4493C9E6C857B',
 
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
+}
+
+const gaugeTokenList = {
+  fx_ETH_xETH: '0x82E535428b3034Ca74ce738949954715627cb140',
+  ConvexCurveManager_ETH_xETH: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
+  fx_ETH_FXN: '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
+  ConvexCurveManager_ETH_FXN: '0x23831E29db590BbbAcF267EE2Cf377cD3E54A718',
+  fx_crvUSD_fETH: '0x12B295D12a4D4DF2F3F5B2B8E151bbE000564fa5',
+  ConvexCurveManager_crvUSD_fETH: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
+  fx_fETH_FRAXBP: '0x5c28b966aB37cFB9397bBc04595f91F0fBf06d9b',
+  ConvexCurveManager_fETH_FRAXBP: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
 }
 
 const tokens = {
@@ -308,6 +318,7 @@ export default {
   TOKENS_INFO,
   POOLS_LIST_GAUGE,
   zapTokens,
+  gaugeTokenList,
 }
 
 // market: "0xeCbA45f077df21D9142312a5aa21411371E1f943",
