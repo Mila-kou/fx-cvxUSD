@@ -1,0 +1,13 @@
+@import '../../../../assets/css/mixin.scss';
+
+.poolWrap {
+  margin-top: 16px;
+  border-radius: 10px;
+  padding: 16px;
+  background: var(--input-background-color);
+}
+
+@media (max-width: 800px) {
+  .poolWrap {
+  }
+}

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
-import PoolItem from './components/PoolItem'
+import PoolCell from './components/PoolCell'
+import DepositCell from './components/DepositCell'
 import usePool from './hooks/usePool'
 
 import styles from './styles.module.scss'
@@ -36,56 +36,48 @@ export default function EarningPoolPage() {
     )
   )
 
+  const cells = [
+    {
+      title: 'Rebalance Pool A',
+      subTitle: 'fETH',
+    },
+    {
+      title: 'Rebalance Pool B',
+      subTitle: 'fETH',
+    },
+    {
+      title: 'FXN / ETH Curve LP',
+    },
+    {
+      title: 'xETH / ETH Curve LP',
+    },
+    {
+      title: 'fETH / crvUSD Curve LP',
+    },
+    {
+      title: 'fETH / FRAXBP Curve LP',
+    },
+  ]
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
-          Rebalance Pool
+          Earning Pools
         </div>
-        <p className="text-[20px] mt-[24px]">Overview</p>
-        <div className="flex items-center">
-          {`CR < 130% fETH will be used for rebalance`} {` `}
-          <Tooltip
-            placement="topLeft"
-            title="The deposited, unlocking, unclaimed fETH will be used for rebalance. Unlocking takes 1 day from the last unlocking transaction."
-            arrow
-            color="#000"
-            overlayInnerStyle={{ width: '300px' }}
-          >
-            <InfoCircleOutlined className="ml-[8px]" />
-          </Tooltip>
+        <div className="flex justify-between">
+          <div className="w-[180px]" />
+          <div className="w-[140px]">TVL</div>
+          <div className="w-[150px]">APR Range</div>
+          <div className="w-[80px]">Deposit</div>
+          <div className="w-[80px]">Earn</div>
+          <div className="w-[80px]" />
         </div>
-        <div className={styles.items}>
-          <div className={styles.item}>
-            <p>Total Deposited Value</p>
-            <h2>{dollarText(totalSupplyTvlText)}</h2>
-            <p>{totalSupplyText} fETH</p>
-          </div>
-          <div className={styles.item}>
-            <p>A Pool APR (stETH)</p>
-            <h2>{poolAData.apy}%</h2>
-            <p>{poolAData.stabilityPoolTotalSupply} fETH</p>
-          </div>
-          <div className={styles.item}>
-            <p>B Pool APR (xETH)</p>
-            <h2>{poolBData.apy}%</h2>
-            <p>{poolBData.stabilityPoolTotalSupply} fETH</p>
-          </div>
-        </div>
+        {cells.map((item) => (
+          <PoolCell cellData={item} {...poolAData} />
+        ))}
       </div>
-
-      <PoolItem
-        title="My Rebalance Pool A"
-        contractType="fx_RebalancePool_A"
-        {...poolAData}
-      />
-      <PoolItem
-        title="My Rebalance Pool B"
-        contractType="fx_RebalancePool_B"
-        hasXETH
-        {...poolBData}
-      />
     </div>
   )
 }
