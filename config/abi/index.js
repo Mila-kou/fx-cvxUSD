@@ -44,7 +44,11 @@ import FX_RebalanceWithBonusTokenABI from './fx/RebalanceWithBonusToken.json'
 import wstETHABI from './wstETH.json'
 import curveSwapABI from './common/curveSwap.json'
 
+// vesting
 import AladdinCLEVVestingABI from './airdrop/vesting.json'
+import FX_ManageableVestingABI from './fx/FX_ManageableVesting.json'
+import convex_cvxFxnStakingABI from './fx/convex_cvxFxnStaking.json'
+import stakeDao_sdFxnStakingABI from './fx/stakeDao_sdFxnStaking.json'
 
 // farming
 import FX_GaugeControllerABI from './fx/farming/fx-GaugeController.json'
@@ -101,4 +105,7 @@ export default {
   FX_VotingEscrowBoostABI,
   FX_VotingEscrowProxyABI,
   FX_fx_SharedLiquidityGaugeABI,
+  FX_ManageableVestingABI,
+  convex_cvxFxnStakingABI,
+  stakeDao_sdFxnStakingABI,
 }

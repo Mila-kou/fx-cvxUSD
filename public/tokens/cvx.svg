@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns:xodm="http://www.corel.com/coreldraw/odm/2003" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 2500 2500" style="enable-background:new 0 0 2500 2500;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#3A3A3A;}
+	.st2{fill:#1682FE;}
+	.st3{fill:#FF5A5A;}
+	.st4{fill:#F4BB3B;}
+	.st5{fill:#60D8A4;}
+</style>
+<g id="Layer_x0020_1">
+	<g id="_1706270826656">
+		<g id="Layer_2_00000116219575559792888810000015274913260782515369_">
+			<g id="logo">
+				<circle class="st0" cx="1250" cy="1250" r="1250"></circle>
+				<polygon class="st1" points="1980,1082 1980,745 1812,745 1812,576 1475,576 1475,408 1138,408 1138,576 801,576 801,745       632,745 632,1755 801,1755 801,1924 1138,1924 1138,2092 1474,2092 1474,1924 1812,1924 1812,1755 1980,1755 1980,1418       1643,1418 1643,1587 1475,1587 1475,1755 1138,1755 1138,1587 969,1587 969,913 1138,913 1138,745 1475,745 1475,913 1643,913       1643,1082     "></polygon>
+				<rect x="1531" y="913" class="st2" width="112" height="168"></rect>
+				<rect x="1362" y="745" class="st2" width="112" height="168"></rect>
+				<rect x="1025" y="408" class="st2" width="112" height="168"></rect>
+				<rect x="1475" y="1419" class="st3" width="168" height="169"></rect>
+				<rect x="1362" y="1587" class="st3" width="112" height="168"></rect>
+				<rect x="1025" y="1924" class="st3" width="112" height="168"></rect>
+				<rect x="688" y="1755" class="st4" width="112" height="168"></rect>
+				<rect x="520" y="1250" class="st4" width="112" height="505"></rect>
+				<rect x="520" y="745" class="st5" width="112" height="505"></rect>
+				<rect x="688" y="576" class="st2" width="112" height="168"></rect>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

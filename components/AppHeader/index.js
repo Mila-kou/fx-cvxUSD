@@ -27,6 +27,7 @@ const routers = [
   ['Gauge Weight', '/gauge-weight'],
   // ['Farming', '/farming'],
   ['Vesting', '/vesting'],
+  ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
   // ['Offering', '/offering'],
 ]

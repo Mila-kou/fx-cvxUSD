@@ -50,7 +50,15 @@ const contracts = {
   fx_ReservePool: '0x5d0Aacf75116d1645Db2B3d1Ca4b303ef0CA3752',
   fx_FxETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
 
+  // ManageableVesting
   fx_Vesting: '0x2290eeFEa24A6E43b26C27187742bD1FEDC10BDB',
+  fx_ManageableVesting: '0xdddCAae9608D63C90017f700E3C51B9C781b97C7',
+  fx_ManageableVesting_CvxFxnVestingManager:
+    '0xbEfe612CeCAeBA0111307Ee9967609B07DA52E17',
+  fx_ManageableVesting_SdFxnVestingManager:
+    '0x45F8C8194506b5026a7e198f5120d5913BbacFEe',
+  convex_cvxFxnStaking: '0xEC60Cd4a5866fb3B0DD317A46d3B474a24e06beF',
+  stakeDao_sdFxnStaking: '0xbcfE5c47129253C6B8a9A00565B3358b488D42E0',
 
   FXN: '0x365AccFCa291e7D3914637ABf1F7635dB165Bb09',
   fx_FXN_treasury: '0x26B2ec4E02ebe2F54583af25b647b1D619e67BbF',
@@ -149,6 +157,7 @@ const tokens = {
 
   // abcCVX
   abcCVX: '0xDEC800C2b17c9673570FDF54450dc1bd79c8E359',
+  SDT: '0x73968b9a57c6E53d41345FD57a6E6ae27d6CDB2F',
 }
 
 const TOKENS_INFO = {
