@@ -1,4 +1,6 @@
 const CLEVIcon = '/assets/tokens/clev.svg'
+const FXNIcon = '/assets/tokens/FXN.svg'
+const stETHIcon = '/assets/tokens/FXN.svg'
 
 const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
@@ -168,7 +170,7 @@ const TOKENS_INFO = {
   weth: ['weth', tokens.weth, 18, 'weth'],
   wbtc: ['bitcoin', tokens.wbtc, 8, 'wbtc'],
   seth: ['seth', tokens.seth, 18, 'seth'],
-  stETH: ['staked-ether', tokens.stETH, 18, 'stETH'],
+  stETH: ['staked-ether', tokens.stETH, 18, 'stETH', stETHIcon],
   renBTC: ['renbtc', tokens.renBTC, 8, 'renBTC'],
   clev: ['clev', tokens.clev, 18, 'aldClev'],
   clevCVX: ['clev', tokens.clevCVX, 18, 'aldClevCVX'],
@@ -179,10 +181,10 @@ const TOKENS_INFO = {
   busd: ['binance-usd', tokens.busd, 18, 'busd'],
   tusd: ['true-usd', tokens.tusd, 18, 'TUSD'],
   lusd: ['usd-coin', tokens.lusd, 18, 'lusd'],
-  fETH: ['fETH', tokens.fETH, 18],
-  xETH: ['xETH', tokens.xETH, 18],
-  veFXN: ['veFXN', tokens.veFXN, 18],
-  fxn: ['FXN', tokens.FXN, 18],
+  fETH: ['fETH', tokens.fETH, 18, 'fETH'],
+  xETH: ['xETH', tokens.xETH, 18, 'xETH'],
+  veFXN: ['veFXN', tokens.veFXN, 18, 'veFXN'],
+  fxn: ['FXN', tokens.FXN, 18, 'FXN', FXNIcon],
 }
 
 const zapTokens = {
@@ -311,6 +313,14 @@ const POOLS_LIST_GAUGE = {
     gauge: gaugeTokenList.fx_fETH_FRAXBP,
   },
 }
+const getTokenInfoByAddress = (tokenAddress) => {
+  for (const key in TOKENS_INFO) {
+    if (TOKENS_INFO[key][1].toLowerCase() == tokenAddress.toLowerCase()) {
+      return TOKENS_INFO[key]
+    }
+  }
+  return {}
+}
 export default {
   tokens,
   contracts,
@@ -318,6 +328,7 @@ export default {
   POOLS_LIST_GAUGE,
   zapTokens,
   gaugeTokenList,
+  getTokenInfoByAddress,
 }
 
 // market: "0xeCbA45f077df21D9142312a5aa21411371E1f943",

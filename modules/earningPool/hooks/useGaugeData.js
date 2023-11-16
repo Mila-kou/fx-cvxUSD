@@ -15,7 +15,6 @@ const useGaugeData = () => {
   const fetchAllPoolData = useCallback(
     async (arr) => {
       try {
-        console.log('allBaseInfo----1')
         const callList = arr.map((item, index) => {
           let _lpGaugeContract = item.lpGaugeContract
           if (!item.lpContract) {
@@ -24,8 +23,14 @@ const useGaugeData = () => {
               abi.FX_fx_SharedLiquidityGaugeABI
             )
           }
-          const { symbol, totalSupply, name, stakingToken, disableGauge } =
-            _lpGaugeContract.methods
+          const {
+            symbol,
+            totalSupply,
+            name,
+            getActiveRewardTokens,
+            stakingToken,
+            disableGauge,
+          } = _lpGaugeContract.methods
           return {
             ...item,
             // lpGaugeContract: _lpGaugeContract,
@@ -34,15 +39,15 @@ const useGaugeData = () => {
               totalSupply: totalSupply(),
               name: name(),
               stakingToken: stakingToken(),
+              activeRewardTokens: getActiveRewardTokens(),
               // disableGauge: disableGauge(),
             },
           }
         })
-        console.log('allBaseInfo----2', callList)
         const allBaseInfo = await multiCallsV2(callList, {
           from: _currentAccount,
         })
-        console.log('allBaseInfo----3', allBaseInfo)
+        console.log('allBaseInfo----', allBaseInfo)
         return allBaseInfo
       } catch (error) {
         console.log('allBaseInfo----error', error)
@@ -70,7 +75,7 @@ const useGaugeData = () => {
             ...item,
             // lpGaugeContract: _lpGaugeContract,
             userInfo: {
-              symbol: balanceOf(_currentAccount),
+              userShare: balanceOf(_currentAccount),
               userAllowance: allowance(_currentAccount, allowanceContractAddr),
             },
           }

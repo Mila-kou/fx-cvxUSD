@@ -22,13 +22,12 @@ export default function PoolCell({ cellData, key }) {
           <p>{cellData.name}</p>
           <p>{cellData.nameShow}</p>
         </div>
-        <div className="w-[140px]">$100,000,000</div>
+        <div className="w-[140px]">{cellData.tvl_text}</div>
         <div className="w-[150px]">12.6% ~ 30.7%</div>
-        <div className="w-[80px]">
-          <img className="h-[30px]" src="/images/f-logo.svg" />
-        </div>
+        <div className="w-[80px]">{cellData.userShare_text}</div>
         <div className="w-[80px]">
           <img className="h-[30px]" src={stETHImg} />
+          <img className="h-[30px]" src="/images/f-logo.svg" />
         </div>
         <div className="w-[80px]">
           <div

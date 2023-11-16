@@ -74,4 +74,5 @@ export default {
   explorerUri,
   POOLS_LIST_GAUGE,
   zapTokens,
+  getTokenInfoByAddress: tokensInfo.getTokenInfoByAddress,
 }

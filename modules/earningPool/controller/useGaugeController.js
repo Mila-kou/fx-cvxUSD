@@ -67,15 +67,22 @@ const useGaugeController = () => {
   const pageData = useMemo(() => {
     try {
       const data = POOLS_LIST.map((item, index) => {
-        // const tvl = checkNotZoroNumOption(
-        //   item?.baseInfo?.totalSupply,
-        //   fb4(item.baseInfo.totalSupply)
-        // )
+        const _baseInfo = allPoolsInfo[index]?.baseInfo || {}
+        const _userInfo = allPoolsInfo[index]?.userInfo || {}
+        const tvl_text = checkNotZoroNumOption(
+          _baseInfo.totalSupply,
+          fb4(_baseInfo.totalSupply)
+        )
+        const userShare_text = checkNotZoroNumOption(
+          _userInfo.userShare,
+          fb4(_userInfo.userShare)
+        )
         return {
           ...item,
-          baseInfo: allPoolsInfo[index]?.baseInfo || {},
-          userInfo: allPoolsUserInfo[index]?.userInfo || {},
-          // tvl,
+          baseInfo: _baseInfo,
+          userInfo: _userInfo,
+          tvl_text,
+          userShare_text,
         }
       })
       console.log(

@@ -12,7 +12,6 @@ export default function Withdraw(props) {
   const [withdrawing, setWithdrawing] = useState(false)
 
   const { logo, name, stakeTokenDecimals } = info
-  const { userInfo } = poolData
 
   const handleInputChange = (val) => setWithdrawAmount(val)
 
@@ -20,36 +19,30 @@ export default function Withdraw(props) {
     if (!isAllReady) return
 
     setWithdrawing(true)
-    let sharesInWei = cBN(withdrawAmount || 0).toFixed(0, 1)
-    try {
-      if (
-        cBN(userInfo.stabilityPoolBalanceOfRes).isLessThanOrEqualTo(sharesInWei)
-      ) {
-        sharesInWei = userInfo.stabilityPoolBalanceOfRes
-      }
-      const apiCall = FX_RebalancePoolContract.methods.unlock(sharesInWei)
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'earn',
-        action: 'Unlock',
-      })
-      onCancel()
-      setWithdrawing(false)
-    } catch (error) {
-      // console.log(error)
-      setWithdrawing(false)
-      noPayableErrorAction(`error_earn_withdraw`, error)
-    }
+    // let sharesInWei = cBN(withdrawAmount || 0).toFixed(0, 1)
+    // try {
+    //   if (
+    //     cBN(userInfo.stabilityPoolBalanceOfRes).isLessThanOrEqualTo(sharesInWei)
+    //   ) {
+    //     sharesInWei = userInfo.stabilityPoolBalanceOfRes
+    //   }
+    //   const apiCall = FX_RebalancePoolContract.methods.unlock(sharesInWei)
+    //   const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+    //   const gas = parseInt(estimatedGas * 1.2, 10) || 0
+    //   await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+    //     key: 'earn',
+    //     action: 'Unlock',
+    //   })
+    //   onCancel()
+    //   setWithdrawing(false)
+    // } catch (error) {
+    //   // console.log(error)
+    //   setWithdrawing(false)
+    //   noPayableErrorAction(`error_earn_withdraw`, error)
+    // }
   }
   const canWithdraw = useMemo(() => {
-    return (
-      !!(withdrawAmount * 1) &&
-      isAllReady &&
-      cBN(withdrawAmount).isLessThanOrEqualTo(
-        userInfo.stabilityPoolBalanceOfRes
-      )
-    )
+    return !!(withdrawAmount * 1) && isAllReady
   }, [withdrawAmount, isAllReady])
 
   return (
@@ -57,8 +50,8 @@ export default function Withdraw(props) {
       <BalanceInput
         placeholder="0"
         symbol={name}
-        balance={fb4(userInfo.stabilityPoolBalanceOfRes, false)}
-        maxAmount={userInfo.stabilityPoolBalanceOfRes}
+        balance={fb4(0, false)}
+        maxAmount={1}
         onChange={handleInputChange}
         withUsd={false}
       />

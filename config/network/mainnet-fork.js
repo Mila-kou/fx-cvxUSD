@@ -50,4 +50,5 @@ export default {
   POOLS_LIST_GAUGE,
   zapTokens,
   gaugeTokenList,
+  getTokenInfoByAddress: tokensInfo.getTokenInfoByAddress,
 }

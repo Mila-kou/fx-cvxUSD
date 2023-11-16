@@ -29,4 +29,5 @@ export default {
   contracts,
   TOKENS_INFO,
   gaugeTokenList,
+  getTokenInfoByAddress: tokensInfo.getTokenInfoByAddress,
 }
