@@ -66,8 +66,7 @@ const useGaugeController = () => {
 
   const pageData = useMemo(() => {
     try {
-      console.log('POOLS_LIST---', POOLS_LIST, allPoolsInfo, allPoolsUserInfo)
-      return POOLS_LIST.map((item, index) => {
+      const data = POOLS_LIST.map((item, index) => {
         // const tvl = checkNotZoroNumOption(
         //   item?.baseInfo?.totalSupply,
         //   fb4(item.baseInfo.totalSupply)
@@ -79,11 +78,20 @@ const useGaugeController = () => {
           // tvl,
         }
       })
+      console.log(
+        'POOLS_LIST---data--',
+        POOLS_LIST,
+        allPoolsInfo,
+        allPoolsUserInfo,
+        data
+      )
+      return data
     } catch (error) {
       console.log('POOLS_LIST---error---', error)
-      return []
+      return POOLS_LIST
     }
-  }, [allPoolsInfo, allPoolsUserInfo])
+  }, [POOLS_LIST, allPoolsInfo, allPoolsUserInfo])
+
   return {
     pageData,
     setDepositVisible,

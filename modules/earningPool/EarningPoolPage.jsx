@@ -9,8 +9,8 @@ import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
 import useGaugeController from './controller/useGaugeController'
 
 export default function EarningPoolPage() {
-  const { pagedata = [], ...pageOthers } = useGaugeController()
-  console.log('POOLS_LIST---pagedata', pagedata)
+  const { pageData, ...pageOthers } = useGaugeController()
+  console.log('POOLS_LIST---pagedata', pageData)
 
   const deposits = [
     {
@@ -76,7 +76,7 @@ export default function EarningPoolPage() {
           <div className="w-[80px]">Earn</div>
           <div className="w-[80px]" />
         </div>
-        {pagedata.map((item) => (
+        {pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
         ))}
       </div>
