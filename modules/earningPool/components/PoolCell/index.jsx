@@ -66,25 +66,23 @@ export default function PoolCell({
           <img className="h-[30px]" src={stETHImg} />
         </div>
         <div className="w-[80px]">
-          <div onClick={handleDeposit}>Deposit</div>
+          <div
+            className="underline cursor-pointer text-[var(--a-button-color)]"
+            onClick={handleDeposit}
+          >
+            Deposit
+          </div>
         </div>
       </div>
 
       {depositVisible && (
         <DepositModal
+          cellData={cellData}
           info={item}
           contractType={contractType}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
           poolData={stabilityPoolInfo}
           onCancel={() => setDepositVisible(false)}
-        />
-      )}
-      {withdrawVisible && (
-        <WithdrawModal
-          info={item}
-          FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
-          onCancel={() => setWithdrawVisible(false)}
         />
       )}
     </div>

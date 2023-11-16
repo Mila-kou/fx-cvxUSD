@@ -9,7 +9,8 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 
 export default function DepositModal(props) {
-  const { onCancel, info, contractType, FX_RebalancePoolContract } = props
+  const { onCancel, info, contractType, FX_RebalancePoolContract, cellData } =
+    props
   const [depositing, setDepositing] = useState(false)
   const { currentAccount, isAllReady } = useWeb3()
   const [selectToken, setSelectToken] = useState(info.zapTokens[0])
@@ -60,7 +61,7 @@ export default function DepositModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">Deposit fETH </h2>
+        <h2 className="mb-[16px]">{cellData.title}</h2>
 
         <BalanceInput
           placeholder="0"

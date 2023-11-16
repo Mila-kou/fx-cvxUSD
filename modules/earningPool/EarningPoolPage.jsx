@@ -36,6 +36,15 @@ export default function EarningPoolPage() {
     )
   )
 
+  const deposits = [
+    {
+      title: 'Rebalance Pool A',
+    },
+    {
+      title: 'FXN / ETH Curve LP',
+    },
+  ]
+
   const cells = [
     {
       title: 'Rebalance Pool A',
@@ -61,6 +70,23 @@ export default function EarningPoolPage() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.headerTitle}>
+          <DotChartOutlined />
+          My Deposits
+        </div>
+        <div className="flex justify-between">
+          <div className="w-[180px]">Pool Name</div>
+          <div className="w-[180px]">Current APR</div>
+          <div className="w-[140px]">Deposits</div>
+          <div className="w-[80px]">Earned</div>
+          <div className="w-[80px]" />
+        </div>
+        {deposits.map((item) => (
+          <DepositCell cellData={item} {...poolAData} />
+        ))}
+      </div>
+
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
