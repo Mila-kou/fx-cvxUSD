@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Modal } from 'antd'
 import { useToken } from '@/hooks/useTokenInfo'
+import Tabs from '@/modules/home/components/Tabs'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
+import Withdraw from './Withdraw'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
@@ -14,8 +16,11 @@ export default function DepositModal(props) {
   const [depositing, setDepositing] = useState(false)
   const { currentAccount, isAllReady } = useWeb3()
   const [selectToken, setSelectToken] = useState(info.zapTokens[0])
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const [depositAmount, setDepositAmount] = useState(0)
+
+  const isWithdraw = activeIndex === 1
 
   const selectTokenInfo = useToken(selectToken.address, contractType, info)
   const tokenContract = selectTokenInfo.contract
@@ -62,31 +67,42 @@ export default function DepositModal(props) {
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
         <h2 className="mb-[16px]">{cellData.title}</h2>
-
-        <BalanceInput
-          placeholder="0"
-          symbol="fETH"
-          balance={fb4(userTokenBalance, false)}
-          maxAmount={userTokenBalance}
-          onChange={handleInputChange}
-          withUsd={false}
+        <Tabs
+          selecedIndex={activeIndex}
+          onChange={(v) => setActiveIndex(v)}
+          tabs={['Deposit', 'Withdraw']}
         />
-        <p className={styles.note}>
-          Note that withdrawals from Rebalancing Pool require 1 day waiting
-          period. Pending withdrawals earn no yield, but may be used for stETH
-          redemption.
-        </p>
-      </div>
 
-      <div className="mt-[40px]">
-        <BtnWapper
-          width="100%"
-          loading={depositing}
-          disabled={!canSubmit}
-          onClick={handleDeposit}
-        >
-          Deposit
-        </BtnWapper>
+        {isWithdraw ? (
+          <Withdraw {...props} />
+        ) : (
+          <div>
+            <BalanceInput
+              placeholder="0"
+              symbol="fETH"
+              balance={fb4(userTokenBalance, false)}
+              maxAmount={userTokenBalance}
+              onChange={handleInputChange}
+              withUsd={false}
+            />
+            <p className={styles.note}>
+              Note that withdrawals from Rebalancing Pool require 1 day waiting
+              period. Pending withdrawals earn no yield, but may be used for
+              stETH redemption.
+            </p>
+
+            <div className="mt-[40px]">
+              <BtnWapper
+                width="100%"
+                loading={depositing}
+                disabled={!canSubmit}
+                onClick={handleDeposit}
+              >
+                Deposit
+              </BtnWapper>
+            </div>
+          </div>
+        )}
       </div>
     </Modal>
   )

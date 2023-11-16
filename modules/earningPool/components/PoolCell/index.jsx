@@ -5,7 +5,6 @@ import cn from 'classnames'
 import Button from '@/components/Button'
 import { POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
-import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
@@ -19,8 +18,6 @@ export default function PoolCell({
   handleHarvest,
   handleLiquidatorWithBonus,
 
-  handleDeposit,
-  handleWithdraw,
   canUnlock,
   handleUnlock,
   canClaim,
@@ -39,19 +36,16 @@ export default function PoolCell({
   userUnlockingUnlockAt,
   userUnlockedBalance,
 
-  depositVisible,
-  setDepositVisible,
-  withdrawVisible,
-  setWithdrawVisible,
-
   contractType,
   FX_RebalancePoolContract,
 
   cellData,
+  key,
   hasXETH,
 }) {
+  const [showDepositModal, setShowDepositModal] = useState(false)
   return (
-    <div className={styles.poolWrap}>
+    <div key={key} className={styles.poolWrap}>
       <div className="flex justify-between items-center">
         <div className="w-[180px]">
           <p>{cellData.title}</p>
@@ -68,21 +62,21 @@ export default function PoolCell({
         <div className="w-[80px]">
           <div
             className="underline cursor-pointer text-[var(--a-button-color)]"
-            onClick={handleDeposit}
+            onClick={() => setShowDepositModal(true)}
           >
             Deposit
           </div>
         </div>
       </div>
 
-      {depositVisible && (
+      {showDepositModal && (
         <DepositModal
           cellData={cellData}
           info={item}
           contractType={contractType}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
           poolData={stabilityPoolInfo}
-          onCancel={() => setDepositVisible(false)}
+          onCancel={() => setShowDepositModal(false)}
         />
       )}
     </div>

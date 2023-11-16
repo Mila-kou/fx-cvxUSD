@@ -5,7 +5,6 @@ import cn from 'classnames'
 import Button from '@/components/Button'
 import { POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
-import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
@@ -19,8 +18,6 @@ export default function PoolItem({
   handleHarvest,
   handleLiquidatorWithBonus,
 
-  handleDeposit,
-  handleWithdraw,
   canUnlock,
   handleUnlock,
   canClaim,
@@ -41,8 +38,6 @@ export default function PoolItem({
 
   depositVisible,
   setDepositVisible,
-  withdrawVisible,
-  setWithdrawVisible,
 
   contractType,
   FX_RebalancePoolContract,
@@ -109,11 +104,11 @@ export default function PoolItem({
                 ) : null}
               </div>
               <div className={styles.actions}>
+                {/*  
                 <Button onClick={handleDeposit}>Deposit</Button>
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
-                </Button>
-                {/*        
+                </Button>      
                 <Button
                   loading={harvesting}
                   onClick={handleHarvest}
@@ -184,23 +179,6 @@ export default function PoolItem({
           </div>
         </div>
       </div>
-      {depositVisible && (
-        <DepositModal
-          info={item}
-          contractType={contractType}
-          FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
-          onCancel={() => setDepositVisible(false)}
-        />
-      )}
-      {withdrawVisible && (
-        <WithdrawModal
-          info={item}
-          FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
-          onCancel={() => setWithdrawVisible(false)}
-        />
-      )}
     </div>
   )
 }

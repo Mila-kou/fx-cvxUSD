@@ -47,10 +47,6 @@ export default function usePool({
     if (!isAllReady) return
     setDepositVisible(true)
   }
-  const handleWithdraw = () => {
-    if (!isAllReady) return
-    setWithdrawVisible(true)
-  }
 
   const handleUnlock = async () => {
     if (unlocking || !canUnlock) return
@@ -165,7 +161,6 @@ export default function usePool({
     handleLiquidatorWithBonus,
 
     handleDeposit,
-    handleWithdraw,
     canUnlock,
     handleUnlock,
     canClaim,

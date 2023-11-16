@@ -1,14 +1,11 @@
 import React, { useState, useCallback, useMemo } from 'react'
-import { Modal } from 'antd'
-import Input from '@/components/Input'
 import Button from '@/components/Button'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
-import styles from './styles.module.scss'
 
-export default function WithdrawModal(props) {
+export default function Withdraw(props) {
   const { onCancel, info, poolData, FX_RebalancePoolContract } = props
   const { currentAccount, isAllReady } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
@@ -56,19 +53,15 @@ export default function WithdrawModal(props) {
   }, [withdrawAmount, isAllReady])
 
   return (
-    <Modal visible centered onCancel={onCancel} footer={null} width={500}>
-      <div className={styles.content}>
-        <h2 className="mb-[16px]">Withdraw fETH </h2>
-        <BalanceInput
-          placeholder="0"
-          symbol={name}
-          balance={fb4(userInfo.stabilityPoolBalanceOfRes, false)}
-          maxAmount={userInfo.stabilityPoolBalanceOfRes}
-          onChange={handleInputChange}
-          withUsd={false}
-        />
-      </div>
-
+    <div>
+      <BalanceInput
+        placeholder="0"
+        symbol={name}
+        balance={fb4(userInfo.stabilityPoolBalanceOfRes, false)}
+        maxAmount={userInfo.stabilityPoolBalanceOfRes}
+        onChange={handleInputChange}
+        withUsd={false}
+      />
       <div className="mt-[40px]">
         <Button
           width="100%"
@@ -79,6 +72,6 @@ export default function WithdrawModal(props) {
           Withdraw
         </Button>
       </div>
-    </Modal>
+    </div>
   )
 }

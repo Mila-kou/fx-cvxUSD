@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
 import PoolCell from './components/PoolCell'
-import DepositCell from './components/DepositCell'
+import MyDepositCell from './components/MyDepositCell'
 import usePool from './hooks/usePool'
 
 import styles from './styles.module.scss'
@@ -83,7 +83,7 @@ export default function EarningPoolPage() {
           <div className="w-[80px]" />
         </div>
         {deposits.map((item) => (
-          <DepositCell cellData={item} {...poolAData} />
+          <MyDepositCell cellData={item} {...poolAData} />
         ))}
       </div>
 
@@ -101,7 +101,7 @@ export default function EarningPoolPage() {
           <div className="w-[80px]" />
         </div>
         {cells.map((item) => (
-          <PoolCell cellData={item} {...poolAData} />
+          <PoolCell key={item.title} cellData={item} {...poolAData} />
         ))}
       </div>
     </div>
