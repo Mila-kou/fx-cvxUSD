@@ -51,7 +51,7 @@ export default function EarningPoolPage() {
           <DotChartOutlined />
           My Deposits
         </div>
-        <div className="flex justify-between">
+        <div className="mt-[32px] flex justify-between">
           <div className="w-[180px]">Pool Name</div>
           <div className="w-[180px]">Current APR</div>
           <div className="w-[140px]">Deposits</div>
