@@ -13,43 +13,14 @@ const xETHImg = '/images/x-logo.svg'
 
 const item = POOLS_LIST[0]
 
-export default function PoolCell({
-  harvesting,
-  handleHarvest,
-  handleLiquidatorWithBonus,
-
-  canUnlock,
-  handleUnlock,
-  canClaim,
-  claiming,
-  handleClaim,
-
-  stabilityPoolInfo,
-  userDeposit,
-  userDepositTvl_text,
-  myTotalValue_text,
-  userWstETHClaimable,
-  userWstETHClaimableTvl_text,
-  userXETHClaimable,
-  userXETHClaimableTvl_text,
-  userUnlockingBalance,
-  userUnlockingUnlockAt,
-  userUnlockedBalance,
-
-  contractType,
-  FX_RebalancePoolContract,
-
-  cellData,
-  key,
-  hasXETH,
-}) {
+export default function PoolCell({ cellData, key }) {
   const [showDepositModal, setShowDepositModal] = useState(false)
   return (
     <div key={key} className={styles.poolWrap}>
       <div className="flex justify-between items-center">
         <div className="w-[180px]">
-          <p>{cellData.title}</p>
-          <p>{cellData.subTitle}</p>
+          <p>{cellData.name}</p>
+          <p>{cellData.nameShow}</p>
         </div>
         <div className="w-[140px]">$100,000,000</div>
         <div className="w-[150px]">12.6% ~ 30.7%</div>
@@ -73,9 +44,9 @@ export default function PoolCell({
         <DepositModal
           cellData={cellData}
           info={item}
-          contractType={contractType}
-          FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
+          // contractType={contractType}
+          // FX_RebalancePoolContract={FX_RebalancePoolContract}
+          // poolData={stabilityPoolInfo}
           onCancel={() => setShowDepositModal(false)}
         />
       )}

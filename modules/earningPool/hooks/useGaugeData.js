@@ -8,7 +8,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import { POOLS_LIST } from '@/config/aladdinVault'
 
 const useGaugeData = () => {
-  const { _currentAccount, web3, blockNumber } = useWeb3()
+  const { _currentAccount, web3, isAllReady, blockNumber } = useWeb3()
   const { getContract } = useContract()
   const multiCallsV2 = useMutiCallV2()
 
@@ -88,8 +88,8 @@ const useGaugeData = () => {
             _lpGaugeContract.methods
           return {
             ...item,
-            lpGaugeContract: _lpGaugeContract,
-            baseInfo: {
+            // lpGaugeContract: _lpGaugeContract,
+            userInfo: {
               symbol: balanceOf(_currentAccount),
               userAllowance: allowance(_currentAccount, allowanceContractAddr),
             },
@@ -122,7 +122,7 @@ const useGaugeData = () => {
       {
         queryKey: ['allPoolsUserInfo', _currentAccount],
         queryFn: () => fetchAllPoolUserData(allPoolsInfo),
-        // enabled: isAllReady,
+        enabled: isAllReady,
         initialData: [],
       },
     ],
@@ -131,7 +131,7 @@ const useGaugeData = () => {
   useEffect(() => {
     refetchInfo()
     refetchUserInfo()
-  }, [_currentAccount])
+  }, [_currentAccount, blockNumber])
 
   return { allPoolsInfo, allPoolsUserInfo }
 }
