@@ -63,12 +63,12 @@ export default function EarningPoolPage() {
         ))}
       </div>
 
-      <div className={styles.header}>
+      <div className={`${styles.header} mt-[32px]`}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
           Earning Pools
         </div>
-        <div className="flex justify-between">
+        <div className="mt-[32px] flex justify-between">
           <div className="w-[180px]" />
           <div className="w-[140px]">TVL</div>
           <div className="w-[150px]">APR Range</div>
