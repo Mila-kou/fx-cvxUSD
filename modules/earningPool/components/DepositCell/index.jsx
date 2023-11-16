@@ -13,7 +13,7 @@ const xETHImg = '/images/x-logo.svg'
 
 const item = POOLS_LIST[0]
 
-export default function MyDepositCell({ cellData }) {
+export default function DepositCell({ cellData }) {
   const [showManageModal, setShowManageModal] = useState(false)
   return (
     <div className={styles.poolWrap}>
