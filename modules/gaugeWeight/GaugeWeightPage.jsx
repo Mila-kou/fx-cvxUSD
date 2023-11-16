@@ -7,10 +7,8 @@ import usePool from './hooks/usePool'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
-import useGaugeController from './controller/useGaugeController'
 
 export default function GaugeWeightPage() {
-  const pagedata = useGaugeController()
   const poolAData = usePool({
     rebalancePoolAddress: tokens.contracts.fx_RebalancePool_A,
     rebalanceWithBonusTokenAddress:
