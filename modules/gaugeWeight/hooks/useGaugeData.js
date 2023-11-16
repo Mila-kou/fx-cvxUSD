@@ -45,18 +45,17 @@ const useGaugeData = () => {
               abi.FX_fx_SharedLiquidityGaugeABI
             )
           }
-          console.log('allBaseInfo----2--', _lpGaugeContract)
           const { symbol, totalSupply, name, stakingToken, disableGauge } =
             _lpGaugeContract.methods
           return {
             // ...item,
-            lpGaugeContract: _lpGaugeContract,
+            // lpGaugeContract: _lpGaugeContract,
             baseInfo: {
               symbol: symbol(),
               totalSupply: totalSupply(),
               name: name(),
               stakingToken: stakingToken(),
-              disableGauge: disableGauge(),
+              // disableGauge: disableGauge(),
             },
           }
         })
