@@ -68,10 +68,15 @@ const useGaugeController = () => {
     try {
       console.log('POOLS_LIST---', POOLS_LIST, allPoolsInfo, allPoolsUserInfo)
       return POOLS_LIST.map((item, index) => {
+        const tvl = checkNotZoroNumOption(
+          item.baseInfo.totalSupply,
+          fb4(item.baseInfo.totalSupply)
+        )
         return {
           ...item,
           baseInfo: allPoolsInfo[index]?.baseInfo || {},
           userInfo: allPoolsUserInfo[index]?.userInfo || {},
+          tvl,
         }
       })
     } catch (error) {

@@ -16,27 +16,6 @@ const useGaugeData = () => {
     async (arr) => {
       try {
         console.log('allBaseInfo----1')
-        // const _symbol = await symbol().call()
-        // console.log('allBaseInfo----1-0', _symbol)
-        // const contractList = await Promise.all(
-        //   arr.map((item, index) => {
-        //     let _lpGaugeContract = item.lpGaugeContract
-        //     if (!item.lpContract) {
-        //       _lpGaugeContract =  getContract(
-        //         item.lpGaugeAddress,
-        //         abi.FX_fx_SharedLiquidityGaugeABI
-        //       )
-        //     }
-        //     const { symbol, totalSupply, name, stakingToken, disableGauge } =
-        //       _lpGaugeContract.methods
-        //     return {
-        //       ...item,
-        //       lpGaugeContract: _lpGaugeContract,
-        //       baseInfo: [symbol()],
-        //     }
-        //   })
-        // )
-
         const callList = arr.map((item, index) => {
           let _lpGaugeContract = item.lpGaugeContract
           if (!item.lpContract) {
@@ -48,7 +27,7 @@ const useGaugeData = () => {
           const { symbol, totalSupply, name, stakingToken, disableGauge } =
             _lpGaugeContract.methods
           return {
-            // ...item,
+            ...item,
             // lpGaugeContract: _lpGaugeContract,
             baseInfo: {
               symbol: symbol(),
@@ -67,6 +46,7 @@ const useGaugeData = () => {
         return allBaseInfo
       } catch (error) {
         console.log('allBaseInfo----error', error)
+        return arr
       }
     },
     [getContract, multiCallsV2, _currentAccount]
