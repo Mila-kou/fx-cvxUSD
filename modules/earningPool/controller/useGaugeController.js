@@ -12,6 +12,7 @@ import abi from '@/config/abi'
 
 const useGaugeController = () => {
   const globalState = useGlobal()
+  const { vaultsPrice } = globalState
   const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
   const { allPoolsInfo, allPoolsUserInfo } = useGaugeData()
@@ -21,6 +22,22 @@ const useGaugeController = () => {
     wstETH: false,
     xETH: false,
   })
+
+  const getLpTokenPrice = useCallback(
+    (lpAddress) => {
+      try {
+        const lpPrice = vaultsPrice[lpAddress.toLowerCase()]
+        if (lpPrice) {
+          return lpPrice.usd
+        }
+        return 0
+      } catch (e) {
+        return 0
+      }
+    },
+    [vaultsPrice]
+  )
+
   const handleDeposit = () => {
     if (!isAllReady) return
     setDepositVisible(true)
@@ -66,6 +83,27 @@ const useGaugeController = () => {
   const canClaim = useMemo(() => {
     return false
   }, [])
+
+  const getApy = useCallback((item) => {
+    const { totalSupply, lpAddress, rewardDatas } = item
+    const { finishAt, lastUpdate, rate } = rewardDatas
+    const lpPrice = getLpTokenPrice(lpAddress)
+    const rewardTokenPrice = 1
+    let _apy = 0
+    const _currTime = Math.ceil(new Date().getTime() / 1000)
+    if (cBN(_currTime).gt(finishAt)) {
+      _apy = cBN(rate).times(config.yearSecond).div()
+
+      _apy = cBN(rate)
+        .div(1e18)
+        .times(config.yearSecond)
+        .div(cBN(totalSupply).div(1e18).times(lpPrice))
+        .times(100)
+        .times(rewardTokenPrice)
+        .toFixed(2)
+    }
+    return _apy
+  })
 
   const pageData = useMemo(() => {
     try {

@@ -12,17 +12,21 @@ const useGaugeData = () => {
   const { getContract } = useContract()
   const multiCallsV2 = useMutiCallV2()
 
+  const getGaugeContract = useCallback(
+    (lpGaugeAddress) => {
+      const _lpGaugeContract = getContract(
+        lpGaugeAddress,
+        abi.FX_fx_SharedLiquidityGaugeABI
+      )
+      return _lpGaugeContract
+    },
+    [getContract]
+  )
   const fetchAllPoolData = useCallback(
     async (arr) => {
       try {
         const callList = arr.map((item, index) => {
-          let _lpGaugeContract = item.lpGaugeContract
-          if (!item.lpContract) {
-            _lpGaugeContract = getContract(
-              item.lpGaugeAddress,
-              abi.FX_fx_SharedLiquidityGaugeABI
-            )
-          }
+          const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
           const {
             symbol,
             totalSupply,
@@ -62,13 +66,7 @@ const useGaugeData = () => {
       try {
         const userCalls = arr.map((item, index) => {
           const allowanceContractAddr = item.lpGaugeAddress
-          let _lpGaugeContract = item.lpGaugeContract
-          if (!item.lpContract) {
-            _lpGaugeContract = getContract(
-              item.lpGaugeAddress,
-              abi.FX_fx_SharedLiquidityGaugeABI
-            )
-          }
+          const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
           const { balanceOf, allowance, claimable_tokens } =
             _lpGaugeContract.methods
           return {
@@ -93,9 +91,45 @@ const useGaugeData = () => {
     [getContract, multiCallsV2, _currentAccount]
   )
 
+  const fetchGaugeListApys = useCallback(
+    async (arr) => {
+      try {
+        const apyCalls = arr.map((item, index) => {
+          const { baseInfo } = item
+          if (!baseInfo.activeRewardTokens) {
+            return []
+          }
+          const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
+          const { rewardData } = _lpGaugeContract.methods
+          let _rewardData = []
+          if (
+            baseInfo.activeRewardTokens &&
+            baseInfo.activeRewardTokens.length
+          ) {
+            _rewardData = baseInfo.activeRewardTokens.map((rewardToken) => {
+              return rewardData(rewardToken)
+            })
+          }
+          item.rewardDatas = _rewardData
+          return item
+        })
+        const allApyData = await multiCallsV2(apyCalls, {
+          from: _currentAccount,
+        })
+        console.log('allUserData----1', allApyData)
+        return allApyData
+      } catch (error) {
+        console.log(error)
+        return []
+      }
+    },
+    [getContract, multiCallsV2, _currentAccount]
+  )
+
   const [
     { data: allPoolsInfo, refetch: refetchInfo },
     { data: allPoolsUserInfo, refetch: refetchUserInfo },
+    { data: allPoolsApyInfo, refetch: refetchApysInfo },
   ] = useQueries({
     queries: [
       {
@@ -110,15 +144,22 @@ const useGaugeData = () => {
         enabled: isAllReady,
         initialData: [],
       },
+      {
+        queryKey: ['allPoolsApyInfo', _currentAccount],
+        queryFn: () => fetchGaugeListApys(allPoolsInfo),
+        enabled: isAllReady,
+        initialData: [],
+      },
     ],
   })
 
   useEffect(() => {
     refetchInfo()
     refetchUserInfo()
+    refetchApysInfo()
   }, [_currentAccount, blockNumber])
 
-  return { allPoolsInfo, allPoolsUserInfo }
+  return { allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo }
 }
 
 export default useGaugeData
