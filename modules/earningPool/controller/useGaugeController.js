@@ -7,10 +7,13 @@ import useWeb3 from '@/hooks/useWeb3'
 import useGaugeData from '../hooks/useGaugeData'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { POOLS_LIST } from '@/config/aladdinVault'
+import { useContract } from '@/hooks/useContracts'
+import abi from '@/config/abi'
 
 const useGaugeController = () => {
   const globalState = useGlobal()
   const { currentAccount, isAllReady } = useWeb3()
+  const { getContract } = useContract()
   const { allPoolsInfo, allPoolsUserInfo } = useGaugeData()
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
@@ -68,7 +71,7 @@ const useGaugeController = () => {
     try {
       const data = POOLS_LIST.map((item, index) => {
         const _baseInfo = allPoolsInfo[index]?.baseInfo || {}
-        const _userInfo = allPoolsInfo[index]?.userInfo || {}
+        const _userInfo = allPoolsUserInfo[index]?.userInfo || {}
         const tvl_text = checkNotZoroNumOption(
           _baseInfo.totalSupply,
           fb4(_baseInfo.totalSupply)
@@ -77,8 +80,13 @@ const useGaugeController = () => {
           _userInfo.userShare,
           fb4(_userInfo.userShare)
         )
+        const _lpGaugeContract = getContract(
+          item.lpGaugeAddress,
+          abi.FX_fx_SharedLiquidityGaugeABI
+        )
         return {
           ...item,
+          lpGaugeContract: _lpGaugeContract,
           baseInfo: _baseInfo,
           userInfo: _userInfo,
           tvl_text,

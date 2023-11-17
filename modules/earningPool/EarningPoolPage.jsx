@@ -21,29 +21,6 @@ export default function EarningPoolPage() {
     },
   ]
 
-  const cells = [
-    {
-      title: 'Rebalance Pool A',
-      subTitle: 'fETH',
-    },
-    {
-      title: 'Rebalance Pool B',
-      subTitle: 'fETH',
-    },
-    {
-      title: 'FXN / ETH Curve LP',
-    },
-    {
-      title: 'xETH / ETH Curve LP',
-    },
-    {
-      title: 'fETH / crvUSD Curve LP',
-    },
-    {
-      title: 'fETH / FRAXBP Curve LP',
-    },
-  ]
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>

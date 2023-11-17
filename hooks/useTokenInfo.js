@@ -132,6 +132,9 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fx_RebalancePool_B':
             _contractAddress = config.contracts.fx_RebalancePool_B
             break
+          case 'fx_gauge':
+            _contractAddress = lpInfo.lpGaugeAddress
+            break
           default:
             _contractAddress = config.contracts.idoSale
             break

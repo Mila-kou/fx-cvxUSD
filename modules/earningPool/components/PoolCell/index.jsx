@@ -13,10 +13,10 @@ const xETHImg = '/images/x-logo.svg'
 
 const item = POOLS_LIST[0]
 
-export default function PoolCell({ cellData, key }) {
+export default function PoolCell({ cellData, ...pageOthers }) {
   const [showDepositModal, setShowDepositModal] = useState(false)
   return (
-    <div key={key} className={styles.poolWrap}>
+    <div key={cellData.id} className={styles.poolWrap}>
       <div className="flex justify-between items-center">
         <div className="w-[180px]">
           <p>{cellData.name}</p>
@@ -41,8 +41,8 @@ export default function PoolCell({ cellData, key }) {
 
       {showDepositModal && (
         <DepositModal
-          cellData={cellData}
-          info={item}
+          // cellData={cellData}
+          info={cellData}
           // contractType={contractType}
           // FX_RebalancePoolContract={FX_RebalancePoolContract}
           // poolData={stabilityPoolInfo}

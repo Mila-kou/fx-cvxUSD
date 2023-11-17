@@ -11,18 +11,18 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 
 export default function DepositModal(props) {
-  const { onCancel, info, contractType, FX_RebalancePoolContract, cellData } =
-    props
+  const { onCancel, info } = props
+  const { lpGaugeContract, zapTokens, name } = info
   const [depositing, setDepositing] = useState(false)
   const { currentAccount, isAllReady } = useWeb3()
-  const [selectToken, setSelectToken] = useState(info.zapTokens[0])
+  const [selectToken, setSelectToken] = useState(zapTokens[0])
   const [activeIndex, setActiveIndex] = useState(0)
 
   const [depositAmount, setDepositAmount] = useState(0)
 
   const isWithdraw = activeIndex === 1
 
-  const selectTokenInfo = useToken(selectToken.address, contractType, info)
+  const selectTokenInfo = useToken(selectToken.address, 'fx_gauge', info)
   const tokenContract = selectTokenInfo.contract
   const tokenApproveContractAddress = selectTokenInfo.contractAddress
   const userTokenBalance = selectTokenInfo.balance
@@ -39,7 +39,7 @@ export default function DepositModal(props) {
     const depositAmountInWei = cBN(depositAmount || 0).toFixed(0, 1)
     setDepositing(true)
     try {
-      const apiCall = FX_RebalancePoolContract.methods.deposit(
+      const apiCall = lpGaugeContract.methods.deposit(
         depositAmountInWei,
         currentAccount
       )
@@ -66,7 +66,7 @@ export default function DepositModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">{cellData.title}</h2>
+        <h2 className="mb-[16px]">{name}</h2>
         <Tabs
           selecedIndex={activeIndex}
           onChange={(v) => setActiveIndex(v)}
@@ -79,17 +79,17 @@ export default function DepositModal(props) {
           <div>
             <BalanceInput
               placeholder="0"
-              symbol="fETH"
+              symbol={name}
               balance={fb4(userTokenBalance, false)}
               maxAmount={userTokenBalance}
               onChange={handleInputChange}
               withUsd={false}
             />
-            <p className={styles.note}>
+            {/* <p className={styles.note}>
               Note that withdrawals from Rebalancing Pool require 1 day waiting
               period. Pending withdrawals earn no yield, but may be used for
               stETH redemption.
-            </p>
+            </p> */}
 
             <div className="mt-[40px]">
               <BtnWapper
