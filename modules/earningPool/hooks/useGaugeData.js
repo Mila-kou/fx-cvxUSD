@@ -3,7 +3,6 @@ import { useQueries } from '@tanstack/react-query'
 import abi from 'config/abi'
 import { useContract } from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
-import { groupByLength } from '@/utils/index'
 import useWeb3 from '@/hooks/useWeb3'
 import { POOLS_LIST } from '@/config/aladdinVault'
 
@@ -107,7 +106,10 @@ const useGaugeData = () => {
             baseInfo.activeRewardTokens.length
           ) {
             _rewardData = baseInfo.activeRewardTokens.map((rewardToken) => {
-              return rewardData(rewardToken)
+              return {
+                rewardAddress: rewardToken,
+                rewardData: rewardData(rewardToken),
+              }
             })
           }
           item.rewardDatas = _rewardData

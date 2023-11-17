@@ -12,10 +12,10 @@ import abi from '@/config/abi'
 
 const useGaugeController = () => {
   const globalState = useGlobal()
-  const { vaultsPrice } = globalState
+  const { lpPrice, tokenPrice } = globalState
   const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
-  const { allPoolsInfo, allPoolsUserInfo } = useGaugeData()
+  const { allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo } = useGaugeData()
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
   const [claiming, setClaiming] = useState({
@@ -23,19 +23,36 @@ const useGaugeController = () => {
     xETH: false,
   })
 
+  console.log('vaultsPrice----', lpPrice)
+
   const getLpTokenPrice = useCallback(
     (lpAddress) => {
       try {
-        const lpPrice = vaultsPrice[lpAddress.toLowerCase()]
-        if (lpPrice) {
-          return lpPrice.usd
+        const _lpPrice = lpPrice[lpAddress.toLowerCase()]
+        if (_lpPrice) {
+          return _lpPrice.usd
         }
         return 0
       } catch (e) {
         return 0
       }
     },
-    [vaultsPrice]
+    [lpPrice]
+  )
+
+  const getTokenPrice = useCallback(
+    (tokenName) => {
+      try {
+        const _tokenPrice = tokenPrice[tokenName]
+        if (_tokenPrice) {
+          return _tokenPrice.usd
+        }
+        return 0
+      } catch (e) {
+        return 0
+      }
+    },
+    [tokenPrice]
   )
 
   const handleDeposit = () => {
@@ -85,30 +102,47 @@ const useGaugeController = () => {
   }, [])
 
   const getApy = useCallback((item) => {
-    const { totalSupply, lpAddress, rewardDatas } = item
-    const { finishAt, lastUpdate, rate } = rewardDatas
-    const lpPrice = getLpTokenPrice(lpAddress)
-    const rewardTokenPrice = 1
-    let _apy = 0
-    const _currTime = Math.ceil(new Date().getTime() / 1000)
-    if (cBN(_currTime).gt(finishAt)) {
-      _apy = cBN(rate).times(config.yearSecond).div()
-
-      _apy = cBN(rate)
-        .div(1e18)
-        .times(config.yearSecond)
-        .div(cBN(totalSupply).div(1e18).times(lpPrice))
-        .times(100)
-        .times(rewardTokenPrice)
-        .toFixed(2)
-    }
-    return _apy
+    const { totalSupply, lpAddress, rewardDatas, rewardTokens } = item
+    const _apys =
+      rewardDatas &&
+      rewardDatas.map((baseApyData, index) => {
+        const {
+          rewardData: { finishAt, lastUpdate, rate },
+          rewardAddress,
+        } = baseApyData
+        const _lpPrice = getLpTokenPrice(lpAddress)
+        const rewardToken = rewardTokens.find(
+          (_tokenData) =>
+            _tokenData[1].toLowerCase() == rewardAddress.toLowerCase()
+        )
+        if (!rewardToken) {
+          return 0
+        }
+        const rewardTokenPrice = getTokenPrice(rewardToken[0])
+        let _apy = 0
+        const _currTime = Math.ceil(new Date().getTime() / 1000)
+        if (cBN(_currTime).gt(finishAt) && cBN(totalSupply).lt(0)) {
+          _apy = cBN(rate)
+            .div(1e18)
+            .times(config.yearSecond)
+            .div(cBN(totalSupply).div(1e18).times(_lpPrice))
+            .times(100)
+            .times(rewardTokenPrice)
+            .toFixed(2)
+        }
+        return {
+          rewardToken,
+          _apy,
+        }
+      })
+    return _apys
   })
 
   const pageData = useMemo(() => {
     try {
       const data = POOLS_LIST.map((item, index) => {
         const _baseInfo = allPoolsInfo[index]?.baseInfo || {}
+        const _rewardDatas = allPoolsApyInfo[index]?.rewardDatas || {}
         const _userInfo = allPoolsUserInfo[index]?.userInfo || {}
         const tvl_text = checkNotZoroNumOption(
           _baseInfo.totalSupply,
@@ -122,20 +156,24 @@ const useGaugeController = () => {
           item.lpGaugeAddress,
           abi.FX_fx_SharedLiquidityGaugeABI
         )
-        return {
+        const _data = {
           ...item,
           lpGaugeContract: _lpGaugeContract,
           baseInfo: _baseInfo,
           userInfo: _userInfo,
+          rewardDatas: _rewardDatas,
           tvl_text,
           userShare_text,
         }
+        const apys = getApy(_data)
+        _data.apys = apys
+        return _data
       })
       console.log(
         'POOLS_LIST---data--',
-        POOLS_LIST,
-        allPoolsInfo,
-        allPoolsUserInfo,
+        // POOLS_LIST,
+        // allPoolsInfo,
+        // allPoolsUserInfo,
         data
       )
       return data
@@ -143,7 +181,7 @@ const useGaugeController = () => {
       console.log('POOLS_LIST---error---', error)
       return POOLS_LIST
     }
-  }, [POOLS_LIST, allPoolsInfo, allPoolsUserInfo])
+  }, [POOLS_LIST, allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo])
 
   return {
     pageData,
