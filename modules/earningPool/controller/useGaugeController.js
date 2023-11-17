@@ -102,10 +102,13 @@ const useGaugeController = () => {
   }, [])
 
   const getApy = useCallback((item) => {
-    const { totalSupply, lpAddress, rewardDatas, rewardTokens } = item
+    const { baseInfo = {}, lpAddress, rewardDatas, rewardTokens } = item
+    const { totalSupply } = baseInfo
+    let allApy = cBN(0)
     const _apys =
       rewardDatas &&
       rewardDatas.map((baseApyData, index) => {
+        let _apy = 0
         const {
           rewardData: { finishAt, lastUpdate, rate },
           rewardAddress,
@@ -116,26 +119,44 @@ const useGaugeController = () => {
             _tokenData[1].toLowerCase() == rewardAddress.toLowerCase()
         )
         if (!rewardToken) {
-          return 0
+          _apy = 0
+        } else {
+          const rewardTokenPrice = getTokenPrice(rewardToken[0])
+          const _currTime = Math.ceil(new Date().getTime() / 1000)
+          const _lastFinishAt = cBN(finishAt).plus(24 * 60 * 60 * 7)
+          if (cBN(_currTime).lt(_lastFinishAt) && cBN(totalSupply).gt(0)) {
+            _apy = cBN(rate)
+              .div(1e18)
+              .times(config.yearSecond)
+              .div(cBN(totalSupply).div(1e18).times(_lpPrice))
+              .times(100)
+              .times(rewardTokenPrice)
+              .toFixed(2)
+          }
+          console.log(
+            'getApy----name,rewardToken,_currTime,finishAt,totalSupply,rate,config.yearSecond,_lpPrice,rewardTokenPrice',
+            item.name,
+            rewardToken[0],
+            _currTime,
+            finishAt,
+            totalSupply,
+            rate,
+            config.yearSecond,
+            _lpPrice,
+            rewardTokenPrice,
+            _apy
+          )
         }
-        const rewardTokenPrice = getTokenPrice(rewardToken[0])
-        let _apy = 0
-        const _currTime = Math.ceil(new Date().getTime() / 1000)
-        if (cBN(_currTime).gt(finishAt) && cBN(totalSupply).lt(0)) {
-          _apy = cBN(rate)
-            .div(1e18)
-            .times(config.yearSecond)
-            .div(cBN(totalSupply).div(1e18).times(_lpPrice))
-            .times(100)
-            .times(rewardTokenPrice)
-            .toFixed(2)
-        }
+        allApy = allApy.plus(_apy)
         return {
           rewardToken,
           _apy,
         }
       })
-    return _apys
+    return {
+      allApy: allApy.toFixed(2),
+      apyList: _apys,
+    }
   })
 
   const pageData = useMemo(() => {
@@ -165,8 +186,8 @@ const useGaugeController = () => {
           tvl_text,
           userShare_text,
         }
-        const apys = getApy(_data)
-        _data.apys = apys
+        const apyInfo = getApy(_data)
+        _data.apyInfo = apyInfo
         return _data
       })
       console.log(

@@ -9,12 +9,32 @@ import styles from './styles.module.scss'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
 const stETHImg = '/tokens/steth.svg'
-const xETHImg = '/images/x-logo.svg'
-
-const item = POOLS_LIST[0]
 
 export default function PoolCell({ cellData, ...pageOthers }) {
   const [showDepositModal, setShowDepositModal] = useState(false)
+  const apyDom = useMemo(() => {
+    if (checkNotZoroNum(cellData.apyInfo?.allApy)) {
+      return `${cellData.apyInfo?.allApy}%`
+    }
+    return '-'
+  }, [cellData])
+  console.log('cellData----', cellData, apyDom)
+
+  const rewardTokenDom = useMemo(() => {
+    return (
+      <>
+        {cellData.rewardTokens.map((item, index) => {
+          return (
+            <img
+              key={index}
+              className="h-[30px]"
+              src={item[4] ?? '/images/f-logo.svg'}
+            />
+          )
+        })}
+      </>
+    )
+  }, [cellData])
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className="flex justify-between items-center">
@@ -23,12 +43,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
           <p>{cellData.nameShow}</p>
         </div>
         <div className="w-[140px]">{cellData.tvl_text}</div>
-        <div className="w-[150px]">12.6% ~ 30.7%</div>
+        <div className="w-[150px]">{apyDom}</div>
         <div className="w-[80px]">{cellData.userShare_text}</div>
-        <div className="w-[80px]">
-          <img className="h-[30px]" src={stETHImg} />
-          <img className="h-[30px]" src="/images/f-logo.svg" />
-        </div>
+        <div className="w-[80px]">{rewardTokenDom}</div>
         <div className="w-[80px]">
           <div
             className="underline cursor-pointer text-[var(--a-button-color)]"

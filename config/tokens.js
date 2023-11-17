@@ -1,6 +1,6 @@
 const CLEVIcon = '/assets/tokens/clev.svg'
-const FXNIcon = '/assets/tokens/FXN.svg'
-const stETHIcon = '/assets/tokens/FXN.svg'
+const FXNIcon = '/tokens/FXN.svg'
+const stETHIcon = '/tokens/steth.svg'
 
 const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
