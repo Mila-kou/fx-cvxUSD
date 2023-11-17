@@ -54,7 +54,7 @@ export const setNetwork = (chainId) => {
   if (chainId === mainnetFork.chainInfo.id) {
     config.concentratorAPI =
       chainId === mainnetFork.chainInfo.id
-        ? 'https://apitest.aladdin.club'
+        ? 'https://api.aladdin.club'
         : 'https://api.aladdin.club'
   }
 }

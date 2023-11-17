@@ -17,8 +17,8 @@ import { cBN, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import {
   getTokenListPrice,
   getVaultsInfo,
-  getConvexVaultsAPY,
-  getConcentratorInit,
+  // getConvexVaultsAPY,
+  // getConcentratorInit,
   getLpPrice,
   getFX_cvxFXN_sdFXN_apy,
 } from '@/services/dataInfo'
@@ -53,8 +53,8 @@ function GlobalProvider({ children }) {
   const [
     { data: tokenPrice, refetch: refetch1 },
     { data: vaultsInfo, refetch: refetch2 },
-    { data: ConvexVaultsAPY, refetch: refetch3 },
-    { data: concentratorInitData, refetch: refetch4 },
+    // { data: ConvexVaultsAPY, refetch: refetch3 },
+    // { data: concentratorInitData, refetch: refetch4 },
     { data: lpPrice, refetch: refetch5 },
     { data: stETHRate, refetch: refetch6 },
     { data: cvxFXN_sdFXN_apy, refetch: refetch7 },
@@ -69,16 +69,16 @@ function GlobalProvider({ children }) {
         queryKey: ['vaultsInfo'],
         queryFn: getVaultsInfo,
       },
-      {
-        queryKey: ['ConvexVaultsAPY'],
-        queryFn: getConvexVaultsAPY,
-        initialData: [],
-      },
-      {
-        queryKey: ['concentratorInitData'],
-        queryFn: getConcentratorInit,
-        initialData: {},
-      },
+      // {
+      //   queryKey: ['ConvexVaultsAPY'],
+      //   queryFn: getConvexVaultsAPY,
+      //   initialData: [],
+      // },
+      // {
+      //   queryKey: ['concentratorInitData'],
+      //   queryFn: getConcentratorInit,
+      //   initialData: {},
+      // },
       {
         queryKey: ['lpPrice'],
         queryFn: getLpPrice,
@@ -114,8 +114,8 @@ function GlobalProvider({ children }) {
     () => {
       refetch1()
       refetch2()
-      refetch3()
-      refetch4()
+      // refetch3()
+      // refetch4()
       refetch5()
       refetch6()
       refetch7()
@@ -238,8 +238,8 @@ function GlobalProvider({ children }) {
 
       lpPrice,
       vaultsInfo,
-      ConvexVaultsAPY,
-      concentratorInitData,
+      // ConvexVaultsAPY,
+      // concentratorInitData,
       ifoVaultWithdrawFee,
       stETHRate,
       cvxFXN_sdFXN_apy,
@@ -261,8 +261,8 @@ function GlobalProvider({ children }) {
 
       lpPrice,
       vaultsInfo,
-      ConvexVaultsAPY,
-      concentratorInitData,
+      // ConvexVaultsAPY,
+      // concentratorInitData,
       ifoVaultWithdrawFee,
       cvxFXN_sdFXN_apy,
     ]
