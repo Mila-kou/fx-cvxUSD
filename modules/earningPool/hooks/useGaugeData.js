@@ -5,6 +5,7 @@ import { useContract, useVeFXN } from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { POOLS_LIST } from '@/config/aladdinVault'
+import config from '@/config/index'
 
 const useGaugeData = () => {
   const { _currentAccount, web3, isAllReady, blockNumber } = useWeb3()
@@ -63,17 +64,32 @@ const useGaugeData = () => {
   const fetchAllPoolUserData = useCallback(
     async (arr) => {
       try {
+        const checkPointList = []
+        let checkPointFn
         const userCalls = arr.map((item, index) => {
           const allowanceContractAddr = item.lpGaugeAddress
           const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
-          const { balanceOf, allowance, claimable_tokens } =
-            _lpGaugeContract.methods
+          const {
+            balanceOf,
+            allowance,
+            claimable,
+            checkpoint,
+            claimable_tokens,
+          } = _lpGaugeContract.methods
+          if (index == 0) {
+            checkPointFn = _lpGaugeContract
+          }
+
           return {
             ...item,
             // lpGaugeContract: _lpGaugeContract,
             userInfo: {
+              // checkPointRes: checkpoint(_currentAccount),
               userShare: balanceOf(_currentAccount),
               userAllowance: allowance(_currentAccount, allowanceContractAddr),
+              userClaimables: item.rewardTokens.map((rewardToken) =>
+                claimable(_currentAccount, rewardToken[1])
+              ),
             },
           }
         })
@@ -83,7 +99,7 @@ const useGaugeData = () => {
         console.log('allUserData----', allUserData)
         return allUserData
       } catch (error) {
-        console.log(error)
+        console.log('allUserData----error', error)
         return []
       }
     },
