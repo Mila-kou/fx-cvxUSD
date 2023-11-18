@@ -22,16 +22,18 @@ export const useVeBoost = (options) => {
   const getLiquidityLimit = async () => {
     console.log('veBoost-----0-1')
     if (gaugeContract) {
+      console.log('veBoost-----0-2')
       try {
         const calls = [
           veContract.methods.balanceOf(veContractTargetAccount),
           veContract.methods.totalSupply(),
-          gaugeContract.methods.working_balances(gaugeContractTargetAccount),
-          gaugeContract.methods.working_supply(),
+          gaugeContract.methods.workingBalanceOf(gaugeContractTargetAccount),
+          gaugeContract.methods.workingSupply(),
           gaugeContract.methods.totalSupply(),
           gaugeContract.methods.balanceOf(gaugeContractTargetAccount),
         ]
         const decoded = await multiCallsV2(calls)
+        console.log('veBoost-----0-3', decoded)
         console.log('curve-dao > calc-contract-info', decoded)
         const _userVeAmount = decoded[0]
         const _veTotalSupply = decoded[1]
@@ -61,11 +63,10 @@ export const useVeBoost = (options) => {
           type == 'calc'
             ? cBN(__gaugeTotalSupply).plus(__l)
             : cBN(__gaugeTotalSupply)
-        console.log('veBoost-----2')
         const TOKENLESS_PRODUCTION = 40
 
         let lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION / 100)
-
+        console.log('veBoost-----lim---', lim)
         lim = cBN(L)
           .multipliedBy(__userVeAmount)
           .div(__veTotalSupply)
@@ -73,25 +74,43 @@ export const useVeBoost = (options) => {
           .plus(lim)
 
         lim = BigNumber.minimum(lim, l)
-
+        console.log('veBoost-----min_lim---', lim.toFixed(0))
         const old_bal = working_balances
         const noboost_lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION).div(100)
         const noboost_supply = cBN(working_supply)
           .plus(noboost_lim)
           .minus(old_bal)
+        console.log(
+          'veBoost-----__L,working_supply,noboost_lim,old_bal,noboost_supply---',
+          __l,
+          working_supply,
+          noboost_lim.toFixed(0),
+          old_bal,
+          noboost_supply.toFixed(0)
+        )
         const _working_supply = cBN(working_supply).plus(lim).minus(old_bal)
-
-        const votingBoost = cBN(lim).div(noboost_lim).toString()
-        const boots = cBN(lim)
-          .div(_working_supply)
-          .div(cBN(noboost_lim).div(noboost_supply))
-          .toString()
-
-        console.log('votingBoost-boots---', votingBoost, boots)
+        let boots
+        let votingBoost
+        if (!checkNotZoroNum(noboost_lim)) {
+          boots = 1
+          votingBoost = 1
+        } else {
+          votingBoost = cBN(lim).div(noboost_lim).toString()
+          console.log(
+            'veBoost-----votingBoost---',
+            _working_supply.toFixed(0),
+            votingBoost
+          )
+          boots = cBN(lim)
+            .div(_working_supply)
+            .div(cBN(noboost_lim).div(noboost_supply))
+            .toString()
+        }
+        console.log('veBoost-----boots---', votingBoost, boots)
 
         const data = [
           _working_supply.toString(),
-          checkNotZoroNum(boots) ? parseFloat(boots).toFixed(2) : 0,
+          checkNotZoroNum(boots) ? parseFloat(boots).toFixed(2) : 1,
           votingBoost,
         ]
         return data
