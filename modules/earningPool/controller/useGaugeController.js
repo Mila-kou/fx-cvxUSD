@@ -7,7 +7,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import useGaugeData from '../hooks/useGaugeData'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { POOLS_LIST } from '@/config/aladdinVault'
-import { useContract } from '@/hooks/useContracts'
+import { useContract, useVeFXN } from '@/hooks/useContracts'
 import abi from '@/config/abi'
 
 const useGaugeController = () => {
@@ -102,7 +102,7 @@ const useGaugeController = () => {
   }, [])
 
   const getApy = useCallback((item) => {
-    const { baseInfo = {}, lpAddress, rewardDatas, rewardTokens } = item
+    const { baseInfo = {}, lpAddress, rewardDatas, rewardTokens } = item || {}
     const { totalSupply } = baseInfo
     let allApy = cBN(0)
     const _apys =

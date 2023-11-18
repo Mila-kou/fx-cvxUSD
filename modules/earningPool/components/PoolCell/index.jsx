@@ -7,10 +7,12 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
 import styles from './styles.module.scss'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
+import useVeBoost_c from '../../controller/useVeBoost_c'
 
 const stETHImg = '/tokens/steth.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
+  const boost = useVeBoost_c(cellData)
   const [showDepositModal, setShowDepositModal] = useState(false)
   const apyDom = useMemo(() => {
     if (checkNotZoroNum(cellData.apyInfo?.allApy)) {

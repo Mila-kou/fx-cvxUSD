@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import abi from 'config/abi'
-import { useContract } from '@/hooks/useContracts'
+import { useContract, useVeFXN } from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { POOLS_LIST } from '@/config/aladdinVault'
