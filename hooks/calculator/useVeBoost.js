@@ -73,7 +73,7 @@ export const useVeBoost = (options) => {
           .multipliedBy((100 - TOKENLESS_PRODUCTION) / 100)
           .plus(lim)
 
-        lim = BigNumber.minimum(lim, l)
+        lim = BigNumber.minimum(lim, __l)
         console.log('veBoost-----min_lim---', lim.toFixed(0))
         const old_bal = working_balances
         const noboost_lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION).div(100)
