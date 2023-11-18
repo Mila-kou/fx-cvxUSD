@@ -16,14 +16,6 @@ const useGaugeController = () => {
   const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
   const { allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo } = useGaugeData()
-  const [depositVisible, setDepositVisible] = useState(false)
-  const [withdrawVisible, setWithdrawVisible] = useState(false)
-  const [claiming, setClaiming] = useState({
-    wstETH: false,
-    xETH: false,
-  })
-
-  console.log('vaultsPrice----', lpPrice)
 
   const getLpTokenPrice = useCallback(
     (lpAddress) => {
@@ -62,39 +54,6 @@ const useGaugeController = () => {
   const handleWithdraw = () => {
     if (!isAllReady) return
     setWithdrawVisible(true)
-  }
-  const handleClaim = async (symbol, wrap) => {
-    if (!isAllReady) return
-    try {
-      setClaiming({
-        ...claiming,
-        [symbol]: true,
-      })
-
-      // console.log('handleClaim-----', symbol, wrap)
-
-      // const apiCall = FX_RebalancePoolContract.methods.claim(
-      //   config.tokens[symbol],
-      //   wrap
-      // )
-      // const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      // const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      // await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-      //   key: 'lp',
-      //   action: 'Claim',
-      // })
-      setClaiming({
-        ...claiming,
-        [symbol]: false,
-      })
-    } catch (error) {
-      setClaiming({
-        ...claiming,
-        [symbol]: false,
-      })
-      console.log('claim-error---', error)
-      noPayableErrorAction(`error_claim`, error)
-    }
   }
 
   const canClaim = useMemo(() => {
@@ -206,13 +165,9 @@ const useGaugeController = () => {
 
   return {
     pageData,
-    setDepositVisible,
-    setWithdrawVisible,
-    setClaiming,
     canClaim,
     handleDeposit,
     handleWithdraw,
-    handleClaim,
   }
 }
 
