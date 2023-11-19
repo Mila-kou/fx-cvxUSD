@@ -73,10 +73,10 @@ const useGaugeController = () => {
     const { baseInfo = {}, lpAddress, rewardDatas, rewardTokens } = item || {}
     const { totalSupply } = baseInfo
     let allApy = cBN(0)
+    let _apys = 0
     const convexLpApy = getLpConvexApy(lpAddress)
-    const _apys =
-      rewardDatas &&
-      rewardDatas.map((baseApyData, index) => {
+    if (rewardDatas && rewardDatas.length) {
+      _apys = rewardDatas.map((baseApyData, index) => {
         let _apy = 0
         const {
           rewardData: { finishAt, lastUpdate, rate },
@@ -124,6 +124,8 @@ const useGaugeController = () => {
           _apy,
         }
       })
+    }
+
     return {
       allApy: allApy.toFixed(2),
       apyList: _apys,
