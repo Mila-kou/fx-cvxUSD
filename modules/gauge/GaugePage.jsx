@@ -7,7 +7,7 @@ import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
-import useGaugeController from './controller/useGaugeController'
+import useGaugeController from '@/modules/earningPool/controller/useGaugeController'
 
 export default function GaugePage() {
   const { pageData, ...pageOthers } = useGaugeController()

@@ -13,7 +13,6 @@ import {
   fb4,
 } from '@/utils/index'
 import NumberInput from '@/components/NumberInput'
-import useVeBoost_c from '../../controller/useVeBoost_c'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
@@ -22,7 +21,6 @@ const stETHImg = '/tokens/steth.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
   const { userInfo = {}, lpGaugeContract } = cellData
-  const boost = useVeBoost_c(cellData)
   const [showDepositModal, setShowDepositModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
   const [openPanel, setOpenPanel] = useState(false)
