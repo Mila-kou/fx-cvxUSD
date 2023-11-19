@@ -17,7 +17,7 @@ import { cBN, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import {
   getTokenListPrice,
   getVaultsInfo,
-  // getConvexVaultsAPY,
+  getConvexVaultsAPY,
   // getConcentratorInit,
   getLpPrice,
   getFX_cvxFXN_sdFXN_apy,
@@ -52,8 +52,8 @@ function GlobalProvider({ children }) {
 
   const [
     { data: tokenPrice, refetch: refetch1 },
-    { data: vaultsInfo, refetch: refetch2 },
-    // { data: ConvexVaultsAPY, refetch: refetch3 },
+    // { data: vaultsInfo, refetch: refetch2 },
+    { data: ConvexVaultsAPY, refetch: refetch3 },
     // { data: concentratorInitData, refetch: refetch4 },
     { data: lpPrice, refetch: refetch5 },
     { data: stETHRate, refetch: refetch6 },
@@ -65,15 +65,15 @@ function GlobalProvider({ children }) {
         queryFn: getTokenListPrice,
         enabled: !!web3,
       },
-      {
-        queryKey: ['vaultsInfo'],
-        queryFn: getVaultsInfo,
-      },
       // {
-      //   queryKey: ['ConvexVaultsAPY'],
-      //   queryFn: getConvexVaultsAPY,
-      //   initialData: [],
+      //   queryKey: ['vaultsInfo'],
+      //   queryFn: getVaultsInfo,
       // },
+      {
+        queryKey: ['ConvexVaultsAPY'],
+        queryFn: getConvexVaultsAPY,
+        initialData: [],
+      },
       // {
       //   queryKey: ['concentratorInitData'],
       //   queryFn: getConcentratorInit,
@@ -99,22 +99,22 @@ function GlobalProvider({ children }) {
     ],
   })
 
-  const ifoVaultWithdrawFee = useMemo(() => {
-    try {
-      return (
-        (Object.values(vaultsInfo.newVault)[0]?.withdrawFeePercentage ??
-          500000) / 10e8
-      )
-    } catch (e) {
-      return 0.0005
-    }
-  }, [vaultsInfo])
+  // const ifoVaultWithdrawFee = useMemo(() => {
+  //   try {
+  //     return (
+  //       (Object.values(vaultsInfo.newVault)[0]?.withdrawFeePercentage ??
+  //         500000) / 10e8
+  //     )
+  //   } catch (e) {
+  //     return 0.0005
+  //   }
+  // }, [vaultsInfo])
 
   useDebounceEffect(
     () => {
       refetch1()
-      refetch2()
-      // refetch3()
+      // refetch2()
+      refetch3()
       // refetch4()
       refetch5()
       refetch6()
@@ -136,8 +136,6 @@ function GlobalProvider({ children }) {
   const tokens = useMemo(() => {
     // ETH
     const { CurrentNavRes } = fx_info.baseInfo
-    console.log('CurrentNavRes---', CurrentNavRes)
-    console.log('tokenPrice---', tokenPrice)
     return {
       ETH: {
         ...ethToken,
@@ -237,10 +235,10 @@ function GlobalProvider({ children }) {
       rebalancePool_info_B,
 
       lpPrice,
-      vaultsInfo,
-      // ConvexVaultsAPY,
+      // vaultsInfo,
+      ConvexVaultsAPY,
       // concentratorInitData,
-      ifoVaultWithdrawFee,
+      // ifoVaultWithdrawFee,
       stETHRate,
       cvxFXN_sdFXN_apy,
     }),
@@ -260,10 +258,10 @@ function GlobalProvider({ children }) {
       rebalancePool_info_B,
 
       lpPrice,
-      vaultsInfo,
-      // ConvexVaultsAPY,
+      // vaultsInfo,
+      ConvexVaultsAPY,
       // concentratorInitData,
-      ifoVaultWithdrawFee,
+      // ifoVaultWithdrawFee,
       cvxFXN_sdFXN_apy,
     ]
   )

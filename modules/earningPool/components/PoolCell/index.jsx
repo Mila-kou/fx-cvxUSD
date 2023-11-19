@@ -22,7 +22,7 @@ const stETHImg = '/tokens/steth.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
   const { userInfo = {}, lpGaugeContract } = cellData
-  const boost = useVeBoost_c(cellData)
+  const boostInfo = useVeBoost_c(cellData)
   const [showDepositModal, setShowDepositModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
@@ -51,11 +51,18 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   }
 
   const apyDom = useMemo(() => {
+    console.log('apy------', cellData.apyInfo, boostInfo)
+    const _allApy = cBN(0)
+    if (cellData.apyInfo && cellData.apyInfo.apyList.length) {
+      cellData.apyInfo.apyList.map((item, index) => {
+        return 0
+      })
+    }
     if (checkNotZoroNum(cellData.apyInfo?.allApy)) {
       return `${cellData.apyInfo?.allApy}%`
     }
     return '-'
-  }, [cellData])
+  }, [cellData, boostInfo])
   console.log('cellData----', cellData, apyDom)
 
   const rewardTokenDom = useMemo(() => {

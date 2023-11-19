@@ -21,9 +21,9 @@ export const useVeBoost = (options) => {
 
   const getLiquidityLimit = async () => {
     console.log('veBoost-----0-1')
-    if (gaugeContract) {
-      console.log('veBoost-----0-2')
-      try {
+    try {
+      if (gaugeContract) {
+        console.log('veBoost-----0-2')
         const calls = [
           veContract.methods.balanceOf(veContractTargetAccount),
           veContract.methods.totalSupply(),
@@ -91,6 +91,7 @@ export const useVeBoost = (options) => {
         const _working_supply = cBN(working_supply).plus(lim).minus(old_bal)
         let boots
         let votingBoost
+        let repairBoost = 1 // 修正值
         if (!checkNotZoroNum(noboost_lim)) {
           boots = 1
           votingBoost = 1
@@ -105,6 +106,7 @@ export const useVeBoost = (options) => {
             .div(_working_supply)
             .div(cBN(noboost_lim).div(noboost_supply))
             .toString()
+          repairBoost = cBN(noboost_supply).div(_working_supply).toFixed(0)
         }
         console.log('veBoost-----boots---', votingBoost, boots)
 
@@ -112,11 +114,13 @@ export const useVeBoost = (options) => {
           _working_supply.toString(),
           checkNotZoroNum(boots) ? parseFloat(boots).toFixed(2) : 1,
           votingBoost,
+          repairBoost,
         ]
         return data
-      } catch (error) {
-        console.log('veBoost---error', error)
       }
+    } catch (error) {
+      console.log('veBoost---error', error)
+      return []
     }
   }
 
