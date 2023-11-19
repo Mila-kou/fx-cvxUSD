@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { Checkbox } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
 import PoolCell from './components/PoolCell'
@@ -7,11 +8,12 @@ import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
-import useGaugeController from '@/modules/earningPool/controller/useGaugeController'
+import useVoteController from './controller/useVoteController'
 
 export default function GaugePage() {
-  const { pageData, ...pageOthers } = useGaugeController()
+  const { pageData, ...pageOthers } = useVoteController()
   const [showModal, setShowModal] = useState(false)
+  const [clearPrev, setClearPrev] = useState(false)
 
   const canCast = true
   console.log('POOLS_LIST---pagedata', pageData)
@@ -32,8 +34,15 @@ export default function GaugePage() {
           </p>
         </div>
 
-        <div className="mt-[32px]">
-          Allocated: 0.0% (0 Votes) Remaining: 100.0% (100,000 Votes)
+        <div className="flex justify-between items-center mt-[32px]">
+          <p>Allocated: 0.0% (0 Votes) Remaining: 100.0% (100,000 Votes)</p>
+          <div className="flex mt-[8px]">
+            <Checkbox
+              className="w-[30px]"
+              onChange={() => setClearPrev(!clearPrev)}
+            />
+            <div>Clear Previous Votes</div>
+          </div>
         </div>
 
         <div className="px-[16px] mt-[32px] flex justify-between">

@@ -246,7 +246,7 @@
       }
     ],
     "outputs": [],
-    "gas": 37475860
+    "gas": 37475848
   },
   {
     "stateMutability": "nonpayable",
@@ -263,7 +263,7 @@
       }
     ],
     "outputs": [],
-    "gas": 37483708
+    "gas": 37483696
   },
   {
     "stateMutability": "nonpayable",
@@ -276,7 +276,7 @@
       }
     ],
     "outputs": [],
-    "gas": 37479930
+    "gas": 37479919
   },
   {
     "stateMutability": "nonpayable",
@@ -289,7 +289,7 @@
       }
     ],
     "outputs": [],
-    "gas": 37487084
+    "gas": 37487073
   },
   {
     "stateMutability": "nonpayable",

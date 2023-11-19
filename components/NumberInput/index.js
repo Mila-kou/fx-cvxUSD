@@ -30,7 +30,7 @@ function NumberInput(props) {
   const handleInputChange = (e) => {
     let { value } = e.target
 
-    const charReg = /[^\d]/g
+    const charReg = /[^\d.]/g
 
     if (charReg.test(value)) {
       value = value.replace(charReg, '')
