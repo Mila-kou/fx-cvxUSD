@@ -1,14 +1,14 @@
 import React from 'react'
 import Head from 'next/head'
-import GaugeWeightPage from '@/modules/gaugeWeight/GaugeWeightPage'
+import GaugePage from '@/modules/gauge/GaugePage'
 
-export default function GaugeWeight() {
+export default function Gauge() {
   return (
     <React.Fragment>
       <Head>
         <title>f(x) Protocol</title>
       </Head>
-      <GaugeWeightPage />
+      <GaugePage />
     </React.Fragment>
   )
 }

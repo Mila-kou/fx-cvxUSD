@@ -1,0 +1,50 @@
+@import '../../assets/css/mixin.scss';
+.reverse {
+  transform: rotate(180deg);
+}
+
+.inputContent {
+  padding: 12px 18px;
+  box-shadow: var(--input-box-shadow);
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  justify-content: space-between;
+  column-gap: 14px;
+  background: var(--input-background-color);
+
+  .right {
+    .balanceWrap {
+      font-size: 16px;
+      text-align: end;
+      color: var(--second-text-color);
+      .max {
+        @include max-button;
+        margin-left: 10px;
+      }
+    }
+    .select {
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--blue-color);
+      &[data-color='red'] {
+        color: var(--red-color);
+      }
+    }
+  }
+
+  input {
+    height: 24px;
+    width: 100%;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    background: transparent;
+    &::placeholder {
+      color: var(--second-text-color);
+    }
+    &[disabled] {
+      background: transparent;
+    }
+  }
+}

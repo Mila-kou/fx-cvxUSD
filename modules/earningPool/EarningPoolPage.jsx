@@ -28,11 +28,11 @@ export default function EarningPoolPage() {
           <DotChartOutlined />
           My Deposits
         </div>
-        <div className="mt-[32px] flex justify-between">
-          <div className="w-[180px]">Pool Name</div>
-          <div className="w-[180px]">Current APR</div>
-          <div className="w-[140px]">Deposits</div>
-          <div className="w-[80px]">Earned</div>
+        <div className="px-[16px] mt-[32px] flex justify-between">
+          <div className="w-[180px] text-[14px]">Pool Name</div>
+          <div className="w-[180px] text-[14px]">Current APR</div>
+          <div className="w-[140px] text-[14px]">Deposits</div>
+          <div className="w-[80px] text-[14px]">Earned</div>
           <div className="w-[80px]" />
         </div>
         {deposits.map((item) => (
@@ -45,12 +45,12 @@ export default function EarningPoolPage() {
           <DotChartOutlined />
           Earning Pools
         </div>
-        <div className="mt-[32px] flex justify-between">
+        <div className="px-[16px] mt-[32px] flex justify-between">
           <div className="w-[180px]" />
-          <div className="w-[140px]">TVL</div>
-          <div className="w-[150px]">APR Range</div>
-          <div className="w-[80px]">Deposit</div>
-          <div className="w-[80px]">Earn</div>
+          <div className="w-[140px] text-[14px]">TVL</div>
+          <div className="w-[150px] text-[14px]">APR Range</div>
+          <div className="w-[80px] text-[14px]">Deposit</div>
+          <div className="w-[80px] text-[14px]">Earn</div>
           <div className="w-[80px]" />
         </div>
         {pageData.map((item) => (

@@ -24,10 +24,10 @@ const routers = [
   ['f(x) Protocol', '/home'],
   ['Rebalance Pool', '/rebalance-pool'],
   ['Earning Pools', '/earning-pool'],
-  ['Gauge Weight', '/gauge-weight'],
+  ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
   ['Vesting', '/vesting'],
-  ['Vesting V2', '/vestingV2'],
+  // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
   // ['Offering', '/offering'],
 ]
