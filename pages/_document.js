@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <meta
           name="description"
-          content="AladdinDAO is the platform introduces DeFi projects (DApps) to investors, creates values from information collection, classification, and assessment. It hopes to Identify the m ost valuable projects from their early phases and prompts them to the society as early as possible."
+          content="f(x) is a DeFi protocol on Ethereum that offers a powerful new decentralized stablecoin enabled by an amplified ETH token, both backed by staked ETH."
         />
         <link rel="shortcut icon" href="/images/favicon.ico" />
       </Head>
