@@ -2,21 +2,9 @@
   {
     "name": "Transfer",
     "inputs": [
-      {
-        "name": "_from",
-        "type": "address",
-        "indexed": true
-      },
-      {
-        "name": "_to",
-        "type": "address",
-        "indexed": true
-      },
-      {
-        "name": "_value",
-        "type": "uint256",
-        "indexed": false
-      }
+      { "name": "_from", "type": "address", "indexed": true },
+      { "name": "_to", "type": "address", "indexed": true },
+      { "name": "_value", "type": "uint256", "indexed": false }
     ],
     "anonymous": false,
     "type": "event"
@@ -24,21 +12,9 @@
   {
     "name": "Approval",
     "inputs": [
-      {
-        "name": "_owner",
-        "type": "address",
-        "indexed": true
-      },
-      {
-        "name": "_spender",
-        "type": "address",
-        "indexed": true
-      },
-      {
-        "name": "_value",
-        "type": "uint256",
-        "indexed": false
-      }
+      { "name": "_owner", "type": "address", "indexed": true },
+      { "name": "_spender", "type": "address", "indexed": true },
+      { "name": "_value", "type": "uint256", "indexed": false }
     ],
     "anonymous": false,
     "type": "event"
@@ -46,46 +22,22 @@
   {
     "name": "UpdateMiningParameters",
     "inputs": [
-      {
-        "name": "time",
-        "type": "uint256",
-        "indexed": false
-      },
-      {
-        "name": "rate",
-        "type": "uint256",
-        "indexed": false
-      },
-      {
-        "name": "supply",
-        "type": "uint256",
-        "indexed": false
-      }
+      { "name": "time", "type": "uint256", "indexed": false },
+      { "name": "rate", "type": "uint256", "indexed": false },
+      { "name": "supply", "type": "uint256", "indexed": false }
     ],
     "anonymous": false,
     "type": "event"
   },
   {
     "name": "SetMinter",
-    "inputs": [
-      {
-        "name": "minter",
-        "type": "address",
-        "indexed": false
-      }
-    ],
+    "inputs": [{ "name": "minter", "type": "address", "indexed": false }],
     "anonymous": false,
     "type": "event"
   },
   {
     "name": "SetAdmin",
-    "inputs": [
-      {
-        "name": "admin",
-        "type": "address",
-        "indexed": false
-      }
-    ],
+    "inputs": [{ "name": "admin", "type": "address", "indexed": false }],
     "anonymous": false,
     "type": "event"
   },
@@ -94,30 +46,12 @@
     "type": "function",
     "name": "initialize",
     "inputs": [
-      {
-        "name": "_init_supply",
-        "type": "uint256"
-      },
-      {
-        "name": "_init_rate",
-        "type": "uint256"
-      },
-      {
-        "name": "_rate_reduction_coefficient",
-        "type": "uint256"
-      },
-      {
-        "name": "_admin",
-        "type": "address"
-      },
-      {
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "name": "_symbol",
-        "type": "string"
-      }
+      { "name": "_init_supply", "type": "uint256" },
+      { "name": "_init_rate", "type": "uint256" },
+      { "name": "_rate_reduction_coefficient", "type": "uint256" },
+      { "name": "_admin", "type": "address" },
+      { "name": "_name", "type": "string" },
+      { "name": "_symbol", "type": "string" }
     ],
     "outputs": [],
     "gas": 527577
@@ -135,12 +69,7 @@
     "type": "function",
     "name": "start_epoch_time_write",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 158997
   },
   {
@@ -148,12 +77,7 @@
     "type": "function",
     "name": "future_epoch_time_write",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 159186
   },
   {
@@ -161,12 +85,7 @@
     "type": "function",
     "name": "available_supply",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 7647
   },
   {
@@ -174,33 +93,17 @@
     "type": "function",
     "name": "mintable_in_timeframe",
     "inputs": [
-      {
-        "name": "start",
-        "type": "uint256"
-      },
-      {
-        "name": "end",
-        "type": "uint256"
-      }
+      { "name": "start", "type": "uint256" },
+      { "name": "end", "type": "uint256" }
     ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 6170727
   },
   {
     "stateMutability": "nonpayable",
     "type": "function",
     "name": "set_minter",
-    "inputs": [
-      {
-        "name": "_minter",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "name": "_minter", "type": "address" }],
     "outputs": [],
     "gas": 41816
   },
@@ -208,12 +111,7 @@
     "stateMutability": "nonpayable",
     "type": "function",
     "name": "set_admin",
-    "inputs": [
-      {
-        "name": "_admin",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "name": "_admin", "type": "address" }],
     "outputs": [],
     "gas": 39655
   },
@@ -222,12 +120,7 @@
     "type": "function",
     "name": "totalSupply",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 2700
   },
   {
@@ -235,21 +128,10 @@
     "type": "function",
     "name": "allowance",
     "inputs": [
-      {
-        "name": "_owner",
-        "type": "address"
-      },
-      {
-        "name": "_spender",
-        "type": "address"
-      }
+      { "name": "_owner", "type": "address" },
+      { "name": "_spender", "type": "address" }
     ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 3262
   },
   {
@@ -257,21 +139,10 @@
     "type": "function",
     "name": "transfer",
     "inputs": [
-      {
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
+      { "name": "_to", "type": "address" },
+      { "name": "_value", "type": "uint256" }
     ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "bool" }],
     "gas": 79032
   },
   {
@@ -279,25 +150,11 @@
     "type": "function",
     "name": "transferFrom",
     "inputs": [
-      {
-        "name": "_from",
-        "type": "address"
-      },
-      {
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
+      { "name": "_from", "type": "address" },
+      { "name": "_to", "type": "address" },
+      { "name": "_value", "type": "uint256" }
     ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "bool" }],
     "gas": 116720
   },
   {
@@ -305,21 +162,10 @@
     "type": "function",
     "name": "approve",
     "inputs": [
-      {
-        "name": "_spender",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
+      { "name": "_spender", "type": "address" },
+      { "name": "_value", "type": "uint256" }
     ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "bool" }],
     "gas": 41885
   },
   {
@@ -327,39 +173,18 @@
     "type": "function",
     "name": "mint",
     "inputs": [
-      {
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
+      { "name": "_to", "type": "address" },
+      { "name": "_value", "type": "uint256" }
     ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "bool" }],
     "gas": 244959
   },
   {
     "stateMutability": "nonpayable",
     "type": "function",
     "name": "burn",
-    "inputs": [
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "inputs": [{ "name": "_value", "type": "uint256" }],
+    "outputs": [{ "name": "", "type": "bool" }],
     "gas": 78779
   },
   {
@@ -367,14 +192,8 @@
     "type": "function",
     "name": "set_name",
     "inputs": [
-      {
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "name": "_symbol",
-        "type": "string"
-      }
+      { "name": "_name", "type": "string" },
+      { "name": "_symbol", "type": "string" }
     ],
     "outputs": [],
     "gas": 189038
@@ -384,12 +203,7 @@
     "type": "function",
     "name": "name",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "string" }],
     "gas": 13229
   },
   {
@@ -397,12 +211,7 @@
     "type": "function",
     "name": "symbol",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "string" }],
     "gas": 10988
   },
   {
@@ -410,30 +219,15 @@
     "type": "function",
     "name": "decimals",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 3000
   },
   {
     "stateMutability": "view",
     "type": "function",
     "name": "balanceOf",
-    "inputs": [
-      {
-        "name": "arg0",
-        "type": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "name": "arg0", "type": "address" }],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 3296
   },
   {
@@ -441,12 +235,7 @@
     "type": "function",
     "name": "minter",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "address" }],
     "gas": 3060
   },
   {
@@ -454,12 +243,7 @@
     "type": "function",
     "name": "admin",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "address" }],
     "gas": 3090
   },
   {
@@ -467,12 +251,7 @@
     "type": "function",
     "name": "INITIAL_RATE",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 3120
   },
   {
@@ -480,12 +259,7 @@
     "type": "function",
     "name": "RATE_REDUCTION_COEFFICIENT",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 3150
   },
   {
@@ -493,12 +267,7 @@
     "type": "function",
     "name": "mining_epoch",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "int128"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "int128" }],
     "gas": 3180
   },
   {
@@ -506,12 +275,7 @@
     "type": "function",
     "name": "start_epoch_time",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 3210
   },
   {
@@ -519,12 +283,7 @@
     "type": "function",
     "name": "rate",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
     "gas": 3240
   }
 ]

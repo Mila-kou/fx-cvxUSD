@@ -5,6 +5,7 @@ import {
   useContract,
   useVeFXN,
   useFxGaugeController,
+  useFXN,
 } from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
@@ -16,6 +17,8 @@ const useVoteData = () => {
   const { contract: veContract } = useVeFXN()
   const { contract: gaugeControllerContract } = useFxGaugeController()
   const multiCallsV2 = useMutiCallV2()
+  const { contract: FXNContract } = useFXN()
+  const { contract: FxGaugeControllerContract } = useFxGaugeController()
 
   const getGaugeContract = useCallback(
     (lpGaugeAddress) => {

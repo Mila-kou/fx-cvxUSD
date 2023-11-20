@@ -14,6 +14,7 @@ import FX_ETHGateway from './fx/ETHGateway.json'
 import Fx_Gateway from './fx/FxGateway.json'
 import Fx_ReservePool from './fx/ReservePool.json'
 import Fx_FxETHTwapOracle from './fx/FxETHTwapOracle.json'
+import FXNABI from './fx/FXN.json'
 
 // test
 import MockTwapOracle from './fx/MockTwapOracle.json'
@@ -62,6 +63,7 @@ export default {
   multiCallABI,
   IdoSale,
   IdoGovernanceVesting,
+  FXNABI,
 
   FX_Market,
   FX_FractionalToken,
