@@ -43,13 +43,13 @@ const useVoteData = () => {
   const fetchCommonVoteData = useCallback(
     async (arr) => {
       try {
-        const nextTimes = moment(calc4(current, true) * 1000 + 86400 * 7 * 1000)
+        const nextTimes = calc4(current, true) * 1000 + 86400 * 7 * 1000
         const { rate } = FXNContract.methods
         const callList = arr.map((item, index) => {
           return {
             ...item,
             baseInfo: {
-              checkpoint_gauge: checkpoint_gauge(),
+              checkpoint_gauge: checkpoint_gauge(item.lpGaugeAddress),
               gauge_weight: get_gauge_weight(item.lpGaugeAddress),
               gauge_relative_weight: gauge_relative_weight(
                 item.lpGaugeAddress,
@@ -60,7 +60,7 @@ const useVoteData = () => {
         })
         const allBaseInfo = await multiCallsV2(
           {
-            FXNRate: rate,
+            FXNRate: rate(),
             callList,
           },
           {
@@ -92,7 +92,6 @@ const useVoteData = () => {
 =======
 >>>>>>> d2ccf9e (Update Vote)
         const { balanceOf } = veContract.methods
-
         const voteCalls = arr.map((item, index) => {
           return {
             ...item,
@@ -147,7 +146,7 @@ const useVoteData = () => {
   ] = useQueries({
     queries: [
       {
-        queryKey: ['commonVoteData', _currentAccount],
+        queryKey: ['commonVoteData'],
         queryFn: () => fetchCommonVoteData(POOLS_LIST),
         initialData: {},
       },
