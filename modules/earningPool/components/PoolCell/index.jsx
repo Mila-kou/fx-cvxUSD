@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { Tooltip, InfoCircleOutlined } from 'antd'
+import { Tooltip } from 'antd'
+import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import cn from 'classnames'
 import Button from '@/components/Button'
 import { POOLS_LIST } from '@/config/aladdinVault'
@@ -18,7 +19,6 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { NoticeCard } from '@/modules/home/components/Common'
 
 const stETHImg = '/tokens/steth.svg'
 
@@ -75,7 +75,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
           _allApy_min = _allApy_min.plus(_min_FXN_Apy)
           _allApy_max = _allApy_max.plus(_max_FXN_Apy)
           _tips.push(
-            `${item.rewardToken[3]} : ${_min_FXN_Apy} % - ${_allApy_max} %`
+            `${item.rewardToken[3]} : ${_min_FXN_Apy}% - ${_allApy_max}%`
           )
         } else {
           _allApy_max = _allApy_max.plus(item._apy)
@@ -85,13 +85,21 @@ export default function PoolCell({ cellData, ...pageOthers }) {
     }
     if (checkNotZoroNum(_allApy_min)) {
       return (
-        <>
-          {_allApy_min.toFixed(2)}%-{_allApy_max.toFixed(2)}%{' '}
-          <NoticeCard content={_tips} />
-          {/* <Tooltip placement="top" title={_tips} arrow color="#000">
+        <div className="flex gap-[6px] items-center text-[16px]">
+          {_allApy_min.toFixed(2)}% - {_allApy_max.toFixed(2)}%
+          <Tooltip
+            placement="top"
+            title={_tips.map((txt) => (
+              <div>
+                <p className="text-[14px]">{txt}</p>
+              </div>
+            ))}
+            arrow
+            color="#000"
+          >
             <InfoCircleOutlined />
-          </Tooltip> */}
-        </>
+          </Tooltip>
+        </div>
       )
     }
     return '-'
@@ -110,14 +118,14 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             )
           }
           return (
-            <>
+            <div className="flex gap-[6px] py-[2px]">
               <img
                 key={index}
-                className="h-[30px]"
+                className="h-[20px]"
                 src={item[4] ?? '/images/f-logo.svg'}
               />
-              {_reward_text}
-            </>
+              <p className="text-[16px]">{_reward_text}</p>
+            </div>
           )
         })}
       </>
@@ -126,23 +134,25 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className="flex justify-between items-center">
-        <div className="w-[180px]">
+        <div className="w-[160px]">
           <p>{cellData.name}</p>
-          <p>{cellData.nameShow}</p>
+          <p className="text-[14px] text-[var(--second-text-color)]">
+            {cellData.nameShow}
+          </p>
         </div>
-        <div className="w-[140px]">{cellData.tvl_text}</div>
-        <div className="w-[150px]">{apyDom}</div>
-        <div className="w-[80px]">{cellData.userShare_text}</div>
+        <div className="w-[80px] text-[16px]">{cellData.tvl_text}</div>
+        <div className="w-[180px]">{apyDom}</div>
+        <div className="w-[80px] text-[16px]">{cellData.userShare_text}</div>
         <div className="w-[80px]">{rewardTokenDom}</div>
         <div className="w-[80px]">
           <div
-            className="underline cursor-pointer text-[var(--a-button-color)]"
+            className="underline cursor-pointer text-[16px] text-[var(--a-button-color)]"
             onClick={() => setShowDepositModal(true)}
           >
             Deposit
           </div>
           <div
-            className="underline cursor-pointer text-[var(--a-button-color)]"
+            className="underline cursor-pointer text-[16px] text-[var(--a-button-color)]"
             onClick={() => handleClaim()}
           >
             Claim
