@@ -10,8 +10,11 @@ import { useContract, useVeFXN } from '@/hooks/useContracts'
 
 const useVoteController = () => {
   const { currentAccount, isAllReady, blockTime } = useWeb3()
-  const { allVoteData, votePower, veFXNAmount, lastScheduled } = useVoteData()
-
+  const {
+    commonVoteData,
+    voteInfo: { allVoteData, votePower, veFXNAmount, lastScheduled },
+  } = useVoteData()
+  console.log('commonVoteData-----2', commonVoteData)
   const userVoteInfo = useMemo(() => {
     const _allocatedVotes = cBN(veFXNAmount)
       .multipliedBy(votePower)

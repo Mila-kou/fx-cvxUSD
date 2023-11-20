@@ -10,12 +10,13 @@ import {
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { POOLS_LIST } from '@/config/aladdinVault'
+import { calc4 } from '@/modules/lock/util'
+import moment from 'moment'
 
 const useVoteData = () => {
-  const { _currentAccount, web3, isAllReady, blockNumber } = useWeb3()
+  const { _currentAccount, current, web3, isAllReady, blockNumber } = useWeb3()
   const { getContract } = useContract()
   const { contract: veContract } = useVeFXN()
-  const { contract: gaugeControllerContract } = useFxGaugeController()
   const multiCallsV2 = useMutiCallV2()
   const { contract: FXNContract } = useFXN()
   const { contract: FxGaugeControllerContract } = useFxGaugeController()
@@ -31,9 +32,55 @@ const useVoteData = () => {
     [getContract]
   )
 
+  const {
+    vote_user_slopes,
+    vote_user_power,
+    last_user_vote,
+    get_gauge_weight,
+    gauge_relative_weight,
+    checkpoint_gauge,
+  } = FxGaugeControllerContract.methods
+  const fetchCommonVoteData = useCallback(
+    async (arr) => {
+      try {
+        const nextTimes = moment(calc4(current, true) * 1000 + 86400 * 7 * 1000)
+        const { rate } = FXNContract.methods
+        const callList = arr.map((item, index) => {
+          return {
+            ...item,
+            baseInfo: {
+              checkpoint_gauge: checkpoint_gauge(),
+              gauge_weight: get_gauge_weight(item.lpGaugeAddress),
+              gauge_relative_weight: gauge_relative_weight(
+                item.lpGaugeAddress,
+                nextTimes
+              ),
+            },
+          }
+        })
+        const allBaseInfo = await multiCallsV2(
+          {
+            FXNRate: rate,
+            callList,
+          },
+          {
+            from: _currentAccount,
+          }
+        )
+        console.log('CommonVoteData----1', allBaseInfo)
+        return allBaseInfo
+      } catch (error) {
+        console.log('commonVoteData----error', error)
+        return arr
+      }
+    },
+    [getContract, multiCallsV2, _currentAccount]
+  )
+
   const fetchAllPoolVoteData = useCallback(
     async (arr) => {
       try {
+<<<<<<< HEAD
         const {
           vote_user_slopes,
           vote_user_power,
@@ -42,12 +89,11 @@ const useVoteData = () => {
           time_total,
         } = gaugeControllerContract.methods
 
+=======
+>>>>>>> d2ccf9e (Update Vote)
         const { balanceOf } = veContract.methods
 
         const voteCalls = arr.map((item, index) => {
-          const allowanceContractAddr = item.lpGaugeAddress
-          const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
-          // const {} = _lpGaugeContract.methods
           return {
             ...item,
             voteInfo: {
@@ -95,8 +141,16 @@ const useVoteData = () => {
     [getContract, multiCallsV2, _currentAccount]
   )
 
-  const [{ data: voteInfo, refetch: refetchVoteInfo }] = useQueries({
+  const [
+    { data: commonVoteData, refetch: refetchCommonnInfo },
+    { data: voteInfo, refetch: refetchVoteInfo },
+  ] = useQueries({
     queries: [
+      {
+        queryKey: ['commonVoteData', _currentAccount],
+        queryFn: () => fetchCommonVoteData(POOLS_LIST),
+        initialData: {},
+      },
       {
         queryKey: ['voteInfo', _currentAccount],
         queryFn: () => fetchAllPoolVoteData(POOLS_LIST),
@@ -112,10 +166,11 @@ const useVoteData = () => {
   })
 
   useEffect(() => {
+    refetchCommonnInfo()
     refetchVoteInfo()
   }, [_currentAccount, blockNumber])
 
-  return voteInfo
+  return { commonVoteData, voteInfo }
 }
 
 export default useVoteData
