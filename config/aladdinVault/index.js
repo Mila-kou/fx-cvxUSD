@@ -6,6 +6,58 @@ const FLogo = '/images/f-logo.svg'
 const XLogo = '/images/x-logo.svg'
 
 export const POOLS_LIST = [
+  // {
+  //   logo: FLogo,
+  //   logo2: `/tokens/crypto-icons-stack.svg#eth`,
+  //   id: 1,
+  //   name: 'Rebalance PoolA',
+  //   platform: 'FX',
+  //   fromPlatformIcon: `${cryptoIcons}#crv`,
+  //   fromPlatform: 'FX',
+  //   platformUrl: 'https://curve.fi/factory-crypto/140',
+  //   curveType: 'curveCopyto',
+  //   gaugeType: 'rebalance',
+  //   nameShow: 'Rebalance PoolA',
+  //   // lpPoolToken: config.POOLS_LIST_GAUGE.ETH_xETH.lpPoolCurveToken,
+  //   lpAddress: config.POOLS_LIST_GAUGE.ETH_xETH.token,
+  //   lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_xETH.gauge,
+  //   rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
+  //   zapTokens: [
+  //     {
+  //       symbol: 'Curve_xETH_ETH',
+  //       icon: 'eth',
+  //       address: config.POOLS_LIST_GAUGE.ETH_xETH.token,
+  //       needZap: false,
+  //       isLp: true,
+  //     },
+  //   ],
+  // },
+  // {
+  //   logo: FLogo,
+  //   logo2: `/tokens/crypto-icons-stack.svg#eth`,
+  //   id: 1,
+  //   name: 'Rebalance PoolB',
+  //   platform: 'FX',
+  //   fromPlatformIcon: `${cryptoIcons}#crv`,
+  //   fromPlatform: 'Curve',
+  //   platformUrl: 'https://curve.fi/factory-crypto/140',
+  //   curveType: 'curveCopyto',
+  //   gaugeType: 'rebalance',
+  //   nameShow: 'Rebalance PoolB',
+  //   // lpPoolToken: config.POOLS_LIST_GAUGE.ETH_xETH.lpPoolCurveToken,
+  //   lpAddress: config.POOLS_LIST_GAUGE.ETH_xETH.token,
+  //   lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_xETH.gauge,
+  //   rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
+  //   zapTokens: [
+  //     {
+  //       symbol: 'Curve_xETH_ETH',
+  //       icon: 'eth',
+  //       address: config.POOLS_LIST_GAUGE.ETH_xETH.token,
+  //       needZap: false,
+  //       isLp: true,
+  //     },
+  //   ],
+  // },
   {
     logo: FLogo,
     logo2: `/tokens/crypto-icons-stack.svg#eth`,
