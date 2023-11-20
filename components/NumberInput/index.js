@@ -21,6 +21,7 @@ function NumberInput(props) {
     disabled,
     type,
     color,
+    max,
     onChange = () => {},
     onSelected = () => {},
   } = props
@@ -36,6 +37,9 @@ function NumberInput(props) {
       value = value.replace(charReg, '')
     }
 
+    if (max) {
+      value = Math.min(Number(value), max)
+    }
     setVal(value || '')
     onChange(value || '')
   }

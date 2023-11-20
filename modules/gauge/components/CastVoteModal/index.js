@@ -16,8 +16,7 @@ const icons = {
   FXN: '/images/FXN.svg',
 }
 
-export default function CastVoteModal({ onCancel, info }) {
-  const [canVote, setCanVote] = useState(true)
+export default function CastVoteModal({ onCancel, voteData }) {
   const [voting, setVoting] = useState(false)
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: gaugeControllerContract } = useFxGaugeController()
@@ -28,8 +27,8 @@ export default function CastVoteModal({ onCancel, info }) {
     setVoting(true)
     try {
       const apiCall = gaugeControllerContract.methods.vote_for_gauge_weights(
-        '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
-        100
+        voteData.lpGaugeAddress,
+        voteData.newPower * 100
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
@@ -46,20 +45,7 @@ export default function CastVoteModal({ onCancel, info }) {
     }
   }
 
-  const rewards = [
-    {
-      name: 'Rebalance Pool A',
-      amount: '10% (10,000 votes)',
-    },
-    {
-      name: 'Rebalance Pool C',
-      amount: '10% (10,000 votes)',
-    },
-    {
-      name: 'FXN / ETH Curve LP',
-      amount: '10% (10,000 votes)',
-    },
-  ]
+  console.log('voteData---', voteData)
 
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
@@ -71,28 +57,25 @@ export default function CastVoteModal({ onCancel, info }) {
           <p className="text-[var(--second-text-color)]">Votes</p>
         </div>
 
-        {rewards.map((item) => (
+        {[voteData].map((item) => (
           <div className="mb-[16px] flex gap-[16px] items-center justify-between">
             <p className="flex-1">{item.name}</p>
-            <p>{item.amount}</p>
+            <p>
+              {item.newPower}% ({item.newPowerVote})
+            </p>
           </div>
         ))}
       </div>
 
       <p className="mt-[40px] text-[var(--second-text-color)]">
-        Will take effect in the next Epoch: <b>Thu 11.16.2023 08:00 am UTC+8</b>
+        Will take effect in the next Epoch: <b>{voteData.nextEpoch}</b>
       </p>
 
       <div className="mt-[40px] flex gap-[16px]">
         <Button className="w-full" onClick={onCancel} type="second">
           Cancel
         </Button>
-        <Button
-          className="w-full"
-          disabled={!canVote}
-          loading={voting}
-          onClick={handleVote}
-        >
+        <Button className="w-full" loading={voting} onClick={handleVote}>
           Vote
         </Button>
       </div>

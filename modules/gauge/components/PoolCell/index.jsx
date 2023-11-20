@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useRef, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
@@ -22,14 +22,25 @@ import config from '@/config/index'
 
 const stETHImg = '/tokens/steth.svg'
 
-export default function PoolCell({ cellData, voteData, ...pageOthers }) {
+export default function PoolCell({
+  cellData,
+  voteData,
+  onCastVote,
+  remaining,
+  ...pageOthers
+}) {
   const { userInfo = {}, lpGaugeContract } = cellData
   const boostInfo = useVeBoost_c(cellData)
   const { isAllReady, currentAccount } = useWeb3()
   const [openPanel, setOpenPanel] = useState(false)
+  const [power, setPower] = useState(0)
+
+  const canCast = useMemo(() => power && remaining >= power, [voteData, power])
+
+  console.log('powerRef.current---', power, canCast, remaining)
 
   const onChange = (v) => {
-    console.log(v)
+    setPower(Number(v))
   }
 
   const apyDom = useMemo(() => {
@@ -100,8 +111,8 @@ export default function PoolCell({ cellData, voteData, ...pageOthers }) {
       </div>
 
       {openPanel ? (
-        <div className={`${styles.panel}`}>
-          <div>
+        <div className={`${styles.panel} gap-[32px]`}>
+          <div className="flex-1">
             <p>
               Voting for <b>{cellData.name}</b>
             </p>
@@ -109,11 +120,24 @@ export default function PoolCell({ cellData, voteData, ...pageOthers }) {
               Previous vote: {voteData?.userPower}% ({voteData?.userVote} Votes)
             </p>
           </div>
-          <NumberInput
-            className="w-[300px]"
-            onChange={onChange}
-            placeholder="Enter an amount"
-          />
+          <div className="flex items-center gap-[6px]">
+            <NumberInput
+              max={remaining}
+              className="w-[100px]"
+              onChange={onChange}
+              placeholder="0"
+            />
+            %
+          </div>
+          <Button
+            width="140px"
+            height="40px"
+            style={{ fontSize: '20px' }}
+            disabled={!canCast}
+            onClick={() => onCastVote(power)}
+          >
+            Cast Votes
+          </Button>
         </div>
       ) : null}
     </div>

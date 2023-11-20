@@ -6,7 +6,7 @@ import CastVoteModal from './components/CastVoteModal'
 import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
-import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
+import { cBN, fb4, checkNotZoroNumOption, dollarText } from '@/utils/index'
 import useGaugeController from '@/modules/earningPool/controller/useGaugeController'
 import PoolCell from './components/PoolCell'
 import useVoteController from './controller/useVoteController'
@@ -14,11 +14,22 @@ import useVoteController from './controller/useVoteController'
 export default function GaugePage() {
   const { pageData, ...pageOthers } = useGaugeController()
   const { userVoteInfo, poolVoteInfo } = useVoteController()
-  const [showModal, setShowModal] = useState(false)
   const [clearPrev, setClearPrev] = useState(false)
+  const [voteData, setVoteData] = useState(null)
 
-  const canCast = true
-  console.log('POOLS_LIST---pagedata', pageData)
+  console.log('POOLS_LIST---voteData', userVoteInfo)
+
+  const onCastVote = (item, newPower) => {
+    const _powerVote = cBN(userVoteInfo.veFXNAmount)
+      .multipliedBy(newPower)
+      .dividedBy(100)
+    setVoteData({
+      ...item,
+      nextEpoch: userVoteInfo.nextEpoch,
+      newPower,
+      newPowerVote: checkNotZoroNumOption(_powerVote, fb4(_powerVote)),
+    })
+  }
 
   return (
     <div className={styles.container}>
@@ -32,7 +43,7 @@ export default function GaugePage() {
             Current Week: <b>100</b>
           </p>
           <p>
-            Next epoch starts: <b>{userVoteInfo.nextEpochState}</b>
+            Next epoch starts: <b>{userVoteInfo.nextEpoch}</b>
           </p>
         </div>
 
@@ -66,21 +77,18 @@ export default function GaugePage() {
           <PoolCell
             cellData={item}
             voteData={poolVoteInfo[item.lpGaugeAddress]}
+            remaining={userVoteInfo.remaining}
+            onCastVote={(newPower) => onCastVote(item, newPower)}
             {...pageOthers}
           />
         ))}
 
-        <div className="mt-[40px]">
-          <Button
-            className="w-[40%] mx-[auto]"
-            disabled={!canCast}
-            onClick={() => setShowModal(true)}
-          >
-            Cast Votes
-          </Button>
-        </div>
-
-        {showModal && <CastVoteModal onCancel={() => setShowModal(false)} />}
+        {voteData && (
+          <CastVoteModal
+            voteData={voteData}
+            onCancel={() => setVoteData(null)}
+          />
+        )}
       </div>
     </div>
   )

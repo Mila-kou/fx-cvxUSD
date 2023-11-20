@@ -44,7 +44,8 @@ const useVoteController = () => {
         _remainingVotes,
         fb4(_remainingVotes)
       ),
-      nextEpochState: `Thu ${next_time} am UTC-8`,
+      veFXNAmount,
+      nextEpoch: `Thu ${next_time} am UTC-8`,
     }
   }, [votePower, veFXNAmount])
 
