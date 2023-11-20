@@ -2,6 +2,7 @@ import React, { useRef, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { NoticeCard } from '@/modules/home/components/Common'
 import cn from 'classnames'
 import Button from '@/components/Button'
 import { POOLS_LIST } from '@/config/aladdinVault'
@@ -39,8 +40,6 @@ export default function PoolCell({
     () => power && voteData.canVote && remaining >= power,
     [voteData, power]
   )
-
-  console.log('powerRef.current---', power, canCast, remaining)
 
   const onChange = (v) => {
     setPower(Number(v))
@@ -109,38 +108,51 @@ export default function PoolCell({
         <div className="w-[180px]">{apyDom}</div>
         <div className="w-[150px] text-[16px]">800.11k -> 700.99k</div>
         <div className="w-[20px] cursor-pointer">
-          <img src="/images/arrow-down.svg" />
+          <img
+            className={openPanel ? 'rotate-180' : ''}
+            src="/images/arrow-down.svg"
+          />
         </div>
       </div>
 
       {openPanel ? (
-        <div className={`${styles.panel} gap-[32px]`}>
-          <div className="flex-1">
-            <p>
-              Voting for <b>{cellData.name}</b>
-            </p>
-            <p className="text-[16px]">
-              Previous vote: {voteData?.userPower}% ({voteData?.userVote} Votes)
-            </p>
+        <div className={`${styles.panel}`}>
+          <div className={`${styles.content} gap-[32px]`}>
+            <div className="flex-1">
+              <p>
+                Voting for <b>{cellData.name}</b>
+              </p>
+              <p className="text-[16px]">
+                Previous vote: {voteData?.userPower}% ({voteData?.userVote}{' '}
+                Votes)
+              </p>
+            </div>
+            <div className="flex items-center gap-[6px]">
+              <NumberInput
+                max={remaining}
+                className="w-[100px]"
+                onChange={onChange}
+                placeholder="0"
+              />
+              %
+            </div>
+            <Button
+              width="140px"
+              height="40px"
+              style={{ fontSize: '20px' }}
+              disabled={!canCast}
+              onClick={() => onCastVote(power)}
+            >
+              Cast Vote
+            </Button>
           </div>
-          <div className="flex items-center gap-[6px]">
-            <NumberInput
-              max={remaining}
-              className="w-[100px]"
-              onChange={onChange}
-              placeholder="0"
+          {voteData.canVote ? null : (
+            <NoticeCard
+              content={[
+                `Cannot change weight votes more often than once in 10 days. You can vote after the ${voteData.canVoteTime}`,
+              ]}
             />
-            %
-          </div>
-          <Button
-            width="140px"
-            height="40px"
-            style={{ fontSize: '20px' }}
-            disabled={!canCast}
-            onClick={() => onCastVote(power)}
-          >
-            Cast Votes
-          </Button>
+          )}
         </div>
       ) : null}
     </div>

@@ -26,6 +26,7 @@ export default function GaugePage() {
     setVoteData({
       ...item,
       nextEpoch: userVoteInfo.nextEpoch,
+      canVoteTime: userVoteInfo.canVoteTime,
       newPower,
       newPowerVote: checkNotZoroNumOption(_powerVote, fb4(_powerVote)),
     })

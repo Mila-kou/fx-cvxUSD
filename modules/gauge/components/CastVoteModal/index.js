@@ -23,7 +23,6 @@ export default function CastVoteModal({ onCancel, voteData }) {
 
   const handleVote = async () => {
     if (!isAllReady) return
-    // const depositAmountInWei = cBN(depositAmount || 0).toFixed(0, 1)
     setVoting(true)
     try {
       const apiCall = gaugeControllerContract.methods.vote_for_gauge_weights(
@@ -60,7 +59,7 @@ export default function CastVoteModal({ onCancel, voteData }) {
         {[voteData].map((item) => (
           <div className="mb-[16px] flex gap-[16px] items-center justify-between">
             <p className="flex-1">{item.name}</p>
-            <p>
+            <p className="text-[var(--primary-color)]">
               {item.newPower}% ({item.newPowerVote})
             </p>
           </div>
@@ -68,7 +67,8 @@ export default function CastVoteModal({ onCancel, voteData }) {
       </div>
 
       <p className="mt-[40px] text-[var(--second-text-color)]">
-        Will take effect in the next Epoch: <b>{voteData.nextEpoch}</b>
+        Will take effect in the next Epoch:{' '}
+        <b className="text-[var(--primary-color)]">{voteData.nextEpoch}</b>
       </p>
 
       <div className="mt-[40px] flex gap-[16px]">

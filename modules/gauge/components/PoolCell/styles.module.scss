@@ -14,11 +14,14 @@
 
   .panel {
     background: var(--background-color);
-    padding: 16px 48px;
-    border-radius: 0 0 10px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 32px 48px;
+
+    .content {
+      border-radius: 0 0 10px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
 

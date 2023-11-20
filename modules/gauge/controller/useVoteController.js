@@ -9,7 +9,7 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 import { useContract, useVeFXN } from '@/hooks/useContracts'
 
 const useVoteController = () => {
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, blockTime } = useWeb3()
   const { allVoteData, votePower, veFXNAmount, lastScheduled } = useVoteData()
 
   const userVoteInfo = useMemo(() => {
@@ -44,12 +44,17 @@ const useVoteController = () => {
         const _vote = cBN(veFXNAmount)
           .multipliedBy(item.voteInfo.voteSlope.power)
           .dividedBy(10000)
+        const lastVoteTime = Number(item.voteInfo.lastVote)
         info[item.lpGaugeAddress] = {
           gaugeWeight: item.voteInfo.gaugeWeight,
-          lastVoteTime: item.voteInfo.lastVote,
-          // lastVoteEnd: item.voteInfo.voteSlope.end,
-          canVote: !item.voteInfo.voteSlope.lastVote,
+          lastVoteTime,
+          // Cannot change weight votes more often than once in 10 days
+          canVote: lastVoteTime + 10 * 86400 <= blockTime,
+          canVoteTime: moment((lastVoteTime + 10 * 86400) * 1000).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
           userPower: item.voteInfo.voteSlope.power / 100,
+          blockTime,
           userVote: checkNotZoroNumOption(_vote, fb4(_vote)),
         }
       })
