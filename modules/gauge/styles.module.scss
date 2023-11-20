@@ -26,10 +26,12 @@
       gap: 32px;
 
       p {
-        border: 1px solid var(--border-color);
         font-size: 16px;
         padding: 2px 12px;
         border-radius: 6px;
+        b {
+          color: var(--primary-color);
+        }
       }
     }
 

@@ -8,10 +8,10 @@ import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
-import useVoteController from './controller/useVoteController'
+import useGaugeController from '@/modules/earningPool/controller/useGaugeController'
 
 export default function GaugePage() {
-  const { pageData, ...pageOthers } = useVoteController()
+  const { pageData, ...pageOthers } = useGaugeController()
   const [showModal, setShowModal] = useState(false)
   const [clearPrev, setClearPrev] = useState(false)
 
@@ -47,9 +47,9 @@ export default function GaugePage() {
 
         <div className="px-[16px] mt-[32px] flex justify-between">
           <div className="w-[120px]" />
-          <div className="w-[140px] text-[14px]">Type</div>
+          <div className="w-[120px] text-[14px]">Type</div>
           <div className="w-[60px] text-[14px]">My Votes</div>
-          <div className="w-[150px] text-[14px]">Votes (Current -> Next)</div>
+          <div className="w-[180px] text-[14px]">APR Range</div>
           <div className="w-[150px] text-[14px]">Estimate FXN Emissions</div>
           <div className="w-[20px]" />
         </div>
