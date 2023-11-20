@@ -160,39 +160,15 @@ export const useWstETH = () => {
 }
 
 ////////////////////////////////////////
-export const useClev = () => {
-  const address = config.contracts.aladdinCLEV
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.AlaCLEV),
-      address,
-      tokenInfo: config.TOKENS_INFO.clev,
-    }),
-    [getContract]
-  )
-}
 
 export const useFXN = () => {
   const address = config.contracts.FXN
   const { getContract } = useContract()
   return useMemo(
     () => ({
-      contract: getContract(address, abi.AlaCLEV),
+      contract: getContract(address, abi.FXNABI),
       address,
       tokenInfo: config.TOKENS_INFO.fxn,
-    }),
-    [getContract]
-  )
-}
-
-export const useAbcCVX = () => {
-  const address = config.tokens.abcCVX
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.AladdinbcCVXABI),
-      address,
     }),
     [getContract]
   )
@@ -217,19 +193,6 @@ export const useClevMinter = () => {
     () => ({
       contract: getContract(address, abi.AlaMinterABI),
       address,
-    }),
-    [getContract]
-  )
-}
-
-export const useVeClev = () => {
-  const address = config.contracts.aladdinVeCLEV
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.AlaVeCLEVABI),
-      address,
-      tokenInfo: config.TOKENS_INFO.veclev,
     }),
     [getContract]
   )
