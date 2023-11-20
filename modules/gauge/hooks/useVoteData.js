@@ -1,19 +1,20 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import abi from 'config/abi'
-import { useContract, useVeFXN } from '@/hooks/useContracts'
+import {
+  useContract,
+  useVeFXN,
+  useFxGaugeController,
+} from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { POOLS_LIST } from '@/config/aladdinVault'
 
-// balanceOf 总票数
-// 某个投了的 vote_user_slopes
-// 总共投了的 vote_user_power
-// 最后投的 last_user_vote
-
 const useVoteData = () => {
   const { _currentAccount, web3, isAllReady, blockNumber } = useWeb3()
   const { getContract } = useContract()
+  const { contract: veContract } = useVeFXN()
+  const { contract: gaugeControllerContract } = useFxGaugeController()
   const multiCallsV2 = useMutiCallV2()
 
   const getGaugeContract = useCallback(
@@ -26,162 +27,86 @@ const useVoteData = () => {
     },
     [getContract]
   )
-  const fetchAllPoolData = useCallback(
-    async (arr) => {
-      try {
-        const callList = arr.map((item, index) => {
-          const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
-          const {
-            symbol,
-            totalSupply,
-            name,
-            getActiveRewardTokens,
-            stakingToken,
-            disableGauge,
-          } = _lpGaugeContract.methods
-          return {
-            ...item,
-            // lpGaugeContract: _lpGaugeContract,
-            baseInfo: {
-              symbol: symbol(),
-              totalSupply: totalSupply(),
-              name: name(),
-              stakingToken: stakingToken(),
-              activeRewardTokens: getActiveRewardTokens(),
-              // disableGauge: disableGauge(),
-            },
-          }
-        })
-        const allBaseInfo = await multiCallsV2(callList, {
-          from: _currentAccount,
-        })
-        console.log('allBaseInfo----', allBaseInfo)
-        return allBaseInfo
-      } catch (error) {
-        console.log('allBaseInfo----error', error)
-        return arr
-      }
-    },
-    [getContract, multiCallsV2, _currentAccount]
-  )
 
-  const fetchAllPoolUserData = useCallback(
+  const fetchAllPoolVoteData = useCallback(
     async (arr) => {
       try {
-        const checkPointList = []
-        let checkPointFn
-        const userCalls = arr.map((item, index) => {
+        const {
+          vote_user_slopes,
+          vote_user_power,
+          last_user_vote,
+          get_gauge_weight,
+        } = gaugeControllerContract.methods
+
+        const { balanceOf } = veContract.methods
+
+        const voteCalls = arr.map((item, index) => {
           const allowanceContractAddr = item.lpGaugeAddress
           const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
-          const {
-            balanceOf,
-            allowance,
-            claimable,
-            checkpoint,
-            claimable_tokens,
-          } = _lpGaugeContract.methods
-          if (index == 0) {
-            checkPointFn = _lpGaugeContract
-          }
-
+          // const {} = _lpGaugeContract.methods
           return {
             ...item,
-            // lpGaugeContract: _lpGaugeContract,
-            userInfo: {
-              // checkPointRes: checkpoint(_currentAccount),
-              userShare: balanceOf(_currentAccount),
-              userAllowance: allowance(_currentAccount, allowanceContractAddr),
-              userClaimables: item.rewardTokens.map((rewardToken) =>
-                claimable(_currentAccount, rewardToken[1])
-              ),
+            voteInfo: {
+              // end、power、slope
+              voteSlope: vote_user_slopes(_currentAccount, item.lpGaugeAddress),
+              lastVote: last_user_vote(_currentAccount, item.lpGaugeAddress),
+              gaugeWeight: get_gauge_weight(item.lpGaugeAddress),
             },
           }
         })
-        const allUserData = await multiCallsV2(userCalls, {
-          from: _currentAccount,
-        })
-        console.log('allUserData----', allUserData)
-        return allUserData
+        const [allVoteData, _votePower, veFXNAmount] = await multiCallsV2(
+          [
+            voteCalls,
+            vote_user_power(_currentAccount),
+            balanceOf(_currentAccount),
+          ],
+          {
+            from: _currentAccount,
+          }
+        )
+        console.log(
+          'allVoteData--votePower---veFXNAmount-',
+          allVoteData,
+          _votePower / 100,
+          veFXNAmount
+        )
+        return {
+          allVoteData,
+          votePower: _votePower / 100,
+          veFXNAmount,
+        }
       } catch (error) {
-        console.log('allUserData----error', error)
-        return []
+        console.log('allVoteData----error', error)
+        return {
+          allVoteData: [],
+          votePower: 0,
+          veFXNAmount: 0,
+        }
       }
     },
     [getContract, multiCallsV2, _currentAccount]
   )
 
-  const fetchGaugeListApys = useCallback(
-    async (arr) => {
-      try {
-        const apyCalls = arr.map((item, index) => {
-          const { baseInfo } = item
-          if (!baseInfo.activeRewardTokens) {
-            return []
-          }
-          const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
-          const { rewardData } = _lpGaugeContract.methods
-          let _rewardData = []
-          if (
-            baseInfo.activeRewardTokens &&
-            baseInfo.activeRewardTokens.length
-          ) {
-            _rewardData = baseInfo.activeRewardTokens.map((rewardToken) => {
-              return {
-                rewardAddress: rewardToken,
-                rewardData: rewardData(rewardToken),
-              }
-            })
-          }
-          item.rewardDatas = _rewardData
-          return item
-        })
-        const allApyData = await multiCallsV2(apyCalls, {
-          from: _currentAccount,
-        })
-        console.log('allUserData----1', allApyData)
-        return allApyData
-      } catch (error) {
-        console.log(error)
-        return []
-      }
-    },
-    [getContract, multiCallsV2, _currentAccount]
-  )
-
-  const [
-    { data: allPoolsInfo, refetch: refetchInfo },
-    { data: allPoolsUserInfo, refetch: refetchUserInfo },
-    { data: allPoolsApyInfo, refetch: refetchApysInfo },
-  ] = useQueries({
+  const [{ data: voteInfo, refetch: refetchVoteInfo }] = useQueries({
     queries: [
       {
-        queryKey: ['allPoolsInfo'],
-        queryFn: () => fetchAllPoolData(allPoolsInfo),
-        enabled: !!web3,
-        initialData: POOLS_LIST,
-      },
-      {
-        queryKey: ['allPoolsUserInfo', _currentAccount],
-        queryFn: () => fetchAllPoolUserData(allPoolsInfo),
+        queryKey: ['voteInfo', _currentAccount],
+        queryFn: () => fetchAllPoolVoteData(POOLS_LIST),
         enabled: isAllReady,
-        initialData: [],
-      },
-      {
-        queryKey: ['allPoolsApyInfo', _currentAccount],
-        queryFn: () => fetchGaugeListApys(allPoolsInfo),
-        enabled: isAllReady,
-        initialData: [],
+        initialData: {
+          allVoteData: [],
+          votePower: 0,
+          veFXNAmount: 0,
+        },
       },
     ],
   })
 
   useEffect(() => {
-    refetchInfo()
-    refetchUserInfo()
-    refetchApysInfo()
+    refetchVoteInfo()
   }, [_currentAccount, blockNumber])
 
-  return { allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo }
+  return voteInfo
 }
 
 export default useVoteData

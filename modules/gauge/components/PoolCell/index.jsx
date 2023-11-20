@@ -22,7 +22,7 @@ import config from '@/config/index'
 
 const stETHImg = '/tokens/steth.svg'
 
-export default function PoolCell({ cellData, ...pageOthers }) {
+export default function PoolCell({ cellData, voteData, ...pageOthers }) {
   const { userInfo = {}, lpGaugeContract } = cellData
   const boostInfo = useVeBoost_c(cellData)
   const { isAllReady, currentAccount } = useWeb3()
@@ -91,7 +91,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
           <p>{cellData.name}</p>
         </div>
         <div className="w-[120px] text-[16px]">Rebalance Pool</div>
-        <div className="w-[60px] text-[16px]">0.0%</div>
+        <div className="w-[60px] text-[16px]">{voteData?.userPower}%</div>
         <div className="w-[180px]">{apyDom}</div>
         <div className="w-[150px] text-[16px]">800.11k -> 700.99k</div>
         <div className="w-[20px] cursor-pointer">
@@ -105,7 +105,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             <p>
               Voting for <b>{cellData.name}</b>
             </p>
-            <p className="text-[16px]">Previous vote: 0.0% (0 Votes)</p>
+            <p className="text-[16px]">
+              Previous vote: {voteData?.userPower}% ({voteData?.userVote} Votes)
+            </p>
           </div>
           <NumberInput
             className="w-[300px]"

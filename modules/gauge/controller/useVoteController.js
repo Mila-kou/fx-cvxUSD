@@ -2,185 +2,78 @@ import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import moment from 'moment'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useGlobal } from '@/contexts/GlobalProvider'
-import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
 import useVoteData from '../hooks/useVoteData'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { POOLS_LIST } from '@/config/aladdinVault'
 import { useContract, useVeFXN } from '@/hooks/useContracts'
-import abi from '@/config/abi'
+
+export const nextWeekThursday = () => {
+  const m = moment()
+  const currentThursday = m.clone().weekday(4).startOf('day').add(8, 'h')
+  if (m.utc().isBefore(currentThursday)) {
+    return currentThursday
+  }
+  const nextWeekDay = m.clone().add(1, 'week')
+  const weekOfDay = nextWeekDay.format('E')
+  const nextThursday = nextWeekDay.subtract(weekOfDay - 4, 'd')
+  return nextThursday
+}
 
 const useVoteController = () => {
-  const globalState = useGlobal()
-  const { lpPrice, tokenPrice, ConvexVaultsAPY } = globalState
   const { currentAccount, isAllReady } = useWeb3()
-  const { getContract } = useContract()
-  const { allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo } = useVoteData()
+  const { allVoteData, votePower, veFXNAmount } = useVoteData()
 
-  const getLpTokenPrice = useCallback(
-    (lpAddress) => {
-      try {
-        const _lpPrice = lpPrice[lpAddress.toLowerCase()]
-        if (_lpPrice) {
-          return _lpPrice.usd
-        }
-        return 0
-      } catch (e) {
-        return 0
-      }
-    },
-    [lpPrice]
-  )
-
-  const getTokenPrice = useCallback(
-    (tokenName) => {
-      try {
-        const _tokenPrice = tokenPrice[tokenName]
-        if (_tokenPrice) {
-          return _tokenPrice.usd
-        }
-        return 0
-      } catch (e) {
-        return 0
-      }
-    },
-    [tokenPrice]
-  )
-
-  const getLpConvexApy = useCallback(
-    (lpAddress) => {
-      try {
-        const _convexLpInfo = ConvexVaultsAPY.find(
-          (item) => item.address.toLowerCase() == lpAddress.toLowerCase()
-        )
-        if (_convexLpInfo.name) {
-          return _convexLpInfo.apy
-        }
-        return 0
-      } catch (error) {
-        console.log('apy------getLpConvexApy-error', error)
-        return 0
-      }
-    },
-    [ConvexVaultsAPY]
-  )
-
-  const canClaim = useMemo(() => {
-    return false
-  }, [])
-
-  const getApy = useCallback((item) => {
-    const { baseInfo = {}, lpAddress, rewardDatas, rewardTokens } = item || {}
-    const { totalSupply } = baseInfo
-    let allApy = cBN(0)
-    let _apys = 0
-    const convexLpApy = getLpConvexApy(lpAddress)
-    if (rewardDatas && rewardDatas.length) {
-      _apys = rewardDatas.map((baseApyData, index) => {
-        let _apy = 0
-        const {
-          rewardData: { finishAt, lastUpdate, rate },
-          rewardAddress,
-        } = baseApyData
-        const _lpPrice = getLpTokenPrice(lpAddress)
-        const rewardToken = rewardTokens.find(
-          (_tokenData) =>
-            _tokenData[1].toLowerCase() == rewardAddress.toLowerCase()
-        )
-
-        if (!rewardToken) {
-          _apy = 0
-        } else {
-          console.log('apy----')
-          const rewardTokenPrice = getTokenPrice(rewardToken[0])
-          const _currTime = Math.ceil(new Date().getTime() / 1000)
-          const _lastFinishAt = cBN(finishAt).plus(24 * 60 * 60 * 7)
-          if (cBN(_currTime).lt(_lastFinishAt) && cBN(totalSupply).gt(0)) {
-            _apy = cBN(rate)
-              .div(1e18)
-              .times(config.yearSecond)
-              .div(cBN(totalSupply).div(1e18).times(_lpPrice))
-              .times(100)
-              .times(rewardTokenPrice)
-              .toFixed(2)
-          }
-          console.log(
-            'getApy----name,rewardToken,_currTime,finishAt,totalSupply,rate,config.yearSecond,_lpPrice,rewardTokenPrice',
-            item.name,
-            rewardToken[0],
-            _currTime,
-            finishAt,
-            totalSupply,
-            rate,
-            config.yearSecond,
-            _lpPrice,
-            rewardTokenPrice,
-            _apy
-          )
-        }
-        allApy = allApy.plus(_apy)
-        return {
-          rewardToken,
-          _apy,
-        }
-      })
-    }
+  const userVoteInfo = useMemo(() => {
+    const _allocatedVotes = cBN(veFXNAmount)
+      .multipliedBy(votePower)
+      .dividedBy(100)
+    const _remainingVotes = cBN(veFXNAmount)
+      .multipliedBy(100 - votePower)
+      .dividedBy(100)
+    const next_time = nextWeekThursday().format('DD.MM.YYYY HH:mm')
 
     return {
-      allApy: allApy.toFixed(2),
-      apyList: _apys,
-      convexLpApy,
+      allocated: votePower,
+      allocatedVotes: checkNotZoroNumOption(
+        _allocatedVotes,
+        fb4(_allocatedVotes)
+      ),
+      remaining: 100 - votePower,
+      remainingVotes: checkNotZoroNumOption(
+        _remainingVotes,
+        fb4(_remainingVotes)
+      ),
+      nextEpochState: `Thu ${next_time} am UTC-8`,
     }
-  })
+  }, [votePower, veFXNAmount])
 
-  const pageData = useMemo(() => {
+  const poolVoteInfo = useMemo(() => {
+    const info = {}
     try {
-      const data = POOLS_LIST.map((item, index) => {
-        const _baseInfo = allPoolsInfo[index]?.baseInfo || {}
-        const _rewardDatas = allPoolsApyInfo[index]?.rewardDatas || {}
-        const _userInfo = allPoolsUserInfo[index]?.userInfo || {}
-        const tvl_text = checkNotZoroNumOption(
-          _baseInfo.totalSupply,
-          fb4(_baseInfo.totalSupply)
-        )
-        const userShare_text = checkNotZoroNumOption(
-          _userInfo.userShare,
-          fb4(_userInfo.userShare)
-        )
-        const _lpGaugeContract = getContract(
-          item.lpGaugeAddress,
-          abi.FX_fx_SharedLiquidityGaugeABI
-        )
-        const _data = {
-          ...item,
-          lpGaugeContract: _lpGaugeContract,
-          baseInfo: _baseInfo,
-          userInfo: _userInfo,
-          rewardDatas: _rewardDatas,
-          tvl_text,
-          userShare_text,
+      allVoteData.forEach((item) => {
+        const _vote = cBN(veFXNAmount)
+          .multipliedBy(item.voteInfo.voteSlope.power)
+          .dividedBy(10000)
+        info[item.lpGaugeAddress] = {
+          gaugeWeight: item.voteInfo.gaugeWeight,
+          lastVoteTime: item.voteInfo.lastVote,
+          lastVoteEnd: item.voteInfo.voteSlope.end,
+          userPower: item.voteInfo.voteSlope.power / 100,
+          userVote: checkNotZoroNumOption(_vote, fb4(_vote)),
         }
-        const apyInfo = getApy(_data)
-        _data.apyInfo = apyInfo
-        return _data
       })
-      console.log(
-        'POOLS_LIST---data--',
-        // POOLS_LIST,
-        // allPoolsInfo,
-        // allPoolsUserInfo,
-        data
-      )
-      return data
     } catch (error) {
-      console.log('POOLS_LIST---error---', error)
-      return POOLS_LIST
+      return info
     }
-  }, [POOLS_LIST, allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo])
+    return info
+  }, [allVoteData, veFXNAmount])
+
+  console.log('poolVoteInfo---', allVoteData, poolVoteInfo)
 
   return {
-    pageData,
-    canClaim,
+    userVoteInfo,
+    poolVoteInfo,
   }
 }
 
