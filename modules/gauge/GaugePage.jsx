@@ -8,10 +8,10 @@ import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
-import useGaugeController from '@/modules/earningPool/controller/useGaugeController'
+import useVoteController from './controller/useVoteController'
 
 export default function GaugePage() {
-  const { pageData, ...pageOthers } = useGaugeController()
+  const { pageData, ...pageOthers } = useVoteController()
   const [showModal, setShowModal] = useState(false)
   const [clearPrev, setClearPrev] = useState(false)
 

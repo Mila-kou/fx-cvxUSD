@@ -25,7 +25,6 @@ const stETHImg = '/tokens/steth.svg'
 export default function PoolCell({ cellData, ...pageOthers }) {
   const { userInfo = {}, lpGaugeContract } = cellData
   const boostInfo = useVeBoost_c(cellData)
-  const [showDepositModal, setShowDepositModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
   const [openPanel, setOpenPanel] = useState(false)
 

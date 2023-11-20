@@ -12,7 +12,7 @@ import abi from '@/config/abi'
 
 const useVoteController = () => {
   const globalState = useGlobal()
-  const { lpPrice, tokenPrice } = globalState
+  const { lpPrice, tokenPrice, ConvexVaultsAPY } = globalState
   const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
   const { allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo } = useVoteData()
@@ -47,6 +47,24 @@ const useVoteController = () => {
     [tokenPrice]
   )
 
+  const getLpConvexApy = useCallback(
+    (lpAddress) => {
+      try {
+        const _convexLpInfo = ConvexVaultsAPY.find(
+          (item) => item.address.toLowerCase() == lpAddress.toLowerCase()
+        )
+        if (_convexLpInfo.name) {
+          return _convexLpInfo.apy
+        }
+        return 0
+      } catch (error) {
+        console.log('apy------getLpConvexApy-error', error)
+        return 0
+      }
+    },
+    [ConvexVaultsAPY]
+  )
+
   const canClaim = useMemo(() => {
     return false
   }, [])
@@ -55,9 +73,10 @@ const useVoteController = () => {
     const { baseInfo = {}, lpAddress, rewardDatas, rewardTokens } = item || {}
     const { totalSupply } = baseInfo
     let allApy = cBN(0)
-    const _apys =
-      rewardDatas &&
-      rewardDatas.map((baseApyData, index) => {
+    let _apys = 0
+    const convexLpApy = getLpConvexApy(lpAddress)
+    if (rewardDatas && rewardDatas.length) {
+      _apys = rewardDatas.map((baseApyData, index) => {
         let _apy = 0
         const {
           rewardData: { finishAt, lastUpdate, rate },
@@ -68,9 +87,11 @@ const useVoteController = () => {
           (_tokenData) =>
             _tokenData[1].toLowerCase() == rewardAddress.toLowerCase()
         )
+
         if (!rewardToken) {
           _apy = 0
         } else {
+          console.log('apy----')
           const rewardTokenPrice = getTokenPrice(rewardToken[0])
           const _currTime = Math.ceil(new Date().getTime() / 1000)
           const _lastFinishAt = cBN(finishAt).plus(24 * 60 * 60 * 7)
@@ -103,9 +124,12 @@ const useVoteController = () => {
           _apy,
         }
       })
+    }
+
     return {
       allApy: allApy.toFixed(2),
       apyList: _apys,
+      convexLpApy,
     }
   })
 

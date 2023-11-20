@@ -6,6 +6,11 @@ import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { POOLS_LIST } from '@/config/aladdinVault'
 
+// balanceOf 总票数
+// 某个投了的 vote_user_slopes
+// 总共投了的 vote_user_power
+// 最后投的 last_user_vote
+
 const useVoteData = () => {
   const { _currentAccount, web3, isAllReady, blockNumber } = useWeb3()
   const { getContract } = useContract()
