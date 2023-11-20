@@ -19,12 +19,12 @@ export default function EarningPoolPage() {
           Earning Pools
         </div>
         <div className="px-[16px] mt-[32px] flex justify-between">
-          <div className="w-[160px]" />
+          <div className="w-[90px]" />
           <div className="w-[80px] text-[14px]">TVL</div>
           <div className="w-[180px] text-[14px]">APR Range</div>
-          <div className="w-[80px] text-[14px]">Deposit</div>
+          <div className="w-[60px] text-[14px]">Deposit</div>
           <div className="w-[80px] text-[14px]">Earn</div>
-          <div className="w-[80px]" />
+          <div className="w-[140px]" />
         </div>
         {pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />

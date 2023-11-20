@@ -134,22 +134,22 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className="flex justify-between items-center">
-        <div className="w-[160px]">
+        <div className="w-[100px]">
           <p>{cellData.name}</p>
           <p className="text-[14px] text-[var(--second-text-color)]">
             {cellData.nameShow}
           </p>
         </div>
-        <div className="w-[80px] text-[16px]">{cellData.tvl_text}</div>
+        <div className="w-[90px] text-[16px]">{cellData.tvl_text}</div>
         <div className="w-[180px]">{apyDom}</div>
-        <div className="w-[80px] text-[16px]">{cellData.userShare_text}</div>
+        <div className="w-[60px] text-[16px]">{cellData.userShare_text}</div>
         <div className="w-[80px]">{rewardTokenDom}</div>
-        <div className="w-[80px]">
+        <div className="w-[140px]">
           <div
             className="underline cursor-pointer text-[16px] text-[var(--a-button-color)]"
             onClick={() => setShowDepositModal(true)}
           >
-            Deposit
+            Deposit / Withdraw
           </div>
           <div
             className="underline cursor-pointer text-[16px] text-[var(--a-button-color)]"

@@ -10,7 +10,7 @@ const icons = {
   FXN: '/images/FXN.svg',
 }
 
-export default function ManageModal(props) {
+export default function ClaimModal(props) {
   const { onCancel, info } = props
   const [canClaim, setCanClaim] = useState(false)
   const [claiming, setClaiming] = useState(false)

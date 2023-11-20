@@ -198,12 +198,12 @@ export const useAbcCVX = () => {
   )
 }
 
-export const useClevGaugeController = () => {
-  const address = config.contracts.aladdinGaugeController
+export const useFxGaugeController = () => {
+  const address = config.contracts.fx_GaugeController
   const { getContract } = useContract()
   return useMemo(
     () => ({
-      contract: getContract(address, abi.AlaGaugeControllerABI),
+      contract: getContract(address, abi.FX_GaugeControllerABI),
       address,
     }),
     [getContract]
