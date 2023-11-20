@@ -39,6 +39,7 @@ const useVoteData = () => {
           vote_user_power,
           last_user_vote,
           get_gauge_weight,
+          time_total,
         } = gaugeControllerContract.methods
 
         const { balanceOf } = veContract.methods
@@ -57,26 +58,29 @@ const useVoteData = () => {
             },
           }
         })
-        const [allVoteData, _votePower, veFXNAmount] = await multiCallsV2(
-          [
-            voteCalls,
-            vote_user_power(_currentAccount),
-            balanceOf(_currentAccount),
-          ],
-          {
-            from: _currentAccount,
-          }
-        )
+        const [allVoteData, _votePower, veFXNAmount, lastScheduled] =
+          await multiCallsV2(
+            [
+              voteCalls,
+              vote_user_power(_currentAccount),
+              balanceOf(_currentAccount),
+              time_total(),
+            ],
+            {
+              from: _currentAccount,
+            }
+          )
         console.log(
-          'allVoteData--votePower---veFXNAmount-',
+          'allVoteData-----veFXNAmount-',
           allVoteData,
-          _votePower / 100,
-          veFXNAmount
+          veFXNAmount,
+          lastScheduled
         )
         return {
           allVoteData,
           votePower: _votePower / 100,
           veFXNAmount,
+          lastScheduled,
         }
       } catch (error) {
         console.log('allVoteData----error', error)
@@ -84,6 +88,7 @@ const useVoteData = () => {
           allVoteData: [],
           votePower: 0,
           veFXNAmount: 0,
+          lastScheduled: 0,
         }
       }
     },
@@ -100,6 +105,7 @@ const useVoteData = () => {
           allVoteData: [],
           votePower: 0,
           veFXNAmount: 0,
+          lastScheduled: 0,
         },
       },
     ],

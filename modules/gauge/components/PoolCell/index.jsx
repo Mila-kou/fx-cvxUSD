@@ -35,7 +35,10 @@ export default function PoolCell({
   const [openPanel, setOpenPanel] = useState(false)
   const [power, setPower] = useState(0)
 
-  const canCast = useMemo(() => power && remaining >= power, [voteData, power])
+  const canCast = useMemo(
+    () => power && voteData.canVote && remaining >= power,
+    [voteData, power]
+  )
 
   console.log('powerRef.current---', power, canCast, remaining)
 

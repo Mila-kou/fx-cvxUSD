@@ -8,21 +8,9 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { POOLS_LIST } from '@/config/aladdinVault'
 import { useContract, useVeFXN } from '@/hooks/useContracts'
 
-export const nextWeekThursday = () => {
-  const m = moment()
-  const currentThursday = m.clone().weekday(4).startOf('day').add(8, 'h')
-  if (m.utc().isBefore(currentThursday)) {
-    return currentThursday
-  }
-  const nextWeekDay = m.clone().add(1, 'week')
-  const weekOfDay = nextWeekDay.format('E')
-  const nextThursday = nextWeekDay.subtract(weekOfDay - 4, 'd')
-  return nextThursday
-}
-
 const useVoteController = () => {
   const { currentAccount, isAllReady } = useWeb3()
-  const { allVoteData, votePower, veFXNAmount } = useVoteData()
+  const { allVoteData, votePower, veFXNAmount, lastScheduled } = useVoteData()
 
   const userVoteInfo = useMemo(() => {
     const _allocatedVotes = cBN(veFXNAmount)
@@ -31,7 +19,7 @@ const useVoteController = () => {
     const _remainingVotes = cBN(veFXNAmount)
       .multipliedBy(100 - votePower)
       .dividedBy(100)
-    const next_time = nextWeekThursday().format('DD.MM.YYYY HH:mm')
+    const next_time = moment(lastScheduled * 1000).format('DD.MM.YYYY HH:mm')
 
     return {
       allocated: votePower,
@@ -59,7 +47,8 @@ const useVoteController = () => {
         info[item.lpGaugeAddress] = {
           gaugeWeight: item.voteInfo.gaugeWeight,
           lastVoteTime: item.voteInfo.lastVote,
-          lastVoteEnd: item.voteInfo.voteSlope.end,
+          // lastVoteEnd: item.voteInfo.voteSlope.end,
+          canVote: !item.voteInfo.voteSlope.lastVote,
           userPower: item.voteInfo.voteSlope.power / 100,
           userVote: checkNotZoroNumOption(_vote, fb4(_vote)),
         }
