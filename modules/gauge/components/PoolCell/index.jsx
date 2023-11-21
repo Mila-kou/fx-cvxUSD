@@ -106,7 +106,10 @@ export default function PoolCell({
         <div className="w-[120px] text-[16px]">Rebalance Pool</div>
         <div className="w-[60px] text-[16px]">{voteData?.userPower}%</div>
         <div className="w-[180px]">{apyDom}</div>
-        <div className="w-[150px] text-[16px]">800.11k -> 700.99k</div>
+        <div className="w-[150px] text-[16px]">
+          {voteData?.thisWeekEstimateFXNEmissions} ->
+          {voteData?.nextWeekEstimateFXNEmissions}
+        </div>
         <div className="w-[20px] cursor-pointer">
           <img
             className={openPanel ? 'rotate-180' : ''}

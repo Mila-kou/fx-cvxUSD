@@ -40,13 +40,17 @@ const useVoteData = () => {
     gauge_relative_weight,
     checkpoint_gauge,
     time_total,
+    get_total_weight,
+    get_type_weight,
+    n_gauge_types,
+    get_weights_sum_per_type,
   } = FxGaugeControllerContract.methods
   const fetchCommonVoteData = useCallback(
     async (arr) => {
       try {
         const nextTimes = calc4(current, true) * 1000 + 86400 * 7 * 1000
         const { rate } = FXNContract.methods
-        const callList = arr.map((item, index) => {
+        const typeGaugeList = arr.map((item, index) => {
           return {
             ...item,
             baseInfo: {
@@ -61,15 +65,27 @@ const useVoteData = () => {
         })
         const allBaseInfo = await multiCallsV2(
           {
+            total_weight: get_total_weight(),
+            n_gauge_types: n_gauge_types(),
             FXNRate: rate(),
-            callList,
+            typeGaugeList,
           },
           {
             from: _currentAccount,
           }
         )
+        const typesWeightCalls = []
+        for (let i = 0, l = allBaseInfo.n_gauge_types; i < l; i++) {
+          typesWeightCalls.push({
+            type_weight: get_type_weight(i),
+            weights_sum_per_type: get_weights_sum_per_type(i),
+          })
+        }
+        const typesWeightDatas = await multiCallsV2(typesWeightCalls, {
+          from: _currentAccount,
+        })
         console.log('CommonVoteData----1', allBaseInfo)
-        return allBaseInfo
+        return { ...allBaseInfo, typesWeightDatas }
       } catch (error) {
         console.log('commonVoteData----error', error)
         return arr
