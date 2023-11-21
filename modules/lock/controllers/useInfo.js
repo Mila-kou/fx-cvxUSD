@@ -123,7 +123,7 @@ const useInfo = (refreshTrigger) => {
       overview: [
         {
           title: 'APR',
-          value: apr ? `${apr.toFixed(2)}%` : '-',
+          value: '8.71%', // apr ? `${apr.toFixed(2)}%` : '-',
         },
         {
           title: 'FXN Locked',
