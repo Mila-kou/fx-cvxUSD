@@ -120,7 +120,10 @@ export default function PoolCell({
           <div className={`${styles.content} gap-[32px]`}>
             <div className="flex-1">
               <p>
-                Voting for <b>{cellData.name}</b>
+                Voting for{' '}
+                <span className="text-[var(--primary-color)]">
+                  {cellData.name}
+                </span>
               </p>
               <p className="text-[16px]">
                 Previous vote: {voteData?.userPower}% ({voteData?.userVote}{' '}

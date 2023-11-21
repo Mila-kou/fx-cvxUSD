@@ -40,9 +40,9 @@ export default function GaugePage() {
             <DotChartOutlined />
             Emissions Voting
           </div>
-          <p>
-            Current Week: <b>100</b>
-          </p>
+          {/* <p>
+              Current Week: <b>100</b>
+            </p> */}
           <p>
             Next epoch starts: <b>{userVoteInfo.nextEpoch}</b>
           </p>
