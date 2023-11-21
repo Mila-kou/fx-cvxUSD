@@ -39,6 +39,7 @@ const useVoteData = () => {
     get_gauge_weight,
     gauge_relative_weight,
     checkpoint_gauge,
+    time_total,
   } = FxGaugeControllerContract.methods
   const fetchCommonVoteData = useCallback(
     async (arr) => {
@@ -80,17 +81,6 @@ const useVoteData = () => {
   const fetchAllPoolVoteData = useCallback(
     async (arr) => {
       try {
-<<<<<<< HEAD
-        const {
-          vote_user_slopes,
-          vote_user_power,
-          last_user_vote,
-          get_gauge_weight,
-          time_total,
-        } = gaugeControllerContract.methods
-
-=======
->>>>>>> d2ccf9e (Update Vote)
         const { balanceOf } = veContract.methods
         const voteCalls = arr.map((item, index) => {
           return {
