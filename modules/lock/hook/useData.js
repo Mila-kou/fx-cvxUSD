@@ -7,6 +7,7 @@ import {
   useVeFXN,
   useFXN,
   useErc20Token,
+  useWstETH,
 } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
@@ -20,6 +21,7 @@ const useData = (refreshTrigger) => {
     config.tokens.stETH,
     veFXNFeeAddress
   )
+  const { contract: wstETHContract, address: wstETHAddress } = useWstETH()
 
   const multiCallsV2 = useMutiCallV2()
 
@@ -67,13 +69,14 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
-        stETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
+        wstETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
         veFXNFeeContract.methods.token_last_balance(),
         veFXNFeeContract.methods.claim(_currentAccount),
         veFXNFeeContract.methods.claim(_currentAccount),
         veFXNFeeContract.methods.claim(_currentAccount),
         veFXNFeeContract.methods.claim(_currentAccount),
         veFXNFeeContract.methods.claim(_currentAccount),
+        wstETHContract.methods.stEthPerToken(),
       ]
       const [
         { amount, end },
@@ -87,6 +90,7 @@ const useData = (refreshTrigger) => {
         userVeRewards2,
         userVeRewards3,
         userVeRewards4,
+        stETHTowstETHRate,
       ] = await multiCallsV2(tokensInfoList)
       console.log(
         'timestamp---tokensThisWeek--tokensPerWeek--platformFeeSpliterStETH--feeBalance--veFXNFeeTokenLastBalance--userVeRewards--',
@@ -98,7 +102,8 @@ const useData = (refreshTrigger) => {
         veFXNFeeTokenLastBalance,
         userVeRewards,
         userVeRewards1,
-        userVeRewards2
+        userVeRewards2,
+        stETHTowstETHRate
       )
       console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
       const fxnCirculationSupply = cBN(fxnTotalAmount)
@@ -121,6 +126,7 @@ const useData = (refreshTrigger) => {
         userLocked: { amount, end: moment(end * 1000).unix() },
         platformFeeSpliterStETH,
         veFXNFeeTokenLastBalance,
+        stETHTowstETHRate,
       })
     } catch (error) {
       console.log(

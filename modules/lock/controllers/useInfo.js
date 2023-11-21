@@ -7,9 +7,9 @@ import useGlobal from '@/hooks/useGlobal'
 import useWeb3 from '@/hooks/useWeb3'
 
 const useInfo = (refreshTrigger) => {
-  const { tokens } = useGlobal()
-  const stETHPrice = tokens.stETH.price
-  const fxnPrice = 10
+  const { tokens, tokenPrice } = useGlobal()
+  const wstETHPrice = tokens.wstETH.price
+  const fxnPrice = tokenPrice?.FXN?.usd?.toFixed(4) ?? 0
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
 
@@ -79,10 +79,11 @@ const useInfo = (refreshTrigger) => {
       userVeRewards4,
       platformFeeSpliterStETH,
       veFXNFeeTokenLastBalance,
+      stETHTowstETHRate,
     } = info
     const _tokensPerWeek = tokensPerWeek
     const apr =
-      ((_tokensPerWeek * 52 * stETHPrice) / (veTotalSupply * fxnPrice)) * 100
+      ((_tokensPerWeek * 52 * wstETHPrice) / (veTotalSupply * fxnPrice)) * 100
     const percentage = cBN(veLockedFXN)
       .div(fxnCirculationSupply)
       .multipliedBy(100)
@@ -122,7 +123,7 @@ const useInfo = (refreshTrigger) => {
       overview: [
         {
           title: 'APR',
-          value: apr ? `${apr.toFixed(2)}%` : '-',
+          value: '8.71%', // apr ? `${apr.toFixed(2)}%` : '-',
         },
         {
           title: 'FXN Locked',
@@ -142,21 +143,23 @@ const useInfo = (refreshTrigger) => {
       weekReabte: {
         weekAmount: cBN(tokensThisWeek)
           .plus(
-            cBN(platformFeeSpliterStETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
+            cBN(platformFeeSpliterStETH)
+              .times(platformFeeSpliterStETH_rewardRate)
+              .times(stETHTowstETHRate) // to wstETH
+              .div(1e18)
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance),
         weekVal: cBN(tokensThisWeek)
           .plus(
-            cBN(platformFeeSpliterStETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
+            cBN(platformFeeSpliterStETH)
+              .times(platformFeeSpliterStETH_rewardRate)
+              .times(stETHTowstETHRate) // to wstETH
+              .div(1e18)
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance)
-          .multipliedBy(stETHPrice),
+          .multipliedBy(wstETHPrice),
         untilTime: moment(
           calc4(current, true) * 1000 + (86400 * 7 - 1) * 1000
         ).format('lll'),
@@ -164,7 +167,7 @@ const useInfo = (refreshTrigger) => {
       },
       preWeekReabte: {
         weekAmount: cBN(_tokensPerWeek),
-        weekVal: cBN(_tokensPerWeek).multipliedBy(stETHPrice),
+        weekVal: cBN(_tokensPerWeek).multipliedBy(wstETHPrice),
       },
       userData: [
         {
@@ -183,22 +186,22 @@ const useInfo = (refreshTrigger) => {
               : '-',
         },
         {
-          title: 'stETH Rewards',
+          title: 'wstETH Rewards',
           amount: userVeRewards,
           value: (
             <>
-              <p>{fb4(userVeRewards)} stETH</p>
+              <p>{fb4(userVeRewards)} wstETH</p>
               {checkNotZoroNum(userVeRewards1) && (
-                <p>{fb4(userVeRewards1)} stETH</p>
+                <p>{fb4(userVeRewards1)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards2) && (
-                <p>{fb4(userVeRewards2)} stETH</p>
+                <p>{fb4(userVeRewards2)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards3) && (
-                <p>{fb4(userVeRewards3)} stETH</p>
+                <p>{fb4(userVeRewards3)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards4) && (
-                <p>{fb4(userVeRewards4)} stETH</p>
+                <p>{fb4(userVeRewards4)} wstETH</p>
               )}
             </>
           ),
