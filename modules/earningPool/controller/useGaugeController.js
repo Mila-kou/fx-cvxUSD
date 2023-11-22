@@ -53,7 +53,7 @@ const useGaugeController = () => {
         const _convexLpInfo = ConvexVaultsAPY.find(
           (item) => item.address.toLowerCase() == lpAddress.toLowerCase()
         )
-        if (_convexLpInfo.name) {
+        if (_convexLpInfo && _convexLpInfo.name) {
           return _convexLpInfo.apy
         }
         return 0

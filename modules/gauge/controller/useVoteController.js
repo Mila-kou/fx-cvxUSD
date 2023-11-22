@@ -65,6 +65,7 @@ const useVoteController = () => {
           .div(1e18)
           .times(type_weight)
           .div(1e18)
+          .times(100)
           .toFixed(4)
         const _nextWeek_gaugeEstimate = cBN(FXNRate)
           .div(1e18)
@@ -73,6 +74,7 @@ const useVoteController = () => {
           .div(1e18)
           .times(type_weight)
           .div(1e18)
+          .times(100)
           .toFixed(4)
         return { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate }
       } catch (error) {
