@@ -184,6 +184,15 @@ export default function PoolItem({
           </div>
         </div>
       </div>
+      {depositVisible && (
+        <DepositModal
+          info={item}
+          contractType={contractType}
+          FX_RebalancePoolContract={FX_RebalancePoolContract}
+          poolData={stabilityPoolInfo}
+          onCancel={() => setDepositVisible(false)}
+        />
+      )}
       {withdrawVisible && (
         <WithdrawModal
           info={item}
