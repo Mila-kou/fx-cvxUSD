@@ -25,6 +25,7 @@ import {
 import useInfo from '@/modules/home/hooks/useInfo'
 import useRebalancePoolUseInfo from '@/modules/rebalancePool/hooks/useRebalancePoolUseInfo'
 import { getStETHRate } from '@/utils/stETHRate'
+import useGauge from '@/hooks/useGauge'
 
 const GlobalContext = createContext(null)
 
@@ -37,6 +38,7 @@ function GlobalProvider({ children }) {
   const refMenu2 = useRef(null)
 
   const fx_info = useInfo()
+  const allGaugeBaseInfo = useGauge()
   const rebalancePool_info_A = useRebalancePoolUseInfo(
     config.contracts.fx_RebalancePool_A
   )
@@ -241,6 +243,7 @@ function GlobalProvider({ children }) {
       // ifoVaultWithdrawFee,
       stETHRate,
       cvxFXN_sdFXN_apy,
+      allGaugeBaseInfo,
     }),
     [
       theme,
@@ -263,6 +266,7 @@ function GlobalProvider({ children }) {
       // concentratorInitData,
       // ifoVaultWithdrawFee,
       cvxFXN_sdFXN_apy,
+      allGaugeBaseInfo,
     ]
   )
 

@@ -83,12 +83,13 @@ const useGaugeController = () => {
           rewardAddress,
         } = baseApyData
         const _lpPrice = getLpTokenPrice(lpAddress)
-        const rewardToken = rewardTokens.find(
+        let rewardToken = rewardTokens.find(
           (_tokenData) =>
             _tokenData[1].toLowerCase() == rewardAddress.toLowerCase()
         )
 
         if (!rewardToken) {
+          rewardToken = ['', '']
           _apy = 0
         } else {
           console.log('apy----')

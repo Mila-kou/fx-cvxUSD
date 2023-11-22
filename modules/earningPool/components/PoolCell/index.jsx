@@ -68,6 +68,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
       _allApy_min = cBN(cellData.apyInfo.convexLpApy.project)
       _allApy_max = cBN(cellData.apyInfo.convexLpApy.project)
       cellData.apyInfo.apyList.map((item, index) => {
+        console.log('gauge--apy----item', item)
         if (item.rewardToken[1] == config.tokens.FXN) {
           if (boostInfo.length) {
             _min_FXN_Apy = cBN(item._apy).times(boostInfo[3]).toFixed(2)
