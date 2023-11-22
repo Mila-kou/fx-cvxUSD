@@ -18,12 +18,14 @@
     .content {
       border-radius: 0 0 10px 10px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
     }
   }
 }
+
 @media (max-width: 800px) {
   .poolWrap {
+    padding: 16px !important;
   }
 }

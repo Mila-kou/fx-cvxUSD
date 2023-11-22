@@ -302,6 +302,20 @@ const getTokenInfoByAddress = (tokenAddress) => {
   }
   return {}
 }
+
+const POOLS_LIST_REBALANCE = {
+  Pool_A: {
+    rebalancePoolAddress: contracts.fx_RebalancePool_A,
+    rebalanceWithBonusTokenAddress: contracts.fx_RebalanceWithBonusToken_A,
+    infoKey: 'rebalancePool_info_A',
+  },
+  Pool_B: {
+    rebalancePoolAddress: contracts.fx_RebalancePool_B,
+    rebalanceWithBonusTokenAddress: contracts.fx_RebalanceWithBonusToken_B,
+    infoKey: 'rebalancePool_info_B',
+  },
+}
+
 export default {
   tokens,
   contracts,
@@ -310,6 +324,7 @@ export default {
   zapTokens,
   gaugeTokenList,
   getTokenInfoByAddress,
+  POOLS_LIST_REBALANCE,
 }
 
 // market: "0xeCbA45f077df21D9142312a5aa21411371E1f943",

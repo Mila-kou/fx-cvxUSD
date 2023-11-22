@@ -21,6 +21,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 
 const stETHImg = '/tokens/steth.svg'
+const xETHImg = '/images/x-logo.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
   const { userInfo = {}, lpGaugeContract } = cellData
@@ -28,6 +29,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   const [showDepositModal, setShowDepositModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
+  const [openPanel, setOpenPanel] = useState(false)
 
   const handleClaim = async (symbol, wrap) => {
     if (!isAllReady) return
@@ -133,32 +135,41 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   }, [cellData])
   return (
     <div key={cellData.id} className={styles.poolWrap}>
-      <div className="flex justify-between items-center">
-        <div className="w-[100px]">
-          <p>{cellData.name}</p>
-          <p className="text-[14px] text-[var(--second-text-color)]">
-            {cellData.nameShow}
-          </p>
+      <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
+        <div className="flex w-[160px] gap-[6px] items-center">
+          <img className="w-[30px]" src={xETHImg} />
+          <div>
+            <p className="text-[16px]">{cellData.name}</p>
+            <p className="text-[14px] text-[var(--second-text-color)]">
+              {cellData.nameShow}
+            </p>
+          </div>
         </div>
         <div className="w-[90px] text-[16px]">{cellData.tvl_text}</div>
         <div className="w-[180px]">{apyDom}</div>
         <div className="w-[60px] text-[16px]">{cellData.userShare_text}</div>
-        <div className="w-[80px]">{rewardTokenDom}</div>
-        <div className="w-[140px]">
-          <div
-            className="underline cursor-pointer text-[16px] text-[var(--a-button-color)]"
-            onClick={() => setShowDepositModal(true)}
-          >
-            Deposit / Withdraw
-          </div>
-          <div
-            className="underline cursor-pointer text-[16px] text-[var(--a-button-color)]"
-            onClick={() => handleClaim()}
-          >
-            Claim
-          </div>
+        <div className="w-[120px]">{rewardTokenDom}</div>
+
+        <div className="w-[20px] cursor-pointer">
+          <img
+            className={openPanel ? 'rotate-180' : ''}
+            src="/images/arrow-down.svg"
+          />
         </div>
       </div>
+
+      {openPanel ? (
+        <div className={`${styles.panel}`}>
+          <div className={`${styles.content} gap-[32px]`}>
+            <Button size="small" onClick={() => setShowDepositModal(true)}>
+              Deposit / Withdraw
+            </Button>
+            <Button size="small" onClick={handleClaim} type="second">
+              Claim
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       {showDepositModal && (
         <DepositModal
