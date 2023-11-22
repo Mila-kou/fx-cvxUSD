@@ -88,7 +88,7 @@ export default function RebalancePoolCell({
       {openPanel ? (
         <div className={`${styles.panel}`}>
           <div className={`${styles.content} gap-[32px]`}>
-            <div>
+            <div className="shrink-0">
               {userUnlockingBalance && userUnlockingBalance !== '-' ? (
                 <p className="text-[16px]">
                   Unlocking: {userUnlockingBalance} fETH

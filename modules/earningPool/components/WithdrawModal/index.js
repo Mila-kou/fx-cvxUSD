@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react'
+import { Modal } from 'antd'
 import Button from '@/components/Button'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import config from '@/config/index'
+import styles from './styles.module.scss'
 
 export default function Withdraw(props) {
   const { onCancel, info } = props
@@ -47,25 +49,28 @@ export default function Withdraw(props) {
   }, [withdrawAmount, isAllReady])
 
   return (
-    <div>
-      <BalanceInput
-        placeholder="0"
-        symbol={name}
-        balance={fb4(userInfo.userShare, false)}
-        maxAmount={userInfo.userShare}
-        onChange={handleInputChange}
-        withUsd={false}
-      />
-      <div className="mt-[40px]">
-        <Button
-          width="100%"
-          disabled={!canWithdraw}
-          loading={withdrawing}
-          onClick={handleWithdraw}
-        >
-          Withdraw
-        </Button>
+    <Modal visible centered onCancel={onCancel} footer={null} width={500}>
+      <div className={styles.content}>
+        <h2 className="mb-[16px]">{name}</h2>
+        <BalanceInput
+          placeholder="0"
+          symbol={name}
+          balance={fb4(userInfo.userShare, false)}
+          maxAmount={userInfo.userShare}
+          onChange={handleInputChange}
+          withUsd={false}
+        />
+        <div className="mt-[40px]">
+          <Button
+            width="100%"
+            disabled={!canWithdraw}
+            loading={withdrawing}
+            onClick={handleWithdraw}
+          >
+            Withdraw
+          </Button>
+        </div>
       </div>
-    </div>
+    </Modal>
   )
 }

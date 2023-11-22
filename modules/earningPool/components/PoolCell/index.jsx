@@ -6,6 +6,7 @@ import cn from 'classnames'
 import Button from '@/components/Button'
 import { POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
+import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
 import {
   cBN,
@@ -27,6 +28,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   const { userInfo = {}, lpGaugeContract } = cellData
   const boostInfo = useVeBoost_c(cellData)
   const [showDepositModal, setShowDepositModal] = useState(false)
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
@@ -162,7 +164,10 @@ export default function PoolCell({ cellData, ...pageOthers }) {
         <div className={`${styles.panel}`}>
           <div className={`${styles.content} gap-[32px]`}>
             <Button size="small" onClick={() => setShowDepositModal(true)}>
-              Deposit / Withdraw
+              Deposit
+            </Button>
+            <Button size="small" onClick={() => setShowWithdrawModal(true)}>
+              Withdraw
             </Button>
             <Button size="small" onClick={handleClaim} type="second">
               Claim
@@ -179,6 +184,17 @@ export default function PoolCell({ cellData, ...pageOthers }) {
           // FX_RebalancePoolContract={FX_RebalancePoolContract}
           // poolData={stabilityPoolInfo}
           onCancel={() => setShowDepositModal(false)}
+        />
+      )}
+
+      {showWithdrawModal && (
+        <WithdrawModal
+          // cellData={cellData}
+          info={cellData}
+          // contractType={contractType}
+          // FX_RebalancePoolContract={FX_RebalancePoolContract}
+          // poolData={stabilityPoolInfo}
+          onCancel={() => setShowWithdrawModal(false)}
         />
       )}
     </div>
