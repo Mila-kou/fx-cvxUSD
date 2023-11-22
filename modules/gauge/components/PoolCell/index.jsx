@@ -95,16 +95,14 @@ export default function PoolCell({
             <div className="flex items-center gap-[6px]">
               <NumberInput
                 max={remaining}
-                className="w-[100px]"
+                className="w-[100px] h-[40px]"
                 onChange={onChange}
                 placeholder="0"
               />
               %
             </div>
             <Button
-              width="140px"
-              height="40px"
-              style={{ fontSize: '20px' }}
+              size="small"
               disabled={!canCast}
               onClick={() => onCastVote(power)}
             >
