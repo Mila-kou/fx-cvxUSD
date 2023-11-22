@@ -12,10 +12,11 @@ import abi from '@/config/abi'
 
 const useGaugeController = () => {
   const globalState = useGlobal()
-  const { lpPrice, tokenPrice, ConvexVaultsAPY } = globalState
+  const { lpPrice, tokenPrice, ConvexVaultsAPY, allGaugeBaseInfo } = globalState
   const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
-  const { allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo } = useGaugeData()
+  const { allPoolsUserInfo } = useGaugeData()
+  const { GaugeList, allPoolsInfo, allPoolsApyInfo } = allGaugeBaseInfo
 
   const getLpTokenPrice = useCallback(
     (lpAddress) => {
@@ -137,8 +138,8 @@ const useGaugeController = () => {
   const pageData = useMemo(() => {
     try {
       const data = POOLS_LIST.map((item, index) => {
-        const _baseInfo = allPoolsInfo[index]?.baseInfo || {}
-        const _rewardDatas = allPoolsApyInfo[index]?.rewardDatas || {}
+        const _baseInfo = GaugeList[index].baseInfo || {}
+        const _rewardDatas = GaugeList[index].rewardDatas || {}
         const _userInfo = allPoolsUserInfo[index]?.userInfo || {}
         const tvl_text = checkNotZoroNumOption(
           _baseInfo.totalSupply,
