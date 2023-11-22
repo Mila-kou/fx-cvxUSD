@@ -46,12 +46,12 @@ export default function PoolCell({
 
   const apyDom = useMemo(() => {
     return `${
-      checkNotZoroNum(voteData.gaugeApy?._thisWeek_apy)
+      checkNotZoroNum(voteData?.gaugeApy?._thisWeek_apy)
         ? `${fb4(voteData.gaugeApy?._thisWeek_apy, false, 0, 2)} %`
         : '-'
     } -> ${
-      checkNotZoroNum(voteData.gaugeApy?._nextWeek_apy)
-        ? `${fb4(voteData.gaugeApy?._nextWeek_apy, false, 0, 2)} %`
+      checkNotZoroNum(voteData?.gaugeApy?._nextWeek_apy)
+        ? `${fb4(voteData?.gaugeApy?._nextWeek_apy, false, 0, 2)} %`
         : '-'
     }`
   }, [cellData])
