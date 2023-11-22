@@ -48,15 +48,23 @@ const useVoteData = () => {
   const fetchCommonVoteData = useCallback(
     async (arr) => {
       try {
-        const nextTimes = calc4(current, true) * 1000 + 86400 * 7 * 1000
+        const nextTimes = calc4(current, true) + 86400 * 7
+        const currentTimes = calc4(current, true)
         const { rate } = FXNContract.methods
         const typeGaugeList = arr.map((item, index) => {
+          const lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
           return {
             ...item,
             baseInfo: {
+              nextTimes,
               checkpoint_gauge: checkpoint_gauge(item.lpGaugeAddress),
               gauge_weight: get_gauge_weight(item.lpGaugeAddress),
-              gauge_relative_weight: gauge_relative_weight(
+              totalSupply: lpGaugeContract.methods.totalSupply(),
+              this_week_gauge_weight: gauge_relative_weight(
+                item.lpGaugeAddress,
+                currentTimes
+              ),
+              next_week_gauge_weight: gauge_relative_weight(
                 item.lpGaugeAddress,
                 nextTimes
               ),

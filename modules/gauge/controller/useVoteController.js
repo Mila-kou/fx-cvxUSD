@@ -11,50 +11,121 @@ import config from '@/config/index'
 
 const useVoteController = () => {
   const { currentAccount, isAllReady, blockTime } = useWeb3()
+  const { lpPrice, tokenPrice, ConvexVaultsAPY } = useGlobal()
   const {
     commonVoteData,
     voteInfo: { allVoteData, votePower, veFXNAmount, lastScheduled },
   } = useVoteData()
-
+  const getTokenPrice = useCallback(
+    (tokenName) => {
+      try {
+        const _tokenPrice = tokenPrice[tokenName]
+        if (_tokenPrice) {
+          return _tokenPrice.usd
+        }
+        return 0
+      } catch (e) {
+        return 0
+      }
+    },
+    [tokenPrice]
+  )
+  const getLpTokenPrice = useCallback(
+    (lpAddress) => {
+      try {
+        const _lpPrice = lpPrice[lpAddress.toLowerCase()]
+        if (_lpPrice) {
+          return _lpPrice.usd
+        }
+        return 0
+      } catch (e) {
+        return 0
+      }
+    },
+    [lpPrice]
+  )
   const getGaugeEstimate = useCallback(
-    (typeIndex, lpGaugeAddress, typeWeek = 'thisWeek') => {
-      const _weekSecond = config.weekSecond
-      const { FXNRate, total_weight, typesWeightDatas, typeGaugeList } =
-        commonVoteData
-      const { type_weight, weights_sum_per_type } = typesWeightDatas[typeIndex]
-      const { baseInfo } = typeGaugeList.find(
-        (item) =>
-          item.lpGaugeAddress.toLowerCase() == lpGaugeAddress.toLowerCase()
-      )
-      console.log(
-        'gaugeEstimate----typeIndex, lpGaugeAddress,commonVoteData,typesWeightDatas,typeGaugeList,baseInfo',
-        typeIndex,
-        lpGaugeAddress,
-        commonVoteData,
-        typesWeightDatas,
-        typeGaugeList,
-        baseInfo
-      )
-      const _allTypesWeight = cBN(type_weight).times(weights_sum_per_type)
-      const _typeWeightRate = cBN(_allTypesWeight).div(total_weight)
-      const _gaugeWeightRate = cBN(baseInfo?.gauge_weight).div(
-        weights_sum_per_type
-      )
-      console.log(
-        'gaugeEstimate----baseInfo?.gauge_weight,_allTypesWeight,_typeWeightRate,_gaugeWeightRate',
-        baseInfo?.gauge_weight,
-        _allTypesWeight.toString(10),
-        _typeWeightRate.toString(10),
-        _gaugeWeightRate.toString(10)
-      )
-      const _gaugeEstimate = cBN(FXNRate)
-        .times(_weekSecond)
-        .times(_typeWeightRate)
-        .times(_gaugeWeightRate)
-        .div(1e18)
-        .toFixed(4)
-      console.log('gaugeEstimate----2', _gaugeEstimate)
-      return _gaugeEstimate
+    (item) => {
+      try {
+        const _weekSecond = config.weekSecond
+        const { FXNRate, total_weight, typesWeightDatas, typeGaugeList } =
+          commonVoteData
+        const { gaugeType: typeIndex, lpGaugeAddress } = item
+        const { type_weight, weights_sum_per_type } =
+          typesWeightDatas[typeIndex]
+        const { baseInfo } = typeGaugeList.find(
+          (itemObj) =>
+            itemObj.lpGaugeAddress.toLowerCase() == lpGaugeAddress.toLowerCase()
+        )
+        const { this_week_gauge_weight, next_week_gauge_weight } = baseInfo
+        const _thisWeek_gaugeEstimate = cBN(FXNRate)
+          .div(1e18)
+          .times(_weekSecond)
+          .times(this_week_gauge_weight)
+          .div(1e18)
+          .times(type_weight)
+          .div(1e18)
+          .toFixed(4)
+        const _nextWeek_gaugeEstimate = cBN(FXNRate)
+          .div(1e18)
+          .times(_weekSecond)
+          .times(next_week_gauge_weight)
+          .div(1e18)
+          .times(type_weight)
+          .div(1e18)
+          .toFixed(4)
+        return { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate }
+      } catch (error) {
+        console.log('gaugeEstimate----error--', error)
+        return {
+          _thisWeek_gaugeEstimate: 0,
+          _nextWeek_gaugeEstimate: 0,
+        }
+      }
+    },
+    [commonVoteData]
+  )
+
+  const getGaugeApy = useCallback(
+    (item) => {
+      try {
+        const { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate } =
+          getGaugeEstimate(item)
+        const { typeGaugeList } = commonVoteData
+        const { lpGaugeAddress, lpAddress } = item
+        const { baseInfo } = typeGaugeList.find(
+          (itemObj) =>
+            itemObj.lpGaugeAddress.toLowerCase() == lpGaugeAddress.toLowerCase()
+        )
+        const { totalSupply } = baseInfo
+        const _fxnPrice = getTokenPrice('FXN')
+        const _lpPrice = getLpTokenPrice(lpAddress)
+        // console.log(
+        //   'apy1----totalSupply,_thisWeek_gaugeEstimate,_nextWeek_gaugeEstimate,_fxnPrice--_lpPrice',
+        //   totalSupply,
+        //   _thisWeek_gaugeEstimate,
+        //   _nextWeek_gaugeEstimate,
+        //   _fxnPrice,
+        //   _lpPrice
+        // )
+        const _thisWeek_apy = checkNotZoroNum(totalSupply)
+          ? cBN(_thisWeek_gaugeEstimate)
+              .times(_fxnPrice)
+              .div(cBN(totalSupply).div(1e18).times(_lpPrice))
+              .toFixed(2)
+          : '0'
+        const _nextWeek_apy = checkNotZoroNum(totalSupply)
+          ? cBN(_nextWeek_gaugeEstimate)
+              .times(_fxnPrice)
+              .div(cBN(totalSupply).div(1e18).times(_lpPrice))
+              .toFixed(2)
+          : '0'
+        // console.log('apy1----', _thisWeek_apy, _nextWeek_apy)
+        return { _thisWeek_apy, _nextWeek_apy }
+      } catch (error) {
+        // console.log('apy1----error', error)
+        return { _thisWeek_apy: 0, _nextWeek_apy: 0 }
+      }
     },
     [commonVoteData]
   )
@@ -93,16 +164,9 @@ const useVoteController = () => {
           .multipliedBy(item.voteInfo.voteSlope.power)
           .dividedBy(10000)
         const lastVoteTime = Number(item.voteInfo.lastVote)
-        const _thisWeekEstimateFXNEmissions = getGaugeEstimate(
-          item.gaugeType,
-          item.lpGaugeAddress,
-          'thisWeek'
-        )
-        const _nextWeekEstimateFXNEmissions = getGaugeEstimate(
-          item.gaugeType,
-          item.lpGaugeAddress,
-          'nextWeek'
-        )
+        const { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate } =
+          getGaugeEstimate(item)
+        const gaugeApy = getGaugeApy(item)
         info[item.lpGaugeAddress] = {
           gaugeWeight: item.voteInfo.gaugeWeight,
           lastVoteTime,
@@ -114,8 +178,9 @@ const useVoteController = () => {
           userPower: item.voteInfo.voteSlope.power / 100,
           blockTime,
           userVote: checkNotZoroNumOption(_vote, fb4(_vote)),
-          thisWeekEstimateFXNEmissions: _thisWeekEstimateFXNEmissions,
-          nextWeekEstimateFXNEmissions: _nextWeekEstimateFXNEmissions,
+          thisWeekEstimateFXNEmissions: _thisWeek_gaugeEstimate,
+          nextWeekEstimateFXNEmissions: _nextWeek_gaugeEstimate,
+          gaugeApy,
         }
       })
     } catch (error) {
