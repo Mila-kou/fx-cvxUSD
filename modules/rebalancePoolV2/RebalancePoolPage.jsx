@@ -10,16 +10,16 @@ import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
 
 export default function RebalancePoolPage() {
   const poolAData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_RebalancePool_A,
+    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_APool,
     rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_A,
-    infoKey: 'rebalancePool_info_A',
+      tokens.contracts.fx_RebalanceWithBonusToken_APool,
+    infoKey: 'rebalancePoolV2_info_A',
   })
   const poolBData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
+    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_BPool,
     rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_B,
-    infoKey: 'rebalancePool_info_B',
+      tokens.contracts.fx_RebalanceWithBonusToken_BPool,
+    infoKey: 'rebalancePoolV2_info_B',
   })
 
   const totalSupplyTvlText = fb4(
@@ -73,12 +73,12 @@ export default function RebalancePoolPage() {
 
       <PoolItem
         title="My Rebalance Pool A"
-        contractType="fx_RebalancePool_A"
+        contractType="fx_BoostableRebalancePool_APool"
         {...poolAData}
       />
       <PoolItem
         title="My Rebalance Pool B"
-        contractType="fx_RebalancePool_B"
+        contractType="fx_BoostableRebalancePool_BPool"
         hasXETH
         {...poolBData}
       />

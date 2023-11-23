@@ -113,4 +113,49 @@ export const POOLS_LIST = [
   // },
 ]
 
+export const REBALANCE_POOLS_LIST = [
+  {
+    logo: FLogo,
+    logo2: `/tokens/crypto-icons-stack.svg#eth`,
+    id: 1,
+    name: 'Rebalance PoolA',
+    platform: 'FX',
+    fromPlatform: 'FX',
+    platformUrl: 'https://curve.fi/factory-crypto/140',
+    curveType: 'curveCopyto',
+    gaugeType: 'rebalance',
+    nameShow: 'Rebalance PoolA',
+    zapTokens: [
+      {
+        symbol: 'fETH',
+        icon: 'eth',
+        address: config.tokens.fETH,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    logo2: `/tokens/crypto-icons-stack.svg#eth`,
+    id: 1,
+    name: 'Rebalance PoolB',
+    platform: 'FX',
+    fromPlatform: 'Curve',
+    platformUrl: 'https://curve.fi/factory-crypto/140',
+    curveType: 'curveCopyto',
+    gaugeType: 'rebalance',
+    nameShow: 'Rebalance PoolB',
+    zapTokens: [
+      {
+        symbol: 'fETH',
+        icon: 'eth',
+        address: config.tokens.fETH,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+]
+
 export default POOLS_LIST
