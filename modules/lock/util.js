@@ -17,7 +17,7 @@ export const calc4 = (m, isTimestamp = false) => {
 
   const unlock_time = Math.floor(params.unix() / WEEK) * WEEK
   // console.log('addtime', moment(unlock_time * 1000).format('lll'), moment(unlock_time * 1000).weekday(), moment(unlock_time * 1000).unix(), moment(unlock_time * 1000).unix() % (86400 * 7))
-  return isTimestamp ? unlock_time : moment(unlock_time * 1000).unix()
+  return isTimestamp ? unlock_time : moment(unlock_time * 1000)
 }
 
 // next week day wedenesday
