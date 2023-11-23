@@ -329,6 +329,34 @@
   },
   {
     "inputs": [],
+    "name": "emaLeverageRatio",
+    "outputs": [
+      {
+        "internalType": "uint40",
+        "name": "lastTime",
+        "type": "uint40"
+      },
+      {
+        "internalType": "uint24",
+        "name": "sampleInterval",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint96",
+        "name": "lastValue",
+        "type": "uint96"
+      },
+      {
+        "internalType": "uint96",
+        "name": "lastEmaValue",
+        "type": "uint96"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "fToken",
     "outputs": [
       {
@@ -439,8 +467,34 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint24",
+        "name": "sampleInterval",
+        "type": "uint24"
+      }
+    ],
+    "name": "initializeV2",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "lastPermissionedPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "leverageRatio",
     "outputs": [
       {
         "internalType": "uint256",
@@ -660,7 +714,7 @@
         "type": "address"
       },
       {
-        "internalType": "enum ITreasury.MintOption",
+        "internalType": "enum IFxTreasury.MintOption",
         "name": "_option",
         "type": "uint8"
       }
@@ -921,6 +975,19 @@
       }
     ],
     "name": "updateBeta",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint24",
+        "name": "_sampleInterval",
+        "type": "uint24"
+      }
+    ],
+    "name": "updateEMASampleInterval",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

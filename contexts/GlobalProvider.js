@@ -24,6 +24,7 @@ import {
 } from '@/services/dataInfo'
 import useInfo from '@/modules/home/hooks/useInfo'
 import useRebalancePoolUseInfo from '@/modules/rebalancePool/hooks/useRebalancePoolUseInfo'
+import useBoostableRebalancePoolData from '@/modules/rebalancePool/hooks/useBoostableRebalancePoolData'
 import { getStETHRate } from '@/utils/stETHRate'
 import useGauge from '@/hooks/useGauge'
 
@@ -44,6 +45,12 @@ function GlobalProvider({ children }) {
   )
   const rebalancePool_info_B = useRebalancePoolUseInfo(
     config.contracts.fx_RebalancePool_B
+  )
+  const rebalancePoolV2_info_A = useBoostableRebalancePoolData(
+    config.contracts.fx_BoostableRebalancePool_APool
+  )
+  const rebalancePoolV2_info_B = useBoostableRebalancePoolData(
+    config.contracts.fx_BoostableRebalancePool_BPool
   )
   const ethToken = useToken(config.tokens.eth)
   const stETHToken = useTokenBalance(config.tokens.stETH)
@@ -235,6 +242,8 @@ function GlobalProvider({ children }) {
       fx_info,
       rebalancePool_info_A,
       rebalancePool_info_B,
+      rebalancePoolV2_info_A,
+      rebalancePoolV2_info_B,
 
       lpPrice,
       // vaultsInfo,
@@ -259,6 +268,8 @@ function GlobalProvider({ children }) {
       fx_info,
       rebalancePool_info_A,
       rebalancePool_info_B,
+      rebalancePoolV2_info_A,
+      rebalancePoolV2_info_B,
 
       lpPrice,
       // vaultsInfo,

@@ -20,12 +20,12 @@ export default function EarningPoolPage() {
       tokens.contracts.fx_RebalanceWithBonusToken_A,
     infoKey: 'rebalancePool_info_A',
   })
-  const poolBData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
-    rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_B,
-    infoKey: 'rebalancePool_info_B',
-  })
+  // const poolBData = usePool({
+  //   rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
+  //   rebalanceWithBonusTokenAddress:
+  //     tokens.contracts.fx_RebalanceWithBonusToken_B,
+  //   infoKey: 'rebalancePool_info_B',
+  // })
 
   return (
     <div className={styles.container}>
@@ -47,12 +47,12 @@ export default function EarningPoolPage() {
           contractType="fx_RebalancePool_A"
           {...poolAData}
         />
-        <RebalancePoolCell
+        {/* <RebalancePoolCell
           title="Rebalance Pool B"
           contractType="fx_RebalancePool_B"
           hasXETH
           {...poolBData}
-        />
+        /> */}
         {pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
         ))}
