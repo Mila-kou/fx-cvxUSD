@@ -705,7 +705,7 @@ export default function Mint({ slippage }) {
       <BalanceInput
         symbol="fETH"
         color={isF ? 'blue' : ''}
-        placeholder={FETHtAmount.minout_ETH}
+        placeholder={checkNotZoroNum(fromAmount) ? FETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${fnav}`}
@@ -721,7 +721,7 @@ export default function Mint({ slippage }) {
         symbol="xETH"
         // tip="Bonus+"
         color={isX ? 'red' : ''}
-        placeholder={XETHtAmount.minout_ETH}
+        placeholder={checkNotZoroNum(fromAmount) ? XETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${xnav}`}
