@@ -3,7 +3,7 @@ import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
 import PoolItem from './components/PoolItem'
-import usePool from './hooks/usePool'
+import usePool from './controller/usePool'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
@@ -23,17 +23,13 @@ export default function RebalancePoolPage() {
   })
 
   const totalSupplyTvlText = fb4(
-    cBN(poolAData.stabilityPoolTotalSupplyTvl).plus(
-      poolBData.stabilityPoolTotalSupplyTvl
-    ),
+    cBN(poolAData.poolTotalSupplyTvl).plus(poolBData.poolTotalSupplyTvl),
     false,
     0
   )
 
   const totalSupplyText = fb4(
-    cBN(poolAData.stabilityPoolTotalSupply_res).plus(
-      poolBData.stabilityPoolTotalSupply_res
-    )
+    cBN(poolAData.poolTotalSupply_res).plus(poolBData.poolTotalSupply_res)
   )
 
   return (

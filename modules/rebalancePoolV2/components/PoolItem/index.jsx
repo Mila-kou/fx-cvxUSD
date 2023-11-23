@@ -77,36 +77,6 @@ export default function PoolItem({
                   {dollarText(userDepositTvl_text)}
                 </h2>
                 <p className="text-[16px]">{userDeposit} fETH</p>
-                {userUnlockingBalance && userUnlockingBalance !== '-' ? (
-                  <p className="text-[16px]">
-                    Unlocking: {userUnlockingBalance} fETH
-                  </p>
-                ) : null}
-                {checkNotZoroNum(
-                  stabilityPoolInfo?.userInfo?.unlockingBalanceOfRes._balance
-                ) ? (
-                  <p className="text-[16px]">
-                    UnlockAt: {userUnlockingUnlockAt}
-                  </p>
-                ) : (
-                  ''
-                )}
-                {userUnlockedBalance && userUnlockedBalance !== '-' ? (
-                  <p className="text-[16px]">
-                    Unlocked: {userUnlockedBalance} fETH{'  '}
-                    <span
-                      className={cn(
-                        'text-[#6B79FC] underline',
-                        canUnlock
-                          ? 'cursor-pointer'
-                          : 'cursor-not-allowed opacity-[0.6]'
-                      )}
-                      onClick={handleUnlock}
-                    >
-                      Claim Funds
-                    </span>
-                  </p>
-                ) : null}
               </div>
               <div className={styles.actions}>
                 <Button onClick={handleDeposit}>Deposit</Button>

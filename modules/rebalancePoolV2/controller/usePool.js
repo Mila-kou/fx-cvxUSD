@@ -1,11 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import useWeb3 from '@/hooks/useWeb3'
-import useStabiltyPool from './useRebalancePool'
+import useRebalancePool from './useRebalancePool'
 import { useContract, useFX_stETHTreasury } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 import abi from '@/config/abi'
+import {
+  useBoostableRebalancePool,
+  useRebalanceWithBonusToken,
+} from '@/hooks/useGaugeContracts'
 
 export default function usePool({
   rebalancePoolAddress,
@@ -14,20 +18,16 @@ export default function usePool({
 }) {
   const { currentAccount, isAllReady } = useWeb3()
   const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
-  const { contract: FX_RebalancePoolContract } = useContract(
-    rebalancePoolAddress,
-    abi.FX_RebalancePoolABI
-  )
+  const { contract: FX_RebalancePoolContract } =
+    useBoostableRebalancePool(rebalancePoolAddress)
 
-  const { contract: FX_RebalanceWithBonusTokenContract } = useContract(
-    rebalanceWithBonusTokenAddress,
-    abi.FX_RebalanceWithBonusTokenABI
-  )
+  const { contract: FX_RebalanceWithBonusTokenContract } =
+    useRebalanceWithBonusToken(rebalanceWithBonusTokenAddress)
 
-  const poolData = useStabiltyPool(infoKey)
+  const poolData = useRebalancePool(infoKey)
 
   const {
-    stabilityPoolInfo,
+    boostableRebalancePoolInfo,
     userWstETHClaimable,
     userXETHClaimable,
     userUnlockedBalanceTvl,
@@ -39,7 +39,6 @@ export default function usePool({
     wstETH: false,
     xETH: false,
   })
-  const [unlocking, setUnlocking] = useState(false)
 
   const [harvesting, setHarvesting] = useState(false)
 
@@ -50,29 +49,6 @@ export default function usePool({
   const handleWithdraw = () => {
     if (!isAllReady) return
     setWithdrawVisible(true)
-  }
-
-  const handleUnlock = async () => {
-    if (unlocking || !canUnlock) return
-    if (!isAllReady) return
-    try {
-      setUnlocking(true)
-      const apiCall = FX_RebalancePoolContract.methods.withdrawUnlocked(
-        false,
-        true
-      )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Unlock',
-      })
-      setUnlocking(false)
-    } catch (error) {
-      setUnlocking(false)
-      console.log('unlock-error---', error)
-      noPayableErrorAction(`error_unlock`, error)
-    }
   }
 
   const handleClaim = async (symbol, wrap) => {
@@ -111,19 +87,19 @@ export default function usePool({
 
   const canClaim = useMemo(() => {
     console.log(
-      'stabilityPoolInfo.userInfo?.claimableResd----claimableXETHRes---',
-      stabilityPoolInfo.userInfo?.claimableRes,
-      stabilityPoolInfo.userInfo?.claimableXETHRes
+      'boostableRebalancePoolInfo.userInfo?.claimableResd----claimableXETHRes---',
+      boostableRebalancePoolInfo.userInfo?.claimableRes,
+      boostableRebalancePoolInfo.userInfo?.claimableXETHRes
     )
     return {
-      wstETH: checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableRes),
-      xETH: checkNotZoroNum(stabilityPoolInfo.userInfo?.claimableXETHRes),
+      wstETH: checkNotZoroNum(
+        boostableRebalancePoolInfo.userInfo?.claimableRes
+      ),
+      xETH: checkNotZoroNum(
+        boostableRebalancePoolInfo.userInfo?.claimableXETHRes
+      ),
     }
   }, [userWstETHClaimable, userXETHClaimable])
-
-  const canUnlock = useMemo(() => {
-    return !!checkNotZoroNum(userUnlockedBalanceTvl)
-  }, [userUnlockedBalanceTvl])
 
   const handleHarvest = async () => {
     if (!isAllReady) return
@@ -146,7 +122,7 @@ export default function usePool({
 
   const handleLiquidatorWithBonus = async () => {
     try {
-      // const _totalFETH = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(stabilityPoolInfo.baseInfo?.totalUnlockingRes).toString(10)
+      // const _totalFETH = cBN(boostableRebalancePoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(boostableRebalancePoolInfo.baseInfo?.totalUnlockingRes).toString(10)
       const apiCall = FX_RebalanceWithBonusTokenContract.methods.liquidate(0)
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
@@ -166,8 +142,6 @@ export default function usePool({
 
     handleDeposit,
     handleWithdraw,
-    canUnlock,
-    handleUnlock,
     canClaim,
     claiming,
     handleClaim,
