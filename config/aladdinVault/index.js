@@ -73,6 +73,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.ETH_xETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.ETH_xETH.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_xETH.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.ETH_xETH.manageConvexGauge,
     rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
     zapTokens: [
       {
@@ -99,6 +101,7 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.ETH_FXN.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.ETH_FXN.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_FXN.gauge,
+    manageConvexGaugeAddress: config.POOLS_LIST_GAUGE.ETH_FXN.manageConvexGauge,
     rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
     zapTokens: [
       {
@@ -122,6 +125,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.crvUSD_fETH.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.crvUSD_fETH.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.crvUSD_fETH.manageConvexGauge,
     rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
     zapTokens: [
       {
@@ -145,6 +150,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.fETH_FRAXBP.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.fETH_FRAXBP.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.fETH_FRAXBP.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.fETH_FRAXBP.manageConvexGauge,
     rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
     zapTokens: [
       {

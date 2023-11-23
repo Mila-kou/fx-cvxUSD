@@ -274,23 +274,27 @@ const POOLS_LIST_GAUGE = {
     lpPoolCurveToken: '0x053d5be7c653325b58d88b942fb2454f8ffd8673',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0x16ead9a10b1a77007e6e329b076ad1fe97a6f7c0',
+    manageConvexGauge: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
     gauge: gaugeTokenList.fx_ETH_xETH,
   },
   ETH_FXN: {
     lpPoolCurveToken: '0xc15f285679a1ef2d25f53d4cbd0265e1d02f2a92',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0xE06A65e09Ae18096B99770A809BA175FA05960e2',
+    manageConvexGauge: '0x23831E29db590BbbAcF267EE2Cf377cD3E54A718',
     gauge: gaugeTokenList.fx_ETH_FXN,
   },
   crvUSD_fETH: {
     lpPoolCurveToken: '0xe7e86c6055b964c7894d33e037ead34f2b62795d',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0x19033d99a7b7010157b81e5ee5a8e63a583fb735',
+    manageConvexGauge: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
     gauge: gaugeTokenList.fx_crvUSD_fETH,
   },
   fETH_FRAXBP: {
     lpPoolCurveToken: '0x5f5fe47fed55eae627386995198294c39e1d17a5',
     token: '0x3d28f9192e34e51414e69fbee5b11b35590fb9fb',
+    manageConvexGauge: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
     gauge: gaugeTokenList.fx_fETH_FRAXBP,
   },
 }

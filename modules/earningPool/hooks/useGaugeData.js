@@ -23,6 +23,17 @@ const useGaugeData = () => {
     [getContract]
   )
 
+  const getManageGaugeContract = useCallback(
+    (lpManageGaugeAddress) => {
+      const _lpGaugeContract = getContract(
+        lpManageGaugeAddress,
+        abi.FX_ConvexCurveManagerABI
+      )
+      return _lpGaugeContract
+    },
+    [getContract]
+  )
+
   const fetchAllPoolUserData = useCallback(
     async (arr) => {
       try {
