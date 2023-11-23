@@ -87,17 +87,33 @@ const contracts = {
   aladdinAllInOneGateway: '0x6e513d492Ded19AD8211a57Cc6B4493C9E6C857B',
 
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
+
+  // farming
+  fx_BoostableRebalancePool_APool: '0xCE225954423b3F7Bd4b6e88a0E46569ce01CF0c6',
+  fx_BoostableRebalancePool_BPool: '0xD0959fe55A6510C78E5Ec3642246882eff7509E9',
+  fx_RebalanceWithBonusToken_APool:
+    '0xc6ae935F7b9efb489938D8DFaeE29740E982d578',
+  fx_RebalanceWithBonusToken_BPool:
+    '0xD2953DD27C273B3C29Fc37F2eDa8014B7896A9B8',
+  fx_RebalancePoolSplitter_BoostableRebalancePool_fETH:
+    '0x2146b8eeF7df5F290B7f3bde7e6582575D89a091',
+  fx_RebalancePoolGaugeClaimer_BoostableRebalancePool_fETH:
+    '0x8532dC104AB8102Af2028609024932175DE3B100',
 }
 
 const gaugeTokenList = {
-  fx_ETH_xETH: '0x82E535428b3034Ca74ce738949954715627cb140',
-  ConvexCurveManager_ETH_xETH: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
-  fx_ETH_FXN: '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
-  ConvexCurveManager_ETH_FXN: '0x23831E29db590BbbAcF267EE2Cf377cD3E54A718',
-  fx_crvUSD_fETH: '0x12B295D12a4D4DF2F3F5B2B8E151bbE000564fa5',
-  ConvexCurveManager_crvUSD_fETH: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
-  fx_fETH_FRAXBP: '0x5c28b966aB37cFB9397bBc04595f91F0fBf06d9b',
-  ConvexCurveManager_fETH_FRAXBP: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
+  fx_ETH_xETH: '0x203aeE406d26AE5C1Cc12b2F884d2B5814A44948',
+  ConvexCurveManager_ETH_xETH: '0x7d23e21Be2bf68De4d3D6C06340cE66F192B185a',
+  fx_ETH_FXN: '0x0E4f31a2f48418c90F5e9fa84Bf761D832C54ceD',
+  ConvexCurveManager_ETH_FXN: '0x43fCFe9F128b5e4271c7E25C47eFe91bA8896220',
+  fx_crvUSD_fETH: '0xA2FaffE31153e5E60F2352e3ed28ff973309C156',
+  ConvexCurveManager_crvUSD_fETH: '0x82E535428b3034Ca74ce738949954715627cb140',
+  fx_fETH_FRAXBP: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
+  ConvexCurveManager_fETH_FRAXBP: '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
+
+  // rebalance pool gauge
+  BoostableRebalancePool_fETH_FundraiseGauge:
+    '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
 }
 
 const tokens = {
@@ -274,27 +290,27 @@ const POOLS_LIST_GAUGE = {
     lpPoolCurveToken: '0x053d5be7c653325b58d88b942fb2454f8ffd8673',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0x16ead9a10b1a77007e6e329b076ad1fe97a6f7c0',
-    manageConvexGauge: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_xETH,
     gauge: gaugeTokenList.fx_ETH_xETH,
   },
   ETH_FXN: {
     lpPoolCurveToken: '0xc15f285679a1ef2d25f53d4cbd0265e1d02f2a92',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0xE06A65e09Ae18096B99770A809BA175FA05960e2',
-    manageConvexGauge: '0x23831E29db590BbbAcF267EE2Cf377cD3E54A718',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_FXN,
     gauge: gaugeTokenList.fx_ETH_FXN,
   },
   crvUSD_fETH: {
     lpPoolCurveToken: '0xe7e86c6055b964c7894d33e037ead34f2b62795d',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0x19033d99a7b7010157b81e5ee5a8e63a583fb735',
-    manageConvexGauge: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_crvUSD_fETH,
     gauge: gaugeTokenList.fx_crvUSD_fETH,
   },
   fETH_FRAXBP: {
     lpPoolCurveToken: '0x5f5fe47fed55eae627386995198294c39e1d17a5',
     token: '0x3d28f9192e34e51414e69fbee5b11b35590fb9fb',
-    manageConvexGauge: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_fETH_FRAXBP,
     gauge: gaugeTokenList.fx_fETH_FRAXBP,
   },
 }

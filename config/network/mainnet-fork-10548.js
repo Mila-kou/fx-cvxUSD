@@ -12,10 +12,11 @@ const explorerUri = 'https://www.etherscan.io'
 
 // ---------- 10548
 const chainInfo = {
-  id: '0x2934',
+  id: '0x2933',
   token: 'ETH',
   label: 'Mainnet Fork',
-  rpcUrl: 'https://apitest.aladdin.club/rpc',
+  // rpcUrl: 'https://apitest.aladdin.club/rpc10547',
+  rpcUrl: 'http://13.229.217.38:10547',
 }
 // const chainInfo = {
 //   id: '0x1',
