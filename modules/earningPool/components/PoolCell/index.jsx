@@ -57,56 +57,90 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   }
 
   const apyDom = useMemo(() => {
-    console.log('apy------', cellData.apyInfo, boostInfo)
-    let _allApy_min = cBN(0)
-    let _allApy_max = cBN(0)
-    let _min_FXN_Apy = 0
-    let _max_FXN_Apy = 0
-    const _tips = []
-    if (cellData.apyInfo && cellData.apyInfo.apyList.length) {
-      _tips.push(`convexLpApy : ${cellData.apyInfo.convexLpApy.project} %`)
-      _allApy_min = cBN(cellData.apyInfo.convexLpApy.project)
-      _allApy_max = cBN(cellData.apyInfo.convexLpApy.project)
-      cellData.apyInfo.apyList.map((item, index) => {
-        console.log('gauge--apy----item', item)
-        if (item.rewardToken[1] == config.tokens.FXN) {
-          if (boostInfo.length) {
-            _min_FXN_Apy = cBN(item._apy).times(boostInfo[3]).toFixed(2)
-            _max_FXN_Apy = cBN(item._apy)
-              .times(boostInfo[2])
-              .times(2.5)
-              .toFixed(2)
-          }
-          _allApy_min = _allApy_min.plus(_min_FXN_Apy)
-          _allApy_max = _allApy_max.plus(_max_FXN_Apy)
-          _tips.push(
-            `${item.rewardToken[3]} : ${_min_FXN_Apy}% - ${_allApy_max}%`
-          )
-        } else {
-          _allApy_max = _allApy_max.plus(item._apy)
-          _tips.push(`${item.rewardToken[3]} : ${item._apy}`)
-        }
-      })
-    }
-    if (checkNotZoroNum(_allApy_min)) {
-      return (
-        <div className="flex gap-[6px] items-center text-[16px]">
-          {_allApy_min.toFixed(2)}% - {_allApy_max.toFixed(2)}%
-          <Tooltip
-            placement="top"
-            title={_tips.map((txt) => (
-              <div>
-                <p className="text-[14px]">{txt}</p>
-              </div>
-            ))}
-            arrow
-            color="#000"
-          >
-            <InfoCircleOutlined />
-          </Tooltip>
-        </div>
-      )
-    }
+    // if (cellData?.apyInfo?.apyList.length) {
+    //   console.log('apy-----page--', cellData.apyInfo, boostInfo)
+    // }
+    // const _projectApy = {
+    //   convexLpApy: {},
+    //   _allApy_min: cBN(0),
+    //   _allApy_max: cBN(0),
+    //   _min_FXN_Apy: 0,
+    //   _max_FXN_Apy: 0,
+    // }
+    // const _currentApy = {
+    //   convexLpApy: {},
+    //   _allApy_min: cBN(0),
+    //   _allApy_max: cBN(0),
+    //   _min_FXN_Apy: 0,
+    //   _max_FXN_Apy: 0,
+    // }
+
+    // const _allApy_min = cBN(0)
+    // const _allApy_max = cBN(0)
+    // const _min_FXN_Apy = 0
+    // const _max_FXN_Apy = 0
+    // const _tips = []
+    // const { apyInfo } = cellData
+    // if (apyInfo && apyInfo.convexLpApy && apyInfo.apyList.length) {
+    //   _tips.push(`projectApy `)
+    //   _tips.push(`-convexLpApy:${apyInfo.convexLpApy.apy.project} % `)
+    //   _tips.push(`--base Apy: ${apyInfo.convexLpApy.curveApys.baseApy} %`)
+    //   _tips.push(`--crvApy Apy: ${apyInfo.convexLpApy.curveApys.crvApy1} %`)
+    //   _tips.push(`--cvxApy Apy: ${apyInfo.convexLpApy.curveApys.cvxApy} %`)
+
+    //   _projectApy._allApy_min = cBN(apyInfo.convexLpApy.apy.project)
+    //   _projectApy._allApy_max = cBN(apyInfo.convexLpApy.apy.project)
+    //   apyInfo.apyList.map((item, index) => {
+    //     console.log('gauge--apy----item', item)
+    //     if (item.rewardToken[1] == config.tokens.FXN) {
+    //       if (boostInfo.length) {
+    //         _projectApy._min_FXN_Apy = cBN(item._projectApy)
+    //           .times(boostInfo[3])
+    //           .toFixed(2)
+    //         _projectApy._max_FXN_Apy = cBN(item._projectApy)
+    //           .times(boostInfo[2])
+    //           .times(2.5)
+    //           .toFixed(2)
+    //       }
+    //       _projectApy._allApy_min = _projectApy._allApy_min.plus(
+    //         _projectApy._min_FXN_Apy
+    //       )
+    //       _projectApy._allApy_max = _projectApy._allApy_max.plus(
+    //         _projectApy._max_FXN_Apy
+    //       )
+    //       _tips.push(
+    //         `${item.rewardToken[3]} : ${_projectApy._min_FXN_Apy}% - ${_projectApy._max_FXN_Apy}%`
+    //       )
+    //     } else {
+    //       _projectApy._allApy_min = _projectApy._allApy_min.plus(
+    //         item._currentApy
+    //       )
+    //       _projectApy._allApy_max = _projectApy._allApy_max.plus(
+    //         item._currentApy
+    //       )
+    //       _tips.push(`${item.rewardToken[3]} : ${item._currentApy}`)
+    //     }
+    //   })
+    // }
+    // if (checkNotZoroNum(_projectApy._allApy_min)) {
+    //   return (
+    //     <div className="flex gap-[6px] items-center text-[16px]">
+    //       {_allApy_min.toFixed(2)}% - {_allApy_max.toFixed(2)}%
+    //       <Tooltip
+    //         placement="top"
+    //         title={_tips.map((txt) => (
+    //           <div>
+    //             <p className="text-[14px]">{txt}</p>
+    //           </div>
+    //         ))}
+    //         arrow
+    //         color="#000"
+    //       >
+    //         <InfoCircleOutlined />
+    //       </Tooltip>
+    //     </div>
+    //   )
+    // }
     return '-'
   }, [cellData, boostInfo])
   console.log('cellData----', cellData, apyDom)

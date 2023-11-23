@@ -9,6 +9,7 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { POOLS_LIST } from '@/config/aladdinVault'
 import { useContract, useVeFXN } from '@/hooks/useContracts'
 import abi from '@/config/abi'
+import useGaugeApyEstimate from '@/hooks/useGaugeApyEstimate'
 
 const useGaugeController = () => {
   const globalState = useGlobal()
@@ -17,6 +18,7 @@ const useGaugeController = () => {
   const { getContract } = useContract()
   const { allPoolsUserInfo } = useGaugeData()
   const { GaugeList, allPoolsInfo, allPoolsApyInfo } = allGaugeBaseInfo
+  const { getGaugeEstimate, getGaugeApy } = useGaugeApyEstimate()
 
   const getLpTokenPrice = useCallback(
     (lpAddress) => {
@@ -55,7 +57,11 @@ const useGaugeController = () => {
           (item) => item.address.toLowerCase() == lpAddress.toLowerCase()
         )
         if (_convexLpInfo && _convexLpInfo.name) {
-          return _convexLpInfo.apy
+          return {
+            apy: _convexLpInfo.apy,
+            currentApys: _convexLpInfo.currentApys,
+            projectApys: _convexLpInfo.curveApys,
+          }
         }
         return 0
       } catch (error) {
@@ -70,70 +76,102 @@ const useGaugeController = () => {
     return false
   }, [])
 
-  const getApy = useCallback((item) => {
-    const { baseInfo = {}, lpAddress, rewardDatas, rewardTokens } = item || {}
-    const { totalSupply } = baseInfo
-    let allApy = cBN(0)
-    let _apys = 0
-    const convexLpApy = getLpConvexApy(lpAddress)
-    if (rewardDatas && rewardDatas.length) {
-      _apys = rewardDatas.map((baseApyData, index) => {
-        let _apy = 0
+  const getApy = useCallback(
+    (item) => {
+      try {
         const {
-          rewardData: { finishAt, lastUpdate, rate },
-          rewardAddress,
-        } = baseApyData
-        const _lpPrice = getLpTokenPrice(lpAddress)
-        let rewardToken = rewardTokens.find(
-          (_tokenData) =>
-            _tokenData[1].toLowerCase() == rewardAddress.toLowerCase()
-        )
+          baseInfo = {},
+          lpAddress,
+          rewardDatas,
+          rewardTokens,
+        } = item || {}
+        console.log('apy----0--')
+        const { totalSupply } = baseInfo
+        let allApy = cBN(0)
+        let _apys = 0
+        const convexLpApy = getLpConvexApy(lpAddress)
+        console.log('apy----1--', rewardDatas)
+        if (rewardDatas && rewardDatas.length) {
+          _apys = rewardDatas.map((baseApyData, index) => {
+            let _currentApy = 0
+            let _projectApy = 0
+            const {
+              rewardData: { finishAt, lastUpdate, rate },
+              rewardAddress,
+            } = baseApyData
+            const _lpPrice = getLpTokenPrice(lpAddress)
+            let rewardToken = rewardTokens.find(
+              (_tokenData) =>
+                _tokenData[1].toLowerCase() == rewardAddress.toLowerCase()
+            )
 
-        if (!rewardToken) {
-          rewardToken = ['', '']
-          _apy = 0
-        } else {
-          console.log('apy----')
-          const rewardTokenPrice = getTokenPrice(rewardToken[0])
-          const _currTime = Math.ceil(new Date().getTime() / 1000)
-          const _lastFinishAt = cBN(finishAt).plus(24 * 60 * 60 * 7)
-          if (cBN(_currTime).lt(_lastFinishAt) && cBN(totalSupply).gt(0)) {
-            _apy = cBN(rate)
-              .div(1e18)
-              .times(config.yearSecond)
-              .div(cBN(totalSupply).div(1e18).times(_lpPrice))
-              .times(100)
-              .times(rewardTokenPrice)
-              .toFixed(2)
-          }
-          console.log(
-            'getApy----name,rewardToken,_currTime,finishAt,totalSupply,rate,config.yearSecond,_lpPrice,rewardTokenPrice',
-            item.name,
-            rewardToken[0],
-            _currTime,
-            finishAt,
-            totalSupply,
-            rate,
-            config.yearSecond,
-            _lpPrice,
-            rewardTokenPrice,
-            _apy
-          )
+            if (!rewardToken) {
+              rewardToken = ['', '']
+              _currentApy = 0
+              _projectApy = 0
+            } else {
+              console.log('apy----2--')
+              if (
+                baseApyData.rewardAddress.toLowerCase() ==
+                config.tokens.FXN.toLowerCase()
+              ) {
+                _projectApy = getGaugeApy(item)
+                console.log('apy----3--', _projectApy)
+              } else {
+                _projectApy = 0
+              }
+              const rewardTokenPrice = getTokenPrice(rewardToken[0])
+              const _currTime = Math.ceil(new Date().getTime() / 1000)
+              const _lastFinishAt = cBN(finishAt).plus(24 * 60 * 60 * 7)
+              if (cBN(_currTime).lt(_lastFinishAt) && cBN(totalSupply).gt(0)) {
+                _currentApy = cBN(rate)
+                  .div(1e18)
+                  .times(config.yearSecond)
+                  .div(cBN(totalSupply).div(1e18).times(_lpPrice))
+                  .times(100)
+                  .times(rewardTokenPrice)
+                  .toFixed(2)
+              }
+              console.log(
+                'apy--------name,rewardToken,_currTime,finishAt,totalSupply,rate,config.yearSecond,_lpPrice,rewardTokenPrice,_projectApy--',
+                item.name,
+                rewardToken[0],
+                _currTime,
+                finishAt,
+                totalSupply,
+                rate,
+                config.yearSecond,
+                _lpPrice,
+                rewardTokenPrice,
+                _currentApy,
+                _projectApy
+              )
+            }
+            allApy = allApy.plus(_currentApy)
+            return {
+              rewardToken,
+              _currentApy,
+              _projectApy,
+            }
+          })
         }
-        allApy = allApy.plus(_apy)
+
         return {
-          rewardToken,
-          _apy,
+          allApy: allApy.toFixed(2),
+          apyList: _apys,
+          convexLpApy,
         }
-      })
-    }
-
-    return {
-      allApy: allApy.toFixed(2),
-      apyList: _apys,
-      convexLpApy,
-    }
-  })
+      } catch (error) {
+        console.log('apy----error--', error)
+        return {
+          allApy: 0,
+          apyList: [],
+          convexLpApy: {},
+        }
+      }
+    },
+    [allGaugeBaseInfo]
+  )
 
   const pageData = useMemo(() => {
     try {
