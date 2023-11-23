@@ -26,11 +26,16 @@ export default function WithdrawModal(props) {
     let sharesInWei = cBN(withdrawAmount || 0).toFixed(0, 1)
     try {
       if (
-        cBN(userInfo.stabilityPoolBalanceOfRes).isLessThanOrEqualTo(sharesInWei)
+        cBN(userInfo.BoostableRebalancePoolBalanceOfRes).isLessThanOrEqualTo(
+          sharesInWei
+        )
       ) {
-        sharesInWei = userInfo.stabilityPoolBalanceOfRes
+        sharesInWei = userInfo.BoostableRebalancePoolBalanceOfRes
       }
-      const apiCall = FX_RebalancePoolContract.methods.unlock(sharesInWei)
+      const apiCall = FX_RebalancePoolContract.methods.withdraw(
+        sharesInWei,
+        currentAccount
+      )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
@@ -50,7 +55,7 @@ export default function WithdrawModal(props) {
       !!(withdrawAmount * 1) &&
       isAllReady &&
       cBN(withdrawAmount).isLessThanOrEqualTo(
-        userInfo.stabilityPoolBalanceOfRes
+        userInfo.BoostableRebalancePoolBalanceOfRes
       )
     )
   }, [withdrawAmount, isAllReady])
@@ -62,8 +67,8 @@ export default function WithdrawModal(props) {
         <BalanceInput
           placeholder="0"
           symbol={name}
-          balance={fb4(userInfo.stabilityPoolBalanceOfRes, false)}
-          maxAmount={userInfo.stabilityPoolBalanceOfRes}
+          balance={fb4(userInfo.BoostableRebalancePoolBalanceOfRes, false)}
+          maxAmount={userInfo.BoostableRebalancePoolBalanceOfRes}
           onChange={handleInputChange}
           withUsd={false}
         />

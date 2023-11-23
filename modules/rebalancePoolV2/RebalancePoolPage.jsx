@@ -61,12 +61,12 @@ export default function RebalancePoolPage() {
           <div className={styles.item}>
             <p>A Pool APR (stETH)</p>
             <h2>{poolAData.apy}%</h2>
-            <p>{poolAData.stabilityPoolTotalSupply} fETH</p>
+            <p>{poolAData.poolTotalSupply} fETH</p>
           </div>
           <div className={styles.item}>
             <p>B Pool APR (xETH)</p>
             <h2>{poolBData.apy}%</h2>
-            <p>{poolBData.stabilityPoolTotalSupply} fETH</p>
+            <p>{poolBData.poolTotalSupply} fETH</p>
           </div>
         </div>
       </div>

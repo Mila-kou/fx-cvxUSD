@@ -21,13 +21,11 @@ export default function PoolItem({
 
   handleDeposit,
   handleWithdraw,
-  canUnlock,
-  handleUnlock,
   canClaim,
   claiming,
   handleClaim,
 
-  stabilityPoolInfo,
+  boostableRebalancePoolInfo,
   userDeposit,
   userDepositTvl_text,
   myTotalValue_text,
@@ -35,9 +33,6 @@ export default function PoolItem({
   userWstETHClaimableTvl_text,
   userXETHClaimable,
   userXETHClaimableTvl_text,
-  userUnlockingBalance,
-  userUnlockingUnlockAt,
-  userUnlockedBalance,
 
   depositVisible,
   setDepositVisible,
@@ -159,7 +154,6 @@ export default function PoolItem({
           info={item}
           contractType={contractType}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
           onCancel={() => setDepositVisible(false)}
         />
       )}
@@ -167,7 +161,7 @@ export default function PoolItem({
         <WithdrawModal
           info={item}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
+          poolData={boostableRebalancePoolInfo}
           onCancel={() => setWithdrawVisible(false)}
         />
       )}
