@@ -51,12 +51,14 @@ import FX_ManageableVestingABI from './fx/FX_ManageableVesting.json'
 import convex_cvxFxnStakingABI from './fx/convex_cvxFxnStaking.json'
 import stakeDao_sdFxnStakingABI from './fx/stakeDao_sdFxnStaking.json'
 
-// farming
+// gauge
 import FX_GaugeControllerABI from './fx/farming/fx-GaugeController.json'
 import FX_ConvexCurveManagerABI from './fx/farming/fx-ConvexCurveManager.json'
 import FX_VotingEscrowBoostABI from './fx/farming/fx-VotingEscrowBoost.json'
 import FX_VotingEscrowProxyABI from './fx/farming/fx-VotingEscrowProxy.json'
 import FX_fx_SharedLiquidityGaugeABI from './fx/farming/fx_SharedLiquidityGauge.json'
+import FX_BoostableRebalancePoolABI from './fx/farming/fx_BoostableRebalancePool.json'
+import FX_RebalancePoolGaugeClaimerABI from './fx/farming/fx-RebalancePoolGaugeClaimer.json'
 
 export default {
   erc20ABI,
@@ -110,4 +112,9 @@ export default {
   FX_ManageableVestingABI,
   convex_cvxFxnStakingABI,
   stakeDao_sdFxnStakingABI,
+
+  FX_BoostableRebalancePoolABI,
+  FX_RebalancePoolGaugeClaimerABI,
+
+  // gauge
 }
