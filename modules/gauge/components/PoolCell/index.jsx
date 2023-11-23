@@ -63,11 +63,15 @@ export default function PoolCell({
           <p>{cellData.name}</p>
         </div>
         <div className="w-[120px] text-[16px]">Rebalance Pool</div>
-        <div className="w-[60px] text-[16px]">{voteData?.userPower}%</div>
+        <div className="w-[60px] text-[16px]">
+          {voteData?.userPower ? `${voteData?.userPower}%` : '-'}
+        </div>
         <div className="w-[180px]">{apyDom}</div>
         <div className="w-[150px] text-[16px]">
-          {voteData?.thisWeekEstimateFXNEmissions} ->
-          {voteData?.nextWeekEstimateFXNEmissions}
+          {voteData?.thisWeekEstimateFXNEmissions}
+          {voteData?.nextWeekEstimateFXNEmissions
+            ? `-> ${voteData.nextWeekEstimateFXNEmissions}`
+            : ''}
         </div>
         <div className="w-[20px] cursor-pointer">
           <img
