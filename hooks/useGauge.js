@@ -54,6 +54,7 @@ const useGauge = () => {
         const currentTimes = calc4(current, true)
         const { rate } = FXNContract.methods
         const _lpGaugeContractList = []
+
         const GaugeList = arr.map((item, index) => {
           const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
           const {
@@ -62,11 +63,11 @@ const useGauge = () => {
             name,
             getActiveRewardTokens,
             stakingToken,
-            disableGauge,
           } = _lpGaugeContract.methods
           _lpGaugeContractList.push(_lpGaugeContract)
+
           return {
-            ...item,
+            // ...item,
             baseInfo: {
               symbol: symbol(),
               totalSupply: totalSupply(),
@@ -90,17 +91,12 @@ const useGauge = () => {
         })
         console.log('__GaugeList---GaugeList-', GaugeList)
 
-        const allGaugeBaseInfo = await multiCallsV2(
-          {
-            total_weight: get_total_weight(),
-            n_gauge_types: n_gauge_types(),
-            FXNRate: rate(),
-            GaugeList,
-          },
-          {
-            from: _currentAccount,
-          }
-        )
+        const allGaugeBaseInfo = await multiCallsV2({
+          total_weight: get_total_weight(),
+          n_gauge_types: n_gauge_types(),
+          FXNRate: rate(),
+          GaugeList,
+        })
         console.log('__GaugeList--allGaugeBaseInfo----', allGaugeBaseInfo)
         // fetchGaugeListApys
         const fetchGaugeListApys = allGaugeBaseInfo.GaugeList.map(
@@ -114,18 +110,20 @@ const useGauge = () => {
                 rewardData: rewardData(rewardToken),
               }
             })
-            item.rewardDatas = _rewardData
-            return item
+            // item.rewardDatas = _rewardData
+            return { rewardDatas: _rewardData }
           }
         )
-        const fetchGaugeListApysData = await multiCallsV2(fetchGaugeListApys, {
-          from: _currentAccount,
-        })
+        const fetchGaugeListApysData = await multiCallsV2(fetchGaugeListApys)
         console.log(
           '__GaugeList--fetchGaugeListApysData----',
           fetchGaugeListApysData
         )
-        allGaugeBaseInfo.GaugeList = fetchGaugeListApysData
+        allGaugeBaseInfo.GaugeList = arr.map((item, index) => ({
+          ...item,
+          ...allGaugeBaseInfo.GaugeList[index],
+          ...fetchGaugeListApysData[index],
+        }))
         // typesWeightCalls
         const typesWeightCalls = []
         for (let i = 0, l = allGaugeBaseInfo.n_gauge_types * 1; i < l; i++) {
@@ -134,20 +132,27 @@ const useGauge = () => {
             weights_sum_per_type: get_weights_sum_per_type(i),
           })
         }
-        const typesWeightDatas = await multiCallsV2(typesWeightCalls, {
-          from: _currentAccount,
-        })
-        console.log('__GaugeList----typesWeightDatas', allGaugeBaseInfo)
+        const typesWeightDatas = await multiCallsV2(typesWeightCalls)
+        console.log('__GaugeList--success--typesWeightDatas', allGaugeBaseInfo)
         setData({
           ...allGaugeBaseInfo,
           typesWeightDatas,
         })
+        return {
+          data: {
+            ...allGaugeBaseInfo,
+            typesWeightDatas,
+          },
+        }
       } catch (error) {
         console.log('__GaugeList----error', error)
-        // return arr
+
+        return {
+          data: {},
+        }
       }
     },
-    [multiCallsV2, current, FXNContract, getGaugeContract, _currentAccount]
+    [multiCallsV2, current, FXNContract, getGaugeContract]
   )
 
   const [{ isFetching, refetch: refetchAllGaugeData }] = useQueries({
@@ -168,7 +173,7 @@ const useGauge = () => {
   useEffect(() => {
     if (isFetching) return
     refetchAllGaugeData()
-  }, [_currentAccount, blockNumber, isFetching])
+  }, [_currentAccount, blockNumber])
 
   return data
 }

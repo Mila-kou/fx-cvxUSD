@@ -8,14 +8,14 @@ import useGaugeApyEstimate from '@/hooks/useGaugeApyEstimate'
 
 const useVoteController = () => {
   const { currentAccount, isAllReady, blockTime } = useWeb3()
-  const { allGaugeBaseInfo } = useGlobal()
+  // const { allGaugeBaseInfo } = useGlobal()
   const {
     voteInfo: { allVoteData, votePower, veFXNAmount, lastScheduled },
   } = useVoteData()
 
   const { getGaugeEstimate, getGaugeApy } = useGaugeApyEstimate()
 
-  console.log('commonVoteData-----2', allGaugeBaseInfo)
+  // console.log('commonVoteData-----2', allGaugeBaseInfo)
   const userVoteInfo = useMemo(() => {
     const _allocatedVotes = cBN(veFXNAmount)
       .multipliedBy(votePower)
@@ -72,7 +72,7 @@ const useVoteController = () => {
       return info
     }
     return info
-  }, [allVoteData, veFXNAmount])
+  }, [allVoteData, veFXNAmount, getGaugeEstimate, getGaugeApy])
 
   console.log('poolVoteInfo---', allVoteData, poolVoteInfo)
 

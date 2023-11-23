@@ -170,7 +170,7 @@ const useGaugeController = () => {
         }
       }
     },
-    [allGaugeBaseInfo]
+    [allGaugeBaseInfo, getGaugeApy]
   )
 
   const pageData = useMemo(() => {

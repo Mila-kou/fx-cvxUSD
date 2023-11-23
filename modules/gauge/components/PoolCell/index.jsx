@@ -49,12 +49,12 @@ export default function PoolCell({
       checkNotZoroNum(voteData?.gaugeApy?._thisWeek_apy)
         ? `${fb4(voteData.gaugeApy?._thisWeek_apy, false, 0, 2)} %`
         : '-'
-    } -> ${
+    } ${
       checkNotZoroNum(voteData?.gaugeApy?._nextWeek_apy)
-        ? `${fb4(voteData?.gaugeApy?._nextWeek_apy, false, 0, 2)} %`
+        ? `-> ${fb4(voteData?.gaugeApy?._nextWeek_apy, false, 0, 2)} %`
         : '-'
     }`
-  }, [cellData])
+  }, [voteData])
 
   return (
     <div key={cellData.id} className={styles.poolWrap}>

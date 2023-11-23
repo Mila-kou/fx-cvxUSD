@@ -36,6 +36,7 @@ const useGaugeApyEstimate = () => {
     },
     [lpPrice]
   )
+
   const getGaugeEstimate = useCallback(
     (item) => {
       try {
@@ -91,6 +92,13 @@ const useGaugeApyEstimate = () => {
           (itemObj) =>
             itemObj.lpGaugeAddress.toLowerCase() == lpGaugeAddress.toLowerCase()
         )
+        console.log(
+          'getGaugeApy--getGaugeEstimate-----',
+          allGaugeBaseInfo,
+          GaugeList,
+          item,
+          baseInfo
+        )
         const { totalSupply } = baseInfo
         const _fxnPrice = getTokenPrice('FXN')
         const _lpPrice = getLpTokenPrice(lpAddress)
@@ -116,10 +124,10 @@ const useGaugeApyEstimate = () => {
               .times(100)
               .toFixed(2)
           : '0'
-        // console.log('apy1----', _thisWeek_apy, _nextWeek_apy)
+        console.log('getGaugeApy----', _thisWeek_apy, _nextWeek_apy)
         return { _thisWeek_apy, _nextWeek_apy }
       } catch (error) {
-        // console.log('apy1----error', error)
+        console.log('getGaugeApy----error', error)
         return { _thisWeek_apy: 0, _nextWeek_apy: 0 }
       }
     },
