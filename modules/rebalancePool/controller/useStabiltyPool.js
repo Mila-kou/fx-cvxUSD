@@ -143,7 +143,7 @@ const useStabiltyPool = (infoKey) => {
         fb4(userXETHClaimable_res)
       )
       let userXETHClaimableTvl = cBN(0)
-      const { _xNav = 0 } = CurrentNavRes
+      const { _xNav = 0 } = fxInfo.baseInfo.CurrentNavRes
       if (
         checkNotZoroNum(_xNav) &&
         checkNotZoroNum(stabilityPoolInfo.userInfo.claimableXETHRes)
