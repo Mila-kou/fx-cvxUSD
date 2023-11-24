@@ -115,7 +115,7 @@ export default function PoolCell({
           {voteData?.canVote ? null : (
             <NoticeCard
               content={[
-                `Cannot change weight votes more often than once in 10 days. You can vote after the ${voteData.canVoteTime}`,
+                `Cannot change weight votes more often than once in 10 days. You can vote after the ${voteData?.canVoteTime}`,
               ]}
             />
           )}
