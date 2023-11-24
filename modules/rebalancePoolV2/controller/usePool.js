@@ -29,7 +29,11 @@ export default function usePool({
   const poolData = useRebalancePool(infoKey)
   const canLiquite = useMemo(() => {
     const { collateralRatioRes, marketConfigRes } = fx_info.baseInfo
-    if (cBN(collateralRatioRes).lt(marketConfigRes.stabilityRatio)) {
+    if (
+      checkNotZoroNum(collateralRatioRes) &&
+      checkNotZoroNum(marketConfigRes.stabilityRatio) &&
+      cBN(collateralRatioRes).lt(marketConfigRes.stabilityRatio)
+    ) {
       return true
     }
     return false
