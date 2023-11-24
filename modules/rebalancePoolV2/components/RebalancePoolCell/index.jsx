@@ -62,7 +62,7 @@ export default function RebalancePoolCell({
           </div>
         </div>
         <div className="w-[90px] text-[16px]">
-          {poolData.stabilityPoolTotalSupply}
+          {poolData.poolTotalSupplyTvl_text}
         </div>
         <div className="w-[180px]">{poolData.apy}</div>
         <div className="w-[60px] text-[16px]">{userDeposit}</div>

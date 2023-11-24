@@ -20,6 +20,7 @@ export default function EarningPoolPage() {
       tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
     infoKey: 'rebalancePoolV2_info_A',
   })
+  console.log('POOLS_LIST---poolAData', poolAData)
   const poolBData = usePool({
     rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_BPool,
     rebalanceWithBonusTokenAddress:
@@ -44,12 +45,12 @@ export default function EarningPoolPage() {
         </div>
         <RebalancePoolCell
           title="Rebalance Pool A"
-          contractType="fx_RebalancePool_A"
+          contractType="fx_BoostableRebalancePool_APool"
           {...poolAData}
         />
         <RebalancePoolCell
           title="Rebalance Pool B"
-          contractType="fx_RebalancePool_B"
+          contractType="fx_BoostableRebalancePool_BPool"
           hasXETH
           {...poolBData}
         />
