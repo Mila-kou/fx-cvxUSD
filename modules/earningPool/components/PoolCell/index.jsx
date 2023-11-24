@@ -156,13 +156,13 @@ export default function PoolCell({ cellData, ...pageOthers }) {
               fb4(userInfo?.userClaimables[index])
             )
           }
-          // const isOnlineRewardToken =
-          //   cellData.rewardDatas &&
-          //   cellData.rewardDatas.find(
-          //     (rewardToken) =>
-          //       rewardToken.rewardAddress.toLowerCase() == item[1].toLowerCase()
-          //   )
-          const isOnlineRewardToken = true
+          const isOnlineRewardToken =
+            cellData.rewardDatas &&
+            cellData.rewardDatas.length &&
+            cellData.rewardDatas.find(
+              (rewardToken) =>
+                rewardToken.rewardAddress.toLowerCase() == item[1].toLowerCase()
+            )
           if (isOnlineRewardToken) {
             return (
               <div className="flex gap-[6px] py-[2px]">
