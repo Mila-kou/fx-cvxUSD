@@ -22,6 +22,7 @@ export default function PoolItem({
   handleDeposit,
   handleWithdraw,
   canClaim,
+  canLiquite,
   claiming,
   handleClaim,
 
@@ -87,9 +88,11 @@ export default function PoolItem({
                   Harvest
                 </Button>
                 */}
-                <Button onClick={handleLiquidatorWithBonus} type="second">
-                  Liquidator
-                </Button>
+                {canLiquite && (
+                  <Button onClick={handleLiquidatorWithBonus} type="second">
+                    Liquidator
+                  </Button>
+                )}
               </div>
             </div>
 

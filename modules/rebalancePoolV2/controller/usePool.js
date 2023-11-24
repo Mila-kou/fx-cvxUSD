@@ -10,6 +10,7 @@ import {
   useBoostableRebalancePool,
   useRebalanceWithBonusToken,
 } from '@/hooks/useGaugeContracts'
+import { useGlobal } from '@/contexts/GlobalProvider'
 
 export default function usePool({
   rebalancePoolAddress,
@@ -17,6 +18,7 @@ export default function usePool({
   infoKey,
 }) {
   const { currentAccount, isAllReady } = useWeb3()
+  const { fx_info } = useGlobal()
   const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
   const { contract: FX_RebalancePoolContract } =
     useBoostableRebalancePool(rebalancePoolAddress)
@@ -25,6 +27,13 @@ export default function usePool({
     useRebalanceWithBonusToken(rebalanceWithBonusTokenAddress)
 
   const poolData = useRebalancePool(infoKey)
+  const canLiquite = useMemo(() => {
+    const { collateralRatioRes, marketConfigRes } = fx_info.baseInfo
+    if (cBN(collateralRatioRes).lt(marketConfigRes.stabilityRatio)) {
+      return true
+    }
+    return false
+  }, [fx_info])
 
   const {
     boostableRebalancePoolInfo,
@@ -143,6 +152,7 @@ export default function usePool({
     handleDeposit,
     handleWithdraw,
     canClaim,
+    canLiquite,
     claiming,
     handleClaim,
 
@@ -152,5 +162,6 @@ export default function usePool({
     setWithdrawVisible,
 
     FX_RebalancePoolContract,
+    FX_RebalanceWithBonusTokenContract,
   }
 }
