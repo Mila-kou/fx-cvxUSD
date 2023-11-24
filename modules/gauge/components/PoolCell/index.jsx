@@ -35,10 +35,13 @@ export default function PoolCell({
   const [openPanel, setOpenPanel] = useState(false)
   const [power, setPower] = useState(0)
 
-  const canCast = useMemo(
-    () => power && voteData.canVote && remaining >= power,
-    [voteData, power]
-  )
+  const canCast = useMemo(() => {
+    if (voteData?.userPower) {
+      const _remaining = remaining + voteData.userPower
+      return voteData.canVote && _remaining >= power
+    }
+    return power && voteData.canVote && remaining >= power
+  }, [voteData, power, remaining])
 
   const onChange = (v) => {
     setPower(Number(v))
@@ -94,7 +97,7 @@ export default function PoolCell({
             </div>
             <div className="flex items-center gap-[6px]">
               <NumberInput
-                max={remaining}
+                max={remaining + voteData?.userPower}
                 className="w-[100px] h-[40px]"
                 onChange={onChange}
                 placeholder="0"
