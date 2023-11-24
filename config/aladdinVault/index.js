@@ -86,31 +86,31 @@ export const POOLS_LIST = [
       },
     ],
   },
-  // {
-  //   logo: XLogo,
-  //   logo2: `/tokens/crypto-icons-stack.svg#eth`,
-  //   id: 4,
-  //   name: 'fETH+FRAXBP',
-  //   platform: 'FX',
-  //   fromPlatformIcon: `${cryptoIcons}#crv`,
-  //   fromPlatform: 'Curve',
-  //   gaugeType: 0,
-  //   // lpPoolToken: config.POOLS_LIST_GAUGE.fETH_FRAXBP.lpPoolCurveToken,
-  //   lpAddress: config.POOLS_LIST_GAUGE.fETH_FRAXBP.token,
-  //   lpGaugeAddress: config.POOLS_LIST_GAUGE.fETH_FRAXBP.gauge,
-  //   manageConvexGaugeAddress:
-  //     config.POOLS_LIST_GAUGE.fETH_FRAXBP.manageConvexGauge,
-  //   rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
-  //   zapTokens: [
-  //     {
-  //       symbol: 'curve_fETH_FRAXBP',
-  //       icon: 'cvx',
-  //       address: config.POOLS_LIST_GAUGE.fETH_FRAXBP.token,
-  //       needZap: false,
-  //       isLp: true,
-  //     },
-  //   ],
-  // },
+  {
+    logo: XLogo,
+    logo2: `/tokens/crypto-icons-stack.svg#eth`,
+    id: 4,
+    name: 'fETH+FRAXBP',
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    gaugeType: 0,
+    // lpPoolToken: config.POOLS_LIST_GAUGE.fETH_FRAXBP.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.fETH_FRAXBP.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.fETH_FRAXBP.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.fETH_FRAXBP.manageConvexGauge,
+    rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
+    zapTokens: [
+      {
+        symbol: 'curve_fETH_FRAXBP',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.fETH_FRAXBP.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
 ]
 
 export const REBALANCE_POOLS_LIST = [

@@ -91,12 +91,15 @@ const useGauge = () => {
         })
         console.log('__GaugeList---GaugeList-', GaugeList)
 
+        const GaugeList1 = await multiCallsV2([GaugeList[0], GaugeList[1]])
+        const GaugeList2 = await multiCallsV2([GaugeList[2], GaugeList[3]])
+
         const allGaugeBaseInfo = await multiCallsV2({
           total_weight: get_total_weight(),
           n_gauge_types: n_gauge_types(),
           FXNRate: rate(),
-          GaugeList,
         })
+        allGaugeBaseInfo.GaugeList = [...GaugeList1, ...GaugeList2]
         console.log('__GaugeList--allGaugeBaseInfo----', allGaugeBaseInfo)
         // fetchGaugeListApys
         const fetchGaugeListApys = allGaugeBaseInfo.GaugeList.map(
