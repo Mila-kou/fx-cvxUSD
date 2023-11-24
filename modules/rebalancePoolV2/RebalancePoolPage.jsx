@@ -12,13 +12,13 @@ export default function RebalancePoolPage() {
   const poolAData = usePool({
     rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_APool,
     rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_APool,
+      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
     infoKey: 'rebalancePoolV2_info_A',
   })
   const poolBData = usePool({
     rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_BPool,
     rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_BPool,
+      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
     infoKey: 'rebalancePoolV2_info_B',
   })
 

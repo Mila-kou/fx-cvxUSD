@@ -7,25 +7,25 @@ import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
 import useGaugeController from './controller/useGaugeController'
 
-import RebalancePoolCell from '@/modules/rebalancePool/components/RebalancePoolCell'
-import usePool from '@/modules/rebalancePool/hooks/usePool'
+import RebalancePoolCell from '@/modules/rebalancePoolV2/components/RebalancePoolCell'
+import usePool from '@/modules/rebalancePoolV2/controller/usePool'
 
 export default function EarningPoolPage() {
   const { pageData, ...pageOthers } = useGaugeController()
   console.log('POOLS_LIST---pagedata', pageData)
 
   const poolAData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_RebalancePool_A,
+    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_APool,
     rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_A,
-    infoKey: 'rebalancePool_info_A',
+      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
+    infoKey: 'rebalancePoolV2_info_A',
   })
-  // const poolBData = usePool({
-  //   rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
-  //   rebalanceWithBonusTokenAddress:
-  //     tokens.contracts.fx_RebalanceWithBonusToken_B,
-  //   infoKey: 'rebalancePool_info_B',
-  // })
+  const poolBData = usePool({
+    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_BPool,
+    rebalanceWithBonusTokenAddress:
+      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
+    infoKey: 'rebalancePoolV2_info_B',
+  })
 
   return (
     <div className={styles.container}>
@@ -47,12 +47,12 @@ export default function EarningPoolPage() {
           contractType="fx_RebalancePool_A"
           {...poolAData}
         />
-        {/* <RebalancePoolCell
+        <RebalancePoolCell
           title="Rebalance Pool B"
           contractType="fx_RebalancePool_B"
           hasXETH
           {...poolBData}
-        /> */}
+        />
         {pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
         ))}
