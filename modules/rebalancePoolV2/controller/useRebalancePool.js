@@ -210,6 +210,8 @@ const useStabiltyPool = (infoKey) => {
         userXETHClaimable: '-',
         userXETHClaimableTvl_text: '-',
         myTotalValue_text: '-',
+        userFXNClaimable: '-',
+        userFXNClaimableTvl_text: '-',
       }
     }
   }, [boostableRebalancePoolInfo, fxInfo.baseInfo, ethPrice])

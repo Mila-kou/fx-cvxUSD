@@ -11,6 +11,7 @@ import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
+const FXNImg = '/images/FXN.svg'
 
 const item = REBALANCE_POOLS_LIST[0]
 
@@ -34,6 +35,8 @@ export default function PoolItem({
   userWstETHClaimableTvl_text,
   userXETHClaimable,
   userXETHClaimableTvl_text,
+  userFXNClaimable,
+  userFXNClaimableTvl_text,
 
   depositVisible,
   setDepositVisible,
@@ -93,6 +96,33 @@ export default function PoolItem({
                     Liquidator
                   </Button>
                 )}
+              </div>
+            </div>
+
+            <div className={cn(styles.cell, 'mt-[50px]')}>
+              <div>
+                <div className={styles.cell}>
+                  <div className={styles.stETHWrap}>
+                    <img src={FXNImg} />
+                  </div>
+                  <div className={styles.cellContent}>
+                    <p className="text-[18px]">Earned</p>
+                    <h2 className="text-[24px]">
+                      {dollarText(userFXNClaimableTvl_text)}
+                    </h2>
+                    <p className="text-[16px]">{userFXNClaimable} FXN</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <Button
+                  disabled={!canClaim.wstETH}
+                  loading={claiming.wstETH}
+                  onClick={() => handleClaim('wstETH', true)}
+                  type="second"
+                >
+                  Claim
+                </Button>
               </div>
             </div>
 

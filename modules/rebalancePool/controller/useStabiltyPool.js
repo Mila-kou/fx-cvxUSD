@@ -16,7 +16,7 @@ const useStabiltyPool = (infoKey) => {
   const { current } = useWeb3()
   const { ethPrice } = useFxCommon()
   console.log(
-    'stabilityPoolInfo---fxInfo--ethPrice--',
+    'stabilityPoolInfo---globalState--',
     stabilityPoolInfo,
     fxInfo,
     ethPrice

@@ -67,7 +67,7 @@ const useGauge = () => {
           _lpGaugeContractList.push(_lpGaugeContract)
 
           return {
-            // ...item,
+            ...item,
             baseInfo: {
               symbol: symbol(),
               totalSupply: totalSupply(),

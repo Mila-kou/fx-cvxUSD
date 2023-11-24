@@ -13,7 +13,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
     contractAddress,
     abi.FX_RebalancePoolABI
   )
-
+  console.log('stabilityPoolInfo---contractAddress-----', contractAddress)
   const { contract: wstETHContract } = useWstETH()
 
   const fetchBaseInfo = useCallback(async () => {
@@ -40,7 +40,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
       ] = await multiCallsV2(apiCalls)
 
       console.log(
-        'BaseInfo222222',
+        'stabilityPoolInfo---BaseInfo222222-----',
         // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
         // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
         //  betaRes,
@@ -59,7 +59,7 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         tokensPerStEth,
       }
     } catch (error) {
-      console.log('baseInfoError==>', error)
+      console.log('stabilityPoolInfo---baseInfoError==>', error)
       return {}
     }
   }, [fx_rebalancePoolContract, multiCallsV2, _currentAccount])

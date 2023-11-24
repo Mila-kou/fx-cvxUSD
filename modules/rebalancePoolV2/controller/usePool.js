@@ -74,10 +74,7 @@ export default function usePool({
 
       console.log('handleClaim-----', symbol, wrap)
 
-      const apiCall = FX_RebalancePoolContract.methods.claim(
-        config.tokens[symbol],
-        wrap
-      )
+      const apiCall = FX_RebalancePoolContract.methods.claim(currentAccount)
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
