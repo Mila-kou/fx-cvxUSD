@@ -284,9 +284,10 @@ export default function Redeem({ slippage }) {
         _fTokenIn = 0
       }
       if (symbol === 'stETH') {
-        minout_ETH = await marketContract.methods
+        const { _baseOut } = await marketContract.methods
           .redeem(_fTokenIn, _xTokenIn, _account, 0)
           .call({ from: _account })
+        minout_ETH = _baseOut
       } else {
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
         const { _dstOut } = await FxGatewayContract.methods
@@ -409,7 +410,7 @@ export default function Redeem({ slippage }) {
       setRedeeming(false)
       initPage()
     } catch (e) {
-      console.log('eeee---', e)
+      console.log('redeem---error', e)
       setRedeeming(false)
     }
   }
