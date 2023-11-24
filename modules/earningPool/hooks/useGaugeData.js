@@ -11,6 +11,7 @@ const useGaugeData = () => {
   const { _currentAccount, web3, isAllReady, blockNumber } = useWeb3()
   const { getContract } = useContract()
   const multiCallsV2 = useMutiCallV2()
+  const [data, setData] = useState([])
 
   const getGaugeContract = useCallback(
     (lpGaugeAddress) => {
@@ -39,6 +40,7 @@ const useGaugeData = () => {
       try {
         const checkPointList = []
         let checkPointFn
+
         const userCalls = arr.map((item, index) => {
           const allowanceContractAddr = item.lpGaugeAddress
           const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
@@ -54,7 +56,7 @@ const useGaugeData = () => {
           }
 
           return {
-            ...item,
+            // ...item,
             // lpGaugeContract: _lpGaugeContract,
             userInfo: {
               // checkPointRes: checkpoint(_currentAccount),
@@ -66,10 +68,17 @@ const useGaugeData = () => {
             },
           }
         })
-        const allUserData = await multiCallsV2(userCalls, {
-          from: _currentAccount,
-        })
+
+        const allUserData1 = await multiCallsV2([userCalls[0], userCalls[1]])
+        const allUserData2 = await multiCallsV2([userCalls[2], userCalls[3]])
+        const allUserData = [...allUserData1, ...allUserData2].map(
+          (item, index) => ({
+            ...item,
+            ...arr[index],
+          })
+        )
         console.log('allUserData----', allUserData)
+        setData(allUserData)
         return allUserData
       } catch (error) {
         console.log('allUserData----error', error)
@@ -79,22 +88,24 @@ const useGaugeData = () => {
     [getContract, multiCallsV2, _currentAccount]
   )
 
-  const [{ data: allPoolsUserInfo, refetch: refetchUserInfo }] = useQueries({
-    queries: [
-      {
-        queryKey: ['allPoolsUserInfo', _currentAccount],
-        queryFn: () => fetchAllPoolUserData(POOLS_LIST),
-        enabled: isAllReady,
-        initialData: [],
-      },
-    ],
-  })
+  const [{ data: allPoolsUserInfo, refetch: refetchUserInfo, isFetching }] =
+    useQueries({
+      queries: [
+        {
+          queryKey: ['allPoolsUserInfo', _currentAccount],
+          queryFn: () => fetchAllPoolUserData(POOLS_LIST),
+          enabled: isAllReady,
+          initialData: [],
+        },
+      ],
+    })
 
   useEffect(() => {
+    if (isFetching) return
     refetchUserInfo()
   }, [_currentAccount, blockNumber])
 
-  return { allPoolsUserInfo }
+  return { allPoolsUserInfo: data }
 }
 
 export default useGaugeData
