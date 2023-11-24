@@ -38,9 +38,9 @@ export default function PoolCell({
   const canCast = useMemo(() => {
     if (voteData?.userPower) {
       const _remaining = remaining + voteData.userPower
-      return voteData.canVote && _remaining >= power
+      return voteData?.canVote && _remaining >= power
     }
-    return power && voteData.canVote && remaining >= power
+    return power && voteData?.canVote && remaining >= power
   }, [voteData, power, remaining])
 
   const onChange = (v) => {
@@ -112,7 +112,7 @@ export default function PoolCell({
               Cast Vote
             </Button>
           </div>
-          {voteData.canVote ? null : (
+          {voteData?.canVote ? null : (
             <NoticeCard
               content={[
                 `Cannot change weight votes more often than once in 10 days. You can vote after the ${voteData.canVoteTime}`,
