@@ -61,9 +61,7 @@ export default function RebalancePoolCell({
             <p className="text-[14px] text-[var(--second-text-color)]">fETH</p>
           </div>
         </div>
-        <div className="w-[90px] text-[16px]">
-          {poolData.poolTotalSupplyTvl_text}
-        </div>
+        <div className="w-[90px] text-[16px]">{poolData.poolTotalSupply}</div>
         <div className="w-[180px]">{poolData.apy}</div>
         <div className="w-[60px] text-[16px]">{userDeposit}</div>
         <div className="w-[120px]">
