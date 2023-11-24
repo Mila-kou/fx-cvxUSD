@@ -1,6 +1,8 @@
 const CLEVIcon = '/assets/tokens/clev.svg'
 const FXNIcon = '/tokens/FXN.svg'
 const stETHIcon = '/tokens/steth.svg'
+const crvIcon = '/tokens/0xd533a949740bb3306d119cc777fa900ba034cd52.png'
+const cvxIcon = '/tokens/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b.png'
 
 const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
@@ -173,7 +175,7 @@ const TOKENS_INFO = {
   clevCVX: ['clev', tokens.clevCVX, 18, 'aldClevCVX'],
   veclev: ['', contracts.aladdinVeCLEV, 18, 'aldVeclev'],
   vefee: ['', contracts.aladdinVeFee, 18, 'aldVefee'],
-  cvx: ['convex-finance', tokens.cvx, 18],
+  cvx: ['convex-finance', tokens.cvx, 18, 'cvx', cvxIcon],
   frax: ['frax', tokens.frax, 18, 'frax'],
   busd: ['binance-usd', tokens.busd, 18, 'busd'],
   tusd: ['true-usd', tokens.tusd, 18, 'TUSD'],
@@ -182,6 +184,7 @@ const TOKENS_INFO = {
   xETH: ['xETH', tokens.xETH, 18, 'xETH'],
   veFXN: ['veFXN', tokens.veFXN, 18, 'veFXN'],
   fxn: ['FXN', tokens.FXN, 18, 'FXN', FXNIcon],
+  crv: ['CRV', tokens.crv, 18, 'CRV', crvIcon],
 }
 
 const zapTokens = {

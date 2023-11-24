@@ -23,7 +23,12 @@ export const POOLS_LIST = [
     lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_xETH.gauge,
     manageConvexGaugeAddress:
       config.POOLS_LIST_GAUGE.ETH_xETH.manageConvexGauge,
-    rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
+    rewardTokens: [
+      config.TOKENS_INFO.fxn,
+      config.TOKENS_INFO.stETH,
+      config.TOKENS_INFO.cvx,
+      config.TOKENS_INFO.crv,
+    ],
     zapTokens: [
       {
         symbol: 'Curve_xETH_ETH',
@@ -50,7 +55,12 @@ export const POOLS_LIST = [
     lpAddress: config.POOLS_LIST_GAUGE.ETH_FXN.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_FXN.gauge,
     manageConvexGaugeAddress: config.POOLS_LIST_GAUGE.ETH_FXN.manageConvexGauge,
-    rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
+    rewardTokens: [
+      config.TOKENS_INFO.fxn,
+      config.TOKENS_INFO.stETH,
+      config.TOKENS_INFO.cvx,
+      config.TOKENS_INFO.crv,
+    ],
     zapTokens: [
       {
         symbol: 'Curve_FXN_ETH',
@@ -75,7 +85,12 @@ export const POOLS_LIST = [
     lpGaugeAddress: config.POOLS_LIST_GAUGE.crvUSD_fETH.gauge,
     manageConvexGaugeAddress:
       config.POOLS_LIST_GAUGE.crvUSD_fETH.manageConvexGauge,
-    rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
+    rewardTokens: [
+      config.TOKENS_INFO.fxn,
+      config.TOKENS_INFO.stETH,
+      config.TOKENS_INFO.cvx,
+      config.TOKENS_INFO.crv,
+    ],
     zapTokens: [
       {
         symbol: 'curve_fETH_crvUSD',
@@ -100,7 +115,12 @@ export const POOLS_LIST = [
     lpGaugeAddress: config.POOLS_LIST_GAUGE.fETH_FRAXBP.gauge,
     manageConvexGaugeAddress:
       config.POOLS_LIST_GAUGE.fETH_FRAXBP.manageConvexGauge,
-    rewardTokens: [config.TOKENS_INFO.fxn, config.TOKENS_INFO.stETH],
+    rewardTokens: [
+      config.TOKENS_INFO.fxn,
+      config.TOKENS_INFO.stETH,
+      config.TOKENS_INFO.cvx,
+      config.TOKENS_INFO.crv,
+    ],
     zapTokens: [
       {
         symbol: 'curve_fETH_FRAXBP',

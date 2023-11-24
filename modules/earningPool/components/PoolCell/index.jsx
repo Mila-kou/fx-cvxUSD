@@ -156,16 +156,26 @@ export default function PoolCell({ cellData, ...pageOthers }) {
               fb4(userInfo?.userClaimables[index])
             )
           }
-          return (
-            <div className="flex gap-[6px] py-[2px]">
-              <img
-                key={index}
-                className="h-[20px]"
-                src={item[4] ?? '/images/f-logo.svg'}
-              />
-              <p className="text-[16px]">{_reward_text}</p>
-            </div>
-          )
+          // const isOnlineRewardToken =
+          //   cellData.rewardDatas &&
+          //   cellData.rewardDatas.find(
+          //     (rewardToken) =>
+          //       rewardToken.rewardAddress.toLowerCase() == item[1].toLowerCase()
+          //   )
+          const isOnlineRewardToken = true
+          if (isOnlineRewardToken) {
+            return (
+              <div className="flex gap-[6px] py-[2px]">
+                <img
+                  key={index}
+                  className="h-[20px]"
+                  src={item[4] ?? '/images/f-logo.svg'}
+                />
+                <p className="text-[16px]">{_reward_text}</p>
+              </div>
+            )
+          }
+          return ''
         })}
       </>
     )
