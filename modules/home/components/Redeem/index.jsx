@@ -198,13 +198,18 @@ export default function Redeem({ slippage }) {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
-  const _account = useMemo(
-    () =>
-      needApprove && symbol !== 'stETH'
-        ? config.approvedAddress
-        : _currentAccount,
-    [needApprove, _currentAccount, symbol == 'stETH']
-  )
+  const _account = useMemo(() => {
+    const isInsufficient = cBN(tokenAmount).isGreaterThan(
+      tokens[isF ? 'fETH' : 'xETH'].balance
+    )
+
+    if (isInsufficient) {
+      return config.approvedAddress
+    }
+    return needApprove && symbol !== 'stETH'
+      ? config.approvedAddress
+      : _currentAccount
+  }, [needApprove, _currentAccount, tokenAmount, isF, symbol == 'stETH'])
 
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
@@ -263,6 +268,11 @@ export default function Redeem({ slippage }) {
   const getMinAmount = async (needLoading) => {
     try {
       if (!checkNotZoroNum(tokenAmount)) {
+        setMinOutETHtAmount({
+          minout_ETH: 0,
+          minout_slippage: 0,
+          minout_slippage_tvl: 0,
+        })
         return 0
       }
       if (needLoading) {
@@ -272,11 +282,14 @@ export default function Redeem({ slippage }) {
       let _mockAmount = tokenAmount
       let _mockRatio = 1
       let _redeemBonus = 0
+
+      console.log('_account----', _account)
+      // 默认比例 0.01
       if (_account !== _currentAccount) {
         _mockAmount = cBN(1).shiftedBy(18).toString()
         _mockRatio = cBN(tokenAmount).div(cBN(10).pow(18)).toFixed(4, 1)
-        // console.log('fromAmount----', _mockAmount, _mockRatio)
       }
+      console.log('fromAmount----', _mockAmount, _mockRatio)
 
       let minout_ETH
       let _fTokenIn = 0
@@ -308,7 +321,6 @@ export default function Redeem({ slippage }) {
         minout_ETH = _dstOut
         _redeemBonus = _bonus || cBN(0)
       }
-      console.log('minout_ETH----', minout_ETH)
       // 比例计算
       minout_ETH *= _mockRatio
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
@@ -489,7 +501,7 @@ export default function Redeem({ slippage }) {
 
       <BalanceInput
         symbol={symbol}
-        placeholder={canReceived ? minOutETHtAmount.minout_ETH : '-'}
+        placeholder={minOutETHtAmount.minout_ETH}
         decimals={config.zapTokens[symbol].decimals}
         usd={`$${toUsd}`}
         disabled

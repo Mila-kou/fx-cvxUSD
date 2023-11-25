@@ -215,6 +215,9 @@ function GlobalProvider({ children }) {
       WETH: {
         price: tokenPrice?.WETH?.usd?.toFixed(4) ?? 0,
       },
+      wstETH: {
+        price: tokenPrice?.wstETH?.usd?.toFixed(4) ?? 0,
+      },
     }
   }, [
     ethToken,

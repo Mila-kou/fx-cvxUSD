@@ -125,10 +125,13 @@ export default function Mint({ slippage }) {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
-  const _account = useMemo(
-    () => (needApprove ? config.approvedAddress : _currentAccount),
-    [needApprove, _currentAccount]
-  )
+  const _account = useMemo(() => {
+    const isInsufficient = cBN(fromAmount).isGreaterThan(tokens[symbol].balance)
+    if (isInsufficient) {
+      return config.approvedAddress
+    }
+    return needApprove ? config.approvedAddress : _currentAccount
+  }, [needApprove, fromAmount, symbol, _currentAccount])
 
   const [isF, isX] = useMemo(() => [selected === 0, selected === 1], [selected])
 
@@ -246,6 +249,7 @@ export default function Mint({ slippage }) {
               .times(getGasPrice)
               .toFixed(0, 1)
             if (
+              _account === _currentAccount &&
               cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
             ) {
               _ETHtAmountAndGas = cBN(tokens.ETH.balance)
@@ -701,7 +705,7 @@ export default function Mint({ slippage }) {
       <BalanceInput
         symbol="fETH"
         color={isF ? 'blue' : ''}
-        placeholder={canReceived ? FETHtAmount.minout_ETH : '-'}
+        placeholder={checkNotZoroNum(fromAmount) ? FETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${fnav}`}
@@ -717,7 +721,7 @@ export default function Mint({ slippage }) {
         symbol="xETH"
         // tip="Bonus+"
         color={isX ? 'red' : ''}
-        placeholder={canReceived ? XETHtAmount.minout_ETH : '-'}
+        placeholder={checkNotZoroNum(fromAmount) ? XETHtAmount.minout_ETH : '-'}
         disabled
         className={styles.inputItem}
         usd={`$${xnav}`}
