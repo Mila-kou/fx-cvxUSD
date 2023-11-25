@@ -53,6 +53,8 @@ export default function Redeem({ slippage }) {
   const { contract: FxGatewayContract, address: fxGatewayContractAddress } =
     useFx_FxGateway()
 
+  const [redeemBouns, setRedeemBouns] = useState(0)
+
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
 
   const {
@@ -255,6 +257,7 @@ export default function Redeem({ slippage }) {
       minout_slippage: 0,
       minout_slippage_tvl: 0,
     })
+    setRedeemBouns(0)
   }
 
   const getMinAmount = async (needLoading) => {
@@ -268,6 +271,7 @@ export default function Redeem({ slippage }) {
 
       let _mockAmount = tokenAmount
       let _mockRatio = 1
+      let _redeemBonus = 0
       if (_account !== _currentAccount) {
         _mockAmount = cBN(1).shiftedBy(18).toString()
         _mockRatio = cBN(tokenAmount).div(cBN(10).pow(18)).toFixed(4, 1)
@@ -289,6 +293,7 @@ export default function Redeem({ slippage }) {
           .redeem(_fTokenIn, _xTokenIn, _account, 0)
           .call({ from: _account })
         minout_ETH = _baseOut
+        _redeemBonus = _bonus || cBN(0)
       } else {
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
         const { _dstOut, _bonus } = await FxGatewayContract.methods
@@ -301,6 +306,7 @@ export default function Redeem({ slippage }) {
           )
           .call({ from: _account })
         minout_ETH = _dstOut
+        _redeemBonus = _bonus || cBN(0)
       }
       console.log('minout_ETH----', minout_ETH)
       // 比例计算
@@ -321,6 +327,7 @@ export default function Redeem({ slippage }) {
         ),
         minout_slippage_tvl: _minOut_ETH_tvl,
       })
+      setRedeemBouns((_redeemBonus *= _mockRatio))
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
@@ -502,6 +509,12 @@ export default function Redeem({ slippage }) {
           ]}
         />
       )}
+      {isFETHBouns && isF && redeemBouns ? (
+        <DetailCell
+          title="Redeem fETH Bonus:"
+          content={[fb4(cBN(redeemBouns)), '', 'stETH']}
+        />
+      ) : null}
 
       {showDisabledNotice ? (
         <NoticeCard
