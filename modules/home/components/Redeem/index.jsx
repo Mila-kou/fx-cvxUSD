@@ -11,7 +11,7 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
-import { DetailCell, NoticeCard } from '../Common'
+import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import Button from '@/components/Button'
 import useFxCommon_New from '../../hooks/useFxCommon_New'
 
@@ -76,6 +76,7 @@ export default function Redeem({ slippage }) {
     xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
     baseInfo,
+    isFETHBouns,
   } = useETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -437,6 +438,18 @@ export default function Redeem({ slippage }) {
 
   return (
     <div className={styles.container}>
+      {isFETHBouns ? (
+        <BonusCard
+          title={`Redeem fETH will earn ${fb4(
+            cBN(baseInfo.bonusRatioRes).times(100),
+            false,
+            18,
+            2
+          )}% bonus now`}
+          amount=""
+          symbol=""
+        />
+      ) : null}
       <BalanceInput
         placeholder="-"
         balance={fb4(tokens.fETH.balance, false)}
