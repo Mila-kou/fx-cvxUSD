@@ -109,9 +109,10 @@ export default function Redeem({ slippage }) {
     const { reservePoolBalancesRes } = baseInfo
 
     // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
-    return BigNumber.min(cBN(reservePoolBalancesRes), redeemBouns)
-      .multipliedBy(baseInfo.bonusRatioRes)
-      .div(10e17)
+    return BigNumber.min(
+      cBN(reservePoolBalancesRes),
+      cBN(redeemBouns).multipliedBy(baseInfo.bonusRatioRes).div(10e17)
+    )
   }, [redeemBouns, baseInfo?.reservePoolBalancesRes])
 
   const [_fnav, _xnav, _ethPrice_text, _isPriceValid] = useMemo(() => {
