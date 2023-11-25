@@ -273,6 +273,7 @@ export default function Redeem({ slippage }) {
           minout_slippage: 0,
           minout_slippage_tvl: 0,
         })
+        setRedeemBouns(0)
         return 0
       }
       if (needLoading) {
