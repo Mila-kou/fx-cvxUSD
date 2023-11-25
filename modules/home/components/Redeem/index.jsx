@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
+import BigNumber from 'bignumber.js'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
@@ -103,6 +104,15 @@ export default function Redeem({ slippage }) {
     }
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
+
+  const bonus_text = useMemo(() => {
+    const { reservePoolBalancesRes } = baseInfo
+
+    // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
+    return BigNumber.min(cBN(reservePoolBalancesRes), redeemBouns)
+      .multipliedBy(baseInfo.bonusRatioRes)
+      .div(10e17)
+  }, [redeemBouns, baseInfo?.reservePoolBalancesRes])
 
   const [_fnav, _xnav, _ethPrice_text, _isPriceValid] = useMemo(() => {
     if (
@@ -307,7 +317,7 @@ export default function Redeem({ slippage }) {
           .redeem(_fTokenIn, _xTokenIn, _account, 0)
           .call({ from: _account })
         minout_ETH = _baseOut
-        _redeemBonus = _bonus || cBN(0)
+        _redeemBonus = cBN(_bonus || 0)
       } else {
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
         const { _dstOut, _bonus } = await FxGatewayContract.methods
@@ -320,7 +330,7 @@ export default function Redeem({ slippage }) {
           )
           .call({ from: _account })
         minout_ETH = _dstOut
-        _redeemBonus = _bonus || cBN(0)
+        _redeemBonus = cBN(_bonus || 0)
       }
       // 比例计算
       minout_ETH *= _mockRatio
@@ -340,7 +350,7 @@ export default function Redeem({ slippage }) {
         ),
         minout_slippage_tvl: _minOut_ETH_tvl,
       })
-      setRedeemBouns((_redeemBonus *= _mockRatio))
+      setRedeemBouns(_redeemBonus.multipliedBy(_mockRatio))
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
@@ -526,11 +536,7 @@ export default function Redeem({ slippage }) {
       {isFETHBouns && isF && redeemBouns ? (
         <DetailCell
           title="Redeem fETH Bonus:"
-          content={[
-            fb4(cBN(redeemBouns).multipliedBy(5).div(100)),
-            '',
-            'stETH',
-          ]}
+          content={[fb4(bonus_text), '', 'stETH']}
         />
       ) : null}
 
