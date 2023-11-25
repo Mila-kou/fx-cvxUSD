@@ -526,7 +526,11 @@ export default function Redeem({ slippage }) {
       {isFETHBouns && isF && redeemBouns ? (
         <DetailCell
           title="Redeem fETH Bonus:"
-          content={[fb4(cBN(redeemBouns)), '', 'stETH']}
+          content={[
+            fb4(cBN(redeemBouns).multipliedBy(5).div(100)),
+            '',
+            'stETH',
+          ]}
         />
       ) : null}
 
