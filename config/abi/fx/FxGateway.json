@@ -343,6 +343,11 @@
         "internalType": "uint256",
         "name": "_dstOut",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonus",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -378,6 +383,11 @@
       {
         "internalType": "uint256",
         "name": "_amountOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonus",
         "type": "uint256"
       }
     ],
