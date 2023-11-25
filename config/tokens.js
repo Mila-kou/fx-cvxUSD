@@ -90,6 +90,8 @@ const contracts = {
 
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
 
+  fx_RebalancePoolRegistry: '0xc337bfa01A3aFC8f8D22ccbA87f1B6AA2aAf37f8',
+
   // farming
   fx_BoostableRebalancePool_APool: '0xCE225954423b3F7Bd4b6e88a0E46569ce01CF0c6',
   fx_BoostableRebalancePool_BPool: '0xD0959fe55A6510C78E5Ec3642246882eff7509E9',

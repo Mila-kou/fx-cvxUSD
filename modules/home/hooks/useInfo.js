@@ -14,6 +14,7 @@ import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4 } from '@/utils/index'
 import config from '@/config/index'
+import { useRebalancePoolRegistryPool } from '@/hooks/useGaugeContracts'
 
 const useInfo = () => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
@@ -25,6 +26,8 @@ const useInfo = () => {
   const { contract: treasuryContract } = useFX_stETHTreasury()
   const { contract: reservePoolContract } = useFx_ReservePool()
   const { contract: fxETHTwapOracle } = useFx_FxETHTwapOracle()
+  const { contract: RebalancePoolRegistryPoolContract } =
+    useRebalancePoolRegistryPool()
   const stETHContract = erc20Contract(config.tokens.stETH)
   const [maxAbleFToken, setMaxAbleFToken] = useState({})
   const fetchBaseInfo = useCallback(async () => {
@@ -34,6 +37,8 @@ const useInfo = () => {
       balanceOf: fETHBalanceOf,
     } = fETHContract.methods
     const { totalSupply: xETHTotalSupplyFn } = xETHContract.methods
+    const { totalSupply: RebalancePoolRegistryPoolTotalSupply } =
+      RebalancePoolRegistryPoolContract.methods
     const {
       getCurrentNav,
       collateralRatio,
@@ -81,6 +86,7 @@ const useInfo = () => {
         stETHContract.methods.balanceOf(config.contracts.fx_ReservePool),
         bonusRatio(config.tokens.stETH),
         fxETHTwapOracle.methods.getPrice(),
+        RebalancePoolRegistryPoolTotalSupply(),
       ]
       const [
         fETHTotalSupplyRes,
@@ -105,6 +111,7 @@ const useInfo = () => {
         reservePoolBalancesRes,
         bonusRatioRes,
         fxETHTwapOraclePriceeInfo,
+        RebalancePoolRegistryPoolTotalSupplyRes,
       ] = await multiCallsV2(apiCalls)
       // const reservePoolBalancesRes = 1e18
       // const bonusRatioRes = 1e18
@@ -123,7 +130,8 @@ const useInfo = () => {
         baseTokenCapRes,
         reservePoolBalancesRes,
         bonusRatioRes,
-        fxETHTwapOraclePriceeInfo
+        fxETHTwapOraclePriceeInfo,
+        RebalancePoolRegistryPoolTotalSupplyRes
       )
 
       return {
@@ -149,6 +157,7 @@ const useInfo = () => {
         reservePoolBalancesRes,
         bonusRatioRes,
         fxETHTwapOraclePriceeInfo,
+        RebalancePoolRegistryPoolTotalSupplyRes,
       }
     } catch (error) {
       console.log('baseInfoError==>', error)

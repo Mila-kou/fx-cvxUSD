@@ -60,6 +60,9 @@ import FX_fx_SharedLiquidityGaugeABI from './fx/farming/fx_SharedLiquidityGauge.
 import FX_BoostableRebalancePoolABI from './fx/farming/fx_BoostableRebalancePool.json'
 import FX_RebalancePoolGaugeClaimerABI from './fx/farming/fx-RebalancePoolGaugeClaimer.json'
 
+// rebalance
+import FX_RebalancePoolRegistryABI from './fx/fx-RebalancePoolRegistry.json'
+
 export default {
   erc20ABI,
   multiCallABI,
@@ -115,6 +118,8 @@ export default {
 
   FX_BoostableRebalancePoolABI,
   FX_RebalancePoolGaugeClaimerABI,
+
+  FX_RebalancePoolRegistryABI,
 
   // gauge
 }

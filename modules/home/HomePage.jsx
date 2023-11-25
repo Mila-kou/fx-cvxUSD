@@ -629,7 +629,6 @@ export default function HomePage() {
   const [priceLoading, setPriceLoading] = useState(0)
   const ethMockTwapOracleAddr = '0x8DA04c56FEc95e4B76030272104c246cE5c93BD7'
   const stEthMockTwapOracleAddr = '0x1FAc89d15eC45C1c09A8b911d6C265F59732Fa72'
-
   const { contract: ethMockTwapOracleContract } = useContract(
     ethMockTwapOracleAddr,
     abi.MockTwapOracleAbi

@@ -39,6 +39,18 @@ export const useBoostableRebalancePool = (gaugeAddress) => {
   )
 }
 
+export const useRebalancePoolRegistryPool = () => {
+  const address = config.contracts.fx_RebalancePoolRegistry
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_RebalancePoolRegistryABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
 export const useRebalanceWithBonusToken = (token) => {
   const address = token
   const { getContract } = useContract()

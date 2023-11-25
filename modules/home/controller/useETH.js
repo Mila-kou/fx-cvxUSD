@@ -26,6 +26,7 @@ const useETH = () => {
     xETHBeta_text,
     ethPrice,
     isXETHBouns,
+    isFETHBouns,
   } = useFxCommon()
   const fxCommonNew = useFxCommon_New()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
@@ -369,6 +370,7 @@ const useETH = () => {
   return {
     ...fxInfo,
     isXETHBouns,
+    isFETHBouns,
     fETHAddress,
     xETHAddress,
     fETHContract,
