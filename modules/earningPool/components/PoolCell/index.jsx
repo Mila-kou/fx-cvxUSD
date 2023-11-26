@@ -163,7 +163,10 @@ export default function PoolCell({ cellData, ...pageOthers }) {
               (rewardToken) =>
                 rewardToken.rewardAddress.toLowerCase() == item[1].toLowerCase()
             )
-          if (isOnlineRewardToken) {
+          if (
+            isOnlineRewardToken ||
+            item[1].toLowerCase() == config.tokens.FXN.toLowerCase()
+          ) {
             return (
               <div className="flex gap-[6px] py-[2px]">
                 <img
