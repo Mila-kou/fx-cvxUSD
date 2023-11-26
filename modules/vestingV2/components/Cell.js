@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '@/components/Button'
 import styles from '../styles.module.scss'
+import NoticeModal from './NoticeModal'
 
 function InfoItem({ title, value, unit }) {
   return (
@@ -65,6 +66,19 @@ export default function Cell({
   //     },
   //   ]
   // }
+
+  const [showNoticeModal, setShowNoticeModal] = useState(false)
+
+  const goClaim = () => {
+    setShowNoticeModal(false)
+    handleClaim()
+  }
+
+  const goConvert = () => {
+    setShowNoticeModal(false)
+    onConvert()
+  }
+
   return (
     <div className={styles.cell}>
       <div>
@@ -93,22 +107,27 @@ export default function Cell({
               <InfoItem title="End Time" value={`${latestTimeText}`} />
             )}
           </div>
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center gap-4 items-end">
             {onConvert ? (
-              <Button
-                width="150px"
-                height="56px"
-                onClick={onConvert}
-                loading={converting}
-              >
-                Convert
-              </Button>
+              <div>
+                <p className="text-[14px] text-[var(--yellow-color)]">
+                  Earn 100% + APY
+                </p>
+                <Button
+                  width="150px"
+                  height="56px"
+                  onClick={onConvert}
+                  loading={converting}
+                >
+                  Convert
+                </Button>
+              </div>
             ) : null}
-            {!!(canClaim * 1) && (
+            {!(canClaim * 1) && (
               <Button
                 width="150px"
                 height="56px"
-                onClick={handleClaim}
+                onClick={() => setShowNoticeModal(true)}
                 loading={claiming}
               >
                 Claim
@@ -149,6 +168,14 @@ export default function Cell({
             </Button>
           </div>
         </div>
+      ) : null}
+
+      {showNoticeModal ? (
+        <NoticeModal
+          onCancel={() => setShowNoticeModal(false)}
+          goClaim={goClaim}
+          goConvert={goConvert}
+        />
       ) : null}
     </div>
   )
