@@ -173,6 +173,41 @@ const useGaugeController = () => {
     [allGaugeBaseInfo, getGaugeApy]
   )
 
+  const getUserFXNNum = useCallback(
+    (PoolsUserInfoItem) => {
+      const {
+        snapshotRes,
+        userSnapshotRes,
+        workingBalanceRes,
+        integrate_fractionRes,
+      } = PoolsUserInfoItem || {}
+      if (!checkNotZoroNum(PoolsUserInfoItem.workingBalanceRes)) {
+        return 0
+      }
+      const rewards_pending_fxn = cBN(userSnapshotRes.rewards.pending)
+        .plus(
+          cBN(workingBalanceRes)
+            .times(
+              cBN(snapshotRes.integral).minus(
+                userSnapshotRes.checkpoint.integral
+              )
+            )
+            .div(1e18)
+        )
+        .toFixed(0)
+      // console.log(
+      //   'rewards_pending_fxn--workingBalanceRes--snapshotRes--userSnapshotRes--integrate_fractionRes----',
+      //   rewards_pending_fxn,
+      //   workingBalanceRes,
+      //   snapshotRes,
+      //   userSnapshotRes,
+      //   integrate_fractionRes
+      // )
+      return rewards_pending_fxn
+    },
+    [allPoolsUserInfo]
+  )
+
   const pageData = useMemo(() => {
     try {
       const data = POOLS_LIST.map((item, index) => {
@@ -187,6 +222,7 @@ const useGaugeController = () => {
           _userInfo.userShare,
           fb4(_userInfo.userShare)
         )
+        const fxnRewardData = getUserFXNNum(_userInfo)
         const _lpGaugeContract = getContract(
           item.lpGaugeAddress,
           abi.FX_fx_SharedLiquidityGaugeABI
@@ -196,6 +232,11 @@ const useGaugeController = () => {
           lpGaugeContract: _lpGaugeContract,
           baseInfo: _baseInfo,
           userInfo: _userInfo,
+          useFXNReward: fxnRewardData,
+          useFXNReward_text: checkNotZoroNumOption(
+            fxnRewardData,
+            fb4(fxnRewardData)
+          ),
           rewardDatas: _rewardDatas,
           tvl_text,
           userShare_text,

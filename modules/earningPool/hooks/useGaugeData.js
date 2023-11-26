@@ -50,6 +50,10 @@ const useGaugeData = () => {
             claimable,
             checkpoint,
             claimable_tokens,
+            integrate_fraction,
+            userSnapshot,
+            snapshot,
+            workingBalanceOf,
           } = _lpGaugeContract.methods
           if (index == 0) {
             checkPointFn = _lpGaugeContract
@@ -65,6 +69,10 @@ const useGaugeData = () => {
               userClaimables: item.rewardTokens.map((rewardToken) =>
                 claimable(_currentAccount, rewardToken[1])
               ),
+              userSnapshotRes: userSnapshot(_currentAccount),
+              integrate_fractionRes: integrate_fraction(_currentAccount),
+              snapshotRes: snapshot(),
+              workingBalanceRes: workingBalanceOf(_currentAccount),
             },
           }
         })

@@ -25,7 +25,7 @@ const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
-  const { userInfo = {}, lpGaugeContract } = cellData
+  const { userInfo = {}, useFXNReward_text, lpGaugeContract } = cellData
   const boostInfo = useVeBoost_c(cellData)
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
@@ -163,10 +163,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
               (rewardToken) =>
                 rewardToken.rewardAddress.toLowerCase() == item[1].toLowerCase()
             )
-          if (
-            isOnlineRewardToken ||
+          const isFXNReward =
             item[1].toLowerCase() == config.tokens.FXN.toLowerCase()
-          ) {
+          if (isOnlineRewardToken || isFXNReward) {
             return (
               <div className="flex gap-[6px] py-[2px]">
                 <img
@@ -174,7 +173,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
                   className="h-[20px]"
                   src={item[4] ?? '/images/f-logo.svg'}
                 />
-                <p className="text-[16px]">{_reward_text}</p>
+                <p className="text-[16px]">
+                  {isFXNReward ? useFXNReward_text : _reward_text}
+                </p>
               </div>
             )
           }

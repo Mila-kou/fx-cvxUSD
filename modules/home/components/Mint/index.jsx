@@ -231,9 +231,16 @@ export default function Mint({ slippage }) {
         let _ETHtAmountAndGas = _mockAmount
 
         if (isSwap) {
-          minout_ETH = await FxGatewayContract.methods
+          const resData = await FxGatewayContract.methods
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
             .call({ from: _account })
+          if (typeof resData === 'object') {
+            minout_ETH = resData._amountOut
+            const _userXETHBonus = cBN(resData._bonus || 0)
+            setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
+          } else {
+            minout_ETH = resData
+          }
         } else if (symbol === 'stETH') {
           const resData = await marketContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
