@@ -151,10 +151,6 @@ export default function FAQ({ open, onCancel }) {
                 notes:
               </p>
               <p>
-                * 1-day waiting period after latest withdraw request, before
-                withdrawal-requested fETH is claimable
-              </p>
-              <p>
                 * until it is claimed, withdrawal-requested fETH earns no yield
                 but may still be used for redemptions
               </p>
