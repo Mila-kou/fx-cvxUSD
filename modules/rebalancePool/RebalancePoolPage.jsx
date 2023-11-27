@@ -15,16 +15,17 @@ export default function RebalancePoolPage() {
       tokens.contracts.fx_RebalanceWithBonusToken_A,
     infoKey: 'rebalancePool_info_A',
   })
-  const poolBData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
-    rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_B,
-    infoKey: 'rebalancePool_info_B',
-  })
+  // const poolBData = usePool({
+  //   rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
+  //   rebalanceWithBonusTokenAddress:
+  //     tokens.contracts.fx_RebalanceWithBonusToken_B,
+  //   infoKey: 'rebalancePool_info_B',
+  // })
 
   const totalSupplyTvlText = fb4(
     cBN(poolAData.stabilityPoolTotalSupplyTvl).plus(
-      poolBData.stabilityPoolTotalSupplyTvl
+      0
+      // poolBData.stabilityPoolTotalSupplyTvl
     ),
     false,
     0
@@ -32,7 +33,8 @@ export default function RebalancePoolPage() {
 
   const totalSupplyText = fb4(
     cBN(poolAData.stabilityPoolTotalSupply_res).plus(
-      poolBData.stabilityPoolTotalSupply_res
+      0
+      // poolBData.stabilityPoolTotalSupply_res
     )
   )
 
@@ -67,11 +69,11 @@ export default function RebalancePoolPage() {
             <h2>{poolAData.apy}%</h2>
             <p>{poolAData.stabilityPoolTotalSupply} fETH</p>
           </div>
-          <div className={styles.item}>
+          {/* <div className={styles.item}>
             <p>B Pool APR (xETH)</p>
             <h2>{poolBData.apy}%</h2>
             <p>{poolBData.stabilityPoolTotalSupply} fETH</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -80,12 +82,12 @@ export default function RebalancePoolPage() {
         contractType="fx_RebalancePool_A"
         {...poolAData}
       />
-      <PoolItem
+      {/* <PoolItem
         title="My Rebalance Pool B"
         contractType="fx_RebalancePool_B"
         hasXETH
         {...poolBData}
-      />
+      /> */}
     </div>
   )
 }
