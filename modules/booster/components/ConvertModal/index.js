@@ -31,7 +31,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
             if (item.tokenName == 'SDT') {
               return old + item.apy / 2.5
             }
-            return old + item.apy * 1
+            return old + (item.tokenName ? item.apy * 1 : 0)
           }, 0)
         } else {
           const _itemObj = _typeData.find((item) => item.tokenName == tokenName)
