@@ -15,11 +15,10 @@ export default function NoticeModal({ onCancel, goConvert, goClaim }) {
       <div className={styles.info}>Get More Reward ?</div>
 
       <p className="text-[18px] ">
-        Recommended convert your vesting $FXN to $cvxFXN or $sdFXN to earn extra
-        rewards.
+        Convert $FXN to $cvxFXN or $sdFXN to earn extra rewards
       </p>
       <Button width="100%" className="mt-[48px]" onClick={goConvert}>
-        Go To Convert
+        Convert
       </Button>
       <Button
         type="second"
