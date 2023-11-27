@@ -123,7 +123,7 @@ export default function Cell({
                 </Button>
               </div>
             ) : null}
-            {canClaim * 1 && (
+            {!!(canClaim * 1) && (
               <Button
                 width="150px"
                 height="56px"
