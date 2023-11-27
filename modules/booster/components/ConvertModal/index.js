@@ -75,6 +75,10 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
           token: 'SDT',
           apy: cBN(getApy('sdFXN', 'SDT')).toFixed(2),
         },
+        {
+          token: 'wstETH',
+          apy: cBN(getApy('sdFXN', 'wstETH')).toFixed(2),
+        },
       ],
     },
   ]
