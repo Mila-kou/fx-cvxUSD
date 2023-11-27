@@ -24,29 +24,30 @@ const contracts = {
   fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
   fx_RebalanceWithBonusToken_A: '0x17f21f468d77E6e35702a9Ae7a9da50Db7F6a4f4',
   fx_RebalanceWithBonusToken_B: '0xFf71c3AF2d66E2bAFc8088000fFB4CbFf4Ed7814',
+  fx_RebalancePoolSplitter: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
 
   fx_VotingEscrowBoost: '0x1DC94c4Dba60f2880A40327EF465E364C57df03F',
   fx_VotingEscrowProxy: '0x9B487bA5eB7848352cbFFE20DE7bC3384660E945',
   fx_GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
 
-  fx_FxGateway: '0xC9A872dD728d714070aC60d6C6B890f917F3441F',
+  fx_FxGateway: '0x5c28b966aB37cFB9397bBc04595f91F0fBf06d9b',
   fx_ReservePool: '0x5d0Aacf75116d1645Db2B3d1Ca4b303ef0CA3752',
   fx_FxETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
 
   // ManageableVesting
   fx_Vesting: '0x2290eeFEa24A6E43b26C27187742bD1FEDC10BDB',
-  fx_ManageableVesting: '0xdddCAae9608D63C90017f700E3C51B9C781b97C7',
+  fx_ManageableVesting: '0x0E4f31a2f48418c90F5e9fa84Bf761D832C54ceD',
   fx_ManageableVesting_CvxFxnVestingManager:
-    '0xbEfe612CeCAeBA0111307Ee9967609B07DA52E17',
+    '0x43fCFe9F128b5e4271c7E25C47eFe91bA8896220',
   fx_ManageableVesting_SdFxnVestingManager:
-    '0x45F8C8194506b5026a7e198f5120d5913BbacFEe',
+    '0xA2FaffE31153e5E60F2352e3ed28ff973309C156',
   convex_cvxFxnStaking: '0xEC60Cd4a5866fb3B0DD317A46d3B474a24e06beF',
   stakeDao_sdFxnStaking: '0xbcfE5c47129253C6B8a9A00565B3358b488D42E0',
 
   FXN: '0x365AccFCa291e7D3914637ABf1F7635dB165Bb09',
   fx_FXN_treasury: '0x26B2ec4E02ebe2F54583af25b647b1D619e67BbF',
   fx_FXN_PlatformFeeDistributor: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
-  fx_PlatformFeeSpliter: '0xc6dEe5913e010895F3702bc43a40d661B13a40BD',
+  fx_PlatformFeeSpliter: '0x0084C2e1B1823564e597Ff4848a88D61ac63D703',
   fx_FXN_ProxyAdmin: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
   veFXN: '0xEC6B8A3F3605B083F7044C0F31f2cac0caf1d469',
   TokenMinter: '0xC8b194925D55d5dE9555AD1db74c149329F71DeF',
@@ -91,7 +92,7 @@ const contracts = {
 
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
 
-  fx_RebalancePoolRegistry: '0xc337bfa01A3aFC8f8D22ccbA87f1B6AA2aAf37f8',
+  fx_RebalancePoolRegistry: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
 
   // farming
   fx_BoostableRebalancePool_APool: '0xCE225954423b3F7Bd4b6e88a0E46569ce01CF0c6',

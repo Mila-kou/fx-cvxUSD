@@ -26,6 +26,7 @@ const routers = [
   // ['Earning Pools', '/earning-pool'],
   // ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
+  ['Booster Vesting', '/booster-vesting'],
   ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
