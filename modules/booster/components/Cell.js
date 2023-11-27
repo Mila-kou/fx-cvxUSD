@@ -110,9 +110,9 @@ export default function Cell({
           <div className="flex justify-center gap-4 items-end">
             {onConvert ? (
               <div>
-                <p className="text-[14px] text-[var(--yellow-color)]">
+                {/* <p className="text-[14px] text-[var(--yellow-color)]">
                   Earn 100% + APY
-                </p>
+                </p> */}
                 <Button
                   width="150px"
                   height="56px"
