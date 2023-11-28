@@ -662,7 +662,6 @@ export default function Mint({ slippage }) {
 
   useEffect(() => {
     getMinAmount(true)
-    // handleGetAllMinAmount()
   }, [isF, slippage, fromAmount, _account])
 
   const fromUsd = useMemo(() => {
