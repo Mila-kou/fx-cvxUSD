@@ -111,7 +111,6 @@ export default function Mint({ slippage }) {
   const bonus_text = useMemo(() => {
     const { reservePoolBalancesRes } = baseInfo
 
-    // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
     return BigNumber.min(reservePoolBalancesRes, mintXBouns, xETHBonus)
   }, [mintXBouns, baseInfo?.reservePoolBalancesRes, xETHBonus])
 

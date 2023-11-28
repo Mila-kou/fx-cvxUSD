@@ -108,7 +108,6 @@ export default function Redeem({ slippage }) {
   const bonus_text = useMemo(() => {
     const { reservePoolBalancesRes } = baseInfo
 
-    console.log('redeemBouns--memo-', redeemBouns.toString())
     return BigNumber.min(cBN(reservePoolBalancesRes), cBN(redeemBouns))
   }, [redeemBouns, baseInfo?.reservePoolBalancesRes])
 
