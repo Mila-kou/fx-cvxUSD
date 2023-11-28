@@ -112,8 +112,8 @@ export default function Mint({ slippage }) {
     const { reservePoolBalancesRes } = baseInfo
 
     // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
-    return BigNumber.min(cBN(reservePoolBalancesRes), mintXBouns)
-  }, [mintXBouns, baseInfo?.reservePoolBalancesRes])
+    return BigNumber.min(reservePoolBalancesRes, mintXBouns, xETHBonus)
+  }, [mintXBouns, baseInfo?.reservePoolBalancesRes, xETHBonus])
 
   useEffect(() => {
     initPage()
@@ -663,7 +663,7 @@ export default function Mint({ slippage }) {
   useEffect(() => {
     getMinAmount(true)
     // handleGetAllMinAmount()
-  }, [isF, slippage, fromAmount])
+  }, [isF, slippage, fromAmount, _account])
 
   const fromUsd = useMemo(() => {
     if (symbol === 'fETH') {
