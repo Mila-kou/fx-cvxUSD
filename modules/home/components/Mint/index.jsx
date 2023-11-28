@@ -312,6 +312,7 @@ export default function Mint({ slippage }) {
         }
       } else {
         minout_ETH = 0
+        setMintXBouns(0)
       }
       console.log('minout_ETH----', minout_ETH)
 
