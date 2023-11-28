@@ -602,11 +602,11 @@ export default function Mint({ slippage }) {
 
   const checkPause = useCallback(() => {
     let isPaused = false
+    const isPausedMintfETH = checkMintPaused()
     if (isSwap) {
-      isPaused = checkSwapPause()
+      isPaused = checkSwapPause() || (isF && isPausedMintfETH)
     } else {
       if (isF) {
-        const isPausedMintfETH = checkMintPaused()
         isPaused = mintPaused || isPausedMintfETH || !_isValidPrice
       } else {
         isPaused = mintPaused || !_isValidPrice

@@ -38,6 +38,7 @@ export default function Cell({
   claimRewarding,
 
   canClaimReward,
+  convertFist,
 }) {
   let itemData = [
     {
@@ -127,7 +128,13 @@ export default function Cell({
               <Button
                 width="150px"
                 height="56px"
-                onClick={() => setShowNoticeModal(true)}
+                onClick={() => {
+                  if (convertFist) {
+                    setShowNoticeModal(true)
+                  } else {
+                    handleClaim()
+                  }
+                }}
                 loading={claiming}
               >
                 Claim
