@@ -7,19 +7,25 @@ import usePool from './controller/usePool'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
+import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 
 export default function RebalancePoolPage() {
+  const { rebalancePoolAddress, rebalanceWithBonusTokenAddress, infoKey } =
+    REBALANCE_POOLS_LIST[0]
+  const {
+    rebalancePoolAddress: rebalancePoolAddress_B,
+    rebalanceWithBonusTokenAddress: rebalanceWithBonusTokenAddress_B,
+    infoKey: infoKey_B,
+  } = REBALANCE_POOLS_LIST[0]
   const poolAData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_APool,
-    rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
-    infoKey: 'rebalancePoolV2_info_A',
+    rebalancePoolAddress,
+    rebalanceWithBonusTokenAddress,
+    infoKey,
   })
   const poolBData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_BPool,
-    rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
-    infoKey: 'rebalancePoolV2_info_B',
+    rebalancePoolAddress: rebalancePoolAddress_B,
+    rebalanceWithBonusTokenAddress: rebalanceWithBonusTokenAddress_B,
+    infoKey: infoKey_B,
   })
 
   const totalSupplyTvlText = fb4(

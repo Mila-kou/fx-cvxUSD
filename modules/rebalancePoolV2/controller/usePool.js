@@ -11,15 +11,16 @@ import {
   useRebalanceWithBonusToken,
 } from '@/hooks/useGaugeContracts'
 import { useGlobal } from '@/contexts/GlobalProvider'
+import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 
-export default function usePool({
-  rebalancePoolAddress,
-  rebalanceWithBonusTokenAddress,
-  infoKey,
-}) {
+export default function usePool({ infoKey }) {
   const { currentAccount, isAllReady } = useWeb3()
   const { fx_info } = useGlobal()
   const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
+  const _poolConfig = REBALANCE_POOLS_LIST.find(
+    (item) => item.infoKey == infoKey
+  )
+  const { rebalancePoolAddress, rebalanceWithBonusTokenAddress } = _poolConfig
   const { contract: FX_RebalancePoolContract } =
     useBoostableRebalancePool(rebalancePoolAddress)
 

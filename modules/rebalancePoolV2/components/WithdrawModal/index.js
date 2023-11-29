@@ -13,7 +13,6 @@ export default function WithdrawModal(props) {
   const { currentAccount, isAllReady } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
-
   const { logo, name, stakeTokenDecimals } = info
   const { userInfo } = poolData
 

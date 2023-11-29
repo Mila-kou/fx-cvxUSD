@@ -47,10 +47,10 @@ function GlobalProvider({ children }) {
     config.contracts.fx_RebalancePool_B
   )
   const rebalancePoolV2_info_A = useBoostableRebalancePoolData(
-    config.contracts.fx_BoostableRebalancePool_APool
+    'rebalancePoolV2_info_A'
   )
   const rebalancePoolV2_info_B = useBoostableRebalancePoolData(
-    config.contracts.fx_BoostableRebalancePool_BPool
+    'rebalancePoolV2_info_B'
   )
   const ethToken = useToken(config.tokens.eth)
   const stETHToken = useTokenBalance(config.tokens.stETH)

@@ -11,6 +11,7 @@ import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
+const fxnImg = '/images/FXN.svg'
 
 const item = POOLS_LIST[0]
 
@@ -27,7 +28,7 @@ export default function RebalancePoolCell({
   claiming,
   handleClaim,
 
-  stabilityPoolInfo,
+  boostableRebalancePoolInfo,
   userDeposit,
   userDepositTvl_text,
   myTotalValue_text,
@@ -66,6 +67,10 @@ export default function RebalancePoolCell({
         <div className="w-[60px] text-[16px]">{userDeposit}</div>
         <div className="w-[120px]">
           <div className="flex gap-[6px] py-[2px]">
+            <img className="h-[20px]" src={fxnImg} />
+            <p className="text-[16px]">{userWstETHClaimable}</p>
+          </div>
+          <div className="flex gap-[6px] py-[2px]">
             <img className="h-[20px]" src={stETHImg} />
             <p className="text-[16px]">{userWstETHClaimable}</p>
           </div>
@@ -86,37 +91,6 @@ export default function RebalancePoolCell({
       {openPanel ? (
         <div className={`${styles.panel}`}>
           <div className={`${styles.content} gap-[32px]`}>
-            <div className="shrink-0">
-              {userUnlockingBalance && userUnlockingBalance !== '-' ? (
-                <p className="text-[16px]">
-                  Unlocking: {userUnlockingBalance} fETH
-                </p>
-              ) : null}
-              {checkNotZoroNum(
-                stabilityPoolInfo?.userInfo?.unlockingBalanceOfRes._balance
-              ) ? (
-                <p className="text-[16px]">UnlockAt: {userUnlockingUnlockAt}</p>
-              ) : (
-                ''
-              )}
-              {userUnlockedBalance && userUnlockedBalance !== '-' ? (
-                <p className="text-[16px]">
-                  Unlocked: {userUnlockedBalance} fETH{'  '}
-                  <span
-                    className={cn(
-                      'text-[#6B79FC] underline',
-                      canUnlock
-                        ? 'cursor-pointer'
-                        : 'cursor-not-allowed opacity-[0.6]'
-                    )}
-                    onClick={handleUnlock}
-                  >
-                    Claim Funds
-                  </span>
-                </p>
-              ) : null}
-            </div>
-
             <Button size="small" onClick={handleDeposit}>
               Deposit
             </Button>
@@ -144,12 +118,12 @@ export default function RebalancePoolCell({
               size="small"
               disabled={!canClaim.wstETH}
               loading={claiming.wstETH}
-              onClick={() => handleClaim('wstETH', true)}
+              onClick={() => handleClaim()}
               type="second"
             >
               Claim
             </Button>
-            <Button
+            {/* <Button
               size="small"
               disabled={!canClaim.xETH}
               loading={claiming.xETH}
@@ -157,7 +131,7 @@ export default function RebalancePoolCell({
               type="second"
             >
               Claim
-            </Button>
+            </Button> */}
           </div>
         </div>
       ) : null}
@@ -167,7 +141,7 @@ export default function RebalancePoolCell({
           info={item}
           contractType={contractType}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
+          poolData={boostableRebalancePoolInfo}
           onCancel={() => setDepositVisible(false)}
         />
       )}
@@ -175,7 +149,7 @@ export default function RebalancePoolCell({
         <WithdrawModal
           info={item}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
-          poolData={stabilityPoolInfo}
+          poolData={boostableRebalancePoolInfo}
           onCancel={() => setWithdrawVisible(false)}
         />
       )}

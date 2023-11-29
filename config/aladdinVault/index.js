@@ -136,15 +136,16 @@ export const POOLS_LIST = [
 export const REBALANCE_POOLS_LIST = [
   {
     logo: FLogo,
-    logo2: `/tokens/crypto-icons-stack.svg#eth`,
     id: 1,
-    name: 'Rebalance PoolA',
-    platform: 'FX',
-    fromPlatform: 'FX',
-    platformUrl: 'https://curve.fi/factory-crypto/140',
-    curveType: 'curveCopyto',
-    gaugeType: 'rebalance',
+    name: 'BoostRebalance PoolA',
+    gaugeType: 'boostRebalance',
     nameShow: 'Rebalance PoolA',
+    rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_APool,
+    rebalanceWithBonusTokenAddress:
+      config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
+    infoKey: 'rebalancePoolV2_info_A',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceReward: [config.TOKENS_INFO.stETH],
     zapTokens: [
       {
         symbol: 'fETH',
@@ -157,15 +158,16 @@ export const REBALANCE_POOLS_LIST = [
   },
   {
     logo: FLogo,
-    logo2: `/tokens/crypto-icons-stack.svg#eth`,
-    id: 1,
-    name: 'Rebalance PoolB',
-    platform: 'FX',
-    fromPlatform: 'Curve',
-    platformUrl: 'https://curve.fi/factory-crypto/140',
-    curveType: 'curveCopyto',
-    gaugeType: 'rebalance',
+    id: 2,
+    name: 'BoostRebalance PoolB',
+    gaugeType: 'boostRebalance',
     nameShow: 'Rebalance PoolB',
+    rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_BPool,
+    rebalanceWithBonusTokenAddress:
+      config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
+    infoKey: 'rebalancePoolV2_info_B',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: [config.TOKENS_INFO.stETH, config.TOKENS_INFO.xETH],
     zapTokens: [
       {
         symbol: 'fETH',

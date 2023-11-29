@@ -6,10 +6,14 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import abi from '@/config/abi'
 import { useBoostableRebalancePool } from '@/hooks/useGaugeContracts'
+import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 
-const useRebalancePoolUseInfo = (contractAddress) => {
+const useRebalancePoolUseInfo = (infoKey) => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
+  const { rebalancePoolAddress: contractAddress } = REBALANCE_POOLS_LIST.find(
+    (item) => item.infoKey == infoKey
+  )
   const { contract: fx_BoostableRebalancePool_PoolContract } =
     useBoostableRebalancePool(contractAddress)
 
@@ -68,6 +72,11 @@ const useRebalancePoolUseInfo = (contractAddress) => {
       balanceOf: BoostableRebalancePoolBalanceOfFn,
       claimable: claimableFn,
       getBoostRatio,
+      allowance,
+      userSnapshot,
+      integrate_fraction,
+      snapshot,
+      workingBalanceOf,
     } = fx_BoostableRebalancePool_PoolContract.methods
 
     try {
@@ -78,6 +87,11 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         claimableFn(_currentAccount, config.tokens.wstETH),
         claimableFn(_currentAccount, config.tokens.xETH),
         claimableFn(_currentAccount, config.tokens.FXN),
+
+        // userSnapshot(_currentAccount),
+        // integrate_fraction(_currentAccount),
+        // snapshot(),
+        // workingBalanceOf(_currentAccount),
       ]
       const [
         ,
@@ -86,6 +100,10 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         claimableWstETHRes,
         claimableXETHRes,
         claimableFXNRes,
+        // userSnapshotRes,
+        // claimableFXNRes,
+        // snapshotRes,
+        // workingBalanceRes,
       ] = await multiCallsV2(apiCalls)
 
       console.log(
@@ -95,6 +113,10 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         claimableWstETHRes,
         claimableXETHRes,
         claimableFXNRes
+
+        // userSnapshotRes,
+        // snapshotRes,
+        // workingBalanceRes
       )
 
       return {
@@ -103,9 +125,13 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         claimableWstETHRes,
         claimableXETHRes,
         claimableFXNRes,
+
+        // userSnapshotRes,
+        // snapshotRes,
+        // workingBalanceRes,
       }
     } catch (error) {
-      console.log('rebalance--UserInfoError==>', error)
+      console.log('boostableRebalancePoolInfo--UserInfoError==>', error)
       return {}
     }
   }, [

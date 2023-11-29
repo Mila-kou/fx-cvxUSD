@@ -15,11 +15,12 @@ const useStabiltyPool = (infoKey) => {
 
   const { current } = useWeb3()
   const { ethPrice } = useFxCommon()
+
   console.log(
-    'boostableRebalancePoolInfo---fxInfo--ethPrice--',
-    boostableRebalancePoolInfo,
-    fxInfo,
-    ethPrice
+    'boostableRebalancePoolInfo-----',
+    boostableRebalancePoolInfo
+    // fxInfo,
+    // ethPrice
   )
   const { extraRewardState, tokensPerStEth } =
     boostableRebalancePoolInfo?.baseInfo || {}
