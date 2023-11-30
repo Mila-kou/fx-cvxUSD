@@ -124,7 +124,7 @@ const useInfo = (refreshTrigger) => {
       overview: [
         {
           title: 'APR',
-          value: apr ? `${apr.toFixed(2)}%` : '-',
+          value: checkNotZoroNum(apr) ? `${apr.toFixed(2)}%` : '-',
         },
         {
           title: 'FXN Locked',
