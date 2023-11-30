@@ -39,6 +39,7 @@ const useVestingData = () => {
         vested(_currentAccount),
         claimableRewards(propyUser),
         claimable_reward(propyUser, config.tokens.SDT),
+        claimable_reward(propyUser, config.tokens.wstETH),
         cvxFxnStakingBalanceOf(propyUser),
         sdFxnStakingBalanceOf(propyUser),
       ]
@@ -47,6 +48,7 @@ const useVestingData = () => {
         vestedData,
         convexRewards,
         statkeDaoRewards,
+        statkeDaoWstETHRewards,
         cvxFxnStakingBalances,
         sdFxnStakingBalances,
       ] = await multiCallsV2(apis)
@@ -56,6 +58,7 @@ const useVestingData = () => {
         vestedData,
         convexRewards,
         statkeDaoRewards,
+        statkeDaoWstETHRewards,
         cvxFxnStakingBalances,
         sdFxnStakingBalances,
         canClaim_0,
@@ -70,6 +73,7 @@ const useVestingData = () => {
         vestedData,
         convexRewards,
         statkeDaoRewards,
+        statkeDaoWstETHRewards,
         cvxFxnStakingBalances,
         sdFxnStakingBalances,
       }

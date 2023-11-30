@@ -15,6 +15,7 @@ const useVesting = (refreshTrigger) => {
     vestedData,
     convexRewards,
     statkeDaoRewards,
+    statkeDaoWstETHRewards,
     cvxFxnStakingBalances,
     sdFxnStakingBalances,
   } = useVestingData(refreshTrigger)
@@ -250,6 +251,7 @@ const useVesting = (refreshTrigger) => {
         startTimeText,
         convexRewards,
         statkeDaoRewards,
+        statkeDaoWstETHRewards,
         newList_fx,
         newList_convex,
         newList_stakeDao,
