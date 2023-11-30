@@ -29,6 +29,7 @@ const allowChains = Object.values(chainMap).map((item) => item.chainInfo)
 const zeroAddress = '0x0000000000000000000000000000000000000000'
 const defaultAddress = '0x1111111111111111111111111111111111111111'
 const daySecond = 86400
+const weekSecond = 604800
 const yearSecond = 31536000
 const uint256Max =
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
@@ -41,6 +42,7 @@ const config = {
   defaultAddress,
   allowChains,
   daySecond,
+  weekSecond,
   yearSecond,
   uint256Max,
   approvedAddress,
@@ -54,7 +56,7 @@ export const setNetwork = (chainId) => {
   if (chainId === mainnetFork.chainInfo.id) {
     config.concentratorAPI =
       chainId === mainnetFork.chainInfo.id
-        ? 'https://apitest.aladdin.club'
+        ? 'https://api.aladdin.club'
         : 'https://api.aladdin.club'
   }
 }

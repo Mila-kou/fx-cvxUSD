@@ -54,7 +54,6 @@ export default function Mint({ slippage }) {
     minout_slippage: 0,
     minout_ETH: 0,
     minout_slippage_tvl: 0,
-    bonus: 0,
   })
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
@@ -108,6 +107,13 @@ export default function Mint({ slippage }) {
   const selectTokenAddress = useMemo(() => {
     return OPTIONS.find((item) => item[0] === symbol)[1]
   }, [symbol])
+
+  const bonus_text = useMemo(() => {
+    const { reservePoolBalancesRes } = baseInfo
+
+    // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
+    return BigNumber.min(reservePoolBalancesRes, mintXBouns, xETHBonus)
+  }, [mintXBouns, baseInfo?.reservePoolBalancesRes, xETHBonus])
 
   useEffect(() => {
     initPage()
@@ -225,9 +231,16 @@ export default function Mint({ slippage }) {
         let _ETHtAmountAndGas = _mockAmount
 
         if (isSwap) {
-          minout_ETH = await FxGatewayContract.methods
+          const resData = await FxGatewayContract.methods
             .swap(_ETHtAmountAndGas, symbol === 'fETH', 0)
             .call({ from: _account })
+          if (typeof resData === 'object') {
+            minout_ETH = resData._amountOut
+            const _userXETHBonus = cBN(resData._bonus || 0)
+            setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
+          } else {
+            minout_ETH = resData
+          }
         } else if (symbol === 'stETH') {
           const resData = await marketContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
@@ -236,8 +249,8 @@ export default function Mint({ slippage }) {
           })
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
-            const _userXETHBonus = resData._bonus
-            setMintXBouns(_userXETHBonus)
+            const _userXETHBonus = cBN(resData._bonus || 0)
+            setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
           } else {
             minout_ETH = resData
           }
@@ -292,8 +305,8 @@ export default function Mint({ slippage }) {
           console.log('resData-----', resData)
           if (typeof resData === 'object') {
             minout_ETH = resData._xTokenMinted
-            const _userXETHBonus = resData._bonus
-            setMintXBouns(_userXETHBonus)
+            const _userXETHBonus = cBN(resData._bonus || 0)
+            setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
           } else {
             minout_ETH = resData
           }
@@ -329,7 +342,7 @@ export default function Mint({ slippage }) {
         })
       } else {
         if (!checkNotZoroNum(minout_ETH)) {
-          const { _bonus, _xTokenMinted } = minout_ETH || {}
+          const { _xTokenMinted } = minout_ETH || {}
           _minOut_CBN = (cBN(_xTokenMinted) || cBN(0)).multipliedBy(
             cBN(1).minus(cBN(slippage).dividedBy(100))
           )
@@ -345,7 +358,6 @@ export default function Mint({ slippage }) {
             ),
             minout_slippage: fb4(_minOut_CBN.toString(10)),
             minout_slippage_tvl: _minOut_xETH_tvl,
-            bonus: checkNotZoroNumOption(_bonus, fb4(_bonus.toString(10))),
           })
         } else {
           _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
@@ -362,7 +374,6 @@ export default function Mint({ slippage }) {
             ),
             minout_slippage: fb4(_minOut_CBN.toString(10)),
             minout_slippage_tvl: _minOut_xETH_tvl,
-            bonus: 0,
           })
         }
       }
@@ -591,11 +602,11 @@ export default function Mint({ slippage }) {
 
   const checkPause = useCallback(() => {
     let isPaused = false
+    const isPausedMintfETH = checkMintPaused()
     if (isSwap) {
-      isPaused = checkSwapPause()
+      isPaused = checkSwapPause() || (isF && isPausedMintfETH)
     } else {
       if (isF) {
-        const isPausedMintfETH = checkMintPaused()
         isPaused = mintPaused || isPausedMintfETH || !_isValidPrice
       } else {
         isPaused = mintPaused || !_isValidPrice
@@ -652,7 +663,7 @@ export default function Mint({ slippage }) {
   useEffect(() => {
     getMinAmount(true)
     // handleGetAllMinAmount()
-  }, [isF, slippage, fromAmount])
+  }, [isF, slippage, fromAmount, _account])
 
   const fromUsd = useMemo(() => {
     if (symbol === 'fETH') {
@@ -739,7 +750,7 @@ export default function Mint({ slippage }) {
       {isXETHBouns && isX && mintXBouns ? (
         <DetailCell
           title="Mint xETH Bonus:"
-          content={[fb4(cBN(mintXBouns)), '', 'stETH']}
+          content={[fb4(bonus_text), '', 'stETH']}
         />
       ) : null}
 

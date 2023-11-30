@@ -38,6 +38,9 @@ const zapTokens = {
   ...tokensInfo.zapTokens,
 }
 
+const gaugeTokenList = {
+  ...tokensInfo.gaugeTokenList,
+}
 export default {
   tokens,
   contracts,
@@ -46,4 +49,6 @@ export default {
   explorerUri,
   POOLS_LIST_GAUGE,
   zapTokens,
+  gaugeTokenList,
+  getTokenInfoByAddress: tokensInfo.getTokenInfoByAddress,
 }

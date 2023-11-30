@@ -122,37 +122,13 @@ export const useFx_FxETHTwapOracle = () => {
     [getContract]
   )
 }
-/////////////////////////////
+
 export const useFX_stETHGateway = () => {
   const address = config.contracts.fx_stETHGateway
   const { getContract } = useContract()
   return useMemo(
     () => ({
       contract: getContract(address, abi.FX_stETHGatewayABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useFX_stabilityPool = () => {
-  const address = config.contracts.fx_StabilityPool
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FX_StabilityPoolABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useFX_LiquidatorWithBonusToken = () => {
-  const address = config.contracts.LiquidatorWithBonusToken
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FX_LiquidatorWithBonusTokenABI),
       address,
     }),
     [getContract]
@@ -184,25 +160,13 @@ export const useWstETH = () => {
 }
 
 ////////////////////////////////////////
-export const useClev = () => {
-  const address = config.contracts.aladdinCLEV
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.AlaCLEV),
-      address,
-      tokenInfo: config.TOKENS_INFO.clev,
-    }),
-    [getContract]
-  )
-}
 
 export const useFXN = () => {
   const address = config.contracts.FXN
   const { getContract } = useContract()
   return useMemo(
     () => ({
-      contract: getContract(address, abi.AlaCLEV),
+      contract: getContract(address, abi.FXNABI),
       address,
       tokenInfo: config.TOKENS_INFO.fxn,
     }),
@@ -210,24 +174,12 @@ export const useFXN = () => {
   )
 }
 
-export const useAbcCVX = () => {
-  const address = config.tokens.abcCVX
+export const useFxGaugeController = () => {
+  const address = config.contracts.fx_GaugeController
   const { getContract } = useContract()
   return useMemo(
     () => ({
-      contract: getContract(address, abi.AladdinbcCVXABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useClevGaugeController = () => {
-  const address = config.contracts.aladdinGaugeController
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.AlaGaugeControllerABI),
+      contract: getContract(address, abi.FX_GaugeControllerABI),
       address,
     }),
     [getContract]
@@ -241,19 +193,6 @@ export const useClevMinter = () => {
     () => ({
       contract: getContract(address, abi.AlaMinterABI),
       address,
-    }),
-    [getContract]
-  )
-}
-
-export const useVeClev = () => {
-  const address = config.contracts.aladdinVeCLEV
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.AlaVeCLEVABI),
-      address,
-      tokenInfo: config.TOKENS_INFO.veclev,
     }),
     [getContract]
   )
@@ -332,6 +271,7 @@ export const useErc20Token = (tokenAddr, approveForAddr) => {
   }
 }
 
+/// Vesting ///
 export const useFXNVesting = () => {
   const address = config.contracts.fx_Vesting
   const { getContract } = useContract()
@@ -344,7 +284,43 @@ export const useFXNVesting = () => {
   )
 }
 
-////// Curve ///////
+export const useFX_ManageableVesting = () => {
+  const address = config.contracts.fx_ManageableVesting
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_ManageableVestingABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useConvex_cvxFxnStaking = () => {
+  const address = config.contracts.convex_cvxFxnStaking
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.convex_cvxFxnStakingABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useStakeDao_sdFxnStaking = () => {
+  const address = config.contracts.stakeDao_sdFxnStaking
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.stakeDao_sdFxnStakingABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+/// Curve ///
 export const useCurvefiSwap = () => {
   const address = config.contracts.CurvefiSwapRouterAddress
   const { getContract } = useContract()

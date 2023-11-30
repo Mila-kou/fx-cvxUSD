@@ -34,15 +34,11 @@ const contracts = {
   fx_stETHTreasury: '0x7185E3477Ad54A8186e623768833e8C2686591D3',
   fx_stETHGateway: '0x7b9Bb9CdBb04BF57F2F82e51D54F6C8ee165FF3B',
 
-  fx_StabilityPool: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',
-
-  LiquidatorWithBonusToken: '0x3D8faCB2b65B8CEB682ADE00E016c672Ee6262c0',
-  wstETHWrapper: '0x0338B5CCEe1B9297d242A2f0836379470D2e857C'
+  fx_RebalancePool_A: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
-
 
 const tokens = {
   ...tokensInfo.tokens,
@@ -67,7 +63,7 @@ const zapTokens = {
     decimals: TOKENS_INFO.fETH[2],
     address: TOKENS_INFO.fETH[1],
     needZap: true,
-  }
+  },
 }
 
 export default {
@@ -78,4 +74,5 @@ export default {
   explorerUri,
   POOLS_LIST_GAUGE,
   zapTokens,
+  getTokenInfoByAddress: tokensInfo.getTokenInfoByAddress,
 }

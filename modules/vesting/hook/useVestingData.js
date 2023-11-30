@@ -10,15 +10,19 @@ const useVestingData = () => {
   const { contract: VestingContract } = useFXNVesting()
 
   const fetchUserVesting = useCallback(async () => {
-    const { getUserVest, vested, claim } = VestingContract.methods
-    const canClaim = await claim().call({ from: _currentAccount })
-    const apis = [getUserVest(_currentAccount), vested(_currentAccount)]
-    const [userVest, vestedData] = await multiCallsV2(apis)
-
-    return {
-      canClaim,
-      userVest,
-      vestedData,
+    try {
+      const { getUserVest, vested, claim } = VestingContract.methods
+      const canClaim = await claim().call({ from: _currentAccount })
+      const apis = [getUserVest(_currentAccount), vested(_currentAccount)]
+      const [userVest, vestedData] = await multiCallsV2(apis)
+      console.log('userVest--vestedData--', userVest, vestedData)
+      return {
+        canClaim,
+        userVest,
+        vestedData,
+      }
+    } catch (error) {
+      console.log('useVestingData', error)
     }
   }, [VestingContract, _currentAccount, multiCallsV2])
 

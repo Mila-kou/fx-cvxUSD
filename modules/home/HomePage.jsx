@@ -627,9 +627,8 @@ export default function HomePage() {
 
   const { _currentAccount } = useWeb3()
   const [priceLoading, setPriceLoading] = useState(0)
-  const ethMockTwapOracleAddr = '0x8da04c56fec95e4b76030272104c246ce5c93bd7'
-  const stEthMockTwapOracleAddr = '0x1fac89d15ec45c1c09a8b911d6c265f59732fa72'
-
+  const ethMockTwapOracleAddr = '0x8DA04c56FEc95e4B76030272104c246cE5c93BD7'
+  const stEthMockTwapOracleAddr = '0x1FAc89d15eC45C1c09A8b911d6C265F59732Fa72'
   const { contract: ethMockTwapOracleContract } = useContract(
     ethMockTwapOracleAddr,
     abi.MockTwapOracleAbi
@@ -712,7 +711,7 @@ export default function HomePage() {
     <div className={styles.container}>
       <div className={styles.item}>
         <Swap isValidPrice={pricePriceInfo._isValid} />
-        {/* New ETH Price: <SimpleInput onChange={handleChange_CurrentETHPrice} />
+        New ETH Price: <SimpleInput onChange={handleChange_CurrentETHPrice} />
         <Button width="100%" loading={priceLoading} onClick={handleSetPrice}>
           ETH Price
         </Button>
@@ -750,7 +749,7 @@ export default function HomePage() {
         </div>
         <Button width="100%" loading={priceLoading} onClick={handlePrice}>
           getPrice
-        </Button> */}
+        </Button>
       </div>
       {showSystemStatistics ? (
         <div className={styles.item}>

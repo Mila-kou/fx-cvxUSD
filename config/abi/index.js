@@ -1,11 +1,11 @@
 import erc20ABI from './ERC20.json'
 import multiCallABI from './MultiCall.json'
 
-//IDO
+// IDO
 import IdoSale from './ido/IdoSale.json'
 import IdoGovernanceVesting from './ido/IdoGovernanceVesting.json'
 
-//fxETH
+// fxETH
 import FX_Market from './fx/Market.json'
 import FX_FractionalToken from './fx/FractionalToken.json'
 import FX_LeveragedToken from './fx/LeveragedToken.json'
@@ -14,8 +14,9 @@ import FX_ETHGateway from './fx/ETHGateway.json'
 import Fx_Gateway from './fx/FxGateway.json'
 import Fx_ReservePool from './fx/ReservePool.json'
 import Fx_FxETHTwapOracle from './fx/FxETHTwapOracle.json'
+import FXNABI from './fx/FXN.json'
 
-//test
+// test
 import MockTwapOracle from './fx/MockTwapOracle.json'
 
 import AladdinCVXLockerABI from './AladdinCVXLocker.json'
@@ -29,7 +30,6 @@ import AlaCLEV from './ve/AlaCLEV.json'
 import AlaMinterABI from './ve/AlaMinter.json'
 import AlaGaugeControllerABI from './ve/AlaGaugeController.json'
 import AlaAllInOneGatewayABI from './ve/AllInOneGateway.json'
-import PlatformFeeDistributorABI from './PlatformFeeDistributor.json'
 import CommonABI from './common/abi.json'
 import BalancerABI from './common/Balancer.json'
 import CurveCopytoABI from './common/curveCopyto.json'
@@ -39,19 +39,36 @@ import RewardClaimHelperABI from './RewardClaimHelper.json'
 
 import FX_stETHGatewayABI from './fx/stETHGateway.json'
 import FX_stETHTreasuryABI from './fx/stETHTreasury.json'
-import FX_StabilityPoolABI from './fx/StabilityPool.json'
-import FX_LiquidatorWithBonusTokenABI from './fx/LiquidatorWithBonusToken.json'
+import FX_RebalancePoolABI from './fx/RebalancePool.json'
+import FX_RebalanceWithBonusTokenABI from './fx/RebalanceWithBonusToken.json'
 
 import wstETHABI from './wstETH.json'
 import curveSwapABI from './common/curveSwap.json'
 
+// vesting
 import AladdinCLEVVestingABI from './airdrop/vesting.json'
+import FX_ManageableVestingABI from './fx/FX_ManageableVesting.json'
+import convex_cvxFxnStakingABI from './fx/convex_cvxFxnStaking.json'
+import stakeDao_sdFxnStakingABI from './fx/stakeDao_sdFxnStaking.json'
+
+// gauge
+import FX_GaugeControllerABI from './fx/farming/fx-GaugeController.json'
+import FX_ConvexCurveManagerABI from './fx/farming/fx-ConvexCurveManager.json'
+import FX_VotingEscrowBoostABI from './fx/farming/fx-VotingEscrowBoost.json'
+import FX_VotingEscrowProxyABI from './fx/farming/fx-VotingEscrowProxy.json'
+import FX_fx_SharedLiquidityGaugeABI from './fx/farming/fx_SharedLiquidityGauge.json'
+import FX_BoostableRebalancePoolABI from './fx/farming/fx_BoostableRebalancePool.json'
+import FX_RebalancePoolGaugeClaimerABI from './fx/farming/fx-RebalancePoolGaugeClaimer.json'
+
+// rebalance
+import FX_RebalancePoolRegistryABI from './fx/fx-RebalancePoolRegistry.json'
 
 export default {
   erc20ABI,
   multiCallABI,
   IdoSale,
   IdoGovernanceVesting,
+  FXNABI,
 
   FX_Market,
   FX_FractionalToken,
@@ -60,8 +77,8 @@ export default {
   FX_ETHGateway,
   FX_stETHGatewayABI,
   FX_stETHTreasuryABI,
-  FX_StabilityPoolABI,
-  FX_LiquidatorWithBonusTokenABI,
+  FX_RebalancePoolABI,
+  FX_RebalanceWithBonusTokenABI,
 
   MockTwapOracleAbi: MockTwapOracle,
 
@@ -79,7 +96,6 @@ export default {
   BalancerABI,
   CurveCopytoABI,
   CurveStaticCoinABI,
-  PlatformFeeDistributorABI,
   AladdinbcCVXABI,
   RewardClaimHelperABI,
   wstETHABI,
@@ -90,4 +106,20 @@ export default {
   curveSwapABI,
 
   AladdinCLEVVestingABI,
+
+  FX_GaugeControllerABI,
+  FX_ConvexCurveManagerABI,
+  FX_VotingEscrowBoostABI,
+  FX_VotingEscrowProxyABI,
+  FX_fx_SharedLiquidityGaugeABI,
+  FX_ManageableVestingABI,
+  convex_cvxFxnStakingABI,
+  stakeDao_sdFxnStakingABI,
+
+  FX_BoostableRebalancePoolABI,
+  FX_RebalancePoolGaugeClaimerABI,
+
+  FX_RebalancePoolRegistryABI,
+
+  // gauge
 }

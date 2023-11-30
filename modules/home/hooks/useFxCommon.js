@@ -524,12 +524,14 @@ const useFxCommon = () => {
   const isXETHBouns = useMemo(() => {
     if (
       systemStatus > 0 &&
-      cBN(fx_info.baseInfo.reservePoolBalancesRes).isGreaterThan(1e18)
+      cBN(fx_info.baseInfo.reservePoolBalancesRes).isGreaterThan(0) &&
+      cBN(fx_info.baseInfo.RebalancePoolRegistryPoolTotalSupplyRes).isEqualTo(0)
     ) {
       return true
     }
     return false
   }, [fx_info])
+  const isFETHBouns = isXETHBouns
 
   return {
     getStabilityModePrice,
@@ -543,6 +545,7 @@ const useFxCommon = () => {
     xETHBeta_text,
     ethPrice,
     isXETHBouns,
+    isFETHBouns,
   }
 }
 

@@ -18,12 +18,15 @@ import {
   getTokenListPrice,
   getVaultsInfo,
   getConvexVaultsAPY,
-  getConcentratorInit,
+  // getConcentratorInit,
   getLpPrice,
+  getFX_cvxFXN_sdFXN_apy,
 } from '@/services/dataInfo'
 import useInfo from '@/modules/home/hooks/useInfo'
-import stabilityPoolUseInfo from '@/modules/stabilityPool/hooks/h_useInfo'
+import useRebalancePoolUseInfo from '@/modules/rebalancePool/hooks/useRebalancePoolUseInfo'
+import useBoostableRebalancePoolData from '@/modules/rebalancePoolV2/hooks/useBoostableRebalancePoolData'
 import { getStETHRate } from '@/utils/stETHRate'
+// import useGauge from '@/hooks/useGauge'
 
 const GlobalContext = createContext(null)
 
@@ -36,7 +39,19 @@ function GlobalProvider({ children }) {
   const refMenu2 = useRef(null)
 
   const fx_info = useInfo()
-  const stabilityPool_info = stabilityPoolUseInfo()
+  // const allGaugeBaseInfo = useGauge()
+  const rebalancePool_info_A = useRebalancePoolUseInfo(
+    config.contracts.fx_RebalancePool_A
+  )
+  // const rebalancePool_info_B = useRebalancePoolUseInfo(
+  //   config.contracts.fx_RebalancePool_B
+  // )
+  // const rebalancePoolV2_info_A = useBoostableRebalancePoolData(
+  //   config.contracts.fx_BoostableRebalancePool_APool
+  // )
+  // const rebalancePoolV2_info_B = useBoostableRebalancePoolData(
+  //   config.contracts.fx_BoostableRebalancePool_BPool
+  // )
   const ethToken = useToken(config.tokens.eth)
   const stETHToken = useTokenBalance(config.tokens.stETH)
   const fETHToken = useTokenBalance(config.tokens.fETH)
@@ -46,11 +61,12 @@ function GlobalProvider({ children }) {
 
   const [
     { data: tokenPrice, refetch: refetch1 },
-    { data: vaultsInfo, refetch: refetch2 },
+    // { data: vaultsInfo, refetch: refetch2 },
     { data: ConvexVaultsAPY, refetch: refetch3 },
-    { data: concentratorInitData, refetch: refetch4 },
+    // { data: concentratorInitData, refetch: refetch4 },
     { data: lpPrice, refetch: refetch5 },
     { data: stETHRate, refetch: refetch6 },
+    { data: cvxFXN_sdFXN_apy, refetch: refetch7 },
   ] = useQueries({
     queries: [
       {
@@ -58,20 +74,20 @@ function GlobalProvider({ children }) {
         queryFn: getTokenListPrice,
         enabled: !!web3,
       },
-      {
-        queryKey: ['vaultsInfo'],
-        queryFn: getVaultsInfo,
-      },
+      // {
+      //   queryKey: ['vaultsInfo'],
+      //   queryFn: getVaultsInfo,
+      // },
       {
         queryKey: ['ConvexVaultsAPY'],
         queryFn: getConvexVaultsAPY,
         initialData: [],
       },
-      {
-        queryKey: ['concentratorInitData'],
-        queryFn: getConcentratorInit,
-        initialData: {},
-      },
+      // {
+      //   queryKey: ['concentratorInitData'],
+      //   queryFn: getConcentratorInit,
+      //   initialData: {},
+      // },
       {
         queryKey: ['lpPrice'],
         queryFn: getLpPrice,
@@ -83,28 +99,35 @@ function GlobalProvider({ children }) {
         refetchInterval: 600000,
         initialData: 1,
       },
+      {
+        queryKey: ['cvxFXN_sdFXN_apy'],
+        queryFn: getFX_cvxFXN_sdFXN_apy,
+        refetchInterval: 600000,
+        initialData: {},
+      },
     ],
   })
 
-  const ifoVaultWithdrawFee = useMemo(() => {
-    try {
-      return (
-        (Object.values(vaultsInfo.newVault)[0]?.withdrawFeePercentage ??
-          500000) / 10e8
-      )
-    } catch (e) {
-      return 0.0005
-    }
-  }, [vaultsInfo])
+  // const ifoVaultWithdrawFee = useMemo(() => {
+  //   try {
+  //     return (
+  //       (Object.values(vaultsInfo.newVault)[0]?.withdrawFeePercentage ??
+  //         500000) / 10e8
+  //     )
+  //   } catch (e) {
+  //     return 0.0005
+  //   }
+  // }, [vaultsInfo])
 
   useDebounceEffect(
     () => {
       refetch1()
-      refetch2()
+      // refetch2()
       refetch3()
-      refetch4()
+      // refetch4()
       refetch5()
       refetch6()
+      refetch7()
     },
     [blockNumber],
     { wait: 30000 }
@@ -122,8 +145,6 @@ function GlobalProvider({ children }) {
   const tokens = useMemo(() => {
     // ETH
     const { CurrentNavRes } = fx_info.baseInfo
-    console.log('CurrentNavRes---', CurrentNavRes)
-    console.log('tokenPrice---', tokenPrice)
     return {
       ETH: {
         ...ethToken,
@@ -222,14 +243,19 @@ function GlobalProvider({ children }) {
       tokens,
       tokenPrice,
       fx_info,
-      stabilityPool_info,
+      rebalancePool_info_A,
+      // rebalancePool_info_B,
+      // rebalancePoolV2_info_A,
+      // rebalancePoolV2_info_B,
 
       lpPrice,
-      vaultsInfo,
+      // vaultsInfo,
       ConvexVaultsAPY,
-      concentratorInitData,
-      ifoVaultWithdrawFee,
+      // concentratorInitData,
+      // ifoVaultWithdrawFee,
       stETHRate,
+      cvxFXN_sdFXN_apy,
+      // allGaugeBaseInfo,
     }),
     [
       theme,
@@ -243,13 +269,18 @@ function GlobalProvider({ children }) {
       tokens,
       tokenPrice,
       fx_info,
-      stabilityPool_info,
+      rebalancePool_info_A,
+      // rebalancePool_info_B,
+      // rebalancePoolV2_info_A,
+      // rebalancePoolV2_info_B,
 
       lpPrice,
-      vaultsInfo,
+      // vaultsInfo,
       ConvexVaultsAPY,
-      concentratorInitData,
-      ifoVaultWithdrawFee,
+      // concentratorInitData,
+      // ifoVaultWithdrawFee,
+      cvxFXN_sdFXN_apy,
+      // allGaugeBaseInfo,
     ]
   )
 

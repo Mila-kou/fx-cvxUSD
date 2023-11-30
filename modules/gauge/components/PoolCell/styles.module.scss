@@ -1,0 +1,31 @@
+@import '../../../../assets/css/mixin.scss';
+
+.poolWrap {
+  margin-top: 16px;
+
+  .card {
+    background: var(--input-background-color);
+    padding: 16px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel {
+    background: var(--background-color);
+    padding: 32px 48px;
+
+    .content {
+      border-radius: 0 0 10px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .poolWrap {
+  }
+}

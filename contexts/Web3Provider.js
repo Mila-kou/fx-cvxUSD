@@ -118,7 +118,10 @@ function Web3ContextProvider({ children }) {
     ],
   })
 
-  const current = useMemo(() => moment(1000 * blockTime), [blockTime])
+  const current = useMemo(
+    () => moment(1000 * (blockTime ?? Math.ceil(+new Date() / 1000))),
+    [blockTime]
+  )
 
   const value = useMemo(
     () => ({

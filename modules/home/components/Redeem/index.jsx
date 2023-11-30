@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
+import BigNumber from 'bignumber.js'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
@@ -11,7 +12,7 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
-import { DetailCell, NoticeCard } from '../Common'
+import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import Button from '@/components/Button'
 import useFxCommon_New from '../../hooks/useFxCommon_New'
 
@@ -53,6 +54,8 @@ export default function Redeem({ slippage }) {
   const { contract: FxGatewayContract, address: fxGatewayContractAddress } =
     useFx_FxGateway()
 
+  const [redeemBouns, setRedeemBouns] = useState(0)
+
   const [showDisabledNotice, setShowDisabledNotice] = useState(false)
 
   const {
@@ -76,6 +79,7 @@ export default function Redeem({ slippage }) {
     xTokenRedeemInSystemStabilityModePaused,
     xETHBeta_text,
     baseInfo,
+    isFETHBouns,
   } = useETH()
 
   const [FETHtAmount, setFETHtAmount] = useState(0)
@@ -100,6 +104,13 @@ export default function Redeem({ slippage }) {
     }
     return [_isF, !_isF, _selectTokenAddress, _tokenAmount]
   }, [selected, FETHtAmount, XETHtAmount])
+
+  const bonus_text = useMemo(() => {
+    const { reservePoolBalancesRes } = baseInfo
+
+    // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
+    return BigNumber.min(cBN(reservePoolBalancesRes), cBN(redeemBouns))
+  }, [redeemBouns, baseInfo?.reservePoolBalancesRes])
 
   const [_fnav, _xnav, _ethPrice_text, _isPriceValid] = useMemo(() => {
     if (
@@ -206,7 +217,7 @@ export default function Redeem({ slippage }) {
     return needApprove && symbol !== 'stETH'
       ? config.approvedAddress
       : _currentAccount
-  }, [needApprove, _currentAccount, tokenAmount, isF, symbol == 'stETH'])
+  }, [needApprove, _currentAccount, tokenAmount, isF, symbol])
 
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
@@ -259,6 +270,7 @@ export default function Redeem({ slippage }) {
       minout_slippage: 0,
       minout_slippage_tvl: 0,
     })
+    setRedeemBouns(0)
   }
 
   const getMinAmount = async (needLoading) => {
@@ -269,6 +281,7 @@ export default function Redeem({ slippage }) {
           minout_slippage: 0,
           minout_slippage_tvl: 0,
         })
+        setRedeemBouns(0)
         return 0
       }
       if (needLoading) {
@@ -277,6 +290,7 @@ export default function Redeem({ slippage }) {
 
       let _mockAmount = tokenAmount
       let _mockRatio = 1
+      let _redeemBonus = 0
 
       console.log('_account----', _account)
       // 默认比例 0.01
@@ -297,12 +311,14 @@ export default function Redeem({ slippage }) {
         _fTokenIn = 0
       }
       if (symbol === 'stETH') {
-        minout_ETH = await marketContract.methods
+        const { _baseOut, _bonus } = await marketContract.methods
           .redeem(_fTokenIn, _xTokenIn, _account, 0)
           .call({ from: _account })
+        minout_ETH = _baseOut
+        _redeemBonus = cBN(_bonus || 0)
       } else {
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
-        const { _dstOut } = await FxGatewayContract.methods
+        const { _dstOut, _bonus } = await FxGatewayContract.methods
           .redeem(
             [config.contracts.redeemConverter, route],
             _fTokenIn,
@@ -312,6 +328,7 @@ export default function Redeem({ slippage }) {
           )
           .call({ from: _account })
         minout_ETH = _dstOut
+        _redeemBonus = cBN(_bonus || 0)
       }
       // 比例计算
       minout_ETH *= _mockRatio
@@ -331,6 +348,7 @@ export default function Redeem({ slippage }) {
         ),
         minout_slippage_tvl: _minOut_ETH_tvl,
       })
+      setRedeemBouns(_redeemBonus.multipliedBy(_mockRatio))
       setPriceLoading(false)
       return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
@@ -340,6 +358,7 @@ export default function Redeem({ slippage }) {
         minout_slippage: 0,
         minout_slippage_tvl: 0,
       })
+      setRedeemBouns(0)
       setPriceLoading(false)
       if (
         error?.message &&
@@ -421,7 +440,7 @@ export default function Redeem({ slippage }) {
       setRedeeming(false)
       initPage()
     } catch (e) {
-      console.log('eeee---', e)
+      console.log('redeem---error', e)
       setRedeeming(false)
     }
   }
@@ -431,7 +450,7 @@ export default function Redeem({ slippage }) {
 
   useEffect(() => {
     getMinAmount(true)
-  }, [isF, slippage, tokenAmount, symbol])
+  }, [isF, slippage, tokenAmount, symbol, _account])
 
   const toUsd = useMemo(() => {
     if (symbol === 'fETH') {
@@ -448,6 +467,18 @@ export default function Redeem({ slippage }) {
 
   return (
     <div className={styles.container}>
+      {isFETHBouns ? (
+        <BonusCard
+          title={`Redeem fETH will earn ${fb4(
+            cBN(baseInfo.bonusRatioRes).times(100),
+            false,
+            18,
+            2
+          )}% bonus now`}
+          amount=""
+          symbol=""
+        />
+      ) : null}
       <BalanceInput
         placeholder="-"
         balance={fb4(tokens.fETH.balance, false)}
@@ -500,6 +531,12 @@ export default function Redeem({ slippage }) {
           ]}
         />
       )}
+      {isFETHBouns && isF && redeemBouns ? (
+        <DetailCell
+          title="Redeem fETH Bonus:"
+          content={[fb4(bonus_text), '', 'stETH']}
+        />
+      ) : null}
 
       {showDisabledNotice ? (
         <NoticeCard

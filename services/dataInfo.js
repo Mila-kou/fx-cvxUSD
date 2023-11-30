@@ -15,16 +15,16 @@ export const getVaultsInfo = () =>
     .catch(() => ({}))
 
 export const getConvexVaultsAPY = () =>
-  fetcher(`${_fetchUrl}/api/convex`)
-    .then((res) => res.data)
-    .catch(() => ({}))
-
-export const getConcentratorInit = () =>
-  fetcher(`${_fetchUrl}/api/aladdin/initInfo`)
+  fetcher(`${_fetchUrl}/api1/lp/convex`)
     .then((res) => res.data)
     .catch(() => ({}))
 
 export const getLpPrice = () =>
-  fetcher(`${_fetchUrl}/api/lp/price`)
+  fetcher(`${_fetchUrl}/api1/lp/price`)
+    .then((res) => res.data)
+    .catch(() => ({}))
+
+export const getFX_cvxFXN_sdFXN_apy = () =>
+  fetcher(`${_fetchUrl}/api1/getFX_cvxFXN_sdFXN_apy`)
     .then((res) => res.data)
     .catch(() => ({}))

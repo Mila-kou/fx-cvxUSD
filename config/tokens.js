@@ -1,4 +1,8 @@
 const CLEVIcon = '/assets/tokens/clev.svg'
+const FXNIcon = '/tokens/FXN.svg'
+const stETHIcon = '/tokens/steth.svg'
+const crvIcon = '/tokens/0xd533a949740bb3306d119cc777fa900ba034cd52.png'
+const cvxIcon = '/tokens/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b.png'
 
 const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
@@ -9,30 +13,42 @@ const contracts = {
   fundsRaisedToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // weth
 
   // fx ----
-  ChainlinkTwapOracleV3: '0xD24AC180e6769Fd5F624e7605B93084171074A77',
+  ChainlinkTwapOracleV3: '0xAd36C7B3C5E0e097884DE951C271eDf5e99EB567', // 0xce3b7f32b98599260F4a057b47fa55DcBDa0A757
   fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
   xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
   fx_Market: '0xe7b9c7c9cA85340b8c06fb805f7775e3015108dB',
   fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
   fx_stETHGateway: '0x9bF5fFABbF97De0a47843A7Ba0A9DDB40f2e2ed5',
 
-  fx_StabilityPool: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
-  LiquidatorWithBonusToken: '0x2Abb56D34e526Cbd01db203067f499A0d80ce3F2',
-  wstETHWrapper: '0xb09e34dD25d5E88a1E9Ff6F6418109927675B658',
+  fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
+  fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
+  fx_RebalanceWithBonusToken_A: '0x17f21f468d77E6e35702a9Ae7a9da50Db7F6a4f4',
+  fx_RebalanceWithBonusToken_B: '0xFf71c3AF2d66E2bAFc8088000fFB4CbFf4Ed7814',
+  fx_RebalancePoolSplitter: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
 
-  fx_VotingEscrow: '0x3875745F4A04549527c7EEa8f777D333193c665c',
-  fx_GaugeController: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
-  fx_Minter: '0x51Ac57dcaf5186a80368EeC6D8DAa338c9CaC125',
-  fx_FxGateway: '0x49e51067E695bd79d6275eCaB6E9E527a72AbdE4',
+  fx_VotingEscrowBoost: '0x1DC94c4Dba60f2880A40327EF465E364C57df03F',
+  fx_VotingEscrowProxy: '0x9B487bA5eB7848352cbFFE20DE7bC3384660E945',
+  fx_GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
+
+  fx_FxGateway: '0x5c28b966aB37cFB9397bBc04595f91F0fBf06d9b',
   fx_ReservePool: '0x5d0Aacf75116d1645Db2B3d1Ca4b303ef0CA3752',
   fx_FxETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
 
+  // ManageableVesting
   fx_Vesting: '0x2290eeFEa24A6E43b26C27187742bD1FEDC10BDB',
+  fx_ManageableVesting: '0x0E4f31a2f48418c90F5e9fa84Bf761D832C54ceD',
+  fx_ManageableVesting_CvxFxnVestingManager:
+    '0x43fCFe9F128b5e4271c7E25C47eFe91bA8896220',
+  fx_ManageableVesting_SdFxnVestingManager:
+    '0xA2FaffE31153e5E60F2352e3ed28ff973309C156',
+  convex_cvxFxnStaking: '0xEC60Cd4a5866fb3B0DD317A46d3B474a24e06beF',
+  stakeDao_sdFxnStaking: '0xbcfE5c47129253C6B8a9A00565B3358b488D42E0',
 
   FXN: '0x365AccFCa291e7D3914637ABf1F7635dB165Bb09',
   fx_FXN_treasury: '0x26B2ec4E02ebe2F54583af25b647b1D619e67BbF',
-  fx_FXN_ProxyAdmin: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
+  fx_FXN_PlatformFeeDistributor: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
   fx_PlatformFeeSpliter: '0x0084C2e1B1823564e597Ff4848a88D61ac63D703',
+  fx_FXN_ProxyAdmin: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
   veFXN: '0xEC6B8A3F3605B083F7044C0F31f2cac0caf1d469',
   TokenMinter: '0xC8b194925D55d5dE9555AD1db74c149329F71DeF',
   GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
@@ -41,7 +57,6 @@ const contracts = {
   redeemConverter: '0xa3F4fB87e19B60622bEA119C4469c0Df2c7c4739',
 
   CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
-
   //  ----
   nativeToken: '0xb26C4B3Ca601136Daf98593feAeff9E0CA702a8D',
 
@@ -75,12 +90,36 @@ const contracts = {
   aladdinCLEVMinter: '0x4aa2afd5616bEEC2321a9EfD7349400d4F18566A',
   aladdinAllInOneGateway: '0x6e513d492Ded19AD8211a57Cc6B4493C9E6C857B',
 
-  aladdinCLEVVest: '0x84C82d43f1Cc64730849f3E389fE3f6d776F7A4E',
-  clevHoderTreasuyry: '0xfc08757c505ea28709df66e54870fb6de09f0c5e',
-
   BalancerContract: '0xba12222222228d8ba445958a75a0704d566bf2c8',
 
-  PlatformFeeDistributor: '0xD6eFa5B63531e9ae61e225b02CbACD59092a35bE',
+  fx_RebalancePoolRegistry: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
+
+  // farming
+  fx_BoostableRebalancePool_APool: '0xCE225954423b3F7Bd4b6e88a0E46569ce01CF0c6',
+  fx_BoostableRebalancePool_BPool: '0xD0959fe55A6510C78E5Ec3642246882eff7509E9',
+  fx_RebalanceWithBonusToken_BoostRebalanceAPool:
+    '0xc6ae935F7b9efb489938D8DFaeE29740E982d578',
+  fx_RebalanceWithBonusToken_BoostRebalanceBPool:
+    '0xD2953DD27C273B3C29Fc37F2eDa8014B7896A9B8',
+  fx_RebalancePoolSplitter_BoostableRebalancePool_fETH:
+    '0x2146b8eeF7df5F290B7f3bde7e6582575D89a091',
+  fx_RebalancePoolGaugeClaimer_BoostableRebalancePool_fETH:
+    '0x8532dC104AB8102Af2028609024932175DE3B100',
+}
+
+const gaugeTokenList = {
+  fx_ETH_xETH: '0x203aeE406d26AE5C1Cc12b2F884d2B5814A44948',
+  ConvexCurveManager_ETH_xETH: '0x7d23e21Be2bf68De4d3D6C06340cE66F192B185a',
+  fx_ETH_FXN: '0x0E4f31a2f48418c90F5e9fa84Bf761D832C54ceD',
+  ConvexCurveManager_ETH_FXN: '0x43fCFe9F128b5e4271c7E25C47eFe91bA8896220',
+  fx_crvUSD_fETH: '0xA2FaffE31153e5E60F2352e3ed28ff973309C156',
+  ConvexCurveManager_crvUSD_fETH: '0x82E535428b3034Ca74ce738949954715627cb140',
+  fx_fETH_FRAXBP: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
+  ConvexCurveManager_fETH_FRAXBP: '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
+
+  // rebalance pool gauge
+  BoostableRebalancePool_fETH_FundraiseGauge:
+    '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
 }
 
 const tokens = {
@@ -121,6 +160,9 @@ const tokens = {
 
   // abcCVX
   abcCVX: '0xDEC800C2b17c9673570FDF54450dc1bd79c8E359',
+  SDT: '0x73968b9a57c6E53d41345FD57a6E6ae27d6CDB2F',
+
+  FXN: contracts.FXN,
 }
 
 const TOKENS_INFO = {
@@ -131,21 +173,22 @@ const TOKENS_INFO = {
   weth: ['weth', tokens.weth, 18, 'weth'],
   wbtc: ['bitcoin', tokens.wbtc, 8, 'wbtc'],
   seth: ['seth', tokens.seth, 18, 'seth'],
-  stETH: ['staked-ether', tokens.stETH, 18, 'stETH'],
+  stETH: ['staked-ether', tokens.stETH, 18, 'stETH', stETHIcon],
   renBTC: ['renbtc', tokens.renBTC, 8, 'renBTC'],
   clev: ['clev', tokens.clev, 18, 'aldClev'],
   clevCVX: ['clev', tokens.clevCVX, 18, 'aldClevCVX'],
   veclev: ['', contracts.aladdinVeCLEV, 18, 'aldVeclev'],
   vefee: ['', contracts.aladdinVeFee, 18, 'aldVefee'],
-  cvx: ['convex-finance', tokens.cvx, 18],
+  cvx: ['convex-finance', tokens.cvx, 18, 'cvx', cvxIcon],
   frax: ['frax', tokens.frax, 18, 'frax'],
   busd: ['binance-usd', tokens.busd, 18, 'busd'],
   tusd: ['true-usd', tokens.tusd, 18, 'TUSD'],
   lusd: ['usd-coin', tokens.lusd, 18, 'lusd'],
-  fETH: ['fETH', tokens.fETH, 18],
-  xETH: ['xETH', tokens.xETH, 18],
-  veFXN: ['veFXN', tokens.veFXN, 18],
-  fxn: ['FXN', tokens.FXN, 18],
+  fETH: ['fETH', tokens.fETH, 18, 'fETH'],
+  xETH: ['xETH', tokens.xETH, 18, 'xETH'],
+  veFXN: ['veFXN', tokens.veFXN, 18, 'veFXN'],
+  fxn: ['FXN', tokens.FXN, 18, 'FXN', FXNIcon],
+  crv: ['CRV', tokens.crv, 18, 'CRV', crvIcon],
 }
 
 const zapTokens = {
@@ -250,46 +293,65 @@ const zapTokens = {
 }
 
 const POOLS_LIST_GAUGE = {
-  Curve_CLEV_ETH: {
-    lpPoolCurveToken: '0x342D1C4Aa76EA6F5E5871b7f11A019a0eB713A4f',
-    token: '0x6C280dB098dB673d30d5B34eC04B6387185D3620',
-    gauge: '0x86e917ad6Cb44F9E6C8D9fA012acF0d0CfcF114f',
-    underlyingAssets: [TOKENS_INFO.weth, TOKENS_INFO.clev],
-    otherTokenName: 'CLEV',
-    otherTokenIndex: 1,
-    checkLpPriceTokenIndex: 0,
-    checkLpTokenName: 'ETH',
-    abiType: 'balances',
+  ETH_xETH: {
+    lpPoolCurveToken: '0x053d5be7c653325b58d88b942fb2454f8ffd8673',
+    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+    token: '0x16ead9a10b1a77007e6e329b076ad1fe97a6f7c0',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_xETH,
+    gauge: gaugeTokenList.fx_ETH_xETH,
   },
-  Curve_clevCVX_CVX: {
-    lpPoolCurveToken: '0xF9078Fb962A7D13F55d40d49C8AA6472aBD1A5a6',
-    token: '0xF9078Fb962A7D13F55d40d49C8AA6472aBD1A5a6',
-    gauge: '0xF758BE28E93672d1a8482BE15EAf21aa5450F979',
-    underlyingAssets: [TOKENS_INFO.cvx, TOKENS_INFO.clevCVX],
-    otherTokenName: 'clevCVX',
-    otherTokenIndex: 1,
-    checkLpPriceTokenIndex: 0,
-    checkLpTokenName: 'CVX',
-    abiType: 'balances',
+  ETH_FXN: {
+    lpPoolCurveToken: '0xc15f285679a1ef2d25f53d4cbd0265e1d02f2a92',
+    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+    token: '0xE06A65e09Ae18096B99770A809BA175FA05960e2',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_FXN,
+    gauge: gaugeTokenList.fx_ETH_FXN,
   },
-  Concentrator_abcCVX: {
-    lpPoolCurveToken: '',
-    token: tokens.abcCVX,
-    gauge: '0xc5022291cA8281745d173bB855DCd34dda67F2f0',
-    underlyingAssets: [TOKENS_INFO.cvx, TOKENS_INFO.clevCVX],
-    otherTokenName: 'clevCVX',
-    otherTokenIndex: 1,
-    checkLpPriceTokenIndex: 0,
-    checkLpTokenName: 'CVX',
-    abiType: 'balances',
+  crvUSD_fETH: {
+    lpPoolCurveToken: '0xe7e86c6055b964c7894d33e037ead34f2b62795d',
+    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+    token: '0x19033d99a7b7010157b81e5ee5a8e63a583fb735',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_crvUSD_fETH,
+    gauge: gaugeTokenList.fx_crvUSD_fETH,
+  },
+  fETH_FRAXBP: {
+    lpPoolCurveToken: '0x5f5fe47fed55eae627386995198294c39e1d17a5',
+    token: '0x3d28f9192e34e51414e69fbee5b11b35590fb9fb',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_fETH_FRAXBP,
+    gauge: gaugeTokenList.fx_fETH_FRAXBP,
   },
 }
+const getTokenInfoByAddress = (tokenAddress) => {
+  for (const key in TOKENS_INFO) {
+    if (TOKENS_INFO[key][1].toLowerCase() == tokenAddress.toLowerCase()) {
+      return TOKENS_INFO[key]
+    }
+  }
+  return {}
+}
+
+const POOLS_LIST_REBALANCE = {
+  Pool_A: {
+    rebalancePoolAddress: contracts.fx_RebalancePool_A,
+    rebalanceWithBonusTokenAddress: contracts.fx_RebalanceWithBonusToken_A,
+    infoKey: 'rebalancePool_info_A',
+  },
+  Pool_B: {
+    rebalancePoolAddress: contracts.fx_RebalancePool_B,
+    rebalanceWithBonusTokenAddress: contracts.fx_RebalanceWithBonusToken_B,
+    infoKey: 'rebalancePool_info_B',
+  },
+}
+
 export default {
   tokens,
   contracts,
   TOKENS_INFO,
   POOLS_LIST_GAUGE,
   zapTokens,
+  gaugeTokenList,
+  getTokenInfoByAddress,
+  POOLS_LIST_REBALANCE,
 }
 
 // market: "0xeCbA45f077df21D9142312a5aa21411371E1f943",
