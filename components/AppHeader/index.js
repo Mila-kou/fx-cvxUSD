@@ -27,7 +27,7 @@ const routers = [
   // ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
   ['Booster Vesting', '/booster-vesting'],
-  ['Vesting', '/vesting'],
+  // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
   // ['Offering', '/offering'],
@@ -231,6 +231,15 @@ export default function AppHeader() {
           >
             Governance
           </a>
+          <Link
+            href="/vesting"
+            className={cn(
+              styles.route,
+              route.includes('/vesting') && styles.active
+            )}
+          >
+            Vesting
+          </Link>
           <span className={styles.route} onClick={toggleFAQ}>
             FAQ
           </span>
