@@ -93,11 +93,11 @@ function BalanceInput(props) {
       data-color={color}
       onClick={type == 'select' ? onSelected : () => {}}
     >
-      <div className={styles.left}>
+      {/* <div className={styles.left}>
         {['fETH', 'FXN'].includes(symbol) && <FLogo />}
         {symbol === 'xETH' && <XLogo />}
         {logoSrc && <img src={logoSrc} />}
-      </div>
+      </div> */}
       <div className={styles.symbolWrap}>
         {options.length ? (
           <InputSelect

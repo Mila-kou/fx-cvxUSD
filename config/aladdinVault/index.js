@@ -138,13 +138,13 @@ export const REBALANCE_POOLS_LIST = [
     logo: FLogo,
     logo2: `/tokens/crypto-icons-stack.svg#eth`,
     id: 1,
-    name: 'Rebalance PoolA',
+    name: 'Rebalance Pool',
     platform: 'FX',
     fromPlatform: 'FX',
     platformUrl: 'https://curve.fi/factory-crypto/140',
     curveType: 'curveCopyto',
     gaugeType: 'rebalance',
-    nameShow: 'Rebalance PoolA',
+    nameShow: 'Rebalance Pool',
     zapTokens: [
       {
         symbol: 'fETH',
