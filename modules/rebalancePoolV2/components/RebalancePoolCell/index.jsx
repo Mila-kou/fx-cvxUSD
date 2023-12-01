@@ -118,7 +118,7 @@ export default function RebalancePoolCell({
 
             <Button
               size="small"
-              disabled={!canClaim.wstETH}
+              // disabled={!canClaim.wstETH}
               loading={claiming.wstETH}
               onClick={() => handleClaim()}
               type="second"

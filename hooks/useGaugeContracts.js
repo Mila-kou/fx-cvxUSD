@@ -62,3 +62,15 @@ export const useRebalanceWithBonusToken = (token) => {
     [getContract]
   )
 }
+
+export const useFXNTokenMinter = () => {
+  const address = config.contracts.fx_TokenMinter
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.FX_FXNTokenMinterABI),
+      address,
+    }),
+    [getContract]
+  )
+}

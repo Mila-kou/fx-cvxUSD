@@ -20,18 +20,25 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
+import { useFXNTokenMinter } from '@/hooks/useGaugeContracts'
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
-  const { userInfo = {}, useFXNReward_text, lpGaugeContract } = cellData
+  const {
+    userInfo = {},
+    useFXNReward_text,
+    lpGaugeAddress,
+    lpGaugeContract,
+  } = cellData
   const boostInfo = useVeBoost_c(cellData)
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
+  const { contract: FXNTokenMinterContract } = useFXNTokenMinter()
 
   const handleClaim = async (symbol, wrap) => {
     if (!isAllReady) return
@@ -51,6 +58,25 @@ export default function PoolCell({ cellData, ...pageOthers }) {
     } catch (error) {
       setClaiming(true)
 
+      console.log('claim-error---', error)
+      noPayableErrorAction(`error_claim`, error)
+    }
+  }
+
+  const handleClaimFXN = async () => {
+    if (!isAllReady) return
+    try {
+      setClaiming(true)
+      const apiCall = FXNTokenMinterContract.methods.mint(lpGaugeAddress)
+      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'lp',
+        action: 'Claim',
+      })
+      setClaiming(false)
+    } catch (error) {
+      setClaiming(true)
       console.log('claim-error---', error)
       noPayableErrorAction(`error_claim`, error)
     }
@@ -220,6 +246,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             </Button>
             <Button size="small" onClick={handleClaim} type="second">
               Claim
+            </Button>
+            <Button size="small" onClick={handleClaimFXN} type="second">
+              Claim FXN
             </Button>
           </div>
         </div>
