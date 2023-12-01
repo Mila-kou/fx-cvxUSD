@@ -34,6 +34,8 @@ export default function RebalancePoolCell({
   myTotalValue_text,
   userWstETHClaimable,
   userWstETHClaimableTvl_text,
+  userFXNClaimable,
+  userFXNClaimableTvl_text,
   userXETHClaimable,
   userXETHClaimableTvl_text,
   userUnlockingBalance,
@@ -68,7 +70,7 @@ export default function RebalancePoolCell({
         <div className="w-[120px]">
           <div className="flex gap-[6px] py-[2px]">
             <img className="h-[20px]" src={fxnImg} />
-            <p className="text-[16px]">{userWstETHClaimable}</p>
+            <p className="text-[16px]">{userFXNClaimable}</p>
           </div>
           <div className="flex gap-[6px] py-[2px]">
             <img className="h-[20px]" src={stETHImg} />

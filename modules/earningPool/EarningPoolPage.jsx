@@ -12,19 +12,11 @@ import usePool from '@/modules/rebalancePoolV2/controller/usePool'
 
 export default function EarningPoolPage() {
   const { pageData, ...pageOthers } = useGaugeController()
-  console.log('POOLS_LIST---pagedata', pageData)
 
   const poolAData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_APool,
-    rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
     infoKey: 'rebalancePoolV2_info_A',
   })
-  console.log('POOLS_LIST---poolAData', poolAData)
   const poolBData = usePool({
-    rebalancePoolAddress: tokens.contracts.fx_BoostableRebalancePool_BPool,
-    rebalanceWithBonusTokenAddress:
-      tokens.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
     infoKey: 'rebalancePoolV2_info_B',
   })
 
