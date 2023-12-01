@@ -8,6 +8,7 @@ import Tabs from '@/modules/home/components/Tabs'
 import styles from './styles.module.scss'
 import useVesting from '../../controller/useVesting'
 import { useGlobal } from '@/contexts/GlobalProvider'
+import useInfo from '@/modules/lock/controllers/useInfo'
 
 export default function ConvertModal({ onCancel, converting, handleConvert }) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -20,7 +21,8 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     handleClaim: handleClaimFn,
     handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
-
+  const locker_c = useInfo(0)
+  console.log('locker_c----4', locker_c)
   const getApy = useCallback(
     (type, tokenName) => {
       let _apy = 0
@@ -69,7 +71,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     },
     {
       title: 'sdFXN',
-      apy: cBN(getApy('sdFXN', 'All')).toFixed(2),
+      apy: locker_c?.overview[0]?.value, // cBN(getApy('sdFXN', 'All')).toFixed(2),
       rewards: [
         {
           token: 'SDT',
@@ -77,7 +79,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
         },
         {
           token: 'wstETH',
-          apy: cBN(getApy('sdFXN', 'wstETH')).toFixed(2),
+          apy: locker_c?.overview[0]?.value, // cBN(getApy('sdFXN', 'wstETH')).toFixed(2),
         },
       ],
     },
