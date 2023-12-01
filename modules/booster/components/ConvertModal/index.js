@@ -22,7 +22,6 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
   const locker_c = useInfo(0)
-  console.log('locker_c----4', locker_c)
   const getApy = useCallback(
     (type, tokenName) => {
       let _apy = 0
@@ -50,6 +49,12 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     },
     [cvxFXN_sdFXN_apy]
   )
+  const _sdFxnApy = useMemo(() => {
+    if (locker_c && locker_c.overview[0]) {
+      return locker_c.overview[0].value.replace('%', '')
+    }
+    return '-'
+  }, [locker_c])
   const strategy = [
     {
       title: 'cvxFXN',
@@ -71,7 +76,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     },
     {
       title: 'sdFXN',
-      apy: locker_c?.overview[0]?.value, // cBN(getApy('sdFXN', 'All')).toFixed(2),
+      apy: _sdFxnApy, // cBN(getApy('sdFXN', 'All')).toFixed(2),
       rewards: [
         {
           token: 'SDT',
@@ -79,7 +84,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
         },
         {
           token: 'wstETH',
-          apy: locker_c?.overview[0]?.value, // cBN(getApy('sdFXN', 'wstETH')).toFixed(2),
+          apy: _sdFxnApy, // cBN(getApy('sdFXN', 'wstETH')).toFixed(2),
         },
       ],
     },
