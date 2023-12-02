@@ -218,7 +218,7 @@ export default function AppHeader() {
           <a
             className={styles.route}
             target="_blank"
-            href="https://bridge.aladdin.club"
+            href="https://bridge.aladdin.club?source=fx"
             rel="noreferrer"
           >
             Bridge
@@ -342,7 +342,7 @@ export default function AppHeader() {
                 <a
                   className={styles.route}
                   target="_blank"
-                  href="https://bridge.aladdin.club"
+                  href="https://bridge.aladdin.club?source=fx"
                   rel="noreferrer"
                 >
                   Bridge
