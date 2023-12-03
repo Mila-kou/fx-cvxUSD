@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Tooltip } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import cn from 'classnames'
 import Button from '@/components/Button'
 import { POOLS_LIST } from '@/config/aladdinVault'
@@ -24,7 +25,6 @@ export default function RebalancePoolCell({
   handleWithdraw,
   canUnlock,
   handleUnlock,
-  canClaim,
   claiming,
   handleClaim,
 
@@ -54,11 +54,40 @@ export default function RebalancePoolCell({
   ...poolData
 }) {
   const [openPanel, setOpenPanel] = useState(false)
+
+  const canClaim = userWstETHClaimable || userFXNClaimable || userXETHClaimable
+
+  const getRewards = (props = {}) => (
+    <div {...props}>
+      <div className="flex gap-[6px] py-[2px]">
+        <img className="h-[20px]" src={fxnImg} />
+        <p className="text-[16px]">{userFXNClaimable}</p>
+      </div>
+      <div className="flex gap-[6px] py-[2px]">
+        <img className="h-[20px]" src={stETHImg} />
+        <p className="text-[16px]">{userWstETHClaimable}</p>
+      </div>
+      {hasXETH ? (
+        <div className="flex gap-[6px] py-[2px]">
+          <img className="h-[20px]" src={xETHImg} />
+          <p className="text-[16px]">{userXETHClaimable}</p>
+        </div>
+      ) : null}
+    </div>
+  )
+
+  const apyList = [
+    'Proj.APY: 11.94%',
+    'Base Vault APR: 0.26%',
+    'Compounding afrxETH APY: 11.68%',
+    'Current APY: 0.26% Base',
+  ]
+
   return (
     <div key={poolData.title} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
         <div className="flex w-[160px] gap-[6px] items-center">
-          <img className="w-[30px]" src={xETHImg} />
+          <img className="w-[30px]" src={fxnImg} />
           <div>
             <p className="text-[16px]">{poolData.title}</p>
             <p className="text-[14px] text-[var(--second-text-color)]">fETH</p>
@@ -67,22 +96,7 @@ export default function RebalancePoolCell({
         <div className="w-[90px] text-[16px]">{poolData.poolTotalSupply}</div>
         <div className="w-[180px]">{poolData.apy}</div>
         <div className="w-[60px] text-[16px]">{userDeposit}</div>
-        <div className="w-[120px]">
-          <div className="flex gap-[6px] py-[2px]">
-            <img className="h-[20px]" src={fxnImg} />
-            <p className="text-[16px]">{userFXNClaimable}</p>
-          </div>
-          <div className="flex gap-[6px] py-[2px]">
-            <img className="h-[20px]" src={stETHImg} />
-            <p className="text-[16px]">{userWstETHClaimable}</p>
-          </div>
-          {hasXETH ? (
-            <div className="flex gap-[6px] py-[2px]">
-              <img className="h-[20px]" src={xETHImg} />
-              <p className="text-[16px]">{userXETHClaimable}</p>
-            </div>
-          ) : null}
-        </div>
+        <div className="w-[120px]">{getRewards()}</div>
         <div className="w-[20px] cursor-pointer">
           <img
             className={openPanel ? 'rotate-180' : ''}
@@ -92,48 +106,75 @@ export default function RebalancePoolCell({
       </div>
       {openPanel ? (
         <div className={`${styles.panel}`}>
-          <div className={`${styles.content} gap-[32px]`}>
-            <Button size="small" onClick={handleDeposit}>
-              Deposit
-            </Button>
-            <Button size="small" onClick={handleWithdraw} type="second">
-              Withdraw
-            </Button>
-            {/*        
+          <div className={styles.content}>
+            <div className={styles.item}>
+              <div>
+                <div>
+                  Projected APY: 1%{' '}
+                  <Tooltip
+                    placement="topLeft"
+                    title={
+                      <div>
+                        {apyList.map((apy) => (
+                          <p className="text-[14px]">{apy}</p>
+                        ))}
+                      </div>
+                    }
+                    arrow
+                    color="#000"
+                    overlayInnerStyle={{ width: '300px' }}
+                  >
+                    <InfoCircleOutlined className="ml-[8px]" />
+                  </Tooltip>
+                </div>
+              </div>
+              <div>
+                <div className="flex gap-[32px]">
+                  <Button size="small" onClick={handleDeposit}>
+                    Deposit
+                  </Button>
+                  <Button size="small" onClick={handleWithdraw} type="second">
+                    Withdraw
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className={`${styles.item} mt-[32px]`}>
+              <div>
+                <div className="flex">
+                  Earn: {getRewards({ className: 'flex gap-[32px] ml-[8px]' })}
+                </div>
+              </div>
+              <div>
+                <div className="flex gap-[32px]">
+                  <Button
+                    size="small"
+                    onClick={handleLiquidatorWithBonus}
+                    type="second"
+                  >
+                    Liquidator
+                  </Button>
+                  <Button
+                    size="small"
+                    disabled={!canClaim}
+                    loading={claiming}
+                    onClick={() => handleClaim()}
+                  >
+                    Claim
+                  </Button>
+                </div>
+                {/* 
                 <Button
+                  size="small"
                   loading={harvesting}
                   onClick={handleHarvest}
                   type="second"
                 >
                   Harvest
-                </Button>
-                */}
-            <Button
-              size="small"
-              onClick={handleLiquidatorWithBonus}
-              type="second"
-            >
-              Liquidator
-            </Button>
-
-            <Button
-              size="small"
-              // disabled={!canClaim.wstETH}
-              loading={claiming.wstETH}
-              onClick={() => handleClaim()}
-              type="second"
-            >
-              Claim
-            </Button>
-            {/* <Button
-              size="small"
-              disabled={!canClaim.xETH}
-              loading={claiming.xETH}
-              onClick={() => handleClaim('xETH', false)}
-              type="second"
-            >
-              Claim
-            </Button> */}
+                </Button> */}
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

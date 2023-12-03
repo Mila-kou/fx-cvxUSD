@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
-import PoolItem from './components/PoolItem'
+import RebalancePoolCell from './components/RebalancePoolCell'
 import usePool from './controller/usePool'
 
 import styles from './styles.module.scss'
@@ -16,7 +16,7 @@ export default function RebalancePoolPage() {
     rebalancePoolAddress: rebalancePoolAddress_B,
     rebalanceWithBonusTokenAddress: rebalanceWithBonusTokenAddress_B,
     infoKey: infoKey_B,
-  } = REBALANCE_POOLS_LIST[0]
+  } = REBALANCE_POOLS_LIST[1]
   const poolAData = usePool({
     rebalancePoolAddress,
     rebalanceWithBonusTokenAddress,
@@ -27,16 +27,6 @@ export default function RebalancePoolPage() {
     rebalanceWithBonusTokenAddress: rebalanceWithBonusTokenAddress_B,
     infoKey: infoKey_B,
   })
-
-  const totalSupplyTvlText = fb4(
-    cBN(poolAData.poolTotalSupplyTvl).plus(poolBData.poolTotalSupplyTvl),
-    false,
-    0
-  )
-
-  const totalSupplyText = fb4(
-    cBN(poolAData.poolTotalSupply_res).plus(poolBData.poolTotalSupply_res)
-  )
 
   return (
     <div className={styles.container}>
@@ -58,36 +48,27 @@ export default function RebalancePoolPage() {
             <InfoCircleOutlined className="ml-[8px]" />
           </Tooltip>
         </div>
-        <div className={styles.items}>
-          <div className={styles.item}>
-            <p>Total Deposited Value</p>
-            <h2>{dollarText(totalSupplyTvlText)}</h2>
-            <p>{totalSupplyText} fETH</p>
-          </div>
-          <div className={styles.item}>
-            <p>A Pool APR (stETH)</p>
-            <h2>{poolAData.apy}%</h2>
-            <p>{poolAData.poolTotalSupply} fETH</p>
-          </div>
-          <div className={styles.item}>
-            <p>B Pool APR (xETH)</p>
-            <h2>{poolBData.apy}%</h2>
-            <p>{poolBData.poolTotalSupply} fETH</p>
-          </div>
-        </div>
-      </div>
 
-      <PoolItem
-        title="My Rebalance Pool A"
-        contractType="fx_BoostableRebalancePool_APool"
-        {...poolAData}
-      />
-      <PoolItem
-        title="My Rebalance Pool B"
-        contractType="fx_BoostableRebalancePool_BPool"
-        hasXETH
-        {...poolBData}
-      />
+        <div className="px-[16px] mt-[32px] flex justify-between">
+          <div className="w-[160px]" />
+          <div className="w-[90px] text-[14px]">TVL</div>
+          <div className="w-[180px] text-[14px]">APR Range</div>
+          <div className="w-[60px] text-[14px]">Deposit</div>
+          <div className="w-[120px] text-[14px]">Earn</div>
+          <div className="w-[20px]" />
+        </div>
+        <RebalancePoolCell
+          title="Rebalance Pool A"
+          contractType="fx_BoostableRebalancePool_APool"
+          {...poolAData}
+        />
+        <RebalancePoolCell
+          title="Rebalance Pool B"
+          contractType="fx_BoostableRebalancePool_BPool"
+          hasXETH
+          {...poolBData}
+        />
+      </div>
     </div>
   )
 }

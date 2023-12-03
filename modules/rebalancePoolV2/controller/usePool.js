@@ -49,10 +49,7 @@ export default function usePool({ infoKey }) {
 
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
-  const [claiming, setClaiming] = useState({
-    wstETH: false,
-    xETH: false,
-  })
+  const [claiming, setClaiming] = useState(false)
 
   const [harvesting, setHarvesting] = useState(false)
 
@@ -68,10 +65,7 @@ export default function usePool({ infoKey }) {
   const handleClaim = async (symbol, wrap) => {
     if (!isAllReady) return
     try {
-      setClaiming({
-        ...claiming,
-        [symbol]: true,
-      })
+      setClaiming(true)
 
       console.log('handleClaim-----', symbol, wrap)
 
@@ -82,35 +76,13 @@ export default function usePool({ infoKey }) {
         key: 'lp',
         action: 'Claim',
       })
-      setClaiming({
-        ...claiming,
-        [symbol]: false,
-      })
+      setClaiming(false)
     } catch (error) {
-      setClaiming({
-        ...claiming,
-        [symbol]: false,
-      })
+      setClaiming(false)
       console.log('claim-error---', error)
       noPayableErrorAction(`error_claim`, error)
     }
   }
-
-  const canClaim = useMemo(() => {
-    console.log(
-      'boostableRebalancePoolInfo.userInfo?.claimableResd----claimableXETHRes---',
-      boostableRebalancePoolInfo.userInfo?.claimableRes,
-      boostableRebalancePoolInfo.userInfo?.claimableXETHRes
-    )
-    return {
-      wstETH: checkNotZoroNum(
-        boostableRebalancePoolInfo.userInfo?.claimableRes
-      ),
-      xETH: checkNotZoroNum(
-        boostableRebalancePoolInfo.userInfo?.claimableXETHRes
-      ),
-    }
-  }, [userWstETHClaimable, userXETHClaimable])
 
   const handleHarvest = async () => {
     if (!isAllReady) return
@@ -153,7 +125,6 @@ export default function usePool({ infoKey }) {
 
     handleDeposit,
     handleWithdraw,
-    canClaim,
     canLiquite,
     claiming,
     handleClaim,
