@@ -146,8 +146,7 @@ const useInfo = (refreshTrigger) => {
           .plus(
             cBN(platformFeeSpliterStETH)
               .times(platformFeeSpliterStETH_rewardRate)
-              .times(stETHTowstETHRate) // to wstETH
-              .div(1e18)
+              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance),
@@ -155,8 +154,7 @@ const useInfo = (refreshTrigger) => {
           .plus(
             cBN(platformFeeSpliterStETH)
               .times(platformFeeSpliterStETH_rewardRate)
-              .times(stETHTowstETHRate) // to wstETH
-              .div(1e18)
+              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance)
