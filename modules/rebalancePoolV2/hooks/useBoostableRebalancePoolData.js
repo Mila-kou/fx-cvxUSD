@@ -125,6 +125,13 @@ const useRebalancePoolUseInfo = (infoKey) => {
         // workingBalanceRes
       )
 
+      console.log('claimable-----', {
+        BoostRatioRes,
+        claimableWstETHRes,
+        claimableXETHRes,
+        claimableFXNRes,
+      })
+
       return {
         BoostableRebalancePoolBalanceOfRes,
         BoostRatioRes,
