@@ -34,22 +34,27 @@ const useRebalancePoolUseInfo = (infoKey) => {
         getBoostRatio(_currentAccount),
         rewardData(config.tokens.wstETH),
         rewardData(config.tokens.FXN),
+        rewardData(config.tokens.xETH),
         wstETHContract.methods.tokensPerStEth(),
       ]
       const [
         BoostableRebalancePoolTotalSupplyRes,
         ActiveRewardTokensRes,
+        boostRatioRes,
         rewardData_wstETH_Res,
         rewardData_FXN_Res,
+        rewardData_xETH_Res,
         tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
       console.log(
-        'rebalance--BaseInfo222222------',
-        BoostableRebalancePoolTotalSupplyRes,
-        ActiveRewardTokensRes,
+        'PoolApy-----BaseInfo222222------',
+        // BoostableRebalancePoolTotalSupplyRes,
+        // ActiveRewardTokensRes,
+        boostRatioRes,
         rewardData_wstETH_Res,
-        rewardData_FXN_Res,
-        tokensPerStEth
+        rewardData_xETH_Res
+        // rewardData_FXN_Res
+        // tokensPerStEth
       )
 
       return {
@@ -57,6 +62,7 @@ const useRebalancePoolUseInfo = (infoKey) => {
         ActiveRewardTokensRes,
         rewardData_wstETH_Res,
         rewardData_FXN_Res,
+        rewardData_xETH_Res,
         tokensPerStEth,
       }
     } catch (error) {

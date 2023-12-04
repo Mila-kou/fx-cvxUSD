@@ -8,7 +8,12 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
-import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
+import {
+  cBN,
+  checkNotZoroNum,
+  checkNotZoroNumOption,
+  dollarText,
+} from '@/utils/index'
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
@@ -77,10 +82,10 @@ export default function RebalancePoolCell({
   )
 
   const apyList = [
-    'Proj.APY: 11.94%',
-    'Base Vault APR: 0.26%',
-    'Compounding afrxETH APY: 11.68%',
-    'Current APY: 0.26% Base',
+    `APY: ${poolData.apyObj?.apy_text}`,
+    `FXN APR: ${poolData.apyObj?.fxnApy_text}`,
+    `wstETH APR: ${poolData.apyObj?.wstETHApy_text}`,
+    hasXETH ? `xETH APR: ${poolData.apyObj?.xETHApy_text}` : '',
   ]
 
   return (
@@ -94,7 +99,7 @@ export default function RebalancePoolCell({
           </div>
         </div>
         <div className="w-[90px] text-[16px]">{poolData.poolTotalSupply}</div>
-        <div className="w-[180px]">{poolData.apy}</div>
+        <div className="w-[180px]">{poolData.apyObj?.apy_text}</div>
         <div className="w-[60px] text-[16px]">{userDeposit}</div>
         <div className="w-[120px]">{getRewards()}</div>
         <div className="w-[20px] cursor-pointer">
@@ -110,13 +115,13 @@ export default function RebalancePoolCell({
             <div className={styles.item}>
               <div>
                 <div>
-                  Projected APY: 1%{' '}
+                  Projected APY: {poolData.apyObj?.apy_text}{' '}
                   <Tooltip
                     placement="topLeft"
                     title={
                       <div>
-                        {apyList.map((apy) => (
-                          <p className="text-[14px]">{apy}</p>
+                        {apyList.map((apyText) => (
+                          <p className="text-[14px]">{apyText}</p>
                         ))}
                       </div>
                     }
