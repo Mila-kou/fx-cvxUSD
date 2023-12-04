@@ -4,7 +4,7 @@ import { Tooltip } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import cn from 'classnames'
 import Button from '@/components/Button'
-import { POOLS_LIST } from '@/config/aladdinVault'
+import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
@@ -19,7 +19,7 @@ const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
 const fxnImg = '/images/FXN.svg'
 
-const item = POOLS_LIST[0]
+const item = REBALANCE_POOLS_LIST[0]
 
 export default function RebalancePoolCell({
   harvesting,

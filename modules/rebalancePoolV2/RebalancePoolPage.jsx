@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import tokens from '@/config/tokens'
 import RebalancePoolCell from './components/RebalancePoolCell'
 import usePool from './controller/usePool'
 
@@ -12,16 +11,17 @@ import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 export default function RebalancePoolPage() {
   const { rebalancePoolAddress, rebalanceWithBonusTokenAddress, infoKey } =
     REBALANCE_POOLS_LIST[0]
-  const {
-    rebalancePoolAddress: rebalancePoolAddress_B,
-    rebalanceWithBonusTokenAddress: rebalanceWithBonusTokenAddress_B,
-    infoKey: infoKey_B,
-  } = REBALANCE_POOLS_LIST[1]
   const poolAData = usePool({
     rebalancePoolAddress,
     rebalanceWithBonusTokenAddress,
     infoKey,
   })
+
+  const {
+    rebalancePoolAddress: rebalancePoolAddress_B,
+    rebalanceWithBonusTokenAddress: rebalanceWithBonusTokenAddress_B,
+    infoKey: infoKey_B,
+  } = REBALANCE_POOLS_LIST[1]
   const poolBData = usePool({
     rebalancePoolAddress: rebalancePoolAddress_B,
     rebalanceWithBonusTokenAddress: rebalanceWithBonusTokenAddress_B,
