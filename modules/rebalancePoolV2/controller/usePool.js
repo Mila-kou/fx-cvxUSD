@@ -118,7 +118,7 @@ export default function usePool({ infoKey }) {
 
   return {
     ...poolData,
-
+    _poolConfig,
     harvesting,
     handleHarvest,
     handleLiquidatorWithBonus,

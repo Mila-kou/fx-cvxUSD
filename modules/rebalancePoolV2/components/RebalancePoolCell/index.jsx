@@ -4,7 +4,6 @@ import { Tooltip } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import cn from 'classnames'
 import Button from '@/components/Button'
-import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
@@ -17,9 +16,8 @@ import {
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
+const fETHImg = '/images/f-logo.svg'
 const fxnImg = '/images/FXN.svg'
-
-const item = REBALANCE_POOLS_LIST[0]
 
 export default function RebalancePoolCell({
   harvesting,
@@ -43,6 +41,7 @@ export default function RebalancePoolCell({
   userFXNClaimableTvl_text,
   userXETHClaimable,
   userXETHClaimableTvl_text,
+  poolTotalSupplyTvl_text,
   userUnlockingBalance,
   userUnlockingUnlockAt,
   userUnlockedBalance,
@@ -56,6 +55,7 @@ export default function RebalancePoolCell({
   FX_RebalancePoolContract,
 
   hasXETH,
+  _poolConfig,
   ...poolData
 }) {
   const [openPanel, setOpenPanel] = useState(false)
@@ -92,15 +92,25 @@ export default function RebalancePoolCell({
     <div key={poolData.title} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
         <div className="flex w-[160px] gap-[6px] items-center">
-          <img className="w-[30px]" src={fxnImg} />
+          <img className="w-[30px]" src={fETHImg} />
           <div>
             <p className="text-[16px]">{poolData.title}</p>
             <p className="text-[14px] text-[var(--second-text-color)]">fETH</p>
           </div>
         </div>
-        <div className="w-[90px] text-[16px]">{poolData.poolTotalSupply}</div>
+        <div className="w-[90px] text-[16px]">
+          <p className="text-[16px]">{poolData.poolTotalSupply}</p>
+          <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
+            ${poolTotalSupplyTvl_text}
+          </p>
+        </div>
         <div className="w-[180px]">{poolData.apyObj?.apy_text}</div>
-        <div className="w-[60px] text-[16px]">{userDeposit}</div>
+        <div className="w-[90px] text-[16px]">
+          <p className="text-[16px]">{userDeposit}</p>
+          <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
+            ${userDepositTvl_text}
+          </p>
+        </div>
         <div className="w-[120px]">{getRewards()}</div>
         <div className="w-[20px] cursor-pointer">
           <img
@@ -186,7 +196,7 @@ export default function RebalancePoolCell({
 
       {depositVisible && (
         <DepositModal
-          info={item}
+          info={_poolConfig}
           contractType={contractType}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
           poolData={boostableRebalancePoolInfo}
@@ -195,7 +205,7 @@ export default function RebalancePoolCell({
       )}
       {withdrawVisible && (
         <WithdrawModal
-          info={item}
+          info={_poolConfig}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
           poolData={boostableRebalancePoolInfo}
           onCancel={() => setWithdrawVisible(false)}

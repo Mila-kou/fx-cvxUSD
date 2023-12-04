@@ -66,6 +66,7 @@ export default function WithdrawModal(props) {
         <BalanceInput
           placeholder="0"
           symbol={name}
+          hideLogo
           balance={fb4(userInfo.BoostableRebalancePoolBalanceOfRes, false)}
           maxAmount={userInfo.BoostableRebalancePoolBalanceOfRes}
           onChange={handleInputChange}
