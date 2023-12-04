@@ -39,7 +39,7 @@ export default function WithdrawModal(props) {
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'earn',
-        action: 'Unlock',
+        action: 'Withdraw',
       })
       onCancel()
       setWithdrawing(false)

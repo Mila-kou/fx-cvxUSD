@@ -32,9 +32,9 @@ const useStabiltyPool = (infoKey) => {
     rewardData_FXN_Res,
     tokensPerStEth,
   } = boostableRebalancePoolInfo?.baseInfo || {}
-  const stETHRate = checkNotZoroNum(tokensPerStEth)
-    ? cBN(1).div(cBN(tokensPerStEth).div(1e18)).toFixed(4)
-    : 1
+  // const stETHRate = checkNotZoroNum(tokensPerStEth)
+  //   ? cBN(1).div(cBN(tokensPerStEth).div(1e18)).toFixed(4)
+  //   : 1
   // console.log(
   //   'PoolApy---baseInfo',
   //   globalState,
@@ -110,7 +110,6 @@ const useStabiltyPool = (infoKey) => {
             .div(1e18)
             .multipliedBy(config.yearSecond)
             .multipliedBy(ethPrice)
-            .multipliedBy(stETHRate)
             .div(rebalanceTvl)
             .times(100)
         }
@@ -147,13 +146,12 @@ const useStabiltyPool = (infoKey) => {
           `${fb4(_fxnApy, false, 0, 2)} %`
         )
         console.log(
-          'PoolApy---rate_currentTime--finishAt--config.yearSecond--ethPrice--stETHRate--stabilityPoolTotalSupplyTvl--_fxnApy--apy---',
+          'PoolApy---rate_currentTime--finishAt--config.yearSecond--ethPrice---stabilityPoolTotalSupplyTvl--_fxnApy--apy---',
           rate,
           _currentTime,
           finishAt,
           config.yearSecond,
           ethPrice,
-          stETHRate,
           rebalanceTvl.toString(),
           _fxnApy.toString(),
           apy.toString()
@@ -214,9 +212,7 @@ const useStabiltyPool = (infoKey) => {
       const userDepositTvl_text = fb4(userDepositTvl, false, 0)
 
       // stETH
-      const userWstETHClaimable_res = cBN(userInfo?.claimableWstETHRes).times(
-        stETHRate
-      )
+      const userWstETHClaimable_res = cBN(userInfo?.claimableWstETHRes)
 
       const userWstETHClaimable = checkNotZoroNumOption(
         userWstETHClaimable_res,
@@ -224,7 +220,6 @@ const useStabiltyPool = (infoKey) => {
       )
       console.log(
         'userWstETHClaimable-----',
-        stETHRate,
         userWstETHClaimable_res,
         userInfo?.claimableWstETHRes
       )
@@ -235,7 +230,6 @@ const useStabiltyPool = (infoKey) => {
       ) {
         userWstETHClaimableTvl = cBN(ethPrice)
           .times(userInfo.claimableRes)
-          .times(stETHRate)
           .div(1e18)
       }
       const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, false, 0)
