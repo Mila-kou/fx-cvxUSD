@@ -21,7 +21,7 @@ export default function DemoPage() {
                       .filter((_, i) => i < v.__length__)
                       .map((item) =>
                         Number(item) > 100000000000
-                          ? fb4(item, false, 18, 18)
+                          ? fb4(item, false, 18, 18).replace(',', '')
                           : item
                       )
                       .join(',')
@@ -29,7 +29,7 @@ export default function DemoPage() {
               </p>
               <p>
                 {Number(v) > 100000000000
-                  ? fb4(v, false, 18, 18)
+                  ? fb4(v, false, 18, 18).replace(',', '')
                   : JSON.stringify(v, null, 2)}
               </p>
             </div>
