@@ -48,7 +48,8 @@ const useData = (infoKey) => {
         // tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
       console.log(
-        'PoolApy-----useData------'
+        'blockNumber-----useData------',
+        blockNumber
         // BoostableRebalancePoolTotalSupplyRes,
         // ActiveRewardTokensRes,
         // boostRatioRes,
@@ -65,6 +66,7 @@ const useData = (infoKey) => {
         boostRatio,
         // rewardData_wstETH_Res,
         rewardData_FXN,
+        blockNumber,
         // rewardData_xETH_Res,
         // tokensPerStEth,
       }
@@ -72,7 +74,12 @@ const useData = (infoKey) => {
       console.log('rebalance--baseInfoError==>', error)
       return {}
     }
-  }, [fx_BoostableRebalancePool_PoolContract, multiCallsV2, _currentAccount])
+  }, [
+    fx_BoostableRebalancePool_PoolContract,
+    multiCallsV2,
+    _currentAccount,
+    blockNumber,
+  ])
 
   const fetchUserInfo = useCallback(async () => {
     console.log('rebalance--fetchUserInfo--')
