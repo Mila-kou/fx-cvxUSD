@@ -193,7 +193,7 @@ const useStabiltyPool = (infoKey) => {
           .times(poolTotalSupply_res)
           .div(1e18)
       }
-      const poolTotalSupplyTvl_text = fb4(poolTotalSupplyTvl, false, 0)
+      const poolTotalSupplyTvl_text = fb4(poolTotalSupplyTvl, true, 0)
 
       const userDeposit = checkNotZoroNumOption(
         userInfo?.BoostableRebalancePoolBalanceOfRes,
@@ -209,7 +209,7 @@ const useStabiltyPool = (infoKey) => {
           .times(userInfo.BoostableRebalancePoolBalanceOfRes)
           .div(1e18)
       }
-      const userDepositTvl_text = fb4(userDepositTvl, false, 0)
+      const userDepositTvl_text = fb4(userDepositTvl, true, 0)
 
       // stETH
       const userWstETHClaimable_res = cBN(userInfo?.claimableWstETHRes)

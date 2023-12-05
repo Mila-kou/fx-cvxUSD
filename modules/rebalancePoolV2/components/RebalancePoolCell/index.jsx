@@ -99,16 +99,16 @@ export default function RebalancePoolCell({
           </div>
         </div>
         <div className="w-[90px] text-[16px]">
-          <p className="text-[16px]">{poolData.poolTotalSupply}</p>
+          <p className="text-[16px]">{poolTotalSupplyTvl_text}</p>
           <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
-            ${poolTotalSupplyTvl_text}
+            {poolData.poolTotalSupply}
           </p>
         </div>
         <div className="w-[180px]">{poolData.apyObj?.apy_text}</div>
         <div className="w-[90px] text-[16px]">
-          <p className="text-[16px]">{userDeposit}</p>
+          <p className="text-[16px]">{userDepositTvl_text}</p>
           <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
-            ${userDepositTvl_text}
+            {userDeposit}
           </p>
         </div>
         <div className="w-[120px]">{getRewards()}</div>

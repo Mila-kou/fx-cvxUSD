@@ -31,7 +31,7 @@ export default function EarningPoolPage() {
           <div className="w-[160px]" />
           <div className="w-[90px] text-[14px]">TVL</div>
           <div className="w-[180px] text-[14px]">APR Range</div>
-          <div className="w-[60px] text-[14px]">Deposit</div>
+          <div className="w-[90px] text-[14px]">Deposit</div>
           <div className="w-[120px] text-[14px]">Earn</div>
           <div className="w-[20px]" />
         </div>
