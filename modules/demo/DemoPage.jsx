@@ -27,7 +27,11 @@ export default function DemoPage() {
                       .join(',')
                   : null}
               </p>
-              <p>{JSON.stringify(v, null, 2)}</p>
+              <p>
+                {Number(v) > 100000000000
+                  ? fb4(v, false, 18, 18)
+                  : JSON.stringify(v, null, 2)}
+              </p>
             </div>
           ))}
         </div>
