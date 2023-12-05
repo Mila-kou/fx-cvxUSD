@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { fb4 } from '@/utils/index'
 
 import styles from './styles.module.scss'
 import useData from './hooks/useData'
@@ -18,6 +19,11 @@ export default function DemoPage() {
                 {v?.__length__
                   ? Object.values(v)
                       .filter((_, i) => i < v.__length__)
+                      .map((item) =>
+                        Number(item) > 100000000000
+                          ? fb4(item, false, 18, 18)
+                          : item
+                      )
                       .join(',')
                   : null}
               </p>
