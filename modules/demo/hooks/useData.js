@@ -25,6 +25,7 @@ const useData = (infoKey) => {
       totalSupply: BoostableRebalancePoolTotalSupplyFn,
       getBoostRatio,
       rewardData,
+      claimable: claimableFn,
     } = fx_BoostableRebalancePool_PoolContract.methods
     try {
       const apiCalls = [
@@ -34,6 +35,7 @@ const useData = (infoKey) => {
         getBoostRatio(_currentAccount),
         // rewardData(config.tokens.wstETH),
         rewardData(config.tokens.FXN),
+        claimableFn(_currentAccount, config.tokens.FXN),
         // rewardData(config.tokens.xETH),
         // wstETHContract.methods.tokensPerStEth(),
       ]
@@ -44,6 +46,7 @@ const useData = (infoKey) => {
         boostRatio,
         // rewardData_wstETH_Res,
         rewardData_FXN,
+        claimableFXN,
         // rewardData_xETH_Res,
         // tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
@@ -66,6 +69,7 @@ const useData = (infoKey) => {
         boostRatio,
         // rewardData_wstETH_Res,
         rewardData_FXN,
+        claimableFXN,
         blockNumber,
         // rewardData_xETH_Res,
         // tokensPerStEth,
