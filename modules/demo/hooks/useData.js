@@ -7,7 +7,7 @@ import { useBoostableRebalancePool } from '@/hooks/useGaugeContracts'
 import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 
 const useData = (infoKey) => {
-  const { _currentAccount, web3, blockNumber } = useWeb3()
+  const { _currentAccount, web3, blockNumber, blockTime } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
   const { rebalancePoolAddress: contractAddress } = REBALANCE_POOLS_LIST.find(
     (item) => item.infoKey == infoKey
@@ -71,6 +71,7 @@ const useData = (infoKey) => {
         rewardData_FXN,
         claimableFXN,
         blockNumber,
+        blockTime,
         // rewardData_xETH_Res,
         // tokensPerStEth,
       }
@@ -83,6 +84,7 @@ const useData = (infoKey) => {
     multiCallsV2,
     _currentAccount,
     blockNumber,
+    blockTime,
   ])
 
   const fetchUserInfo = useCallback(async () => {
