@@ -5,6 +5,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { useBoostableRebalancePool } from '@/hooks/useGaugeContracts'
 import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
+import { fb4 } from '@/utils/index'
 import {
   useVeFXNFee,
   useVeFXN,
@@ -12,6 +13,8 @@ import {
   useErc20Token,
   useWstETH,
 } from '@/hooks/useContracts'
+
+const format = (v, d = 18) => fb4(v, false, d, d).replace(',', '')
 
 const useData = (infoKey) => {
   const { _currentAccount, web3, blockNumber, blockTime } = useWeb3()
@@ -37,6 +40,7 @@ const useData = (infoKey) => {
       getBoostRatio,
       rewardData,
       claimable: claimableFn,
+      userRewardSnapshot: userRewardSnapshotFn,
     } = fx_BoostableRebalancePool_PoolContract.methods
     try {
       const apiCalls = [
@@ -48,6 +52,7 @@ const useData = (infoKey) => {
         rewardData(config.tokens.FXN),
         claimableFn(_currentAccount, config.tokens.FXN),
         totalSupplyVeFXNFn(),
+        userRewardSnapshotFn(_currentAccount, config.tokens.FXN),
         // rewardData(config.tokens.xETH),
         // wstETHContract.methods.tokensPerStEth(),
       ]
@@ -60,12 +65,13 @@ const useData = (infoKey) => {
         rewardData_FXN,
         claimableFXN,
         totalSupply_veFXN,
+        userRewardSnapshot_FXNRes,
         // rewardData_xETH_Res,
         // tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
       console.log(
-        'blockNumber-----useData------',
-        blockNumber
+        'userRewardSnapshot_FXN------',
+        userRewardSnapshot_FXNRes
         // BoostableRebalancePoolTotalSupplyRes,
         // ActiveRewardTokensRes,
         // boostRatioRes,
@@ -74,6 +80,13 @@ const useData = (infoKey) => {
         // rewardData_FXN_Res
         // tokensPerStEth
       )
+
+      const userRewardSnapshot_FXN = {
+        pending: format(userRewardSnapshot_FXNRes.rewards.pending),
+        claimed: format(userRewardSnapshot_FXNRes.rewards.claimed),
+        timestamp: userRewardSnapshot_FXNRes.checkpoint.timestamp,
+        integral: format(userRewardSnapshot_FXNRes.checkpoint.integral, 36),
+      }
 
       return {
         dataObj: {
@@ -85,6 +98,7 @@ const useData = (infoKey) => {
           rewardData_FXN,
           claimableFXN,
           totalSupply_veFXN,
+          userRewardSnapshot_FXN,
           blockNumber,
           blockTime,
         },
@@ -98,6 +112,16 @@ const useData = (infoKey) => {
           boostRatio,
           claimableFXN,
           totalSupply_veFXN,
+        ],
+
+        spList: [
+          userRewardSnapshot_FXN.pending,
+          userRewardSnapshot_FXN.claimed,
+          userRewardSnapshot_FXN.integral,
+          format(rewardData_FXN[0]),
+          format(rewardData_FXN[1]),
+          rewardData_FXN[2],
+          rewardData_FXN[3],
         ],
         // rewardData_xETH_Res,
         // tokensPerStEth,

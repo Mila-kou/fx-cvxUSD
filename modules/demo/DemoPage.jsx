@@ -11,7 +11,10 @@ export default function DemoPage() {
   return (
     <div className={styles.container}>
       <div className={`${styles.header} mt-[32px]`}>
-        <div>
+        <p>userRewardSnapshot_FXN这组</p>
+        <div>{(rebalancePoolV2_info_A?.baseInfo?.spList || []).join(',')}</div>
+
+        <div className="mt-[40px]">
           {(rebalancePoolV2_info_A?.baseInfo?.dataList || []).map((v, i) => (
             <span>
               {Number(v) > 100000000000
