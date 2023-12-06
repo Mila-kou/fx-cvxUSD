@@ -5,15 +5,26 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { useBoostableRebalancePool } from '@/hooks/useGaugeContracts'
 import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
+import {
+  useVeFXNFee,
+  useVeFXN,
+  useFXN,
+  useErc20Token,
+  useWstETH,
+} from '@/hooks/useContracts'
 
 const useData = (infoKey) => {
   const { _currentAccount, web3, blockNumber, blockTime } = useWeb3()
+  const { contract: veFXNContract, address: veFXNAddress } = useVeFXN()
   const multiCallsV2 = useMutiCallV2()
   const { rebalancePoolAddress: contractAddress } = REBALANCE_POOLS_LIST.find(
     (item) => item.infoKey == infoKey
   )
   const { contract: fx_BoostableRebalancePool_PoolContract } =
     useBoostableRebalancePool(contractAddress)
+
+  const { totalSupply: totalSupplyVeFXNFn, balanceOf: veFXNBalanceOf } =
+    veFXNContract.methods
 
   console.log('rebalance--0--', contractAddress)
   // const { contract: wstETHContract } = useWstETH()
@@ -36,6 +47,7 @@ const useData = (infoKey) => {
         // rewardData(config.tokens.wstETH),
         rewardData(config.tokens.FXN),
         claimableFn(_currentAccount, config.tokens.FXN),
+        totalSupplyVeFXNFn(),
         // rewardData(config.tokens.xETH),
         // wstETHContract.methods.tokensPerStEth(),
       ]
@@ -47,6 +59,7 @@ const useData = (infoKey) => {
         // rewardData_wstETH_Res,
         rewardData_FXN,
         claimableFXN,
+        totalSupply_veFXN,
         // rewardData_xETH_Res,
         // tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
@@ -63,15 +76,29 @@ const useData = (infoKey) => {
       )
 
       return {
-        boostCheckpoint,
-        balanceOf,
-        totalSupply,
-        boostRatio,
-        // rewardData_wstETH_Res,
-        rewardData_FXN,
-        claimableFXN,
-        blockNumber,
-        blockTime,
+        dataObj: {
+          boostCheckpoint,
+          balanceOf,
+          totalSupply,
+          boostRatio,
+          // rewardData_wstETH_Res,
+          rewardData_FXN,
+          claimableFXN,
+          totalSupply_veFXN,
+          blockNumber,
+          blockTime,
+        },
+
+        dataList: [
+          boostCheckpoint[0],
+          boostCheckpoint[1],
+          boostCheckpoint[2],
+          balanceOf,
+          totalSupply,
+          boostRatio,
+          claimableFXN,
+          totalSupply_veFXN,
+        ],
         // rewardData_xETH_Res,
         // tokensPerStEth,
       }
