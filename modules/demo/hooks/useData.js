@@ -193,7 +193,7 @@ const useData = (infoKey) => {
   useEffect(() => {
     refetchBaseInfo()
     // refetchUserInfo()
-  }, [_currentAccount, blockNumber])
+  }, [_currentAccount, blockNumber, blockTime])
   return {
     baseInfo: BoostableRebalancePool_baseInfo,
     // ...maxAbleFToken,
