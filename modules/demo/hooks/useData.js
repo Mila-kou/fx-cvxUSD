@@ -14,7 +14,8 @@ import {
   useWstETH,
 } from '@/hooks/useContracts'
 
-const format = (v, d = 18) => fb4(v, false, d, d).replace(',', '')
+const format = (v, d = 18) =>
+  fb4(v, false, d, d).replace(',', '').replace('-', '0')
 
 const useData = (infoKey) => {
   const { _currentAccount, web3, blockNumber, blockTime } = useWeb3()
@@ -117,6 +118,7 @@ const useData = (infoKey) => {
         spList: [
           userRewardSnapshot_FXN.pending,
           userRewardSnapshot_FXN.claimed,
+          userRewardSnapshot_FXN.timestamp,
           userRewardSnapshot_FXN.integral,
           format(rewardData_FXN[0]),
           format(rewardData_FXN[1]),
