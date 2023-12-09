@@ -53,9 +53,11 @@ const useGaugeController = () => {
   const getLpConvexApy = useCallback(
     (lpAddress) => {
       try {
-        const _convexLpInfo = ConvexVaultsAPY.find(
-          (item) => item.address.toLowerCase() == lpAddress.toLowerCase()
-        )
+        const _convexLpInfo =
+          ConvexVaultsAPY &&
+          ConvexVaultsAPY.find(
+            (item) => item.address.toLowerCase() == lpAddress.toLowerCase()
+          )
         if (_convexLpInfo && _convexLpInfo.name) {
           return {
             apy: _convexLpInfo.apy,
@@ -85,12 +87,11 @@ const useGaugeController = () => {
           rewardDatas,
           rewardTokens,
         } = item || {}
-        console.log('apy----0--')
         const { totalSupply } = baseInfo
         let allApy = cBN(0)
-        let _apys = 0
+        let _apys = []
         const convexLpApy = getLpConvexApy(lpAddress)
-        console.log('apy----1--', rewardDatas)
+        console.log('apy----c_1--', rewardDatas, convexLpApy)
         if (rewardDatas && rewardDatas.length) {
           _apys = rewardDatas.map((baseApyData, index) => {
             let _currentApy = 0
@@ -147,7 +148,7 @@ const useGaugeController = () => {
                 _projectApy
               )
             }
-            allApy = allApy.plus(_currentApy)
+            // allApy = allApy.plus(_currentApy)
             return {
               rewardToken,
               _currentApy,
@@ -157,12 +158,12 @@ const useGaugeController = () => {
         }
 
         return {
-          allApy: allApy.toFixed(2),
+          // allApy: allApy.toFixed(2),
           apyList: _apys,
           convexLpApy,
         }
       } catch (error) {
-        console.log('apy----error--', error)
+        console.log('apy----c_error--', error)
         return {
           allApy: 0,
           apyList: [],
@@ -170,7 +171,7 @@ const useGaugeController = () => {
         }
       }
     },
-    [allGaugeBaseInfo, getGaugeApy]
+    [allGaugeBaseInfo, getGaugeApy, ConvexVaultsAPY]
   )
 
   const getUserFXNNum = useCallback(
@@ -246,7 +247,7 @@ const useGaugeController = () => {
         return _data
       })
       console.log(
-        'POOLS_LIST---data--',
+        'apy--------POOLS_LIST---data--',
         // POOLS_LIST,
         // allPoolsInfo,
         // allPoolsUserInfo,
