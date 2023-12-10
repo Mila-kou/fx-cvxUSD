@@ -147,6 +147,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
       const _currentApy = getTypeApy(apyInfo, 'current')
       console.log('apy----_projectApy---', _projectApy)
       console.log('apy----_currentApy---', _currentApy)
+      if (_projectApy._allApy_min) {
+        return `${_projectApy._allApy_min} % - ${_projectApy._allApy_max} %`
+      }
     }
     return '-'
   }, [cellData, boostInfo])
