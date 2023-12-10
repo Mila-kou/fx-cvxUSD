@@ -99,7 +99,6 @@ export default function PoolCell({ cellData, ...pageOthers }) {
     _typeApy._allApy_min = cBN(_convexTypeApy)
     _typeApy._allApy_max = cBN(_convexTypeApy)
     _apyInfo.apyList.map((item, index) => {
-      console.log('gauge--apy----item', item)
       let _itemTypeApy = item._projectApy
       if (type == 'project') {
         _itemTypeApy = item._projectApy
@@ -136,7 +135,6 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   }, [])
   const apyDom = useMemo(() => {
     const { apyInfo } = cellData
-    console.log('apy----page-', apyInfo)
     if (
       apyInfo &&
       apyInfo.convexLpApy &&

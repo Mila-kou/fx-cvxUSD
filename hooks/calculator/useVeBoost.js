@@ -49,7 +49,7 @@ export const useVeBoost = (options) => {
         console.log('veBoost-----1', type, l)
         if (type == 'calc') {
           if (cBN(l).isZero() || cBN(l).isNaN()) {
-            return [0, 0]
+            return [0, 0, 0]
           }
           // __userVeAmount = cBN(__userVeAmount).plus(_userVeAmount).toFixed(0)
         } else {
