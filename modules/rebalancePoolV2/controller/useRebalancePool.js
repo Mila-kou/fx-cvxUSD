@@ -80,6 +80,15 @@ const useStabiltyPool = (infoKey) => {
   //   [boostableRebalancePoolInfo?.baseInfo]
   // )
 
+  const getMax = useCallback(
+    (userInfo) => {
+      console.log('getMax----', boostableRebalancePoolInfo)
+      // const max_claimable = (claimable - pending) / getboostratio
+      // return max_claimable=（claimable-pending）/getboostratio
+      return 1
+    },
+    [boostableRebalancePoolInfo]
+  )
   const getPoolApy_snap = useCallback(
     (rebalanceTvl) => {
       try {
@@ -255,6 +264,8 @@ const useStabiltyPool = (infoKey) => {
 
       // FXN
       const userFXNClaimable_res = cBN(userInfo?.claimableFXNRes)
+
+      const max = getMax(userInfo)
 
       const userFXNClaimable = checkNotZoroNumOption(
         userFXNClaimable_res,
