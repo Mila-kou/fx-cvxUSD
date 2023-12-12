@@ -265,7 +265,7 @@ const useStabiltyPool = (infoKey) => {
       // FXN
       const userFXNClaimable_res = cBN(userInfo?.claimableFXNRes)
 
-      const max = getMax(userInfo)
+      // const max = getMax(userInfo)
 
       const userFXNClaimable = checkNotZoroNumOption(
         userFXNClaimable_res,

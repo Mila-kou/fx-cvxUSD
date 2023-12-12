@@ -22,8 +22,8 @@ const contracts = {
 
   fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
   fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
-  fx_RebalanceWithBonusToken_A: '0x17f21f468d77E6e35702a9Ae7a9da50Db7F6a4f4',
-  fx_RebalanceWithBonusToken_B: '0xFf71c3AF2d66E2bAFc8088000fFB4CbFf4Ed7814',
+  fx_RebalanceWithBonusToken_A: '0xc6dEe5913e010895F3702bc43a40d661B13a40BD',
+  fx_RebalanceWithBonusToken_B: '0xB87A8332dFb1C76Bb22477dCfEdDeB69865cA9f9',
   fx_RebalancePoolSplitter: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
 
   fx_VotingEscrowBoost: '0x1DC94c4Dba60f2880A40327EF465E364C57df03F',
@@ -98,13 +98,13 @@ const contracts = {
   fx_BoostableRebalancePool_APool: '0xCE225954423b3F7Bd4b6e88a0E46569ce01CF0c6',
   fx_BoostableRebalancePool_BPool: '0xD0959fe55A6510C78E5Ec3642246882eff7509E9',
   fx_RebalanceWithBonusToken_BoostRebalanceAPool:
-    '0xc6ae935F7b9efb489938D8DFaeE29740E982d578',
+    '0x74E9234A6e03c382A01Bb942B1aF05B639371309',
   fx_RebalanceWithBonusToken_BoostRebalanceBPool:
-    '0xD2953DD27C273B3C29Fc37F2eDa8014B7896A9B8',
+    '0x5a161B94c737326cA115eC46f4Eaf4eEC5037dBE',
   fx_RebalancePoolSplitter_BoostableRebalancePool_fETH:
-    '0x2146b8eeF7df5F290B7f3bde7e6582575D89a091',
+    '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
   fx_RebalancePoolGaugeClaimer_BoostableRebalancePool_fETH:
-    '0x8532dC104AB8102Af2028609024932175DE3B100',
+    '0x11e94c39A54c469A76D4f7C99F2B2dfcB7113E08',
 }
 
 const gaugeTokenList = {
@@ -119,7 +119,7 @@ const gaugeTokenList = {
 
   // rebalance pool gauge
   BoostableRebalancePool_fETH_FundraiseGauge:
-    '0x9015a02f285fBC68C8f229F748365F54d0F19459',
+    '0x81243a88Dd9Fb963c643bD3f2194c2cA9CCFc428',
 }
 
 const tokens = {
