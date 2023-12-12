@@ -184,7 +184,7 @@ const useStabiltyPool = (infoKey) => {
   )
 
   const pageData = useMemo(() => {
-    const { baseInfo = {}, userInfo = {} } = boostableRebalancePoolInfo
+    const { baseInfo = {}, userInfo = {} } = boostableRebalancePoolInfo || {}
     const _fNav = CurrentNavRes?._fNav || 0
     const _xNav = CurrentNavRes?._xNav || 0
     try {
