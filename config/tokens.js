@@ -95,7 +95,7 @@ const contracts = {
   fx_RebalancePoolRegistry: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
 
   // farming
-  fx_BoostableRebalancePool_APool: '0xCE225954423b3F7Bd4b6e88a0E46569ce01CF0c6',
+  fx_BoostableRebalancePool_APool: '0xc6dEe5913e010895F3702bc43a40d661B13a40BD',
   fx_BoostableRebalancePool_BPool: '0xD0959fe55A6510C78E5Ec3642246882eff7509E9',
   fx_RebalanceWithBonusToken_BoostRebalanceAPool:
     '0x74E9234A6e03c382A01Bb942B1aF05B639371309',
