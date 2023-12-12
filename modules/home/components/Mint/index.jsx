@@ -111,9 +111,8 @@ export default function Mint({ slippage }) {
   const bonus_text = useMemo(() => {
     const { reservePoolBalancesRes } = baseInfo
 
-    // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
-    return BigNumber.min(cBN(reservePoolBalancesRes), mintXBouns)
-  }, [mintXBouns, baseInfo?.reservePoolBalancesRes])
+    return BigNumber.min(reservePoolBalancesRes, mintXBouns, xETHBonus)
+  }, [mintXBouns, baseInfo?.reservePoolBalancesRes, xETHBonus])
 
   useEffect(() => {
     initPage()
@@ -313,6 +312,7 @@ export default function Mint({ slippage }) {
         }
       } else {
         minout_ETH = 0
+        setMintXBouns(0)
       }
       console.log('minout_ETH----', minout_ETH)
 
@@ -602,11 +602,11 @@ export default function Mint({ slippage }) {
 
   const checkPause = useCallback(() => {
     let isPaused = false
+    const isPausedMintfETH = checkMintPaused()
     if (isSwap) {
-      isPaused = checkSwapPause()
+      isPaused = checkSwapPause() || (isF && isPausedMintfETH)
     } else {
       if (isF) {
-        const isPausedMintfETH = checkMintPaused()
         isPaused = mintPaused || isPausedMintfETH || !_isValidPrice
       } else {
         isPaused = mintPaused || !_isValidPrice
@@ -662,8 +662,7 @@ export default function Mint({ slippage }) {
 
   useEffect(() => {
     getMinAmount(true)
-    // handleGetAllMinAmount()
-  }, [isF, slippage, fromAmount])
+  }, [isF, slippage, fromAmount, _account])
 
   const fromUsd = useMemo(() => {
     if (symbol === 'fETH') {

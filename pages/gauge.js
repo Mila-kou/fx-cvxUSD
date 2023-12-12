@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import GaugePage from '@/modules/gauge/GaugePage'
+// import GaugePage from '@/modules/gauge/GaugePage'
 
 export default function Gauge() {
   return (
@@ -8,7 +8,7 @@ export default function Gauge() {
       <Head>
         <title>f(x) Protocol</title>
       </Head>
-      <GaugePage />
+      {/* <GaugePage /> */}
     </React.Fragment>
   )
 }

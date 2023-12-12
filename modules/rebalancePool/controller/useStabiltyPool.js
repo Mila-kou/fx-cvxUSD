@@ -175,9 +175,9 @@ const useStabiltyPool = (infoKey) => {
         fb4(stabilityPoolInfo.userInfo.unlockingBalanceOfRes?._balance)
       )
       const userUnlockingUnlockAt = checkNotZoroNumOption(
-        stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt,
+        stabilityPoolInfo.userInfo?.unlockingBalanceOfRes?._unlockAt,
         moment(
-          stabilityPoolInfo.userInfo?.unlockingBalanceOfRes._unlockAt * 1000
+          stabilityPoolInfo.userInfo?.unlockingBalanceOfRes?._unlockAt * 1000
         ).format('lll')
       )
 

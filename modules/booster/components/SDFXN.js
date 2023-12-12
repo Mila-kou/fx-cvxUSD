@@ -15,6 +15,7 @@ export default function SDFXN() {
     canClaim_2: canClaim,
     canClaim_2_Text: canClaimText,
     statkeDaoRewards,
+    statkeDaoWstETHRewards,
     getBatchsInfo,
     newList_stakeDao,
     handleClaim: handleClaimFn,
@@ -58,12 +59,12 @@ export default function SDFXN() {
     //   symbol: 'FXN',
     //   amount: '100,000',
     // },
-    // {
-    //   icon: '/tokens/steth.svg',
-    //   symbol: 'wstETH',
-    //   amount: '100,000',
-    //   iconSize: '20px',
-    // },
+    {
+      icon: '/tokens/steth.svg',
+      symbol: 'wstETH',
+      amount: fb4(statkeDaoWstETHRewards),
+      iconSize: '20px',
+    },
   ]
 
   const data = {

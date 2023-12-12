@@ -26,7 +26,8 @@ const routers = [
   ['Earning Pools', '/earning-pool'],
   // ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
-  ['Vesting', '/vesting'],
+  ['Booster', '/booster'],
+  // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
   // ['Offering', '/offering'],
@@ -217,7 +218,7 @@ export default function AppHeader() {
           <a
             className={styles.route}
             target="_blank"
-            href="https://bridge.aladdin.club"
+            href="https://bridge.aladdin.club?source=fx"
             rel="noreferrer"
           >
             Bridge
@@ -230,6 +231,15 @@ export default function AppHeader() {
           >
             Governance
           </a>
+          <Link
+            href="/vesting"
+            className={cn(
+              styles.route,
+              route.includes('/vesting') && styles.active
+            )}
+          >
+            Vesting
+          </Link>
           <span className={styles.route} onClick={toggleFAQ}>
             FAQ
           </span>
@@ -332,7 +342,7 @@ export default function AppHeader() {
                 <a
                   className={styles.route}
                   target="_blank"
-                  href="https://bridge.aladdin.club"
+                  href="https://bridge.aladdin.club?source=fx"
                   rel="noreferrer"
                 >
                   Bridge

@@ -83,7 +83,7 @@ export default function PoolItem({
                   </p>
                 ) : null}
                 {checkNotZoroNum(
-                  stabilityPoolInfo?.userInfo?.unlockingBalanceOfRes._balance
+                  stabilityPoolInfo?.userInfo?.unlockingBalanceOfRes?._balance
                 ) ? (
                   <p className="text-[16px]">
                     UnlockAt: {userUnlockingUnlockAt}
@@ -122,9 +122,9 @@ export default function PoolItem({
                   Harvest
                 </Button>
                 */}
-                <Button onClick={handleLiquidatorWithBonus} type="second">
+                {/* <Button onClick={handleLiquidatorWithBonus} type="second">
                   Liquidator
-                </Button>
+                </Button> */}
               </div>
             </div>
 

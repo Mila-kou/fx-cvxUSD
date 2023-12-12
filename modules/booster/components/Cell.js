@@ -38,6 +38,7 @@ export default function Cell({
   claimRewarding,
 
   canClaimReward,
+  convertFist,
 }) {
   let itemData = [
     {
@@ -110,9 +111,9 @@ export default function Cell({
           <div className="flex justify-center gap-4 items-end">
             {onConvert ? (
               <div>
-                <p className="text-[14px] text-[var(--yellow-color)]">
+                {/* <p className="text-[14px] text-[var(--yellow-color)]">
                   Earn 100% + APY
-                </p>
+                </p> */}
                 <Button
                   width="150px"
                   height="56px"
@@ -123,11 +124,17 @@ export default function Cell({
                 </Button>
               </div>
             ) : null}
-            {!(canClaim * 1) && (
+            {!!(canClaim * 1) && (
               <Button
                 width="150px"
                 height="56px"
-                onClick={() => setShowNoticeModal(true)}
+                onClick={() => {
+                  if (convertFist) {
+                    setShowNoticeModal(true)
+                  } else {
+                    handleClaim()
+                  }
+                }}
                 loading={claiming}
               >
                 Claim

@@ -82,6 +82,7 @@ const useInfo = (refreshTrigger) => {
       stETHTowstETHRate,
     } = info
     const _tokensPerWeek = tokensPerWeek
+    // const ___tokensPerWeek = cBN(3.207).times(1e18).toFixed(0)
     const apr =
       ((_tokensPerWeek * 52 * wstETHPrice) / (veTotalSupply * fxnPrice)) * 100
     const percentage = cBN(veLockedFXN)
@@ -123,7 +124,7 @@ const useInfo = (refreshTrigger) => {
       overview: [
         {
           title: 'APR',
-          value: '8.71%', // apr ? `${apr.toFixed(2)}%` : '-',
+          value: checkNotZoroNum(apr) ? `${apr.toFixed(2)}%` : '-',
         },
         {
           title: 'FXN Locked',
@@ -145,8 +146,7 @@ const useInfo = (refreshTrigger) => {
           .plus(
             cBN(platformFeeSpliterStETH)
               .times(platformFeeSpliterStETH_rewardRate)
-              .times(stETHTowstETHRate) // to wstETH
-              .div(1e18)
+              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance),
@@ -154,8 +154,7 @@ const useInfo = (refreshTrigger) => {
           .plus(
             cBN(platformFeeSpliterStETH)
               .times(platformFeeSpliterStETH_rewardRate)
-              .times(stETHTowstETHRate) // to wstETH
-              .div(1e18)
+              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance)

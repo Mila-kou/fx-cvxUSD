@@ -50,7 +50,7 @@ export default function RebalancePoolPage() {
           {`CR < 130% fETH will be used for rebalance`} {` `}
           <Tooltip
             placement="topLeft"
-            title="The deposited, unlocking, unclaimed fETH will be used for rebalance. Unlocking takes 1 day from the last unlocking transaction."
+            title="The deposited, unlocking, unclaimed fETH will be used for rebalance. "
             arrow
             color="#000"
             overlayInnerStyle={{ width: '300px' }}
@@ -65,7 +65,7 @@ export default function RebalancePoolPage() {
             <p>{totalSupplyText} fETH</p>
           </div>
           <div className={styles.item}>
-            <p>A Pool APR (stETH)</p>
+            <p>Pool APR (stETH)</p>
             <h2>{poolAData.apy}%</h2>
             <p>{poolAData.stabilityPoolTotalSupply} fETH</p>
           </div>
@@ -78,7 +78,7 @@ export default function RebalancePoolPage() {
       </div>
 
       <PoolItem
-        title="My Rebalance Pool A"
+        title="My Rebalance Pool"
         contractType="fx_RebalancePool_A"
         {...poolAData}
       />

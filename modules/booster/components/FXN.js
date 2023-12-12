@@ -61,6 +61,7 @@ export default function FXN() {
         action: 'Convert',
       })
       setClaiming(false)
+      setShowConvert(false)
       setConverting(false)
       setRefreshTrigger((prev) => prev + 1)
     } catch (error) {
@@ -95,7 +96,7 @@ export default function FXN() {
 
   return (
     <>
-      <Cell {...data} title="Vesting FXN Tokens" />
+      <Cell {...data} title="Vesting FXN Tokens" convertFist />
       {showConvert ? (
         <ConvertModal
           onCancel={() => setShowConvert(false)}

@@ -108,11 +108,8 @@ export default function Redeem({ slippage }) {
   const bonus_text = useMemo(() => {
     const { reservePoolBalancesRes } = baseInfo
 
-    // console.log('baseInfo.bonusRatioRes---', baseInfo.bonusRatioRes)
-    return BigNumber.min(
-      cBN(reservePoolBalancesRes),
-      cBN(redeemBouns).multipliedBy(baseInfo.bonusRatioRes).div(10e17)
-    )
+    console.log('redeemBouns--memo-', redeemBouns.toString())
+    return BigNumber.min(cBN(reservePoolBalancesRes), cBN(redeemBouns))
   }, [redeemBouns, baseInfo?.reservePoolBalancesRes])
 
   const [_fnav, _xnav, _ethPrice_text, _isPriceValid] = useMemo(() => {
@@ -220,7 +217,7 @@ export default function Redeem({ slippage }) {
     return needApprove && symbol !== 'stETH'
       ? config.approvedAddress
       : _currentAccount
-  }, [needApprove, _currentAccount, tokenAmount, isF, symbol == 'stETH'])
+  }, [needApprove, _currentAccount, tokenAmount, isF, symbol])
 
   const canRedeem = useMemo(() => {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
@@ -453,7 +450,7 @@ export default function Redeem({ slippage }) {
 
   useEffect(() => {
     getMinAmount(true)
-  }, [isF, slippage, tokenAmount, symbol])
+  }, [isF, slippage, tokenAmount, symbol, _account])
 
   const toUsd = useMemo(() => {
     if (symbol === 'fETH') {

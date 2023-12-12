@@ -8,6 +8,7 @@ import Tabs from '@/modules/home/components/Tabs'
 import styles from './styles.module.scss'
 import useVesting from '../../controller/useVesting'
 import { useGlobal } from '@/contexts/GlobalProvider'
+// import useInfo from '@/modules/lock/controllers/useInfo'
 
 export default function ConvertModal({ onCancel, converting, handleConvert }) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -20,7 +21,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     handleClaim: handleClaimFn,
     handleClaimReward: handleClaimRewardFn,
   } = useVesting(refreshTrigger)
-
+  // const locker_c = useInfo(0)
   const getApy = useCallback(
     (type, tokenName) => {
       let _apy = 0
@@ -31,7 +32,7 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
             if (item.tokenName == 'SDT') {
               return old + item.apy / 2.5
             }
-            return old + item.apy * 1
+            return old + (item.tokenName ? item.apy * 1 : 0)
           }, 0)
         } else {
           const _itemObj = _typeData.find((item) => item.tokenName == tokenName)
@@ -48,6 +49,12 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
     },
     [cvxFXN_sdFXN_apy]
   )
+  // const _sdFxnApy = useMemo(() => {
+  //   if (locker_c && locker_c.overview[0]) {
+  //     return locker_c.overview[0].value.replace('%', '')
+  //   }
+  //   return '-'
+  // }, [locker_c])
   const strategy = [
     {
       title: 'cvxFXN',
@@ -74,6 +81,10 @@ export default function ConvertModal({ onCancel, converting, handleConvert }) {
         {
           token: 'SDT',
           apy: cBN(getApy('sdFXN', 'SDT')).toFixed(2),
+        },
+        {
+          token: 'wstETH',
+          apy: cBN(getApy('sdFXN', 'wstETH')).toFixed(2),
         },
       ],
     },

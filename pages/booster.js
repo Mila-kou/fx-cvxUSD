@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import VestingPage from '@/modules/vestingV2/VestingPage'
+import VestingPage from '@/modules/booster/VestingPage'
 
 export default function Vesting() {
   return (
