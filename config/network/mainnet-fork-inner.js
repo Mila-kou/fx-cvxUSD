@@ -18,23 +18,23 @@ const explorerUri = 'https://www.etherscan.io'
 //   rpcUrl: 'https://apitest.aladdin.club/rpc',
 // }
 const chainInfo = {
-  id: '0x1',
+  id: '0x2707',
   token: 'ETH',
   label: 'Phalcon-Inner',
-  rpcUrl: 'https://rpc.phalcon.xyz/rpc_999ebf7d68bb4a2e9c81c59c3e597280',
+  rpcUrl: 'https://rpc.phalcon.xyz/rpc_ac96a4002c4646b6af7f203d9b9ef9b8',
 }
 
 const contracts = {
   ...tokensInfo.contracts,
 
-  ChainlinkTwapOracleV3: '0x1109E1f9e6D4A15EabAdb22dE11B3077DD2be793',
-  fETH: '0xd6e6561Ed9D4a041a2e0c771A06aCCA82765635C',
-  xETH: '0x1CCdE657685926e342D12dF5F33d555985FBd0C3',
-  fx_Market: '0x3CB1ee412b295aC5B45952658fD70c2DeEc3B59e',
-  fx_stETHTreasury: '0x79e3868f36E2F38d2D4C71190D259b614d1d5Fe2',
-  fx_stETHGateway: '0x58A76E9C37B89718fE05446C19850249B9564C5B',
+  // ChainlinkTwapOracleV3: '0x460B3CdE57DfbA90DBed02fd83d3990a92DA1230',
+  // fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
+  // xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
+  // fx_Market: '0xe7b9c7c9cA85340b8c06fb805f7775e3015108dB',
+  // fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
+  // fx_stETHGateway: '0x4C5C52d507066780500e627d592DbE11476E7c21',
 
-  fx_RebalancePool_A: '0x7d42f87D19D872B5d343aaC09D8436ab276F9d38',
+  // fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
 
   // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
@@ -42,8 +42,8 @@ const contracts = {
 
 const tokens = {
   ...tokensInfo.tokens,
-  fETH: '0xd6e6561Ed9D4a041a2e0c771A06aCCA82765635C',
-  xETH: '0x1CCdE657685926e342D12dF5F33d555985FBd0C3',
+  // fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
+  // xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
 }
 
 const TOKENS_INFO = {
@@ -66,6 +66,9 @@ const zapTokens = {
   },
 }
 
+const gaugeTokenList = {
+  ...tokensInfo.gaugeTokenList,
+}
 export default {
   tokens,
   contracts,
@@ -74,5 +77,6 @@ export default {
   explorerUri,
   POOLS_LIST_GAUGE,
   zapTokens,
+  gaugeTokenList,
   getTokenInfoByAddress: tokensInfo.getTokenInfoByAddress,
 }
