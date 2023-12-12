@@ -43,9 +43,9 @@ function GlobalProvider({ children }) {
   const rebalancePool_info_A = useRebalancePoolUseInfo(
     config.contracts.fx_RebalancePool_A
   )
-  const rebalancePool_info_B = useRebalancePoolUseInfo(
-    config.contracts.fx_RebalancePool_B
-  )
+  // const rebalancePool_info_B = useRebalancePoolUseInfo(
+  //   config.contracts.fx_RebalancePool_B
+  // )
   const rebalancePoolV2_info_A = useBoostableRebalancePoolData(
     'rebalancePoolV2_info_A'
   )
@@ -245,8 +245,8 @@ function GlobalProvider({ children }) {
       fx_info,
       rebalancePool_info_A,
       // rebalancePool_info_B,
-      // rebalancePoolV2_info_A,
-      // rebalancePoolV2_info_B,
+      rebalancePoolV2_info_A,
+      rebalancePoolV2_info_B,
 
       lpPrice,
       // vaultsInfo,
@@ -271,8 +271,8 @@ function GlobalProvider({ children }) {
       fx_info,
       rebalancePool_info_A,
       // rebalancePool_info_B,
-      // rebalancePoolV2_info_A,
-      // rebalancePoolV2_info_B,
+      rebalancePoolV2_info_A,
+      rebalancePoolV2_info_B,
 
       lpPrice,
       // vaultsInfo,
