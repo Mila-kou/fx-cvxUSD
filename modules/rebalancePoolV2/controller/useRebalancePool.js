@@ -99,7 +99,10 @@ const useStabiltyPool = (infoKey) => {
         let xETH_apyWei = 0
         const _fxnPrice = getTokenPrice('FXN')
         const _fxnApy = checkNotZoroNum(rebalanceTvl)
-          ? cBN(1000 * _fxnPrice).div(cBN(rebalanceTvl))
+          ? cBN(1000 * _fxnPrice)
+              .div(cBN(rebalanceTvl))
+              .multipliedBy(100)
+              .times(12)
           : cBN(0)
         const _currentTime = current.unix()
         console.log(
