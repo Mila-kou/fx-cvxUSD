@@ -98,6 +98,7 @@ const useStabiltyPool = (infoKey) => {
         let wstETH_apyWei = 0
         let xETH_apyWei = 0
         const _fxnPrice = getTokenPrice('FXN')
+        const _wstETHPrice = getTokenPrice('wstETH')
         const _fxnApy = checkNotZoroNum(rebalanceTvl)
           ? cBN(1000 * _fxnPrice).div(cBN(rebalanceTvl))
           : cBN(0)
@@ -111,16 +112,17 @@ const useStabiltyPool = (infoKey) => {
           _currentTime,
           rate,
           config.yearSecond,
-          rebalanceTvl.toString()
+          rebalanceTvl.toString(),
+          _wstETHPrice
         )
         // wstETH apy
-        if (_currentTime > finishAt) {
+        if (_currentTime < finishAt) {
           wstETH_apyWei = cBN(0)
         } else {
           wstETH_apyWei = cBN(rate)
             .div(1e18)
             .multipliedBy(config.yearSecond)
-            .multipliedBy(ethPrice)
+            .multipliedBy(_wstETHPrice)
             .div(rebalanceTvl)
             .times(100)
         }
@@ -131,7 +133,6 @@ const useStabiltyPool = (infoKey) => {
           xETH_apyWei = cBN(rate_xETH)
             .div(1e18)
             .multipliedBy(config.yearSecond)
-            .multipliedBy(ethPrice)
             .multipliedBy(xETHPrice)
             .div(rebalanceTvl)
             .times(100)
