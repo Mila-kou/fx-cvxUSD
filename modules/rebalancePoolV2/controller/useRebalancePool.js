@@ -103,10 +103,12 @@ const useStabiltyPool = (infoKey) => {
           : cBN(0)
         const _currentTime = current.unix()
         console.log(
-          'PoolApy---infoKey,rewardData_wstETH_Res,_fxnPrice,rate,yearSecond,rebalanceTvl',
+          'PoolApy---infoKey,rewardData_wstETH_Res,_fxnPrice,_currentTime,rate,yearSecond,rebalanceTvl',
+          'wstETH_apyWei',
           infoKey,
           rewardData_wstETH_Res,
           _fxnPrice,
+          _currentTime,
           rate,
           config.yearSecond,
           rebalanceTvl.toString()
@@ -126,7 +128,7 @@ const useStabiltyPool = (infoKey) => {
         if (_currentTime > finishAt_xETH) {
           xETH_apyWei = cBN(0)
         } else {
-          xETH_apyWei = cBN(rate)
+          xETH_apyWei = cBN(rate_xETH)
             .div(1e18)
             .multipliedBy(config.yearSecond)
             .multipliedBy(ethPrice)
