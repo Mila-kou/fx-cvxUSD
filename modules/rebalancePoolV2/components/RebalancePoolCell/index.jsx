@@ -65,17 +65,17 @@ export default function RebalancePoolCell({
   const getRewards = (props = {}) => (
     <div {...props}>
       <div className="flex gap-[6px] py-[2px]">
-        <img className="h-[20px]" src={fxnImg} />
-        <p className="text-[16px]">{userFXNClaimable}</p>
+        <img className="h-[20px] w-[20px]" src={fxnImg} />
+        <p className="text-[16px]">{userFXNClaimableTvl_text}</p>
       </div>
       <div className="flex gap-[6px] py-[2px]">
-        <img className="h-[20px]" src={stETHImg} />
-        <p className="text-[16px]">{userWstETHClaimable}</p>
+        <img className="h-[20px] w-[20px]" src={stETHImg} />
+        <p className="text-[16px]">{userWstETHClaimableTvl_text}</p>
       </div>
       {hasXETH ? (
         <div className="flex gap-[6px] py-[2px]">
-          <img className="h-[20px]" src={xETHImg} />
-          <p className="text-[16px]">{userXETHClaimable}</p>
+          <img className="h-[20px] w-[20px]" src={xETHImg} />
+          <p className="text-[16px]">{userXETHClaimableTvl_text}</p>
         </div>
       ) : null}
     </div>
@@ -95,7 +95,9 @@ export default function RebalancePoolCell({
           <img className="w-[30px]" src={fETHImg} />
           <div>
             <p className="text-[16px]">{poolData.title}</p>
-            <p className="text-[14px] text-[var(--second-text-color)]">fETH</p>
+            <p className="text-[14px] text-[var(--second-text-color)]">
+              {poolData.subTitle}
+            </p>
           </div>
         </div>
         <div className="w-[90px] text-[16px]">
@@ -122,25 +124,32 @@ export default function RebalancePoolCell({
       {openPanel ? (
         <div className={`${styles.panel}`}>
           <div className={styles.content}>
-            <div className={styles.item}>
+            <div className="flex items-center">
+              {`CR < 130% fETH will be used for rebalance`}
+            </div>
+            <div className="mt-[12px]">
+              Projected APY: {poolData.apyObj?.apy_text}{' '}
+              <Tooltip
+                placement="topLeft"
+                title={
+                  <div>
+                    {apyList.map((apyText) => (
+                      <p className="text-[14px]">{apyText}</p>
+                    ))}
+                  </div>
+                }
+                arrow
+                color="#000"
+                overlayInnerStyle={{ width: '300px' }}
+              >
+                <InfoCircleOutlined className="ml-[8px]" />
+              </Tooltip>
+            </div>
+
+            <div className={`${styles.item} mt-[12px]`}>
               <div>
-                <div>
-                  Projected APY: {poolData.apyObj?.apy_text}{' '}
-                  <Tooltip
-                    placement="topLeft"
-                    title={
-                      <div>
-                        {apyList.map((apyText) => (
-                          <p className="text-[14px]">{apyText}</p>
-                        ))}
-                      </div>
-                    }
-                    arrow
-                    color="#000"
-                    overlayInnerStyle={{ width: '300px' }}
-                  >
-                    <InfoCircleOutlined className="ml-[8px]" />
-                  </Tooltip>
+                <div className="flex">
+                  Earn: {getRewards({ className: 'flex gap-[32px] ml-[8px]' })}
                 </div>
               </div>
               <div>
@@ -150,25 +159,6 @@ export default function RebalancePoolCell({
                   </Button>
                   <Button size="small" onClick={handleWithdraw} type="second">
                     Withdraw
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <div className={`${styles.item} mt-[32px]`}>
-              <div>
-                <div className="flex">
-                  Earn: {getRewards({ className: 'flex gap-[32px] ml-[8px]' })}
-                </div>
-              </div>
-              <div>
-                <div className="flex gap-[32px]">
-                  <Button
-                    size="small"
-                    onClick={handleLiquidatorWithBonus}
-                    type="second"
-                  >
-                    Liquidator
                   </Button>
                   <Button
                     size="small"
@@ -180,6 +170,15 @@ export default function RebalancePoolCell({
                   </Button>
                 </div>
                 {/* 
+                <div className="flex gap-[32px]">
+                  <Button
+                    size="small"
+                    onClick={handleLiquidatorWithBonus}
+                    type="second"
+                  >
+                    Liquidator
+                  </Button>
+                </div>
                 <Button
                   size="small"
                   loading={harvesting}

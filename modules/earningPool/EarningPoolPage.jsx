@@ -38,11 +38,13 @@ export default function EarningPoolPage() {
         <RebalancePoolCell
           title="Rebalance Pool A"
           contractType="fx_BoostableRebalancePool_APool"
+          subTitle="fETH for stETH"
           {...poolAData}
         />
         <RebalancePoolCell
           title="Rebalance Pool B"
           contractType="fx_BoostableRebalancePool_BPool"
+          subTitle="fETH for xETH"
           hasXETH
           {...poolBData}
         />

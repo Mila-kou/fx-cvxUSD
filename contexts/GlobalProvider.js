@@ -218,6 +218,9 @@ function GlobalProvider({ children }) {
       wstETH: {
         price: tokenPrice?.wstETH?.usd?.toFixed(4) ?? 0,
       },
+      FXN: {
+        price: tokenPrice?.FXN?.usd?.toFixed(4) ?? 0,
+      },
     }
   }, [
     ethToken,

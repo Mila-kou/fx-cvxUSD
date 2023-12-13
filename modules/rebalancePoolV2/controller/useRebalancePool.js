@@ -244,7 +244,7 @@ const useStabiltyPool = (infoKey) => {
           .times(userInfo.claimableRes)
           .div(1e18)
       }
-      const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, false, 0)
+      const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, true, 0)
 
       // xETH
       const userXETHClaimable_res = cBN(userInfo?.claimableXETHRes)
@@ -263,7 +263,7 @@ const useStabiltyPool = (infoKey) => {
           .times(userInfo.claimableXETHRes)
           .div(1e18)
       }
-      const userXETHClaimableTvl_text = fb4(userXETHClaimableTvl, false, 0)
+      const userXETHClaimableTvl_text = fb4(userXETHClaimableTvl, true, 0)
 
       // FXN
       const userFXNClaimable_res = cBN(userInfo?.claimableFXNRes)
@@ -272,13 +272,14 @@ const useStabiltyPool = (infoKey) => {
         fb4(userFXNClaimable_res)
       )
       let userFXNClaimableTvl = cBN(0)
-      if (checkNotZoroNum(_xNav) && checkNotZoroNum(userInfo.claimableFXNRes)) {
-        userFXNClaimableTvl = cBN(_xNav)
-          .div(1e18)
+
+      const _fxnPrice = getTokenPrice('FXN')
+      if (_fxnPrice && checkNotZoroNum(userInfo.claimableFXNRes)) {
+        userFXNClaimableTvl = cBN(_fxnPrice)
           .times(userInfo.claimableFXNRes)
           .div(1e18)
       }
-      const userFXNClaimableTvl_text = fb4(userFXNClaimableTvl, false, 0)
+      const userFXNClaimableTvl_text = fb4(userFXNClaimableTvl, true, 0)
 
       const myTotalValue = userDepositTvl
         .plus(userWstETHClaimableTvl)
