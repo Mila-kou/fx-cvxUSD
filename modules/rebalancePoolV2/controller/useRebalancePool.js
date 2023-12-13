@@ -98,30 +98,31 @@ const useStabiltyPool = (infoKey) => {
         let wstETH_apyWei = 0
         let xETH_apyWei = 0
         const _fxnPrice = getTokenPrice('FXN')
+        const _wstETHPrice = getTokenPrice('wstETH')
         const _fxnApy = checkNotZoroNum(rebalanceTvl)
-          ? cBN(1000 * _fxnPrice)
-              .div(cBN(rebalanceTvl))
-              .multipliedBy(100)
-              .times(12)
+          ? cBN(1000 * _fxnPrice).div(cBN(rebalanceTvl))
           : cBN(0)
         const _currentTime = current.unix()
         console.log(
-          'PoolApy---infoKey,rewardData_wstETH_Res,_fxnPrice,rate,yearSecond,rebalanceTvl',
+          'PoolApy---infoKey,rewardData_wstETH_Res,_fxnPrice,_currentTime,rate,yearSecond,rebalanceTvl',
+          'wstETH_apyWei',
           infoKey,
           rewardData_wstETH_Res,
           _fxnPrice,
+          _currentTime,
           rate,
           config.yearSecond,
-          rebalanceTvl.toString()
+          rebalanceTvl.toString(),
+          _wstETHPrice
         )
         // wstETH apy
-        if (_currentTime > finishAt) {
+        if (_currentTime < finishAt) {
           wstETH_apyWei = cBN(0)
         } else {
           wstETH_apyWei = cBN(rate)
             .div(1e18)
             .multipliedBy(config.yearSecond)
-            .multipliedBy(ethPrice)
+            .multipliedBy(_wstETHPrice)
             .div(rebalanceTvl)
             .times(100)
         }
@@ -129,10 +130,9 @@ const useStabiltyPool = (infoKey) => {
         if (_currentTime > finishAt_xETH) {
           xETH_apyWei = cBN(0)
         } else {
-          xETH_apyWei = cBN(rate)
+          xETH_apyWei = cBN(rate_xETH)
             .div(1e18)
             .multipliedBy(config.yearSecond)
-            .multipliedBy(ethPrice)
             .multipliedBy(xETHPrice)
             .div(rebalanceTvl)
             .times(100)
@@ -187,7 +187,7 @@ const useStabiltyPool = (infoKey) => {
   )
 
   const pageData = useMemo(() => {
-    const { baseInfo = {}, userInfo = {} } = boostableRebalancePoolInfo || {}
+    const { baseInfo = {}, userInfo = {} } = boostableRebalancePoolInfo
     const _fNav = CurrentNavRes?._fNav || 0
     const _xNav = CurrentNavRes?._xNav || 0
     try {
@@ -267,9 +267,6 @@ const useStabiltyPool = (infoKey) => {
 
       // FXN
       const userFXNClaimable_res = cBN(userInfo?.claimableFXNRes)
-
-      // const max = getMax(userInfo)
-
       const userFXNClaimable = checkNotZoroNumOption(
         userFXNClaimable_res,
         fb4(userFXNClaimable_res)
