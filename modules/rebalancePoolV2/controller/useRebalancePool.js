@@ -116,7 +116,7 @@ const useStabiltyPool = (infoKey) => {
           _wstETHPrice
         )
         // wstETH apy
-        if (_currentTime < finishAt) {
+        if (_currentTime > finishAt) {
           wstETH_apyWei = cBN(0)
         } else {
           wstETH_apyWei = cBN(rate)
