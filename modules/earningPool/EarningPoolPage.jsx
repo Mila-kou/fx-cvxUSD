@@ -25,7 +25,7 @@ export default function EarningPoolPage() {
       <div className={`${styles.header} mt-[32px]`}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
-          Rebalance Pools
+          Rebalance Pool
         </div>
         <div className="px-[16px] mt-[32px] flex justify-between">
           <div className="w-[230px]" />

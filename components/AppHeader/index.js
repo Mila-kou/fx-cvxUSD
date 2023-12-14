@@ -23,7 +23,7 @@ import FAQ from '@/components/FAQ'
 const routers = [
   ['f(x) Protocol', '/home'],
   ['Rebalance Pool', '/earning-pool', 'New'],
-  ['Rebalance Pool (Old)', '/rebalance-pool'],
+  ['Rebalance Pool (Deprecated)', '/rebalance-pool'],
   // ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
   ['Booster', '/booster'],
