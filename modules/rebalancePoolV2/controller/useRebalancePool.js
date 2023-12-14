@@ -102,6 +102,7 @@ const useStabiltyPool = (infoKey) => {
         const _fxnApy = checkNotZoroNum(rebalanceTvl)
           ? cBN(1000 * _fxnPrice)
               .div(cBN(rebalanceTvl))
+              .times(12)
               .times(100)
           : cBN(0)
         const _currentTime = current.unix()
