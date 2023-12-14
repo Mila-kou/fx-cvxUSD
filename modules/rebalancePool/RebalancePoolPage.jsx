@@ -43,7 +43,7 @@ export default function RebalancePoolPage() {
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
-          Rebalance Pool (Old)
+          Rebalance Pool (Deprecated)
         </div>
         <p className="text-[20px] mt-[24px]">Overview</p>
         <div className="flex items-center">
