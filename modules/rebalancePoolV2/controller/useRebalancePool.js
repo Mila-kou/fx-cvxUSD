@@ -288,9 +288,9 @@ const useStabiltyPool = (infoKey) => {
         .plus(userXETHClaimableTvl)
         .plus(userFXNClaimableTvl)
 
-      const userTotalClaimable = userFXNClaimable
-        .plus(userXETHClaimable)
-        .plus(userFXNClaimable)
+      const userTotalClaimable = userWstETHClaimableTvl
+        .plus(userXETHClaimableTvl)
+        .plus(userFXNClaimableTvl)
 
       const userTotalClaimableTvl_text = checkNotZoroNumOption(
         userTotalClaimable,
