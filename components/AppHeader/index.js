@@ -22,8 +22,8 @@ import FAQ from '@/components/FAQ'
 
 const routers = [
   ['f(x) Protocol', '/home'],
-  ['Rebalance Pool', '/rebalance-pool'],
-  ['Earning Pools', '/earning-pool'],
+  ['Rebalance Pool', '/earning-pool', 'New'],
+  ['Rebalance Pool (Old)', '/rebalance-pool'],
   // ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
   ['Booster', '/booster'],
@@ -204,7 +204,7 @@ export default function AppHeader() {
           <Link href="/home">
             <img className={styles.logo} src="/images/FXN.svg" />
           </Link>
-          {routers.map(([label, href]) => (
+          {routers.map(([label, href, tag]) => (
             <Link
               href={href}
               className={cn(
@@ -212,7 +212,7 @@ export default function AppHeader() {
                 route.includes(href) && styles.active
               )}
             >
-              {label}
+              {label} {tag ? <p className={styles.tag}>{tag}</p> : null}
             </Link>
           ))}
           <a

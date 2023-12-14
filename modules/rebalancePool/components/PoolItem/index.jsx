@@ -109,7 +109,7 @@ export default function PoolItem({
                 ) : null}
               </div>
               <div className={styles.actions}>
-                <Button onClick={handleDeposit}>Deposit</Button>
+                {/* <Button onClick={handleDeposit}>Deposit</Button> */}
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
@@ -148,7 +148,6 @@ export default function PoolItem({
                   disabled={!canClaim.wstETH}
                   loading={claiming.wstETH}
                   onClick={() => handleClaim('wstETH', true)}
-                  type="second"
                 >
                   Claim
                 </Button>

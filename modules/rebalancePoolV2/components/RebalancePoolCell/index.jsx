@@ -93,7 +93,7 @@ export default function RebalancePoolCell({
   return (
     <div key={poolData.title} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
-        <div className="flex w-[160px] gap-[6px] items-center">
+        <div className="flex w-[220px] gap-[6px] items-center">
           <img className="w-[30px]" src={fETHImg} />
           <div>
             <p className="text-[16px]">{poolData.title}</p>
@@ -102,20 +102,20 @@ export default function RebalancePoolCell({
             </p>
           </div>
         </div>
-        <div className="w-[90px] text-[16px]">
+        <div className="w-[120px] text-[16px]">
           <p className="text-[16px]">{poolTotalSupplyTvl_text}</p>
           <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
             {poolData.poolTotalSupply}
           </p>
         </div>
-        <div className="w-[180px]">{poolData.apyObj?.apy_text}</div>
+        <div className="w-[140px]">{poolData.apyObj?.apy_text}</div>
         <div className="w-[90px] text-[16px]">
           <p className="text-[16px]">{userDepositTvl_text}</p>
           <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
             {userDeposit}
           </p>
         </div>
-        <div className="w-[120px]">{userTotalClaimableTvl_text}</div>
+        <div className="w-[100px]">{userTotalClaimableTvl_text}</div>
         <div className="w-[20px] cursor-pointer">
           <img
             className={openPanel ? 'rotate-180' : ''}
