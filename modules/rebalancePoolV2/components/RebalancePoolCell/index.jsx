@@ -45,6 +45,8 @@ export default function RebalancePoolCell({
   userUnlockingBalance,
   userUnlockingUnlockAt,
   userUnlockedBalance,
+  userTotalClaimable,
+  userTotalClaimableTvl_text,
 
   depositVisible,
   setDepositVisible,
@@ -60,22 +62,22 @@ export default function RebalancePoolCell({
 }) {
   const [openPanel, setOpenPanel] = useState(false)
 
-  const canClaim = userWstETHClaimable || userFXNClaimable || userXETHClaimable
+  const canClaim = checkNotZoroNum(userTotalClaimable)
 
   const getRewards = (props = {}) => (
     <div {...props}>
       <div className="flex gap-[6px] py-[2px]">
         <img className="h-[20px] w-[20px]" src={fxnImg} />
-        <p className="text-[16px]">{userFXNClaimableTvl_text}</p>
+        <p className="text-[16px]">{userFXNClaimable}</p>
       </div>
       <div className="flex gap-[6px] py-[2px]">
         <img className="h-[20px] w-[20px]" src={stETHImg} />
-        <p className="text-[16px]">{userWstETHClaimableTvl_text}</p>
+        <p className="text-[16px]">{userWstETHClaimable}</p>
       </div>
       {hasXETH ? (
         <div className="flex gap-[6px] py-[2px]">
           <img className="h-[20px] w-[20px]" src={xETHImg} />
-          <p className="text-[16px]">{userXETHClaimableTvl_text}</p>
+          <p className="text-[16px]">{userXETHClaimable}</p>
         </div>
       ) : null}
     </div>
@@ -113,7 +115,7 @@ export default function RebalancePoolCell({
             {userDeposit}
           </p>
         </div>
-        <div className="w-[120px]">{getRewards()}</div>
+        <div className="w-[120px]">{userTotalClaimableTvl_text}</div>
         <div className="w-[20px] cursor-pointer">
           <img
             className={openPanel ? 'rotate-180' : ''}

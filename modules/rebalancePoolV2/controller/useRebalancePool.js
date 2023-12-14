@@ -286,6 +286,15 @@ const useStabiltyPool = (infoKey) => {
         .plus(userXETHClaimableTvl)
         .plus(userFXNClaimableTvl)
 
+      const userTotalClaimable = userFXNClaimable
+        .plus(userXETHClaimable)
+        .plus(userFXNClaimable)
+
+      const userTotalClaimableTvl_text = checkNotZoroNumOption(
+        userTotalClaimable,
+        fb4(userTotalClaimable, true, 0)
+      )
+
       const myTotalValue_text = checkNotZoroNumOption(
         myTotalValue,
         fb4(myTotalValue, false, 0)
@@ -307,6 +316,8 @@ const useStabiltyPool = (infoKey) => {
         myTotalValue_text,
         userFXNClaimable,
         userFXNClaimableTvl_text,
+        userTotalClaimable,
+        userTotalClaimableTvl_text,
         apyObj,
       }
     } catch (error) {
