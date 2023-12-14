@@ -35,7 +35,7 @@ const useData = (infoKey) => {
 
   const fetchBaseInfo = useCallback(async () => {
     const {
-      checkpoint,
+      // checkpoint,
       boostCheckpoint: boostCheckpointFn,
       balanceOf: balanceOfFn,
       totalSupply: BoostableRebalancePoolTotalSupplyFn,
@@ -46,7 +46,7 @@ const useData = (infoKey) => {
     } = fx_BoostableRebalancePool_PoolContract.methods
     try {
       const apiCalls = [
-        checkpoint(_currentAccount),
+        // checkpoint(_currentAccount),
         boostCheckpointFn(_currentAccount),
         balanceOfFn(_currentAccount),
         BoostableRebalancePoolTotalSupplyFn(),
@@ -60,7 +60,7 @@ const useData = (infoKey) => {
         // wstETHContract.methods.tokensPerStEth(),
       ]
       const [
-        ,
+        // ,
         boostCheckpoint,
         balanceOf,
         totalSupply,
