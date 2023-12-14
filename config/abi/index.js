@@ -60,6 +60,8 @@ import FX_fx_SharedLiquidityGaugeABI from './fx/farming/fx_SharedLiquidityGauge.
 import FX_BoostableRebalancePoolABI from './fx/farming/fx_BoostableRebalancePool.json'
 import FX_RebalancePoolGaugeClaimerABI from './fx/farming/fx-RebalancePoolGaugeClaimer.json'
 
+import FX_FXNTokenMinterABI from './fx/farming/fx_TokenMinter.json'
+
 // rebalance
 import FX_RebalancePoolRegistryABI from './fx/fx-RebalancePoolRegistry.json'
 
@@ -120,6 +122,6 @@ export default {
   FX_RebalancePoolGaugeClaimerABI,
 
   FX_RebalancePoolRegistryABI,
-
+  FX_FXNTokenMinterABI,
   // gauge
 }

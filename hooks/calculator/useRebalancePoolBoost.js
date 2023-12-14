@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { checkNotZoroNum, cBN } from 'utils'
 import { useMutiCall, useMutiCallV2 } from '@/hooks/useMutiCalls'
 
-export const useVeBoost = (options) => {
-  console.log('veBoost-----0', options)
+export const useRebalancePoolBoost = (options) => {
+  console.log('RebalancePoolBoost-----0', options)
   const multiCallsV2 = useMutiCallV2()
   const {
     veContract,
@@ -27,20 +27,18 @@ export const useVeBoost = (options) => {
         const calls = [
           veContract.methods.balanceOf(veContractTargetAccount),
           veContract.methods.totalSupply(),
-          gaugeContract.methods.workingBalanceOf(gaugeContractTargetAccount),
-          gaugeContract.methods.workingSupply(),
           gaugeContract.methods.totalSupply(),
           gaugeContract.methods.balanceOf(gaugeContractTargetAccount),
         ]
         const decoded = await multiCallsV2(calls)
         console.log('veBoost-----0-3', decoded)
         console.log('curve-dao > calc-contract-info', decoded)
-        const _userVeAmount = decoded[0]
-        const _veTotalSupply = decoded[1]
-        const working_balances = decoded[2]
-        const working_supply = decoded[3]
-        const _gaugeTotalSupply = decoded[4]
-        const _userDepositAmount = decoded[5]
+        const [
+          _userVeAmount,
+          _veTotalSupply,
+          _gaugeTotalSupply,
+          _userDepositAmount,
+        ] = decoded
 
         let __l = l
         let __userVeAmount = userVeAmount
@@ -65,57 +63,23 @@ export const useVeBoost = (options) => {
             : cBN(__gaugeTotalSupply)
         const TOKENLESS_PRODUCTION = 40
 
-        let lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION / 100)
-        console.log('veBoost-----lim---', lim)
-        lim = cBN(L)
+        const user_nowork = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION / 100)
+        const user_work = cBN((100 - TOKENLESS_PRODUCTION) / 100)
+          .multipliedBy(__gaugeTotalSupply)
           .multipliedBy(__userVeAmount)
           .div(__veTotalSupply)
-          .multipliedBy((100 - TOKENLESS_PRODUCTION) / 100)
-          .plus(lim)
-
-        lim = BigNumber.minimum(lim, __l)
-        console.log('veBoost-----min_lim---', lim.toFixed(0))
-        const old_bal = working_balances
-        const noboost_lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION).div(100)
-        const noboost_supply = cBN(working_supply)
-          .plus(noboost_lim)
-          .minus(old_bal)
-        console.log(
-          'veBoost-----__L,working_supply,noboost_lim,old_bal,noboost_supply---',
-          __l,
-          working_supply,
-          noboost_lim.toFixed(0),
-          old_bal,
-          noboost_supply.toFixed(0)
+        const _userWorkbalance = BigNumber.minimum(
+          user_nowork.plus(user_work),
+          __l
         )
-        const _working_supply = cBN(working_supply).plus(lim).minus(old_bal)
-        let boots
-        let votingBoost
-        let repairBoost = 1 // 修正值
-        if (!checkNotZoroNum(noboost_lim)) {
-          boots = 1
-          votingBoost = 1
-        } else {
-          votingBoost = cBN(lim).div(noboost_lim).toString()
-          console.log(
-            'veBoost-----votingBoost---',
-            _working_supply.toFixed(0),
-            votingBoost
-          )
-          boots = cBN(lim)
-            .div(_working_supply)
-            .div(cBN(noboost_lim).div(noboost_supply))
-            .toString()
-          repairBoost = cBN(noboost_supply).div(_working_supply).toFixed(0)
-        }
-        console.log('veBoost-----boots---', votingBoost, boots)
 
-        const data = [
-          _working_supply.toString(),
-          checkNotZoroNum(boots) ? parseFloat(boots).toFixed(2) : 1,
-          votingBoost,
-          repairBoost,
-        ]
+        const boostratio = _userWorkbalance / __l
+        const boost = boostratio / 0.4
+        const maxVeAmount = cBN(_userDepositAmount)
+          .div(_gaugeTotalSupply)
+          .multipliedBy(_veTotalSupply)
+
+        const data = { boostratio, boost, maxVeAmount }
         return data
       }
     } catch (error) {

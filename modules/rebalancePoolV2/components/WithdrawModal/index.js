@@ -13,7 +13,6 @@ export default function WithdrawModal(props) {
   const { currentAccount, isAllReady } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
-
   const { logo, name, stakeTokenDecimals } = info
   const { userInfo } = poolData
 
@@ -40,7 +39,7 @@ export default function WithdrawModal(props) {
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'earn',
-        action: 'Unlock',
+        action: 'Withdraw',
       })
       onCancel()
       setWithdrawing(false)
@@ -66,7 +65,7 @@ export default function WithdrawModal(props) {
         <h2 className="mb-[16px]">Withdraw fETH </h2>
         <BalanceInput
           placeholder="0"
-          symbol={name}
+          symbol="fETH"
           balance={fb4(userInfo.BoostableRebalancePoolBalanceOfRes, false)}
           maxAmount={userInfo.BoostableRebalancePoolBalanceOfRes}
           onChange={handleInputChange}

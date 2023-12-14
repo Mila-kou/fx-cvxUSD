@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import cn from 'classnames'
 import Button from '@/components/Button'
-import { POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
@@ -20,18 +19,25 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
+import { useFXNTokenMinter } from '@/hooks/useGaugeContracts'
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
-  const { userInfo = {}, useFXNReward_text, lpGaugeContract } = cellData
+  const {
+    userInfo = {},
+    useFXNReward_text,
+    lpGaugeAddress,
+    lpGaugeContract,
+  } = cellData
   const boostInfo = useVeBoost_c(cellData)
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
+  const { contract: FXNTokenMinterContract } = useFXNTokenMinter()
 
   const handleClaim = async (symbol, wrap) => {
     if (!isAllReady) return
@@ -56,91 +62,98 @@ export default function PoolCell({ cellData, ...pageOthers }) {
     }
   }
 
+  const handleClaimFXN = async () => {
+    if (!isAllReady) return
+    try {
+      setClaiming(true)
+      const apiCall = FXNTokenMinterContract.methods.mint(lpGaugeAddress)
+      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
+        key: 'lp',
+        action: 'Claim',
+      })
+      setClaiming(false)
+    } catch (error) {
+      setClaiming(true)
+      console.log('claim-error---', error)
+      noPayableErrorAction(`error_claim`, error)
+    }
+  }
+
+  const getTypeApy = useCallback((_apyInfo, type) => {
+    const _typeApy = {
+      convexLpApy: {},
+      _allApy_min: cBN(0),
+      _allApy_max: cBN(0),
+      _min_FXN_Apy: 0,
+      _max_FXN_Apy: 0,
+    }
+    let _convexTypeApy = 0
+    if (type == 'project') {
+      _convexTypeApy = _apyInfo.convexLpApy.apy.project
+    } else {
+      _convexTypeApy = _apyInfo.convexLpApy.apy.current
+    }
+    _typeApy.convexLpApy = _apyInfo.convexLpApy
+    _typeApy._allApy_min = cBN(_convexTypeApy)
+    _typeApy._allApy_max = cBN(_convexTypeApy)
+    _apyInfo.apyList.map((item, index) => {
+      let _itemTypeApy = item._projectApy
+      if (type == 'project') {
+        _itemTypeApy = item._projectApy
+      } else {
+        _itemTypeApy = item._currentApy
+      }
+      if (item.rewardToken[1] == config.tokens.FXN) {
+        if (boostInfo.length) {
+          _typeApy._min_FXN_Apy = cBN(_itemTypeApy)
+            .times(boostInfo[3])
+            .toFixed(2)
+          _typeApy._max_FXN_Apy = cBN(_itemTypeApy)
+            .times(boostInfo[2])
+            .times(2.5)
+            .toFixed(2)
+        }
+        _typeApy._allApy_min = cBN(_typeApy._allApy_min).plus(
+          _typeApy._min_FXN_Apy
+        )
+        _typeApy._allApy_max = cBN(_typeApy._allApy_max).plus(
+          _typeApy._max_FXN_Apy
+        )
+      } else {
+        console.log('apy----0', _typeApy)
+        _typeApy._allApy_min = cBN(_typeApy._allApy_min)
+          .plus(_itemTypeApy)
+          .toString(10)
+        _typeApy._allApy_max = cBN(_typeApy._allApy_max)
+          .plus(_itemTypeApy)
+          .toString(10)
+      }
+    })
+    return _typeApy
+  }, [])
   const apyDom = useMemo(() => {
-    // if (cellData?.apyInfo?.apyList.length) {
-    //   console.log('apy-----page--', cellData.apyInfo, boostInfo)
-    // }
-    // const _projectApy = {
-    //   convexLpApy: {},
-    //   _allApy_min: cBN(0),
-    //   _allApy_max: cBN(0),
-    //   _min_FXN_Apy: 0,
-    //   _max_FXN_Apy: 0,
-    // }
-    // const _currentApy = {
-    //   convexLpApy: {},
-    //   _allApy_min: cBN(0),
-    //   _allApy_max: cBN(0),
-    //   _min_FXN_Apy: 0,
-    //   _max_FXN_Apy: 0,
-    // }
-
-    // const _allApy_min = cBN(0)
-    // const _allApy_max = cBN(0)
-    // const _min_FXN_Apy = 0
-    // const _max_FXN_Apy = 0
-    // const _tips = []
-    // const { apyInfo } = cellData
-    // if (apyInfo && apyInfo.convexLpApy && apyInfo.apyList.length) {
-    //   _tips.push(`projectApy `)
-    //   _tips.push(`-convexLpApy:${apyInfo.convexLpApy.apy.project} % `)
-    //   _tips.push(`--base Apy: ${apyInfo.convexLpApy.curveApys.baseApy} %`)
-    //   _tips.push(`--crvApy Apy: ${apyInfo.convexLpApy.curveApys.crvApy1} %`)
-    //   _tips.push(`--cvxApy Apy: ${apyInfo.convexLpApy.curveApys.cvxApy} %`)
-
-    //   _projectApy._allApy_min = cBN(apyInfo.convexLpApy.apy.project)
-    //   _projectApy._allApy_max = cBN(apyInfo.convexLpApy.apy.project)
-    //   apyInfo.apyList.map((item, index) => {
-    //     console.log('gauge--apy----item', item)
-    //     if (item.rewardToken[1] == config.tokens.FXN) {
-    //       if (boostInfo.length) {
-    //         _projectApy._min_FXN_Apy = cBN(item._projectApy)
-    //           .times(boostInfo[3])
-    //           .toFixed(2)
-    //         _projectApy._max_FXN_Apy = cBN(item._projectApy)
-    //           .times(boostInfo[2])
-    //           .times(2.5)
-    //           .toFixed(2)
-    //       }
-    //       _projectApy._allApy_min = _projectApy._allApy_min.plus(
-    //         _projectApy._min_FXN_Apy
-    //       )
-    //       _projectApy._allApy_max = _projectApy._allApy_max.plus(
-    //         _projectApy._max_FXN_Apy
-    //       )
-    //       _tips.push(
-    //         `${item.rewardToken[3]} : ${_projectApy._min_FXN_Apy}% - ${_projectApy._max_FXN_Apy}%`
-    //       )
-    //     } else {
-    //       _projectApy._allApy_min = _projectApy._allApy_min.plus(
-    //         item._currentApy
-    //       )
-    //       _projectApy._allApy_max = _projectApy._allApy_max.plus(
-    //         item._currentApy
-    //       )
-    //       _tips.push(`${item.rewardToken[3]} : ${item._currentApy}`)
-    //     }
-    //   })
-    // }
-    // if (checkNotZoroNum(_projectApy._allApy_min)) {
-    //   return (
-    //     <div className="flex gap-[6px] items-center text-[16px]">
-    //       {_allApy_min.toFixed(2)}% - {_allApy_max.toFixed(2)}%
-    //       <Tooltip
-    //         placement="top"
-    //         title={_tips.map((txt) => (
-    //           <div>
-    //             <p className="text-[14px]">{txt}</p>
-    //           </div>
-    //         ))}
-    //         arrow
-    //         color="#000"
-    //       >
-    //         <InfoCircleOutlined />
-    //       </Tooltip>
-    //     </div>
-    //   )
-    // }
+    const { apyInfo } = cellData
+    if (
+      apyInfo &&
+      apyInfo.convexLpApy &&
+      apyInfo.convexLpApy.apy &&
+      apyInfo.apyList.length
+    ) {
+      const _projectApy = getTypeApy(apyInfo, 'project')
+      const _currentApy = getTypeApy(apyInfo, 'current')
+      console.log('apy----_projectApy---', _projectApy)
+      console.log('apy----_currentApy---', _currentApy)
+      if (checkNotZoroNum(_projectApy._allApy_min)) {
+        return `${fb4(_projectApy._allApy_min, false, 0, 2)} % - ${fb4(
+          _projectApy._allApy_max,
+          false,
+          0,
+          2
+        )} %`
+      }
+    }
     return '-'
   }, [cellData, boostInfo])
   console.log('cellData----', cellData, apyDom)
@@ -220,6 +233,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             </Button>
             <Button size="small" onClick={handleClaim} type="second">
               Claim
+            </Button>
+            <Button size="small" onClick={handleClaimFXN} type="second">
+              Claim FXN
             </Button>
           </div>
         </div>
