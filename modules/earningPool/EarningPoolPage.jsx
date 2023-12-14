@@ -28,23 +28,23 @@ export default function EarningPoolPage() {
           Rebalance Pool
         </div>
         <div className="px-[16px] mt-[32px] flex justify-between">
-          <div className="w-[220px]" />
+          <div className="w-[230px]" />
           <div className="w-[120px] text-[14px]">TVL</div>
-          <div className="w-[140px] text-[14px]">APR Range</div>
-          <div className="w-[90px] text-[14px]">Deposit</div>
+          <div className="w-[120px] text-[14px]">APR Range</div>
+          <div className="w-[110px] text-[14px]">Deposit</div>
           <div className="w-[100px] text-[14px]">Earn</div>
           <div className="w-[20px]" />
         </div>
         <RebalancePoolCell
-          title="fETH Rebalance Pool(stETH)"
+          title="fETH Rebalance Pool (stETH)"
           contractType="fx_BoostableRebalancePool_APool"
-          subTitle="fETH for stETH"
+          // subTitle="fETH for stETH"
           {...poolAData}
         />
         <RebalancePoolCell
-          title="fETH Rebalance Pool(xETH)"
+          title="fETH Rebalance Pool (xETH)"
           contractType="fx_BoostableRebalancePool_BPool"
-          subTitle="fETH for xETH"
+          // subTitle="fETH for xETH"
           hasXETH
           {...poolBData}
         />

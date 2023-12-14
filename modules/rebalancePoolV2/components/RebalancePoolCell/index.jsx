@@ -93,10 +93,10 @@ export default function RebalancePoolCell({
   return (
     <div key={poolData.title} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
-        <div className="flex w-[220px] gap-[6px] items-center">
+        <div className="flex w-[230px] gap-[6px] items-center">
           <img className="w-[30px]" src={fETHImg} />
           <div>
-            <p className="text-[16px]">{poolData.title}</p>
+            <p className="text-[16px] h-[16px]">{poolData.title}</p>
             <p className="text-[14px] text-[var(--second-text-color)]">
               {poolData.subTitle}
             </p>
@@ -108,8 +108,8 @@ export default function RebalancePoolCell({
             {poolData.poolTotalSupply}
           </p>
         </div>
-        <div className="w-[140px]">{poolData.apyObj?.apy_text}</div>
-        <div className="w-[90px] text-[16px]">
+        <div className="w-[120px]">{poolData.apyObj?.apy_text}</div>
+        <div className="w-[110px] text-[16px]">
           <p className="text-[16px]">{userDepositTvl_text}</p>
           <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
             {userDeposit}
