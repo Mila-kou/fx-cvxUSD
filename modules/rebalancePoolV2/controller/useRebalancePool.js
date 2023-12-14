@@ -193,6 +193,7 @@ const useStabiltyPool = (infoKey) => {
     const { baseInfo = {}, userInfo = {} } = boostableRebalancePoolInfo
     const _fNav = CurrentNavRes?._fNav || 0
     const _xNav = CurrentNavRes?._xNav || 0
+    const _wstETHPrice = getTokenPrice('wstETH')
     try {
       const poolTotalSupply_res = cBN(
         baseInfo.BoostableRebalancePoolTotalSupplyRes
@@ -240,11 +241,11 @@ const useStabiltyPool = (infoKey) => {
       )
       let userWstETHClaimableTvl = cBN(0)
       if (
-        checkNotZoroNum(ethPrice) &&
+        checkNotZoroNum(_wstETHPrice) &&
         checkNotZoroNum(userInfo.claimableWstETHRes)
       ) {
-        userWstETHClaimableTvl = cBN(ethPrice)
-          .times(userInfo.claimableRes)
+        userWstETHClaimableTvl = cBN(_wstETHPrice)
+          .times(userInfo.claimableWstETHRes)
           .div(1e18)
       }
       const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, true, 0)
