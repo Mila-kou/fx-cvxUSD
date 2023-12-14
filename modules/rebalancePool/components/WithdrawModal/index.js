@@ -61,7 +61,7 @@ export default function WithdrawModal(props) {
         <h2 className="mb-[16px]">Withdraw fETH </h2>
         <BalanceInput
           placeholder="0"
-          symbol={name}
+          symbol="fETH"
           balance={fb4(userInfo.stabilityPoolBalanceOfRes, false)}
           maxAmount={userInfo.stabilityPoolBalanceOfRes}
           onChange={handleInputChange}
