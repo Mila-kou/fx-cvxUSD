@@ -17,7 +17,6 @@ const useRebalancePoolUseInfo = (infoKey) => {
   const { contract: fx_BoostableRebalancePool_PoolContract } =
     useBoostableRebalancePool(contractAddress)
 
-  console.log('rebalance--0--', contractAddress)
   const { contract: wstETHContract } = useWstETH()
 
   const fetchBaseInfo = useCallback(async () => {
@@ -47,7 +46,7 @@ const useRebalancePoolUseInfo = (infoKey) => {
         tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
       console.log(
-        'PoolApy-----BaseInfo222222------',
+        'rebalance--0-------BaseInfo222222------1--',
         // BoostableRebalancePoolTotalSupplyRes,
         // ActiveRewardTokensRes,
         boostRatioRes,
@@ -87,7 +86,7 @@ const useRebalancePoolUseInfo = (infoKey) => {
 
     try {
       const apiCalls = [
-        checkpoint(_currentAccount),
+        // checkpoint(_currentAccount),
         BoostableRebalancePoolBalanceOfFn(_currentAccount),
         getBoostRatio(_currentAccount),
         claimableFn(_currentAccount, config.tokens.wstETH),
@@ -100,7 +99,7 @@ const useRebalancePoolUseInfo = (infoKey) => {
         // workingBalanceOf(_currentAccount),
       ]
       const [
-        ,
+        // ,
         BoostableRebalancePoolBalanceOfRes,
         BoostRatioRes,
         claimableWstETHRes,

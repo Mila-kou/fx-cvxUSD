@@ -129,18 +129,18 @@ const useStabiltyPool = (infoKey) => {
             .div(rebalanceTvl)
             .times(100)
         }
-        // xETH apy
-        if (_currentTime > finishAt_xETH) {
-          xETH_apyWei = cBN(0)
-        } else {
-          xETH_apyWei = cBN(rate_xETH)
-            .div(1e18)
-            .multipliedBy(config.yearSecond)
-            .multipliedBy(xETHPrice)
-            .div(rebalanceTvl)
-            .times(100)
-        }
-        const _apy = wstETH_apyWei.plus(_fxnApy).plus(xETH_apyWei)
+        // // xETH apy
+        // if (_currentTime > finishAt_xETH) {
+        //   xETH_apyWei = cBN(0)
+        // } else {
+        //   xETH_apyWei = cBN(rate_xETH)
+        //     .div(1e18)
+        //     .multipliedBy(config.yearSecond)
+        //     .multipliedBy(xETHPrice)
+        //     .div(rebalanceTvl)
+        //     .times(100)
+        // }
+        const _apy = wstETH_apyWei.plus(_fxnApy)
         const apy = _apy
         const apy_text = checkNotZoroNumOption(
           _apy,

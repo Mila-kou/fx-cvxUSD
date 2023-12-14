@@ -87,7 +87,7 @@ export default function RebalancePoolCell({
     `APY: ${poolData.apyObj?.apy_text}`,
     `FXN APR: ${poolData.apyObj?.fxnApy_text}`,
     `wstETH APR: ${poolData.apyObj?.wstETHApy_text}`,
-    hasXETH ? `xETH APR: ${poolData.apyObj?.xETHApy_text}` : '',
+    // hasXETH ? `xETH APR: ${poolData.apyObj?.xETHApy_text}` : '',
   ]
 
   return (
