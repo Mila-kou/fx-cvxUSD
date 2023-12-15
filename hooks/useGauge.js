@@ -114,7 +114,12 @@ const useGauge = () => {
               }
             })
             // item.rewardDatas = _rewardData
-            return { rewardDatas: _rewardData }
+            return {
+              rewardDatas: [
+                ..._rewardData,
+                { rewardAddress: config.tokens.FXN }, // add FXN reward
+              ],
+            }
           }
         )
         const fetchGaugeListApysData = await multiCallsV2(fetchGaugeListApys)

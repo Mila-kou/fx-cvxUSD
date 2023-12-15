@@ -1,14 +1,14 @@
 import React from 'react'
 import Head from 'next/head'
-// import RebalancePoolPage from '@/modules/rebalancePoolV2/RebalancePoolPage'
+import DemoPage from '@/modules/demo/DemoPage'
 
-export default function RebalancePool() {
+export default function Lock() {
   return (
     <React.Fragment>
       <Head>
         <title>f(x) Protocol</title>
       </Head>
-      {/* <RebalancePoolPage /> */}
+      <DemoPage />
     </React.Fragment>
   )
 }

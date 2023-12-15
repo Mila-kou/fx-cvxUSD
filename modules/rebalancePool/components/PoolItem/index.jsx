@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Tooltip } from 'antd'
 import cn from 'classnames'
 import Button from '@/components/Button'
-import { POOLS_LIST, REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
+import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
@@ -109,7 +109,7 @@ export default function PoolItem({
                 ) : null}
               </div>
               <div className={styles.actions}>
-                <Button onClick={handleDeposit}>Deposit</Button>
+                {/* <Button onClick={handleDeposit}>Deposit</Button> */}
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
@@ -148,7 +148,6 @@ export default function PoolItem({
                   disabled={!canClaim.wstETH}
                   loading={claiming.wstETH}
                   onClick={() => handleClaim('wstETH', true)}
-                  type="second"
                 >
                   Claim
                 </Button>

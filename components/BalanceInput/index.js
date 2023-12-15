@@ -30,6 +30,7 @@ function BalanceInput(props) {
     maxAmount,
     className = '',
     symbol,
+    hideLogo,
     tip,
     disabled,
     type,
@@ -93,11 +94,13 @@ function BalanceInput(props) {
       data-color={color}
       onClick={type == 'select' ? onSelected : () => {}}
     >
-      {/* <div className={styles.left}>
-        {['fETH', 'FXN'].includes(symbol) && <FLogo />}
-        {symbol === 'xETH' && <XLogo />}
-        {logoSrc && <img src={logoSrc} />}
-      </div> */}
+      {hideLogo ? null : (
+        <div className={styles.left}>
+          {['fETH', 'FXN'].includes(symbol) && <FLogo />}
+          {symbol === 'xETH' && <XLogo />}
+          {logoSrc && <img src={logoSrc} />}
+        </div>
+      )}
       <div className={styles.symbolWrap}>
         {options.length ? (
           <InputSelect

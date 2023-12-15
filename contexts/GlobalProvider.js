@@ -46,12 +46,12 @@ function GlobalProvider({ children }) {
   // const rebalancePool_info_B = useRebalancePoolUseInfo(
   //   config.contracts.fx_RebalancePool_B
   // )
-  // const rebalancePoolV2_info_A = useBoostableRebalancePoolData(
-  //   config.contracts.fx_BoostableRebalancePool_APool
-  // )
-  // const rebalancePoolV2_info_B = useBoostableRebalancePoolData(
-  //   config.contracts.fx_BoostableRebalancePool_BPool
-  // )
+  const rebalancePoolV2_info_A = useBoostableRebalancePoolData(
+    'rebalancePoolV2_info_A'
+  )
+  const rebalancePoolV2_info_B = useBoostableRebalancePoolData(
+    'rebalancePoolV2_info_B'
+  )
   const ethToken = useToken(config.tokens.eth)
   const stETHToken = useTokenBalance(config.tokens.stETH)
   const fETHToken = useTokenBalance(config.tokens.fETH)
@@ -218,6 +218,9 @@ function GlobalProvider({ children }) {
       wstETH: {
         price: tokenPrice?.wstETH?.usd?.toFixed(4) ?? 0,
       },
+      FXN: {
+        price: tokenPrice?.FXN?.usd?.toFixed(4) ?? 0,
+      },
     }
   }, [
     ethToken,
@@ -245,8 +248,8 @@ function GlobalProvider({ children }) {
       fx_info,
       rebalancePool_info_A,
       // rebalancePool_info_B,
-      // rebalancePoolV2_info_A,
-      // rebalancePoolV2_info_B,
+      rebalancePoolV2_info_A,
+      rebalancePoolV2_info_B,
 
       lpPrice,
       // vaultsInfo,
@@ -271,8 +274,8 @@ function GlobalProvider({ children }) {
       fx_info,
       rebalancePool_info_A,
       // rebalancePool_info_B,
-      // rebalancePoolV2_info_A,
-      // rebalancePoolV2_info_B,
+      rebalancePoolV2_info_A,
+      rebalancePoolV2_info_B,
 
       lpPrice,
       // vaultsInfo,

@@ -47,6 +47,7 @@ const useData = (refreshTrigger) => {
         balanceOf(veFXNAddress),
         balanceOf(config.contracts.fx_Vesting),
         balanceOf(config.contracts.fx_FXN_treasury),
+        balanceOf(config.contracts.aladdin_FXN_treasury),
         veFXNBalanceOf(_currentAccount),
         fxnTotalSupply(),
       ]
@@ -56,6 +57,7 @@ const useData = (refreshTrigger) => {
         veLockedFXN,
         fxnVested,
         fxnTreasury,
+        aladdin_FXN_treasuryres,
         userVeShare,
         fxnTotalAmount,
       ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
@@ -109,6 +111,7 @@ const useData = (refreshTrigger) => {
       const fxnCirculationSupply = cBN(fxnTotalAmount)
         .minus(fxnVested)
         .minus(fxnTreasury)
+        .minus(aladdin_FXN_treasuryres)
 
       setContractInfo({
         feeBalance,

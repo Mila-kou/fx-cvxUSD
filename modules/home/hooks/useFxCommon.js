@@ -236,14 +236,21 @@ const useFxCommon = () => {
   //   m_nx: '', //铸造xETH的数量
   // }
 
-  const ethPrice = useMemo(
-    () =>
-      checkNotZoroNumOption(
-        fx_info.baseInfo.CurrentNavRes?._baseNav,
-        (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
-      ),
-    [fx_info]
-  )
+  const [ethPrice, fETHPrice, xETHPrice] = useMemo(() => {
+    const _ethPrice = checkNotZoroNumOption(
+      fx_info.baseInfo.CurrentNavRes?._baseNav,
+      (fx_info.baseInfo.CurrentNavRes?._baseNav || 0) / 1e18
+    )
+    const _fETHPrice = checkNotZoroNumOption(
+      fx_info.baseInfo.CurrentNavRes?._fNav,
+      (fx_info.baseInfo.CurrentNavRes?._fNav || 0) / 1e18
+    )
+    const _xETHPrice = checkNotZoroNumOption(
+      fx_info.baseInfo.CurrentNavRes?._xNav,
+      (fx_info.baseInfo.CurrentNavRes?._xNav || 0) / 1e18
+    )
+    return [_ethPrice, _fETHPrice, _xETHPrice]
+  }, [fx_info])
 
   /**
    * 获取StabilityMode 价格
@@ -544,6 +551,8 @@ const useFxCommon = () => {
     xETHBeta,
     xETHBeta_text,
     ethPrice,
+    fETHPrice,
+    xETHPrice,
     isXETHBouns,
     isFETHBouns,
   }
