@@ -23,7 +23,7 @@ import FAQ from '@/components/FAQ'
 const routers = [
   ['f(x) Protocol', '/home'],
   ['Rebalance Pool', '/earning-pool', 'New'],
-  ['Rebalance Pool (Deprecated)', '/rebalance-pool'],
+  ['Rebalance Pool (Deprecated)', '/rebalance-pool', ''],
   // ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
   ['Booster', '/booster'],
@@ -215,22 +215,6 @@ export default function AppHeader() {
               {label} {tag ? <p className={styles.tag}>{tag}</p> : null}
             </Link>
           ))}
-          <a
-            className={styles.route}
-            target="_blank"
-            href="https://bridge.aladdin.club?source=fx"
-            rel="noreferrer"
-          >
-            Bridge
-          </a>
-          <a
-            className={styles.route}
-            target="_blank"
-            href="https://snapshot.org/#/fxn.eth"
-            rel="noreferrer"
-          >
-            Governance
-          </a>
           <Link
             href="/vesting"
             className={cn(
@@ -240,7 +224,26 @@ export default function AppHeader() {
           >
             Vesting
           </Link>
-          <span className={styles.route} onClick={toggleFAQ}>
+          <a
+            className={styles.route}
+            target="_blank"
+            href="https://bridge.aladdin.club?source=fx"
+            rel="noreferrer"
+          >
+            Bridge
+          </a>
+          <a
+            className={cn(styles.route, styles.canHide)}
+            target="_blank"
+            href="https://snapshot.org/#/fxn.eth"
+            rel="noreferrer"
+          >
+            Governance
+          </a>
+          <span
+            className={cn(styles.route, styles.canHide)}
+            onClick={toggleFAQ}
+          >
             FAQ
           </span>
         </div>

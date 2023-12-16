@@ -269,25 +269,11 @@
   display: none;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1380px) {
   .container {
-    .left {
+    .canHide {
       display: none;
     }
-    .right {
-      display: none;
-    }
-
-    .mobile {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-
-      .account {
-        margin-right: 0;
-      }
-    }
-
     .mobileLinks {
       display: flex;
       flex-direction: column;
@@ -306,6 +292,26 @@
       p {
         color: #231f20;
         margin-left: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 1240px) {
+  .container {
+    .left {
+      display: none;
+    }
+    .right {
+      display: none;
+    }
+    .mobile {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .account {
+        margin-right: 0;
       }
     }
   }
