@@ -26,8 +26,10 @@ const contracts = {
   fx_RebalanceWithBonusToken_B: '0x5a161B94c737326cA115eC46f4Eaf4eEC5037dBE',
   fx_RebalancePoolSplitter: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
 
-  fx_VotingEscrowBoost: '0x1DC94c4Dba60f2880A40327EF465E364C57df03F',
-  fx_VotingEscrowProxy: '0x9B487bA5eB7848352cbFFE20DE7bC3384660E945',
+  // ve boost
+  fx_VotingEscrowBoost: '0xC2BdBF323304eaBd9260b42E4d0d429Ca3481d6E',
+  fx_VotingEscrowProxy: '0xf64B38e1Fe07FfB50Be16Ef2A9d7b88d7Da68377',
+
   fx_GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
 
   fx_FxGateway: '0x5c28b966aB37cFB9397bBc04595f91F0fBf06d9b',
