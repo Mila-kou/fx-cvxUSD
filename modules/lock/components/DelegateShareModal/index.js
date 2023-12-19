@@ -19,6 +19,9 @@ import {
   lockTimeTipText,
 } from '../../util'
 import { useVeFXN, useErc20Token } from '@/hooks/useContracts'
+import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
+import useVeBoostDelegateShare_c from '../../controllers/useVeboost_c'
+import Button from '@/components/Button'
 
 const typeList = [
   {
@@ -39,12 +42,14 @@ export default function DelegateShareModal({
   refreshAction,
 }) {
   const { isAllReady, currentAccount } = useWeb3()
-  const [address, setAddress] = useState('')
+  const [delegation_to_address, setAddress] = useState('')
   const [amount, setAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
   const [processing, setProcessing] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const { veTotalSupply, veLockedFXN, userLocked, userVeShare } =
+    useVeBoostDelegateShare_c()
 
   const { title, subTitle, note } = typeList[isShare ? 1 : 0]
 
@@ -57,22 +62,26 @@ export default function DelegateShareModal({
   }, [])
 
   const { contract: veFXNContract } = useVeFXN()
+  const {
+    contract: VotingEscrowBoostContract,
+    address: fx_VotingEscrowBoostAdress,
+  } = useVotingEscrowBoost()
 
-  const { tokenContract: fxnContract, tokenInfo: fxnInfo } = useErc20Token(
-    config.contracts.FXN,
-    config.contracts.veFXN
-  )
+  // const { tokenContract: fxnContract, tokenInfo: fxnInfo } = useErc20Token(
+  //   config.contracts.veFXN,
+  //   fx_VotingEscrowBoostAdress
+  // )
 
-  const { refreshTrigger: approveTrigger, BtnWapper } = useApprove({
-    allowance: fxnInfo.allowance,
-    tokenContract: fxnContract,
-    approveAddress: config.contracts.veFXN,
-    approveAmount: checkNotZoroNum(amount) ? amount : 0,
-  })
+  // const { refreshTrigger: approveTrigger, BtnWapper } = useApprove({
+  //   allowance: fxnInfo.allowance,
+  //   tokenContract: fxnContract,
+  //   approveAddress: config.contracts.veFXN,
+  //   approveAmount: checkNotZoroNum(amount) ? amount : 0,
+  // })
 
-  useEffect(() => {
-    setRefreshTrigger((prev) => prev + 1)
-  }, [approveTrigger])
+  // useEffect(() => {
+  //   setRefreshTrigger((prev) => prev + 1)
+  // }, [approveTrigger])
 
   useEffect(() => {
     refreshAction((prev) => prev + 1)
@@ -80,13 +89,14 @@ export default function DelegateShareModal({
 
   const handleProcess = async () => {
     if (!isAllReady) return
-    const lockAmountInWei = cBN(amount).toFixed(0, 1)
+    const boostAmountInWei = cBN(amount).toFixed(0, 1)
     setProcessing(true)
 
     try {
       const timestamp = locktime.startOf('day').add(8, 'hours').unix()
-      const apiCall = veFXNContract.methods.create_lock(
-        lockAmountInWei.toString(),
+      const apiCall = VotingEscrowBoostContract.methods.boost(
+        delegation_to_address,
+        boostAmountInWei.toString(),
         timestamp
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
@@ -94,8 +104,8 @@ export default function DelegateShareModal({
       await NoPayableAction(
         () => apiCall.send({ from: currentAccount, gas }),
         {
-          key: 'ctr',
-          action: 'lock',
+          key: 'boost',
+          action: 'boost',
         },
         () => {
           setRefreshTrigger((prev) => prev + 1)
@@ -105,7 +115,7 @@ export default function DelegateShareModal({
       )
     } catch (error) {
       setProcessing(false)
-      noPayableErrorAction(`error_ctr_lock`, error)
+      noPayableErrorAction(`error_boost`, error)
     }
   }
 
@@ -124,10 +134,10 @@ export default function DelegateShareModal({
   }
 
   const canProcess =
-    address &&
-    cBN(fxnInfo.balance).isGreaterThan(0) &&
+    delegation_to_address &&
+    cBN(userVeShare).isGreaterThan(0) &&
     cBN(amount).isGreaterThan(0) &&
-    cBN(amount).isLessThanOrEqualTo(fxnInfo.balance)
+    cBN(amount).isLessThanOrEqualTo(userVeShare)
 
   return (
     <Modal onCancel={onCancel} visible footer={null} width="600px">
@@ -148,8 +158,8 @@ export default function DelegateShareModal({
       <BalanceInput
         placeholder="0"
         symbol="veFXN"
-        balance={fb4(fxnInfo.balance, false)}
-        maxAmount={fxnInfo.balance}
+        balance={fb4(userVeShare, false)}
+        maxAmount={userVeShare}
         onChange={setAmount}
         withUsd={false}
       />
@@ -184,14 +194,14 @@ export default function DelegateShareModal({
       <div className="text-[16px] mt-[32px]">{note}</div>
 
       <div className={styles.actions}>
-        <BtnWapper
+        <Button
           width="100%"
           onClick={handleProcess}
           disabled={!canProcess}
           loading={processing}
         >
           {title}
-        </BtnWapper>
+        </Button>
       </div>
     </Modal>
   )
