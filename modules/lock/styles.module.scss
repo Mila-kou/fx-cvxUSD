@@ -1,7 +1,7 @@
 @import '../../assets/css/mixin.scss';
 
 .container {
-  max-width: 1163px;
+  max-width: 1200px;
   margin: 60px auto;
 
   .header {
@@ -37,11 +37,14 @@
     gap: 14px;
     .left {
       flex: 1;
-      background: var(--background-color);
-      padding: 28px 56px;
-      border-radius: 10px;
-      height: 568px;
     }
+  }
+
+  .itemContent {
+    margin-top: 16px;
+    padding: 28px 32px;
+    border-radius: 10px;
+    background: var(--background-color);
   }
 }
 
