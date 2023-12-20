@@ -3,18 +3,20 @@ import { cBN, fb4, checkNotZoroNum } from 'utils'
 import Tabs from '@/modules/home/components/Tabs'
 import styles from './styles.module.scss'
 import DelegateShareModal from '../DelegateShareModal'
+import useInfo from '../../controllers/useInfo'
+import moment from 'moment'
 
 export default function DelegateShare({ refreshAction }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [showModal, setShowModal] = useState(false)
-
+  const pageData = useInfo()
   const isShare = activeIndex === 1
 
   const typeList = [
     {
       title: 'Delegation',
       subTitle: 'These addresses are delegated to use your veFXN.',
-      list: [1, 1, 1],
+      list: pageData.contractInfo?.boostsRes || [],
     },
     {
       title: 'Share',
@@ -55,8 +57,13 @@ export default function DelegateShare({ refreshAction }) {
           {typeList[activeIndex].list.length ? (
             typeList[activeIndex].list.map((item) => (
               <div className="flex mt-[8px]">
-                <div className="flex-1 text-[16px]">0x1234...1234</div>
-                <div className="flex-1 text-[16px]">2023-12-12 08:00:00</div>
+                <div className="flex-1 text-[16px]">{`${item.receiver.slice(
+                  0,
+                  6
+                )}...${item.receiver.slice(-6)}`}</div>
+                <div className="flex-1 text-[16px]">
+                  {moment(item.endTime * 1000).format('lll')}
+                </div>
                 <div
                   className="text-[16px]  text-[var(--a-button-color)] cursor-pointer"
                   onClick={() => handleCancel(item)}

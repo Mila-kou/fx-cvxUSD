@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 import config from 'config'
-import { cBN } from 'utils'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption } from 'utils'
 import {
   useVeFXNFee,
   useVeFXN,
@@ -11,6 +11,7 @@ import {
 } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
+import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
 
 const useData = (refreshTrigger) => {
   const { _currentAccount, blockNumber, current } = useWeb3()
@@ -22,6 +23,7 @@ const useData = (refreshTrigger) => {
     veFXNFeeAddress
   )
   const { contract: wstETHContract, address: wstETHAddress } = useWstETH()
+  const { contract: votingEscrowBoostContract } = useVotingEscrowBoost()
 
   const multiCallsV2 = useMutiCallV2()
 
@@ -40,6 +42,7 @@ const useData = (refreshTrigger) => {
   const fetchCotractInfo = async () => {
     const { totalSupply, balanceOf: veFXNBalanceOf } = veFXNContract.methods
     const { balanceOf, totalSupply: fxnTotalSupply } = FXNContract.methods
+    const { boostLength, boosts } = votingEscrowBoostContract.methods
 
     try {
       const abiCalls = [
@@ -50,6 +53,7 @@ const useData = (refreshTrigger) => {
         balanceOf(config.contracts.aladdin_FXN_treasury),
         veFXNBalanceOf(_currentAccount),
         fxnTotalSupply(),
+        boostLength(_currentAccount),
       ]
 
       const [
@@ -60,6 +64,7 @@ const useData = (refreshTrigger) => {
         aladdin_FXN_treasuryres,
         userVeShare,
         fxnTotalAmount,
+        boostLengthRes,
       ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
       const thisWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400
@@ -105,13 +110,22 @@ const useData = (refreshTrigger) => {
         userVeRewards,
         userVeRewards1,
         userVeRewards2,
-        stETHTowstETHRate
+        stETHTowstETHRate,
+        boostLengthRes
       )
       console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
       const fxnCirculationSupply = cBN(fxnTotalAmount)
         .minus(fxnVested)
         .minus(fxnTreasury)
         .minus(aladdin_FXN_treasuryres)
+      let boostsRes = []
+      if (checkNotZoroNum(boostLengthRes)) {
+        const _callApis = []
+        for (let i = 0, l = boostLengthRes * 1; i < l; i++) {
+          _callApis.push(boosts(_currentAccount, i))
+        }
+        boostsRes = await multiCallsV2(_callApis)
+      }
 
       setContractInfo({
         feeBalance,
@@ -130,6 +144,8 @@ const useData = (refreshTrigger) => {
         platformFeeSpliterStETH,
         veFXNFeeTokenLastBalance,
         stETHTowstETHRate,
+        boostLengthRes,
+        boostsRes,
       })
     } catch (error) {
       console.log(

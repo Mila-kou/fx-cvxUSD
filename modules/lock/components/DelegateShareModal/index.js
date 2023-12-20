@@ -22,6 +22,7 @@ import { useVeFXN, useErc20Token } from '@/hooks/useContracts'
 import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
 import useVeBoostDelegateShare_c from '../../controllers/useVeboost_c'
 import Button from '@/components/Button'
+import useInfo from '../../controllers/useInfo'
 
 const typeList = [
   {
@@ -50,6 +51,7 @@ export default function DelegateShareModal({
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const { veTotalSupply, veLockedFXN, userLocked, userVeShare } =
     useVeBoostDelegateShare_c()
+  const pageData = useInfo()
 
   const { title, subTitle, note } = typeList[isShare ? 1 : 0]
 
@@ -67,6 +69,9 @@ export default function DelegateShareModal({
     address: fx_VotingEscrowBoostAdress,
   } = useVotingEscrowBoost()
 
+  const onChangeAddress = (obj) => {
+    setAddress(obj.target.value)
+  }
   // const { tokenContract: fxnContract, tokenInfo: fxnInfo } = useErc20Token(
   //   config.contracts.veFXN,
   //   fx_VotingEscrowBoostAdress
@@ -89,7 +94,10 @@ export default function DelegateShareModal({
 
   const handleProcess = async () => {
     if (!isAllReady) return
-    const boostAmountInWei = cBN(amount).toFixed(0, 1)
+    const boostAmountInWei = cBN(amount).gte(cBN(userVeShare).times(0.99))
+      ? cBN(amount).times(0.99).toFixed(0, 1)
+      : cBN(amount).toFixed(0, 1)
+
     setProcessing(true)
 
     try {
@@ -151,7 +159,7 @@ export default function DelegateShareModal({
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
         {title} to (address)
       </p>
-      <TextInput onChange={setAddress} withUsd={false} />
+      <TextInput onChange={onChangeAddress} withUsd={false} />
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
         {title} Amount
       </p>
