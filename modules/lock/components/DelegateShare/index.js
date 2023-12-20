@@ -1,22 +1,45 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import moment from 'moment'
 import { cBN, fb4, checkNotZoroNum } from 'utils'
 import Tabs from '@/modules/home/components/Tabs'
 import styles from './styles.module.scss'
 import DelegateShareModal from '../DelegateShareModal'
 import useInfo from '../../controllers/useInfo'
-import moment from 'moment'
+import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
+import useWeb3 from '@/hooks/useWeb3'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 export default function DelegateShare({ refreshAction }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [showModal, setShowModal] = useState(false)
   const pageData = useInfo()
+  const { isAllReady, currentAccount } = useWeb3()
+  console.log('pageData---', pageData)
   const isShare = activeIndex === 1
-
+  const {
+    contract: VotingEscrowBoostContract,
+    address: fx_VotingEscrowBoostAdress,
+  } = useVotingEscrowBoost()
+  const _newBoostRes = useMemo(() => {
+    const __newBoostRes = []
+    if (pageData.contractInfo && pageData.contractInfo.boostsRes) {
+      const _currentTime = Math.ceil(new Date().getTime() / 1000)
+      pageData.contractInfo.boostsRes.map((item, index) => {
+        if (
+          cBN(item.cancelAmount).lt(item.initialAmount) &&
+          cBN(_currentTime).lt(item.endTime)
+        ) {
+          __newBoostRes.push({ ...item, index })
+        }
+      })
+    }
+    return __newBoostRes
+  }, [pageData.contractInfo])
   const typeList = [
     {
       title: 'Delegation',
       subTitle: 'These addresses are delegated to use your veFXN.',
-      list: pageData.contractInfo?.boostsRes || [],
+      list: _newBoostRes,
     },
     {
       title: 'Share',
@@ -25,9 +48,30 @@ export default function DelegateShare({ refreshAction }) {
     },
   ]
 
-  const handleCancel = (item) => {
-    if (isShare) {
-      //
+  const handleCancel = async (item) => {
+    const _currentTime = Math.ceil(new Date().getTime() / 1000)
+    if (
+      checkNotZoroNum(item.initialAmount) &&
+      cBN(_currentTime).lt(item.endTime)
+    ) {
+      try {
+        const apiCall = VotingEscrowBoostContract.methods.unboost(
+          item.index,
+          item.initialAmount.toString()
+        )
+        const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
+        const gas = parseInt(estimatedGas * 1.2, 10) || 0
+        await noPayableAction(
+          () => apiCall.send({ from: currentAccount, gas }),
+          {
+            key: 'boost',
+            action: 'boost',
+          },
+          () => {}
+        )
+      } catch (error) {
+        noPayableErrorAction(`error_boost`, error)
+      }
     }
   }
 
@@ -55,8 +99,8 @@ export default function DelegateShare({ refreshAction }) {
         </div>
         <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
           {typeList[activeIndex].list.length ? (
-            typeList[activeIndex].list.map((item) => (
-              <div className="flex mt-[8px]">
+            typeList[activeIndex].list.map((item, index) => (
+              <div key={index} className="flex mt-[8px]">
                 <div className="flex-1 text-[16px]">{`${item.receiver.slice(
                   0,
                   6
