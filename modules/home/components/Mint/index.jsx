@@ -681,12 +681,12 @@ export default function Mint({ slippage }) {
     <div className={styles.container}>
       {isXETHBouns ? (
         <BonusCard
-          title={`Minting xETH will earn ${fb4(
+          title={`MINT xETH TO EARN ${fb4(
             cBN(baseInfo.bonusRatioRes).times(100),
             false,
             18,
             2
-          )}% bonus now`}
+          )}% BONUS NOW`}
           amount=""
           symbol=""
         />
