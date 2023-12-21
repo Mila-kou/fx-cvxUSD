@@ -42,16 +42,21 @@ export default function DelegateShareModal({
   onCancel,
   refreshAction,
 }) {
-  const { isAllReady, currentAccount } = useWeb3()
+  const { isAllReady, web3, currentAccount } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
   const [amount, setAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
   const [processing, setProcessing] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const { veTotalSupply, veLockedFXN, userLocked, userVeShare } =
-    useVeBoostDelegateShare_c()
-  const pageData = useInfo()
+  const {
+    veTotalSupply,
+    veLockedFXN,
+    userLocked,
+    userVeShare,
+    _last_ve_balance,
+  } = useVeBoostDelegateShare_c()
+  console.log('shareModal---', userVeShare, _last_ve_balance)
 
   const { title, subTitle, note } = typeList[isShare ? 1 : 0]
 
@@ -94,6 +99,11 @@ export default function DelegateShareModal({
 
   const handleProcess = async () => {
     if (!isAllReady) return
+    const _isAddress = web3.utils.isAddress(delegation_to_address)
+    if (!_isAddress) {
+      noPayableErrorAction(`Invalid Address`, 'Invalid Address')
+      return
+    }
     const boostAmountInWei = cBN(amount).gte(cBN(userVeShare).times(0.99))
       ? cBN(amount).times(0.99).toFixed(0, 1)
       : cBN(amount).toFixed(0, 1)
@@ -166,8 +176,8 @@ export default function DelegateShareModal({
       <BalanceInput
         placeholder="0"
         symbol="veFXN"
-        balance={fb4(userVeShare, false)}
-        maxAmount={userVeShare}
+        balance={fb4(_last_ve_balance, false)}
+        maxAmount={_last_ve_balance}
         onChange={setAmount}
         withUsd={false}
       />

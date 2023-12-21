@@ -20,8 +20,9 @@ export default function DelegateShare({ refreshAction }) {
     contract: VotingEscrowBoostContract,
     address: fx_VotingEscrowBoostAdress,
   } = useVotingEscrowBoost()
-  const _newBoostRes = useMemo(() => {
+  const [_newBoostRes, _receivedRes] = useMemo(() => {
     const __newBoostRes = []
+    let __receivedRes = 0
     if (pageData.contractInfo && pageData.contractInfo.boostsRes) {
       const _currentTime = Math.ceil(new Date().getTime() / 1000)
       pageData.contractInfo.boostsRes.map((item, index) => {
@@ -33,18 +34,33 @@ export default function DelegateShare({ refreshAction }) {
         }
       })
     }
-    return __newBoostRes
+    if (pageData.contractInfo && pageData.contractInfo.receivedRes) {
+      const { ts, slope, bias } = pageData.contractInfo.receivedRes
+      const _currentTime = Math.ceil(new Date().getTime() / 1000)
+      if (cBN(_currentTime).lt(ts)) {
+        __receivedRes = 0
+      } else {
+        __receivedRes = cBN(ts)
+          .minus(_currentTime)
+          .multipliedBy(slope)
+          .div(1e18)
+          .toFixed(0)
+      }
+    }
+    return [__newBoostRes, __receivedRes]
   }, [pageData.contractInfo])
   const typeList = [
     {
       title: 'Delegation',
       subTitle: 'These addresses are delegated to use your veFXN.',
       list: _newBoostRes,
+      received: _receivedRes,
     },
     {
       title: 'Share',
       subTitle: 'These addresses can share your veFXN boosting.',
-      list: [1, 1, 1],
+      list: [],
+      received: 0,
     },
   ]
 
@@ -130,6 +146,9 @@ export default function DelegateShare({ refreshAction }) {
         </div>
       </div>
 
+      <div className="bg-[var(--input-background-color)] p-[16px] rounded-[5px]">
+        User received: {fb4(typeList[activeIndex].received)}
+      </div>
       {showModal ? (
         <DelegateShareModal
           onCancel={() => setShowModal(false)}

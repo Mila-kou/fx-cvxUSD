@@ -12,9 +12,28 @@ const useVeBoostDelegateShare_c = (refreshTrigger) => {
   const { current, currentAccount } = useWeb3()
 
   const pageData = useMemo(() => {
-    const { veTotalSupply, veLockedFXN, userLocked, userVeShare } = info
+    const {
+      veTotalSupply,
+      veLockedFXN,
+      userLocked,
+      userVeShare,
+      delegatedBalanceRes,
+      adjustedVeBalanceRes,
+      receivedRes,
+      receivedBalanceRes,
+    } = info
+    console.log('shareModal---', info)
+    const _last_ve_balance = adjustedVeBalanceRes
     const _pageData = {
       userVeShare,
+      veTotalSupply,
+      veLockedFXN,
+      userLocked,
+      delegatedBalanceRes,
+      adjustedVeBalanceRes,
+      receivedRes,
+      receivedBalanceRes,
+      _last_ve_balance,
     }
     return _pageData
   }, [info, current])

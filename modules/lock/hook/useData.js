@@ -42,7 +42,14 @@ const useData = (refreshTrigger) => {
   const fetchCotractInfo = async () => {
     const { totalSupply, balanceOf: veFXNBalanceOf } = veFXNContract.methods
     const { balanceOf, totalSupply: fxnTotalSupply } = FXNContract.methods
-    const { boostLength, boosts } = votingEscrowBoostContract.methods
+    const {
+      boostLength,
+      boosts,
+      received,
+      adjustedVeBalance,
+      receivedBalance,
+      delegatedBalance,
+    } = votingEscrowBoostContract.methods
 
     try {
       const abiCalls = [
@@ -53,7 +60,11 @@ const useData = (refreshTrigger) => {
         balanceOf(config.contracts.aladdin_FXN_treasury),
         veFXNBalanceOf(_currentAccount),
         fxnTotalSupply(),
+        delegatedBalance(_currentAccount),
+        adjustedVeBalance(_currentAccount),
         boostLength(_currentAccount),
+        received(_currentAccount),
+        receivedBalance(_currentAccount),
       ]
 
       const [
@@ -64,7 +75,11 @@ const useData = (refreshTrigger) => {
         aladdin_FXN_treasuryres,
         userVeShare,
         fxnTotalAmount,
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
         boostLengthRes,
+        receivedRes,
+        receivedBalanceRes,
       ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
       const thisWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400
@@ -111,7 +126,11 @@ const useData = (refreshTrigger) => {
         userVeRewards1,
         userVeRewards2,
         stETHTowstETHRate,
-        boostLengthRes
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
+        boostLengthRes,
+        receivedRes,
+        receivedBalanceRes
       )
       console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
       const fxnCirculationSupply = cBN(fxnTotalAmount)
@@ -144,8 +163,12 @@ const useData = (refreshTrigger) => {
         platformFeeSpliterStETH,
         veFXNFeeTokenLastBalance,
         stETHTowstETHRate,
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
         boostLengthRes,
         boostsRes,
+        receivedRes,
+        receivedBalanceRes,
       })
     } catch (error) {
       console.log(
