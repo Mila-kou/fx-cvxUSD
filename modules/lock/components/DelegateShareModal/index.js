@@ -173,7 +173,7 @@ export default function DelegateShareModal({
       </div>
 
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-        {title} to {isShare ? '' : '(address)'}
+        {title} to (address)
       </p>
       <TextInput onChange={onChangeAddress} withUsd={false} />
 
