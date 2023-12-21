@@ -171,36 +171,44 @@ export default function DelegateShareModal({
       <div className="mb-[16px] text-[16px]" id="trigger">
         {subTitle}
       </div>
+
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
         {title} to {isShare ? '' : '(address)'}
       </p>
+      <TextInput onChange={onChangeAddress} withUsd={false} />
 
       {isShare ? (
-        <div className={styles.selectItem}>
-          <InputSelect
-            value={share_to}
-            className="h-[60px]"
-            onChange={(v) => setShareTo(v)}
-            options={OPTIONS.map(({ shareAddress, nameShow }) => ({
-              value: shareAddress,
-              label: nameShow,
-            }))}
-          />
-        </div>
+        <>
+          <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
+            Pool
+          </p>
+          <div className={styles.selectItem}>
+            <InputSelect
+              value={share_to}
+              className="h-[60px]"
+              onChange={(v) => setShareTo(v)}
+              options={OPTIONS.map(({ shareAddress, nameShow }) => ({
+                value: shareAddress,
+                label: nameShow,
+              }))}
+            />
+          </div>
+        </>
       ) : (
-        <TextInput onChange={onChangeAddress} withUsd={false} />
+        <>
+          <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
+            {title} Amount
+          </p>
+          <BalanceInput
+            placeholder="0"
+            symbol="veFXN"
+            balance={fb4(_last_ve_balance, false)}
+            maxAmount={_last_ve_balance}
+            onChange={setAmount}
+            withUsd={false}
+          />
+        </>
       )}
-      <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-        {title} Amount
-      </p>
-      <BalanceInput
-        placeholder="0"
-        symbol="veFXN"
-        balance={fb4(_last_ve_balance, false)}
-        maxAmount={_last_ve_balance}
-        onChange={setAmount}
-        withUsd={false}
-      />
 
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
         Duration
