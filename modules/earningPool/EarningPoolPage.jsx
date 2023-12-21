@@ -36,13 +36,11 @@ export default function EarningPoolPage() {
           <div className="w-[20px]" />
         </div>
         <RebalancePoolCell
-          title="fETH Rebalance Pool (stETH)"
           contractType="fx_BoostableRebalancePool_APool"
           // subTitle="fETH for stETH"
           {...poolAData}
         />
         <RebalancePoolCell
-          title="fETH Rebalance Pool (xETH)"
           contractType="fx_BoostableRebalancePool_BPool"
           // subTitle="fETH for xETH"
           hasXETH

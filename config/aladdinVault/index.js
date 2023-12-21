@@ -11,6 +11,8 @@ export const POOLS_LIST = [
   //   logo2: `/tokens/crypto-icons-stack.svg#eth`,
   //   id: 1,
   //   name: 'xETH+ETH',
+  // TODO:
+  // shareAddress: '',
   //   platform: 'FX',
   //   fromPlatformIcon: `${cryptoIcons}#crv`,
   //   fromPlatform: 'Curve',
@@ -44,6 +46,8 @@ export const POOLS_LIST = [
   //   logo2: `/tokens/crypto-icons-stack.svg#eth`,
   //   id: 2,
   //   name: 'FXN+ETH',
+  // TODO:
+  // shareAddress: '',
   //   platform: 'FX',
   //   fromPlatformIcon: `${cryptoIcons}#crv`,
   //   fromPlatform: 'Curve',
@@ -75,6 +79,8 @@ export const POOLS_LIST = [
   //   logo2: `/tokens/crypto-icons-stack.svg#eth`,
   //   id: 3,
   //   name: 'fETH+crvUSD',
+  // TODO:
+  // shareAddress: '',
   //   platform: 'FX',
   //   fromPlatformIcon: `${cryptoIcons}#crv`,
   //   fromPlatform: 'Curve',
@@ -105,6 +111,8 @@ export const POOLS_LIST = [
   //   logo2: `/tokens/crypto-icons-stack.svg#eth`,
   //   id: 4,
   //   name: 'fETH+FRAXBP',
+  // TODO:
+  // shareAddress: '',
   //   platform: 'FX',
   //   fromPlatformIcon: `${cryptoIcons}#crv`,
   //   fromPlatform: 'Curve',
@@ -137,8 +145,10 @@ export const REBALANCE_POOLS_LIST = [
     logo: FLogo,
     id: 1,
     name: 'BoostRebalance PoolA',
+    // TODO:
+    shareAddress: '',
     gaugeType: 'boostRebalance',
-    nameShow: 'Rebalance PoolA',
+    nameShow: 'fETH Rebalance Pool (stETH)',
     rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_APool,
     rebalanceWithBonusTokenAddress:
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
@@ -159,8 +169,10 @@ export const REBALANCE_POOLS_LIST = [
     logo: FLogo,
     id: 2,
     name: 'BoostRebalance PoolB',
+    // TODO:
+    shareAddress: '',
     gaugeType: 'boostRebalance',
-    nameShow: 'Rebalance PoolB',
+    nameShow: 'fETH Rebalance Pool (xETH)',
     rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_BPool,
     rebalanceWithBonusTokenAddress:
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,

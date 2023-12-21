@@ -35,6 +35,13 @@
   }
 }
 
+.selectItem {
+  background: var(--input-background-color);
+  width: 100%;
+  padding: 0 16px;
+  border-radius: 6px;
+}
+
 .datePickerDropdown {
   z-index: 1000000000000000;
 }

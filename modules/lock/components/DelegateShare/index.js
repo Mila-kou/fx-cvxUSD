@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
+import { LoadingOutlined } from '@ant-design/icons'
 import { cBN, fb4, checkNotZoroNum } from 'utils'
 import Tabs from '@/modules/home/components/Tabs'
-import styles from './styles.module.scss'
-import DelegateShareModal from '../DelegateShareModal'
-import useInfo from '../../controllers/useInfo'
 import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import DelegateShareModal from '../DelegateShareModal'
+import useInfo from '../../controllers/useInfo'
+import styles from './styles.module.scss'
 
 export default function DelegateShare({ refreshAction }) {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [canceling, setCanceling] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const pageData = useInfo()
   const { isAllReady, currentAccount } = useWeb3()
@@ -65,6 +67,7 @@ export default function DelegateShare({ refreshAction }) {
   ]
 
   const handleCancel = async (item) => {
+    setCanceling(true)
     const _currentTime = Math.ceil(new Date().getTime() / 1000)
     if (
       checkNotZoroNum(item.initialAmount) &&
@@ -85,7 +88,9 @@ export default function DelegateShare({ refreshAction }) {
           },
           () => {}
         )
+        setCanceling(false)
       } catch (error) {
+        setCanceling(false)
         noPayableErrorAction(`error_boost`, error)
       }
     }
@@ -125,10 +130,13 @@ export default function DelegateShare({ refreshAction }) {
                   {moment(item.endTime * 1000).format('lll')}
                 </div>
                 <div
-                  className="text-[16px]  text-[var(--a-button-color)] cursor-pointer"
+                  className="text-[16px] flex items-center gap-[5px]  text-[var(--a-button-color)] cursor-pointer "
                   onClick={() => handleCancel(item)}
                 >
-                  Cancel
+                  Cancel{' '}
+                  {canceling ? (
+                    <LoadingOutlined style={{ fontSize: '12px' }} />
+                  ) : null}
                 </div>
               </div>
             ))

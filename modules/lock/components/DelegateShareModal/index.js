@@ -9,7 +9,9 @@ import useWeb3 from 'hooks/useWeb3'
 import { checkNotZoroNum, cBN, fb4 } from 'utils'
 import TextInput from '@/components/TextInput'
 import BalanceInput from '@/components/BalanceInput'
+import InputSelect from '@/components/InputSelect'
 import styles from './styles.module.scss'
+import { REBALANCE_POOLS_LIST, POOLS_LIST } from '@/config/aladdinVault'
 import {
   WEEK,
   YEARS,
@@ -37,6 +39,8 @@ const typeList = [
   },
 ]
 
+const OPTIONS = [...REBALANCE_POOLS_LIST, ...POOLS_LIST]
+
 export default function DelegateShareModal({
   isShare,
   onCancel,
@@ -44,6 +48,7 @@ export default function DelegateShareModal({
 }) {
   const { isAllReady, web3, currentAccount } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
+  const [share_to, setShareTo] = useState(OPTIONS[0].shareAddress)
   const [amount, setAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
@@ -167,9 +172,24 @@ export default function DelegateShareModal({
         {subTitle}
       </div>
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-        {title} to (address)
+        {title} to {isShare ? '' : '(address)'}
       </p>
-      <TextInput onChange={onChangeAddress} withUsd={false} />
+
+      {isShare ? (
+        <div className={styles.selectItem}>
+          <InputSelect
+            value={share_to}
+            className="h-[60px]"
+            onChange={(v) => setShareTo(v)}
+            options={OPTIONS.map(({ shareAddress, nameShow }) => ({
+              value: shareAddress,
+              label: nameShow,
+            }))}
+          />
+        </div>
+      ) : (
+        <TextInput onChange={onChangeAddress} withUsd={false} />
+      )}
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
         {title} Amount
       </p>
