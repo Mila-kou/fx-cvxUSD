@@ -27,40 +27,23 @@ import Button from '@/components/Button'
 import useInfo from '../../controllers/useInfo'
 import useVeShare_c from '../../controllers/useVeShare_c'
 
-const typeList = [
-  {
-    title: 'Delegation',
-    subTitle: 'The delegated address will obtain the right to use your veFXN.',
-    note: 'After delegated, you can canceled the delegation anytime, it will take effect every epoch.',
-  },
-  {
-    title: 'Share',
-    subTitle: 'The address shared with will share your veFXN boosting.',
-    note: 'After shared, you can canceled the sharing anytime, it will take effect every epoch.',
-  },
-]
-
 const OPTIONS = POOLS_LIST
 
-export default function DelegateShareModal({
-  isShare,
-  onCancel,
-  refreshAction,
-}) {
+export default function DelegateShareModal({ onCancel, refreshAction }) {
   const { isAllReady, web3, currentAccount } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
   const [share_to, setShareTo] = useState(OPTIONS[0].lpGaugeAddress)
   const [amount, setAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
-  const [processing, setProcessing] = useState(false)
+  const [sharing, setSharing] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [isCheckShare, setIsCheckShare] = useState(-1)
 
+  const _last_ve_balance = 0
+
   const { getGaugeContract, fetchGaugeInfo, fetchIsStakerAllowed } =
     useVeShare_c()
-
-  const { title, subTitle, note } = typeList[isShare ? 1 : 0]
 
   const onChangeAddress = (obj) => {
     setAddress(obj.target.value)
@@ -92,7 +75,7 @@ export default function DelegateShareModal({
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
       return
     }
-    setProcessing(true)
+    setSharing(true)
 
     try {
       const gaugeContract = getGaugeContract(share_to)
@@ -109,12 +92,12 @@ export default function DelegateShareModal({
         },
         () => {
           setRefreshTrigger((prev) => prev + 1)
-          setProcessing(false)
+          setSharing(false)
           onCancel()
         }
       )
     } catch (error) {
-      setProcessing(false)
+      setSharing(false)
       noPayableErrorAction(`error_share`, error)
     }
   }
@@ -124,52 +107,37 @@ export default function DelegateShareModal({
   return (
     <Modal onCancel={onCancel} visible footer={null} width="600px">
       <div className={styles.info}>
-        <div className="color-white">{title} your veFXN</div>
+        <div className="color-white">Share your veFXN</div>
       </div>
 
       <div className="mb-[16px] text-[16px]" id="trigger">
-        {subTitle}
+        The address shared with will share your veFXN boosting.
       </div>
 
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-        {title} to (address)
+        Share to (address)
       </p>
       <TextInput onChange={onChangeAddress} withUsd={false} />
 
-      {isShare ? (
-        <>
-          <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-            Pool
-          </p>
-          <div className={styles.selectItem}>
-            <InputSelect
-              value={share_to}
-              className="h-[60px]"
-              onChange={(v) => setShareTo(v)}
-              options={OPTIONS.map(({ name, lpGaugeAddress }) => ({
-                value: lpGaugeAddress,
-                label: name,
-              }))}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-            {title} Amount
-          </p>
-          <BalanceInput
-            placeholder="0"
-            symbol="veFXN"
-            balance={fb4(_last_ve_balance, false)}
-            maxAmount={_last_ve_balance}
-            onChange={setAmount}
-            withUsd={false}
-          />
-        </>
-      )}
+      <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
+        Pool
+      </p>
+      <div className={styles.selectItem}>
+        <InputSelect
+          value={share_to}
+          className="h-[60px]"
+          onChange={(v) => setShareTo(v)}
+          options={OPTIONS.map(({ name, lpGaugeAddress }) => ({
+            value: lpGaugeAddress,
+            label: name,
+          }))}
+        />
+      </div>
 
-      <div className="text-[16px] mt-[32px]">{note}</div>
+      <div className="text-[16px] mt-[32px]">
+        After shared, you can canceled the sharing anytime, it will take effect
+        every epoch.
+      </div>
 
       <div className={styles.actions}>
         {isCheckShare == '-1' ? (
@@ -179,7 +147,7 @@ export default function DelegateShareModal({
             width="100%"
             onClick={handleProcess}
             disabled={!canProcess}
-            loading={processing}
+            loading={sharing}
           >
             {isCheckShare ? 'Cancel Share' : 'Share'}
           </Button>

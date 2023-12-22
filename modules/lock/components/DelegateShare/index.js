@@ -6,14 +6,14 @@ import Tabs from '@/modules/home/components/Tabs'
 import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import DelegateShareModal from '../DelegateShareModal'
+import DelegateModal from '../DelegateModal'
+import ShareModal from '../ShareModal'
 import useInfo from '../../controllers/useInfo'
-import styles from './styles.module.scss'
 
 export default function DelegateShare({ refreshAction }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [canceling, setCanceling] = useState(false)
-  const [showModal, setShowModal] = useState(false)
+  const [showModalIndex, setShowModalIndex] = useState(-1)
   const pageData = useInfo()
   const { isAllReady, currentAccount } = useWeb3()
   console.log('pageData---', pageData)
@@ -103,7 +103,10 @@ export default function DelegateShare({ refreshAction }) {
         onChange={(v) => setActiveIndex(v)}
         tabs={typeList.map((item) => item.title)}
       />
-      <div onClick={() => setShowModal(true)} className="cursor-pointer">
+      <div
+        onClick={() => setShowModalIndex(activeIndex)}
+        className="cursor-pointer"
+      >
         <p className="text-[16px] mt-[16px] underline text-[var(--a-button-color)]">
           + New {typeList[activeIndex].title}
         </p>
@@ -157,10 +160,16 @@ export default function DelegateShare({ refreshAction }) {
       <div className="bg-[var(--input-background-color)] p-[16px] rounded-[5px]">
         User received: {fb4(typeList[activeIndex].received)}
       </div>
-      {showModal ? (
-        <DelegateShareModal
-          onCancel={() => setShowModal(false)}
-          isShare={isShare}
+      {showModalIndex === 0 ? (
+        <DelegateModal
+          onCancel={() => setShowModalIndex(-1)}
+          refreshAction={refreshAction}
+        />
+      ) : null}
+
+      {showModalIndex === 1 ? (
+        <ShareModal
+          onCancel={() => setShowModalIndex(-1)}
           refreshAction={refreshAction}
         />
       ) : null}
