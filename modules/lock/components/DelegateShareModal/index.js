@@ -49,7 +49,7 @@ export default function DelegateShareModal({
 }) {
   const { isAllReady, web3, currentAccount } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
-  const [share_to, setShareTo] = useState(OPTIONS[0].shareAddress)
+  const [share_to, setShareTo] = useState(OPTIONS[0].rebalancePoolAddress)
   const [amount, setAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
@@ -65,9 +65,9 @@ export default function DelegateShareModal({
   const onChangeAddress = (obj) => {
     setAddress(obj.target.value)
   }
-  const onChangeShareTo = (obj) => {
-    console.log('obj---', obj)
-  }
+
+  console.log('share_to---', share_to)
+
   // useEffect(() => {
   //   setRefreshTrigger((prev) => prev + 1)
   // }, [approveTrigger])
@@ -149,10 +149,12 @@ export default function DelegateShareModal({
               value={share_to}
               className="h-[60px]"
               onChange={(v) => setShareTo(v)}
-              options={OPTIONS.map(({ shareAddress, nameShow }) => ({
-                value: shareAddress,
-                label: nameShow,
-              }))}
+              options={OPTIONS.map(
+                ({ nameShow, rebalancePoolAddress, lpGaugeAddress }) => ({
+                  value: rebalancePoolAddress || lpGaugeAddress,
+                  label: nameShow,
+                })
+              )}
             />
           </div>
         </>
