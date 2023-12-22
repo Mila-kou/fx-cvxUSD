@@ -34,12 +34,17 @@ const useGaugeShare = () => {
   }
 
   const fetchIsStakerAllowed = async (lpGaugeAddress, receivedAddress) => {
-    const _gaugeContract = getGaugeContract(lpGaugeAddress)
-    const { isStakerAllowed } = _gaugeContract.methods
-    const callList = [isStakerAllowed(_currentAccount, receivedAddress)]
-    const [IsStakerAllowedRes] = await multiCallsV2(callList)
-    return {
-      IsStakerAllowedRes,
+    try {
+      const _gaugeContract = getGaugeContract(lpGaugeAddress)
+      const { isStakerAllowed } = _gaugeContract.methods
+      const callList = [isStakerAllowed(_currentAccount, receivedAddress)]
+      const [IsStakerAllowedRes] = await multiCallsV2(callList)
+      return {
+        IsStakerAllowedRes,
+      }
+    } catch (error) {
+      console.log('fetchIsStakerAllowed---', error)
+      return false
     }
   }
 

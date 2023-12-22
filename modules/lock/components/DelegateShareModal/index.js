@@ -66,8 +66,6 @@ export default function DelegateShareModal({
     setAddress(obj.target.value)
   }
 
-  console.log('share_to---', share_to)
-
   // useEffect(() => {
   //   setRefreshTrigger((prev) => prev + 1)
   // }, [approveTrigger])
@@ -83,9 +81,8 @@ export default function DelegateShareModal({
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
       return
     }
-    console.log('share_to---', share_to)
     const _data = await fetchIsStakerAllowed(share_to, delegation_to_address)
-    setIsCheckShare(_data)
+    setIsCheckShare(_data.IsStakerAllowedRes)
   }
 
   const handleProcess = async () => {
@@ -175,18 +172,18 @@ export default function DelegateShareModal({
       <div className="text-[16px] mt-[32px]">{note}</div>
 
       <div className={styles.actions}>
-        {isCheckShare == '-1' && (
+        {isCheckShare == '-1' ? (
           <Button onClick={handleCheckIsShare}>Check is share</Button>
+        ) : (
+          <Button
+            width="100%"
+            onClick={handleProcess}
+            disabled={!canProcess}
+            loading={processing}
+          >
+            {isCheckShare ? 'Cancel Share' : 'Share'}
+          </Button>
         )}
-
-        <Button
-          width="100%"
-          onClick={handleProcess}
-          disabled={!canProcess}
-          loading={processing}
-        >
-          {title}
-        </Button>
       </div>
     </Modal>
   )
