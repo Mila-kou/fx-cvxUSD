@@ -49,6 +49,11 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
     setAddress(obj.target.value)
   }
 
+  const onChangeSelectGauge = (obj) => {
+    setIsCheckShare(-1)
+    setShareTo(obj)
+  }
+
   // useEffect(() => {
   //   setRefreshTrigger((prev) => prev + 1)
   // }, [approveTrigger])
@@ -126,7 +131,7 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
         <InputSelect
           value={share_to}
           className="h-[60px]"
-          onChange={(v) => setShareTo(v)}
+          onChange={(v) => onChangeSelectGauge(v)}
           options={OPTIONS.map(({ name, lpGaugeAddress }) => ({
             value: lpGaugeAddress,
             label: name,
@@ -141,7 +146,9 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
 
       <div className={styles.actions}>
         {isCheckShare == '-1' ? (
-          <Button onClick={handleCheckIsShare}>Check is share</Button>
+          <Button width="100%" onClick={handleCheckIsShare}>
+            Check Shared
+          </Button>
         ) : (
           <Button
             width="100%"
