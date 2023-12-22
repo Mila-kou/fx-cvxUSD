@@ -25,6 +25,7 @@ import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
 import useVeBoostDelegateShare_c from '../../controllers/useVeboost_c'
 import Button from '@/components/Button'
 import useInfo from '../../controllers/useInfo'
+import useVeShare_c from '../../controllers/useVeShare_c'
 
 const typeList = [
   {
@@ -54,46 +55,19 @@ export default function DelegateShareModal({
   const [startTime, setStartTime] = useState(moment())
   const [processing, setProcessing] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const {
-    veTotalSupply,
-    veLockedFXN,
-    userLocked,
-    userVeShare,
-    _last_ve_balance,
-  } = useVeBoostDelegateShare_c()
-  console.log('shareModal---', userVeShare, _last_ve_balance)
+  const [isCheckShare, setIsCheckShare] = useState(-1)
+
+  const { getGaugeContract, fetchGaugeInfo, fetchIsStakerAllowed } =
+    useVeShare_c()
 
   const { title, subTitle, note } = typeList[isShare ? 1 : 0]
-
-  useEffect(() => {
-    const current = moment().startOf('day').add(8, 'hours')
-    if (calc4(moment()).isSameOrBefore(current)) {
-      setLocktime(calc4(moment().add(7, 'day')))
-      setStartTime(calc4(moment().add(7, 'day')).subtract(1, 'days'))
-    }
-  }, [])
-
-  const { contract: veFXNContract } = useVeFXN()
-  const {
-    contract: VotingEscrowBoostContract,
-    address: fx_VotingEscrowBoostAdress,
-  } = useVotingEscrowBoost()
 
   const onChangeAddress = (obj) => {
     setAddress(obj.target.value)
   }
-  // const { tokenContract: fxnContract, tokenInfo: fxnInfo } = useErc20Token(
-  //   config.contracts.veFXN,
-  //   fx_VotingEscrowBoostAdress
-  // )
-
-  // const { refreshTrigger: approveTrigger, BtnWapper } = useApprove({
-  //   allowance: fxnInfo.allowance,
-  //   tokenContract: fxnContract,
-  //   approveAddress: config.contracts.veFXN,
-  //   approveAmount: checkNotZoroNum(amount) ? amount : 0,
-  // })
-
+  const onChangeShareTo = (obj) => {
+    console.log('obj---', obj)
+  }
   // useEffect(() => {
   //   setRefreshTrigger((prev) => prev + 1)
   // }, [approveTrigger])
@@ -102,6 +76,18 @@ export default function DelegateShareModal({
     refreshAction((prev) => prev + 1)
   }, [refreshTrigger])
 
+  const handleCheckIsShare = async () => {
+    if (!isAllReady) return
+    const _isAddress = web3.utils.isAddress(delegation_to_address)
+    if (!_isAddress) {
+      noPayableErrorAction(`Invalid Address`, 'Invalid Address')
+      return
+    }
+    console.log('share_to---', share_to)
+    const _data = await fetchIsStakerAllowed(share_to, delegation_to_address)
+    setIsCheckShare(_data)
+  }
+
   const handleProcess = async () => {
     if (!isAllReady) return
     const _isAddress = web3.utils.isAddress(delegation_to_address)
@@ -109,26 +95,20 @@ export default function DelegateShareModal({
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
       return
     }
-    const boostAmountInWei = cBN(amount).gte(cBN(userVeShare).times(0.99))
-      ? cBN(amount).times(0.99).toFixed(0, 1)
-      : cBN(amount).toFixed(0, 1)
-
     setProcessing(true)
 
     try {
-      const timestamp = locktime.startOf('day').add(8, 'hours').unix()
-      const apiCall = VotingEscrowBoostContract.methods.boost(
-        delegation_to_address,
-        boostAmountInWei.toString(),
-        timestamp
+      const gaugeContract = getGaugeContract(share_to)
+      const apiCall = gaugeContract.methods.toggleVoteSharing(
+        delegation_to_address
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
       await NoPayableAction(
         () => apiCall.send({ from: currentAccount, gas }),
         {
-          key: 'boost',
-          action: 'boost',
+          key: 'share',
+          action: 'share',
         },
         () => {
           setRefreshTrigger((prev) => prev + 1)
@@ -138,29 +118,11 @@ export default function DelegateShareModal({
       )
     } catch (error) {
       setProcessing(false)
-      noPayableErrorAction(`error_boost`, error)
+      noPayableErrorAction(`error_share`, error)
     }
   }
 
-  const addTime = (days) => {
-    setLocktime(calc4(moment(moment().clone().add(days, 'day'))))
-  }
-
-  const disabledDate = (current) => {
-    return (
-      current &&
-      !current.isBetween(
-        startTime,
-        calc4(moment(startTime.clone().add(FOURYEARS, 'day')))
-      )
-    )
-  }
-
-  const canProcess =
-    delegation_to_address &&
-    cBN(userVeShare).isGreaterThan(0) &&
-    cBN(amount).isGreaterThan(0) &&
-    cBN(amount).isLessThanOrEqualTo(userVeShare)
+  const canProcess = delegation_to_address
 
   return (
     <Modal onCancel={onCancel} visible footer={null} width="600px">
@@ -210,36 +172,13 @@ export default function DelegateShareModal({
         </>
       )}
 
-      <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-        Duration
-      </p>
-      <DatePicker
-        value={locktime}
-        onChange={setLocktime}
-        disabledDate={disabledDate}
-        className={styles.datePicker}
-        getPopupContainer={() => document.getElementById('trigger')}
-        showTime={false}
-        showToday={false}
-        renderExtraFooter={() => (
-          <div className="flex justify-between flex-wrap">
-            {shortDate.map((i) => (
-              <div
-                key={i.value}
-                onClick={() => addTime(i.value)}
-                className="text-center w-2/6 underline text-blue-900 cursor-pointer"
-              >
-                {i.lable}
-              </div>
-            ))}
-          </div>
-        )}
-        dropdownClassName={styles.datePickerDropdown}
-      />
-
       <div className="text-[16px] mt-[32px]">{note}</div>
 
       <div className={styles.actions}>
+        {isCheckShare == '-1' && (
+          <Button onClick={handleCheckIsShare}>Check is share</Button>
+        )}
+
         <Button
           width="100%"
           onClick={handleProcess}

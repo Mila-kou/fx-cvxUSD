@@ -9,7 +9,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import { useContract } from '@/hooks/useContracts'
 import useGaugeShare from '../hook/useGaugeShare'
 
-const useVeBoostDelegateShare_c = (refreshTrigger) => {
+const useVeShare_c = (refreshTrigger) => {
   const { tokens, tokenPrice } = useGlobal()
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
@@ -29,4 +29,4 @@ const useVeBoostDelegateShare_c = (refreshTrigger) => {
   }
 }
 
-export default useVeBoostDelegateShare_c
+export default useVeShare_c
