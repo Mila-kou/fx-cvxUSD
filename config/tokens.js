@@ -111,17 +111,17 @@ const contracts = {
 }
 
 const gaugeTokenList = {
-  // fx_ETH_xETH: '0x203aeE406d26AE5C1Cc12b2F884d2B5814A44948',
-  // ConvexCurveManager_ETH_xETH: '0x7d23e21Be2bf68De4d3D6C06340cE66F192B185a',
-  // fx_ETH_FXN: '0x0E4f31a2f48418c90F5e9fa84Bf761D832C54ceD',
-  // ConvexCurveManager_ETH_FXN: '0x43fCFe9F128b5e4271c7E25C47eFe91bA8896220',
-  // fx_crvUSD_fETH: '0xA2FaffE31153e5E60F2352e3ed28ff973309C156',
-  // ConvexCurveManager_crvUSD_fETH: '0x82E535428b3034Ca74ce738949954715627cb140',
-  // fx_fETH_FRAXBP: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
-  // ConvexCurveManager_fETH_FRAXBP: '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
-  // // rebalance pool gauge
-  // BoostableRebalancePool_fETH_FundraiseGauge:
-  //   '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
+  fx_ETH_xETH: '0x203aeE406d26AE5C1Cc12b2F884d2B5814A44948',
+  ConvexCurveManager_ETH_xETH: '0x7d23e21Be2bf68De4d3D6C06340cE66F192B185a',
+  fx_ETH_FXN: '0x0E4f31a2f48418c90F5e9fa84Bf761D832C54ceD',
+  ConvexCurveManager_ETH_FXN: '0x43fCFe9F128b5e4271c7E25C47eFe91bA8896220',
+  fx_crvUSD_fETH: '0xA2FaffE31153e5E60F2352e3ed28ff973309C156',
+  ConvexCurveManager_crvUSD_fETH: '0x82E535428b3034Ca74ce738949954715627cb140',
+  fx_fETH_FRAXBP: '0x9748Df3c38Ca6B03697B0769CDbf46BFe7E800d8',
+  ConvexCurveManager_fETH_FRAXBP: '0xF74CA519Fe35Ec6A862A4debD8e317BeD3c47c87',
+  // rebalance pool gauge
+  BoostableRebalancePool_fETH_FundraiseGauge:
+    '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
 }
 
 const tokens = {

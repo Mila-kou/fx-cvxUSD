@@ -40,7 +40,7 @@ const typeList = [
   },
 ]
 
-const OPTIONS = [...REBALANCE_POOLS_LIST, ...POOLS_LIST]
+const OPTIONS = POOLS_LIST
 
 export default function DelegateShareModal({
   isShare,
@@ -49,7 +49,7 @@ export default function DelegateShareModal({
 }) {
   const { isAllReady, web3, currentAccount } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
-  const [share_to, setShareTo] = useState(OPTIONS[0].rebalancePoolAddress)
+  const [share_to, setShareTo] = useState(OPTIONS[0].lpGaugeAddress)
   const [amount, setAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
@@ -149,12 +149,10 @@ export default function DelegateShareModal({
               value={share_to}
               className="h-[60px]"
               onChange={(v) => setShareTo(v)}
-              options={OPTIONS.map(
-                ({ nameShow, rebalancePoolAddress, lpGaugeAddress }) => ({
-                  value: rebalancePoolAddress || lpGaugeAddress,
-                  label: nameShow,
-                })
-              )}
+              options={OPTIONS.map(({ name, lpGaugeAddress }) => ({
+                value: lpGaugeAddress,
+                label: name,
+              }))}
             />
           </div>
         </>
