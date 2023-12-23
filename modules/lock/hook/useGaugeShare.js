@@ -55,10 +55,11 @@ const useGaugeShare = () => {
     const callList = POOLS_LIST.map((item) => {
       const { lpGaugeAddress } = item
       const _getGaugeContract = getGaugeContract(lpGaugeAddress)
+      const { isStakerAllowed, getStakerVoteOwner } = _getGaugeContract.methods
       return {
         lpGaugeAddress,
-        StakerVoteOwnerRes:
-          _getGaugeContract.methods.getStakerVoteOwner(_currentAccount),
+        StakerVoteOwnerRes: getStakerVoteOwner(_currentAccount),
+        isStakerAllowedRes: isStakerAllowed(_currentAccount, _currentAccount),
       }
     })
     try {
