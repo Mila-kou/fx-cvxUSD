@@ -8,7 +8,10 @@ import useWeb3 from '@/hooks/useWeb3'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import DelegateModal from '../DelegateModal'
 import ShareModal from '../ShareModal'
+import ShareAcceptOrRejectModal from '../ShareModal/AcceptOrReject'
 import useInfo from '../../controllers/useInfo'
+import config from '@/config/index'
+import useVeShare_c from '../../controllers/useVeShare_c'
 
 export default function DelegateShare({ refreshAction }) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -22,6 +25,7 @@ export default function DelegateShare({ refreshAction }) {
     contract: VotingEscrowBoostContract,
     address: fx_VotingEscrowBoostAdress,
   } = useVotingEscrowBoost()
+  const { AllGaugeShare } = useVeShare_c()
   const [_newBoostRes, _receivedRes] = useMemo(() => {
     const __newBoostRes = []
     let __receivedRes = 0
@@ -51,6 +55,20 @@ export default function DelegateShare({ refreshAction }) {
     }
     return [__newBoostRes, __receivedRes]
   }, [pageData.contractInfo])
+
+  const [_newGaugeShareRes] = useMemo(() => {
+    const __newGaugeShareRes = []
+    if (AllGaugeShare) {
+      AllGaugeShare.map((item, index) => {
+        if (item.StakerVoteOwnerRes != config.zeroAddress) {
+          __newGaugeShareRes.push({ ...item, index })
+        }
+      })
+    }
+    return [__newGaugeShareRes]
+  }, [AllGaugeShare])
+  console.log('_newGaugeShareRes----', _newGaugeShareRes)
+
   const typeList = [
     {
       title: 'Delegation',
@@ -61,8 +79,7 @@ export default function DelegateShare({ refreshAction }) {
     {
       title: 'Share',
       subTitle: 'These addresses can share your veFXN boosting.',
-      list: [],
-      received: 0,
+      list: _newGaugeShareRes,
     },
   ]
 
@@ -114,52 +131,98 @@ export default function DelegateShare({ refreshAction }) {
           {typeList[activeIndex].subTitle}
         </p>
       </div>
-
-      <div className="bg-[var(--input-background-color)] p-[16px] rounded-[5px]">
-        <div className="flex  justify-between">
-          <div className="text-[14px]">Address</div>
-          <div className="text-[14px]">Duration</div>
-          <div className="text-[14px]">Action</div>
+      {typeList[activeIndex].title == 'Share' && (
+        <div onClick={() => setShowModalIndex(2)} className="cursor-pointer">
+          + Check My Share
         </div>
-        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-          {typeList[activeIndex].list.length ? (
-            typeList[activeIndex].list.map((item, index) => (
-              <div key={index} className="flex mt-[8px]">
-                <div className="flex-1 text-[16px]">{`${item.receiver.slice(
-                  0,
-                  6
-                )}...${item.receiver.slice(-6)}`}</div>
-                <div className="flex-1 text-[16px]">
-                  {moment(item.endTime * 1000).format('lll')}
-                </div>
-                <div
-                  className="text-[16px] flex items-center gap-[5px]  text-[var(--a-button-color)] cursor-pointer "
-                  onClick={() => handleCancel(item)}
+      )}
+
+      {activeIndex === 0 && (
+        <>
+          <div className="bg-[var(--input-background-color)] p-[16px] rounded-[5px]">
+            <div className="flex  justify-between">
+              <div className="text-[14px]">Address</div>
+              <div className="text-[14px]">Duration</div>
+              <div className="text-[14px]">Action</div>
+            </div>
+            <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+              {typeList[activeIndex].list.length ? (
+                typeList[activeIndex].list.map((item, index) => (
+                  <div key={index} className="flex mt-[8px]">
+                    <div className="flex-1 text-[16px]">{`${item.receiver.slice(
+                      0,
+                      6
+                    )}...${item.receiver.slice(-6)}`}</div>
+                    <div className="flex-1 text-[16px]">
+                      {moment(item.endTime * 1000).format('lll')}
+                    </div>
+                    <div
+                      className="text-[16px] flex items-center gap-[5px]  text-[var(--a-button-color)] cursor-pointer "
+                      onClick={() => handleCancel(item)}
+                    >
+                      Cancel{' '}
+                      {canceling ? (
+                        <LoadingOutlined style={{ fontSize: '12px' }} />
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p
+                  style={{
+                    height: '30px',
+                    textAlign: 'center',
+                    fontSize: '14px',
+                  }}
                 >
-                  Cancel{' '}
-                  {canceling ? (
-                    <LoadingOutlined style={{ fontSize: '12px' }} />
-                  ) : null}
-                </div>
-              </div>
-            ))
-          ) : (
-            <p
-              style={{
-                height: '30px',
-                textAlign: 'center',
-                fontSize: '14px',
-              }}
-            >
-              No Data
-            </p>
-          )}
-        </div>
-      </div>
+                  No Data
+                </p>
+              )}
+            </div>
+          </div>
+          <div
+            className="bg-[var(--input-background-color)] p-[16px] rounded-[5px]"
+            style={{ marginTop: '10px' }}
+          >
+            User received: {fb4(typeList[activeIndex].received)}
+          </div>
+        </>
+      )}
 
-      <div className="bg-[var(--input-background-color)] p-[16px] rounded-[5px]">
-        User received: {fb4(typeList[activeIndex].received)}
-      </div>
+      {activeIndex === 1 && (
+        <div className="bg-[var(--input-background-color)] p-[16px] rounded-[5px]">
+          <div className="flex  justify-between">
+            <div className="text-[14px]">Share From </div>
+            <div className="text-[14px]">Gauge Name</div>
+          </div>
+          <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            {typeList[activeIndex].list.length ? (
+              typeList[activeIndex].list.map((item, index) => (
+                <div key={index} className="flex mt-[8px]">
+                  <div className="flex-1 text-[16px]">{`${item.StakerVoteOwnerRes.slice(
+                    0,
+                    6
+                  )}...${item.StakerVoteOwnerRes.slice(-6)}`}</div>
+                  <div className="text-[16px] flex items-center gap-[5px]  text-[var(--a-button-color)] cursor-pointer ">
+                    {item.nameShow}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p
+                style={{
+                  height: '30px',
+                  textAlign: 'center',
+                  fontSize: '14px',
+                }}
+              >
+                No Data
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
       {showModalIndex === 0 ? (
         <DelegateModal
           onCancel={() => setShowModalIndex(-1)}
@@ -169,6 +232,13 @@ export default function DelegateShare({ refreshAction }) {
 
       {showModalIndex === 1 ? (
         <ShareModal
+          onCancel={() => setShowModalIndex(-1)}
+          refreshAction={refreshAction}
+        />
+      ) : null}
+
+      {showModalIndex === 2 ? (
+        <ShareAcceptOrRejectModal
           onCancel={() => setShowModalIndex(-1)}
           refreshAction={refreshAction}
         />

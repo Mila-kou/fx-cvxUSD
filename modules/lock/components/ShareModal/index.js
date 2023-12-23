@@ -69,7 +69,11 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
       return
     }
-    const _data = await fetchIsStakerAllowed(share_to, delegation_to_address)
+    const _data = await fetchIsStakerAllowed(
+      share_to,
+      delegation_to_address,
+      currentAccount
+    )
     setIsCheckShare(_data.IsStakerAllowedRes)
   }
 

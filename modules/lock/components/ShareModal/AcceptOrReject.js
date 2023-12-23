@@ -69,9 +69,11 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
       return
     }
-    const _data = await fetchIsStakerAllowed(share_to, currentAccount).call({
-      from: share_from_address,
-    })
+    const _data = await fetchIsStakerAllowed(
+      share_to,
+      currentAccount,
+      share_from_address
+    )
     setIsCheckShare(_data.IsStakerAllowedRes)
   }
 
@@ -88,7 +90,7 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
       const gaugeContract = getGaugeContract(share_to)
       let apiCall = gaugeContract.methods.rejectSharedVote()
       if (type == 'accept') {
-        apiCall = gaugeContract.methods.acceptSharedVote(currentAccount)
+        apiCall = gaugeContract.methods.acceptSharedVote(share_from_address)
       } else {
         apiCall = gaugeContract.methods.rejectSharedVote()
       }
@@ -97,8 +99,8 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
       await NoPayableAction(
         () => apiCall.send({ from: currentAccount, gas }),
         {
-          key: 'share',
-          action: 'share',
+          key: 'Option',
+          action: 'Option',
         },
         () => {
           setRefreshTrigger((prev) => prev + 1)
@@ -126,14 +128,13 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
           Check Shared
         </Button>
       )
+    } else if (!isCheckShare) {
+      _dom = (
+        <Button width="100%" disabled={!canProcess} loading={sharing}>
+          No Share
+        </Button>
+      )
     } else {
-      if (isCheckShare) {
-        _dom = (
-          <Button width="100%" disabled={!canProcess} loading={sharing}>
-            No Share
-          </Button>
-        )
-      }
       _dom = (
         <>
           <Button
@@ -144,6 +145,7 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
           >
             Accept Share
           </Button>
+          <br />
           <Button
             width="100%"
             onClick={() => handleProcess('reject')}
@@ -168,7 +170,7 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
       </div>
 
       <p className="mt-[32px] mb-[16px] text-[16px] text-[var(--second-text-color)]">
-        Share to (address)
+        Share from (address)
       </p>
       <TextInput onChange={onChangeAddress} withUsd={false} />
 

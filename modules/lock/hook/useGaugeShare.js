@@ -35,12 +35,25 @@ const useGaugeShare = () => {
     }
   }
 
-  const fetchIsStakerAllowed = async (lpGaugeAddress, receivedAddress) => {
+  const fetchIsStakerAllowed = async (
+    lpGaugeAddress,
+    receivedAddress,
+    shareFromAddress = _currentAccount
+  ) => {
     try {
       const _gaugeContract = getGaugeContract(lpGaugeAddress)
       const { isStakerAllowed } = _gaugeContract.methods
-      const callList = [isStakerAllowed(_currentAccount, receivedAddress)]
-      const [IsStakerAllowedRes] = await multiCallsV2(callList)
+      const IsStakerAllowedRes = await isStakerAllowed(
+        shareFromAddress,
+        receivedAddress
+      ).call({ from: shareFromAddress })
+      console.log(
+        'fetchIsStakerAllowed---lpGaugeAddress--receivedAddress--shareFromAddress--IsStakerAllowedRes',
+        lpGaugeAddress,
+        receivedAddress,
+        shareFromAddress,
+        IsStakerAllowedRes
+      )
       return {
         IsStakerAllowedRes,
       }
@@ -51,19 +64,17 @@ const useGaugeShare = () => {
   }
 
   const fetchAllGaugeShare = async () => {
-    console.log('fetchAllGaugeShare---11')
     const callList = POOLS_LIST.map((item) => {
-      const { lpGaugeAddress } = item
+      const { lpGaugeAddress, nameShow } = item
       const _getGaugeContract = getGaugeContract(lpGaugeAddress)
       const { isStakerAllowed, getStakerVoteOwner } = _getGaugeContract.methods
       return {
         lpGaugeAddress,
+        nameShow,
         StakerVoteOwnerRes: getStakerVoteOwner(_currentAccount),
-        isStakerAllowedRes: isStakerAllowed(_currentAccount, _currentAccount),
       }
     })
     try {
-      console.log('fetchAllGaugeShare---22', callList)
       const data = await multiCallsV2(callList)
       console.log('fetchAllGaugeShare---33', data)
       return data

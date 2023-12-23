@@ -14,8 +14,12 @@ const useVeShare_c = (refreshTrigger) => {
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
   const { getContract } = useContract()
-  const { getGaugeContract, fetchGaugeInfo, fetchIsStakerAllowed } =
-    useGaugeShare()
+  const {
+    getGaugeContract,
+    fetchGaugeInfo,
+    fetchIsStakerAllowed,
+    AllGaugeShare,
+  } = useGaugeShare()
 
   const pageData = useMemo(() => {
     return {}
@@ -25,6 +29,7 @@ const useVeShare_c = (refreshTrigger) => {
     getGaugeContract,
     fetchGaugeInfo,
     fetchIsStakerAllowed,
+    AllGaugeShare,
     pageData,
   }
 }
