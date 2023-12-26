@@ -33,9 +33,13 @@
   color: var(--second-text-color);
   background: var(--input-background-color);
   font-size: 16px;
-  padding: 30px 16px;
+  padding: 24px 16px;
   border-radius: 6px;
   margin: 20px 0;
+  p {
+    color: var(--yellow-color);
+    font-weight: 600;
+  }
   span {
     color: var(--main-text-color);
   }

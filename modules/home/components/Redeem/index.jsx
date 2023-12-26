@@ -469,12 +469,12 @@ export default function Redeem({ slippage }) {
     <div className={styles.container}>
       {isFETHBouns ? (
         <BonusCard
-          title={`Redeem fETH will earn ${fb4(
+          title={`REDEEM fETH TO EARN ${fb4(
             cBN(baseInfo.bonusRatioRes).times(100),
             false,
             18,
             2
-          )}% bonus now`}
+          )}% BONUS NOW`}
           amount=""
           symbol=""
         />
