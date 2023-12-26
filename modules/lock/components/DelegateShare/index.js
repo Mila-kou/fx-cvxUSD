@@ -46,11 +46,12 @@ export default function DelegateShare({ refreshAction }) {
       if (cBN(_currentTime).lt(ts)) {
         __receivedRes = 0
       } else {
-        __receivedRes = cBN(ts)
-          .minus(_currentTime)
-          .multipliedBy(slope)
-          .div(1e18)
-          .toFixed(0)
+        __receivedRes = bias
+        // cBN(ts)
+        //   .minus(_currentTime)
+        //   .multipliedBy(slope)
+        //   .div(1e18)
+        //   .toFixed(0)
       }
     }
     return [__newBoostRes, __receivedRes]
