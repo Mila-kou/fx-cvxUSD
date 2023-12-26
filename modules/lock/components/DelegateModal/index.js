@@ -61,6 +61,9 @@ export default function DelegateShareModal({
     userVeShare,
     _last_ve_balance,
   } = useVeBoostDelegateShare_c()
+
+  const { end } = userLocked
+  // moment(end * 1000).isBefore(moment()
   console.log('shareModal---', userVeShare, _last_ve_balance)
 
   const { title, subTitle, note } = typeList[isShare ? 1 : 0]
@@ -142,17 +145,14 @@ export default function DelegateShareModal({
     }
   }
 
-  const addTime = (days) => {
-    setLocktime(calc4(moment(moment().clone().add(days, 'day'))))
+  const toEnd = () => {
+    setLocktime(calc4(moment(end * 1000)))
   }
 
   const disabledDate = (current) => {
     return (
       current &&
-      !current.isBetween(
-        startTime,
-        calc4(moment(startTime.clone().add(FOURYEARS, 'day')))
-      )
+      !current.isBetween(startTime, calc4(moment(end * 1000)), undefined, '(]')
     )
   }
 
@@ -222,17 +222,18 @@ export default function DelegateShareModal({
         showTime={false}
         showToday={false}
         renderExtraFooter={() => (
-          <div className="flex justify-between flex-wrap">
-            {shortDate.map((i) => (
-              <div
-                key={i.value}
-                onClick={() => addTime(i.value)}
-                className="text-center w-2/6 underline text-blue-900 cursor-pointer"
-              >
-                {i.lable}
-              </div>
-            ))}
-          </div>
+          <Button
+            onClick={toEnd}
+            type="second"
+            w="100%"
+            size="small"
+            className="my-[20px] text-[14px]"
+          >
+            Until lock-up end:{' '}
+            {end != 0 && end != undefined
+              ? moment(end * 1000).format('YYYY-MM-DD')
+              : '-'}
+          </Button>
         )}
         dropdownClassName={styles.datePickerDropdown}
       />
