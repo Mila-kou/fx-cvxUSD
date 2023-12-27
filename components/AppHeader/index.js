@@ -24,7 +24,7 @@ const routers = [
   ['f(x) Protocol', '/home'],
   ['Rebalance Pool', '/earning-pool', 'New'],
   ['Rebalance Pool (Deprecated)', '/rebalance-pool', ''],
-  ['Gauge', '/gauge'],
+  // ['Gauge', '/gauge'],
   // ['Farming', '/farming'],
   ['Booster', '/booster'],
   // ['Vesting', '/vesting'],
