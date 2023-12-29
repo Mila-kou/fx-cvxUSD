@@ -200,7 +200,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
-        <div className="flex w-[160px] gap-[6px] items-center">
+        <div className="flex w-[230px] gap-[6px] items-center">
           <img className="w-[30px]" src={xETHImg} />
           <div>
             <p className="text-[16px]">{cellData.name}</p>
@@ -209,10 +209,10 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             </p>
           </div>
         </div>
-        <div className="w-[90px] text-[16px]">{cellData.tvl_text}</div>
-        <div className="w-[180px]">{apyDom}</div>
-        <div className="w-[60px] text-[16px]">{cellData.userShare_text}</div>
-        <div className="w-[120px]">{rewardTokenDom}</div>
+        <div className="w-[120px] text-[16px]">{cellData.tvl_text}</div>
+        <div className="w-[120px] text-[16px]">{apyDom}</div>
+        <div className="w-[110px] text-[16px]">{cellData.userShare_text}</div>
+        <div className="w-[100px]">{rewardTokenDom}</div>
 
         <div className="w-[20px] cursor-pointer">
           <img
