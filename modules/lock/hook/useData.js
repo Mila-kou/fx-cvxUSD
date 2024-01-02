@@ -61,13 +61,11 @@ const useData = (refreshTrigger) => {
         userVeShare,
         fxnTotalAmount,
       ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
-      console.log('timestamp---0001')
       const thisWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400
       const preWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400 - 86400 * 7
 
-      console.log('timestamp---111')
       const tokensInfoList = [
         veFXNContract.methods.locked(_currentAccount),
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
