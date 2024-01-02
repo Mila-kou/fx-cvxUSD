@@ -27,7 +27,7 @@ import Button from '@/components/Button'
 import useInfo from '../../controllers/useInfo'
 import useVeShare_c from '../../controllers/useVeShare_c'
 
-const OPTIONS = POOLS_LIST
+const OPTIONS = [...POOLS_LIST, ...REBALANCE_POOLS_LIST]
 
 export default function DelegateShareModal({ onCancel, refreshAction }) {
   const { isAllReady, web3, currentAccount } = useWeb3()
@@ -136,10 +136,12 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
           value={share_to}
           className="h-[60px]"
           onChange={(v) => onChangeSelectGauge(v)}
-          options={OPTIONS.map(({ name, lpGaugeAddress }) => ({
-            value: lpGaugeAddress,
-            label: name,
-          }))}
+          options={OPTIONS.map(
+            ({ name, lpGaugeAddress, rebalancePoolAddress }) => ({
+              value: lpGaugeAddress || rebalancePoolAddress,
+              label: name,
+            })
+          )}
         />
       </div>
 

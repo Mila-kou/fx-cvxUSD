@@ -20,12 +20,6 @@ const contracts = {
   fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
   fx_stETHGateway: '0x9bF5fFABbF97De0a47843A7Ba0A9DDB40f2e2ed5',
 
-  fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
-  fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
-  fx_RebalanceWithBonusToken_A: '0x74E9234A6e03c382A01Bb942B1aF05B639371309',
-  fx_RebalanceWithBonusToken_B: '0x5a161B94c737326cA115eC46f4Eaf4eEC5037dBE',
-  fx_RebalancePoolSplitter: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
-
   // ve boost
   fx_VotingEscrowBoost: '0xC2BdBF323304eaBd9260b42E4d0d429Ca3481d6E',
   fx_VotingEscrowProxy: '0xf64B38e1Fe07FfB50Be16Ef2A9d7b88d7Da68377',
@@ -97,8 +91,19 @@ const contracts = {
 
   fx_RebalancePoolRegistry: '0x4eEfea49e4D876599765d5375cF7314cD14C9d38',
 
-  // farming
+  // rebalance
+  fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
+  fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
+  fx_RebalanceWithBonusToken_A: '0x74E9234A6e03c382A01Bb942B1aF05B639371309',
+  fx_RebalanceWithBonusToken_B: '0x5a161B94c737326cA115eC46f4Eaf4eEC5037dBE',
+  fx_RebalancePoolSplitter: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb', // fx_BoostableRebalancePool_APool_RebalancePoolSplitter
+
   fx_BoostableRebalancePool_APool: '0xc6dEe5913e010895F3702bc43a40d661B13a40BD',
+  fx_BoostableRebalancePool_APool_FundraiseGauge:
+    '0x28ED637C5e3371c2678C2d346dF04Fb634ED832d',
+  fx_BoostableRebalancePool_APool_RebalancePoolGaugeClaimer:
+    '0x9710Ca7F3eDD4893f399c89ea184D92cc7172e28',
+
   fx_BoostableRebalancePool_BPool: '0xB87A8332dFb1C76Bb22477dCfEdDeB69865cA9f9',
   // fx_RebalanceWithBonusToken_BoostRebalanceAPool:
   //   '0xc6ae935F7b9efb489938D8DFaeE29740E982d578',

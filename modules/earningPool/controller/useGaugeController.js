@@ -17,7 +17,7 @@ const useGaugeController = () => {
   const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
   const { allPoolsUserInfo } = useGaugeData()
-  const { GaugeList, allPoolsInfo, allPoolsApyInfo } = allGaugeBaseInfo
+  const { GaugeList = [], allPoolsInfo, allPoolsApyInfo } = allGaugeBaseInfo
   const { getGaugeEstimate, getGaugeApy } = useGaugeApyEstimate()
 
   const getLpTokenPrice = useCallback(
