@@ -5,13 +5,13 @@ import PoolCell from './components/PoolCell'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
-import useGaugeController from './controller/useGaugeController'
+// import useGaugeController from './controller/useGaugeController'
 
 import RebalancePoolCell from '@/modules/rebalancePoolV2/components/RebalancePoolCell'
 import usePool from '@/modules/rebalancePoolV2/controller/usePool'
 
 export default function EarningPoolPage() {
-  const { pageData, ...pageOthers } = useGaugeController()
+  // const { pageData, ...pageOthers } = useGaugeController()
 
   const poolAData = usePool({
     infoKey: 'rebalancePoolV2_info_A',
@@ -47,9 +47,9 @@ export default function EarningPoolPage() {
           {...poolBData}
         />
 
-        {pageData.map((item) => (
+        {/* pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
-        ))}
+        )) */}
       </div>
     </div>
   )
