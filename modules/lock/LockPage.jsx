@@ -17,7 +17,7 @@ import { useVeFXN, useVeFXNFee } from '@/hooks/useContracts'
 import styles from './styles.module.scss'
 
 const InfoItem = ({ title, value }) => (
-  <div className={`flex justify-between my-3 text-[16px]`}>
+  <div className="flex justify-between my-3 text-[16px]">
     <span>{title}</span>
     <span className="text-[var(--primary-color)]">{value}</span>
   </div>

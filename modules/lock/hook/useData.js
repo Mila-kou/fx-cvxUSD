@@ -42,15 +42,6 @@ const useData = (refreshTrigger) => {
   const fetchCotractInfo = async () => {
     const { totalSupply, balanceOf: veFXNBalanceOf } = veFXNContract.methods
     const { balanceOf, totalSupply: fxnTotalSupply } = FXNContract.methods
-    const {
-      boostLength,
-      boosts,
-      received,
-      adjustedVeBalance,
-      receivedBalance,
-      delegatedBalance,
-    } = votingEscrowBoostContract.methods
-
     try {
       const abiCalls = [
         totalSupply(),
@@ -60,13 +51,7 @@ const useData = (refreshTrigger) => {
         balanceOf(config.contracts.aladdin_FXN_treasury),
         veFXNBalanceOf(_currentAccount),
         fxnTotalSupply(),
-        delegatedBalance(_currentAccount),
-        adjustedVeBalance(_currentAccount),
-        boostLength(_currentAccount),
-        received(_currentAccount),
-        receivedBalance(_currentAccount),
       ]
-
       const [
         veTotalSupply,
         veLockedFXN,
@@ -75,17 +60,14 @@ const useData = (refreshTrigger) => {
         aladdin_FXN_treasuryres,
         userVeShare,
         fxnTotalAmount,
-        delegatedBalanceRes,
-        adjustedVeBalanceRes,
-        boostLengthRes,
-        receivedRes,
-        receivedBalanceRes,
       ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
+      console.log('timestamp---0001')
       const thisWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400
       const preWeekTimestamp =
         Math.floor(current.unix() / (7 * 86400)) * 7 * 86400 - 86400 * 7
 
+      console.log('timestamp---111')
       const tokensInfoList = [
         veFXNContract.methods.locked(_currentAccount),
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
@@ -125,26 +107,13 @@ const useData = (refreshTrigger) => {
         userVeRewards,
         userVeRewards1,
         userVeRewards2,
-        stETHTowstETHRate,
-        delegatedBalanceRes,
-        adjustedVeBalanceRes,
-        boostLengthRes,
-        receivedRes,
-        receivedBalanceRes
+        stETHTowstETHRate
       )
       console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
       const fxnCirculationSupply = cBN(fxnTotalAmount)
         .minus(fxnVested)
         .minus(fxnTreasury)
         .minus(aladdin_FXN_treasuryres)
-      let boostsRes = []
-      if (checkNotZoroNum(boostLengthRes)) {
-        const _callApis = []
-        for (let i = 0, l = boostLengthRes * 1; i < l; i++) {
-          _callApis.push(boosts(_currentAccount, i))
-        }
-        boostsRes = await multiCallsV2(_callApis)
-      }
 
       setContractInfo({
         feeBalance,
@@ -163,6 +132,57 @@ const useData = (refreshTrigger) => {
         platformFeeSpliterStETH,
         veFXNFeeTokenLastBalance,
         stETHTowstETHRate,
+      })
+    } catch (error) {
+      console.log(
+        'timestamp---tokensThisWeek--platformFeeSpliterStETH--veFXNFeeTokenLastBalance--feeBalance--error',
+        error
+      )
+    }
+  }
+
+  const fetchLpGaugeContractInfo = async () => {
+    const {
+      boostLength,
+      boosts,
+      received,
+      adjustedVeBalance,
+      receivedBalance,
+      delegatedBalance,
+    } = votingEscrowBoostContract.methods
+    try {
+      const abiCalls = [
+        delegatedBalance(_currentAccount),
+        adjustedVeBalance(_currentAccount),
+        boostLength(_currentAccount),
+        received(_currentAccount),
+        receivedBalance(_currentAccount),
+      ]
+      const [
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
+        boostLengthRes,
+        receivedRes,
+        receivedBalanceRes,
+      ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
+
+      console.log(
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
+        boostLengthRes,
+        receivedRes,
+        receivedBalanceRes
+      )
+      let boostsRes = []
+      if (checkNotZoroNum(boostLengthRes)) {
+        const _callApis = []
+        for (let i = 0, l = boostLengthRes * 1; i < l; i++) {
+          _callApis.push(boosts(_currentAccount, i))
+        }
+        boostsRes = await multiCallsV2(_callApis)
+      }
+
+      setContractInfo({
         delegatedBalanceRes,
         adjustedVeBalanceRes,
         boostLengthRes,
