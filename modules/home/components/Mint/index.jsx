@@ -271,7 +271,7 @@ export default function Mint({ slippage }) {
             console.log('aa-----0--', _ETHtAmountAndGas)
             const aa = await stETHContract.methods
               .submit(_currentAccount)
-              .call({ value: _ETHtAmountAndGas })
+              .call({ value: _ETHtAmountAndGas, from: _currentAccount })
             console.log('aa-----', aa)
           } catch (error) {
             console.log('aa-----error', error)
