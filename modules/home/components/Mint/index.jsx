@@ -15,7 +15,7 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
-import { useFx_FxGateway } from '@/hooks/useContracts'
+import { useFx_FxGateway, useStETH } from '@/hooks/useContracts'
 import useCurveSwap from '@/hooks/useCurveSwap'
 
 const OPTIONS = [
@@ -41,6 +41,7 @@ export default function Mint({ slippage }) {
   const [showRetry, setShowRetry] = useState(false)
   const [symbol, setSymbol] = useState('ETH')
   const { contract: FxGatewayContract } = useFx_FxGateway()
+  const { contract: stETHContract } = useStETH()
 
   const minGas = 234854
   const [fromAmount, setFromAmount] = useState(0)
@@ -253,23 +254,45 @@ export default function Mint({ slippage }) {
           } else {
             minout_ETH = resData
           }
-        } else {
-          if (symbol == 'ETH') {
-            const getGasPrice = await getGas()
-            const gasFee = cBN(minGas)
-              .times(1e9)
-              .times(getGasPrice)
+        } else if (symbol == 'ETH') {
+          console.log('aa-------')
+          const getGasPrice = await getGas()
+          const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+          if (
+            _account === _currentAccount &&
+            cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+          ) {
+            _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+              .minus(gasFee)
+              // .div(1e18)
               .toFixed(0, 1)
-            if (
-              _account === _currentAccount &&
-              cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-            ) {
-              _ETHtAmountAndGas = cBN(tokens.ETH.balance)
-                .minus(gasFee)
-                .toFixed(0, 1)
-                .toString()
-            }
           }
+          try {
+            console.log('aa-----0--', _ETHtAmountAndGas)
+            const aa = await stETHContract.methods
+              .submit(_currentAccount)
+              .call({ value: _ETHtAmountAndGas })
+            console.log('aa-----', aa)
+          } catch (error) {
+            console.log('aa-----error', error)
+          }
+        } else {
+          // if (symbol == 'ETH') {
+          //   const getGasPrice = await getGas()
+          //   const gasFee = cBN(minGas)
+          //     .times(1e9)
+          //     .times(getGasPrice)
+          //     .toFixed(0, 1)
+          //   if (
+          //     _account === _currentAccount &&
+          //     cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+          //   ) {
+          //     _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+          //       .minus(gasFee)
+          //       .toFixed(0, 1)
+          //       .toString()
+          //   }
+          // }
 
           const res = await getCurveSwapABI({
             src:
