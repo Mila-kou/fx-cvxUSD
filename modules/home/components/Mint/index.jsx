@@ -264,17 +264,32 @@ export default function Mint({ slippage }) {
           ) {
             _ETHtAmountAndGas = cBN(tokens.ETH.balance)
               .minus(gasFee)
-              // .div(1e18)
               .toFixed(0, 1)
           }
-          try {
-            console.log('aa-----0--', _ETHtAmountAndGas)
-            const aa = await stETHContract.methods
-              .submit(_currentAccount)
-              .call({ value: _ETHtAmountAndGas, from: _currentAccount })
-            console.log('aa-----', aa)
-          } catch (error) {
-            console.log('aa-----error', error)
+          const dataCode = await stETHContract.methods
+            .submit(_account)
+            .encodeABI()
+          const resData = await FxGatewayContract.methods[
+            isF ? 'mintFToken' : 'mintXToken'
+          ](
+            [
+              selectTokenAddress,
+              _ETHtAmountAndGas,
+              config.tokens.stETH,
+              dataCode,
+            ],
+            0
+          ).call({
+            value: _ETHtAmountAndGas,
+            from: _account,
+          })
+          console.log('aa--------2', resData)
+          if (typeof resData === 'object') {
+            minout_ETH = resData._xTokenMinted
+            const _userXETHBonus = cBN(resData._bonus || 0)
+            setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
+          } else {
+            minout_ETH = resData
           }
         } else {
           // if (symbol == 'ETH') {
@@ -348,7 +363,7 @@ export default function Mint({ slippage }) {
         )
 
         minout_ETH = BigNumber.min(
-          maxMintableFTokenRes._maxFTokenMintable,
+          maxMintableFTokenRes?._maxFTokenMintable,
           minout_ETH
         )
 
