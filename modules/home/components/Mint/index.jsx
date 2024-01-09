@@ -343,10 +343,10 @@ export default function Mint({ slippage }) {
           cBN(1).minus(cBN(slippage).dividedBy(100))
         )
 
-        // minout_ETH = BigNumber.min(
-        //   maxMintableFTokenRes?._maxFTokenMintable,
-        //   minout_ETH
-        // )
+        minout_ETH = BigNumber.min(
+          maxMintableFTokenRes?._maxFTokenMintable,
+          minout_ETH
+        )
 
         const _minOut_fETH_tvl = fb4(
           _minOut_CBN.multipliedBy(fnav).toString(10)
