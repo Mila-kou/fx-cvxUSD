@@ -43,6 +43,7 @@ import FX_RebalancePoolABI from './fx/RebalancePool.json'
 import FX_RebalanceWithBonusTokenABI from './fx/RebalanceWithBonusToken.json'
 
 import wstETHABI from './wstETH.json'
+import stETHABI from './stETH.json'
 import curveSwapABI from './common/curveSwap.json'
 
 // vesting
@@ -101,6 +102,7 @@ export default {
   AladdinbcCVXABI,
   RewardClaimHelperABI,
   wstETHABI,
+  stETHABI,
   Fx_Gateway,
   Fx_ReservePool,
   Fx_FxETHTwapOracle,
