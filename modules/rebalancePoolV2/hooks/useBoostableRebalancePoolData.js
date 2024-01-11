@@ -86,7 +86,7 @@ const useRebalancePoolUseInfo = (infoKey) => {
 
     try {
       const apiCalls = [
-        checkpoint(_currentAccount),
+        // checkpoint(_currentAccount),
         BoostableRebalancePoolBalanceOfFn(_currentAccount),
         getBoostRatio(_currentAccount),
         claimableFn(_currentAccount, config.tokens.wstETH),
@@ -99,7 +99,7 @@ const useRebalancePoolUseInfo = (infoKey) => {
         // workingBalanceOf(_currentAccount),
       ]
       const [
-        ,
+        // ,
         BoostableRebalancePoolBalanceOfRes,
         BoostRatioRes,
         claimableWstETHRes,
