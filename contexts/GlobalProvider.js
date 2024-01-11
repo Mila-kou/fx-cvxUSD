@@ -25,7 +25,7 @@ import {
 import useInfo from '@/modules/home/hooks/useInfo'
 import useRebalancePoolUseInfo from '@/modules/rebalancePool/hooks/useRebalancePoolUseInfo'
 import useBoostableRebalancePoolData from '@/modules/rebalancePoolV2/hooks/useBoostableRebalancePoolData'
-import { getStETHRate } from '@/utils/stETHRate'
+// import { getStETHRate } from '@/utils/stETHRate'
 // import useGauge from '@/hooks/useGauge'
 
 const GlobalContext = createContext(null)
@@ -65,7 +65,7 @@ function GlobalProvider({ children }) {
     { data: ConvexVaultsAPY, refetch: refetch3 },
     // { data: concentratorInitData, refetch: refetch4 },
     { data: lpPrice, refetch: refetch5 },
-    { data: stETHRate, refetch: refetch6 },
+    // { data: stETHRate, refetch: refetch6 },
     { data: cvxFXN_sdFXN_apy, refetch: refetch7 },
   ] = useQueries({
     queries: [
@@ -93,12 +93,12 @@ function GlobalProvider({ children }) {
         queryFn: getLpPrice,
         initialData: {},
       },
-      {
-        queryKey: ['stETHRate'],
-        queryFn: getStETHRate,
-        refetchInterval: 600000,
-        initialData: 1,
-      },
+      // {
+      //   queryKey: ['stETHRate'],
+      //   queryFn: getStETHRate,
+      //   refetchInterval: 600000,
+      //   initialData: 1,
+      // },
       {
         queryKey: ['cvxFXN_sdFXN_apy'],
         queryFn: getFX_cvxFXN_sdFXN_apy,
@@ -126,7 +126,7 @@ function GlobalProvider({ children }) {
       refetch3()
       // refetch4()
       refetch5()
-      refetch6()
+      // refetch6()
       refetch7()
     },
     [blockNumber],
@@ -255,7 +255,7 @@ function GlobalProvider({ children }) {
       ConvexVaultsAPY,
       // concentratorInitData,
       // ifoVaultWithdrawFee,
-      stETHRate,
+      // stETHRate,
       cvxFXN_sdFXN_apy,
       // allGaugeBaseInfo,
     }),
