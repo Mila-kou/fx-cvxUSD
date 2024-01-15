@@ -137,9 +137,9 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
           className="h-[60px]"
           onChange={(v) => onChangeSelectGauge(v)}
           options={OPTIONS.map(
-            ({ name, lpGaugeAddress, rebalancePoolAddress }) => ({
+            ({ nameShow, lpGaugeAddress, rebalancePoolAddress }) => ({
               value: lpGaugeAddress || rebalancePoolAddress,
-              label: name,
+              label: nameShow,
             })
           )}
         />
