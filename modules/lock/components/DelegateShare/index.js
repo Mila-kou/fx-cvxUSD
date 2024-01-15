@@ -125,18 +125,18 @@ export default function DelegateShare({ refreshAction }) {
         onClick={() => setShowModalIndex(activeIndex)}
         className="cursor-pointer"
       >
-        <p className="text-[16px] mt-[16px] underline text-[var(--a-button-color)]">
+        <p className="flex justify-between text-[16px] mt-[16px] underline text-[var(--a-button-color)]">
           + New {typeList[activeIndex].title}
+          {typeList[activeIndex].title == 'Share' && (
+            <p onClick={() => setShowModalIndex(2)} className="text-[16px]">
+              Check My Share
+            </p>
+          )}
         </p>
         <p className="text-[16px] my-[16px]">
           {typeList[activeIndex].subTitle}
         </p>
       </div>
-      {typeList[activeIndex].title == 'Share' && (
-        <div onClick={() => setShowModalIndex(2)} className="cursor-pointer">
-          + Check My Share
-        </div>
-      )}
 
       {activeIndex === 0 && (
         <>
