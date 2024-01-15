@@ -94,7 +94,11 @@ const MerkleTree = () => {
           onClick={handleClaim}
           loading={claiming}
         >
-          {data.isClaimed ? `Claimed` : `Claimable from ${startTimeText}`}
+          {data.isClaimed
+            ? `Claimed`
+            : canClaimTime
+            ? 'Claim'
+            : `Claimable from ${startTimeText}`}
         </Button>
       </div>
     </div>
