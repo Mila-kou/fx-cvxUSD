@@ -22,7 +22,7 @@ const chainInfo = {
   token: 'ETH',
   label: 'Phalcon-Inner',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_41eea69bd29a42ec806fe88cbba06109',
+    'https://rpc.phalcon.blocksec.com/rpc_bc788c8fe427460f977aabbf9bf4aea9',
 }
 
 const contracts = {
