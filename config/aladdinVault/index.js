@@ -139,7 +139,7 @@ export const REBALANCE_POOLS_LIST = [
     id: 1,
     name: 'BoostRebalance PoolA',
     gaugeType: 'boostRebalance',
-    nameShow: 'fETH Rebalance Pool (stETH)',
+    nameShow: 'fETH Rebalance Pool (Redeem to stETH)',
     rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_APool,
     rebalanceWithBonusTokenAddress:
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
@@ -161,7 +161,7 @@ export const REBALANCE_POOLS_LIST = [
     id: 2,
     name: 'BoostRebalance PoolB',
     gaugeType: 'boostRebalance',
-    nameShow: 'fETH Rebalance Pool (xETH)',
+    nameShow: 'fETH Rebalance Pool (Redeem to xETH)',
     rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_BPool,
     rebalanceWithBonusTokenAddress:
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
