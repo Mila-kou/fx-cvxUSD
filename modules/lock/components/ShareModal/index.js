@@ -32,7 +32,9 @@ const OPTIONS = [...POOLS_LIST, ...REBALANCE_POOLS_LIST]
 export default function DelegateShareModal({ onCancel, refreshAction }) {
   const { isAllReady, web3, currentAccount } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
-  const [share_to, setShareTo] = useState(OPTIONS[0].lpGaugeAddress)
+  const [share_to, setShareTo] = useState(
+    OPTIONS[0].lpGaugeAddress || OPTIONS[0].rebalancePoolAddress
+  )
   const [amount, setAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
@@ -69,6 +71,13 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
       return
     }
+    if (delegation_to_address.toLowerCase() == currentAccount.toLowerCase()) {
+      noPayableErrorAction(
+        `Invalid Share To Address`,
+        'Invalid Share To Address'
+      )
+      return
+    }
     const _data = await fetchIsStakerAllowed(
       share_to,
       delegation_to_address,
@@ -82,6 +91,13 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
     const _isAddress = web3.utils.isAddress(delegation_to_address)
     if (!_isAddress) {
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
+      return
+    }
+    if (delegation_to_address.toLowerCase() == currentAccount.toLowerCase()) {
+      noPayableErrorAction(
+        `Invalid Share To Address`,
+        'Invalid Share To Address'
+      )
       return
     }
     setSharing(true)
