@@ -106,6 +106,8 @@ const contracts = {
   //   '0x2146b8eeF7df5F290B7f3bde7e6582575D89a091',
   // fx_RebalancePoolGaugeClaimer_BoostableRebalancePool_fETH:
   //   '0x8532dC104AB8102Af2028609024932175DE3B100',
+
+  aladdinTreeAddress: '0xabc6a4e345801cb5f57629e79cd5eb2e9e514e98',
 }
 
 const gaugeTokenList = {

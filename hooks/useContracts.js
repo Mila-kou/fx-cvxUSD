@@ -332,3 +332,15 @@ export const useCurvefiSwap = () => {
     [getContract]
   )
 }
+
+export const useAladdinTree = () => {
+  const address = config.contracts.aladdinTreeAddress
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.AladdinMerkleTreeABI),
+      address,
+    }),
+    [getContract]
+  )
+}
