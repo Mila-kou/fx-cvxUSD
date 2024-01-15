@@ -8,7 +8,7 @@ import { useContract } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import { REBALANCE_POOLS_LIST, POOLS_LIST } from '@/config/aladdinVault'
-
+const OPTIONS = [...POOLS_LIST, ...REBALANCE_POOLS_LIST]
 const useGaugeShare = () => {
   const { _currentAccount, blockNumber, web3, current } = useWeb3()
   const { getContract } = useContract()
@@ -64,9 +64,11 @@ const useGaugeShare = () => {
   }
 
   const fetchAllGaugeShare = async () => {
-    const callList = POOLS_LIST.map((item) => {
-      const { lpGaugeAddress, nameShow } = item
-      const _getGaugeContract = getGaugeContract(lpGaugeAddress)
+    const callList = OPTIONS.map((item) => {
+      const { lpGaugeAddress, rebalancePoolAddress, nameShow } = item
+      const _getGaugeContract = getGaugeContract(
+        lpGaugeAddress || rebalancePoolAddress
+      )
       const { isStakerAllowed, getStakerVoteOwner } = _getGaugeContract.methods
       return {
         lpGaugeAddress,

@@ -129,19 +129,18 @@ export default function DelegateShare({ refreshAction }) {
           >
             + New {typeList[activeIndex].title}
           </p>
-
-          {typeList[activeIndex].title == 'Share' && (
-            <p
-              onClick={() => setShowModalIndex(2)}
-              className="text-[16px] underline text-[var(--a-button-color)]"
-            >
-              Check My Share
-            </p>
-          )}
         </div>
         <p className="text-[16px] my-[16px]">
           {typeList[activeIndex].subTitle}
         </p>
+        {typeList[activeIndex].title == 'Share' && (
+          <p
+            onClick={() => setShowModalIndex(2)}
+            className="text-[16px] underline text-[var(--a-button-color)]"
+          >
+            Check My Share
+          </p>
+        )}
       </div>
 
       {activeIndex === 0 && (
