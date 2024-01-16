@@ -8,6 +8,7 @@ import { useContract } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import { REBALANCE_POOLS_LIST, POOLS_LIST } from '@/config/aladdinVault'
+
 const OPTIONS = [...POOLS_LIST, ...REBALANCE_POOLS_LIST]
 const useGaugeShare = () => {
   const { _currentAccount, blockNumber, web3, current } = useWeb3()
@@ -71,7 +72,7 @@ const useGaugeShare = () => {
       )
       const { isStakerAllowed, getStakerVoteOwner } = _getGaugeContract.methods
       return {
-        lpGaugeAddress,
+        lpGaugeAddress: lpGaugeAddress || rebalancePoolAddress,
         nameShow,
         StakerVoteOwnerRes: getStakerVoteOwner(_currentAccount),
       }
