@@ -8,7 +8,7 @@ const useMerkleTreeData = () => {
       _newList[key.toLowerCase()] = treeJSON.claims[key]
     }
     if (treeJSON.claims && _newList[userAddress.toLowerCase()]) {
-      return _newList[userAddress]
+      return _newList[userAddress.toLowerCase()]
     }
     return {}
   }
