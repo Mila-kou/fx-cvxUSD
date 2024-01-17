@@ -88,17 +88,13 @@ const MerkleTree = () => {
           <p>{data.amount ? `${fb4(data.amount)} FXN` : 'Nothing to claim'}</p>
         </div>
         <Button
-          disabled={data.isClaimed || !canClaimTime}
+          disabled={data.isClaimed}
           className={styles.action}
           size="small"
           onClick={handleClaim}
           loading={claiming}
         >
-          {data.isClaimed
-            ? `Claimed`
-            : canClaimTime
-            ? 'Claim'
-            : `Claimable from ${startTimeText}`}
+          {data.isClaimed ? `Claimed` : 'Claim'}
         </Button>
       </div>
     </div>
