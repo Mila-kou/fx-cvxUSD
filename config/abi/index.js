@@ -66,6 +66,8 @@ import FX_FXNTokenMinterABI from './fx/farming/fx_TokenMinter.json'
 // rebalance
 import FX_RebalancePoolRegistryABI from './fx/fx-RebalancePoolRegistry.json'
 
+import AladdinMerkleTreeABI from './AladdinMerkleTree.json'
+
 export default {
   erc20ABI,
   multiCallABI,
@@ -126,4 +128,6 @@ export default {
   FX_RebalancePoolRegistryABI,
   FX_FXNTokenMinterABI,
   // gauge
+
+  AladdinMerkleTreeABI,
 }
