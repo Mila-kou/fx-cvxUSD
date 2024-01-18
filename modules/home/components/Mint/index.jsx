@@ -266,7 +266,7 @@ export default function Mint({ slippage }) {
               .toFixed(0, 1)
           }
           const dataCode = await stETHContract.methods
-            .submit(config.contracts.fx_FxGateway)
+            .submit(config.contracts.fx_FXN_treasury)
             .encodeABI()
           const resData = await FxGatewayContract.methods[
             isF ? 'mintFToken' : 'mintXToken'
@@ -474,7 +474,7 @@ export default function Mint({ slippage }) {
       let apiCall
       if (symbol == 'ETH') {
         const dataCode = await stETHContract.methods
-          .submit(config.contracts.fx_FxGateway)
+          .submit(config.contracts.fx_FXN_treasury)
           .encodeABI()
         apiCall = await FxGatewayContract.methods[
           isF ? 'mintFToken' : 'mintXToken'
