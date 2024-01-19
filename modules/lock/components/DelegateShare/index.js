@@ -14,13 +14,13 @@ import config from '@/config/index'
 import useVeShare_c from '../../controllers/useVeShare_c'
 
 export default function DelegateShare({ refreshAction }) {
-  const [activeIndex, setActiveIndex] = useState(0)
+  // const [activeIndex, setActiveIndex] = useState(0)
+  const activeIndex = 1
   const [canceling, setCanceling] = useState(false)
   const [showModalIndex, setShowModalIndex] = useState(-1)
   const pageData = useInfo()
   const { isAllReady, currentAccount } = useWeb3()
   console.log('pageData---', pageData)
-  const isShare = activeIndex === 1
   const {
     contract: VotingEscrowBoostContract,
     address: fx_VotingEscrowBoostAdress,
@@ -116,11 +116,11 @@ export default function DelegateShare({ refreshAction }) {
 
   return (
     <div>
-      <Tabs
+      {/* <Tabs
         selecedIndex={activeIndex}
         onChange={(v) => setActiveIndex(v)}
         tabs={typeList.map((item) => item.title)}
-      />
+  /> */}
       <div className="cursor-pointer">
         <div className="flex justify-between mt-[16px]">
           <p
