@@ -62,14 +62,14 @@ export default function PoolCell({
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
-        <div className="w-[120px]">
+        <div className="w-[200px]">
           <p>{cellData.name}</p>
         </div>
-        <div className="w-[120px] text-[16px]">Rebalance Pool</div>
-        <div className="w-[60px] text-[16px]">
+        <div className="w-[180px] text-[16px]">Gauge</div>
+        <div className="w-[100px] text-[16px]">
           {voteData?.userPower ? `${voteData?.userPower}%` : '-'}
         </div>
-        <div className="w-[180px]">{apyDom}</div>
+        <div className="w-[220px]">{apyDom}</div>
         <div className="w-[150px] text-[16px]">
           {voteData?.thisWeekEstimateFXNEmissions}
           {voteData?.nextWeekEstimateFXNEmissions

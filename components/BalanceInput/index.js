@@ -82,7 +82,7 @@ function BalanceInput(props) {
   }, [clearTrigger])
 
   const logoSrc = useMemo(() => {
-    if (['fETH', 'xETH', 'FXN'].includes(symbol)) return ''
+    if (['fETH', 'xETH', 'FXN', 'veFXN'].includes(symbol)) return ''
     if (['ETH', 'stETH'].includes(symbol))
       return '/tokens/crypto-icons-stack.svg#eth'
     return `/tokens/crypto-icons-stack.svg#${symbol.toLowerCase()}`
@@ -96,7 +96,7 @@ function BalanceInput(props) {
     >
       {hideLogo ? null : (
         <div className={styles.left}>
-          {['fETH', 'FXN'].includes(symbol) && <FLogo />}
+          {['fETH', 'FXN', 'veFXN'].includes(symbol) && <FLogo />}
           {symbol === 'xETH' && <XLogo />}
           {logoSrc && <img src={logoSrc} />}
         </div>

@@ -67,10 +67,10 @@ export default function GaugePage() {
         </div>
 
         <div className="px-[16px] mt-[32px] flex justify-between">
-          <div className="w-[120px]" />
-          <div className="w-[120px] text-[14px]">Type</div>
-          <div className="w-[60px] text-[14px]">My Votes</div>
-          <div className="w-[180px] text-[14px]">APR Range</div>
+          <div className="w-[200px]" />
+          <div className="w-[180px] text-[14px]">Type</div>
+          <div className="w-[100px] text-[14px]">My Votes</div>
+          <div className="w-[220px] text-[14px]">APR Range</div>
           <div className="w-[150px] text-[14px]">Estimate FXN Emissions</div>
           <div className="w-[20px]" />
         </div>

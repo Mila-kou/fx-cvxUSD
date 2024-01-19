@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
-// import PoolCell from './components/PoolCell'
+import PoolCell from './components/PoolCell'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
@@ -49,8 +49,8 @@ export default function EarningPoolPage() {
           hasXETH
           {...poolBData}
         />
-        {/*
-        {pageData.map((item) => (
+
+        {/* pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
         ))}
         */}

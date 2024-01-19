@@ -12,11 +12,12 @@ import LockModal from './components/LockModal'
 import LockMoreModal from './components/LockMoreModal'
 import ExtendModal from './components/ExtendModal'
 import LockerChart from './components/LockerChart'
+import DelegateShare from './components/DelegateShare'
 import { useVeFXN, useVeFXNFee } from '@/hooks/useContracts'
 import styles from './styles.module.scss'
 
 const InfoItem = ({ title, value }) => (
-  <div className={`flex justify-between my-3 `}>
+  <div className="flex justify-between my-3 text-[16px]">
     <span>{title}</span>
     <span className="text-[var(--primary-color)]">{value}</span>
   </div>
@@ -24,7 +25,7 @@ const InfoItem = ({ title, value }) => (
 
 const RebateInfo = ({ info, preWeekData }) => {
   return (
-    <div className="bg-[var(--background-color)] p-[56px] rounded-[10px]">
+    <div className="bg-[var(--background-color)] p-[58px] rounded-[10px]">
       <div>
         <div className="font-medium mb-6">Total veFXN Revenue</div>
         <div className="flex items-center justify-between my-3">
@@ -137,18 +138,20 @@ const LockPage = () => {
 
       <div className={styles.content}>
         <div className={styles.left}>
-          <h2 className="mb-10">veFXN Voting Power</h2>
-          <LockerChart />
-        </div>
-
-        <div className="w-full flex flex-col gap-8 flex-1">
           <RebateInfo
             info={pageData.weekReabte}
             preWeekData={pageData.preWeekReabte}
             refresh={() => setRefreshTrigger((prev) => prev + 1)}
           />
 
-          <div className="bg-[var(--background-color)] p-[56px] rounded-[10px]">
+          <div className={styles.itemContent}>
+            <h2 className="mb-10">veFXN Voting Power</h2>
+            <LockerChart />
+          </div>
+        </div>
+
+        <div className="w-full flex flex-col flex-1">
+          <div className="bg-[var(--background-color)] p-[48px] rounded-[10px]">
             <div>
               <div className="mb-6">Lock FXN</div>
               {pageData.userData.slice(0, 4).map((i) => (
@@ -177,6 +180,7 @@ const LockPage = () => {
                 <Button
                   width="100%"
                   onClick={() => setLockMoreModalVisible(true)}
+                  size="small"
                 >
                   Lock More
                 </Button>
@@ -186,6 +190,7 @@ const LockPage = () => {
                 <Button
                   width="100%"
                   onClick={() => setExtendModalVisible(true)}
+                  size="small"
                 >
                   Extend
                 </Button>
@@ -202,6 +207,10 @@ const LockPage = () => {
                 </Button>
               )}
             </div>
+          </div>
+
+          <div className={styles.itemContent}>
+            <DelegateShare refreshAction={setRefreshTrigger} />
           </div>
         </div>
       </div>

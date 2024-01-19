@@ -1,0 +1,40 @@
+@import '../../assets/css/mixin.scss';
+.inputContent {
+  box-shadow: var(--input-box-shadow);
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  justify-content: space-between;
+  padding-right: 16px;
+  background: var(--input-background-color);
+  .symbol {
+    display: flex;
+    align-items: center;
+    color: #000;
+    border-right: 1px solid #e5e5e5;
+    height: 60px;
+    padding: 0 25px;
+    font-weight: 500;
+  }
+
+  input {
+    flex: 1;
+    height: 60px;
+    border: none;
+    outline: none;
+    padding-left: 32px;
+    box-sizing: border-box;
+    color: #fff;
+    background: transparent;
+    &::placeholder {
+      color: var(--priamry-color);
+    }
+    &[disabled] {
+      background: transparent;
+    }
+  }
+
+  .max {
+    @include max-button;
+  }
+}

@@ -14,13 +14,12 @@
 
   .inputContent {
     box-shadow: var(--input-box-shadow);
-    border: 1px solid #e5e5e5;
-    background: #fff;
     display: flex;
     align-items: center;
     border-radius: 6px;
     justify-content: space-between;
     padding-right: 16px;
+    background: var(--input-background-color);
     .symbol {
       display: flex;
       align-items: center;
@@ -40,8 +39,12 @@
       box-sizing: border-box;
       background-color: #fff;
       color: #aca6a6;
+      background: transparent;
       &::placeholder {
-        color: #434242;
+        color: var(--priamry-color);
+      }
+      &[disabled] {
+        background: transparent;
       }
     }
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 import config from 'config'
-import { cBN } from 'utils'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption } from 'utils'
 import {
   useVeFXNFee,
   useVeFXN,
@@ -11,6 +11,7 @@ import {
 } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
+import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
 
 const useData = (refreshTrigger) => {
   const { _currentAccount, blockNumber, current } = useWeb3()
@@ -22,6 +23,7 @@ const useData = (refreshTrigger) => {
     veFXNFeeAddress
   )
   const { contract: wstETHContract, address: wstETHAddress } = useWstETH()
+  const { contract: votingEscrowBoostContract } = useVotingEscrowBoost()
 
   const multiCallsV2 = useMutiCallV2()
 
@@ -40,7 +42,6 @@ const useData = (refreshTrigger) => {
   const fetchCotractInfo = async () => {
     const { totalSupply, balanceOf: veFXNBalanceOf } = veFXNContract.methods
     const { balanceOf, totalSupply: fxnTotalSupply } = FXNContract.methods
-
     try {
       const abiCalls = [
         totalSupply(),
@@ -51,7 +52,6 @@ const useData = (refreshTrigger) => {
         veFXNBalanceOf(_currentAccount),
         fxnTotalSupply(),
       ]
-
       const [
         veTotalSupply,
         veLockedFXN,
@@ -130,6 +130,63 @@ const useData = (refreshTrigger) => {
         platformFeeSpliterStETH,
         veFXNFeeTokenLastBalance,
         stETHTowstETHRate,
+      })
+    } catch (error) {
+      console.log(
+        'timestamp---tokensThisWeek--platformFeeSpliterStETH--veFXNFeeTokenLastBalance--feeBalance--error',
+        error
+      )
+    }
+  }
+
+  const fetchLpGaugeContractInfo = async () => {
+    const {
+      boostLength,
+      boosts,
+      received,
+      adjustedVeBalance,
+      receivedBalance,
+      delegatedBalance,
+    } = votingEscrowBoostContract.methods
+    try {
+      const abiCalls = [
+        delegatedBalance(_currentAccount),
+        adjustedVeBalance(_currentAccount),
+        boostLength(_currentAccount),
+        received(_currentAccount),
+        receivedBalance(_currentAccount),
+      ]
+      const [
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
+        boostLengthRes,
+        receivedRes,
+        receivedBalanceRes,
+      ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
+
+      console.log(
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
+        boostLengthRes,
+        receivedRes,
+        receivedBalanceRes
+      )
+      let boostsRes = []
+      if (checkNotZoroNum(boostLengthRes)) {
+        const _callApis = []
+        for (let i = 0, l = boostLengthRes * 1; i < l; i++) {
+          _callApis.push(boosts(_currentAccount, i))
+        }
+        boostsRes = await multiCallsV2(_callApis)
+      }
+
+      setContractInfo({
+        delegatedBalanceRes,
+        adjustedVeBalanceRes,
+        boostLengthRes,
+        boostsRes,
+        receivedRes,
+        receivedBalanceRes,
       })
     } catch (error) {
       console.log(

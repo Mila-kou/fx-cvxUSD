@@ -44,7 +44,7 @@ export default function Input(props) {
   useEffect(() => {
     const val = cBN(defaultValue)
       .shiftedBy(-(decimals ?? 18))
-      .toFixed(3)
+      .toFixed(3, 1)
     setValue(val)
     onChange(defaultValue, 100)
   }, [defaultValue])

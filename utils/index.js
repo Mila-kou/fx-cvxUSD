@@ -42,7 +42,9 @@ export function formatBalance(balanceInWei, decimals = 18, toFixed = -1) {
     return formatResult(result)
   }
 
-  const result = cBN(balanceInWei).div(cBN(10).pow(decimals)).toFormat(toFixed)
+  const result = cBN(balanceInWei)
+    .div(cBN(10).pow(decimals))
+    .toFormat(toFixed, 1)
 
   return formatResult(result)
 }
