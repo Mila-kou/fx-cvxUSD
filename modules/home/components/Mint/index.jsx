@@ -15,7 +15,7 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
-import { useFx_FxGateway } from '@/hooks/useContracts'
+import { useFx_FxGateway, useStETH } from '@/hooks/useContracts'
 import useCurveSwap from '@/hooks/useCurveSwap'
 
 const OPTIONS = [
@@ -41,6 +41,7 @@ export default function Mint({ slippage }) {
   const [showRetry, setShowRetry] = useState(false)
   const [symbol, setSymbol] = useState('ETH')
   const { contract: FxGatewayContract } = useFx_FxGateway()
+  const { contract: stETHContract } = useStETH()
 
   const minGas = 234854
   const [fromAmount, setFromAmount] = useState(0)
@@ -253,24 +254,42 @@ export default function Mint({ slippage }) {
           } else {
             minout_ETH = resData
           }
-        } else {
-          if (symbol == 'ETH') {
-            const getGasPrice = await getGas()
-            const gasFee = cBN(minGas)
-              .times(1e9)
-              .times(getGasPrice)
+        } else if (symbol == 'ETH') {
+          const getGasPrice = await getGas()
+          const gasFee = cBN(minGas).times(1e9).times(getGasPrice).toFixed(0, 1)
+          if (
+            _account === _currentAccount &&
+            cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+          ) {
+            _ETHtAmountAndGas = cBN(tokens.ETH.balance)
+              .minus(gasFee)
               .toFixed(0, 1)
-            if (
-              _account === _currentAccount &&
-              cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
-            ) {
-              _ETHtAmountAndGas = cBN(tokens.ETH.balance)
-                .minus(gasFee)
-                .toFixed(0, 1)
-                .toString()
-            }
           }
-
+          const dataCode = await stETHContract.methods
+            .submit(config.contracts.fx_FXN_treasury)
+            .encodeABI()
+          const resData = await FxGatewayContract.methods[
+            isF ? 'mintFToken' : 'mintXToken'
+          ](
+            [
+              selectTokenAddress,
+              _ETHtAmountAndGas,
+              config.tokens.stETH,
+              dataCode,
+            ],
+            0
+          ).call({
+            value: _ETHtAmountAndGas,
+            from: _account,
+          })
+          if (typeof resData === 'object') {
+            minout_ETH = resData._xTokenMinted
+            const _userXETHBonus = cBN(resData._bonus || 0)
+            setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
+          } else {
+            minout_ETH = resData
+          }
+        } else {
           const res = await getCurveSwapABI({
             src:
               symbol == 'ETH'
@@ -325,7 +344,7 @@ export default function Mint({ slippage }) {
         )
 
         minout_ETH = BigNumber.min(
-          maxMintableFTokenRes._maxFTokenMintable,
+          maxMintableFTokenRes?._maxFTokenMintable,
           minout_ETH
         )
 
@@ -452,38 +471,56 @@ export default function Mint({ slippage }) {
         _ETHtAmountAndGas = fromAmount
       }
       const _minOut = await getMinAmount()
-      const _curveCallOut = await getCurveSwapMinout(
-        {
+      let apiCall
+      if (symbol == 'ETH') {
+        const dataCode = await stETHContract.methods
+          .submit(config.contracts.fx_FXN_treasury)
+          .encodeABI()
+        apiCall = await FxGatewayContract.methods[
+          isF ? 'mintFToken' : 'mintXToken'
+        ](
+          [
+            selectTokenAddress,
+            _ETHtAmountAndGas,
+            config.tokens.stETH,
+            dataCode,
+          ],
+          0
+        )
+      } else {
+        const _curveCallOut = await getCurveSwapMinout(
+          {
+            src:
+              symbol == 'ETH'
+                ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+                : selectTokenAddress,
+            dst: config.tokens.stETH,
+            amount: _ETHtAmountAndGas.toString(),
+          },
+          _account
+        )
+
+        const _curveMinout = cBN(_curveCallOut).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+
+        const { data } = await getCurveSwapABI({
           src:
             symbol == 'ETH'
               ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
               : selectTokenAddress,
           dst: config.tokens.stETH,
           amount: _ETHtAmountAndGas.toString(),
-        },
-        _account
-      )
+          minout: _curveMinout.toFixed(0),
+        })
 
-      const _curveMinout = cBN(_curveCallOut).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
-      )
-
-      const { data } = await getCurveSwapABI({
-        src:
-          symbol == 'ETH'
-            ? '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-            : selectTokenAddress,
-        dst: config.tokens.stETH,
-        amount: _ETHtAmountAndGas.toString(),
-        minout: _curveMinout.toFixed(0),
-      })
-
-      const apiCall = await FxGatewayContract.methods[
-        isF ? 'mintFToken' : 'mintXToken'
-      ](
-        [selectTokenAddress, _ETHtAmountAndGas, data.tx.to, data.tx.data],
-        _minOut
-      )
+        apiCall = await FxGatewayContract.methods[
+          isF ? 'mintFToken' : 'mintXToken'
+        ](
+          [selectTokenAddress, _ETHtAmountAndGas, data.tx.to, data.tx.data],
+          _minOut
+        )
+      }
 
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,

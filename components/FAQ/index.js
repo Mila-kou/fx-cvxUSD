@@ -122,7 +122,7 @@ export default function FAQ({ open, onCancel }) {
                 f(x) has extensive and thoughtful risk management systems to
                 prevent this from happening, clearly explained in the{' '}
                 <a
-                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/whitepaper_v2.pdf"
+                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/f(x)_whitepaper_v2.pdf"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -139,7 +139,7 @@ export default function FAQ({ open, onCancel }) {
                 stETH if the amount of fETH minted ever gets too high compared
                 to xETH (see risks above, and{' '}
                 <a
-                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/whitepaper_v2.pdf"
+                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/f(x)_whitepaper_v2.pdf"
                   target="_blank"
                   rel="noreferrer"
                 >

@@ -9,6 +9,7 @@ import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
 
 import RebalancePoolCell from '@/modules/rebalancePoolV2/components/RebalancePoolCell'
 import usePool from '@/modules/rebalancePoolV2/controller/usePool'
+import MerkleTree from './MerkleTree'
 
 export default function EarningPoolPage() {
   // const { pageData, ...pageOthers } = useGaugeController()
@@ -36,20 +37,25 @@ export default function EarningPoolPage() {
           <div className="w-[20px]" />
         </div>
         <RebalancePoolCell
+          title="fETH Rebalance Pool"
           contractType="fx_BoostableRebalancePool_APool"
-          // subTitle="fETH for stETH"
+          subTitle="Redeem to stETH"
           {...poolAData}
         />
         <RebalancePoolCell
+          title="fETH Rebalance Pool"
           contractType="fx_BoostableRebalancePool_BPool"
-          // subTitle="fETH for xETH"
+          subTitle="Redeem to xETH"
           hasXETH
           {...poolBData}
         />
 
         {/* pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
-        )) */}
+        ))}
+        */}
+
+        <MerkleTree />
       </div>
     </div>
   )

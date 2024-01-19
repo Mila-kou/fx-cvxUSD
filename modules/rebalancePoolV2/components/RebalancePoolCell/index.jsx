@@ -96,8 +96,8 @@ export default function RebalancePoolCell({
         <div className="flex w-[230px] gap-[6px] items-center">
           <img className="w-[30px]" src={fETHImg} />
           <div>
-            <p className="text-[16px] h-[16px]">{_poolConfig.nameShow}</p>
-            <p className="text-[14px] text-[var(--second-text-color)]">
+            <p className="text-[16px] h-[16px]">{poolData.title}</p>
+            <p className="text-[14px] mt-[6px] text-[var(--second-text-color)]">
               {poolData.subTitle}
             </p>
           </div>

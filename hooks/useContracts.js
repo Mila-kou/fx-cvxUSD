@@ -159,6 +159,18 @@ export const useWstETH = () => {
   )
 }
 
+export const useStETH = () => {
+  const address = config.tokens.stETH
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.stETHABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
 ////////////////////////////////////////
 
 export const useFXN = () => {
@@ -327,6 +339,18 @@ export const useCurvefiSwap = () => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.curveSwapABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useAladdinTree = () => {
+  const address = config.contracts.aladdinTreeAddress
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.AladdinMerkleTreeABI),
       address,
     }),
     [getContract]
