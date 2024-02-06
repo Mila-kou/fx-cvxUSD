@@ -1,21 +1,15 @@
-import React, {
-  memo,
-  useCallback,
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react'
-import { Tooltip } from 'antd'
+import React, { memo, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import styles from './styles.module.scss'
+import { addToMetamask } from '@/utils/index'
 
 const ReactECharts = dynamic(() => import('echarts-for-react'), {
   ssr: false,
 })
 
-export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
+export default function BreakdownChart({ assetInfo, dateList, navs }) {
   const ref = useRef(null)
+  const { symbol, address } = assetInfo
 
   const option = {
     grid: { top: 8, right: 0, bottom: 22, left: 25 },
@@ -77,49 +71,26 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
   }
 
   return (
-    <div className={styles.container} data-color={color}>
-      <div className={styles.header}>
-        <div className={styles.left}>
-          <img src={icon} />
-        </div>
-        <div className={styles.content}>
-          <div>
-            {symbol}
-            {symbol === 'xETH' ? (
-              <Tooltip placement="top" title="Leverage" arrow color="#000">
-                <span className="ml-[12px] border-b-[1px] border-dashed cursor-pointer">
-                  x{fxData.xETHBeta_text}
-                </span>
-              </Tooltip>
-            ) : null}
-          </div>
-          <p className={styles.second}>Net Assets Value</p>
-        </div>
-        <div className={styles.right}>
-          <p>${fxData.nav}</p>
-          {/* <p className={styles.second}>(0.56 ETH per 1k fETH)</p> */}
-        </div>
-      </div>
-
+    <div className={styles.container}>
       <ReactECharts
         ref={ref}
         option={option}
         notMerge
-        className={styles.chart}
         style={{ height: 118 }}
       />
 
       <div className={styles.footer}>
-        <div className={styles.footerItem}>
-          <div>{symbol} Total Supply:</div>
-          <div>
-            {fxData.totalSupply} ({fxData.ratio}%)
-          </div>
-        </div>
-        <div className={styles.footerItem}>
-          <div>{symbol} Market Cap:</div>
-          <div>{fxData.marketCap}</div>
-        </div>
+        <p>
+          {symbol} Contract Address:{' '}
+          <a
+            href={`https://www.etherscan.io/token/${address}`}
+            target="_blank"
+            rel="noreferrer"
+          >{`${address.slice(0, 6)}...${address.slice(-4)}`}</a>
+        </p>
+        <p className="cursor-pointer" onClick={() => addToMetamask(assetInfo)}>
+          + Add {symbol} to wallet
+        </p>
       </div>
     </div>
   )

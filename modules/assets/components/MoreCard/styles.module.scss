@@ -1,0 +1,41 @@
+@import '../../../../assets/css/mixin.scss';
+
+$radius: 10px;
+
+.container {
+  margin-top: 16px;
+  padding: 40px 24px;
+  @include card;
+  border-radius: $radius;
+  max-width: 456px;
+
+  .subTitle {
+    font-size: 14px;
+    color: var(--second-text-color);
+  }
+
+  .cell {
+    display: flex;
+    margin-top: 16px;
+    padding: 10px 16px;
+    border-radius: $radius;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    p {
+      font-size: 16px;
+      line-height: 1.3;
+      color: #fff;
+    }
+  }
+
+  .xbg {
+    background: var(--x-bg-color);
+  }
+
+  .fbg {
+    background: var(--f-bg-color);
+  }
+}

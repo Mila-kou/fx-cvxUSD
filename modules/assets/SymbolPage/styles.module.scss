@@ -1,0 +1,38 @@
+@import '../../../assets/css/mixin.scss';
+
+.container {
+  max-width: 1180px;
+  margin: 40px auto 0;
+}
+
+.tabWrap {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+}
+.content {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  column-gap: 23px;
+  padding-bottom: 50px;
+  flex-direction: row-reverse;
+  .item {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 1166px) {
+  .content {
+    margin-top: 40px;
+    flex-direction: column;
+    row-gap: 23px;
+    align-items: center;
+  }
+}

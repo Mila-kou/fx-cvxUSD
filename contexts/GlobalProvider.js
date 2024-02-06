@@ -25,6 +25,7 @@ import {
 import useInfo from '@/modules/home/hooks/useInfo'
 import useRebalancePoolUseInfo from '@/modules/rebalancePool/hooks/useRebalancePoolUseInfo'
 import useBoostableRebalancePoolData from '@/modules/rebalancePoolV2/hooks/useBoostableRebalancePoolData'
+import useAssetsController from '@/modules/assets/controller/useAssetsController'
 // import { getStETHRate } from '@/utils/stETHRate'
 // import useGauge from '@/hooks/useGauge'
 
@@ -58,6 +59,8 @@ function GlobalProvider({ children }) {
   const xETHToken = useTokenBalance(config.tokens.xETH)
   const usdcToken = useTokenBalance(config.tokens.usdc)
   const usdtToken = useTokenBalance(config.tokens.usdt)
+
+  const { fAssetList, xAssetList } = useAssetsController()
 
   const [
     { data: tokenPrice, refetch: refetch1 },
@@ -258,6 +261,9 @@ function GlobalProvider({ children }) {
       // stETHRate,
       cvxFXN_sdFXN_apy,
       // allGaugeBaseInfo,
+
+      fAssetList,
+      xAssetList,
     }),
     [
       theme,
@@ -283,6 +289,9 @@ function GlobalProvider({ children }) {
       // ifoVaultWithdrawFee,
       cvxFXN_sdFXN_apy,
       // allGaugeBaseInfo,
+
+      fAssetList,
+      xAssetList,
     ]
   )
 

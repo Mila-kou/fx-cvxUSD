@@ -63,18 +63,6 @@ export const useFX_Market = () => {
   )
 }
 
-export const useFX_Treasury = () => {
-  const address = config.contracts.fx_Treasury
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FX_Treasury),
-      address,
-    }),
-    [getContract]
-  )
-}
-
 export const useFX_stETHTreasury = () => {
   const address = config.contracts.fx_stETHTreasury
   const { getContract } = useContract()
@@ -351,6 +339,63 @@ export const useAladdinTree = () => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.AladdinMerkleTreeABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+// ------ new UI
+
+export const useFContract = () => {
+  const { getContract } = useContract()
+  return useCallback(
+    (address) => ({
+      contract: getContract(address, abi.FX_FractionalToken),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useXContract = () => {
+  const { getContract } = useContract()
+  return useCallback(
+    (address) => ({
+      contract: getContract(address, abi.FX_LeveragedToken),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useMarketContract = () => {
+  const { getContract } = useContract()
+  return useCallback(
+    (address) => ({
+      contract: getContract(address, abi.FX_Market),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useTreasuryContract = () => {
+  const { getContract } = useContract()
+  return useCallback(
+    (address) => ({
+      contract: getContract(address, abi.FX_stETHTreasuryABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useReservePoolContract = () => {
+  const { getContract } = useContract()
+  return useCallback(
+    (address) => ({
+      contract: getContract(address, abi.Fx_ReservePool),
       address,
     }),
     [getContract]

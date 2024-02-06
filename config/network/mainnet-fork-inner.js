@@ -20,7 +20,7 @@ const explorerUri = 'https://www.etherscan.io'
 const chainInfo = {
   id: '0x1864f',
   token: 'ETH',
-  label: 'Phalcon-Inner',
+  label: 'Phalcon-99913',
   rpcUrl:
     'https://rpc.phalcon.blocksec.com/rpc_927e5b6db08f4a8d8943cba047c022a7',
 }
@@ -37,7 +37,6 @@ const contracts = {
 
   // fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
 
-  // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
 

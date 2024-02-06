@@ -96,7 +96,7 @@ export default function SystemStatistics() {
       <div className={styles.wrap}>
         <div className={styles.item}>
           <div className={styles.card} data-color="blue">
-            <div className={styles.title}>Backed Asset Value (TVL)</div>
+            <div className={styles.title}>Reserve Asset Value (TVL)</div>
             <div className={cn(styles.value, styles.nums)}>
               <p>
                 <b>{totalBaseToken}</b> ETH
@@ -165,11 +165,11 @@ export default function SystemStatistics() {
             <div className={styles.title}>
               fETH Collateral Ratio{' '}
               <span className="text-[13px]">
-                (Backed Asset Value / fETH Supply)
+                (Reserve Asset Value / fETH Supply)
               </span>
               {/* <Tooltip
                 placement="top"
-                title="fETH Marketcap / Backed Asset Value"
+                title="fETH Marketcap / Reserve Asset Value"
                 arrow
                 color="#000"
               >

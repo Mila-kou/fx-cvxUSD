@@ -1,0 +1,28 @@
+@import '../../../../assets/css/mixin.scss';
+
+.container {
+  color: #fff;
+  font-size: 11px;
+  div {
+    color: #fff;
+  }
+
+  .footer {
+    align-items: center;
+    margin-top: 16px;
+    .footerItem {
+      display: flex;
+      justify-content: space-between;
+      &:first-child {
+        padding-bottom: 6px;
+      }
+    }
+    div {
+      font-size: 16px;
+      img {
+        width: 10px;
+        margin-right: 4px;
+      }
+    }
+  }
+}

@@ -6,7 +6,6 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import { Tooltip } from 'antd'
 import dynamic from 'next/dynamic'
 import styles from './styles.module.scss'
 
@@ -14,7 +13,7 @@ const ReactECharts = dynamic(() => import('echarts-for-react'), {
   ssr: false,
 })
 
-export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
+export default function NavChart({ dateList, navs }) {
   const ref = useRef(null)
 
   const option = {
@@ -77,50 +76,13 @@ export default function Chart({ color, icon, symbol, fxData, dateList, navs }) {
   }
 
   return (
-    <div className={styles.container} data-color={color}>
-      <div className={styles.header}>
-        <div className={styles.left}>
-          <img src={icon} />
-        </div>
-        <div className={styles.content}>
-          <div>
-            {symbol}
-            {symbol === 'xETH' ? (
-              <Tooltip placement="top" title="Leverage" arrow color="#000">
-                <span className="ml-[12px] border-b-[1px] border-dashed cursor-pointer">
-                  x{fxData.xETHBeta_text}
-                </span>
-              </Tooltip>
-            ) : null}
-          </div>
-          <p className={styles.second}>Net Assets Value</p>
-        </div>
-        <div className={styles.right}>
-          <p>${fxData.nav}</p>
-          {/* <p className={styles.second}>(0.56 ETH per 1k fETH)</p> */}
-        </div>
-      </div>
-
+    <div className={styles.container}>
       <ReactECharts
         ref={ref}
         option={option}
         notMerge
-        className={styles.chart}
         style={{ height: 118 }}
       />
-
-      <div className={styles.footer}>
-        <div className={styles.footerItem}>
-          <div>{symbol} Total Supply:</div>
-          <div>
-            {fxData.totalSupply} ({fxData.ratio}%)
-          </div>
-        </div>
-        <div className={styles.footerItem}>
-          <div>{symbol} Market Cap:</div>
-          <div>{fxData.marketCap}</div>
-        </div>
-      </div>
     </div>
   )
 }

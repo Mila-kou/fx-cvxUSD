@@ -137,7 +137,11 @@ const tokens = {
   idoSale: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
 
   fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
+  fxUSD: '',
+
   xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
+  xstETH: '',
+  xfrxETH: '',
 
   usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',
@@ -330,6 +334,7 @@ const POOLS_LIST_GAUGE = {
     gauge: gaugeTokenList.fx_fETH_FRAXBP,
   },
 }
+
 const getTokenInfoByAddress = (tokenAddress) => {
   for (const key in TOKENS_INFO) {
     if (TOKENS_INFO[key][1].toLowerCase() == tokenAddress.toLowerCase()) {
@@ -339,6 +344,59 @@ const getTokenInfoByAddress = (tokenAddress) => {
   return {}
 }
 
+export const BASE_TOKENS_MAP = {
+  ETH: {
+    baseSymbol: 'ETH',
+    contracts: {
+      market: contracts.fx_Market,
+      treasury: contracts.fx_stETHTreasury,
+      reservePool: contracts.fx_ReservePool,
+    },
+  },
+}
+
+export const ASSETS = [
+  {
+    symbol: 'fETH',
+    baseSymbol: 'ETH',
+    address: TOKENS_INFO.fETH[1],
+    decimals: TOKENS_INFO.fETH[2],
+    descrition: '0.1 Volatility in ETH',
+    icon: '/images/f-logo.svg',
+    isF: true,
+    show24Change: true,
+  },
+  {
+    symbol: 'xETH',
+    baseSymbol: 'ETH',
+    address: TOKENS_INFO.xETH[1],
+    decimals: TOKENS_INFO.xETH[2],
+    descrition: 'Long ETH up to 4x',
+    icon: '/images/x-logo.svg',
+    isX: true,
+    show24Change: true,
+  },
+  // {
+  //   symbol: 'fxUSD',
+  //   address: contracts.fxUSD,
+  //   descrition: 'Multi-Asset backed',
+  //   icon: '/images/f-logo.svg',
+  //   isBreakdownChart: true,
+  // },
+  // {
+  //   symbol: 'xstETH',
+  //   address: contracts.xstETH,
+  //   descrition: 'Long stETH up to 4x',
+  //   icon: '/images/x-logo.svg',
+  // },
+  // {
+  //   symbol: 'xfrxETH',
+  //   address: contracts.xfrxETH,
+  //   descrition: 'Long frxETH up to 4x',
+  //   icon: '/images/x-logo.svg',
+  // },
+]
+
 export default {
   tokens,
   contracts,
@@ -347,6 +405,7 @@ export default {
   zapTokens,
   gaugeTokenList,
   getTokenInfoByAddress,
+  ASSETS,
 }
 
 // market: "0xeCbA45f077df21D9142312a5aa21411371E1f943",

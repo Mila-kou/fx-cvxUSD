@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   return (
     <div>
       <AppHeader />
-      <main>{children}</main>
+      <main style={{ minHeight: 'calc(100vh - 390px)' }}>{children}</main>
       <AppFooter />
       <AggressModal />
     </div>

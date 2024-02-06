@@ -21,7 +21,8 @@ import Select from '@/components/Select'
 import FAQ from '@/components/FAQ'
 
 const routers = [
-  ['f(x) Protocol', '/home'],
+  ['Assets', '/assets'],
+  // ['f(x) Protocol', '/home'],
   ['Rebalance Pool', '/earning-pool', 'New'],
   ['Rebalance Pool (Deprecated)', '/rebalance-pool', ''],
   // ['Gauge', '/gauge'],
@@ -185,7 +186,7 @@ export default function AppHeader() {
     <div>
       <div className={styles.container}>
         <div className={styles.mobile}>
-          <Link href="/home">
+          <Link href="/assets">
             <img className={styles.logo} src="/images/FXN.svg" />
           </Link>
           <div
@@ -201,7 +202,7 @@ export default function AppHeader() {
         </div>
 
         <div className={styles.left}>
-          <Link href="/home">
+          <Link href="/assets">
             <img className={styles.logo} src="/images/FXN.svg" />
           </Link>
           {routers.map(([label, href, tag]) => (
@@ -376,10 +377,7 @@ export default function AppHeader() {
                 </div>
               ) : null}
               <div className={styles.item}>
-                <div>
-                  <SkinOutlined />
-                  Theme
-                </div>
+                <div>Theme</div>
                 <div className={styles.btns}>
                   <div
                     className={styles.blue}

@@ -132,3 +132,17 @@ export const getConvexData = (connvexInfo, tokenName) => {
     return null
   }
 }
+
+export const formatWithUnit = (number, decimals = 1) => {
+  let i = 0
+  let value = Number(number)
+
+  if (!number) return '0'
+
+  while (value > 1000) {
+    value /= 1000
+    ++i
+  }
+
+  return `${i ? value.toFixed(decimals) : value}${['', 'K', 'M', 'G'][i]}`
+}

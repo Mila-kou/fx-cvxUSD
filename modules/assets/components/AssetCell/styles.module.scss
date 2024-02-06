@@ -1,0 +1,35 @@
+@import '../../../../assets/css/mixin.scss';
+
+.poolWrap {
+  margin-top: 16px;
+  .card {
+    background: var(--f-bg-color);
+    padding: 16px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+      line-height: 1.3;
+    }
+  }
+
+  div {
+    color: white;
+  }
+
+  .redbg {
+    background: var(--x-bg-color);
+  }
+  .greenbg {
+    background: linear-gradient(270deg, #1a6d63 0%, #075e54 100%);
+    div {
+      color: white;
+    }
+  }
+}
+@media (max-width: 800px) {
+  .poolWrap {
+  }
+}

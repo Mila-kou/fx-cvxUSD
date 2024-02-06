@@ -36,7 +36,6 @@ const contracts = {
 
   fx_RebalancePool_A: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935',
 
-  // fx_Treasury: '0x908f0F329d4cab59Ae962b9ba119d7524fDF002B',
   // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
 

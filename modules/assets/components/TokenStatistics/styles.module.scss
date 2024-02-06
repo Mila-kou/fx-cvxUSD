@@ -1,0 +1,169 @@
+@import '../../../../assets/css/mixin.scss';
+
+$radius: 10px;
+
+.container {
+  padding: 24px 30px;
+  @include card;
+  border-radius: $radius;
+
+  .wrap {
+    position: relative;
+    width: 600px;
+    max-width: calc(100vw - 60px);
+
+    .item {
+      display: flex;
+      gap: 32px;
+      .card {
+        border-radius: 6px;
+        flex: 1;
+        background: var(--input-background-color);
+        padding: 22px 16px 10px;
+        border-radius: $radius;
+        .title {
+          font-size: 14px;
+          display: flex;
+          justify-content: center;
+          svg {
+            margin-top: -10px;
+            margin-left: 10px;
+          }
+        }
+        .nums {
+          margin-top: 14px;
+          text-align: center;
+          font-size: 24px;
+          color: var(--primary-color);
+        }
+        .ratio {
+          .red {
+            color: red;
+          }
+          .green {
+            color: green;
+          }
+          span {
+            color: red;
+            font-size: 24px;
+          }
+          p:last-child {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .chart {
+    @include card;
+    border-radius: $radius;
+    margin-top: 8px;
+    padding: 20px 16px;
+    background: var(--chart-background-color);
+  }
+
+  .details {
+    margin-top: 32px;
+    font-size: 12px;
+    &[data-color='blue'] {
+      p {
+        color: var(--blue-color);
+      }
+    }
+    &[data-color='red'] {
+      p {
+        color: var(--red-color);
+      }
+    }
+    &[data-color='green'] {
+      p {
+        color: var(--green-color);
+      }
+    }
+    .cell {
+      padding: 4px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(105, 94, 247, 0.4);
+      span {
+        margin-left: 6px;
+      }
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+
+  .updateAt {
+    color: var(--second-text-color);
+    font-size: 12px;
+    text-align: end;
+    margin-top: 16px;
+  }
+}
+
+// @media (min-width: 1280px) and (max-width: 1420px) {
+//   .wrap {
+//     .item {
+//       width: 348px !important;
+//       .card {
+//         .nums {
+//           b {
+//             font-size: 30px !important;
+//             line-height: 30px !important;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+// @media (max-width: 1280px) {
+//   .modeContent {
+//     flex-direction: column;
+//     row-gap: 10px;
+//   }
+//   .wrap {
+//     flex-direction: column;
+//     row-gap: 23px;
+//     .item {
+//       width: 408px !important;
+//     }
+//   }
+// }
+
+// @media (max-width: 474px) {
+//   .wrap {
+//     .item {
+//       width: calc(100vw - 60px) !important;
+//     }
+//   }
+// }
+
+.processWrap {
+  width: 100%;
+  p {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--main-text-color);
+    text-align: end;
+  }
+  progress {
+    width: 100%;
+    height: 18px;
+    margin-top: 4px;
+    background: var(--progress-color);
+    border-radius: 5px;
+  }
+  progress::-webkit-progress-bar {
+    background-color: var(--progress-color);
+    border-radius: 5px;
+  }
+  progress::-webkit-progress-value {
+    background: linear-gradient(90deg, #4214ed 0%, #7316ff 100%);
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+}
