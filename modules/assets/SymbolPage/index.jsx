@@ -47,7 +47,7 @@ export default function SymbolPage() {
 
   return (
     <div className={styles.container}>
-      <p className={styles.title}>{['Stable', 'Leverage'][selecedIndex]}</p>
+      {/* <p className={styles.title}>{['Stable', 'Leverage'][selecedIndex]}</p> */}
       <div className={styles.content}>
         <div className={styles.item} key={assetInfo.symbol}>
           <Swap isValidPrice={pricePriceInfo._isValid} assetInfo={assetInfo} />
