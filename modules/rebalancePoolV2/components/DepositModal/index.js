@@ -104,11 +104,11 @@ export default function DepositModal(props) {
           period. Pending withdrawals earn no yield, but may be used for stETH
           redemption.
         </p> */}
-        {/* <Link href={`/assets/${selectToken.symbol}/`}>
+        <Link href={`/assets/${selectToken.symbol}/`}>
           <p className="text-center mt-[20px] text-[16px] underline text-[var(--a-button-color)]">
             Get {selectToken.symbol} to Deposit
           </p>
-      </Link> */}
+        </Link>
       </div>
 
       {isRecap ? (

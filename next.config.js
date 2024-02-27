@@ -39,22 +39,7 @@ module.exports = {
     return [
       {
         source: '/',
-        destination: '/genesis',
-        permanent: false,
-      },
-      {
-        source: '/assets/fxUSD',
-        destination: '/genesis',
-        permanent: false,
-      },
-      {
-        source: '/assets/xstETH',
-        destination: '/genesis',
-        permanent: false,
-      },
-      {
-        source: '/assets/xfrxETH',
-        destination: '/genesis',
+        destination: '/assets',
         permanent: false,
       },
     ]
@@ -64,7 +49,7 @@ module.exports = {
     return {
       ...defaultPathMap,
       '/home': { page: '/assets' },
-      '/': { page: '/genesis' },
+      '/': { page: '/assets' },
     }
   },
 }

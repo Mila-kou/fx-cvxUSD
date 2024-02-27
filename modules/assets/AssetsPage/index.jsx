@@ -21,7 +21,7 @@ export default function AssetsPage() {
     (state) => state.asset
   )
 
-  // usePools()
+  usePools()
 
   const comingList = ASSETS.filter((item) => item.isComing)
   const [stEthPrice, setStEthPrice] = useState(0)
@@ -140,13 +140,7 @@ export default function AssetsPage() {
             </div>
 
             {list.map((item) => (
-              <Link
-                href={
-                  ['fxUSD', 'xstETH', 'xfrxETH'].includes(item.symbol)
-                    ? 'genesis'
-                    : `assets/${item.symbol}`
-                }
-              >
+              <Link href={`assets/${item.symbol}`}>
                 <AssetCell info={item} />
               </Link>
             ))}
