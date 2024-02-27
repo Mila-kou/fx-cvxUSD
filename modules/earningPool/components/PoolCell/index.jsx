@@ -47,7 +47,11 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   const boostInfo = useMemo(() => {
     let boost = [0, 0, 0, 0]
     try {
-      if (veBoostAllData && veBoostAllData.allGaugeVeBoost) {
+      if (
+        veBoostAllData &&
+        veBoostAllData.allGaugeVeBoost &&
+        veBoostAllData.allGaugeVeBoost[lpGaugeAddress]
+      ) {
         boost = veBoostAllData.allGaugeVeBoost[lpGaugeAddress]
       }
     } catch (error) {
