@@ -34,7 +34,7 @@ export default function GenesisPage() {
   const { stETHApy, sfrxETHApy } = useGenesis_c()
   const { tokens } = useSelector((state) => state.token)
   const genesis = useSelector((state) => state.genesis)
-  const [slippage, setSlippage] = useState(0.03)
+  const [slippage, setSlippage] = useState(0.3)
   const { getZapInParams } = useZapIn()
 
   const [stage, setStage] = useState(STAGE.LAUNCHING)
