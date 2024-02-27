@@ -9,7 +9,8 @@
       "@/utils/*": ["utils/*"],
       "@/config/*": ["config/*"],
       "@/services/*": ["services/*"],
-      "@/modules/*": ["modules/*"]
+      "@/modules/*": ["modules/*"],
+      "@/store/*": ["store/*"]
     }
   }
 }

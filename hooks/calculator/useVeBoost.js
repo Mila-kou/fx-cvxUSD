@@ -20,10 +20,10 @@ export const useVeBoost = (options) => {
   } = options
 
   const getLiquidityLimit = async () => {
-    console.log('veBoost-----0-1')
+    // console.log('veBoost-----0-1')
     try {
       if (gaugeContract) {
-        console.log('veBoost-----0-2')
+        // console.log('veBoost-----0-2')
         const calls = [
           veContract.methods.balanceOf(veContractTargetAccount),
           veContract.methods.totalSupply(),
@@ -33,8 +33,8 @@ export const useVeBoost = (options) => {
           gaugeContract.methods.balanceOf(gaugeContractTargetAccount),
         ]
         const decoded = await multiCallsV2(calls)
-        console.log('veBoost-----0-3', decoded)
-        console.log('curve-dao > calc-contract-info', decoded)
+        // console.log('veBoost-----0-3', decoded)
+        // console.log('curve-dao > calc-contract-info', decoded)
         const _userVeAmount = decoded[0]
         const _veTotalSupply = decoded[1]
         const working_balances = decoded[2]
@@ -46,7 +46,7 @@ export const useVeBoost = (options) => {
         let __userVeAmount = userVeAmount
         let __veTotalSupply = veTotalSupply
         let __gaugeTotalSupply = gaugeTotalSupply
-        console.log('veBoost-----1', type, l)
+        // console.log('veBoost-----1', type, l)
         if (type == 'calc') {
           if (cBN(l).isZero() || cBN(l).isNaN()) {
             return [0, 0, 0]
@@ -66,7 +66,7 @@ export const useVeBoost = (options) => {
         const TOKENLESS_PRODUCTION = 40
 
         let lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION / 100)
-        console.log('veBoost-----lim---', lim)
+        // console.log('veBoost-----lim---', lim)
         lim = cBN(L)
           .multipliedBy(__userVeAmount)
           .div(__veTotalSupply)
@@ -74,20 +74,21 @@ export const useVeBoost = (options) => {
           .plus(lim)
 
         lim = BigNumber.minimum(lim, __l)
-        console.log('veBoost-----min_lim---', lim.toFixed(0))
+        // console.log('veBoost-----min_lim---', lim.toFixed(0))
         const old_bal = working_balances
         const noboost_lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION).div(100)
         const noboost_supply = cBN(working_supply)
           .plus(noboost_lim)
           .minus(old_bal)
-        console.log(
-          'veBoost-----__L,working_supply,noboost_lim,old_bal,noboost_supply---',
-          __l,
-          working_supply,
-          noboost_lim.toFixed(0),
-          old_bal,
-          noboost_supply.toFixed(0)
-        )
+        // console.log(
+        //   'veBoost-----__L,working_supply,noboost_lim,old_bal,noboost_supply---',
+        //   __l,
+        //   working_supply,
+        //   noboost_lim.toFixed(0),
+        //   old_bal,
+        //   noboost_supply.toFixed(0),
+        //   gaugeContract._address
+        // )
         const _working_supply = cBN(working_supply).plus(lim).minus(old_bal)
         let boots
         let votingBoost
@@ -97,18 +98,17 @@ export const useVeBoost = (options) => {
           votingBoost = 1
         } else {
           votingBoost = cBN(lim).div(noboost_lim).toString()
-          console.log(
-            'veBoost-----votingBoost---',
-            _working_supply.toFixed(0),
-            votingBoost
-          )
+          // console.log(
+          //   'veBoost-----votingBoost---',
+          //   _working_supply.toFixed(0),
+          //   votingBoost
+          // )
           boots = cBN(lim)
             .div(_working_supply)
             .div(cBN(noboost_lim).div(noboost_supply))
             .toString()
-          repairBoost = cBN(noboost_supply).div(_working_supply).toFixed(0)
+          repairBoost = cBN(noboost_supply).div(_working_supply).toFixed(2)
         }
-        console.log('veBoost-----boots---', votingBoost, boots)
 
         const data = [
           _working_supply.toString(),
@@ -116,17 +116,23 @@ export const useVeBoost = (options) => {
           votingBoost,
           repairBoost,
         ]
+        console.log('veBoost-----boots---', data)
         return data
       }
     } catch (error) {
       console.log('veBoost---error', error)
-      return []
+      return [0, 0, 0, 0]
     }
   }
 
   const { data } = useQuery({
-    queryKey: ['liquidityLimit'],
-    // enabled: !!gaugeContract,
+    queryKey: [
+      'veBoost',
+      gaugeContract?._address,
+      veContractTargetAccount,
+      gaugeContractTargetAccount,
+    ],
+    enabled: !!gaugeContract,
     queryFn: () => getLiquidityLimit(),
     initialData: [0, 0],
   })

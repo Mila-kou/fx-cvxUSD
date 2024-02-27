@@ -2,14 +2,14 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import styles from './styles.module.scss'
-import useAssetsController from '@/modules/assets/controller/useAssetsController'
+import { useSelector } from '@/store/index'
 import { ChangedPrice } from '../Common'
 
 export default function MoreCard({ assetInfo }) {
   const { isF } = assetInfo
-  const { fAssetList, xAssetList } = useAssetsController()
+  const { fETH, xETH } = useSelector((state) => state.asset)
 
-  const list = isF ? xAssetList : fAssetList
+  const list = isF ? [xETH] : [fETH]
 
   return (
     <div className={styles.container}>
@@ -34,7 +34,7 @@ export default function MoreCard({ assetInfo }) {
             </div>
             <div>
               <p>{item.nav_text}</p>
-              {item.show24Change ? (
+              {item.isShow24Change ? (
                 <ChangedPrice value={item.change24h} />
               ) : null}
             </div>

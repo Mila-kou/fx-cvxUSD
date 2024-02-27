@@ -1,21 +1,27 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
-import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useGlobal } from '@/contexts/GlobalProvider'
-import useFxCommon from '@/modules/home/hooks/useFxCommon'
+import useGaugeApyEstimate from '@/hooks/useGaugeApyEstimate'
+import useFxCommon from '@/modules/assets/hooks/useFxCommon'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
 
 const useStabiltyPool = (infoKey) => {
+  const { tokenPrice } = useSelector((state) => state.token)
+
   const globalState = useGlobal()
-  const fxInfo = globalState.fx_info
+  const { getGaugeEstimate, getGaugeApy } = useGaugeApyEstimate()
+  const { fx_info, allGaugeBaseInfo } = globalState
+  const fxInfo = fx_info
   const boostableRebalancePoolInfo = globalState[infoKey]
-  const { tokenPrice } = globalState
+  const { GaugeList = [], allPoolsInfo, allPoolsApyInfo } = allGaugeBaseInfo
 
   const { CurrentNavRes } = fxInfo.baseInfo || {}
 
   const { current } = useWeb3()
   const { ethPrice, xETHPrice } = useFxCommon()
+  console.log('GaugeList----', GaugeList, boostableRebalancePoolInfo)
 
   const getTokenPrice = useCallback(
     (token) => {
@@ -32,71 +38,25 @@ const useStabiltyPool = (infoKey) => {
     rewardData_FXN_Res,
     tokensPerStEth,
   } = boostableRebalancePoolInfo?.baseInfo || {}
-  // const stETHRate = checkNotZoroNum(tokensPerStEth)
-  //   ? cBN(1).div(cBN(tokensPerStEth).div(1e18)).toFixed(4)
-  //   : 1
-  // console.log(
-  //   'PoolApy---baseInfo',
-  //   globalState,
-  //   boostableRebalancePoolInfo?.baseInfo
-  // )
-  // const getPoolApy = useCallback(
-  //   (PoolTotalSupplyTvl) => {
-  //     try {
-  //       const { finishAt, rate } = extraRewardState || {}
-  //       let apy = 0
+  const getRebalanceGaugeFXNAPY = useCallback(
+    (item) => {
+      let fxnApy = 0
+      const _rebalanceGauge = GaugeList.find((gaugeObj) =>
+        gaugeObj.actionRebalancePool.includes(item.rebalancePoolAddress)
+      )
 
-  //       const _currentTime = current.unix()
-  //       if (_currentTime > finishAt) {
-  //         apy = 0
-  //       } else {
-  //         const apyWei = cBN(rate)
-  //           .div(1e18)
-  //           .multipliedBy(config.yearSecond)
-  //           .multipliedBy(ethPrice)
-  //           .multipliedBy(stETHRate)
-  //           .div(PoolTotalSupplyTvl)
-  //           .times(100)
-  //         const _apy = apyWei.multipliedBy(1.04)
-  //         apy = checkNotZoroNumOption(_apy, fb4(_apy, false, 0, 2))
-  //       }
-  //       console.log(
-  //         'rate_currentTime--finishAt--config.yearSecond--ethPrice--stETHRate--poolTotalSupplyTvl--apy---',
-  //         rate,
-  //         _currentTime,
-  //         finishAt,
-  //         config.yearSecond,
-  //         ethPrice,
-  //         stETHRate,
-  //         PoolTotalSupplyTvl.toString(),
-  //         apy.toString()
-  //       )
-  //       return apy
-  //     } catch (error) {
-  //       console.log('apy---', error)
-  //       return 0
-  //     }
-  //   },
-  //   [boostableRebalancePoolInfo?.baseInfo]
-  // )
-
-  const getMax = useCallback(
-    (userInfo) => {
-      console.log('getMax----', boostableRebalancePoolInfo)
-      // const max_claimable = (claimable - pending) / getboostratio
-      // return max_claimable=（claimable-pending）/getboostratio
-      return 1
+      if (_rebalanceGauge) {
+        fxnApy = getGaugeApy(_rebalanceGauge)
+      }
+      return fxnApy
     },
-    [boostableRebalancePoolInfo]
+    [getGaugeApy, GaugeList]
   )
   const getPoolApy_snap = useCallback(
     (rebalanceTvl) => {
       try {
         const { finishAt, rate } = rewardData_wstETH_Res || {}
-        const { finishAt: finishAt_xETH, rate: rate_xETH } =
-          rewardData_xETH_Res || {}
         let wstETH_apyWei = 0
-        let xETH_apyWei = 0
         const _fxnPrice = getTokenPrice('FXN')
         const _wstETHPrice = getTokenPrice('wstETH')
         const _fxnApy = checkNotZoroNum(rebalanceTvl)
@@ -105,19 +65,15 @@ const useStabiltyPool = (infoKey) => {
               .times(12)
               .times(100)
           : cBN(0)
+
+        // // FXN Project Apy
+        // const { _thisWeek_apy } = getRebalanceGaugeFXNAPY(
+        //   boostableRebalancePoolInfo.rebalanceConfig
+        // )
+        // const _fxnApy = cBN(_thisWeek_apy).div(2).toFixed(2)
+
         const _currentTime = current.unix()
-        console.log(
-          'PoolApy---infoKey,rewardData_wstETH_Res,_fxnPrice,_currentTime,rate,yearSecond,rebalanceTvl',
-          'wstETH_apyWei',
-          infoKey,
-          rewardData_wstETH_Res,
-          _fxnPrice,
-          _currentTime,
-          rate,
-          config.yearSecond,
-          rebalanceTvl.toString(),
-          _wstETHPrice
-        )
+
         // wstETH apy
         if (_currentTime > finishAt) {
           wstETH_apyWei = cBN(0)
@@ -129,57 +85,76 @@ const useStabiltyPool = (infoKey) => {
             .div(rebalanceTvl)
             .times(100)
         }
-        // // xETH apy
-        // if (_currentTime > finishAt_xETH) {
-        //   xETH_apyWei = cBN(0)
-        // } else {
-        //   xETH_apyWei = cBN(rate_xETH)
-        //     .div(1e18)
-        //     .multipliedBy(config.yearSecond)
-        //     .multipliedBy(xETHPrice)
-        //     .div(rebalanceTvl)
-        //     .times(100)
-        // }
         const _apy = wstETH_apyWei.plus(_fxnApy)
         const apy = _apy
         const apy_text = checkNotZoroNumOption(
           _apy,
-          `${fb4(_apy, false, 0, 2)} %`
+          `${fb4(_apy, false, 0, 2)}`
         )
         const wstETHApy = wstETH_apyWei
         const wstETHApy_text = checkNotZoroNumOption(
           wstETH_apyWei,
-          `${fb4(wstETH_apyWei, false, 0, 2)} %`
+          `${fb4(wstETH_apyWei, false, 0, 2)}`
         )
-        const xETHApy = xETH_apyWei
-        const xETHApy_text = checkNotZoroNumOption(
-          xETH_apyWei,
-          `${fb4(xETH_apyWei, false, 0, 2)} %`
-        )
-        const fxnApy_text = checkNotZoroNumOption(
+
+        const fxnApyV1_text = checkNotZoroNumOption(
           _fxnApy,
-          `${fb4(_fxnApy, false, 0, 2)} %`
+          `${fb4(_fxnApy, false, 0, 2)}`
         )
-        console.log(
-          'PoolApy---rate_currentTime--finishAt--config.yearSecond--ethPrice---stabilityPoolTotalSupplyTvl--_fxnApy--apy---',
-          rate,
-          _currentTime,
-          finishAt,
-          config.yearSecond,
-          ethPrice,
-          rebalanceTvl.toString(),
-          _fxnApy.toString(),
-          apy.toString()
+
+        const _fxnApy_min = _fxnApy * 0.4
+        const fxnApy_min_text = fb4(_fxnApy_min, false, 0, 2)
+        const fxnApy_max_text = fb4(_fxnApy, false, 0, 2)
+        const minApy = wstETH_apyWei.plus(_fxnApy_min)
+        const maxApy = wstETH_apyWei.plus(_fxnApy)
+        const minApy_text = checkNotZoroNumOption(
+          minApy,
+          `${fb4(minApy, false, 0, 2)}`
         )
+        const maxApy_text = checkNotZoroNumOption(
+          maxApy,
+          `${fb4(maxApy, false, 0, 2)}`
+        )
+        let userApy = 0
+        let userApy_text = 0
+        let boostLever = 0
+        let boostLever_text = 0
+        let userFxnApy = 0
+        let userFxnApy_text = 0
+        const { BoostRatioRes } = boostableRebalancePoolInfo?.userInfo
+        console.log('BoostRatioRes---', BoostRatioRes)
+        if (false) {
+          // boostableRebalancePoolInfo
+          boostLever = cBN(BoostRatioRes).div(1e18).times(2.5)
+          userFxnApy = cBN(_fxnApy_min).times(boostLever)
+          userApy = wstETH_apyWei.plus(userFxnApy)
+          userApy_text = checkNotZoroNumOption(
+            userApy,
+            fb4(userApy, false, 0, 2)
+          )
+          boostLever_text = fb4(boostLever, false, 0, 2)
+          userFxnApy_text = fb4(userFxnApy, false, 0, 2)
+        }
+        console.log('BoostRatioRes---', BoostRatioRes)
         return {
           apy: _apy,
           apy_text,
           wstETHApy,
           wstETHApy_text,
-          xETHApy,
-          xETHApy_text,
+          // xETHApy,
+          // xETHApy_text,
           fxnApy: _fxnApy,
-          fxnApy_text,
+          fxnApyV1_text,
+          minApy,
+          minApy_text,
+          maxApy_text,
+          fxnApy_min_text,
+          fxnApy_max_text,
+          userApy,
+          userApy_text,
+          boostLever,
+          boostLever_text,
+          userFxnApy_text,
         }
       } catch (error) {
         console.log('apy---', error)
@@ -188,7 +163,54 @@ const useStabiltyPool = (infoKey) => {
     },
     [boostableRebalancePoolInfo?.baseInfo]
   )
+  const getRewarItem = useCallback(
+    (RebalanceUserInfo, rewardName) => {
+      let _rewardTokenNum = 0
+      const _fNav = CurrentNavRes?._fNav || 0
+      const _xNav = CurrentNavRes?._xNav || 0
+      const _wstETHPrice = getTokenPrice('wstETH')
+      // const _sfrxETHPrice = getTokenPrice('sfrxETH')
+      // const _xstETHPrice = getTokenPrice('xstETH')
+      // const _xfrxETHPrice = getTokenPrice('xfrxETH')
+      const _fxnPrice = getTokenPrice('FXN')
 
+      let _rewardTokenPrice = _wstETHPrice
+      if (rewardName == 'wstETH') {
+        _rewardTokenNum = RebalanceUserInfo.claimableWstETHRes
+        _rewardTokenPrice = _wstETHPrice
+      } else if (rewardName == 'xETH') {
+        _rewardTokenNum = RebalanceUserInfo.claimableXETHRes
+        _rewardTokenPrice = cBN(_xNav).div(1e18)
+      } else if (rewardName == 'FXN') {
+        _rewardTokenNum = RebalanceUserInfo.claimableFXNRes
+        _rewardTokenPrice = _fxnPrice
+      }
+
+      const userRewardTokenClaimable_text = checkNotZoroNumOption(
+        _rewardTokenNum,
+        fb4(_rewardTokenNum)
+      )
+      let userRewardTokenClaimableTvl = cBN(0)
+      if (
+        checkNotZoroNum(_rewardTokenPrice) &&
+        checkNotZoroNum(_rewardTokenNum)
+      ) {
+        userRewardTokenClaimableTvl =
+          cBN(_rewardTokenPrice).times(_rewardTokenNum)
+      }
+      const userRewardTokenClaimableTvl_text = checkNotZoroNumOption(
+        userRewardTokenClaimableTvl,
+        fb4(userRewardTokenClaimableTvl)
+      )
+      return {
+        userRewardTokenClaimableRes: _rewardTokenNum,
+        userRewardTokenClaimable_text,
+        userRewardTokenClaimableTvl,
+        userRewardTokenClaimableTvl_text,
+      }
+    },
+    [boostableRebalancePoolInfo, CurrentNavRes]
+  )
   const pageData = useMemo(() => {
     const { baseInfo = {}, userInfo = {} } = boostableRebalancePoolInfo
     const _fNav = CurrentNavRes?._fNav || 0
@@ -228,62 +250,26 @@ const useStabiltyPool = (infoKey) => {
       const userDepositTvl_text = fb4(userDepositTvl, true, 0)
 
       // stETH
-      const userWstETHClaimable_res = cBN(userInfo?.claimableWstETHRes)
-
-      const userWstETHClaimable = checkNotZoroNumOption(
-        userWstETHClaimable_res,
-        fb4(userWstETHClaimable_res)
-      )
-      console.log(
-        'userWstETHClaimable-----',
-        userWstETHClaimable_res,
-        userInfo?.claimableWstETHRes
-      )
-      let userWstETHClaimableTvl = cBN(0)
-      if (
-        checkNotZoroNum(_wstETHPrice) &&
-        checkNotZoroNum(userInfo.claimableWstETHRes)
-      ) {
-        userWstETHClaimableTvl = cBN(_wstETHPrice)
-          .times(userInfo.claimableWstETHRes)
-          .div(1e18)
-      }
-      const userWstETHClaimableTvl_text = fb4(userWstETHClaimableTvl, true, 0)
+      // stETH
+      const {
+        userRewardTokenClaimable_text: userWstETHClaimable_text,
+        userRewardTokenClaimableTvl: userWstETHClaimableTvl,
+        userRewardTokenClaimableTvl_text: userWstETHClaimableTvl_text,
+      } = getRewarItem(userInfo, 'wstETH')
 
       // xETH
-      const userXETHClaimable_res = cBN(userInfo?.claimableXETHRes)
-
-      const userXETHClaimable = checkNotZoroNumOption(
-        userXETHClaimable_res,
-        fb4(userXETHClaimable_res)
-      )
-      let userXETHClaimableTvl = cBN(0)
-      if (
-        checkNotZoroNum(_xNav) &&
-        checkNotZoroNum(userInfo.claimableXETHRes)
-      ) {
-        userXETHClaimableTvl = cBN(_xNav)
-          .div(1e18)
-          .times(userInfo.claimableXETHRes)
-          .div(1e18)
-      }
-      const userXETHClaimableTvl_text = fb4(userXETHClaimableTvl, true, 0)
+      const {
+        userRewardTokenClaimable_text: userXETHClaimable_text,
+        userRewardTokenClaimableTvl: userXETHClaimableTvl,
+        userRewardTokenClaimableTvl_text: userXETHClaimableTvl_text,
+      } = getRewarItem(userInfo, 'xETH')
 
       // FXN
-      const userFXNClaimable_res = cBN(userInfo?.claimableFXNRes)
-      const userFXNClaimable = checkNotZoroNumOption(
-        userFXNClaimable_res,
-        fb4(userFXNClaimable_res)
-      )
-      let userFXNClaimableTvl = cBN(0)
-
-      const _fxnPrice = getTokenPrice('FXN')
-      if (_fxnPrice && checkNotZoroNum(userInfo.claimableFXNRes)) {
-        userFXNClaimableTvl = cBN(_fxnPrice)
-          .times(userInfo.claimableFXNRes)
-          .div(1e18)
-      }
-      const userFXNClaimableTvl_text = fb4(userFXNClaimableTvl, true, 0)
+      const {
+        userRewardTokenClaimable_text: userFXNClaimable_text,
+        userRewardTokenClaimableTvl: userFXNClaimableTvl,
+        userRewardTokenClaimableTvl_text: userFXNClaimableTvl_text,
+      } = getRewarItem(userInfo, 'FXN')
 
       const myTotalValue = userDepositTvl
         .plus(userWstETHClaimableTvl)
@@ -293,6 +279,7 @@ const useStabiltyPool = (infoKey) => {
       const userTotalClaimable = userWstETHClaimableTvl
         .plus(userXETHClaimableTvl)
         .plus(userFXNClaimableTvl)
+        .div(1e18)
 
       const userTotalClaimableTvl_text = checkNotZoroNumOption(
         userTotalClaimable,
@@ -313,13 +300,15 @@ const useStabiltyPool = (infoKey) => {
         poolTotalSupply,
         userDeposit,
         userDepositTvl_text,
-        userWstETHClaimable,
+
+        userWstETHClaimable_text,
         userWstETHClaimableTvl_text,
-        userXETHClaimable,
+        userXETHClaimable_text,
         userXETHClaimableTvl_text,
-        myTotalValue_text,
-        userFXNClaimable,
+        userFXNClaimable_text,
         userFXNClaimableTvl_text,
+
+        myTotalValue_text,
         userTotalClaimable,
         userTotalClaimableTvl_text,
         apyObj,
@@ -335,6 +324,7 @@ const useStabiltyPool = (infoKey) => {
         userDeposit: '-',
         userDepositTvl_text: '-',
         userWstETHClaimable: '-',
+        userWstETHClaimable_text: '-',
         userWstETHClaimableTvl_text: '-',
         userXETHClaimable: '-',
         userXETHClaimableTvl_text: '-',

@@ -2,7 +2,7 @@ import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import moment from 'moment'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useGlobal } from '@/contexts/GlobalProvider'
-import useFxCommon from '@/modules/home/hooks/useFxCommon'
+import useFxCommon from '@/modules/assets/hooks/useFxCommon'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
 
@@ -10,8 +10,6 @@ const useStabiltyPool = (infoKey) => {
   const globalState = useGlobal()
   const fxInfo = globalState.fx_info
   const stabilityPoolInfo = globalState[infoKey]
-
-  const { CurrentNavRes } = fxInfo.baseInfo
 
   const { current } = useWeb3()
   const { ethPrice } = useFxCommon()

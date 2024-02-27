@@ -1,45 +1,42 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { Button, InputNumber } from 'antd'
 import { useRouter, useHis } from 'next/router'
+import { useSelector } from 'react-redux'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import useGlobal from '@/hooks/useGlobal'
 import Swap from '../components/Swap'
 import TokenStatistics from '../components/TokenStatistics'
+import TokenStatisticsV2 from '../components/TokenStatisticsV2'
 import Tabs from '../components/Tabs'
 import MoreCard from '../components/MoreCard'
 import styles from './styles.module.scss'
-import { ASSETS } from '@/config/tokens'
+import { ASSETS, ASSET_MAP } from '@/config/tokens'
 
 export default function SymbolPage() {
+  const asset = useSelector((state) => state.asset)
+  const baseToken = useSelector((state) => state.baseToken)
+
   const { query, push } = useRouter()
   const { symbol } = query
 
-  const { fAssetList, xAssetList } = useGlobal()
+  const baseTokens = useMemo(() => {
+    if (symbol === 'fxUSD') return [baseToken.wstETH, baseToken.sfrxETH]
 
-  const assetInfo = useMemo(() => {
-    const obj = [...fAssetList, ...xAssetList].find(
-      (item) => item.symbol === symbol
-    )
+    if (symbol === 'xstETH') return [baseToken.wstETH]
 
-    console.log('obj---', obj)
+    if (symbol === 'xfrxETH') return [baseToken.sfrxETH]
+    return []
+  }, [symbol, baseToken])
 
-    if (obj) return obj
+  console.log('baseToken----', baseToken, baseTokens)
 
-    return ASSETS.find((item) => item.symbol === symbol)
-  }, [fAssetList, xAssetList, symbol])
+  const isV2 = !['fETH', 'xETH'].includes(symbol)
+
+  const assetInfo = Object.values(asset).find((item) => item.symbol === symbol)
 
   const [pricePriceInfo, setPriceInfo] = useState({})
-
-  const revAssetInfo = useMemo(() => {
-    if (!assetInfo) return null
-
-    return ASSETS.find(
-      (item) =>
-        item.baseSymbol === assetInfo.baseSymbol && item.symbol !== symbol
-    )
-  }, [assetInfo])
 
   if (!assetInfo) return null
 
@@ -56,7 +53,11 @@ export default function SymbolPage() {
   */}
         </div>
         <div className={styles.item}>
-          <TokenStatistics assetInfo={assetInfo} />
+          {isV2 ? (
+            <TokenStatisticsV2 assetInfo={assetInfo} baseTokens={baseTokens} />
+          ) : (
+            <TokenStatistics assetInfo={assetInfo} />
+          )}
         </div>
       </div>
     </div>

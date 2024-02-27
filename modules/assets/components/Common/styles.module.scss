@@ -32,12 +32,13 @@
   align-items: center;
   color: var(--second-text-color);
   background: var(--input-background-color);
-  font-size: 16px;
-  padding: 24px 16px;
+  font-size: 14px;
+  padding: 16px 16px 14px;
   border-radius: 6px;
   margin: 20px 0;
   p {
     color: var(--yellow-color);
+    font-size: 16px;
     font-weight: 600;
   }
   span {

@@ -10,7 +10,7 @@ import React, {
 const ThemeContext = createContext(null)
 
 function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('red')
+  const [theme, setTheme] = useState('blue')
 
   const handleTheme = useCallback(
     (_theme) => {
@@ -23,9 +23,9 @@ function ThemeProvider({ children }) {
     [setTheme]
   )
 
-  useEffect(() => {
-    handleTheme(window.localStorage.getItem('theme') || 'blue')
-  }, [])
+  // useEffect(() => {
+  //   handleTheme(window.localStorage.getItem('theme') || 'blue')
+  // }, [])
 
   const toggleTheme = useCallback(() => {
     const _theme = theme === 'blue' ? 'red' : 'blue'

@@ -1,8 +1,5 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Tooltip } from 'antd'
-import useNavs from '../../hooks/useNavs'
+import useFxNavs from '../../hooks/useFxNavs'
 import NavChart from '../NavChart'
-import BreakdownChart from '../BreakdownChart'
 import BackendAssetValueChart from '../BackendAssetValueChart'
 import { ChangedPrice } from '../Common'
 import styles from './styles.module.scss'
@@ -16,7 +13,7 @@ export default function TokenStatistics({ assetInfo }) {
     leverage_text,
     collateralRatio_text,
     change24h,
-    isBreakdownChart,
+    isShow24Change,
     isX,
     icon,
     subIcon,
@@ -27,10 +24,18 @@ export default function TokenStatistics({ assetInfo }) {
     baseTokenCap_text,
   } = assetInfo
 
-  const navsData = useNavs()
+  const navsData = useFxNavs()
   const navList = navsData.navList[symbol]
 
   const totalBaseTokenNumber = (totalBaseToken || '').replace(',', '')
+
+  const getCollateralRatioDom = () => {
+    return (
+      <div className={styles.nums}>
+        {isX ? leverage_text : `${collateralRatio_text}%`}
+      </div>
+    )
+  }
 
   return (
     <div className={styles.container}>
@@ -46,7 +51,7 @@ export default function TokenStatistics({ assetInfo }) {
         </div>
         <p>
           {symbol} <span className="mx-[8px]">{nav_text}</span>
-          <ChangedPrice value={change24h} isRed />
+          {isShow24Change ? <ChangedPrice value={change24h} isRed /> : null}
         </p>
       </div>
 
@@ -69,9 +74,7 @@ export default function TokenStatistics({ assetInfo }) {
             <div className={styles.title}>
               {symbol} {isX ? 'Leverage' : 'Collateral Ratio'}
             </div>
-            <div className={styles.nums}>
-              {isX ? leverage_text : `${collateralRatio_text}%`}
-            </div>
+            {getCollateralRatioDom()}
           </div>
         </div>
 
@@ -93,23 +96,13 @@ export default function TokenStatistics({ assetInfo }) {
           <NavChart dateList={navsData.dateList} navs={navList} />
         </div>
 
-        <p className="mt-[24px]">
-          {isBreakdownChart ? 'Backed Asset Breakdown' : 'Reserve Asset Value'}
-        </p>
+        <p className="mt-[24px]">Reserve Asset Value</p>
         <div className={styles.chart}>
-          {isBreakdownChart ? (
-            <BreakdownChart
-              dateList={navsData.dateList}
-              navs={navList}
-              assetInfo={assetInfo}
-            />
-          ) : (
-            <BackendAssetValueChart
-              dateList={navsData.dateList}
-              list={navsData.totalBaseTokenList}
-              assetInfo={assetInfo}
-            />
-          )}
+          <BackendAssetValueChart
+            dateList={navsData.dateList}
+            list={navsData.totalBaseTokenList}
+            assetInfo={assetInfo}
+          />
         </div>
       </div>
     </div>

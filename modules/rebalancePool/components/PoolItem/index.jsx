@@ -62,7 +62,7 @@ export default function PoolItem({
             <div className={cn(styles.item, styles.itemWrap, 'mt-[40px]')}>
               <div>
                 <img src="/images/f-logo.svg" />
-                <Link href="/home">
+                <Link href="/assets/fETH/">
                   <p>Get fETH to Deposit →</p>
                 </Link>
               </div>

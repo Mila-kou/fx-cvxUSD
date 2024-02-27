@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { cBN, checkNotZoroNum, fb4 } from 'utils'
 import moment from 'moment'
 import useData from '../hook/useData'
 import { calc4 } from '../util'
-import useGlobal from '@/hooks/useGlobal'
 import useWeb3 from '@/hooks/useWeb3'
 
 const useInfo = (refreshTrigger) => {
-  const { tokens, tokenPrice } = useGlobal()
+  const { tokens } = useSelector((state) => state.token)
   const wstETHPrice = tokens.wstETH.price
-  const fxnPrice = tokenPrice?.FXN?.usd?.toFixed(4) ?? 0
+  const fxnPrice = tokens.FXN.price
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
 

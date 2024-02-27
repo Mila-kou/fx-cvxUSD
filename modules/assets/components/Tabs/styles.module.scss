@@ -3,21 +3,11 @@
 .tabs {
   display: flex;
   margin-bottom: 12px;
-  --primary-color: #fff;
+  --primary-color: var(--blue-color);
   .tab {
     flex: 1;
+    @include troggle-button;
     padding: 8px;
-    font-size: 20px;
-    padding: 4px 8px;
-    color: var(--second-text-color);
-    border: none;
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    &[data-active='true'] {
-      color: var(--primary-color);
-    }
+    color: var(--disabled-text-color);
   }
 }

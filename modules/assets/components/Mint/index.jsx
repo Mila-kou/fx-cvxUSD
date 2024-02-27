@@ -1,6 +1,7 @@
 /* eslint-disable no-lonely-if */
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
+import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -9,7 +10,6 @@ import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
-import useGlobal from '@/hooks/useGlobal'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
@@ -20,7 +20,7 @@ import useCurveSwap from '@/hooks/useCurveSwap'
 
 export default function Mint({ slippage, assetInfo }) {
   const { _currentAccount } = useWeb3()
-  const { tokens } = useGlobal()
+  const { tokens } = useSelector((state) => state.token)
   const [clearTrigger, clearInput] = useClearInput()
   const { getCurveSwapABI, getCurveSwapMinout } = useCurveSwap()
 

@@ -23,9 +23,9 @@
     background: var(--x-bg-color);
   }
   .greenbg {
-    background: linear-gradient(270deg, #1a6d63 0%, #075e54 100%);
+    background: var(--deep-green-color);
     div {
-      color: white;
+      color: #231f20;
     }
   }
 }

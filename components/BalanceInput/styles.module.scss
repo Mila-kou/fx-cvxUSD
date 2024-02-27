@@ -12,6 +12,7 @@
   justify-content: space-between;
   column-gap: 14px;
   background: var(--input-background-color);
+  gap: 16px;
 
   &[data-color] {
     opacity: 0.9;
@@ -31,7 +32,7 @@
       color: #fff;
     }
     color: #fff;
-    background: linear-gradient(0deg, #4214ed 0%, #7316ff 100%);
+    background: var(--f-bg-color);
     @include color-svg();
   }
   &[data-color='red'] {
@@ -42,7 +43,18 @@
       color: #fff;
     }
     color: #fff;
-    background: linear-gradient(0deg, #ff086b 0%, #f05a29 100%);
+    background: var(--x-bg-color);
+    @include color-svg();
+  }
+  &[data-color='deep-green'] {
+    p {
+      color: #fff;
+    }
+    input {
+      color: #fff;
+    }
+    color: #fff;
+    background: var(--deep-green-color);
     @include color-svg();
   }
 

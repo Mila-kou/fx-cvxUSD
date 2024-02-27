@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 import { useQueries } from '@tanstack/react-query'
-import moment from 'moment'
 import {
   useContract,
   useFETH,
@@ -12,7 +11,6 @@ import {
 } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
-import { cBN, fb4 } from '@/utils/index'
 import config from '@/config/index'
 import { useRebalancePoolRegistryPool } from '@/hooks/useGaugeContracts'
 
@@ -179,15 +177,11 @@ const useInfo = () => {
       maxMintableXToken,
       maxRedeemableFToken,
       maxRedeemableXToken,
-      cacheTwap,
       maxMintableXTokenWithIncentive,
       maxLiquidatable,
     } = treasuryContract.methods
     const _stabilityRatio = baseInfo.marketConfigRes?.stabilityRatio || 0
     const _liquidationRatio = baseInfo.marketConfigRes?.liquidationRatio || 0
-    const _selfLiquidationRatio =
-      baseInfo.marketConfigRes?.selfLiquidationRatio || 0
-    const _recapRatioRatio = baseInfo.marketConfigRes?.recapRatio || 0
     const _stabilityIncentiveRatio =
       baseInfo.incentiveConfigRes?.stabilityIncentiveRatio || 0
     const _liquidationIncentiveRatio =

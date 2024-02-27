@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import {
   useFETH,
@@ -7,14 +7,11 @@ import {
   useFX_stETHTreasury,
   useFX_stETHGateway,
 } from '@/hooks/useContracts'
-import useETHPrice from '../hooks/useETHPrice'
 import useFxCommon, { getR } from '../hooks/useFxCommon'
 import { useGlobal } from '@/contexts/GlobalProvider'
-import useFxCommon_New from '../hooks/useFxCommon_New'
 
 const useETH = () => {
   const { fx_info: fxInfo } = useGlobal()
-  // const ethPrice = useETHPrice()
   const {
     systemStatus,
     getMaxXETHBonus,
@@ -28,21 +25,11 @@ const useETH = () => {
     isXETHBouns,
     isFETHBouns,
   } = useFxCommon()
-  const fxCommonNew = useFxCommon_New()
   const { contract: fETHContract, address: fETHAddress } = useFETH()
   const { contract: xETHContract, address: xETHAddress } = useXETH()
   const { contract: marketContract } = useFX_Market()
   const { contract: treasuryContract } = useFX_stETHTreasury()
   const { contract: stETHGatewayContract } = useFX_stETHGateway()
-  const [mintLoading, setMintLoading] = useState(false)
-  const [feeUsd, setFeeUsd] = useState(10)
-
-  const handleMintFETH = async () => {
-    setMintLoading(false)
-    // fETHContract
-  }
-
-  const handleMintXETH = async () => {}
 
   const pageData = useMemo(() => {
     try {
@@ -182,29 +169,6 @@ const useETH = () => {
         _redeemXETHFee
       )
 
-      let StabilityModePrice = getStabilityModePrice({
-        p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
-        beta: fxInfo.baseInfo.betaRes / 1e18,
-        s: ethPrice,
-      })
-      StabilityModePrice = checkNotZoroNumOption(
-        StabilityModePrice,
-        fb4(StabilityModePrice, false, 0, 2)
-      )
-      let UserLiquidationModePrice = getUserLiquidationModePrice({
-        p_f: cBN(1e18).div(fxInfo.baseInfo.collateralRatioRes).toString(10),
-        beta: fxInfo.baseInfo.betaRes / 1e18,
-        s: ethPrice,
-      })
-      UserLiquidationModePrice = checkNotZoroNumOption(
-        UserLiquidationModePrice,
-        fb4(UserLiquidationModePrice, false, 0, 2)
-      )
-      const ProtocolLiquidationModePrice = checkNotZoroNumOption(
-        protocolLiquidationModePrice,
-        fb4(protocolLiquidationModePrice, false, 0, 2)
-      )
-
       const lastPermissionedPrice = checkNotZoroNumOption(
         fxInfo.baseInfo.lastPermissionedPriceRes,
         fb4(fxInfo.baseInfo.lastPermissionedPriceRes, false, 18, 2)
@@ -228,64 +192,14 @@ const useETH = () => {
           .times(fxInfo.baseInfo?.bonusRatioRes)
           .div(1e18)
       )
-      const maxXETHBonus_text = checkNotZoroNumOption(
-        maxXETHBonus,
-        fb4(maxXETHBonus, false, 0)
-      )
-      const mode1_maxBaseIn =
-        fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn
-      const mode1_maxBaseIn_text = checkNotZoroNumOption(
-        fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn,
-        fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxBaseIn)
-      )
-      const mode1_maxXTokenMintable_text = checkNotZoroNumOption(
-        fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable,
-        fb4(fxInfo.maxMintableXTokenWithIncentiveRes?._maxXTokenMintable)
-      )
-
-      const mode2_maxFTokenBaseIn =
-        fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable
-      const mode2_maxFTokenBaseIn_text = checkNotZoroNumOption(
-        mode2_maxFTokenBaseIn,
-        fb4(mode2_maxFTokenBaseIn)
-      )
-      const mode2_maxETHBaseOut = fxInfo.maxLiquidatableRes?._maxBaseOut
-      const mode2_maxETHBaseOut_text = checkNotZoroNumOption(
-        mode2_maxETHBaseOut,
-        fb4(mode2_maxETHBaseOut)
-      )
 
       const maxETHBonus = getMaxETHBonus({
         MaxBaseInfETH:
           (fxInfo.maxLiquidatableRes?._maxFTokenLiquidatable || 0) / 1e18,
         redeemFETHFee: (_redeemFETHFee || 0) / 1e18,
       })
-      const maxETHBonus_Text = checkNotZoroNumOption(
-        maxETHBonus,
-        fb4(maxETHBonus, false, 0)
-      )
 
-      console.log('fxInfo.incentiveConfigRes---', fxInfo)
-      const stabilityIncentiveRatio_text = checkNotZoroNumOption(
-        fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio,
-        fb4(fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio * 100)
-      )
-      const liquidationIncentiveRatio_text = checkNotZoroNumOption(
-        fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio,
-        fb4(fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio * 100)
-      )
-      console.log('maxETHBonus--', maxETHBonus, maxETHBonus_Text)
-      let isShowBonusTab = false
-      if (
-        checkNotZoroNum(
-          fxInfo.baseInfo.incentiveConfigRes?.stabilityIncentiveRatio
-        ) &&
-        checkNotZoroNum(
-          fxInfo.baseInfo.incentiveConfigRes?.liquidationIncentiveRatio
-        )
-      ) {
-        isShowBonusTab = true
-      }
+      console.log('maxETHBonus--', maxETHBonus)
 
       return {
         fnav: _fnav,
@@ -310,9 +224,6 @@ const useETH = () => {
         p_f: _p_f,
         p_x: _p_x,
 
-        StabilityModePrice,
-        UserLiquidationModePrice,
-        ProtocolLiquidationModePrice,
         systemStatus,
         lastPermissionedPrice,
         R: _R,
@@ -323,29 +234,12 @@ const useETH = () => {
         xTokenRedeemInSystemStabilityModePaused:
           fxInfo.baseInfo.xTokenRedeemInSystemStabilityModePausedRes,
 
-        mode1_maxBaseIn,
-        mode1_maxBaseIn_text,
-        mode1_maxXTokenMintable_text,
         maxXETHBonus,
-        maxXETHBonus_text,
-        mode2_maxFTokenBaseIn,
-        mode2_maxFTokenBaseIn_text,
-        mode2_maxETHBaseOut,
-        mode2_maxETHBaseOut_text,
         maxETHBonus,
-        maxETHBonus_Text,
         xETHBeta,
         xETHBeta_text,
 
         xETHBonus,
-
-        stabilityIncentiveRatio_text,
-        liquidationIncentiveRatio_text,
-        isShowBonusTab,
-
-        isETHPriceGreatThanETHLastPrice: cBN(
-          fxInfo.baseInfo.CurrentNavRes?._baseNav
-        ).isGreaterThan(fxInfo.baseInfo.lastPermissionedPriceRes),
       }
     } catch (error) {
       return {

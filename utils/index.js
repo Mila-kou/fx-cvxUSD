@@ -16,7 +16,12 @@ export const checkNotZoroNum = (num) => {
   return !(cBN(num).isZero() || cBN(num).isNaN() || !cBN(num).isFinite())
 }
 
-export function formatBalance(balanceInWei, decimals = 18, toFixed = -1) {
+export function formatBalance(
+  balanceInWei,
+  decimals = 18,
+  toFixed = -1,
+  isTrimZero = true
+) {
   if (cBN(balanceInWei).isNaN()) return '0'
 
   const formatResult = (result) => {
@@ -30,10 +35,9 @@ export function formatBalance(balanceInWei, decimals = 18, toFixed = -1) {
         : result
 
     if (cBN(result).isLessThan(1)) {
-      return `${trimZero}`
+      return isTrimZero ? `${trimZero}` : `${result}`
     }
-
-    return trimZero
+    return isTrimZero ? `${trimZero}` : `${result}`
   }
 
   if (toFixed === -1) {
@@ -76,7 +80,13 @@ export const addToMetamask = (options) => {
   }
 }
 
-export const fb4 = (balance, isMoney, decimals, toFixedNum = -1) => {
+export const fb4 = (
+  balance,
+  isMoney,
+  decimals,
+  toFixedNum = -1,
+  isTrimZero = true
+) => {
   if (cBN(balance).isZero()) {
     return isMoney ? '$0' : '-'
   }
@@ -87,7 +97,8 @@ export const fb4 = (balance, isMoney, decimals, toFixedNum = -1) => {
   return `${isMoney ? '$' : ''}${formatBalance(
     balance,
     decimals ?? 18,
-    toFixedNum > -1 ? toFixedNum : isMoney ? 2 : 4
+    toFixedNum > -1 ? toFixedNum : isMoney ? 2 : 4,
+    isTrimZero
   )}`
 }
 

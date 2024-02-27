@@ -18,18 +18,20 @@ const useVeBoostDelegateShare_c = (refreshTrigger) => {
       userLocked,
       userVeShare,
       delegatedBalanceRes,
+      delegableBalanceRes,
       adjustedVeBalanceRes,
       receivedRes,
       receivedBalanceRes,
     } = info
     console.log('shareModal---', info)
-    const _last_ve_balance = adjustedVeBalanceRes
+    const _last_ve_balance = delegableBalanceRes
     const _pageData = {
       userVeShare,
       veTotalSupply,
       veLockedFXN,
       userLocked,
       delegatedBalanceRes,
+      delegableBalanceRes,
       adjustedVeBalanceRes,
       receivedRes,
       receivedBalanceRes,

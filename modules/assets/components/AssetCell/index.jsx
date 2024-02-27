@@ -1,32 +1,48 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
+import { useSelector } from 'react-redux'
 import styles from './styles.module.scss'
 import { ChangedPrice } from '../Common'
 
-export default function AssetCell({ info, token }) {
+export default function AssetCell({ info }) {
+  const baseToken = useSelector((state) => state.baseToken)
   const {
     isX,
+    baseSymbol,
     totalSupply_text,
     marketCap_text,
     nav_text,
     leverage_text,
     change24h,
+    background,
   } = info
-  // console.log('token---', token, info)
+
+  const _leverage_text =
+    baseToken[baseSymbol]?.data?.leverage_text || leverage_text
+
   return (
     <div key={info.id} className={styles.poolWrap}>
-      <div className={cn(styles.card, isX && styles.redbg)}>
-        <div className="flex w-[200px] gap-[10px] items-center">
-          <img className="w-[30px]" src={info.icon} />
+      <div
+        className={cn(styles.card, isX && styles.redbg)}
+        style={{ background: background || '' }}
+      >
+        <div className="flex w-[200px] gap-[14px] items-center">
+          <div className="relative">
+            <img className="w-[30px]" src={info.icon} />
+            <img
+              className="w-[18px] absolute right-[-8px] bottom-[-3px]"
+              src={info.subIcon}
+            />
+          </div>
           <div>
             <p className="text-[16px]">{info.symbol}</p>
             <p className="text-[14px] mt-[4px]">{info.descrition}</p>
           </div>
         </div>
 
-        <div className="w-[140px] text-[16px]">
+        <div className="w-[120px] text-[16px]">
           {isX ? (
-            leverage_text
+            _leverage_text
           ) : (
             <div>
               <p className="text-[16px]">{marketCap_text}</p>
@@ -37,10 +53,10 @@ export default function AssetCell({ info, token }) {
           )}
         </div>
 
-        <div className="w-[90px] text-[16px]">{nav_text}</div>
+        <div className="w-[60px] text-[16px]">{nav_text}</div>
 
-        <div className="w-[80px] text-[16px]">
-          {info.show24Change ? <ChangedPrice value={change24h} /> : '-'}
+        <div className="w-[72px] text-[16px] text-center">
+          {info.isShow24Change ? <ChangedPrice value={change24h} /> : '-'}
         </div>
       </div>
     </div>
@@ -53,7 +69,7 @@ export function ComingAssetCell({ info }) {
       <div
         className={cn(styles.card, info.isX ? styles.redbg : styles.greenbg)}
       >
-        <div className="flex w-[200px] gap-[16px] items-center">
+        <div className="flex w-[220px] gap-[16px] items-center">
           <div className="relative">
             <img className="w-[30px]" src={info.icon} />
             <img
@@ -63,7 +79,7 @@ export function ComingAssetCell({ info }) {
           </div>
           <div>
             <p className="text-[16px]">{info.symbol}</p>
-            <p className="text-[14px]">{info.descrition || 'Coming soon'}</p>
+            <p className="text-[14px]">Coming soon</p>
           </div>
         </div>
       </div>

@@ -43,6 +43,7 @@ import FX_RebalancePoolABI from './fx/RebalancePool.json'
 import FX_RebalanceWithBonusTokenABI from './fx/RebalanceWithBonusToken.json'
 
 import wstETHABI from './wstETH.json'
+import sfrxETHABI from './sfrxETH.json'
 import stETHABI from './stETH.json'
 import curveSwapABI from './common/curveSwap.json'
 
@@ -67,6 +68,23 @@ import FX_FXNTokenMinterABI from './fx/farming/fx_TokenMinter.json'
 import FX_RebalancePoolRegistryABI from './fx/fx-RebalancePoolRegistry.json'
 
 import AladdinMerkleTreeABI from './AladdinMerkleTree.json'
+
+// fxUSD
+import FXUSD_FractionalTokenV2_ABI from './fxUSD/FractionalTokenV2.json'
+import FXUSD_LeveragedTokenV2_ABI from './fxUSD/LeveragedTokenV2.json'
+import FXUSD_FxMarketV1Facet_ABI from './fxUSD/FxMarketV1Facet.json'
+import FXUSD_FxUSD_ABI from './fxUSD/FxUSD.json'
+import FXUSD_FxUSDFacet_ABI from './fxUSD/FxUSDFacet.json'
+import FXUSD_MarketV2_ABI from './fxUSD/MarketV2.json'
+import FXUSD_TreasuryV2_ABI from './fxUSD/TreasuryV2.json'
+import FXUSD_WrappedTokenTreasuryV2_ABI from './fxUSD/WrappedTokenTreasuryV2.json'
+import FxInitialFund_ABI from './fxUSD/FxInitialFund.json'
+import FXUSD_ReservePoolV2_ABI from './fxUSD/ReservePoolV2.json'
+import ETHTwapOracle_ABI from './fxUSD/ETHTwapOracle.json'
+import RateProvider_ABI from './fxUSD/RateProvider.json'
+
+// common
+import MultiPathConverter_ABI from './common/MultiPathConverter.json'
 
 export default {
   erc20ABI,
@@ -104,6 +122,7 @@ export default {
   AladdinbcCVXABI,
   RewardClaimHelperABI,
   wstETHABI,
+  sfrxETHABI,
   stETHABI,
   Fx_Gateway,
   Fx_ReservePool,
@@ -128,6 +147,23 @@ export default {
   FX_RebalancePoolRegistryABI,
   FX_FXNTokenMinterABI,
   // gauge
-
   AladdinMerkleTreeABI,
+
+  // fxUSD
+  FXUSD_FractionalTokenV2_ABI,
+  FXUSD_LeveragedTokenV2_ABI,
+  FXUSD_FxMarketV1Facet_ABI,
+  FXUSD_FxUSD_ABI,
+  FXUSD_FxUSDFacet_ABI,
+  FXUSD_MarketV2_ABI,
+  FXUSD_TreasuryV2_ABI,
+  FXUSD_WrappedTokenTreasuryV2_ABI,
+  FxInitialFund_ABI,
+  ETHTwapOracle_ABI,
+  RateProvider_ABI,
+
+  // common
+  MultiPathConverter_ABI,
+
+  FXUSD_ReservePoolV2_ABI,
 }

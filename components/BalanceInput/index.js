@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import cn from 'classnames'
+import { useDebounceEffect } from 'ahooks'
 import { SyncOutlined } from '@ant-design/icons'
 import InputSelect from '@/components/InputSelect'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
-import useGlobal from '@/hooks/useGlobal'
-import FLogo from '../../public/images/f-s-logo.svg'
-import XLogo from '../../public/images/x-s-logo.svg'
+import { ASSET_MAP } from '@/config/tokens'
 
 export const useClearInput = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
@@ -44,9 +43,18 @@ function BalanceInput(props) {
     showRetry,
     onRetry = () => {},
   } = props
-  const { theme } = useGlobal()
 
   const [val, setVal] = useState('')
+
+  useDebounceEffect(
+    () => {
+      onChange(cBN(val || '').shiftedBy(decimals ?? 18))
+    },
+    [val, decimals],
+    {
+      wait: 500,
+    }
+  )
 
   const handleInputChange = (e) => {
     let { value } = e.target
@@ -58,22 +66,15 @@ function BalanceInput(props) {
     }
 
     setVal(value || '')
-    onChange(cBN(value || '').shiftedBy(decimals ?? 18))
   }
 
-  useEffect(() => {
-    onChange(cBN(val || '').shiftedBy(decimals ?? 18))
-  }, [decimals])
-
   const setMax = () => {
-    onChange(maxAmount)
-    setVal(fb4(maxAmount, false, decimals ?? 18))
+    setVal(fb4(maxAmount, false, decimals ?? 18).replace(',', ''))
   }
 
   useEffect(() => {
     if (changeValue) {
-      setVal(fb4(changeValue, false, decimals ?? 18))
-      onChange(changeValue)
+      setVal(fb4(changeValue, false, decimals ?? 18).replace(',', ''))
     }
   }, [changeValue])
 
@@ -82,11 +83,34 @@ function BalanceInput(props) {
   }, [clearTrigger])
 
   const logoSrc = useMemo(() => {
-    if (['fETH', 'xETH', 'FXN', 'veFXN'].includes(symbol)) return ''
-    if (['ETH', 'stETH'].includes(symbol))
+    if (['fETH', 'FXN'].includes(symbol)) {
+      return '/images/f-logo.svg'
+    }
+    if (['xETH', 'xstETH', 'xfrxETH'].includes(symbol)) {
+      return '/images/x-logo.svg'
+    }
+    if (symbol === 'fxUSD') {
+      return '/tokens/fxusd.svg'
+    }
+    if (symbol === 'crvUSD') {
+      return '/tokens/crvUSD.png'
+    }
+    if (['stETH', 'wstETH'].includes(symbol)) {
+      return '/tokens/steth.svg'
+    }
+    if (symbol === 'ETH') {
       return '/tokens/crypto-icons-stack.svg#eth'
+    }
+    if (symbol === 'frxETH') {
+      return '/tokens/frxeth.svg'
+    }
+    if (symbol === 'sfrxETH') {
+      return '/tokens/sfrxeth.svg'
+    }
     return `/tokens/crypto-icons-stack.svg#${symbol.toLowerCase()}`
   }, [symbol])
+
+  const subIcon = useMemo(() => ASSET_MAP[symbol]?.subIcon, [symbol])
 
   return (
     <div
@@ -96,16 +120,24 @@ function BalanceInput(props) {
     >
       {hideLogo ? null : (
         <div className={styles.left}>
-          {['fETH', 'FXN', 'veFXN'].includes(symbol) && <FLogo />}
-          {symbol === 'xETH' && <XLogo />}
-          {logoSrc && <img src={logoSrc} />}
+          {logoSrc && (
+            <div className="relative">
+              <img className="w-[30px]" src={logoSrc} />
+              {subIcon && (
+                <img
+                  className="w-[18px] absolute right-[-3px] bottom-[-3px]"
+                  src={subIcon}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
       <div className={styles.symbolWrap}>
         {options.length ? (
           <InputSelect
             value={symbol}
-            style={{ minWidth: '130px', marginRight: '16px' }}
+            style={{ width: '130px', marginRight: '16px' }}
             onChange={(v) => onSymbolChanged(v)}
             options={options.map((item) => ({
               value: item,
@@ -126,7 +158,9 @@ function BalanceInput(props) {
               loading ? (
                 <SyncOutlined spin />
               ) : (
-                <span onClick={onRetry}>Retry</span>
+                <span className="text-[16px] text-stone-300" onClick={onRetry}>
+                  Retry
+                </span>
               )
             ) : (
               <>

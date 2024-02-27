@@ -11,9 +11,10 @@ import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 const useRebalancePoolUseInfo = (infoKey) => {
   const { _currentAccount, web3, blockNumber } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
-  const { rebalancePoolAddress: contractAddress } = REBALANCE_POOLS_LIST.find(
+  const rebalanceConfig = REBALANCE_POOLS_LIST.find(
     (item) => item.infoKey == infoKey
   )
+  const { rebalancePoolAddress: contractAddress } = rebalanceConfig
   const { contract: fx_BoostableRebalancePool_PoolContract } =
     useBoostableRebalancePool(contractAddress)
 
@@ -45,16 +46,6 @@ const useRebalancePoolUseInfo = (infoKey) => {
         rewardData_xETH_Res,
         tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
-      console.log(
-        'rebalance--0-------BaseInfo222222------1--',
-        // BoostableRebalancePoolTotalSupplyRes,
-        // ActiveRewardTokensRes,
-        boostRatioRes,
-        rewardData_wstETH_Res,
-        rewardData_xETH_Res
-        // rewardData_FXN_Res
-        // tokensPerStEth
-      )
 
       return {
         BoostableRebalancePoolTotalSupplyRes,
@@ -178,6 +169,7 @@ const useRebalancePoolUseInfo = (infoKey) => {
     refetchUserInfo()
   }, [_currentAccount, blockNumber])
   return {
+    rebalanceConfig,
     baseInfo: BoostableRebalancePool_baseInfo,
     // ...maxAbleFToken,
     userInfo: BoostableRebalancePool_userInfo,

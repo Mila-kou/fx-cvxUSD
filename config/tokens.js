@@ -4,7 +4,7 @@ const stETHIcon = '/tokens/steth.svg'
 const crvIcon = '/tokens/0xd533a949740bb3306d119cc777fa900ba034cd52.png'
 const cvxIcon = '/tokens/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b.png'
 
-const contracts = {
+export const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
   multiCall: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
   idoSale1: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f', // round 1
@@ -21,8 +21,8 @@ const contracts = {
   fx_stETHGateway: '0x9bF5fFABbF97De0a47843A7Ba0A9DDB40f2e2ed5',
 
   // ve boost
-  fx_VotingEscrowBoost: '0xC2BdBF323304eaBd9260b42E4d0d429Ca3481d6E', // for delegation
-  fx_VotingEscrowProxy: '0xf64B38e1Fe07FfB50Be16Ef2A9d7b88d7Da68377', // for delegation
+  fx_VotingEscrowBoost: '0x8Cc02c0D9592976635E98e6446ef4976567E7A81', // for delegation
+  fx_VotingEscrowProxy: '0x1145f304d74f3295Fa38b82e7BB8704B0E187FA1', // for delegation
 
   fx_GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
 
@@ -47,11 +47,11 @@ const contracts = {
   fx_PlatformFeeSpliter: '0x0084C2e1B1823564e597Ff4848a88D61ac63D703',
   fx_FXN_ProxyAdmin: '0x9B54B7703551D9d0ced177A78367560a8B2eDDA4',
   veFXN: '0xEC6B8A3F3605B083F7044C0F31f2cac0caf1d469',
-  TokenMinter: '0xC8b194925D55d5dE9555AD1db74c149329F71DeF',
+  fx_TokenMinter: '0xC8b194925D55d5dE9555AD1db74c149329F71DeF',
   GaugeController: '0xe60eB8098B34eD775ac44B1ddE864e098C6d7f37',
   fx_ve_FeeDistributor: '0xd116513EEa4Efe3908212AfBAeFC76cb29245681',
 
-  redeemConverter: '0xa3F4fB87e19B60622bEA119C4469c0Df2c7c4739',
+  redeemConverter: '0x11C907b3aeDbD863e551c37f21DD3F36b28A6784', // common converter
 
   CurvefiSwapRouterAddress: '0x99a58482bd75cbab83b27ec03ca68ff489b5788f',
   //  ----
@@ -100,48 +100,92 @@ const contracts = {
 
   fx_BoostableRebalancePool_APool: '0xc6dEe5913e010895F3702bc43a40d661B13a40BD',
   fx_BoostableRebalancePool_APool_FundraiseGauge:
-    '0x28ED637C5e3371c2678C2d346dF04Fb634ED832d',
+    '0x9710ca7f3edd4893f399c89ea184d92cc7172e28',
   fx_BoostableRebalancePool_APool_RebalancePoolGaugeClaimer:
-    '0x9710Ca7F3eDD4893f399c89ea184D92cc7172e28',
+    '0x81243a88Dd9Fb963c643bD3f2194c2cA9CCFc428',
 
   fx_BoostableRebalancePool_BPool: '0xB87A8332dFb1C76Bb22477dCfEdDeB69865cA9f9',
-  // fx_RebalanceWithBonusToken_BoostRebalanceAPool:
-  //   '0xc6ae935F7b9efb489938D8DFaeE29740E982d578',
-  // fx_RebalanceWithBonusToken_BoostRebalanceBPool:
-  //   '0xD2953DD27C273B3C29Fc37F2eDa8014B7896A9B8',
-  // fx_RebalancePoolSplitter_BoostableRebalancePool_fETH:
-  //   '0x2146b8eeF7df5F290B7f3bde7e6582575D89a091',
-  // fx_RebalancePoolGaugeClaimer_BoostableRebalancePool_fETH:
-  //   '0x8532dC104AB8102Af2028609024932175DE3B100',
+  fx_RebalanceWithBonusToken_BoostRebalanceAPool:
+    '0x74E9234A6e03c382A01Bb942B1aF05B639371309',
+  fx_RebalanceWithBonusToken_BoostRebalanceBPool:
+    '0x5a161B94c737326cA115eC46f4Eaf4eEC5037dBE',
+  fx_RebalancePoolSplitter_BoostableRebalancePool_fETH:
+    '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb',
+  fx_RebalancePoolGaugeClaimer_BoostableRebalancePool_fETH:
+    '0x81243a88Dd9Fb963c643bD3f2194c2cA9CCFc428',
 
   aladdinTreeAddress: '0xabc6a4e345801cb5f57629e79cd5eb2e9e514e98',
+
+  // fxUSD
+  FxUSD: '0x085780639CC2cACd35E474e71f4d000e2405d8f6',
+  fxUSD_FxInitialFund_wstETH: '0xe6b953BB4c4B8eEd78b40B81e457ee4BDA461D55', // FxInitialFund
+  fxUSD_FxInitialFund_sfrxETH: '0xFC3862c33b54E0BBA61d966Ff51973C20be4fC62', // FxInitialFund
+
+  fxUSD_wstETH_Treasury: '0xED803540037B0ae069c93420F89Cd653B6e3Df1f',
+  fxUSD_wstETH_Market: '0xAD9A0E7C08bc9F747dF97a3E7E7f620632CB6155',
+  fxUSD_wstETH_FractionalToken: '0xD6B8162e2fb9F3EFf09bb8598ca0C8958E33A23D',
+  fxUSD_wstETH_LeveragedToken: '0x5a097b014C547718e79030a077A91Ae37679EfF5',
+  fxUSD_sfrxETH_Treasury: '0xcfEEfF214b256063110d3236ea12Db49d2dF2359',
+  fxUSD_sfrxETH_Market: '0x714B853b3bA73E439c652CfE79660F329E6ebB42',
+  fxUSD_sfrxETH_FractionalToken: '0xa87F04c9743Fd1933F82bdDec9692e9D97673769',
+  fxUSD_sfrxETH_LeveragedToken: '0x2bb0C32101456F5960d4e994Bac183Fe0dc6C82c',
+  fxUSD_GatewayRouter: '0xA5e2Ec4682a32605b9098Ddd7204fe84Ab932fE4',
+
+  // fxUSD rebalance pool
+  FxUSD_ShareableRebalancePool_wstETH:
+    '0x9aD382b028e03977D446635Ba6b8492040F829b7',
+  FxUSD_ShareableRebalancePool_wstETH_FundraiseGauge:
+    '0xf422446F7730e50B9CAb4618343425d9927b35ED',
+  FxUSD_ShareableRebalancePool_xstETH:
+    '0x0417CE2934899d7130229CDa39Db456Ff2332685',
+
+  FxUSD_ShareableRebalancePool_sfrxETH:
+    '0xb925F8CAA6BE0BFCd1A7383168D1c932D185A748',
+  FxUSD_ShareableRebalancePool_sfrxETH_FundraiseGauge:
+    '0xB3886b8c94C8635B786b1CA88942337669BB1e1E',
+  FxUSD_ShareableRebalancePool_xfrxETH:
+    '0x4a2ab45D27428901E826db4a52Dae00594b68022',
+
+  FxUSD_Rebalancer: '0x78c3aF23A4DeA2F630C130d2E42717587584BF05',
+
+  MultiPathConverter: '0x4F96fe476e7dcD0404894454927b9885Eb8B57c3',
+
+  fxUSD_wstETH_RebalancePoolRegistry:
+    '0x86e987a89Fd7345457d97b9e82906f346D61Df39',
+  fxUSD_sfrxETH_RebalancePoolRegistry:
+    '0x345a345DAd48c3504113539ce83c0cB765627B54',
+  fxUSD_ReservePoolV2: '0xb592E01dd77084b36430ffCB9c9D2F76fDE32631',
+
+  fxUSD_FxStETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
+  fxUSD_FxFrxETHTwapOracle: '0x939c38921c961DecB3cc16f601C32d07C41cd25C',
+
+  wstETHRateProvider: '0x81A777c4aB65229d1Bf64DaE4c831bDf628Ccc7f',
+  sfrxETHRateProvider: '0x7ceD6167b5A08111dC8d0D2f9F7E482c4Da62506',
 }
 
 const gaugeTokenList = {
-  fx_ETH_xETH: '0xaae6965E5E06149e1165C0e2Ab41e4a63DB85a1F',
-  ConvexCurveManager_ETH_xETH: '0xDc6f334D27b40625887451Bc1516906E60871172',
-  fx_ETH_FXN: '0xCE225954423b3F7Bd4b6e88a0E46569ce01CF0c6',
-  ConvexCurveManager_ETH_FXN: '0xD0959fe55A6510C78E5Ec3642246882eff7509E9',
-  fx_crvUSD_fETH: '0xc6ae935F7b9efb489938D8DFaeE29740E982d578',
-  ConvexCurveManager_crvUSD_fETH: '0xD2953DD27C273B3C29Fc37F2eDa8014B7896A9B8',
-  fx_fETH_FRAXBP: '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
-  ConvexCurveManager_fETH_FRAXBP: '0x2146b8eeF7df5F290B7f3bde7e6582575D89a091',
-  // rebalance pool gauge
-  BoostableRebalancePool_fETH_FundraiseGauge:
-    '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
+  fx_ETH_FXN: '0xA5250C540914E012E22e623275E290c4dC993D11',
+  ConvexCurveManager_ETH_FXN: '0x9B0df1A542d982DC4AdC413acf1db0D10e5cED4B',
+  fx_FXN_cvxFXN: '0xfEFafB9446d84A9e58a3A2f2DDDd7219E8c94FbB',
+  ConvexCurveManager_FXN_cvxFXN: '0x607Fb364d8D7fBB4630d3020eC582e4D75d1949a',
+  fx_FXN_sdFXN: '0x5b1D12365BEc01b8b672eE45912d1bbc86305dba',
+  ConvexCurveManager_FXN_sdFXN: '0x06688aC314dA737a1E9841B374F393A7982fA6D1',
+  // // rebalance pool gauge
+  // BoostableRebalancePool_fETH_FundraiseGauge:
+  //   '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
 }
 
-const tokens = {
+export const tokens = {
   eth: '0x0000000000000000000000000000000000000000',
   weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
   idoSale: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
 
   fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
-  fxUSD: '',
+  fxUSD: contracts.FxUSD,
 
   xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
-  xstETH: '',
-  xfrxETH: '',
+  xstETH: contracts.fxUSD_wstETH_LeveragedToken,
+  xfrxETH: contracts.fxUSD_sfrxETH_LeveragedToken,
 
   usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',
@@ -176,6 +220,10 @@ const tokens = {
   SDT: '0x73968b9a57c6E53d41345FD57a6E6ae27d6CDB2F',
 
   FXN: contracts.FXN,
+  sfrxETH: '0xac3e018457b222d93114458476f3e3416abbe38f',
+  frxETH: '0x5e8422345238f34275888049021821e8e08caa1f',
+
+  crvUSD: '0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E',
 }
 
 const TOKENS_INFO = {
@@ -202,9 +250,15 @@ const TOKENS_INFO = {
   veFXN: ['veFXN', tokens.veFXN, 18, 'veFXN'],
   fxn: ['FXN', tokens.FXN, 18, 'FXN', FXNIcon],
   crv: ['CRV', tokens.crv, 18, 'CRV', crvIcon],
+  wstETH: ['wstETH', tokens.wstETH, 18, 'wstETH', 'wstETH'],
+  sfrxETH: ['sfrxETH', tokens.sfrxETH, 18, 'sfrxETH', 'sfrxETH'],
+  frxETH: ['frxETH', tokens.frxETH, 18, 'frxETH', 'frxETH'],
+  xstETH: ['xstETH', tokens.xstETH, 18, 'xstETH', 'xstETH'],
+  xfrxETH: ['xfrxETH', tokens.xfrxETH, 18, 'xfrxETH', 'xfrxETH'],
+  crvUSD: ['crvusd', tokens.crvUSD, 18],
 }
 
-const zapTokens = {
+export const zapTokens = {
   USDC: {
     symbol: 'USDC',
     icon: 'usdc',
@@ -303,16 +357,51 @@ const zapTokens = {
     address: TOKENS_INFO.tusd[1],
     needZap: true,
   },
+  wstETH: {
+    symbol: 'wstETH',
+    icon: 'wstETH',
+    decimals: TOKENS_INFO.wstETH[2],
+    address: TOKENS_INFO.wstETH[1],
+    needZap: true,
+  },
+  frxETH: {
+    symbol: 'frxETH',
+    icon: 'frxETH',
+    decimals: TOKENS_INFO.frxETH[2],
+    address: TOKENS_INFO.frxETH[1],
+    needZap: true,
+  },
+  sfrxETH: {
+    symbol: 'sfrxETH',
+    icon: 'sfrxETH',
+    decimals: TOKENS_INFO.sfrxETH[2],
+    address: TOKENS_INFO.sfrxETH[1],
+    needZap: true,
+  },
+  crvUSD: {
+    symbol: 'crvUSD',
+    icon: 'crvUSD',
+    decimals: TOKENS_INFO.crvUSD[2],
+    address: TOKENS_INFO.crvUSD[1],
+    needZap: true,
+  },
+  Frax: {
+    symbol: 'Frax',
+    icon: 'frax',
+    decimals: TOKENS_INFO.frax[2],
+    address: TOKENS_INFO.frax[1],
+    needZap: true,
+  },
 }
 
 const POOLS_LIST_GAUGE = {
-  ETH_xETH: {
-    lpPoolCurveToken: '0x053d5be7c653325b58d88b942fb2454f8ffd8673',
-    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
-    token: '0x16ead9a10b1a77007e6e329b076ad1fe97a6f7c0',
-    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_xETH,
-    gauge: gaugeTokenList.fx_ETH_xETH,
-  },
+  // ETH_xETH: {
+  //   lpPoolCurveToken: '0x053d5be7c653325b58d88b942fb2454f8ffd8673',
+  //   // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+  //   token: '0x16ead9a10b1a77007e6e329b076ad1fe97a6f7c0',
+  //   manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_xETH,
+  //   gauge: gaugeTokenList.fx_ETH_xETH,
+  // },
   ETH_FXN: {
     lpPoolCurveToken: '0xc15f285679a1ef2d25f53d4cbd0265e1d02f2a92',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
@@ -320,18 +409,18 @@ const POOLS_LIST_GAUGE = {
     manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_FXN,
     gauge: gaugeTokenList.fx_ETH_FXN,
   },
-  crvUSD_fETH: {
-    lpPoolCurveToken: '0xe7e86c6055b964c7894d33e037ead34f2b62795d',
+  FXN_cvxFXN: {
+    lpPoolCurveToken: '0x1062fd8ed633c1f080754c19317cb3912810b5e5',
     // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
-    token: '0x19033d99a7b7010157b81e5ee5a8e63a583fb735',
-    manageConvexGauge: gaugeTokenList.ConvexCurveManager_crvUSD_fETH,
-    gauge: gaugeTokenList.fx_crvUSD_fETH,
+    token: '0x1062fd8ed633c1f080754c19317cb3912810b5e5',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_FXN_cvxFXN,
+    gauge: gaugeTokenList.fx_FXN_cvxFXN,
   },
-  fETH_FRAXBP: {
-    lpPoolCurveToken: '0x5f5fe47fed55eae627386995198294c39e1d17a5',
-    token: '0x3d28f9192e34e51414e69fbee5b11b35590fb9fb',
-    manageConvexGauge: gaugeTokenList.ConvexCurveManager_fETH_FRAXBP,
-    gauge: gaugeTokenList.fx_fETH_FRAXBP,
+  FXN_sdFXN: {
+    lpPoolCurveToken: '0x28ca243dc0ac075dd012fcf9375c25d18a844d96',
+    token: '0x28ca243dc0ac075dd012fcf9375c25d18a844d96',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_FXN_sdFXN,
+    gauge: gaugeTokenList.fx_FXN_sdFXN,
   },
 }
 
@@ -344,58 +433,113 @@ const getTokenInfoByAddress = (tokenAddress) => {
   return {}
 }
 
+export const GENESIS_MAP = {
+  stETH: {
+    symbol: 'stETH',
+    baseSymbol: 'wstETH',
+    xToken: 'xstETH',
+    address: contracts.fxUSD_FxInitialFund_wstETH,
+  },
+  frxETH: {
+    symbol: 'frxETH',
+    baseSymbol: 'sfrxETH',
+    xToken: 'xfrxETH',
+    address: contracts.fxUSD_FxInitialFund_sfrxETH,
+  },
+}
+
 export const BASE_TOKENS_MAP = {
-  ETH: {
-    baseSymbol: 'ETH',
+  fxETH: {
+    baseSymbol: 'fxETH',
+    baseName: 'stETH',
     contracts: {
       market: contracts.fx_Market,
       treasury: contracts.fx_stETHTreasury,
-      reservePool: contracts.fx_ReservePool,
+      rebalancePoolRegistry: contracts.fx_RebalancePoolRegistry,
+    },
+  },
+  wstETH: {
+    baseSymbol: 'wstETH',
+    baseName: 'stETH',
+    contracts: {
+      market: contracts.fxUSD_wstETH_Market,
+      treasury: contracts.fxUSD_wstETH_Treasury,
+      rebalancePoolRegistry: contracts.fxUSD_wstETH_RebalancePoolRegistry,
+      fToken: contracts.fxUSD_wstETH_FractionalToken,
+      xToken: contracts.fxUSD_wstETH_LeveragedToken,
+      twapOracle: contracts.fxUSD_FxStETHTwapOracle,
+      rateProvider: contracts.wstETHRateProvider,
+    },
+  },
+  sfrxETH: {
+    baseSymbol: 'sfrxETH',
+    baseName: 'frxETH',
+    contracts: {
+      market: contracts.fxUSD_sfrxETH_Market,
+      treasury: contracts.fxUSD_sfrxETH_Treasury,
+      rebalancePoolRegistry: contracts.fxUSD_sfrxETH_RebalancePoolRegistry,
+      fToken: contracts.fxUSD_sfrxETH_FractionalToken,
+      xToken: contracts.fxUSD_sfrxETH_LeveragedToken,
+      twapOracle: contracts.fxUSD_FxFrxETHTwapOracle,
+      rateProvider: contracts.sfrxETHRateProvider,
     },
   },
 }
 
-export const ASSETS = [
-  {
+export const ASSET_MAP = {
+  fETH: {
     symbol: 'fETH',
-    baseSymbol: 'ETH',
     address: TOKENS_INFO.fETH[1],
     decimals: TOKENS_INFO.fETH[2],
-    descrition: '0.1 Volatility in ETH',
+    descrition: '10% Volatility of ETH',
     icon: '/images/f-logo.svg',
     isF: true,
-    show24Change: true,
+    isShow24Change: true,
+    baseSymbol: 'fxETH',
   },
-  {
+  xETH: {
     symbol: 'xETH',
-    baseSymbol: 'ETH',
     address: TOKENS_INFO.xETH[1],
     decimals: TOKENS_INFO.xETH[2],
     descrition: 'Long ETH up to 4x',
     icon: '/images/x-logo.svg',
     isX: true,
-    show24Change: true,
+    isShow24Change: true,
+    baseSymbol: 'fxETH',
   },
-  // {
-  //   symbol: 'fxUSD',
-  //   address: contracts.fxUSD,
-  //   descrition: 'Multi-Asset backed',
-  //   icon: '/images/f-logo.svg',
-  //   isBreakdownChart: true,
-  // },
-  // {
-  //   symbol: 'xstETH',
-  //   address: contracts.xstETH,
-  //   descrition: 'Long stETH up to 4x',
-  //   icon: '/images/x-logo.svg',
-  // },
-  // {
-  //   symbol: 'xfrxETH',
-  //   address: contracts.xfrxETH,
-  //   descrition: 'Long frxETH up to 4x',
-  //   icon: '/images/x-logo.svg',
-  // },
-]
+  fxUSD: {
+    symbol: 'fxUSD',
+    address: contracts.fxUSD,
+    descrition: '$1.00 Pegged Stablecoin',
+    icon: '/tokens/fxusd.svg',
+    isBreakdownChart: true,
+    background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
+    isF: true,
+    baseTokenInfos: [BASE_TOKENS_MAP.wstETH, BASE_TOKENS_MAP.sfrxETH],
+  },
+  xstETH: {
+    symbol: 'xstETH',
+    address: contracts.fxUSD_wstETH_LeveragedToken,
+    descrition: 'Long stETH up to 4.3x',
+    icon: '/images/x-logo.svg',
+    subIcon: '/tokens/steth.svg',
+    isX: true,
+    baseSymbol: 'wstETH',
+    baseTokenInfo: BASE_TOKENS_MAP.wstETH,
+  },
+  xfrxETH: {
+    symbol: 'xfrxETH',
+    address: contracts.fxUSD_sfrxETH_LeveragedToken,
+    descrition: 'Long frxETH up to 4.3x',
+    icon: '/images/x-logo.svg',
+    subIcon: '/tokens/frxeth.svg',
+    isX: true,
+    baseSymbol: 'sfrxETH',
+    baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
+  },
+}
+
+export const ASSETS = Object.values(ASSET_MAP)
 
 export default {
   tokens,

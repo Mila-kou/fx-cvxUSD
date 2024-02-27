@@ -9,7 +9,7 @@ import {
 } from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
-import { POOLS_LIST } from '@/config/aladdinVault'
+import { GAUGE_LIST } from '@/config/aladdinVault'
 
 const useVoteData = () => {
   const { _currentAccount, current, web3, isAllReady, blockNumber } = useWeb3()
@@ -88,7 +88,7 @@ const useVoteData = () => {
     queries: [
       {
         queryKey: ['voteInfo', _currentAccount],
-        queryFn: () => fetchAllPoolVoteData(POOLS_LIST),
+        queryFn: () => fetchAllPoolVoteData(GAUGE_LIST),
         enabled: isAllReady,
         initialData: {
           allVoteData: [],

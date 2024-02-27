@@ -14,7 +14,7 @@ const useVoteController = () => {
   } = useVoteData()
 
   const { getGaugeEstimate, getGaugeApy } = useGaugeApyEstimate()
-
+  const canVoteDay = 10
   // console.log('commonVoteData-----2', allGaugeBaseInfo)
   const userVoteInfo = useMemo(() => {
     const _allocatedVotes = cBN(veFXNAmount)
@@ -23,7 +23,7 @@ const useVoteController = () => {
     const _remainingVotes = cBN(veFXNAmount)
       .multipliedBy(100 - votePower)
       .dividedBy(100)
-    const next_time = moment(lastScheduled * 1000).format('DD.MM.YYYY HH:mm')
+    const next_time = new Date(lastScheduled * 1000).toLocaleString() // moment().format('lll')
 
     return {
       allocated: votePower,
@@ -37,7 +37,7 @@ const useVoteController = () => {
         fb4(_remainingVotes)
       ),
       veFXNAmount,
-      nextEpoch: `Thu ${next_time} am UTC-8`,
+      nextEpoch: `${next_time} `,
     }
   }, [votePower, veFXNAmount])
 
@@ -56,10 +56,10 @@ const useVoteController = () => {
           gaugeWeight: item.voteInfo.gaugeWeight,
           lastVoteTime,
           // Cannot change weight votes more often than once in 10 days
-          canVote: lastVoteTime + 10 * 86400 <= blockTime,
-          canVoteTime: moment((lastVoteTime + 10 * 86400) * 1000).format(
-            'YYYY-MM-DD HH:mm:ss'
-          ),
+          canVote: lastVoteTime + canVoteDay * 86400 <= blockTime,
+          canVoteTime: new Date(
+            (lastVoteTime + canVoteDay * 86400) * 1000
+          ).toLocaleString(),
           userPower: item.voteInfo.voteSlope.power / 100,
           blockTime,
           userVote: checkNotZoroNumOption(_vote, fb4(_vote)),
@@ -73,8 +73,6 @@ const useVoteController = () => {
     }
     return info
   }, [allVoteData, veFXNAmount, getGaugeEstimate, getGaugeApy])
-
-  console.log('poolVoteInfo---', allVoteData, poolVoteInfo)
 
   return {
     userVoteInfo,

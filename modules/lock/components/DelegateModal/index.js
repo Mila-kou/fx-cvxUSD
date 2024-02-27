@@ -112,8 +112,8 @@ export default function DelegateShareModal({
       noPayableErrorAction(`Invalid Address`, 'Invalid Address')
       return
     }
-    const boostAmountInWei = cBN(amount).gte(cBN(userVeShare).times(0.99))
-      ? cBN(amount).times(0.99).toFixed(0, 1)
+    const boostAmountInWei = cBN(amount).gte(cBN(_last_ve_balance).times(0.99))
+      ? cBN(_last_ve_balance).times(0.99).toFixed(0, 1)
       : cBN(amount).toFixed(0, 1)
 
     setProcessing(true)

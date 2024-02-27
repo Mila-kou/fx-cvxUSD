@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { Modal } from 'antd'
 import { useToken } from '@/hooks/useTokenInfo'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
@@ -7,15 +7,33 @@ import useApprove from '@/hooks/useApprove'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
+import { useContract } from '@/hooks/useContracts'
+import abi from '@/config/abi'
 
 export default function DepositModal(props) {
   const { onCancel, info } = props
-  const { lpGaugeContract, zapTokens, name } = info
+  const { zapTokens, name } = info
   const [depositing, setDepositing] = useState(false)
   const { currentAccount, isAllReady } = useWeb3()
+  const { getContract } = useContract()
   const [selectToken, setSelectToken] = useState(zapTokens[0])
 
   const [depositAmount, setDepositAmount] = useState(0)
+
+  const getGaugeContract = useCallback(
+    (lpGaugeAddress) => {
+      const _lpGaugeContract = getContract(
+        lpGaugeAddress,
+        abi.FX_fx_SharedLiquidityGaugeABI
+      )
+      return _lpGaugeContract
+    },
+    [getContract]
+  )
+  const lpGaugeContract = getGaugeContract(
+    info.lpGaugeAddress,
+    abi.FX_fx_SharedLiquidityGaugeABI
+  )
 
   const selectTokenInfo = useToken(selectToken.address, 'fx_gauge', info)
   const tokenContract = selectTokenInfo.contract
@@ -36,7 +54,8 @@ export default function DepositModal(props) {
     try {
       const apiCall = lpGaugeContract.methods.deposit(
         depositAmountInWei,
-        currentAccount
+        currentAccount,
+        true
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0

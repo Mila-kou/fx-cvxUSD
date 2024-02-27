@@ -113,27 +113,30 @@ const useData = (refreshTrigger) => {
         .minus(fxnTreasury)
         .minus(aladdin_FXN_treasuryres)
 
-      setContractInfo({
-        feeBalance,
-        veTotalSupply,
-        veLockedFXN,
-        userVeShare,
-        tokensThisWeek,
-        tokensPerWeek,
-        userVeRewards,
-        userVeRewards1,
-        userVeRewards2,
-        userVeRewards3,
-        userVeRewards4,
-        fxnCirculationSupply,
-        userLocked: { amount, end: moment(end * 1000).unix() },
-        platformFeeSpliterStETH,
-        veFXNFeeTokenLastBalance,
-        stETHTowstETHRate,
+      setContractInfo((pre) => {
+        return {
+          ...pre,
+          feeBalance,
+          veTotalSupply,
+          veLockedFXN,
+          userVeShare,
+          tokensThisWeek,
+          tokensPerWeek,
+          userVeRewards,
+          userVeRewards1,
+          userVeRewards2,
+          userVeRewards3,
+          userVeRewards4,
+          fxnCirculationSupply,
+          userLocked: { amount, end: moment(end * 1000).unix() },
+          platformFeeSpliterStETH,
+          veFXNFeeTokenLastBalance,
+          stETHTowstETHRate,
+        }
       })
     } catch (error) {
       console.log(
-        'timestamp---tokensThisWeek--platformFeeSpliterStETH--veFXNFeeTokenLastBalance--feeBalance--error',
+        'timestamp---1--tokensThisWeek--platformFeeSpliterStETH--veFXNFeeTokenLastBalance--feeBalance--error',
         error
       )
     }
@@ -147,10 +150,12 @@ const useData = (refreshTrigger) => {
       adjustedVeBalance,
       receivedBalance,
       delegatedBalance,
+      delegableBalance,
     } = votingEscrowBoostContract.methods
     try {
       const abiCalls = [
         delegatedBalance(_currentAccount),
+        delegableBalance(_currentAccount),
         adjustedVeBalance(_currentAccount),
         boostLength(_currentAccount),
         received(_currentAccount),
@@ -158,6 +163,7 @@ const useData = (refreshTrigger) => {
       ]
       const [
         delegatedBalanceRes,
+        delegableBalanceRes,
         adjustedVeBalanceRes,
         boostLengthRes,
         receivedRes,
@@ -165,7 +171,9 @@ const useData = (refreshTrigger) => {
       ] = await multiCallsV2(abiCalls) // [0,0,0,0,0,0]
 
       console.log(
+        'timestamp----5--',
         delegatedBalanceRes,
+        delegableBalanceRes,
         adjustedVeBalanceRes,
         boostLengthRes,
         receivedRes,
@@ -180,17 +188,21 @@ const useData = (refreshTrigger) => {
         boostsRes = await multiCallsV2(_callApis)
       }
 
-      setContractInfo({
-        delegatedBalanceRes,
-        adjustedVeBalanceRes,
-        boostLengthRes,
-        boostsRes,
-        receivedRes,
-        receivedBalanceRes,
+      setContractInfo((pre) => {
+        return {
+          ...pre,
+          delegatedBalanceRes,
+          delegableBalanceRes,
+          adjustedVeBalanceRes,
+          boostLengthRes,
+          boostsRes,
+          receivedRes,
+          receivedBalanceRes,
+        }
       })
     } catch (error) {
       console.log(
-        'timestamp---tokensThisWeek--platformFeeSpliterStETH--veFXNFeeTokenLastBalance--feeBalance--error',
+        'timestamp---3--tokensThisWeek--platformFeeSpliterStETH--veFXNFeeTokenLastBalance--feeBalance--error',
         error
       )
     }
@@ -198,6 +210,7 @@ const useData = (refreshTrigger) => {
 
   useEffect(() => {
     fetchCotractInfo()
+    fetchLpGaugeContractInfo()
   }, [_currentAccount, blockNumber, current, refreshTrigger])
 
   return {

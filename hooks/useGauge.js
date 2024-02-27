@@ -1,25 +1,28 @@
 import { useCallback, useState, useEffect } from 'react'
 import { useQueries } from '@tanstack/react-query'
+import { useDispatch } from 'react-redux'
 import abi from 'config/abi'
 import { useContract, useFXN, useFxGaugeController } from './useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
-import { POOLS_LIST } from '@/config/aladdinVault'
+import { GAUGE_LIST } from '@/config/aladdinVault'
 import useWeb3 from '@/hooks/useWeb3'
 import { calc4 } from '@/modules/lock/util'
+import { updateGauge } from '@/store/slices/gauge'
 import config from '../config'
-import { cBN, checkNotZoroNum } from '../utils'
 
 const useGauge = () => {
   const { getContract } = useContract()
   const { _currentAccount, current, web3, isAllReady, blockNumber } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
+  const dispatch = useDispatch()
+
   const { contract: FxGaugeControllerContract } = useFxGaugeController()
   const { contract: FXNContract } = useFXN()
   const [data, setData] = useState({
     total_weight: 0,
     n_gauge_types: 0,
     FXNRate: 0,
-    GaugeList: POOLS_LIST,
+    GaugeList: GAUGE_LIST,
   })
 
   const {
@@ -48,7 +51,6 @@ const useGauge = () => {
   )
   const fetchAllGaugeData = useCallback(
     async (arr) => {
-      console.log('allGaugeBaseInfo----in-')
       try {
         const nextTimes = calc4(current, true) + 86400 * 7
         const currentTimes = calc4(current, true)
@@ -66,15 +68,12 @@ const useGauge = () => {
           } = _lpGaugeContract.methods
           _lpGaugeContractList.push(_lpGaugeContract)
 
-          return {
-            // ...item,
-            baseInfo: {
-              symbol: symbol(),
-              totalSupply: totalSupply(),
-              name: name(),
-              stakingToken: stakingToken(),
-              activeRewardTokens: getActiveRewardTokens(),
-            },
+          console.log(
+            '__GaugeList---GaugeList-_lpGaugeContract--',
+            _lpGaugeContract
+          )
+          const _apiCall = {
+            baseInfo: {},
             baseGaugeControllerInfo: {
               // checkpoint_gauge: checkpoint_gauge(item.lpGaugeAddress),
               gauge_weight: get_gauge_weight(item.lpGaugeAddress),
@@ -88,23 +87,32 @@ const useGauge = () => {
               ),
             },
           }
+          if (item.gaugeTypeName !== 'Rebalance Pool Gauge') {
+            _apiCall.baseInfo = {
+              symbol: symbol(),
+              totalSupply: totalSupply(),
+              name: name(),
+              stakingToken: stakingToken(),
+              activeRewardTokens: getActiveRewardTokens(),
+            }
+          }
+          return _apiCall
         })
         console.log('__GaugeList---GaugeList-', GaugeList)
 
-        const GaugeList1 = await multiCallsV2([GaugeList[0], GaugeList[1]])
-        const GaugeList2 = await multiCallsV2([GaugeList[2], GaugeList[3]])
+        const GaugeList_all = await multiCallsV2(GaugeList)
 
         const allGaugeBaseInfo = await multiCallsV2({
           total_weight: get_total_weight(),
           n_gauge_types: n_gauge_types(),
           FXNRate: rate(),
         })
-        allGaugeBaseInfo.GaugeList = [...GaugeList1, ...GaugeList2]
-        console.log('__GaugeList--allGaugeBaseInfo----', allGaugeBaseInfo)
+        allGaugeBaseInfo.GaugeList = [...GaugeList_all]
+        console.log('__GaugeList---GaugeList-1--', allGaugeBaseInfo)
         // fetchGaugeListApys
         const fetchGaugeListApys = allGaugeBaseInfo.GaugeList.map(
           (item, index) => {
-            const { activeRewardTokens } = item.baseInfo
+            const { activeRewardTokens = [] } = item.baseInfo
             const { rewardData } = _lpGaugeContractList[index].methods
 
             const _rewardData = activeRewardTokens.map((rewardToken) => {
@@ -153,7 +161,7 @@ const useGauge = () => {
           },
         }
       } catch (error) {
-        console.log('__GaugeList----error', error)
+        console.log('__GaugeList---GaugeList-error', error)
 
         return {
           data: {},
@@ -167,12 +175,12 @@ const useGauge = () => {
     queries: [
       {
         queryKey: ['allGaugeData', _currentAccount],
-        queryFn: () => fetchAllGaugeData(POOLS_LIST),
+        queryFn: () => fetchAllGaugeData(GAUGE_LIST),
         initialData: {
           total_weight: 0,
           n_gauge_types: 0,
           FXNRate: 0,
-          GaugeList: POOLS_LIST,
+          GaugeList: GAUGE_LIST,
         },
       },
     ],
@@ -182,6 +190,10 @@ const useGauge = () => {
     if (isFetching) return
     refetchAllGaugeData()
   }, [_currentAccount, blockNumber])
+
+  useEffect(() => {
+    dispatch(updateGauge(data))
+  }, [data, dispatch])
 
   return data
 }

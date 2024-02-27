@@ -15,12 +15,6 @@ export default function RebalancePoolPage() {
       tokens.contracts.fx_RebalanceWithBonusToken_A,
     infoKey: 'rebalancePool_info_A',
   })
-  // const poolBData = usePool({
-  //   rebalancePoolAddress: tokens.contracts.fx_RebalancePool_B,
-  //   rebalanceWithBonusTokenAddress:
-  //     tokens.contracts.fx_RebalanceWithBonusToken_B,
-  //   infoKey: 'rebalancePool_info_B',
-  // })
 
   const totalSupplyTvlText = fb4(
     cBN(poolAData.stabilityPoolTotalSupplyTvl).plus(

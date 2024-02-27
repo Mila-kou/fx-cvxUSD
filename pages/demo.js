@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import DemoPage from '@/modules/demo/DemoPage'
+// import DemoPage from '@/modules/demo/DemoPage'
 
 export default function Lock() {
   return (
@@ -8,7 +8,7 @@ export default function Lock() {
       <Head>
         <title>f(x) Protocol</title>
       </Head>
-      <DemoPage />
+      {/* <DemoPage /> */}
     </React.Fragment>
   )
 }

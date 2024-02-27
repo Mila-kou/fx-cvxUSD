@@ -3,6 +3,7 @@ import { Checkbox } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
 import CastVoteModal from './components/CastVoteModal'
+import { REBALANCE_GAUGE_LIST, POOLS_LIST } from '@/config/aladdinVault'
 import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
@@ -11,13 +12,24 @@ import useGaugeController from '@/modules/earningPool/controller/useGaugeControl
 import PoolCell from './components/PoolCell'
 import useVoteController from './controller/useVoteController'
 
+const Header = ({ title }) => (
+  <div>
+    <p className="mt-[36px] font-bold">{title}</p>
+    <div className="px-[16px] flex justify-between">
+      <div className="w-[200px]" />
+      <div className="w-[180px] text-[14px]">Type</div>
+      <div className="w-[100px] text-[14px]">My Votes</div>
+      <div className="w-[200px] text-[14px]">APR Range</div>
+      <div className="w-[150px] text-[14px]">Estimate FXN Emissions</div>
+      <div className="w-[20px]" />
+    </div>
+  </div>
+)
+
 export default function GaugePage() {
-  const { pageData, ...pageOthers } = useGaugeController()
   const { userVoteInfo, poolVoteInfo } = useVoteController()
   const [clearPrev, setClearPrev] = useState(false)
   const [voteData, setVoteData] = useState(null)
-
-  console.log('POOLS_LIST---voteData', userVoteInfo)
 
   const onCastVote = (item, newPower) => {
     const _powerVote = cBN(userVoteInfo.veFXNAmount)
@@ -65,22 +77,37 @@ export default function GaugePage() {
             <div>Clear Previous Votes</div>
           </div> */}
         </div>
+        <Header title="fxUSD Pools" />
+        {REBALANCE_GAUGE_LIST.filter((item) => item.poolType === 'fxUSD').map(
+          (item) => (
+            <PoolCell
+              cellData={item}
+              voteData={poolVoteInfo[item.lpGaugeAddress]}
+              remaining={userVoteInfo.remaining}
+              onCastVote={(newPower) => onCastVote(item, newPower)}
+            />
+          )
+        )}
 
-        <div className="px-[16px] mt-[32px] flex justify-between">
-          <div className="w-[200px]" />
-          <div className="w-[180px] text-[14px]">Type</div>
-          <div className="w-[100px] text-[14px]">My Votes</div>
-          <div className="w-[220px] text-[14px]">APR Range</div>
-          <div className="w-[150px] text-[14px]">Estimate FXN Emissions</div>
-          <div className="w-[20px]" />
-        </div>
-        {pageData.map((item) => (
+        <Header title="fETH Pools" />
+        {REBALANCE_GAUGE_LIST.filter((item) => item.poolType === 'fETH').map(
+          (item) => (
+            <PoolCell
+              cellData={item}
+              voteData={poolVoteInfo[item.lpGaugeAddress]}
+              remaining={userVoteInfo.remaining}
+              onCastVote={(newPower) => onCastVote(item, newPower)}
+            />
+          )
+        )}
+
+        <Header title="f(x) Curve LPs" />
+        {POOLS_LIST.map((item) => (
           <PoolCell
             cellData={item}
             voteData={poolVoteInfo[item.lpGaugeAddress]}
             remaining={userVoteInfo.remaining}
             onCastVote={(newPower) => onCastVote(item, newPower)}
-            {...pageOthers}
           />
         ))}
 

@@ -1,5 +1,6 @@
 import ethereum from './network/ethereum'
 import mainnetFork_inner from './network/mainnet-fork-inner'
+import mainnetFork_inner_fork3 from './network/mainnet-fork-inner-fork3'
 import mainnetFork_10548 from './network/mainnet-fork-10548'
 import mainnetFork_outer from './network/mainnet-fork-outer'
 import sepolia from './network/sepolia'
@@ -17,7 +18,8 @@ import sepolia from './network/sepolia'
 //       [sepolia.chainInfo.id]: sepolia,
 //       [mainnetFork.chainInfo.id]: mainnetFork,
 //     }
-const mainnetFork = mainnetFork_inner
+const mainnetFork = ethereum
+// const mainnetFork = mainnetFork_inner_fork3
 const chainMap = {
   // [sepolia.chainInfo.id]: sepolia,
   [ethereum.chainInfo.id]: ethereum,

@@ -2,10 +2,8 @@ import React, { useRef, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Tooltip } from 'antd'
 import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import { NoticeCard } from '@/modules/home/components/Common'
-import cn from 'classnames'
+import { NoticeCard } from '@/modules/assets/components/Common'
 import Button from '@/components/Button'
-import { POOLS_LIST } from '@/config/aladdinVault'
 import styles from './styles.module.scss'
 import {
   cBN,
@@ -14,23 +12,17 @@ import {
   dollarText,
   fb4,
 } from '@/utils/index'
-import useVeBoost_c from '@/modules/earningPool/controller/useVeBoost_c'
 import NumberInput from '@/components/NumberInput'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
-import config from '@/config/index'
-
-const stETHImg = '/tokens/steth.svg'
 
 export default function PoolCell({
   cellData,
   voteData,
   onCastVote,
   remaining,
-  ...pageOthers
 }) {
-  const { userInfo = {}, lpGaugeContract } = cellData
   const { isAllReady, currentAccount } = useWeb3()
   const [openPanel, setOpenPanel] = useState(false)
   const [power, setPower] = useState(0)
@@ -61,19 +53,37 @@ export default function PoolCell({
 
   return (
     <div key={cellData.id} className={styles.poolWrap}>
-      <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
-        <div className="w-[200px]">
-          <p>{cellData.name}</p>
+      <div
+        className={styles.card}
+        style={{
+          background:
+            cellData.poolType == 'fxUSD'
+              ? 'var(--deep-green-color)'
+              : cellData.poolType == 'fETH'
+              ? 'var(--f-bg-color)'
+              : '',
+        }}
+        onClick={() => setOpenPanel(!openPanel)}
+      >
+        <div className="w-[200px] flex items-center gap-[16px]">
+          <div className="relative flex-shrink-0">
+            <img className="w-[30px]" src={cellData.icon} />
+            <img
+              className="w-[18px] absolute right-[-8px] bottom-[-3px]"
+              src={cellData.subIcon}
+            />
+          </div>
+          <span style={{ marginLeft: '5px' }}>{cellData.name}</span>
         </div>
-        <div className="w-[180px] text-[16px]">Gauge</div>
+        <div className="w-[180px] text-[16px]">{cellData.gaugeTypeName}</div>
         <div className="w-[100px] text-[16px]">
           {voteData?.userPower ? `${voteData?.userPower}%` : '-'}
         </div>
-        <div className="w-[220px]">{apyDom}</div>
+        <div className="w-[200px] text-[16px]">{apyDom}</div>
         <div className="w-[150px] text-[16px]">
           {voteData?.thisWeekEstimateFXNEmissions}
           {voteData?.nextWeekEstimateFXNEmissions
-            ? `-> ${voteData.nextWeekEstimateFXNEmissions}`
+            ? ` -> ${voteData.nextWeekEstimateFXNEmissions}`
             : ''}
         </div>
         <div className="w-[20px] cursor-pointer">
@@ -110,7 +120,8 @@ export default function PoolCell({
             </div>
             <Button
               size="small"
-              disabled={!canCast}
+              // disabled={!canCast}
+              disabled
               onClick={() => onCastVote(power)}
             >
               Cast Vote

@@ -147,6 +147,18 @@ export const useWstETH = () => {
   )
 }
 
+export const useSfrxETH = () => {
+  const address = config.tokens.sfrxETH
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.sfrxETHABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
 export const useStETH = () => {
   const address = config.tokens.stETH
   const { getContract } = useContract()
@@ -396,6 +408,18 @@ export const useReservePoolContract = () => {
   return useCallback(
     (address) => ({
       contract: getContract(address, abi.Fx_ReservePool),
+      address,
+    }),
+    [getContract]
+  )
+}
+
+export const useMultiPathConverterContract = () => {
+  const address = config.contracts.MultiPathConverter
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.MultiPathConverter_ABI),
       address,
     }),
     [getContract]

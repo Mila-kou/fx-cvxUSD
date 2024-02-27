@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
 import { LoadingOutlined } from '@ant-design/icons'
 import { cBN, fb4, checkNotZoroNum } from 'utils'
-import Tabs from '@/modules/home/components/Tabs'
+import Tabs from '@/modules/assets/components/Tabs'
 import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
@@ -14,8 +14,7 @@ import config from '@/config/index'
 import useVeShare_c from '../../controllers/useVeShare_c'
 
 export default function DelegateShare({ refreshAction }) {
-  // const [activeIndex, setActiveIndex] = useState(0)
-  const activeIndex = 1
+  const [activeIndex, setActiveIndex] = useState(0)
   const [canceling, setCanceling] = useState(false)
   const [showModalIndex, setShowModalIndex] = useState(-1)
   const pageData = useInfo()
@@ -116,11 +115,11 @@ export default function DelegateShare({ refreshAction }) {
 
   return (
     <div>
-      {/* <Tabs
+      <Tabs
         selecedIndex={activeIndex}
         onChange={(v) => setActiveIndex(v)}
         tabs={typeList.map((item) => item.title)}
-  /> */}
+      />
       <div className="cursor-pointer">
         <div className="flex justify-between mt-[16px]">
           <p
@@ -150,7 +149,7 @@ export default function DelegateShare({ refreshAction }) {
             <div className="flex  justify-between">
               <div className="text-[14px]">Address</div>
               <div className="text-[14px]">Duration</div>
-              <div className="text-[14px]">Action</div>
+              {/* <div className="text-[14px]">Action</div> */}
             </div>
             <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
               {typeList[activeIndex].list.length ? (
@@ -160,10 +159,10 @@ export default function DelegateShare({ refreshAction }) {
                       0,
                       6
                     )}...${item.receiver.slice(-6)}`}</div>
-                    <div className="flex-1 text-[16px]">
+                    <div className="text-[16px]">
                       {moment(item.endTime * 1000).format('lll')}
                     </div>
-                    <div
+                    {/* <div
                       className="text-[16px] flex items-center gap-[5px]  text-[var(--a-button-color)] cursor-pointer "
                       onClick={() => handleCancel(item)}
                     >
@@ -171,7 +170,7 @@ export default function DelegateShare({ refreshAction }) {
                       {canceling ? (
                         <LoadingOutlined style={{ fontSize: '12px' }} />
                       ) : null}
-                    </div>
+                    </div> */}
                   </div>
                 ))
               ) : (

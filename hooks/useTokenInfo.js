@@ -138,8 +138,36 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fx_BoostableRebalancePool_BPool':
             _contractAddress = config.contracts.fx_BoostableRebalancePool_BPool
             break
+          case 'FxUSD_ShareableRebalancePool_wstETH':
+            _contractAddress =
+              config.contracts.FxUSD_ShareableRebalancePool_wstETH
+            break
+          case 'FxUSD_ShareableRebalancePool_xstETH':
+            _contractAddress =
+              config.contracts.FxUSD_ShareableRebalancePool_xstETH
+            break
+          case 'FxUSD_ShareableRebalancePool_sfrxETH':
+            _contractAddress =
+              config.contracts.FxUSD_ShareableRebalancePool_sfrxETH
+            break
+          case 'FxUSD_ShareableRebalancePool_xfrxETH':
+            _contractAddress =
+              config.contracts.FxUSD_ShareableRebalancePool_xfrxETH
+            break
           case 'fx_gauge':
             _contractAddress = lpInfo.lpGaugeAddress
+            break
+          case 'fxUSD_gateway_router':
+            _contractAddress = config.contracts.fxUSD_GatewayRouter
+            break
+          case 'fxUSD_wstETH_Market':
+            _contractAddress = config.contracts.fxUSD_wstETH_Market
+            break
+          case 'fxUSD_sfrxETH_Market':
+            _contractAddress = config.contracts.fxUSD_sfrxETH_Market
+            break
+          case 'fxUSD':
+            _contractAddress = config.tokens.fxUSD
             break
           default:
             _contractAddress = config.contracts.idoSale

@@ -4,14 +4,16 @@ import abi from 'config/abi'
 import { useContract, useVeFXN } from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
-import { POOLS_LIST } from '@/config/aladdinVault'
+import { GAUGE_LIST } from '@/config/aladdinVault'
 import config from '@/config/index'
+import { useFXNTokenMinter } from '@/hooks/useGaugeContracts'
 
 const useGaugeData = () => {
   const { _currentAccount, web3, isAllReady, blockNumber } = useWeb3()
   const { getContract } = useContract()
   const multiCallsV2 = useMutiCallV2()
   const [data, setData] = useState([])
+  const { contract: FXNTokenMinterContract } = useFXNTokenMinter()
 
   const getGaugeContract = useCallback(
     (lpGaugeAddress) => {
@@ -40,7 +42,6 @@ const useGaugeData = () => {
       try {
         const checkPointList = []
         let checkPointFn
-
         const userCalls = arr.map((item, index) => {
           const allowanceContractAddr = item.lpGaugeAddress
           const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
@@ -49,42 +50,53 @@ const useGaugeData = () => {
             allowance,
             claimable,
             checkpoint,
+            user_checkpoint,
             claimable_tokens,
             integrate_fraction,
             userSnapshot,
             snapshot,
             workingBalanceOf,
+            claim,
           } = _lpGaugeContract.methods
+          const { minted } = FXNTokenMinterContract.methods
           if (index == 0) {
             checkPointFn = _lpGaugeContract
           }
-
+          if (item.gaugeTypeName == 'Liquidity Gauge') {
+            return {
+              // ...item,
+              // lpGaugeContract: _lpGaugeContract,
+              userInfo: {
+                // checkPointRes: user_checkpoint(_currentAccount),
+                userClaimables: item.rewardTokens.map((rewardToken) =>
+                  claimable(_currentAccount, rewardToken[1])
+                ),
+                claimRes: claim(_currentAccount),
+                userShare: balanceOf(_currentAccount),
+                userAllowance: allowance(
+                  _currentAccount,
+                  allowanceContractAddr
+                ),
+                // userSnapshotRes: userSnapshot(_currentAccount),
+                fxnMintedRes: minted(_currentAccount, item.lpGaugeAddress),
+                integrate_fractionRes: integrate_fraction(_currentAccount),
+                // snapshotRes: snapshot(),
+                workingBalanceRes: workingBalanceOf(_currentAccount),
+              },
+            }
+          }
           return {
-            // ...item,
-            // lpGaugeContract: _lpGaugeContract,
-            userInfo: {
-              // checkPointRes: checkpoint(_currentAccount),
-              userShare: balanceOf(_currentAccount),
-              userAllowance: allowance(_currentAccount, allowanceContractAddr),
-              userClaimables: item.rewardTokens.map((rewardToken) =>
-                claimable(_currentAccount, rewardToken[1])
-              ),
-              userSnapshotRes: userSnapshot(_currentAccount),
-              integrate_fractionRes: integrate_fraction(_currentAccount),
-              snapshotRes: snapshot(),
-              workingBalanceRes: workingBalanceOf(_currentAccount),
-            },
+            userInfo: {},
           }
         })
-
-        const allUserData1 = await multiCallsV2([userCalls[0], userCalls[1]])
-        const allUserData2 = await multiCallsV2([userCalls[2], userCalls[3]])
-        const allUserData = [...allUserData1, ...allUserData2].map(
-          (item, index) => ({
-            ...item,
-            ...arr[index],
-          })
-        )
+        const allUserData_all = await multiCallsV2(userCalls)
+        // const allUserData1 = await multiCallsV2([userCalls[0], userCalls[1]])
+        // const allUserData2 = await multiCallsV2([userCalls[2], userCalls[3]])
+        // const allUserData_all = [...allUserData1, ...allUserData2]
+        const allUserData = allUserData_all.map((item, index) => ({
+          ...item,
+          ...arr[index],
+        }))
         console.log('allUserData----', allUserData)
         setData(allUserData)
         return allUserData
@@ -101,7 +113,7 @@ const useGaugeData = () => {
       queries: [
         {
           queryKey: ['allPoolsUserInfo', _currentAccount],
-          queryFn: () => fetchAllPoolUserData(POOLS_LIST),
+          queryFn: () => fetchAllPoolUserData(GAUGE_LIST),
           enabled: isAllReady,
           initialData: [],
         },

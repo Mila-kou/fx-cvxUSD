@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
 import { Tooltip } from 'antd'
-import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import cn from 'classnames'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import Button from '@/components/Button'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
@@ -20,18 +19,21 @@ import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { useFXNTokenMinter } from '@/hooks/useGaugeContracts'
+import { useVeBoostAllGauge } from '@/hooks/calculator/useVeBoost_AllGauge'
 
-const stETHImg = '/tokens/steth.svg'
-const xETHImg = '/images/x-logo.svg'
+const FXNImg = '/images/FXN.svg'
 
 export default function PoolCell({ cellData, ...pageOthers }) {
   const {
     userInfo = {},
-    useFXNReward_text,
+    useFXNClaimable,
+    useFXNClaimable_text,
+    useCRVClaimable_text,
+    useCVXClaimable_text,
     lpGaugeAddress,
     lpGaugeContract,
   } = cellData
-  const boostInfo = useVeBoost_c(cellData)
+  const veBoostAllData = useVeBoostAllGauge()
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const { isAllReady, currentAccount } = useWeb3()
@@ -39,13 +41,25 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   const [openPanel, setOpenPanel] = useState(false)
   const { contract: FXNTokenMinterContract } = useFXNTokenMinter()
 
+  const _rewardTokensList = [cellData.baseRewardToken].concat(
+    cellData.rewardTokens
+  )
+  const boostInfo = useMemo(() => {
+    let boost = [0, 0, 0, 0]
+    try {
+      if (veBoostAllData && veBoostAllData.allGaugeVeBoost) {
+        boost = veBoostAllData.allGaugeVeBoost[lpGaugeAddress]
+      }
+    } catch (error) {
+      boost = [0, 0, 0, 0]
+    }
+    return boost
+  }, [veBoostAllData])
+
   const handleClaim = async (symbol, wrap) => {
     if (!isAllReady) return
     try {
       setClaiming(true)
-
-      console.log('handleClaim-----', symbol, wrap)
-
       const apiCall = lpGaugeContract.methods.claim(currentAccount)
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
       const gas = parseInt(estimatedGas * 1.2, 10) || 0
@@ -81,59 +95,74 @@ export default function PoolCell({ cellData, ...pageOthers }) {
     }
   }
 
-  const getTypeApy = useCallback((_apyInfo, type) => {
-    const _typeApy = {
-      convexLpApy: {},
-      _allApy_min: cBN(0),
-      _allApy_max: cBN(0),
-      _min_FXN_Apy: 0,
-      _max_FXN_Apy: 0,
-    }
-    let _convexTypeApy = 0
-    if (type == 'project') {
-      _convexTypeApy = _apyInfo.convexLpApy.apy.project
-    } else {
-      _convexTypeApy = _apyInfo.convexLpApy.apy.current
-    }
-    _typeApy.convexLpApy = _apyInfo.convexLpApy
-    _typeApy._allApy_min = cBN(_convexTypeApy)
-    _typeApy._allApy_max = cBN(_convexTypeApy)
-    _apyInfo.apyList.map((item, index) => {
-      let _itemTypeApy = item._projectApy
+  const getTypeApy = useCallback(
+    (_apyInfo, type) => {
+      const { convexLpApy, fxnApy } = _apyInfo
+      const _typeApy = {
+        convexLpApy: {},
+        _allApy_min: cBN(0),
+        _allApy_max: cBN(0),
+        _min_FXN_Apy: 0,
+        _max_FXN_Apy: 0,
+      }
+      let _convexTypeApy = 0
       if (type == 'project') {
-        _itemTypeApy = item._projectApy
+        _convexTypeApy = convexLpApy.apy.project
       } else {
-        _itemTypeApy = item._currentApy
+        _convexTypeApy = convexLpApy.apy.current
       }
-      if (item.rewardToken[1] == config.tokens.FXN) {
-        if (boostInfo.length) {
-          _typeApy._min_FXN_Apy = cBN(_itemTypeApy)
-            .times(boostInfo[3])
-            .toFixed(2)
-          _typeApy._max_FXN_Apy = cBN(_itemTypeApy)
-            .times(boostInfo[2])
-            .times(2.5)
-            .toFixed(2)
+      _typeApy.convexLpApy = _apyInfo.convexLpApy
+      _typeApy._allApy_min = cBN(_convexTypeApy)
+      _typeApy._allApy_max = cBN(_convexTypeApy)
+
+      _typeApy._min_FXN_Apy = cBN(fxnApy._thisWeek_apy)
+        .times(boostInfo[3])
+        .toFixed(2)
+      _typeApy._max_FXN_Apy = cBN(fxnApy._thisWeek_apy)
+        .times(boostInfo[3])
+        .times(2.5)
+        .toFixed(2)
+      _typeApy._allApy_min = cBN(_convexTypeApy).plus(_typeApy._min_FXN_Apy)
+      _typeApy._allApy_max = cBN(_convexTypeApy).plus(_typeApy._max_FXN_Apy)
+      const boostLever = boostInfo[2]
+      if (cBN(boostLever).gt(1)) {
+        _typeApy.boostLever = boostLever
+        const _userFxnApy = cBN(_typeApy._min_FXN_Apy).times(boostLever)
+        const _userApy = cBN(_convexTypeApy).plus(_userFxnApy)
+        _typeApy.userApy = _userApy
+        _typeApy.userFxnApy = _userFxnApy
+        _typeApy.userFxnApy_text = checkNotZoroNumOption(
+          _userFxnApy,
+          fb4(_userFxnApy, false, 0, 2)
+        )
+        _typeApy.userApy_text = checkNotZoroNumOption(
+          _userApy,
+          fb4(_userApy, false, 0, 2)
+        )
+      }
+      _typeApy.boostLever_text = fb4(boostInfo[2], false, 0, 2)
+      return _typeApy
+    },
+    [veBoostAllData]
+  )
+
+  const canClaim = useMemo(() => {
+    let _isCanClaim = false
+    if (userInfo.userClaimables && userInfo.userClaimables.length) {
+      userInfo.userClaimables.map((item, index) => {
+        if (checkNotZoroNum(item)) {
+          _isCanClaim = true
         }
-        _typeApy._allApy_min = cBN(_typeApy._allApy_min).plus(
-          _typeApy._min_FXN_Apy
-        )
-        _typeApy._allApy_max = cBN(_typeApy._allApy_max).plus(
-          _typeApy._max_FXN_Apy
-        )
-      } else {
-        console.log('apy----0', _typeApy)
-        _typeApy._allApy_min = cBN(_typeApy._allApy_min)
-          .plus(_itemTypeApy)
-          .toString(10)
-        _typeApy._allApy_max = cBN(_typeApy._allApy_max)
-          .plus(_itemTypeApy)
-          .toString(10)
-      }
-    })
-    return _typeApy
-  }, [])
-  const apyDom = useMemo(() => {
+      })
+    }
+    return _isCanClaim
+  }, [userInfo.userClaimables])
+
+  const canClaimFXN = useMemo(() => {
+    return checkNotZoroNum(useFXNClaimable)
+  }, [useFXNClaimable])
+
+  const [apyAndBoostDom, apyDom, apyDetalDom] = useMemo(() => {
     const { apyInfo } = cellData
     if (
       apyInfo &&
@@ -144,30 +173,65 @@ export default function PoolCell({ cellData, ...pageOthers }) {
       const _projectApy = getTypeApy(apyInfo, 'project')
       const _currentApy = getTypeApy(apyInfo, 'current')
       console.log('apy----_projectApy---', _projectApy)
-      console.log('apy----_currentApy---', _currentApy)
-      if (checkNotZoroNum(_projectApy._allApy_min)) {
-        return `${fb4(_projectApy._allApy_min, false, 0, 2)} % - ${fb4(
-          _projectApy._allApy_max,
+      // console.log('apy----_currentApy---', _currentApy)
+      let _apyAndBoostDom = '-'
+      let _apyDom = '-'
+      let _apyDetailDom = '-'
+      if (checkNotZoroNum(_projectApy.userApy)) {
+        _apyAndBoostDom = (
+          <>
+            <p>{_projectApy.userApy_text} %</p>
+            <p>Boost: {_projectApy.boostLever_text}x</p>
+          </>
+        )
+        _apyDom = `${_projectApy.userApy_text} %`
+      } else if (checkNotZoroNum(_projectApy._allApy_min)) {
+        _apyAndBoostDom = `${fb4(
+          _projectApy._allApy_min,
           false,
           0,
           2
-        )} %`
+        )} % -> ${fb4(_projectApy._allApy_max, false, 0, 2)} %`
+        _apyDom = _apyAndBoostDom
       }
+      _apyDetailDom = (
+        <div>
+          <p>Convex Apy</p>
+          <p>
+            &nbsp;&nbsp; CRV :{' '}
+            {cBN(_projectApy.convexLpApy.projectApys.crvApy1).toFixed(2)} %
+          </p>
+          <p>
+            &nbsp;&nbsp; CVX :{' '}
+            {cBN(_projectApy.convexLpApy.projectApys.cvxApy).toFixed(2)} %
+          </p>
+          <p>FXN Apy</p>
+          {checkNotZoroNum(_projectApy.userApy) ?
+            <p>&nbsp;&nbsp; Apy : {_projectApy.userFxnApy_text} %</p> :
+            <>
+              <p>&nbsp;&nbsp; Min Apy : {_projectApy._min_FXN_Apy} %</p>
+              <p>&nbsp;&nbsp; Max Apy : {_projectApy._max_FXN_Apy} %</p>
+            </>
+          }
+        </div>
+      )
+      return [_apyAndBoostDom, _apyDom, _apyDetailDom]
     }
-    return '-'
-  }, [cellData, boostInfo])
+    return ['-', '-', '-']
+  }, [cellData.apyInfo, boostInfo])
   console.log('cellData----', cellData, apyDom)
 
   const rewardTokenDom = useMemo(() => {
     return (
       <>
-        {cellData.rewardTokens.map((item, index) => {
+        {_rewardTokensList.map((item, index) => {
           let _reward_text = '-'
-          if (userInfo.userClaimables && userInfo.userClaimables.length) {
-            _reward_text = checkNotZoroNumOption(
-              userInfo.userClaimables[index],
-              fb4(userInfo?.userClaimables[index])
-            )
+          if (item[1].toLowerCase() == config.tokens.FXN.toLowerCase()) {
+            _reward_text = useFXNClaimable_text
+          } else if (item[1].toLowerCase() == config.tokens.crv.toLowerCase()) {
+            _reward_text = useCRVClaimable_text
+          } else if (item[1].toLowerCase() == config.tokens.cvx.toLowerCase()) {
+            _reward_text = useCVXClaimable_text
           }
           const isOnlineRewardToken =
             cellData.rewardDatas &&
@@ -180,14 +244,14 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             item[1].toLowerCase() == config.tokens.FXN.toLowerCase()
           if (isOnlineRewardToken || isFXNReward) {
             return (
-              <div className="flex gap-[6px] py-[2px]">
+              <div className="flex gap-[6px] py-[2px] ml-[8px]">
                 <img
                   key={index}
                   className="h-[20px]"
                   src={item[4] ?? '/images/f-logo.svg'}
                 />
                 <p className="text-[16px]">
-                  {isFXNReward ? useFXNReward_text : _reward_text}
+                  {isFXNReward ? useFXNClaimable_text : _reward_text}
                 </p>
               </div>
             )
@@ -200,19 +264,34 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
-        <div className="flex w-[230px] gap-[6px] items-center">
-          <img className="w-[30px]" src={xETHImg} />
+        <div className="flex w-[230px] gap-[16px] items-center">
+          <div className="relative flex-shrink-0">
+            <img className="w-[30px]" src={cellData.icon} />
+            <img
+              className="w-[18px] absolute right-[-8px] bottom-[-3px]"
+              src={cellData.subIcon}
+            />
+          </div>
           <div>
             <p className="text-[16px]">{cellData.name}</p>
-            <p className="text-[14px] text-[var(--second-text-color)]">
-              {cellData.nameShow}
-            </p>
+
+            {cellData.nameShow.map((item) => (
+              <p className="text-[14px] text-[var(--second-text-color)]">
+                {item}
+              </p>
+            ))}
           </div>
         </div>
-        <div className="w-[120px] text-[16px]">{cellData.tvl_text}</div>
-        <div className="w-[120px] text-[16px]">{apyDom}</div>
-        <div className="w-[110px] text-[16px]">{cellData.userShare_text}</div>
-        <div className="w-[100px]">{rewardTokenDom}</div>
+        <div className="w-[120px] text-[16px]">
+          {cellData.tvl_text} <br /> {cellData.totalSupply_text}
+        </div>
+        <div className="w-[170px] text-[16px]">{apyAndBoostDom}</div>
+        <div className="w-[110px] text-[16px]">
+          {cellData.userShare_tvl_text} <br /> {cellData.userShare_text}{' '}
+        </div>
+        <div className="w-[100px] text-[16px]">
+          {cellData.userTotalClaimable_text}
+        </div>
 
         <div className="w-[20px] cursor-pointer">
           <img
@@ -224,6 +303,19 @@ export default function PoolCell({ cellData, ...pageOthers }) {
 
       {openPanel ? (
         <div className={`${styles.panel}`}>
+          <div className="mt-[12px]">
+            Projected APY: {apyDom}{' '}
+            <Tooltip
+              placement="topLeft"
+              title={apyDetalDom}
+              arrow
+              color="#000"
+              overlayInnerStyle={{ width: '300px' }}
+            >
+              <InfoCircleOutlined className="ml-[8px]" />
+            </Tooltip>
+          </div>
+          <div className="flex">Earn: {rewardTokenDom}</div>
           <div className={`${styles.content} gap-[32px]`}>
             <Button size="small" onClick={() => setShowDepositModal(true)}>
               Deposit
@@ -231,10 +323,20 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             <Button size="small" onClick={() => setShowWithdrawModal(true)}>
               Withdraw
             </Button>
-            <Button size="small" onClick={handleClaim} type="second">
+            <Button
+              size="small"
+              disabled={!canClaim}
+              onClick={handleClaim}
+              type="second"
+            >
               Claim
             </Button>
-            <Button size="small" onClick={handleClaimFXN} type="second">
+            <Button
+              size="small"
+              disabled={!canClaimFXN}
+              onClick={handleClaimFXN}
+              type="second"
+            >
               Claim FXN
             </Button>
           </div>

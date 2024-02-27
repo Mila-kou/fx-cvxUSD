@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from 'antd'
+import { useSelector } from 'react-redux'
 import SimpleInput from '@/components/SimpleInput'
 import styles from './styles.module.scss'
 import useIDO from './controller/useIDO'
@@ -11,7 +12,6 @@ import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
-import useGlobal from '@/hooks/useGlobal'
 
 const depositTokenInfo = tokensList.depositTokens[0]
 
@@ -24,7 +24,7 @@ export default function IdoPage() {
   const [depositAmount, setDepositAmount] = useState(0)
   const [minAmount, setMinAmount] = useState(0)
   const [buying, setBuying] = useState(false)
-  const { tokens } = useGlobal()
+  const { tokens } = useSelector((state) => state.token)
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const { IdoSaleContract } = PageData
@@ -55,7 +55,8 @@ export default function IdoPage() {
       (newStatus >= 1 &&
         cBN(PageData.baseInfo.capAmount).isLessThanOrEqualTo(
           PageData.baseInfo.totalSoldAmount
-        )) || newStatus == 3
+        )) ||
+      newStatus == 3
     ) {
       return true
     }
@@ -238,7 +239,7 @@ export default function IdoPage() {
   useEffect(() => {
     try {
       getMinAmount()
-    } catch (error) { }
+    } catch (error) {}
   }, [depositAmount])
 
   const hanldeAmountChanged = (v) => {
@@ -366,7 +367,9 @@ export default function IdoPage() {
               )}
             </p>
             <p className={styles.title}>Public Offering</p>
-            <p className={styles.title}>Offering Amount {PageData.totalFundsRaised} FX</p>
+            <p className={styles.title}>
+              Offering Amount {PageData.totalFundsRaised} FX
+            </p>
             <p className={styles.title}>
               Starting at{' '}
               {PageData.baseInfo?.timeObj.publicSaleStartTime.toLocaleString()}
@@ -436,12 +439,28 @@ export default function IdoPage() {
 
             <p className={styles.num}>Sold Out! 🎉</p>
 
-            <p className={styles.num} > {PageData.capAmount_round1}<span style={{ fontSize: 20, color: "#fff" }}> (Round 1)</span></p>
-            <p className={styles.num1} > {PageData.capAmount}<span style={{ fontSize:20,color:"#fff" }}> (Round 2)</span></p>
+            <p className={styles.num}>
+              {' '}
+              {PageData.capAmount_round1}
+              <span style={{ fontSize: 20, color: '#fff' }}> (Round 1)</span>
+            </p>
+            <p className={styles.num1}>
+              {' '}
+              {PageData.capAmount}
+              <span style={{ fontSize: 20, color: '#fff' }}> (Round 2)</span>
+            </p>
 
             <p className={styles.title}>Offering Amount</p>
-            <p className={styles.num} > {300}<span style={{ fontSize: 20, color: "#fff" }}> (Round 1)</span></p>
-            <p className={styles.num1} > {300}<span style={{ fontSize:20,color:"#fff" }}> (Round 2)</span></p>
+            <p className={styles.num}>
+              {' '}
+              {300}
+              <span style={{ fontSize: 20, color: '#fff' }}> (Round 1)</span>
+            </p>
+            <p className={styles.num1}>
+              {' '}
+              {300}
+              <span style={{ fontSize: 20, color: '#fff' }}> (Round 2)</span>
+            </p>
             <p className={styles.title}>Total Raised</p>
           </div>
 

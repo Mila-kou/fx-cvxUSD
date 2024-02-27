@@ -1,13 +1,13 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import BigNumber from 'bignumber.js'
+import { useSelector } from 'react-redux'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
-import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
@@ -19,7 +19,7 @@ import useFxCommon_New from '../../hooks/useFxCommon_New'
 export default function Redeem({ slippage, assetInfo }) {
   const { _currentAccount } = useWeb3()
   const [isLoading, setIsLoading] = useState(0)
-  const { tokens } = useGlobal()
+  const { tokens } = useSelector((state) => state.token)
   const [clearTrigger, clearInput] = useClearInput()
 
   const fxCommonNew = useFxCommon_New()
@@ -278,6 +278,15 @@ export default function Redeem({ slippage, assetInfo }) {
     isSwap,
     xTokenRedeemInSystemStabilityModePaused,
   ])
+
+  useEffect(() => {
+    setMinOutETHtAmount({
+      minout_ETH: '-',
+      minout_slippage: 0,
+      minout_slippage_tvl: 0,
+    })
+    setBouns(0)
+  }, [symbol])
 
   const initPage = () => {
     setFromAmount(0)

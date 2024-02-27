@@ -10,6 +10,7 @@
   }
 
   .header {
+    min-width: 1052px;
     border-radius: 10px;
     background: var(--background-color);
     padding: 38px 57px;
@@ -54,6 +55,9 @@
 }
 
 @media (max-width: 800px) {
+  .container {
+    overflow-x: scroll;
+  }
   .items {
     flex-direction: column;
   }

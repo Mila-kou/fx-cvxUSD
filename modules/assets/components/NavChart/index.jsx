@@ -6,6 +6,7 @@ import React, {
   useState,
   useEffect,
 } from 'react'
+import { Tooltip } from 'antd'
 import dynamic from 'next/dynamic'
 import styles from './styles.module.scss'
 

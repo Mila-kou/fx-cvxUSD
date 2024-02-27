@@ -32,9 +32,7 @@ export function BonusCard({ title, amount, symbol }) {
   )
 }
 
-export function NoticeCard({
-  content = ['If the bonus is fully distributed, your transaction will fail.'],
-}) {
+export function NoticeCard({ content = [] }) {
   return (
     <div className={styles.noticeCard}>
       <p className={styles.title}>Notice</p>

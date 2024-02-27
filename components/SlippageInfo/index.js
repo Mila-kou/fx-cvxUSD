@@ -26,7 +26,7 @@ export default function SlippageInfo({ slippage, slippageChange }) {
 
   return (
     <div className={styles.slippageInfo}>
-      <span className="color-light-blue">Slippage: </span>
+      <span className="text-[var(--second-text-color)]">Slippage: </span>
       {slippageEditable ? (
         <span>
           <input

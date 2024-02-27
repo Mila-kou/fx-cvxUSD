@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useGlobal } from '@/contexts/GlobalProvider'
 import config from '@/config/index'
@@ -10,15 +11,25 @@ import { POOLS_LIST } from '@/config/aladdinVault'
 import { useContract, useVeFXN } from '@/hooks/useContracts'
 import abi from '@/config/abi'
 import useGaugeApyEstimate from '@/hooks/useGaugeApyEstimate'
+import { useVeBoostAllGauge } from '@/hooks/calculator/useVeBoost_AllGauge'
 
-const useGaugeController = () => {
-  const globalState = useGlobal()
-  const { lpPrice, tokenPrice, ConvexVaultsAPY, allGaugeBaseInfo } = globalState
+const useGaugeController = (LIST = POOLS_LIST) => {
+  const { lpPrice, ConvexVaultsAPY, allGaugeBaseInfo } = useGlobal()
+  const { tokenPrice } = useSelector((state) => state.token)
   const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
   const { allPoolsUserInfo } = useGaugeData()
+  const veBoostData = useVeBoostAllGauge()
   const { GaugeList = [], allPoolsInfo, allPoolsApyInfo } = allGaugeBaseInfo
   const { getGaugeEstimate, getGaugeApy } = useGaugeApyEstimate()
+
+  const _newGaugeList = useMemo(() => {
+    return GaugeList.filter((item) => item.gaugeType == 0)
+  }, [GaugeList])
+
+  const _allPoolsUserInfo = useMemo(() => {
+    return allPoolsUserInfo.filter((item) => item.gaugeType == 0)
+  }, [allPoolsUserInfo])
 
   const getLpTokenPrice = useCallback(
     (lpAddress) => {
@@ -90,7 +101,6 @@ const useGaugeController = () => {
         const { totalSupply } = baseInfo
         let _apys = []
         const convexLpApy = getLpConvexApy(lpAddress)
-        console.log('apy----c_1--', rewardDatas, convexLpApy)
         if (rewardDatas && rewardDatas.length) {
           _apys = rewardDatas.map((baseApyData, index) => {
             let _currentApy = 0
@@ -106,43 +116,37 @@ const useGaugeController = () => {
               rewardToken = ['', '']
               _currentApy = 0
               _projectApy = 0
-            } else if (
-              baseApyData.rewardAddress.toLowerCase() ==
-              config.tokens.FXN.toLowerCase()
-            ) {
-              const fxnApy = getGaugeApy(item)
-              _projectApy = fxnApy._thisWeek_apy
             } else {
-              const {
-                rewardData: { finishAt, lastUpdate, rate },
-              } = baseApyData
-              _projectApy = 0
-              const rewardTokenPrice = getTokenPrice(rewardToken[0])
-              const _currTime = Math.ceil(new Date().getTime() / 1000)
-              const _lastFinishAt = cBN(finishAt).plus(24 * 60 * 60 * 7)
-              if (cBN(_currTime).lt(_lastFinishAt) && cBN(totalSupply).gt(0)) {
-                _currentApy = cBN(rate)
-                  .div(1e18)
-                  .times(config.yearSecond)
-                  .div(cBN(totalSupply).div(1e18).times(_lpPrice))
-                  .times(100)
-                  .times(rewardTokenPrice)
-                  .toFixed(2)
-              }
-              console.log(
-                'apy--------name,rewardToken,_currTime,finishAt,totalSupply,rate,config.yearSecond,_lpPrice,rewardTokenPrice,_projectApy--',
-                item.name,
-                rewardToken[0],
-                _currTime,
-                finishAt,
-                totalSupply,
-                rate,
-                config.yearSecond,
-                _lpPrice,
-                rewardTokenPrice,
-                _currentApy,
-                _projectApy
-              )
+              // const {
+              //   rewardData: { finishAt, lastUpdate, rate },
+              // } = baseApyData
+              // _projectApy = 0
+              // const rewardTokenPrice = getTokenPrice(rewardToken[0])
+              // const _currTime = Math.ceil(new Date().getTime() / 1000)
+              // const _lastFinishAt = cBN(finishAt)
+              // if (cBN(_currTime).lt(_lastFinishAt) && cBN(totalSupply).gt(0)) {
+              //   _currentApy = cBN(rate)
+              //     .div(1e18)
+              //     .times(config.yearSecond)
+              //     .div(cBN(totalSupply).div(1e18).times(_lpPrice))
+              //     .times(100)
+              //     .times(rewardTokenPrice)
+              //     .toFixed(2)
+              // }
+              // console.log(
+              //   'apy--------name,rewardToken,_currTime,finishAt,totalSupply,rate,config.yearSecond,_lpPrice,rewardTokenPrice,_projectApy--',
+              //   item.name,
+              //   rewardToken[0],
+              //   _currTime,
+              //   finishAt,
+              //   totalSupply,
+              //   rate,
+              //   config.yearSecond,
+              //   _lpPrice,
+              //   rewardTokenPrice,
+              //   _currentApy,
+              //   _projectApy
+              // )
             }
             // allApy = allApy.plus(_currentApy)
             return {
@@ -152,9 +156,10 @@ const useGaugeController = () => {
             }
           })
         }
-
+        const fxnApy = getGaugeApy(item)
         return {
           // allApy: allApy.toFixed(2),
+          fxnApy,
           apyList: _apys,
           convexLpApy,
         }
@@ -172,89 +177,175 @@ const useGaugeController = () => {
 
   const getUserFXNNum = useCallback(
     (PoolsUserInfoItem) => {
-      const {
-        snapshotRes,
-        userSnapshotRes,
-        workingBalanceRes,
-        integrate_fractionRes,
-      } = PoolsUserInfoItem || {}
-      if (!checkNotZoroNum(PoolsUserInfoItem.workingBalanceRes)) {
-        return 0
-      }
-      const rewards_pending_fxn = cBN(userSnapshotRes.rewards.pending)
-        .plus(
-          cBN(workingBalanceRes)
-            .times(
-              cBN(snapshotRes.integral).minus(
-                userSnapshotRes.checkpoint.integral
-              )
-            )
-            .div(1e18)
-        )
-        .toFixed(0)
-      // console.log(
-      //   'rewards_pending_fxn--workingBalanceRes--snapshotRes--userSnapshotRes--integrate_fractionRes----',
-      //   rewards_pending_fxn,
-      //   workingBalanceRes,
-      //   snapshotRes,
-      //   userSnapshotRes,
-      //   integrate_fractionRes
-      // )
-      return rewards_pending_fxn
+      const { integrate_fractionRes, fxnMintedRes } = PoolsUserInfoItem || {}
+      const _fxnReward = cBN(integrate_fractionRes).minus(fxnMintedRes)
+      return _fxnReward
     },
-    [allPoolsUserInfo]
+    [_allPoolsUserInfo]
   )
 
+  const getRewarItem = useCallback(
+    (GaugeUserInfo, fxnRewardData, rewardName) => {
+      if (
+        !Object.keys(GaugeUserInfo).length &&
+        !checkNotZoroNum(fxnRewardData)
+      ) {
+        return {
+          userRewardTokenClaimableRes: 0,
+          userRewardTokenClaimable_text: '-',
+          userRewardTokenClaimableTvl: 0,
+          userRewardTokenClaimableTvl_text: '-',
+        }
+      }
+      let _rewardTokenNum = 0
+      const _crvPrice = getTokenPrice('CRV')
+      const _cvxPrice = getTokenPrice('CVX')
+      const _fxnPrice = getTokenPrice('FXN')
+      console.log('gauge--LIST---', rewardName, fxnRewardData, GaugeUserInfo)
+      let _rewardTokenPrice = _crvPrice
+      if (rewardName == 'CRV') {
+        _rewardTokenNum = GaugeUserInfo?.userClaimables[0]
+        _rewardTokenPrice = _crvPrice
+      } else if (rewardName == 'CVX') {
+        _rewardTokenNum = GaugeUserInfo?.userClaimables[1]
+        _rewardTokenPrice = _cvxPrice
+      } else if (rewardName == 'FXN') {
+        _rewardTokenNum = fxnRewardData
+        _rewardTokenPrice = _fxnPrice
+      }
+      const userRewardTokenClaimable_text = checkNotZoroNumOption(
+        _rewardTokenNum,
+        fb4(_rewardTokenNum)
+      )
+      let userRewardTokenClaimableTvl = cBN(0)
+      if (
+        checkNotZoroNum(_rewardTokenPrice) &&
+        checkNotZoroNum(_rewardTokenNum)
+      ) {
+        userRewardTokenClaimableTvl =
+          cBN(_rewardTokenPrice).times(_rewardTokenNum)
+      }
+      const userRewardTokenClaimableTvl_text = checkNotZoroNumOption(
+        userRewardTokenClaimableTvl,
+        fb4(userRewardTokenClaimableTvl)
+      )
+      return {
+        userRewardTokenClaimableRes: _rewardTokenNum,
+        userRewardTokenClaimable_text,
+        userRewardTokenClaimableTvl,
+        userRewardTokenClaimableTvl_text,
+      }
+    },
+    [_newGaugeList]
+  )
   const pageData = useMemo(() => {
     try {
-      const data = POOLS_LIST.map((item, index) => {
-        const _baseInfo = GaugeList[index].baseInfo || {}
-        const _rewardDatas = GaugeList[index].rewardDatas || {}
-        const _userInfo = allPoolsUserInfo[index]?.userInfo || {}
-        const tvl_text = checkNotZoroNumOption(
+      const data = LIST.map((item, index) => {
+        const _baseInfo = _newGaugeList[index]?.baseInfo || {}
+        const _rewardDatas = _newGaugeList[index]?.rewardDatas || {}
+
+        const _userInfo = _allPoolsUserInfo[index]?.userInfo || {}
+        const _lpPrice = getLpTokenPrice(item.lpAddress)
+        const totalSupply_text = checkNotZoroNumOption(
           _baseInfo.totalSupply,
           fb4(_baseInfo.totalSupply)
         )
+        const _tvl_wei = cBN(_baseInfo.totalSupply).times(_lpPrice)
+        const tvl_text = checkNotZoroNumOption(_tvl_wei, `$ ${fb4(_tvl_wei)}`)
+
         const userShare_text = checkNotZoroNumOption(
           _userInfo.userShare,
           fb4(_userInfo.userShare)
+        )
+        const userShare_tvl_wei = cBN(_userInfo.userShare).times(_lpPrice)
+        const userShare_tvl_text = checkNotZoroNumOption(
+          userShare_tvl_wei,
+          `$ ${fb4(userShare_tvl_wei)}`
         )
         const fxnRewardData = getUserFXNNum(_userInfo)
         const _lpGaugeContract = getContract(
           item.lpGaugeAddress,
           abi.FX_fx_SharedLiquidityGaugeABI
         )
+        console.log(
+          'gauge--LIST---_userInfo--',
+          LIST.length,
+          index,
+          _userInfo,
+          _allPoolsUserInfo[index]
+        )
+        // FXN
+        const {
+          userRewardTokenClaimableRes: useFXNClaimable,
+          userRewardTokenClaimable_text: useFXNClaimable_text,
+          userRewardTokenClaimableTvl: useFXNClaimableTVL,
+          userRewardTokenClaimableTvl_text: useFXNClaimableTVL_text,
+        } = getRewarItem(_userInfo, fxnRewardData, 'FXN')
+        // CRV
+        const {
+          userRewardTokenClaimableRes: useCRVClaimable,
+          userRewardTokenClaimable_text: useCRVClaimable_text,
+          userRewardTokenClaimableTvl: useCRVClaimableTVL,
+          userRewardTokenClaimableTvl_text: useCRVClaimableTVL_text,
+        } = getRewarItem(_userInfo, fxnRewardData, 'CRV')
+        // CVX
+        const {
+          userRewardTokenClaimableRes: useCVXClaimable,
+          userRewardTokenClaimable_text: useCVXClaimable_text,
+          userRewardTokenClaimableTvl: useCVXClaimableTVL,
+          userRewardTokenClaimableTvl_text: useCVXClaimableTVL_text,
+        } = getRewarItem(_userInfo, fxnRewardData, 'CVX')
+
+        const userTotalClaimable = useFXNClaimableTVL
+          .plus(useCRVClaimableTVL)
+          .plus(useCVXClaimableTVL)
+        const userTotalClaimable_text = checkNotZoroNumOption(
+          userTotalClaimable,
+          fb4(userTotalClaimable, true)
+        )
+
         const _data = {
           ...item,
           lpGaugeContract: _lpGaugeContract,
           baseInfo: _baseInfo,
           userInfo: _userInfo,
-          useFXNReward: fxnRewardData,
-          useFXNReward_text: checkNotZoroNumOption(
-            fxnRewardData,
-            fb4(fxnRewardData)
-          ),
+          useFXNClaimable,
+          useFXNClaimable_text,
+          useFXNClaimableTVL,
+          useFXNClaimableTVL_text,
+          useCRVClaimable,
+          useCRVClaimable_text,
+          useCRVClaimableTVL,
+          useCRVClaimableTVL_text,
+          useCVXClaimable,
+          useCVXClaimable_text,
+          useCVXClaimableTVL,
+          useCVXClaimableTVL_text,
+          userTotalClaimable,
+          userTotalClaimable_text,
           rewardDatas: _rewardDatas,
+          totalSupply_text,
           tvl_text,
           userShare_text,
+          userShare_tvl_text,
         }
         const apyInfo = getApy(_data)
         _data.apyInfo = apyInfo
         return _data
       })
       console.log(
-        'apy--------POOLS_LIST---data--',
-        // POOLS_LIST,
+        'apy--------LIST---data--',
+        // LIST,
         // allPoolsInfo,
         // allPoolsUserInfo,
         data
       )
       return data
     } catch (error) {
-      console.log('POOLS_LIST---error---', error)
-      return POOLS_LIST
+      console.log('gauge--LIST---error---', error)
+      return LIST
     }
-  }, [POOLS_LIST, allPoolsInfo, allPoolsUserInfo, allPoolsApyInfo])
+  }, [LIST, allPoolsInfo, _allPoolsUserInfo, allPoolsApyInfo])
 
   return {
     pageData,

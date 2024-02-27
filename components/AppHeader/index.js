@@ -1,14 +1,11 @@
 import React, { useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import cn from 'classnames'
+import { useSelector } from 'react-redux'
 import Link from 'next/link'
-import Image from 'next/image'
-import { Switch, Drawer } from 'antd'
 import { useToggle, useClickAway } from 'ahooks'
 import {
   MenuOutlined,
   CloseOutlined,
-  LineChartOutlined,
-  SkinOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons'
 import { useRouter } from 'next/router'
@@ -18,15 +15,16 @@ import styles from './styles.module.scss'
 import config from '@/config/index'
 import { addToMetamask, fb4 } from '@/utils/index'
 import Select from '@/components/Select'
+import Menu from '@/components/menu'
 import FAQ from '@/components/FAQ'
 
 const routers = [
   ['Assets', '/assets'],
   // ['f(x) Protocol', '/home'],
-  ['Rebalance Pool', '/earning-pool', 'New'],
-  ['Rebalance Pool (Deprecated)', '/rebalance-pool', ''],
-  // ['Gauge', '/gauge'],
+  ['Earn', '/earning-pool'],
+  ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
+  ['Genesis', '/genesis'],
   ['Booster', '/booster'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
@@ -35,16 +33,8 @@ const routers = [
 ]
 
 export default function AppHeader() {
-  const {
-    theme,
-    toggleTheme,
-    showSystemStatistics,
-    toggleShowSystemStatistics,
-    tokens,
-    showMenuPanel,
-    toggleShowMenuPanel,
-    refMenu2,
-  } = useGlobal()
+  const { tokens } = useSelector((state) => state.token)
+  const { theme, toggleTheme, showMenuPanel, toggleShowMenuPanel } = useGlobal()
   const {
     connect,
     disconnect,
@@ -55,7 +45,7 @@ export default function AppHeader() {
     isAllowChain,
     blockTime,
   } = useWeb3()
-  const { route } = useRouter()
+  const { route, push } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [openFAQ, { toggle: toggleFAQ }] = useToggle()
 
@@ -66,22 +56,12 @@ export default function AppHeader() {
         symbol: 'ETH',
         amount: fb4(tokens.ETH.balance, false),
         icon: '/tokens/crypto-icons-stack.svg#eth',
-        usd: tokens.ETH.usd,
-      },
-      {
-        name: 'stETH',
-        symbol: 'stETH',
-        amount: fb4(tokens.stETH.balance, false),
-        icon: '/tokens/steth.svg',
-        usd: tokens.ETH.usd,
-        showAdd: true,
       },
       {
         name: 'Fractional ETH',
         symbol: 'fETH',
         amount: fb4(tokens.fETH.balance, false),
         icon: '/images/f-logo.svg',
-        usd: tokens.fETH.usd,
         showAdd: true,
       },
       {
@@ -89,7 +69,13 @@ export default function AppHeader() {
         symbol: 'xETH',
         amount: fb4(tokens.xETH.balance, false),
         icon: '/images/x-logo.svg',
-        usd: tokens.xETH.usd,
+        showAdd: true,
+      },
+      {
+        name: 'fxUSD',
+        symbol: 'fxUSD',
+        amount: fb4(tokens.fxUSD.balance, false),
+        icon: '/tokens/fxusd.svg',
         showAdd: true,
       },
     ]
@@ -98,8 +84,6 @@ export default function AppHeader() {
     // }
     return list
   }, [tokens, route])
-
-  const showSwitch = useMemo(() => route === '/home', [route])
 
   const handleAdd = (symbol) => {
     const map = {
@@ -129,10 +113,7 @@ export default function AppHeader() {
   const refMenuMobile = useRef(null)
   const refMenuPanel = useRef(null)
 
-  const targets =
-    showSystemStatistics && showSwitch
-      ? [refMenu, refMenuMobile, refMenu2, refMenuPanel]
-      : [refMenu, refMenuMobile, refMenuPanel]
+  const targets = [refMenu, refMenuMobile, refMenuPanel]
 
   useClickAway(() => {
     if (showMenuPanel) {
@@ -233,20 +214,26 @@ export default function AppHeader() {
           >
             Bridge
           </a>
-          <a
-            className={cn(styles.route, styles.canHide)}
-            target="_blank"
-            href="https://snapshot.org/#/fxn.eth"
-            rel="noreferrer"
-          >
-            Governance
-          </a>
           <span
             className={cn(styles.route, styles.canHide)}
             onClick={toggleFAQ}
           >
             FAQ
           </span>
+          <Menu
+            label="More"
+            options={[
+              {
+                label: 'Rebalance Pool (Deprecated)',
+                onClick: () => push('/rebalance-pool'),
+              },
+              {
+                label: 'Governance',
+                onClick: () =>
+                  window.open('https://snapshot.org/#/fxn.eth', '_blank'),
+              },
+            ]}
+          />
         </div>
         <div className={styles.right}>
           {/* <a
@@ -274,9 +261,7 @@ export default function AppHeader() {
           >
             <p>{currentAccount ? _account : 'Connect Wallet'}</p>
           </div>
-          <div className={styles.menu} onClick={toggleShowMenuPanel}>
-            <MenuOutlined ref={refMenu} />
-          </div>
+          <div className="w-0" onClick={toggleShowMenuPanel} ref={refMenu} />
         </div>
 
         {showAccountPanel ? (
@@ -315,9 +300,6 @@ export default function AppHeader() {
                       Add to wallet
                     </div>
                   ) : null}
-                  {/* <div className={styles.usd}>
-                    {item.usd ? `~${item.usd}` : '-'}
-                    </div> */}
                 </div>
               ))}
               <div className={styles.disBtn} onClick={handleDisconnect}>
@@ -364,19 +346,7 @@ export default function AppHeader() {
                 </p>
               </div>
 
-              {showSwitch ? (
-                <div className={styles.item}>
-                  <div>
-                    <LineChartOutlined />
-                    System Statistics
-                  </div>
-                  <Switch
-                    checked={showSystemStatistics}
-                    onChange={toggleShowSystemStatistics}
-                  />
-                </div>
-              ) : null}
-              <div className={styles.item}>
+              {/* <div className={styles.item}>
                 <div>Theme</div>
                 <div className={styles.btns}>
                   <div
@@ -394,7 +364,7 @@ export default function AppHeader() {
                     Light
                   </div>
                 </div>
-              </div>
+                    </div> */}
             </div>
           </div>
         ) : null}

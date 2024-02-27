@@ -116,7 +116,7 @@ export default function Cell({
                 </p> */}
                 <Button
                   width="150px"
-                  height="56px"
+                  size="small"
                   onClick={onConvert}
                   loading={converting}
                 >
@@ -127,7 +127,7 @@ export default function Cell({
             {!!(canClaim * 1) && (
               <Button
                 width="150px"
-                height="56px"
+                size="small"
                 onClick={() => {
                   if (convertFist) {
                     setShowNoticeModal(true)

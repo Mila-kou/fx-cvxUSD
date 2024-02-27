@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Modal, Checkbox } from 'antd'
-import moment from 'moment'
-import { cBN, fb4, checkNotZoroNum } from 'utils'
-import { NoticeCard } from '@/modules/home/components/Common'
 import Button from '@/components/Button'
-import Tabs from '@/modules/home/components/Tabs'
 import styles from './styles.module.scss'
-import useVesting from '../../controller/useVesting'
-import { useGlobal } from '@/contexts/GlobalProvider'
 
 export default function NoticeModal({ onCancel, goConvert, goClaim }) {
   return (
@@ -17,13 +11,19 @@ export default function NoticeModal({ onCancel, goConvert, goClaim }) {
       <p className="text-[18px] ">
         Convert $FXN to $cvxFXN or $sdFXN to earn extra rewards
       </p>
-      <Button width="100%" className="mt-[48px]" onClick={goConvert}>
+      <Button
+        width="100%"
+        className="mt-[48px]"
+        size="large"
+        onClick={goConvert}
+      >
         Convert
       </Button>
       <Button
         type="second"
         width="100%"
         className="mt-[16px]"
+        size="large"
         onClick={goClaim}
       >
         Continue To Claim
