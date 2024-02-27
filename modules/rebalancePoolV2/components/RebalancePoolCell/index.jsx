@@ -16,7 +16,7 @@ import {
 } from '@/utils/index'
 
 const stETHImg = '/tokens/steth.svg'
-const sfrxEthImg = '/tokens/sfrxEth.svg'
+const sfrxEthImg = '/tokens/sfrxeth.svg'
 const xETHImg = '/images/x-logo.svg'
 const xfrxETHImg = '/images/x-logo.svg'
 const fETHImg = '/images/f-logo.svg'
