@@ -710,16 +710,18 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
         <Switch checked={isEarn} onChange={setIsEarn} />
       </div>
-      <Select
-        className="mt-[16px] h-[58px]"
-        style={{
-          border: '1px solid #a6a6ae',
-          borderRadius: '4px',
-        }}
-        options={POOL_LIST}
-        value={poolAdddress}
-        onChange={setPoolAdddress}
-      />
+      {isEarn && (
+        <Select
+          className="mt-[16px] h-[58px]"
+          style={{
+            border: '1px solid #a6a6ae',
+            borderRadius: '4px',
+          }}
+          options={POOL_LIST}
+          value={poolAdddress}
+          onChange={setPoolAdddress}
+        />
+      )}
 
       <div className={styles.action}>
         <BtnWapper
