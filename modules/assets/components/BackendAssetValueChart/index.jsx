@@ -12,7 +12,7 @@ export default function BackendAssetValueChart({ assetInfo, dateList, list }) {
   const { symbol, address } = assetInfo
 
   const option = {
-    grid: { top: 8, right: 0, bottom: 22, left: 30 },
+    grid: { top: 8, right: 0, bottom: 22, left: 36 },
     xAxis: {
       type: 'category',
       axisLine: {

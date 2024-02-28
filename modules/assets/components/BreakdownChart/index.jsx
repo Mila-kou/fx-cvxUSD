@@ -13,7 +13,7 @@ export default function BreakdownChart({ assetInfo, dateList, baseTokens }) {
   const { wstETH, sfrxETH } = baseTokens
 
   const option = {
-    grid: { top: 8, right: 0, bottom: 22, left: 30 },
+    grid: { top: 8, right: 0, bottom: 22, left: 36 },
     xAxis: {
       type: 'category',
       axisLine: {
