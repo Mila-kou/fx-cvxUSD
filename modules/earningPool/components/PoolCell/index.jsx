@@ -66,7 +66,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
       setClaiming(true)
       const apiCall = lpGaugeContract.methods.claim(currentAccount)
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'lp',
         action: 'Claim',
@@ -86,7 +86,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
       setClaiming(true)
       const apiCall = FXNTokenMinterContract.methods.mint(lpGaugeAddress)
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'lp',
         action: 'Claim',
@@ -210,13 +210,14 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             {cBN(_projectApy.convexLpApy.projectApys.cvxApy).toFixed(2)} %
           </p>
           <p>FXN Apy</p>
-          {checkNotZoroNum(_projectApy.userApy) ?
-            <p>&nbsp;&nbsp; Apy : {_projectApy.userFxnApy_text} %</p> :
+          {checkNotZoroNum(_projectApy.userApy) ? (
+            <p>&nbsp;&nbsp; Apy : {_projectApy.userFxnApy_text} %</p>
+          ) : (
             <>
               <p>&nbsp;&nbsp; Min Apy : {_projectApy._min_FXN_Apy} %</p>
               <p>&nbsp;&nbsp; Max Apy : {_projectApy._max_FXN_Apy} %</p>
             </>
-          }
+          )}
         </div>
       )
       return [_apyAndBoostDom, _apyDom, _apyDetailDom]

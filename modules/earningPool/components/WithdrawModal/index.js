@@ -31,7 +31,7 @@ export default function Withdraw(props) {
         currentAccount
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'withdraw',
         action: 'Withdraw',

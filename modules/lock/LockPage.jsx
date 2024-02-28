@@ -79,7 +79,7 @@ const LockPage = () => {
     try {
       const apiCall = veFXN.methods.withdraw()
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'ctr',
         action: 'withdraw',
@@ -98,7 +98,7 @@ const LockPage = () => {
     try {
       const apiCall = veContract.methods.claim()
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 've_claim',
         action: 'claim',

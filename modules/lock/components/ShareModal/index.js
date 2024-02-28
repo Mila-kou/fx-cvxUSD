@@ -108,7 +108,7 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
         delegation_to_address
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () => apiCall.send({ from: currentAccount, gas }),
         {

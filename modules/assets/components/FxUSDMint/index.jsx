@@ -536,13 +536,13 @@ export default function FxUSDMint({ slippage, assetInfo }) {
             await fxUSD_GatewayRouterContract.methods.fxMintFxUSDAndEarn(
               convertParams,
               poolAdddress,
-              0
+              _minOut
             )
         } else {
           apiCall = await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
             convertParams,
             config.tokens[_baseSymbol],
-            0
+            _minOut
           )
         }
       }
@@ -550,7 +550,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         from: _currentAccount,
         value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({
@@ -710,16 +710,18 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
         <Switch checked={isEarn} onChange={setIsEarn} />
       </div>
-      <Select
-        className="mt-[16px] h-[58px]"
-        style={{
-          border: '1px solid #a6a6ae',
-          borderRadius: '4px',
-        }}
-        options={POOL_LIST}
-        value={poolAdddress}
-        onChange={setPoolAdddress}
-      />
+      {isEarn && (
+        <Select
+          className="mt-[16px] h-[58px]"
+          style={{
+            border: '1px solid #a6a6ae',
+            borderRadius: '4px',
+          }}
+          options={POOL_LIST}
+          value={poolAdddress}
+          onChange={setPoolAdddress}
+        />
+      )}
 
       <div className={styles.action}>
         <BtnWapper

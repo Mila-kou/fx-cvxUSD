@@ -230,7 +230,7 @@ export default function GenesisPage() {
         from: _currentAccount,
         value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({
@@ -296,7 +296,7 @@ export default function GenesisPage() {
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({
@@ -361,7 +361,7 @@ export default function GenesisPage() {
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({

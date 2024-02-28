@@ -28,7 +28,7 @@ export default function IdoPage() {
 
   const [clearInputTrigger, setClearInputTrigger] = useState(0)
   const { IdoSaleContract } = PageData
-  const minGas = 527336 * 1.2
+  const minGas = 527336 * 1
 
   const selectTokenInfo = useToken(depositTokenInfo.address, 'ido')
 
@@ -106,7 +106,7 @@ export default function IdoPage() {
       setClaiming(true)
       const apiCall = IdoSaleContract.methods.claim()
       const estimatedGas = await apiCall.estimateGas({ from: _currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () => apiCall.send({ from: _currentAccount, gas }),
         {
@@ -213,7 +213,7 @@ export default function IdoPage() {
         from: _currentAccount,
         value: callValue,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
 
       await NoPayableAction(
         () => apiCall.send({ from: _currentAccount, gas, value: callValue }),

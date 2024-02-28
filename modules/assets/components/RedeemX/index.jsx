@@ -277,6 +277,7 @@ export default function RedeemX({ slippage, assetInfo }) {
 
     try {
       let minout_ETH
+      let baseOut
       const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
       if (checkNotZoroNum(_mockAmount)) {
         let resData
@@ -293,6 +294,7 @@ export default function RedeemX({ slippage, assetInfo }) {
               from: _account,
             })
           minout_ETH = resData
+          baseOut = resData
         } else {
           const convertParams = getZapOutParams(
             config.tokens[baseSymbol],
@@ -307,14 +309,17 @@ export default function RedeemX({ slippage, assetInfo }) {
             })
 
           minout_ETH = resData._dstOut
+          baseOut = resData._baseOut
           console.log('redeemX--resData-', resData, minout_ETH)
         }
       } else {
         minout_ETH = 0
+        baseOut = 0
       }
 
       // 比例计算
       minout_ETH *= _mockRatio
+      baseOut *= _mockRatio
 
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
@@ -333,8 +338,12 @@ export default function RedeemX({ slippage, assetInfo }) {
         minout_slippage_tvl: _minOut_fETH_tvl,
       })
 
+      const _minBaseOut_CBN = (cBN(baseOut) || cBN(0)).multipliedBy(
+        cBN(1).minus(cBN(slippage).dividedBy(100))
+      )
+
       setPriceLoading(false)
-      return _minOut_CBN.toFixed(0, 1)
+      return _minBaseOut_CBN.toFixed(0, 1)
     } catch (error) {
       console.log('fxMintFxUSD----error--', error)
       setMinOutETHtAmount({
@@ -359,7 +368,7 @@ export default function RedeemX({ slippage, assetInfo }) {
     //   const estimatedGas = await apiCall.estimateGas({
     //     from: _currentAccount,
     //   })
-    //   const gas = parseInt(estimatedGas * 1.2, 10) || 0
+    //   const gas = parseInt(estimatedGas * 1, 10) || 0
     //   await NoPayableAction(
     //     () =>
     //       apiCall.send({
@@ -387,9 +396,9 @@ export default function RedeemX({ slippage, assetInfo }) {
 
     try {
       setIsLoading(true)
-      const _minoutETH = await getMinAmount()
+      const _minBaseoutETH = await getMinAmount()
 
-      if (!checkNotZoroNum(_minoutETH)) {
+      if (!checkNotZoroNum(_minBaseoutETH)) {
         setIsLoading(false)
         return
       }
@@ -400,7 +409,7 @@ export default function RedeemX({ slippage, assetInfo }) {
         apiCall = await MarketContract.methods.redeemXToken(
           fromAmount,
           _currentAccount,
-          _minoutETH
+          _minBaseoutETH
         )
       } else {
         const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
@@ -413,13 +422,13 @@ export default function RedeemX({ slippage, assetInfo }) {
           convertParams,
           contracts.market,
           fromAmount,
-          0
+          _minBaseoutETH
         )
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () => apiCall.send({ from: _currentAccount, gas }),
         {

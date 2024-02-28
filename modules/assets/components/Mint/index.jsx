@@ -390,7 +390,7 @@ export default function Mint({ slippage, assetInfo }) {
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({
@@ -483,7 +483,7 @@ export default function Mint({ slippage, assetInfo }) {
         from: _currentAccount,
         value: _ETHtAmountAndGas,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({
@@ -527,7 +527,7 @@ export default function Mint({ slippage, assetInfo }) {
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({

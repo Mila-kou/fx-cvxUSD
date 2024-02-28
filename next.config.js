@@ -42,6 +42,11 @@ module.exports = {
         destination: '/assets',
         permanent: false,
       },
+      {
+        source: '/home',
+        destination: '/assets',
+        permanent: false,
+      },
     ]
   },
   ...config,
