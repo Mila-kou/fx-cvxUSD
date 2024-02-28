@@ -38,7 +38,7 @@ export default function DepositModal(props) {
         currentAccount
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'lp',
         action: 'Deposit',

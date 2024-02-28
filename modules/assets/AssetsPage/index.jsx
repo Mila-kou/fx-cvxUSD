@@ -63,7 +63,7 @@ export default function AssetsPage() {
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await noPayableAction(
         () => apiCall.send({ from: _currentAccount, gas }),
         {
@@ -92,7 +92,7 @@ export default function AssetsPage() {
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await noPayableAction(
         () => apiCall.send({ from: _currentAccount, gas }),
         {

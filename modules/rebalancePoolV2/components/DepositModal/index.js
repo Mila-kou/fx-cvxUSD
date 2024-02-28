@@ -66,7 +66,7 @@ export default function DepositModal(props) {
       }
 
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'lp',
         action: 'Deposit',
@@ -89,7 +89,7 @@ export default function DepositModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">Deposit fETH </h2>
+        <h2 className="mb-[16px]">Deposit {selectToken.symbol} </h2>
 
         <BalanceInput
           placeholder="0"

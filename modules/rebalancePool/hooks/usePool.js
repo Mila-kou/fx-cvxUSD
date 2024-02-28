@@ -62,7 +62,7 @@ export default function usePool({
         true
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'lp',
         action: 'Unlock',
@@ -90,7 +90,7 @@ export default function usePool({
         wrap
       )
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'lp',
         action: 'Claim',
@@ -131,7 +131,7 @@ export default function usePool({
       setHarvesting(true)
       const apiCall = FX_stETHTreasuryContract.methods.harvest()
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
         key: 'lp',
         action: 'Harvest',
@@ -149,7 +149,7 @@ export default function usePool({
       // const _totalFETH = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(stabilityPoolInfo.baseInfo?.totalUnlockingRes).toString(10)
       const apiCall = FX_RebalanceWithBonusTokenContract.methods.liquidate(0)
       const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       const tx = await apiCall.send({ from: currentAccount, gas })
       console.log('liquidate success---', tx)
     } catch (error) {

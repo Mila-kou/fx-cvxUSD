@@ -58,7 +58,7 @@ export const useApprove = (props) => {
 
     const apiCall = tokenContract.methods.approve(approveAddress, '0')
     const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-    const gas = parseInt(estimatedGas * 1.2, 10) || 0
+    const gas = parseInt(estimatedGas * 1, 10) || 0
     await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
       key: 'Approve',
       action: 'Reset Approve',
@@ -90,7 +90,7 @@ export const useApprove = (props) => {
           approveWei
         )
         const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-        const gas = parseInt(estimatedGas * 1.2, 10) || 0
+        const gas = parseInt(estimatedGas * 1, 10) || 0
         await NoPayableAction(
           () => apiCall.send({ from: currentAccount, gas }),
           {

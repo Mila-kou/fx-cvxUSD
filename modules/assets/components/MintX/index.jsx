@@ -331,20 +331,19 @@ export default function MintX({ slippage, assetInfo }) {
           to: baseSymbol,
           amount: _ETHtAmountAndGas,
           slippage,
-          minOut: 0,
         })
 
         apiCall = await fxUSD_GatewayRouterContract.methods.fxMintXTokenV2(
           convertParams,
           contracts.market,
-          0
+          _minOut
         )
       }
       const estimatedGas = await apiCall.estimateGas({
         from: _currentAccount,
         value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
       })
-      const gas = parseInt(estimatedGas * 1.2, 10) || 0
+      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
           apiCall.send({
