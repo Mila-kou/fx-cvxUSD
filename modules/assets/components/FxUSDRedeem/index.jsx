@@ -415,9 +415,9 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       setPriceLoading(false)
 
       const _min_baseOuts = min_baseOuts.map((item) =>
-        (cBN(item) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100))
-        )
+        (cBN(item) || cBN(0))
+          .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
+          .toFixed(0, 1)
       )
       return [_minOut_CBN.toFixed(0, 1), _min_baseOuts]
     } catch (error) {
@@ -508,6 +508,8 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
           config.tokens.sfrxETH,
           _symbolAddress
         )
+
+        console.log('_min_baseOuts----', _min_baseOuts)
 
         apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
           [convertParams_baseToken_1, convertParams_baseToken_2],

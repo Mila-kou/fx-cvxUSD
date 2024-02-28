@@ -7,7 +7,7 @@ import useGlobal from '@/hooks/useGlobal'
 import { ASSETS } from '@/config/tokens'
 import SimpleInput from '@/components/SimpleInput'
 import Button from '@/components/Button'
-import { cBN, checkNotZoroNum } from '@/utils/index'
+import { cBN, fb4, checkNotZoroNum } from '@/utils/index'
 import useWeb3 from '@/hooks/useWeb3'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { useContract } from '@/hooks/useContracts'
@@ -20,6 +20,7 @@ export default function AssetsPage() {
   const { fETH, xETH, fxUSD, xstETH, xfrxETH } = useSelector(
     (state) => state.asset
   )
+  const { wstETH, sfrxETH } = useSelector((state) => state.baseToken)
 
   usePools()
 
@@ -107,53 +108,91 @@ export default function AssetsPage() {
     }
   }
 
+  const getTotalBaseTokenUSD = () => {
+    let totalBaseTokenUSD = cBN(0)
+    const list = [wstETH, sfrxETH]
+    list.forEach(({ data }) => {
+      totalBaseTokenUSD = totalBaseTokenUSD.plus(
+        checkNotZoroNum(data.totalBaseTokenRes)
+          ? cBN(data.totalBaseTokenRes)
+              .multipliedBy(cBN(data.prices.inMint))
+              .toFixed(0, 1)
+          : 0
+      )
+    })
+    return fb4(totalBaseTokenUSD)
+  }
+
+  const LIST = [
+    {
+      title: 'fxUSD Reserve Asset Value',
+      value: getTotalBaseTokenUSD() || '-',
+    },
+    { title: 'fETH Reserve Asset Value', value: fETH.totalBaseTokenUSD_text },
+  ]
+
   return (
     <>
       <div className={styles.container}>
-        {[
-          [
-            'Stable Assets',
-            [fxUSD, fETH],
-            false,
-            `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
-          ],
-          [
-            'Leveraged Assets',
-            [xETH, xstETH, xfrxETH],
-            true,
-            `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
-          ],
-        ].map(([name, list, isX, icon]) => (
-          <div className={`${styles.header} mt-[32px]`} key={name}>
-            <div className={styles.headerTitle}>
-              <img src={icon} />
-              {name}
-            </div>
-
-            <div className="px-[16px] mt-[16px] flex justify-between">
-              <div className="w-[200px]" />
-              <div className="w-[120px] text-[14px]">
-                {isX ? 'Leverage' : 'TVL'}
+        <div className={styles.header}>
+          <div className={styles.items}>
+            {LIST.map((item) => (
+              <div className={styles.item} key={item.symbol}>
+                <p>{item.title}</p>
+                <h2 className="text-[22px]">${item.value}</h2>
               </div>
-              <div className="w-[60px] text-[14px]">Nav</div>
-              <div className="w-[72px] text-[14px]">24h Change</div>
-            </div>
-
-            {list.map((item) => (
-              <Link href={`assets/${item.symbol}`}>
-                <AssetCell info={item} />
-              </Link>
             ))}
-
-            {comingList
-              .filter((item) => !!item.isX === !!isX)
-              .map((item) => (
-                <div>
-                  <ComingAssetCell info={item} />
-                </div>
-              ))}
           </div>
-        ))}
+        </div>
+        <div className={styles.wrap}>
+          {[
+            [
+              'Stable Assets',
+              [fxUSD, fETH],
+              false,
+              `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+            [
+              'Leveraged Assets',
+              [xETH, xstETH, xfrxETH],
+              true,
+              `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+          ].map(([name, list, isX, icon]) => (
+            <div
+              className={`${styles.header} min-w-[556px] mt-[32px]`}
+              key={name}
+            >
+              <div className={styles.headerTitle}>
+                <img src={icon} />
+                {name}
+              </div>
+
+              <div className="px-[16px] mt-[16px] flex justify-between">
+                <div className="w-[200px]" />
+                <div className="w-[120px] text-[14px]">
+                  {isX ? 'Leverage' : 'TVL'}
+                </div>
+                <div className="w-[60px] text-[14px]">Nav</div>
+                <div className="w-[72px] text-[14px]">24h Change</div>
+              </div>
+
+              {list.map((item) => (
+                <Link href={`assets/${item.symbol}`}>
+                  <AssetCell info={item} />
+                </Link>
+              ))}
+
+              {comingList
+                .filter((item) => !!item.isX === !!isX)
+                .map((item) => (
+                  <div>
+                    <ComingAssetCell info={item} />
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
       </div>
       {/* <div className={styles.container}>
         <SimpleInput onChange={handleChange_CurrentStETHPrice} /> <br />
