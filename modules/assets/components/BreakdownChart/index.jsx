@@ -1,18 +1,19 @@
-import React, { memo, useCallback, useRef } from 'react'
+import React, { memo, useMemo, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import styles from './styles.module.scss'
-import { addToMetamask } from '@/utils/index'
+import { addToMetamask, cBN, fb4, formatWithUnit } from '@/utils/index'
 
 const ReactECharts = dynamic(() => import('echarts-for-react'), {
   ssr: false,
 })
 
-export default function BreakdownChart({ assetInfo, dateList, navs }) {
+export default function BreakdownChart({ assetInfo, dateList, baseTokens }) {
   const ref = useRef(null)
   const { symbol, address } = assetInfo
+  const { wstETH, sfrxETH } = baseTokens
 
   const option = {
-    grid: { top: 8, right: 0, bottom: 22, left: 25 },
+    grid: { top: 8, right: 0, bottom: 22, left: 30 },
     xAxis: {
       type: 'category',
       axisLine: {
@@ -39,6 +40,10 @@ export default function BreakdownChart({ assetInfo, dateList, navs }) {
       },
       axisLabel: {
         fontSize: 10,
+        formatter: (value) => {
+          const val = fb4(value).replace(/,/g, '').replace('-', 0)
+          return formatWithUnit(val, 0)
+        },
       },
       splitLine: {
         lineStyle: {
@@ -49,25 +54,36 @@ export default function BreakdownChart({ assetInfo, dateList, navs }) {
     },
     series: [
       {
-        data: navs,
-        type: 'line',
+        data: wstETH,
+        type: 'bar',
+        stack: 'total',
+        symbol: 'none',
+      },
+      {
+        data: sfrxETH,
+        type: 'bar',
+        stack: 'total',
         symbol: 'none',
       },
     ],
     tooltip: {
       trigger: 'axis',
-      // formatter: '{b0}<br />Net Assets Value: ${c0}',
       formatter: (params) => {
-        const { axisValue, value } = params[0]
         console.log('params----', params)
+        const { axisValue, value } = params[0]
+        const { value: value_s } = params[1]
         const time = new Date(axisValue * 1000)
         const _time = `${time.getFullYear()}-${
           time.getMonth() + 1
         }-${time.getDate()} ${time.getHours()}:00:00`
-        return `${_time}<br />Net Assets Value: $${value}`
+        return `${_time} <br />
+        Backed Asset: <br /> 
+        stETH: $${fb4(value)} <br />  
+        frxETH: $${fb4(value_s)} 
+        `
       },
     },
-    color: ['rgba(255, 255, 255, 0.8)'],
+    // color: ['rgba(255, 255, 255, 0.8)'],
   }
 
   return (

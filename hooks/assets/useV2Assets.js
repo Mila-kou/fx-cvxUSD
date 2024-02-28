@@ -11,6 +11,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4, checkNotZoroNumOption, dollarText } from '@/utils/index'
 import { ASSET_MAP } from '@/config/tokens'
 import { updateAsset } from '@/store/slices/asset'
+import useFxUSDNavs from '@/modules/assets/hooks/useFxUSDNavs'
 
 const useV2Assets = () => {
   const { blockNumber } = useWeb3()
@@ -20,6 +21,7 @@ const useV2Assets = () => {
   const getFContract = useV2FContract()
   const getXContract = useV2XContract()
   const getTreasuryContract = useV2TreasuryContract()
+  const { lastDayPrice } = useFxUSDNavs()
 
   const fetchAssetsData = async (arr) => {
     try {
@@ -42,7 +44,7 @@ const useV2Assets = () => {
 
       const data = {}
       callData.forEach((item) => {
-        const { totalSupplyRes, nav } = item
+        const { totalSupplyRes, nav, symbol } = item
         const totalSupply_text = checkNotZoroNumOption(
           totalSupplyRes,
           fb4(totalSupplyRes)
@@ -54,6 +56,18 @@ const useV2Assets = () => {
 
         const asset = ASSET_MAP[item.symbol]
 
+        // change24h
+        const _lastDayPrice = lastDayPrice[symbol]
+
+        let change24h = 0
+        if (_lastDayPrice && nav) {
+          change24h = cBN(nav)
+            .minus(cBN(_lastDayPrice))
+            .multipliedBy(100)
+            .div(cBN(_lastDayPrice))
+            .toFixed(2)
+        }
+
         data[item.symbol] = {
           ...item,
           ...asset,
@@ -63,6 +77,7 @@ const useV2Assets = () => {
           ),
           totalSupply_text,
           marketCap_text,
+          change24h,
         }
       })
       console.log('v2-AssetsData ----', data)

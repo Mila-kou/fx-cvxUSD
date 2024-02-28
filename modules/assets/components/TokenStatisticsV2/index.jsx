@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import useFxNavs from '../../hooks/useFxNavs'
+import useFxUSDNavs from '../../hooks/useFxUSDNavs'
 import NavChart from '../NavChart'
 import BreakdownChart from '../BreakdownChart'
 import BackendAssetValueChart from '../BackendAssetValueChart'
@@ -25,8 +25,9 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
 
   // console.log('baseTokens---', baseTokens)
 
-  const navsData = useFxNavs()
+  const navsData = useFxUSDNavs()
   const navList = navsData.navList[symbol]
+  const totalBaseTokenList = navsData.totalBaseTokenList[baseSymbol]
 
   const isFXUSD = symbol === 'fxUSD'
 
@@ -136,21 +137,21 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
         <p className="mt-[24px]">
           {isBreakdownChart ? 'Backed Asset Breakdown' : 'Reserve Asset Value'}
         </p>
-        {/* <div className={styles.chart}>
+        <div className={styles.chart}>
           {isBreakdownChart ? (
             <BreakdownChart
               dateList={navsData.dateList}
-              navs={navList}
+              baseTokens={navsData.totalBaseTokenList}
               assetInfo={assetInfo}
             />
           ) : (
             <BackendAssetValueChart
               dateList={navsData.dateList}
-              list={navsData.totalBaseTokenList}
+              list={totalBaseTokenList}
               assetInfo={assetInfo}
             />
           )}
-          </div> */}
+        </div>
       </div>
     </div>
   )
