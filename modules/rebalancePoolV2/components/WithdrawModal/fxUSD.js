@@ -11,6 +11,7 @@ import { useFxUSD_GatewayRouter_contract } from '@/hooks/useFXUSDContract'
 import { NoticeCard } from '@/modules/assets/components/Common'
 import config from '@/config/index'
 import { getZapOutParams } from '@/hooks/useZap'
+import SlippageInfo from '@/components/SlippageInfo'
 
 export default function WithdrawModal(props) {
   const { onCancel, info, poolData } = props
@@ -18,6 +19,8 @@ export default function WithdrawModal(props) {
   console.log('WithdrawModal---props----', props)
   const { currentAccount, isAllReady } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
+  const [slippage, setSlippage] = useState(0.3)
+
   const baseToken = useSelector((state) => state.baseToken)
   const [withdrawing, setWithdrawing] = useState(false)
   const { logo, stakeTokenDecimals, withdrawDefaultToken, baseSymbol } = info
@@ -101,11 +104,30 @@ export default function WithdrawModal(props) {
           sharesInWei
         )
       } else {
-        const convertParams = getZapOutParams(
+        const _convertParams = getZapOutParams(
           config.tokens[baseSymbol],
           selectTokenAddress,
           0
         )
+        const _amountOut = await fxUSD_GatewayRouterContract.methods
+          .fxRebalancePoolWithdrawAs(
+            _convertParams,
+            info.rebalancePoolAddress,
+            sharesInWei
+          )
+          .call({
+            from: currentAccount,
+          })
+        const _minOut_CBN = (cBN(_amountOut) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+
+        const convertParams = getZapOutParams(
+          config.tokens[baseSymbol],
+          selectTokenAddress,
+          _minOut_CBN.toFixed(0, 1)
+        )
+
         console.log(
           'fxUSD_GatewayRouterContract--fxRebalancePoolWithdrawAs---',
           JSON.stringify(convertParams),
@@ -136,7 +158,7 @@ export default function WithdrawModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">Withdraw {symbol} </h2>
+        <h2 className="mb-[16px]">Withdraw fxUSD </h2>
         <BalanceInput
           placeholder="0"
           symbol={symbol}
@@ -150,6 +172,12 @@ export default function WithdrawModal(props) {
       </div>
 
       {errorText ? <NoticeCard content={[errorText]} /> : null}
+
+      {symbol !== 'fxUSD' && (
+        <div className="my-[16px]">
+          <SlippageInfo slippage={slippage} slippageChange={setSlippage} />
+        </div>
+      )}
 
       <div className="mt-[40px]">
         <Button
