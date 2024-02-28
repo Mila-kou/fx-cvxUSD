@@ -301,6 +301,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
     try {
       let minout_ETH
+      let min_baseOuts = []
       const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
 
       console.log('_symbolAddress--', symbol, _symbolAddress)
@@ -363,6 +364,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
             })
 
           minout_ETH = resData._dstOut
+          min_baseOuts = resData._baseOuts
 
           resData._bonusOuts.forEach((item, index) => {
             if (Number(item)) {
@@ -381,6 +383,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         }
       } else {
         minout_ETH = 0
+        min_baseOuts = []
       }
 
       // 比例计算
@@ -410,7 +413,13 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         }))
       )
       setPriceLoading(false)
-      return _minOut_CBN.toFixed(0, 1)
+
+      const _min_baseOuts = min_baseOuts.map((item) =>
+        (cBN(item) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100))
+        )
+      )
+      return [_minOut_CBN.toFixed(0, 1), _min_baseOuts]
     } catch (error) {
       setMinOutETHtAmount({
         minout_ETH: 0,
@@ -469,7 +478,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
     try {
       setIsLoading(true)
-      const _minoutETH = await getMinAmount()
+      const [_minoutETH, _min_baseOuts] = await getMinAmount()
 
       let apiCall
 
@@ -503,7 +512,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
           [convertParams_baseToken_1, convertParams_baseToken_2],
           fromAmount,
-          [0, 0]
+          _min_baseOuts
         )
       }
 
