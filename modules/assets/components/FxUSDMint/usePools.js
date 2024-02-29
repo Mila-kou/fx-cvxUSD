@@ -57,7 +57,7 @@ const usePools = () => {
 
   // return pools
 
-  return [POOLS[3], POOLS[2], POOLS[1], POOLS[0]]
+  return [POOLS[2], POOLS[3], POOLS[1], POOLS[0]]
 }
 
 export default usePools

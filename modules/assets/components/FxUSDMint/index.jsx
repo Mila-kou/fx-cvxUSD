@@ -122,7 +122,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
   useEffect(() => {
     if (POOL_LIST.length) {
-      setPoolAdddress(POOL_LIST[1].value)
+      setPoolAdddress(POOL_LIST[0].value)
     }
   }, [POOL_LIST.length])
 
