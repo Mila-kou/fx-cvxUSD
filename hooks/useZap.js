@@ -49,10 +49,15 @@ export const useZapIn = () => {
     let is1Inch = routeType === '1inch'
     switch (from) {
       case 'ETH':
-        is1Inch = to !== 'wstETH'
+        // is1Inch = to !== 'wstETH'
+        is1Inch = true
         break
       case 'stETH':
-        is1Inch = to !== 'wstETH'
+        // is1Inch = to !== 'wstETH'
+        is1Inch = true
+        break
+      case 'WETH':
+        is1Inch = true
         break
       // case 'Frax':
       //   is1Inch = true

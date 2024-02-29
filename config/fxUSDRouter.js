@@ -163,7 +163,6 @@ const fxUSD_ROUTER = {
           '0x2b0f806115ec88b64c4511611dbcf8d05aaef8e3e09',
           '0x2670ed1b033ad6e78c13f35b623f143df7492cc6f004',
           '0x2b9eae5948378e863978446d7aaac254c4b5ffa110a',
-          '0x1fce71607d656d4f172c66f42cfe369b24d78b2820a',
         ],
       ],
       [config.tokens.frax]: [
