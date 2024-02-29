@@ -221,7 +221,7 @@ export default function MintX({ slippage, assetInfo }) {
           resData = await MarketContract.methods
             .mintXToken(_mockAmount, _account, 0)
             .call({
-              from: _currentAccount,
+              from: _account,
             })
 
           minout_ETH = resData._xTokenMinted
@@ -240,7 +240,7 @@ export default function MintX({ slippage, assetInfo }) {
           resData = await fxUSD_GatewayRouterContract.methods
             .fxMintXTokenV2(convertParams, contracts.market, 0)
             .call({
-              from: _currentAccount,
+              from: _account,
               value: symbol == 'ETH' ? _mockAmount : 0,
             })
           console.log('fxMintXTokenV2--resData----', resData)
