@@ -310,7 +310,6 @@ export default function FxUSDMint({ slippage, assetInfo }) {
     if (needLoading) {
       setPriceLoading(true)
     }
-    console.log('baseSymbol--isEarn---', baseSymbol, isEarn)
 
     let _mockAmount = fromAmount
     let _mockRatio = 1
@@ -325,8 +324,6 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         .toFixed(4, 1)
       // console.log('fromAmount----', _mockAmount, _mockRatio)
     }
-
-    console.log('_mockAmount-----', _account, _mockAmount, symbol)
     try {
       let minout_ETH
       let _baseSymbol

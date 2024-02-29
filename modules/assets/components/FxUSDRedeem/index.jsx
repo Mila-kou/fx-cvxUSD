@@ -292,7 +292,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     let _mockRatio = 1
     const __bonus = []
 
-    console.log('_account----', _account)
     // 默认比例 0.01
     if (_account !== _currentAccount) {
       _mockAmount = cBN(1).shiftedBy(18).toString()
@@ -304,7 +303,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       let min_baseOuts = []
       const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
 
-      console.log('_symbolAddress--', symbol, _symbolAddress)
       if (checkNotZoroNum(fromAmount)) {
         let resData
         if (['wstETH', 'sfrxETH'].includes(symbol)) {
@@ -326,7 +324,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
               from: _account,
             })
 
-          console.log('resData----', _account, _mockAmount, resData)
           minout_ETH = resData._amountOut
           if (Number(resData._bonusOut)) {
             __bonus.push({
@@ -336,7 +333,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
           }
           // }
         } else {
-          console.log('fxAutoRedeemFxUSD-----', _account, fromAmount)
           const convertParams_baseToken_1 = getZapOutParams(
             config.tokens.wstETH,
             _symbolAddress
@@ -346,12 +342,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
             config.tokens.sfrxETH,
             _symbolAddress
           )
-          console.log(
-            'convertParams_baseToken----',
-            convertParams_baseToken_1,
-            convertParams_baseToken_2
-          )
-
           resData = await fxUSD_GatewayRouterContract.methods
             .fxAutoRedeemFxUSD(
               [convertParams_baseToken_1, convertParams_baseToken_2],
@@ -373,12 +363,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
               })
             }
           })
-          console.log(
-            'fxAutoRedeemFxUSD--resData-',
-            _account,
-            resData,
-            minout_ETH
-          )
         }
       } else {
         minout_ETH = 0
