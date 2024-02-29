@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useQueries } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { useFXUSD_contract } from '@/hooks/useFXUSDContract'
@@ -12,6 +13,7 @@ const useFxUSD = () => {
   const { blockNumber } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
   const dispatch = useDispatch()
+  const { wstETH, sfrxETH } = useSelector((state) => state.baseToken)
 
   const { contract: fxUSDContract } = useFXUSD_contract()
 
@@ -36,12 +38,17 @@ const useFxUSD = () => {
       const data = {}
       callData.forEach((item) => {
         const { totalSupplyRes, nav } = item
+        // fstETH supply +ffrxETH supply ，这些就包括了fxUSD里fToken
+        const fxUSDAndAllFTotalSupply = cBN(
+          wstETH?.data?.fTokenTotalSupplyRes || 0
+        ).plus(sfrxETH?.data?.fTokenTotalSupplyRes || 0)
+
         const totalSupply_text = checkNotZoroNumOption(
-          totalSupplyRes,
-          fb4(totalSupplyRes)
+          fxUSDAndAllFTotalSupply,
+          fb4(fxUSDAndAllFTotalSupply)
         )
         const marketCap_text = fb4(
-          cBN(totalSupplyRes).multipliedBy(nav).div(1e18),
+          cBN(fxUSDAndAllFTotalSupply).multipliedBy(nav).div(1e18),
           true
         )
 
