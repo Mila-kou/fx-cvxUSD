@@ -320,14 +320,13 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
           //   )
           //   __bonus = cBN(resData._bonusOuts[0])
           // } else {
-          console.log('redeem----', _account, fromAmount)
           resData = await FXUSD_contract.methods
-            .redeem(config.tokens[symbol], fromAmount, _account, 0)
+            .redeem(config.tokens[symbol], _mockAmount, _account, 0)
             .call({
               from: _account,
             })
 
-          console.log('resData----', _account, fromAmount, resData)
+          console.log('resData----', _account, _mockAmount, resData)
           minout_ETH = resData._amountOut
           if (Number(resData._bonusOut)) {
             __bonus.push({
