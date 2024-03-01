@@ -46,8 +46,11 @@ const useFxUSD = () => {
 
       const data = {}
       callData.forEach((item) => {
-        const { _wstETH_fTokenTotalSupply, _sfrxETH_fTokenTotalSupply, nav } =
-          item
+        const {
+          wstETH_fTokenTotalSupply: _wstETH_fTokenTotalSupply,
+          sfrxETH_fTokenTotalSupply: _sfrxETH_fTokenTotalSupply,
+          nav,
+        } = item
         // fstETH supply +ffrxETH supply ，这些就包括了fxUSD里fToken
         const fxUSDAndAllFTotalSupply = cBN(
           _wstETH_fTokenTotalSupply || 0
