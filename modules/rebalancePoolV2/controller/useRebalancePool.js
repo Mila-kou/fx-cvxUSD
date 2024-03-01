@@ -21,7 +21,6 @@ const useStabiltyPool = (infoKey) => {
 
   const { current } = useWeb3()
   const { ethPrice, xETHPrice } = useFxCommon()
-  console.log('GaugeList----', GaugeList, boostableRebalancePoolInfo)
 
   const getTokenPrice = useCallback(
     (token) => {
@@ -40,15 +39,15 @@ const useStabiltyPool = (infoKey) => {
   } = boostableRebalancePoolInfo?.baseInfo || {}
   const getRebalanceGaugeFXNAPY = useCallback(
     (item) => {
-      let fxnApy = 0
+      let fxnGaugeEstimate = {}
       const _rebalanceGauge = GaugeList.find((gaugeObj) =>
         gaugeObj.actionRebalancePool.includes(item.rebalancePoolAddress)
       )
 
       if (_rebalanceGauge) {
-        fxnApy = getGaugeApy(_rebalanceGauge)
+        fxnGaugeEstimate = getGaugeEstimate(_rebalanceGauge)
       }
-      return fxnApy
+      return fxnGaugeEstimate
     },
     [getGaugeApy, GaugeList]
   )
@@ -59,20 +58,24 @@ const useStabiltyPool = (infoKey) => {
         let wstETH_apyWei = 0
         const _fxnPrice = getTokenPrice('FXN')
         const _wstETHPrice = getTokenPrice('wstETH')
-        const _fxnApy = checkNotZoroNum(rebalanceTvl)
-          ? cBN(1000 * _fxnPrice)
-              .div(cBN(rebalanceTvl))
-              .times(12)
-              .times(100)
-          : cBN(0)
+        // FXN Project Apy
+        const { _thisWeek_gaugeEstimate } = getRebalanceGaugeFXNAPY(
+          boostableRebalancePoolInfo.rebalanceConfig
+        )
+        const _fxnGaugeEstimate = cBN(_thisWeek_gaugeEstimate).div(2).toFixed(2)
 
-        // // FXN Project Apy
-        // const { _thisWeek_apy } = getRebalanceGaugeFXNAPY(
-        //   boostableRebalancePoolInfo.rebalanceConfig
-        // )
-        // const _fxnApy = cBN(_thisWeek_apy).div(2).toFixed(2)
-
+        const _fxnApy = cBN(_fxnGaugeEstimate)
+          .multipliedBy(config.yearSecond)
+          .multipliedBy(_fxnPrice)
+          .div(config.weekSecond)
+          .div(rebalanceTvl)
+          .times(100)
+          .toFixed(2)
         const _currentTime = current.unix()
+        const fxnApy_text = checkNotZoroNumOption(
+          _fxnApy,
+          `${fb4(_fxnApy, false, 0, 2)} %`
+        )
 
         // wstETH apy
         if (_currentTime > finishAt) {
@@ -85,21 +88,15 @@ const useStabiltyPool = (infoKey) => {
             .div(rebalanceTvl)
             .times(100)
         }
-        const _apy = wstETH_apyWei.plus(_fxnApy)
-        const apy = _apy
-        const apy_text = checkNotZoroNumOption(
-          _apy,
-          `${fb4(_apy, false, 0, 2)}`
-        )
         const wstETHApy = wstETH_apyWei
         const wstETHApy_text = checkNotZoroNumOption(
           wstETH_apyWei,
-          `${fb4(wstETH_apyWei, false, 0, 2)}`
+          `${fb4(wstETH_apyWei, false, 0, 2)} %`
         )
 
         const fxnApyV1_text = checkNotZoroNumOption(
           _fxnApy,
-          `${fb4(_fxnApy, false, 0, 2)}`
+          `${fb4(_fxnApy, false, 0, 2)} %`
         )
 
         const _fxnApy_min = _fxnApy * 0.4
@@ -123,22 +120,22 @@ const useStabiltyPool = (infoKey) => {
         let userFxnApy_text = 0
         const { BoostRatioRes } = boostableRebalancePoolInfo?.userInfo
         console.log('BoostRatioRes---', BoostRatioRes)
-        if (false) {
+        if (checkNotZoroNum(BoostRatioRes)) {
           // boostableRebalancePoolInfo
           boostLever = cBN(BoostRatioRes).div(1e18).times(2.5)
-          userFxnApy = cBN(_fxnApy_min).times(boostLever)
-          userApy = wstETH_apyWei.plus(userFxnApy)
-          userApy_text = checkNotZoroNumOption(
-            userApy,
-            fb4(userApy, false, 0, 2)
-          )
-          boostLever_text = fb4(boostLever, false, 0, 2)
-          userFxnApy_text = fb4(userFxnApy, false, 0, 2)
+          if (cBN(boostLever).gt(1)) {
+            userFxnApy = cBN(_fxnApy_min).times(boostLever)
+            userApy = wstETH_apyWei.plus(userFxnApy)
+            userApy_text = checkNotZoroNumOption(
+              userApy,
+              fb4(userApy, false, 0, 2)
+            )
+            boostLever_text = fb4(boostLever, false, 0, 2)
+            userFxnApy_text = fb4(userFxnApy, false, 0, 2)
+          }
         }
         console.log('BoostRatioRes---', BoostRatioRes)
         return {
-          apy: _apy,
-          apy_text,
           wstETHApy,
           wstETHApy_text,
           // xETHApy,
@@ -157,7 +154,7 @@ const useStabiltyPool = (infoKey) => {
           userFxnApy_text,
         }
       } catch (error) {
-        console.log('apy---', error)
+        console.log('apyObj------error--', error)
         return 0
       }
     },
@@ -292,6 +289,7 @@ const useStabiltyPool = (infoKey) => {
       )
 
       const apyObj = getPoolApy_snap(poolTotalSupplyTvl)
+      console.log('apyObj------', apyObj)
       return {
         boostableRebalancePoolInfo,
         poolTotalSupplyTvl: poolTotalSupplyTvl.toString(),

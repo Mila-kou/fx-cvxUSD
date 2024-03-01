@@ -215,7 +215,7 @@ const useGaugeController = (LIST = POOLS_LIST) => {
       }
       const userRewardTokenClaimable_text = checkNotZoroNumOption(
         _rewardTokenNum,
-        fb4(_rewardTokenNum)
+        fb4(_rewardTokenNum, false, 18, 2, false)
       )
       let userRewardTokenClaimableTvl = cBN(0)
       if (
@@ -227,7 +227,7 @@ const useGaugeController = (LIST = POOLS_LIST) => {
       }
       const userRewardTokenClaimableTvl_text = checkNotZoroNumOption(
         userRewardTokenClaimableTvl,
-        fb4(userRewardTokenClaimableTvl)
+        fb4(userRewardTokenClaimableTvl, false, 18, 2, false)
       )
       return {
         userRewardTokenClaimableRes: _rewardTokenNum,
@@ -251,7 +251,10 @@ const useGaugeController = (LIST = POOLS_LIST) => {
           fb4(_baseInfo.totalSupply)
         )
         const _tvl_wei = cBN(_baseInfo.totalSupply).times(_lpPrice)
-        const tvl_text = checkNotZoroNumOption(_tvl_wei, `$ ${fb4(_tvl_wei)}`)
+        const tvl_text = checkNotZoroNumOption(
+          _tvl_wei,
+          `${fb4(_tvl_wei, true)}`
+        )
 
         const userShare_text = checkNotZoroNumOption(
           _userInfo.userShare,
@@ -260,7 +263,7 @@ const useGaugeController = (LIST = POOLS_LIST) => {
         const userShare_tvl_wei = cBN(_userInfo.userShare).times(_lpPrice)
         const userShare_tvl_text = checkNotZoroNumOption(
           userShare_tvl_wei,
-          `$ ${fb4(userShare_tvl_wei)}`
+          `${fb4(userShare_tvl_wei, true)}`
         )
         const fxnRewardData = getUserFXNNum(_userInfo)
         const _lpGaugeContract = getContract(

@@ -159,7 +159,6 @@ export default function RebalancePoolCell({
     let _apyDetailDom = '-'
     try {
       const {
-        apy_text,
         fxnApyV1_text,
         boostLever_text,
         wstETHApy_text,
@@ -174,11 +173,7 @@ export default function RebalancePoolCell({
         maxApy_text,
       } = poolData.apyObj
       let _apyList = []
-      if (!isFXUSDPool) {
-        _apyAndBoostDom = `${apy_text} %`
-        _apyDom = _apyAndBoostDom
-        _apyList = [`FXN APR: ${fxnApyV1_text} %`]
-      } else if (checkNotZoroNum(userApy)) {
+      if (checkNotZoroNum(userApy)) {
         _apyAndBoostDom = (
           <>
             <p>{userApy_text} %</p>
@@ -245,7 +240,7 @@ export default function RebalancePoolCell({
             {poolData.poolTotalSupply}
           </p>
         </div>
-        <div className="w-[170px]">{apyAndBoostDom}</div>
+        <div className="w-[170px] text-[16px]">{apyAndBoostDom}</div>
         <div className="w-[110px] text-[16px]">
           <p className="text-[16px]">{userDepositTvl_text}</p>
           <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
@@ -292,7 +287,7 @@ export default function RebalancePoolCell({
                   <Button size="small" onClick={handleDeposit}>
                     Deposit
                   </Button>
-                  <Button size="small" onClick={handleWithdraw} type="second">
+                  <Button size="small" onClick={handleWithdraw}>
                     Withdraw
                   </Button>
                   <Button

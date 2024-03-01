@@ -76,6 +76,7 @@ export const POOLS_LIST = [
     platform: 'FX',
     fromPlatformIcon: `${cryptoIcons}#crv`,
     fromPlatform: 'Curve',
+    platformUrl: 'https://curve.fi/#/ethereum/pools/factory-v2-359/deposit',
     gaugeType: 0,
     gaugeTypeName: 'Liquidity Gauge',
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,

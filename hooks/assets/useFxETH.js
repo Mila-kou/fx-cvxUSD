@@ -49,7 +49,7 @@ const useFxETH = () => {
         const { totalSupplyRes } = item
         const totalSupply_text = checkNotZoroNumOption(
           totalSupplyRes,
-          fb4(totalSupplyRes, false, 18, 2)
+          fb4(totalSupplyRes, false, 18, 4)
         )
         data[item.symbol] = {
           ...ASSET_MAP[item.symbol],

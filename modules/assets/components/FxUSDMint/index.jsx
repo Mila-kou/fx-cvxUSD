@@ -326,7 +326,6 @@ export default function FxUSDMint({ slippage, assetInfo }) {
     }
     try {
       let minout_ETH
-      let _baseSymbol
       if (checkNotZoroNum(fromAmount)) {
         let _ETHtAmountAndGas = _mockAmount
         let resData
@@ -362,16 +361,14 @@ export default function FxUSDMint({ slippage, assetInfo }) {
             }
           }
 
+          const convertParams = await getZapInParams({
+            from: symbol,
+            to: baseSymbol,
+            amount: _ETHtAmountAndGas,
+            slippage,
+          })
+
           if (isEarnActive) {
-            _baseSymbol = baseSymbol
-
-            const convertParams = await getZapInParams({
-              from: symbol,
-              to: baseSymbol,
-              amount: _ETHtAmountAndGas,
-              slippage,
-            })
-
             resData = await fxUSD_GatewayRouterContract.methods
               .fxMintFxUSDAndEarn(convertParams, poolAdddress, 0)
               .call({
@@ -380,61 +377,18 @@ export default function FxUSDMint({ slippage, assetInfo }) {
               })
             console.log('fxMintFxUSD--resData-----', symbol, _account, resData)
           } else {
-            let resData_1 = 0
-            let resData_2 = 0
-            if (symbol !== 'frxETH') {
-              try {
-                const convertParams_1 = await getZapInParams({
-                  from: symbol,
-                  to: 'wstETH',
-                  amount: _ETHtAmountAndGas,
-                  slippage,
-                })
-
-                console.log(
-                  'resData_1----',
-                  JSON.stringify(convertParams_1),
-                  config.tokens.wstETH
-                )
-                resData_1 = await fxUSD_GatewayRouterContract.methods
-                  .fxMintFxUSD(convertParams_1, config.tokens.wstETH, 0)
-                  .call({
-                    from: _account,
-                    value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-                  })
-              } catch (error) {
-                console.log('resData_1--error--', _account, error)
-              }
-            }
-            if (symbol !== 'stETH') {
-              try {
-                const convertParams_2 = await getZapInParams({
-                  from: symbol,
-                  to: 'sfrxETH',
-                  amount: _ETHtAmountAndGas,
-                  slippage,
-                })
-                console.log(
-                  'resData_2----',
-                  JSON.stringify(convertParams_2),
-                  config.tokens.sfrxETH
-                )
-                resData_2 = await fxUSD_GatewayRouterContract.methods
-                  .fxMintFxUSD(convertParams_2, config.tokens.sfrxETH, 0)
-                  .call({
-                    from: _account,
-                    value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-                  })
-              } catch (error) {
-                console.log('resData_2--error--', _account, error)
-              }
-            }
-            resData = BigNumber.max(cBN(resData_1), cBN(resData_2)).toString()
-            _baseSymbol = cBN(resData_1).isGreaterThan(cBN(resData_2))
-              ? 'wstETH'
-              : 'sfrxETH'
-            setBaseSymbol(_baseSymbol)
-            console.log('fxMintFxUSD--resData-', resData, resData_1, resData_2)
+            console.log(
+              'resData----',
+              JSON.stringify(convertParams),
+              baseSymbol
+            )
+            resData = await fxUSD_GatewayRouterContract.methods
+              .fxMintFxUSD(convertParams, config.tokens[baseSymbol], 0)
+              .call({
+                from: _account,
+                value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+              })
+            console.log('fxMintFxUSD--resData-', resData)
           }
         }
 
@@ -460,7 +414,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
       })
 
       setPriceLoading(false)
-      return [_minOut_CBN.toFixed(0, 1), _baseSymbol]
+      return _minOut_CBN.toFixed(0, 1)
     } catch (error) {
       console.log('fxMintFxUSD--finnal--error--', _account, error)
       setMinOutAmount({
@@ -496,7 +450,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
       setMintLoading(true)
 
       const _ETHtAmountAndGas = await getMintGas(fromAmount)
-      const [_minOut, _baseSymbol] = await getMinAmount()
+      const _minOut = await getMinAmount()
 
       if (!checkNotZoroNum(_minOut)) {
         setMintLoading(false)
@@ -523,7 +477,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
       } else {
         const convertParams = await getZapInParams({
           from: symbol,
-          to: _baseSymbol,
+          to: baseSymbol,
           amount: _ETHtAmountAndGas,
           slippage,
         })
@@ -538,7 +492,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         } else {
           apiCall = await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
             convertParams,
-            config.tokens[_baseSymbol],
+            config.tokens[baseSymbol],
             _minOut
           )
         }

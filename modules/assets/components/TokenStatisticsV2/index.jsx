@@ -43,7 +43,7 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
           : 0
       )
     })
-    return fb4(totalBaseTokenUSD)
+    return fb4(totalBaseTokenUSD, false, 18, 2, false)
   }
 
   const getCollateralRatioDom = () => {

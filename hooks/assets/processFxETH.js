@@ -59,7 +59,11 @@ const processFxETH = (asset, baseToken, lastDayPrice) => {
     ? fb4(
         cBN(baseToken.totalBaseTokenRes)
           .multipliedBy(cBN(baseToken._baseNav).div(1e18))
-          .toFixed(0, 1)
+          .toFixed(0, 1),
+        false,
+        18,
+        2,
+        false
       )
     : 0
 

@@ -12,7 +12,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { useContract } from '@/hooks/useContracts'
 import MockTwapOracleABI from '@/config/abi/common/MockTwapOracle'
-// import usePools from '../components/FxUSDMint/usePools'
+import usePools from '../components/FxUSDMint/usePools'
 
 export default function AssetsPage() {
   const { theme } = useGlobal()
@@ -22,7 +22,7 @@ export default function AssetsPage() {
   )
   const { wstETH, sfrxETH } = useSelector((state) => state.baseToken)
 
-  // usePools()
+  usePools()
 
   const comingList = ASSETS.filter((item) => item.isComing)
   const [stEthPrice, setStEthPrice] = useState(0)
@@ -120,7 +120,7 @@ export default function AssetsPage() {
           : 0
       )
     })
-    return fb4(totalBaseTokenUSD)
+    return fb4(totalBaseTokenUSD, false, 18, 2)
   }
 
   const LIST = [

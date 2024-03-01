@@ -175,14 +175,16 @@ const useStabiltyPool = (infoKey, baseToken) => {
         console.log('BoostRatioRes---', BoostRatioRes)
         if (checkNotZoroNum(BoostRatioRes)) {
           boostLever = cBN(BoostRatioRes).div(1e18).times(2.5)
-          userFxnApy = cBN(_fxnApy_min).times(boostLever)
-          userApy = wstETH_apyWei.plus(sfrxETH_apyWei).plus(userFxnApy)
-          userApy_text = checkNotZoroNumOption(
-            userApy,
-            fb4(userApy, false, 0, 2)
-          )
-          boostLever_text = fb4(boostLever, false, 0, 2)
-          userFxnApy_text = fb4(userFxnApy, false, 0, 2)
+          if (cBN(boostLever).gt(1)) {
+            userFxnApy = cBN(_fxnApy_min).times(boostLever)
+            userApy = wstETH_apyWei.plus(sfrxETH_apyWei).plus(userFxnApy)
+            userApy_text = checkNotZoroNumOption(
+              userApy,
+              fb4(userApy, false, 0, 2)
+            )
+            boostLever_text = fb4(boostLever, false, 0, 2)
+            userFxnApy_text = fb4(userFxnApy, false, 0, 2)
+          }
         }
         console.log('BoostRatioRes---', BoostRatioRes)
         return {

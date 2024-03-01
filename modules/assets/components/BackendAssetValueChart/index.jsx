@@ -66,7 +66,13 @@ export default function BackendAssetValueChart({ assetInfo, dateList, list }) {
         const _time = `${time.getFullYear()}-${
           time.getMonth() + 1
         }-${time.getDate()} ${time.getHours()}:00:00`
-        return `${_time}<br />Reserve Asset Value: $${fb4(value)}`
+        return `${_time}<br />Reserve Asset Value: $${fb4(
+          value,
+          false,
+          18,
+          2,
+          false
+        )}`
       },
     },
     color: ['rgba(255, 255, 255, 0.8)'],

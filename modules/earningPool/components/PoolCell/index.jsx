@@ -308,6 +308,18 @@ export default function PoolCell({ cellData, ...pageOthers }) {
 
       {openPanel ? (
         <div className={`${styles.panel}`}>
+          <p className="text-[var(--second-text-color)]">
+            Deposit liquidity into the{' '}
+            <a
+              className="text-[var(--a-button-color)] underline cursor-pointer"
+              href={cellData.platformUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {cellData.fromPlatform} {cellData.name} pool
+            </a>
+            , and then stake your LP tokens here
+          </p>
           <div className="mt-[12px]">
             Projected APY: {apyDom}{' '}
             <Tooltip
@@ -328,19 +340,13 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             <Button size="small" onClick={() => setShowWithdrawModal(true)}>
               Withdraw
             </Button>
-            <Button
-              size="small"
-              disabled={!canClaim}
-              onClick={handleClaim}
-              type="second"
-            >
+            <Button size="small" disabled={!canClaim} onClick={handleClaim}>
               Claim
             </Button>
             <Button
               size="small"
               disabled={!canClaimFXN}
               onClick={handleClaimFXN}
-              type="second"
             >
               Claim FXN
             </Button>

@@ -130,7 +130,11 @@ const processBaseToken = (data) => {
       ? fb4(
           cBN(baseToken.totalBaseTokenRes)
             .multipliedBy(cBN(prices.inMint))
-            .toFixed(0, 1)
+            .toFixed(0, 1),
+          false,
+          18,
+          2,
+          false
         )
       : 0
 
