@@ -1,21 +1,28 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useQueries } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
-import { useFXUSD_contract } from '@/hooks/useFXUSDContract'
+import { useV2FContract, useFXUSD_contract } from '@/hooks/useFXUSDContract'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4, checkNotZoroNumOption, dollarText } from '@/utils/index'
-import { ASSET_MAP, tokens } from '@/config/tokens'
+import { ASSET_MAP, tokens, BASE_TOKENS_MAP } from '@/config/tokens'
 import { updateAsset } from '@/store/slices/asset'
 
 const useFxUSD = () => {
   const { blockNumber } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
   const dispatch = useDispatch()
-  const { wstETH, sfrxETH } = useSelector((state) => state.baseToken)
+  const getFContract = useV2FContract()
 
   const { contract: fxUSDContract } = useFXUSD_contract()
+
+  const { totalSupply: wstETH_fTokenTotalSupply } = getFContract(
+    BASE_TOKENS_MAP.wstETH.contracts.fToken
+  ).contract.methods
+
+  const { totalSupply: sfrxETH_fTokenTotalSupply } = getFContract(
+    BASE_TOKENS_MAP.sfrxETH.contracts.fToken
+  ).contract.methods
 
   const fetchAssetsData = async (arr) => {
     try {
@@ -26,6 +33,8 @@ const useFxUSD = () => {
           symbol: item.symbol,
           totalSupplyRes: totalSupply(),
           nav: nav(),
+          wstETH_fTokenTotalSupply: wstETH_fTokenTotalSupply(),
+          sfrxETH_fTokenTotalSupply: sfrxETH_fTokenTotalSupply(),
           markets: {
             wstETH: markets(tokens.wstETH),
             sfrxETH: markets(tokens.sfrxETH),
@@ -37,11 +46,12 @@ const useFxUSD = () => {
 
       const data = {}
       callData.forEach((item) => {
-        const { totalSupplyRes, nav } = item
+        const { _wstETH_fTokenTotalSupply, _sfrxETH_fTokenTotalSupply, nav } =
+          item
         // fstETH supply +ffrxETH supply ，这些就包括了fxUSD里fToken
         const fxUSDAndAllFTotalSupply = cBN(
-          wstETH?.data?.fTokenTotalSupplyRes || 0
-        ).plus(sfrxETH?.data?.fTokenTotalSupplyRes || 0)
+          _wstETH_fTokenTotalSupply || 0
+        ).plus(_sfrxETH_fTokenTotalSupply || 0)
 
         const totalSupply_text = checkNotZoroNumOption(
           fxUSDAndAllFTotalSupply,
