@@ -110,7 +110,7 @@ export default function EarningPoolPage() {
         <Header title="fETH Pools" />
         <RebalancePoolCell
           title="fETH Rebalance Pool"
-          contractType="fx_RebalancePool_A"
+          contractType="rebalancePoolV2_info_A"
           subTitle={
             <p className="text-[14px]">
               Earn wstETH when staked
@@ -122,7 +122,7 @@ export default function EarningPoolPage() {
         />
         <RebalancePoolCell
           title="fETH Rebalance Pool"
-          contractType="fx_RebalancePool_B"
+          contractType="rebalancePoolV2_info_B"
           subTitle={
             <p className="text-[14px]">
               Earn wstETH when staked
