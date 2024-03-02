@@ -132,25 +132,25 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fx_RebalancePool_B':
             _contractAddress = config.contracts.fx_RebalancePool_B
             break
-          case 'fx_BoostableRebalancePool_APool':
+          case 'rebalancePoolV2_info_A':
             _contractAddress = config.contracts.fx_BoostableRebalancePool_APool
             break
-          case 'fx_BoostableRebalancePool_BPool':
+          case 'rebalancePoolV2_info_B':
             _contractAddress = config.contracts.fx_BoostableRebalancePool_BPool
             break
-          case 'FxUSD_ShareableRebalancePool_wstETH':
+          case 'rebalancePoolV2_info_fxUSD_wstETH':
             _contractAddress =
               config.contracts.FxUSD_ShareableRebalancePool_wstETH
             break
-          case 'FxUSD_ShareableRebalancePool_xstETH':
+          case 'rebalancePoolV2_info_fxUSD_xstETH':
             _contractAddress =
               config.contracts.FxUSD_ShareableRebalancePool_xstETH
             break
-          case 'FxUSD_ShareableRebalancePool_sfrxETH':
+          case 'rebalancePoolV2_info_fxUSD_sfrxETH':
             _contractAddress =
               config.contracts.FxUSD_ShareableRebalancePool_sfrxETH
             break
-          case 'FxUSD_ShareableRebalancePool_xfrxETH':
+          case 'rebalancePoolV2_info_fxUSD_xfrxETH':
             _contractAddress =
               config.contracts.FxUSD_ShareableRebalancePool_xfrxETH
             break
