@@ -14,6 +14,7 @@ import {
   useFXUSD_contract,
   useFxUSD_GatewayRouter_contract,
 } from '@/hooks/useFXUSDContract'
+import Button from '@/components/Button'
 
 export default function DepositModal(props) {
   const baseToken = useSelector((state) => state.baseToken)
@@ -126,14 +127,20 @@ export default function DepositModal(props) {
       ) : null}
 
       <div className="mt-[30px]">
-        <BtnWapper
-          width="100%"
-          loading={depositing}
-          disabled={!canSubmit}
-          onClick={handleDeposit}
-        >
-          Deposit
-        </BtnWapper>
+        {selectToken.symbol === 'fETH' ? (
+          <BtnWapper
+            width="100%"
+            loading={depositing}
+            disabled={!canSubmit}
+            onClick={handleDeposit}
+          >
+            Deposit
+          </BtnWapper>
+        ) : (
+          <Button width="100%" loading={depositing} onClick={handleDeposit}>
+            Deposit
+          </Button>
+        )}
       </div>
     </Modal>
   )
