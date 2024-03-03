@@ -202,6 +202,10 @@ export default function PoolCell({ cellData, ...pageOthers }) {
         <div>
           <p>Convex Apy</p>
           <p>
+            &nbsp;&nbsp; baseApy :{' '}
+            {cBN(_projectApy.convexLpApy.projectApys.baseApy).toFixed(2)} %
+          </p>
+          <p>
             &nbsp;&nbsp; CRV :{' '}
             {cBN(_projectApy.convexLpApy.projectApys.crvApy1).toFixed(2)} %
           </p>
