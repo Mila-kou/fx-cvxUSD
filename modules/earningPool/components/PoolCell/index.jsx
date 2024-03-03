@@ -210,14 +210,8 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             {cBN(_projectApy.convexLpApy.projectApys.cvxApy).toFixed(2)} %
           </p>
           <p>FXN Apy</p>
-          {checkNotZoroNum(_projectApy.userApy) ? (
-            <p>&nbsp;&nbsp; Apy : {_projectApy.userFxnApy_text} %</p>
-          ) : (
-            <>
-              <p>&nbsp;&nbsp; Min Apy : {_projectApy._min_FXN_Apy} %</p>
-              <p>&nbsp;&nbsp; Max Apy : {_projectApy._max_FXN_Apy} %</p>
-            </>
-          )}
+          <p>&nbsp;&nbsp; Min APR : {_projectApy._min_FXN_Apy} %</p>
+          <p>&nbsp;&nbsp; Max APR : {_projectApy._max_FXN_Apy} %</p>
         </div>
       )
       return [_apyAndBoostDom, _apyDom, _apyDetailDom]
@@ -321,7 +315,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             , and then stake your LP tokens here
           </p>
           <div className="mt-[12px]">
-            Projected APY: {apyDom}{' '}
+            Projected APR: {apyDom}{' '}
             <Tooltip
               placement="topLeft"
               title={apyDetalDom}

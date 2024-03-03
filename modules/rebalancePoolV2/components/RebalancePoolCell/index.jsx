@@ -264,7 +264,7 @@ export default function RebalancePoolCell({
               } will be used for rebalance`}
             </div>
             <div className="mt-[12px]">
-              Projected APY: {apyDom}{' '}
+              Projected APR: {apyDom}{' '}
               <Tooltip
                 placement="topLeft"
                 title={apyDetailDom}
