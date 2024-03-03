@@ -92,31 +92,18 @@ export const useVeBoostAllGauge = () => {
       lim = BigNumber.minimum(lim, __l)
       const old_bal = working_balances
       const noboost_lim = cBN(__l).multipliedBy(TOKENLESS_PRODUCTION).div(100)
-      const noboost_supply = cBN(working_supply)
-        .plus(noboost_lim)
-        .minus(old_bal)
-      const _working_supply = cBN(working_supply).plus(lim).minus(old_bal)
-      let boots
+      const noboost_supply = cBN(L).multipliedBy(TOKENLESS_PRODUCTION).div(100)
       let votingBoost
       let repairBoost = 1 // 修正值
       if (!checkNotZoroNum(noboost_lim)) {
-        boots = 1
         votingBoost = 1
       } else {
         votingBoost = cBN(lim).div(noboost_lim).toString()
-        boots = cBN(lim)
-          .div(_working_supply)
-          .div(cBN(noboost_lim).div(noboost_supply))
-          .toString()
-        repairBoost = cBN(noboost_supply).div(_working_supply).toFixed(2)
       }
-
-      const data = [
-        _working_supply.toString(),
-        checkNotZoroNum(boots) ? parseFloat(boots).toFixed(2) : 1,
-        votingBoost,
-        repairBoost,
-      ]
+      repairBoost = checkNotZoroNum(working_supply)
+        ? cBN(noboost_supply).div(working_supply).toFixed(2)
+        : 1
+      const data = [working_supply.toString(), 0, votingBoost, repairBoost]
       return data
     } catch (error) {
       console.log('veBoostAllGauge-----error1---', error)
