@@ -503,6 +503,7 @@ export const ASSET_MAP = {
     decimals: TOKENS_INFO.xETH[2],
     descrition: 'Long ETH up to 4x',
     icon: '/images/x-logo.svg',
+    subIcon: '/tokens/steth.svg',
     isX: true,
     isShow24Change: true,
     baseSymbol: 'fxETH',
@@ -563,3 +564,19 @@ export default {
 //   beta: 1e15,
 //   initialMintRatio: 1e15,
 //   treasury: "0xf1A4c4D30D90D49DbA8Baf0e14dA5fff54B638b8"
+
+export const TOKEN_MAP = {
+  ETH: '/tokens/crypto-icons-stack.svg#eth',
+  stETH: '/tokens/steth.svg',
+  wstETH: '/tokens/steth.svg',
+  sfrxETH: '/tokens/sfrxeth.svg',
+  crvUSD: '/tokens/crvUSD.png',
+  fxUSD: '/tokens/fxusd.svg',
+  frxETH: '/tokens/frxeth.svg',
+  Frax: '/tokens/crypto-icons-stack.svg#frax',
+  USDC: '/tokens/crypto-icons-stack.svg#usdc',
+  USDT: '/tokens/crypto-icons-stack.svg#usdt',
+  WETH: '/tokens/crypto-icons-stack.svg#weth',
+  xETH: '/images/x-logo.svg',
+  fETH: '/images/f-logo.svg',
+}

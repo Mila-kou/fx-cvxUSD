@@ -15,7 +15,7 @@ import Select from '@/components/Select'
 import styles from './styles.module.scss'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
-import usePools from './usePools'
+// import usePools from './usePools'
 import { useZapIn } from '@/hooks/useZap'
 import {
   useFXUSD_contract,
@@ -51,12 +51,10 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
   const [clearTrigger, clearInput] = useClearInput()
-  const [isEarn, setIsEarn] = useState(true)
+  const [isEarn, setIsEarn] = useState(false)
   const { getZapInParams } = useZapIn()
 
-  const poolList = usePools()
-
-  console.log('poolList----', poolList)
+  const poolList = [] // usePools()
 
   const { isF, symbol: toSymbol, nav_text, markets } = assetInfo
 
@@ -647,20 +645,24 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         // onRetry={() => getMinAmount(true)}
       />
 
-      <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
+      <DetailCell
+        title="Mint Fee: "
+        content={[`${fee}%`]}
+        tooltip="Subtracted from amount received"
+      />
       {showMinReceive ? (
         <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
       ) : null}
 
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
 
-      <div className="flex justify-between mt-[16px]">
+      {/* <div className="flex justify-between mt-[16px]">
         <p className="text-[var(--yellow-color)]">
           Deposit into rebalance pool
         </p>
 
         <Switch checked={isEarn} onChange={setIsEarn} />
-      </div>
+      </div> 
       {isEarn && (
         <Select
           className="mt-[16px] h-[58px]"
@@ -673,6 +675,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
           onChange={setPoolAdddress}
         />
       )}
+      */}
 
       <div className={styles.action}>
         <BtnWapper
@@ -681,7 +684,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
           onClick={handleMint}
           width="100%"
         >
-          {isEarn ? 'Mint & Deposit' : 'Mint'}
+          {isEarn ? 'Mint & Deposit' : 'Mint fxUSD'}
         </BtnWapper>
       </div>
     </div>

@@ -68,7 +68,7 @@ const useGaugeApyEstimate = () => {
           .div(1e18)
           .times(type_weight)
           .div(1e18)
-          .toFixed(4)
+          .toFixed(2)
         const _nextWeek_gaugeEstimate = cBN(FXNRate)
           .div(1e18)
           .times(_weekSecond)
@@ -76,7 +76,7 @@ const useGaugeApyEstimate = () => {
           .div(1e18)
           .times(type_weight)
           .div(1e18)
-          .toFixed(4)
+          .toFixed(2)
         return { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate }
       } catch (error) {
         console.log('gaugeEstimate----error--', error)

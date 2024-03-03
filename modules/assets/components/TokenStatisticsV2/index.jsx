@@ -72,7 +72,7 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
 
   return (
     <div className={styles.container}>
-      <div className="flex gap-[14px] items-center mb-[24px]">
+      <div className="flex gap-[18px] items-center mb-[24px]">
         <div className="relative">
           <img className="w-[28px]" src={icon} />
           {subIcon ? (
@@ -117,9 +117,9 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
         </div>
 
         <p className="mt-[24px] text-[16px]">
-          Total Supply
+          Total {symbol} Supply
           <span className="ml-[16px] text-[var(--primary-color)]">
-            {totalSupply_text || '-'} {symbol}
+            {totalSupply_text || '-'}
           </span>
         </p>
         <p className="mt-[4px] text-[16px]">

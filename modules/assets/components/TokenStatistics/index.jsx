@@ -79,9 +79,9 @@ export default function TokenStatistics({ assetInfo }) {
         </div>
 
         <p className="mt-[24px] text-[16px]">
-          Total Supply
+          Total {symbol} Supply
           <span className="ml-[16px] text-[var(--primary-color)]">
-            {totalSupply_text || '-'} {symbol}
+            {totalSupply_text || '-'}
           </span>
         </p>
         <p className="mt-[4px] text-[16px]">

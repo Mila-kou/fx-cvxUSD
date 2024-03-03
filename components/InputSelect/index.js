@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { useToggle, useClickAway } from 'ahooks'
 import { DownOutlined } from '@ant-design/icons'
 import styles from './styles.module.scss'
+import { TOKEN_MAP } from '@/config/tokens'
 
 function InputSelect(props) {
   const {
@@ -50,12 +51,23 @@ function InputSelect(props) {
       {isOpen ? (
         <div className={styles.dropdown}>
           {options.map((item) => (
-            <p
-              className={cn(styles.item, item.value === value && styles.active)}
-              onClick={() => handleClick(item.value)}
-            >
-              {item.label}
-            </p>
+            <div className="flex gap-[10px] items-center py-[4px]">
+              {TOKEN_MAP[item.icon || item.label] ? (
+                <img
+                  className="w-[20px] h-[20px]"
+                  src={TOKEN_MAP[item.icon || item.label]}
+                />
+              ) : null}
+              <p
+                className={cn(
+                  styles.item,
+                  item.value === value && styles.active
+                )}
+                onClick={() => handleClick(item.value)}
+              >
+                {item.label}
+              </p>
+            </div>
           ))}
         </div>
       ) : null}

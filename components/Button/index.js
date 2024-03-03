@@ -14,7 +14,7 @@ export default function Button({
   disabled,
   theme,
   size,
-  type = 'default',
+  type = 'second', // 'default',
   className,
 }) {
   const handClick = () => {

@@ -200,9 +200,9 @@ export default function PoolCell({ cellData, ...pageOthers }) {
       }
       _apyDetailDom = (
         <div>
-          <p>Convex Apy</p>
+          <p>Convex APR</p>
           <p>
-            &nbsp;&nbsp; baseApy :{' '}
+            &nbsp;&nbsp; base APR :{' '}
             {cBN(_projectApy.convexLpApy.projectApys.baseApy).toFixed(2)} %
           </p>
           <p>
@@ -213,7 +213,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             &nbsp;&nbsp; CVX :{' '}
             {cBN(_projectApy.convexLpApy.projectApys.cvxApy).toFixed(2)} %
           </p>
-          <p>FXN Apy</p>
+          <p>FXN APR</p>
           <p>&nbsp;&nbsp; Min APR : {_projectApy._min_FXN_Apy} %</p>
           <p>&nbsp;&nbsp; Max APR : {_projectApy._max_FXN_Apy} %</p>
         </div>
@@ -332,21 +332,35 @@ export default function PoolCell({ cellData, ...pageOthers }) {
           </div>
           <div className="flex">Earn: {rewardTokenDom}</div>
           <div className={`${styles.content} gap-[32px]`}>
-            <Button size="small" onClick={() => setShowDepositModal(true)}>
+            <Button
+              size="small"
+              type="second"
+              onClick={() => setShowDepositModal(true)}
+            >
               Deposit
-            </Button>
-            <Button size="small" onClick={() => setShowWithdrawModal(true)}>
-              Withdraw
-            </Button>
-            <Button size="small" disabled={!canClaim} onClick={handleClaim}>
-              Claim
             </Button>
             <Button
               size="small"
+              type="second"
+              onClick={() => setShowWithdrawModal(true)}
+            >
+              Withdraw
+            </Button>
+            <Button
+              size="small"
+              type="default"
               disabled={!canClaimFXN}
               onClick={handleClaimFXN}
             >
               Claim FXN
+            </Button>
+            <Button
+              size="small"
+              type="default"
+              disabled={!canClaim}
+              onClick={handleClaim}
+            >
+              Claim CRV&CVX
             </Button>
           </div>
         </div>

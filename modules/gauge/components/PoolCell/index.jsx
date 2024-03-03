@@ -121,6 +121,7 @@ export default function PoolCell({
             <Button
               size="small"
               // disabled={!canCast}
+              type="second"
               disabled
               onClick={() => onCastVote(power)}
             >

@@ -168,6 +168,7 @@ export default function Cell({
             <Button
               width="220px"
               height="56px"
+              type="default"
               onClick={handleClaimReward}
               loading={claimRewarding}
             >

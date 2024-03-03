@@ -317,15 +317,11 @@ export default function Redeem({ slippage, assetInfo }) {
       let _mockAmount = tokenAmount
       let _mockRatio = 1
       let __bonus = 0
-
-      console.log('_account----', _account)
       // 默认比例 0.01
       if (_account !== _currentAccount) {
         _mockAmount = cBN(1).shiftedBy(18).toString()
         _mockRatio = cBN(tokenAmount).div(cBN(10).pow(18)).toFixed(4, 1)
       }
-      console.log('fromAmount----', _mockAmount, _mockRatio)
-
       let minout_ETH
       let _fTokenIn = 0
       let _xTokenIn = 0
@@ -338,7 +334,6 @@ export default function Redeem({ slippage, assetInfo }) {
       }
 
       if (isSwap) {
-        console.log('isSwap---', isSwap)
         const resData = await FxGatewayContract.methods
           .swap(_mockAmount, symbol === 'xETH', 0)
           .call({ from: _account })
@@ -348,7 +343,6 @@ export default function Redeem({ slippage, assetInfo }) {
         } else {
           minout_ETH = resData
         }
-        console.log('resData----', resData)
       } else if (symbol === 'stETH') {
         const { _baseOut, _bonus } = await marketContract.methods
           .redeem(_fTokenIn, _xTokenIn, _account, 0)
@@ -595,7 +589,11 @@ export default function Redeem({ slippage, assetInfo }) {
         onSymbolChanged={(v) => setSymbol(v)}
       />
 
-      <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
+      <DetailCell
+        title="Redeem Fee: "
+        content={[`${fee}%`]}
+        tooltip="Subtracted from amount received"
+      />
       {canReceived && (
         <DetailCell
           title="Min. Received:"

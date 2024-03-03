@@ -85,7 +85,7 @@ export const fb4 = (
   isMoney,
   decimals,
   toFixedNum = -1,
-  isTrimZero = true
+  isTrimZero = false
 ) => {
   if (cBN(balance).isZero()) {
     return isMoney ? '$0' : '-'
@@ -97,7 +97,7 @@ export const fb4 = (
   return `${isMoney ? '$' : ''}${formatBalance(
     balance,
     decimals ?? 18,
-    toFixedNum > -1 ? toFixedNum : isMoney ? 2 : 4,
+    toFixedNum > -1 ? toFixedNum : isMoney ? 2 : 2,
     isTrimZero
   )}`
 }

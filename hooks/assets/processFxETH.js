@@ -82,7 +82,7 @@ const processFxETH = (asset, baseToken, lastDayPrice) => {
     ...asset,
     ..._baseToken,
     nav,
-    nav_text: checkNotZoroNumOption(nav, fb4(nav, true, asset.decimals, 4)),
+    nav_text: checkNotZoroNumOption(nav, fb4(nav, true, asset.decimals, 2)),
     marketCap_text,
     totalBaseToken,
     totalBaseTokenUSD_text,

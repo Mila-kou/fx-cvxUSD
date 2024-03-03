@@ -585,7 +585,11 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         options={OPTIONS.map((item) => item[0])}
         onSymbolChanged={(v) => setSymbol(v)}
       />
-      <DetailCell title="Redeem Fee:" content={[`${fee}%`]} />
+      <DetailCell
+        title="Redeem Fee: "
+        content={[`${fee}%`]}
+        tooltip="Subtracted from amount received"
+      />
       {canReceived && (
         <DetailCell
           title="Min. Received:"

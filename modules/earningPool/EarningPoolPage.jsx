@@ -11,7 +11,7 @@ import MerkleTree from './MerkleTree'
 
 const Header = ({ title }) => (
   <div>
-    <p className="mt-[36px] font-bold">{title}</p>
+    <p className="font-bold">{title}</p>
     <div className="px-[16px] flex justify-between">
       <div className="w-[230px]" />
       <div className="w-[120px] text-[14px]">TVL</div>
@@ -51,19 +51,19 @@ export default function EarningPoolPage() {
 
   return (
     <div className={styles.container}>
-      <div className={`${styles.header} mt-[32px]`}>
+      <div className={`${styles.content} mt-[32px]`}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
-          Earn Pools
+          Staking Pools
         </div>
 
-        <Header title="fxUSD Pools" />
+        <Header title="Stake fxUSD" />
         <RebalancePoolCell
-          title="fxUSD Rebalance Pool"
+          title="fxUSD Staking Pool"
           contractType="rebalancePoolV2_info_fxUSD_wstETH"
           subTitle={
             <p className="text-[14px]">
-              Earn wstETH when staked
+              Earn wstETH
               <br />
               Redeem to wstETH
             </p>
@@ -71,11 +71,11 @@ export default function EarningPoolPage() {
           {...fxUSD_wstETH_pool}
         />
         <RebalancePoolCell
-          title="fxUSD Rebalance Pool"
+          title="fxUSD Staking Pool"
           contractType="rebalancePoolV2_info_fxUSD_xstETH"
           subTitle={
             <p className="text-[14px]">
-              Earn wstETH when staked
+              Earn wstETH
               <br />
               Redeem to xstETH
             </p>
@@ -83,11 +83,11 @@ export default function EarningPoolPage() {
           {...fxUSD_xstETH_pool}
         />
         <RebalancePoolCell
-          title="fxUSD Rebalance Pool"
+          title="fxUSD Staking Pool"
           contractType="rebalancePoolV2_info_fxUSD_sfrxETH"
           subTitle={
             <p className="text-[14px]">
-              Earn frxETH when staked
+              Earn frxETH
               <br />
               Redeem to sfrxETH
             </p>
@@ -95,25 +95,27 @@ export default function EarningPoolPage() {
           {...fxUSD_sfrxETH_pool}
         />
         <RebalancePoolCell
-          title="fxUSD Rebalance Pool"
+          title="fxUSD Staking Pool"
           contractType="rebalancePoolV2_info_fxUSD_xfrxETH"
           subTitle={
             <p className="text-[14px]">
-              Earn frxETH when staked
+              Earn frxETH
               <br />
               Redeem to xfrxETH
             </p>
           }
           {...fxUSD_xfrxETH_pool}
         />
+      </div>
 
-        <Header title="fETH Pools" />
+      <div className={`${styles.content} `}>
+        <Header title="Stake fETH" />
         <RebalancePoolCell
-          title="fETH Rebalance Pool"
+          title="fETH Staking Pool"
           contractType="rebalancePoolV2_info_A"
           subTitle={
             <p className="text-[14px]">
-              Earn wstETH when staked
+              Earn wstETH
               <br />
               Redeem to stETH
             </p>
@@ -121,11 +123,11 @@ export default function EarningPoolPage() {
           {...poolAData}
         />
         <RebalancePoolCell
-          title="fETH Rebalance Pool"
+          title="fETH Staking Pool"
           contractType="rebalancePoolV2_info_B"
           subTitle={
             <p className="text-[14px]">
-              Earn wstETH when staked
+              Earn wstETH
               <br />
               Redeem to xETH
             </p>
@@ -133,14 +135,26 @@ export default function EarningPoolPage() {
           hasXETH
           {...poolBData}
         />
+      </div>
 
-        <Header title="f(x) Curve LPs" />
+      <div className={`${styles.content} `}>
+        <Header title="Stake f(x) Curve LPs" />
         {pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
         ))}
-
-        <MerkleTree />
       </div>
+
+      <MerkleTree />
+
+      <p className="w-[1144px] mt-[32px] px-[64px] text-[16px] text-[var(--second-text-color)]">
+        Disclaimer: f(x) is a new protocol. Users should be aware that there are
+        risks with staking tokens in any of the staking pools listed above. It
+        is possible that the f(x) system will enter stability mode for various
+        assets in volatile market conditions. User’s supplied assets may be
+        redeemed for ETH, an ETH Liquid Staking Derivative or an X-token
+        depending on which rebalance pool their tokens are deposited. Please
+        proceed with caution.
+      </p>
     </div>
   )
 }

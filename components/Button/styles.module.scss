@@ -2,7 +2,7 @@
 .btn {
   @include colorful-button;
   &[data-type='second'] {
-    background: var(--input-background-color);
+    background: #3a4045;
     box-shadow: none;
     color: var(--main-text-color);
   }

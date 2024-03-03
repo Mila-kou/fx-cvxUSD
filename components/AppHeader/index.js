@@ -19,13 +19,12 @@ import Menu from '@/components/menu'
 import FAQ from '@/components/FAQ'
 
 const routers = [
-  ['Assets', '/assets'],
+  ['Mint & Redeem', '/assets'],
   // ['f(x) Protocol', '/home'],
-  ['Earn', '/earning-pool'],
+  ['Staking Pools', '/staking'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
   ['Genesis', '/genesis'],
-  ['Booster', '/booster'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
@@ -163,6 +162,28 @@ export default function AppHeader() {
     [blockTime]
   )
 
+  const MORE_LIST = [
+    {
+      label: 'Booster',
+      onClick: () => push('/booster'),
+      url: '/booster',
+    },
+    {
+      label: 'Vesting',
+      onClick: () => push('/vesting'),
+      url: '/vesting',
+    },
+    {
+      label: 'Rebalance Pool (Deprecated)',
+      onClick: () => push('/rebalance-pool'),
+      url: '/rebalance-pool',
+    },
+    {
+      label: 'Governance',
+      onClick: () => window.open('https://snapshot.org/#/fxn.eth', '_blank'),
+    },
+  ]
+
   return (
     <div>
       <div className={styles.container}>
@@ -197,15 +218,6 @@ export default function AppHeader() {
               {label} {tag ? <p className={styles.tag}>{tag}</p> : null}
             </Link>
           ))}
-          <Link
-            href="/vesting"
-            className={cn(
-              styles.route,
-              route.includes('/vesting') && styles.active
-            )}
-          >
-            Vesting
-          </Link>
           <a
             className={styles.route}
             target="_blank"
@@ -220,20 +232,7 @@ export default function AppHeader() {
           >
             FAQ
           </span>
-          <Menu
-            label="More"
-            options={[
-              {
-                label: 'Rebalance Pool (Deprecated)',
-                onClick: () => push('/rebalance-pool'),
-              },
-              {
-                label: 'Governance',
-                onClick: () =>
-                  window.open('https://snapshot.org/#/fxn.eth', '_blank'),
-              },
-            ]}
-          />
+          <Menu label="More" options={MORE_LIST} />
         </div>
         <div className={styles.right}>
           {/* <a
@@ -333,17 +332,20 @@ export default function AppHeader() {
                 >
                   Bridge
                 </a>
-                <a
-                  className={styles.route}
-                  target="_blank"
-                  href="https://snapshot.org/#/fxn.eth"
-                  rel="noreferrer"
-                >
-                  Governance
-                </a>
                 <p className={styles.route} onClick={toggleFAQ}>
                   FAQ
                 </p>
+                {MORE_LIST.map((item) => (
+                  <p
+                    className={cn(
+                      styles.route,
+                      route.includes(item?.url) && styles.active
+                    )}
+                    onClick={item.onClick}
+                  >
+                    {item.label}
+                  </p>
+                ))}
               </div>
 
               {/* <div className={styles.item}>

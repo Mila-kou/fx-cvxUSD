@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Button } from 'antd'
 import cn from 'classnames'
+import { Tooltip } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import { dollarText } from '@/utils/index'
 import styles from './styles.module.scss'
 
@@ -8,10 +9,23 @@ export function DetailCell({
   title,
   isGreen,
   content: [num1 = '', num2, num3],
+  tooltip,
 }) {
   return (
     <div className={cn(styles.detailCell, isGreen ? styles.green : '')}>
-      <p>{title}</p>
+      <p>
+        {title}
+        {tooltip ? (
+          <Tooltip
+            placement="top"
+            title={<p className="text-[16px] py-[8px]">{tooltip}</p>}
+            arrow
+            color="#000"
+          >
+            <InfoCircleOutlined />
+          </Tooltip>
+        ) : null}
+      </p>
       <div className={styles.content}>
         <span>{num1}</span>{' '}
         {num2 && num2 !== '-' ? `(${dollarText(num2)})` : ''}

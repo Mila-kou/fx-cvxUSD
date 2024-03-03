@@ -81,21 +81,26 @@ const MerkleTree = () => {
   }
 
   return (
-    <div className="flex justify-between mt-[32px] items-center">
-      <p className="text-[18px]">Bonus Farming: </p>
-      <div className="flex justify-center gap-[32px] items-center">
-        <div className={styles.check}>
-          <p>{data.amount ? `${fb4(data.amount)} FXN` : 'Nothing to claim'}</p>
+    <div className={`${styles.content} `}>
+      <div className="flex justify-between items-center">
+        <p className="text-[18px]">Bonus Farming: </p>
+        <div className="flex justify-center gap-[32px] items-center">
+          <div className={styles.check}>
+            <p>
+              {data.amount ? `${fb4(data.amount)} FXN` : 'Nothing to claim'}
+            </p>
+          </div>
+          <Button
+            disabled={data.isClaimed}
+            className={styles.action}
+            size="small"
+            type="default"
+            onClick={handleClaim}
+            loading={claiming}
+          >
+            {data.isClaimed ? `Claimed` : 'Claim'}
+          </Button>
         </div>
-        <Button
-          disabled={data.isClaimed}
-          className={styles.action}
-          size="small"
-          onClick={handleClaim}
-          loading={claiming}
-        >
-          {data.isClaimed ? `Claimed` : 'Claim'}
-        </Button>
       </div>
     </div>
   )

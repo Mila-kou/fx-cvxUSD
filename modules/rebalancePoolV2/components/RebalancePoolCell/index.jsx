@@ -258,11 +258,11 @@ export default function RebalancePoolCell({
       {openPanel ? (
         <div className={`${styles.panel}`}>
           <div className={styles.content}>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               {`CR < 130% ${
                 isFXUSDPool ? 'fxUSD' : 'fETH'
               } will be used for rebalance`}
-            </div>
+            </div> */}
             <div className="mt-[12px]">
               Projected APR: {apyDom}{' '}
               <Tooltip
@@ -284,14 +284,15 @@ export default function RebalancePoolCell({
               </div>
               <div>
                 <div className="flex gap-[32px]">
-                  <Button size="small" onClick={handleDeposit}>
+                  <Button size="small" type="second" onClick={handleDeposit}>
                     Deposit
                   </Button>
-                  <Button size="small" onClick={handleWithdraw}>
+                  <Button size="small" type="second" onClick={handleWithdraw}>
                     Withdraw
                   </Button>
                   <Button
                     size="small"
+                    type="default"
                     disabled={!canClaim}
                     loading={claiming}
                     onClick={() => handleClaim()}

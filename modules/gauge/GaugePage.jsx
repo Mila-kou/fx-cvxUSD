@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Checkbox } from 'antd'
-import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { MedicineBoxOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
 import CastVoteModal from './components/CastVoteModal'
 import { REBALANCE_GAUGE_LIST, POOLS_LIST } from '@/config/aladdinVault'
@@ -49,7 +49,7 @@ export default function GaugePage() {
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <div className="flex items-center gap-[6px]">
-            <DotChartOutlined />
+            <MedicineBoxOutlined />
             Emissions Voting
           </div>
           {/* <p>

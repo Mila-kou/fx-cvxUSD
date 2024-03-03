@@ -73,7 +73,7 @@ const useV2Assets = () => {
           ...asset,
           nav_text: checkNotZoroNumOption(
             nav,
-            fb4(nav, true, asset.decimals, 4, false)
+            fb4(nav, true, asset.decimals, 2, false)
           ),
           totalSupply_text,
           marketCap_text,

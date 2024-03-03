@@ -5,7 +5,7 @@ import { SyncOutlined } from '@ant-design/icons'
 import InputSelect from '@/components/InputSelect'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
-import { ASSET_MAP } from '@/config/tokens'
+import { ASSET_MAP, TOKEN_MAP } from '@/config/tokens'
 
 export const useClearInput = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0)

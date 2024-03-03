@@ -9,8 +9,9 @@
     color: var(--primary-color);
   }
 
-  .header {
+  .content {
     min-width: 1052px;
+    margin-top: 16px;
     border-radius: 10px;
     background: var(--background-color);
     padding: 38px 57px;
@@ -24,6 +25,7 @@
     .headerTitle {
       display: flex;
       align-items: center;
+      margin-bottom: 36px;
       gap: 6px;
     }
 

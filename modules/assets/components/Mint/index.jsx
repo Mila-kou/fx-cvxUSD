@@ -666,7 +666,11 @@ export default function Mint({ slippage, assetInfo }) {
         />
       ) : null}
 
-      <DetailCell title="Mint Fee:" content={[`${fee}%`]} />
+      <DetailCell
+        title="Mint Fee: "
+        content={[`${fee}%`]}
+        tooltip="Subtracted from amount received"
+      />
       {showMinReceive ? (
         <DetailCell title="Min. Received:" content={[received, receivedTvl]} />
       ) : null}
