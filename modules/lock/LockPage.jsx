@@ -161,7 +161,7 @@ const LockPage = () => {
               <Visible visible={canClaimRewards}>
                 <Button
                   width="100%"
-                  type="default"
+                  type="red"
                   onClick={handleClaimRewards}
                   loading={crLoading}
                 >
@@ -201,7 +201,7 @@ const LockPage = () => {
               {pageData.status === 'expired' && (
                 <Button
                   width="100%"
-                  type="default"
+                  type="red"
                   loading={loading}
                   onClick={() => handleWithdraw(true)}
                 >

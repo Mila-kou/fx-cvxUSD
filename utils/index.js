@@ -120,11 +120,11 @@ export const checkNotZoroNumOption = (num, cb) => {
   return '-'
 }
 
-export const numberLess = (number, floorNum, cb) => {
+export const numberLess = (number, floorNum) => {
   if (cBN(number).isLessThan(floorNum)) {
     return `<${floorNum}`
   }
-  return cb
+  return number
 }
 
 export const getConvexData = (connvexInfo, tokenName) => {

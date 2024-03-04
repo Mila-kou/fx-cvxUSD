@@ -292,7 +292,7 @@ export default function RebalancePoolCell({
                   </Button>
                   <Button
                     size="small"
-                    type="default"
+                    type="red"
                     disabled={!canClaim}
                     loading={claiming}
                     onClick={() => handleClaim()}

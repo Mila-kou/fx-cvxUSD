@@ -7,6 +7,11 @@
     color: var(--main-text-color);
   }
 
+  &[data-type='red'] {
+    background: #800020;
+    box-shadow: none;
+  }
+
   span {
     margin-left: 10px;
   }

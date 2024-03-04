@@ -1,6 +1,12 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import {
+  cBN,
+  checkNotZoroNum,
+  checkNotZoroNumOption,
+  fb4,
+  numberLess,
+} from '@/utils/index'
 import { useGlobal } from '@/contexts/GlobalProvider'
 import useGaugeApyEstimate from '@/hooks/useGaugeApyEstimate'
 import useFxCommon from '@/modules/assets/hooks/useFxCommon'
@@ -183,9 +189,9 @@ const useStabiltyPool = (infoKey) => {
         _rewardTokenPrice = _fxnPrice
       }
 
-      const userRewardTokenClaimable_text = checkNotZoroNumOption(
-        _rewardTokenNum,
-        fb4(_rewardTokenNum)
+      const userRewardTokenClaimable_text = numberLess(
+        checkNotZoroNumOption(_rewardTokenNum, fb4(_rewardTokenNum)),
+        0.01
       )
       let userRewardTokenClaimableTvl = cBN(0)
       if (
@@ -195,9 +201,12 @@ const useStabiltyPool = (infoKey) => {
         userRewardTokenClaimableTvl =
           cBN(_rewardTokenPrice).times(_rewardTokenNum)
       }
-      const userRewardTokenClaimableTvl_text = checkNotZoroNumOption(
-        userRewardTokenClaimableTvl,
-        fb4(userRewardTokenClaimableTvl)
+      const userRewardTokenClaimableTvl_text = numberLess(
+        checkNotZoroNumOption(
+          userRewardTokenClaimableTvl,
+          fb4(userRewardTokenClaimableTvl)
+        ),
+        0.01
       )
       return {
         userRewardTokenClaimableRes: _rewardTokenNum,

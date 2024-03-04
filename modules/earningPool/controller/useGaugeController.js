@@ -1,7 +1,13 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import {
+  cBN,
+  checkNotZoroNum,
+  checkNotZoroNumOption,
+  fb4,
+  numberLess,
+} from '@/utils/index'
 import { useGlobal } from '@/contexts/GlobalProvider'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
@@ -213,9 +219,12 @@ const useGaugeController = (LIST = POOLS_LIST) => {
         _rewardTokenNum = fxnRewardData
         _rewardTokenPrice = _fxnPrice
       }
-      const userRewardTokenClaimable_text = checkNotZoroNumOption(
-        _rewardTokenNum,
-        fb4(_rewardTokenNum, false, 18, 2, false)
+      const userRewardTokenClaimable_text = numberLess(
+        checkNotZoroNumOption(
+          _rewardTokenNum,
+          fb4(_rewardTokenNum, false, 18, 2, false)
+        ),
+        0.01
       )
       let userRewardTokenClaimableTvl = cBN(0)
       if (
@@ -225,9 +234,12 @@ const useGaugeController = (LIST = POOLS_LIST) => {
         userRewardTokenClaimableTvl =
           cBN(_rewardTokenPrice).times(_rewardTokenNum)
       }
-      const userRewardTokenClaimableTvl_text = checkNotZoroNumOption(
-        userRewardTokenClaimableTvl,
-        fb4(userRewardTokenClaimableTvl, false, 18, 2, false)
+      const userRewardTokenClaimableTvl_text = numberLess(
+        checkNotZoroNumOption(
+          userRewardTokenClaimableTvl,
+          fb4(userRewardTokenClaimableTvl, false, 18, 2, false)
+        ),
+        0.01
       )
       return {
         userRewardTokenClaimableRes: _rewardTokenNum,

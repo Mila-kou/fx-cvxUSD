@@ -82,7 +82,7 @@ export default function VestingPage() {
           <h2 className="flex gap-[6px]">
             <img
               className="h-[22px]"
-              type="default"
+              type="red"
               src={`/images/vesting${theme === 'red' ? '' : '-white'}.svg`}
             />
             Claim FXN Tokens

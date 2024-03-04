@@ -94,7 +94,7 @@ const MerkleTree = () => {
             disabled={data.isClaimed}
             className={styles.action}
             size="small"
-            type="default"
+            type="red"
             onClick={handleClaim}
             loading={claiming}
           >

@@ -348,7 +348,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             </Button>
             <Button
               size="small"
-              type="default"
+              type="red"
               disabled={!canClaimFXN}
               onClick={handleClaimFXN}
             >
@@ -356,7 +356,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
             </Button>
             <Button
               size="small"
-              type="default"
+              type="red"
               disabled={!canClaim}
               onClick={handleClaim}
             >
