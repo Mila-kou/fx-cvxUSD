@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { cBN, checkNotZoroNum, fb4, numberLess } from 'utils'
 import moment from 'moment'
@@ -10,6 +10,7 @@ const useInfo = (refreshTrigger) => {
   const { tokens } = useSelector((state) => state.token)
   const wstETHPrice = tokens.wstETH.price
   const fxnPrice = tokens.FXN.price
+  const sfrxETHPrice = tokens.sfrxETH.price
   const { info, contract } = useData(refreshTrigger)
   const { current, currentAccount } = useWeb3()
 
@@ -61,7 +62,16 @@ const useInfo = (refreshTrigger) => {
     contract,
     contractInfo: info,
   })
-
+  const getSfrxETHToWstETHNum = useCallback(
+    (sfrxETHNum) => {
+      if (checkNotZoroNum(sfrxETHNum) && checkNotZoroNum(wstETHPrice)) {
+        const _wstETHNum = cBN(sfrxETHNum).times(sfrxETHPrice).div(wstETHPrice)
+        return _wstETHNum
+      }
+      return 0
+    },
+    [sfrxETHPrice, wstETHPrice]
+  )
   useEffect(() => {
     const {
       feeBalance,
@@ -78,6 +88,8 @@ const useInfo = (refreshTrigger) => {
       userVeRewards3,
       userVeRewards4,
       platformFeeSpliterStETH,
+      platformFeeSpliterSfrxETH,
+      platformFeeSpliterwstETH,
       veFXNFeeTokenLastBalance,
       stETHTowstETHRate,
     } = info
@@ -119,6 +131,13 @@ const useInfo = (refreshTrigger) => {
       }
     }
 
+    const _PlatformFeeSfrxETHToWstETHNum = getSfrxETHToWstETHNum(
+      platformFeeSpliterSfrxETH
+    )
+    // console.log(
+    //   '_PlatformFeeSfrxETHToWstETHNum---',
+    //   _PlatformFeeSfrxETHToWstETHNum.toString(10)
+    // )
     setPageData((prev) => ({
       ...prev,
       overview: [
@@ -148,6 +167,16 @@ const useInfo = (refreshTrigger) => {
               .times(platformFeeSpliterStETH_rewardRate)
               .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
+          .plus(
+            cBN(_PlatformFeeSfrxETHToWstETHNum).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
+          .plus(
+            cBN(platformFeeSpliterwstETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance),
         weekVal: cBN(tokensThisWeek)
@@ -156,8 +185,19 @@ const useInfo = (refreshTrigger) => {
               .times(platformFeeSpliterStETH_rewardRate)
               .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
+          .plus(
+            cBN(_PlatformFeeSfrxETHToWstETHNum).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
+          .plus(
+            cBN(platformFeeSpliterwstETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
           .minus(veFXNFeeTokenLastBalance)
           .plus(feeBalance)
+
           .multipliedBy(wstETHPrice),
         untilTime: moment(
           calc4(current, true) * 1000 + (86400 * 7 - 1) * 1000

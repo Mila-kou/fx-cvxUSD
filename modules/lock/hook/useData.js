@@ -8,6 +8,7 @@ import {
   useFXN,
   useErc20Token,
   useWstETH,
+  useSfrxETH,
 } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
@@ -24,6 +25,7 @@ const useData = (refreshTrigger) => {
   )
   const { contract: wstETHContract, address: wstETHAddress } = useWstETH()
   const { contract: votingEscrowBoostContract } = useVotingEscrowBoost()
+  const { contract: sfrxETHContract, address: sfrxETHAddress } = useSfrxETH()
 
   const multiCallsV2 = useMutiCallV2()
 
@@ -71,6 +73,12 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
+        sfrxETHContract.methods.balanceOf(
+          config.contracts.fx_PlatformFeeSpliter
+        ),
+        wstETHContract.methods.balanceOf(
+          config.contracts.fx_PlatformFeeSpliter
+        ),
         wstETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
         veFXNFeeContract.methods.token_last_balance(),
         veFXNFeeContract.methods.claim(_currentAccount),
@@ -85,6 +93,8 @@ const useData = (refreshTrigger) => {
         tokensThisWeek,
         tokensPerWeek,
         platformFeeSpliterStETH,
+        platformFeeSpliterSfrxETH,
+        platformFeeSpliterwstETH,
         feeBalance,
         veFXNFeeTokenLastBalance,
         userVeRewards,
@@ -94,19 +104,21 @@ const useData = (refreshTrigger) => {
         userVeRewards4,
         stETHTowstETHRate,
       ] = await multiCallsV2(tokensInfoList)
-      console.log(
-        'timestamp---tokensThisWeek--tokensPerWeek--platformFeeSpliterStETH--feeBalance--veFXNFeeTokenLastBalance--userVeRewards--',
-        thisWeekTimestamp,
-        tokensThisWeek,
-        tokensPerWeek,
-        platformFeeSpliterStETH,
-        feeBalance,
-        veFXNFeeTokenLastBalance,
-        userVeRewards,
-        userVeRewards1,
-        userVeRewards2,
-        stETHTowstETHRate
-      )
+      // console.log(
+      //   'timestamp---tokensThisWeek--tokensPerWeek--platformFeeSpliterStETH--platformFeeSpliterSfrxETH--platformFeeSpliterwstETH--feeBalance--veFXNFeeTokenLastBalance--userVeRewards--',
+      //   thisWeekTimestamp,
+      //   tokensThisWeek,
+      //   tokensPerWeek,
+      //   platformFeeSpliterStETH,
+      //   platformFeeSpliterSfrxETH,
+      //   platformFeeSpliterwstETH,
+      //   feeBalance,
+      //   veFXNFeeTokenLastBalance,
+      //   userVeRewards,
+      //   userVeRewards1,
+      //   userVeRewards2,
+      //   stETHTowstETHRate
+      // )
       console.log('timestamp---tokensPerWeek', preWeekTimestamp, tokensPerWeek)
       const fxnCirculationSupply = cBN(fxnTotalAmount)
         .minus(fxnVested)
@@ -130,6 +142,8 @@ const useData = (refreshTrigger) => {
           fxnCirculationSupply,
           userLocked: { amount, end: moment(end * 1000).unix() },
           platformFeeSpliterStETH,
+          platformFeeSpliterSfrxETH,
+          platformFeeSpliterwstETH,
           veFXNFeeTokenLastBalance,
           stETHTowstETHRate,
         }
