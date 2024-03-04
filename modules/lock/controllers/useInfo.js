@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { cBN, checkNotZoroNum, fb4 } from 'utils'
+import { cBN, checkNotZoroNum, fb4, numberLess } from 'utils'
 import moment from 'moment'
 import useData from '../hook/useData'
 import { calc4 } from '../util'
@@ -189,18 +189,18 @@ const useInfo = (refreshTrigger) => {
           amount: userVeRewards,
           value: (
             <>
-              <p>{fb4(userVeRewards)} wstETH</p>
+              <p>{numberLess(fb4(userVeRewards), 0.01)} wstETH</p>
               {checkNotZoroNum(userVeRewards1) && (
-                <p>{fb4(userVeRewards1)} wstETH</p>
+                <p>{numberLess(fb4(userVeRewards1), 0.01)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards2) && (
-                <p>{fb4(userVeRewards2)} wstETH</p>
+                <p>{numberLess(fb4(userVeRewards2), 0.01)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards3) && (
-                <p>{fb4(userVeRewards3)} wstETH</p>
+                <p>{numberLess(fb4(userVeRewards3), 0.01)} wstETH</p>
               )}
               {checkNotZoroNum(userVeRewards4) && (
-                <p>{fb4(userVeRewards4)} wstETH</p>
+                <p>{numberLess(fb4(userVeRewards4), 0.01)} wstETH</p>
               )}
             </>
           ),
