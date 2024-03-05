@@ -22,7 +22,7 @@ import styles from './styles.module.scss'
 import useGenesis_c from './controller/useGenesis_c'
 import { useZapIn } from '@/hooks/useZap'
 import { DetailCell } from '@/modules/assets/components/Common'
-// import MerkleTree from '@/modules/earningPool/MerkleTree'
+import MerkleTree from '@/modules/earningPool/MerkleTree'
 
 const STAGE = {
   LAUNCHING: 'Launching...',
@@ -37,7 +37,7 @@ export default function GenesisPage() {
   const [slippage, setSlippage] = useState(0.3)
   const { getZapInParams } = useZapIn()
 
-  const [stage, setStage] = useState(STAGE.LAUNCHED)
+  const [stage, setStage] = useState(STAGE.FULL_LAUNCHED)
 
   const [clearTrigger, clearInput] = useClearInput()
   const { _currentAccount, sendTransaction } = useWeb3()
@@ -466,7 +466,11 @@ export default function GenesisPage() {
                 </div>
               ))}
 
-              {/* <MerkleTree /> */}
+              <div className="mt-[32px] flex flex-col gap-[16px]">
+                <MerkleTree />
+                <MerkleTree tokenName="wstETH" title="" />
+                <MerkleTree tokenName="FXS" title="" />
+              </div>
             </div>
           )}
         </div>

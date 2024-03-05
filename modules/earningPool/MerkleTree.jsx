@@ -8,19 +8,28 @@ import useMerkleTreeData from './controller/useMerkleTreeData'
 import { useAladdinTree } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
-const MerkleTree = () => {
+// FXN、wstETH、FXS
+const tokenMap = {
+  FXN: config.tokens.FXN,
+  wstETH: config.tokens.wstETH,
+  FXS: config.tokens.fxs,
+}
+
+const MerkleTree = ({ title = 'Bonus Farming:', tokenName = 'FXN' }) => {
   const { currentAccount, sendTransaction } = useWeb3()
 
   const [data, setData] = useState({})
   const [claiming, setClaiming] = useState(false)
 
-  const { getTreeByAddress } = useMerkleTreeData()
+  const { getTreeByAddressAndTokenName } = useMerkleTreeData()
+
+  const tokenAddress = tokenMap[tokenName]
 
   const { contract: AladdinMerkleTreeContract } = useAladdinTree()
   const startTime = 1705511700000
   const startTimeText = new Date(startTime).toLocaleString()
 
-  const merkleData = getTreeByAddress(currentAccount)
+  const merkleData = getTreeByAddressAndTokenName(currentAccount, tokenName)
 
   const canClaimTime = useMemo(() => {
     const _time = new Date().getTime()
@@ -32,9 +41,18 @@ const MerkleTree = () => {
 
   const handleClaim = async () => {
     setClaiming(true)
+
+    // console.log(
+    //   'claim----',
+    //   tokenAddress,
+    //   data.index,
+    //   currentAccount,
+    //   data.amount,
+    //   JSON.stringify(data.proof)
+    // )
     try {
       const apiCall = AladdinMerkleTreeContract.methods.claim(
-        config.tokens.FXN,
+        tokenAddress,
         data.index,
         currentAccount,
         data.amount,
@@ -67,7 +85,7 @@ const MerkleTree = () => {
     let isClaimed = false
     if (merkleData && Object.values(merkleData).length) {
       isClaimed = await AladdinMerkleTreeContract.methods
-        .isClaimed(config.tokens.FXN, merkleData.index)
+        .isClaimed(tokenAddress, merkleData.index)
         .call({ from: currentAccount })
     }
 
@@ -85,11 +103,13 @@ const MerkleTree = () => {
   return (
     <div className={`${styles.content} `}>
       <div className="flex justify-between items-center">
-        <p className="text-[18px]">Bonus Farming: </p>
+        <p className="text-[18px]">{title}</p>
         <div className="flex justify-center gap-[32px] items-center">
           <div className={styles.check}>
             <p>
-              {data.amount ? `${fb4(data.amount)} FXN` : 'Nothing to claim'}
+              {data.amount
+                ? `${fb4(data.amount)} ${tokenName}`
+                : 'Nothing to claim'}
             </p>
           </div>
           <Button
@@ -99,6 +119,7 @@ const MerkleTree = () => {
             type="red"
             onClick={handleClaim}
             loading={claiming}
+            width="120px"
           >
             {data.isClaimed ? `Claimed` : 'Claim'}
           </Button>

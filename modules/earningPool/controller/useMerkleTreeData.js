@@ -1,20 +1,29 @@
-import treeJSON from 'config/merkletree/earnPools.json'
+import FXNJSON from 'config/merkletree/FXN.json'
+import wstETHJSON from 'config/merkletree/wstETH.json'
+import FXSJSON from 'config/merkletree/FXS.json'
+
+const tokenMap = {
+  FXN: FXNJSON,
+  wstETH: wstETHJSON,
+  FXS: FXSJSON,
+}
 
 const useMerkleTreeData = () => {
-  const getTreeByAddress = (userAddress) => {
+  const getTreeByAddressAndTokenName = (userAddress, tokenName) => {
+    const JSON = tokenMap[tokenName]
     const _newList = {}
     // eslint-disable-next-line guard-for-in
-    for (const key in treeJSON.claims) {
-      _newList[key.toLowerCase()] = treeJSON.claims[key]
+    for (const key in JSON.claims) {
+      _newList[key.toLowerCase()] = JSON.claims[key]
     }
-    if (treeJSON.claims && _newList[userAddress.toLowerCase()]) {
+    if (JSON.claims && _newList[userAddress.toLowerCase()]) {
       return _newList[userAddress.toLowerCase()]
     }
     return {}
   }
 
   return {
-    getTreeByAddress,
+    getTreeByAddressAndTokenName,
   }
 }
 
