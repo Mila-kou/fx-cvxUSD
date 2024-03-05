@@ -6,7 +6,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import { useFX_ManageableVesting } from '@/hooks/useContracts'
 
 const useVesting = (refreshTrigger) => {
-  const { current, currentAccount } = useWeb3()
+  const { current, currentAccount, sendTransaction } = useWeb3()
   const {
     canClaim,
     canClaim_1,
@@ -269,14 +269,17 @@ const useVesting = (refreshTrigger) => {
         apiCall = ManageableVestingContract.methods.claim(_index)
       }
 
-      const estimatedGas = await apiCall.estimateGas({
-        from: currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'Claim',
-        action: 'Claim',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: ManageableVestingContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'Claim',
+          action: 'Claim',
+        }
+      )
       loadingFn(false)
       setRefreshTriggerFn((prev) => prev + 1)
     } catch (error) {
@@ -293,14 +296,17 @@ const useVesting = (refreshTrigger) => {
         __index,
         currentAccount
       )
-      const estimatedGas = await apiCall.estimateGas({
-        from: currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'ClaimReward',
-        action: 'ClaimReward',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: ManageableVestingContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'ClaimReward',
+          action: 'ClaimReward',
+        }
+      )
       loadingFn(false)
       setRefreshTriggerFn((prev) => prev + 1)
     } catch (error) {

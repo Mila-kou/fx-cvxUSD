@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useCallback } from 'react'
 import { useQuery, useQueries, useMutation } from '@tanstack/react-query'
 import Web3 from 'web3'
+import { ethers } from 'ethers'
 import ethProvider from 'eth-provider'
 import { useConnectWallet, useSetChain } from '@web3-onboard/react'
 import moment from 'moment'
@@ -123,6 +124,16 @@ function Web3ContextProvider({ children }) {
     [blockTime]
   )
 
+  const sendTransaction = useCallback(
+    async (...args) => {
+      const ethersProvider = new ethers.BrowserProvider(wallet.provider, 'any')
+
+      const signer = await ethersProvider.getSigner(currentAccount)
+      return signer.sendTransaction(...args)
+    },
+    [currentAccount, wallet]
+  )
+
   const value = useMemo(
     () => ({
       web3,
@@ -142,6 +153,7 @@ function Web3ContextProvider({ children }) {
       switchChain,
       settingChain,
       isAllowChain,
+      sendTransaction,
     }),
     [
       web3,
@@ -160,6 +172,7 @@ function Web3ContextProvider({ children }) {
       switchChain,
       settingChain,
       isAllowChain,
+      sendTransaction,
     ]
   )
 

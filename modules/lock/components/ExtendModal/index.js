@@ -11,7 +11,7 @@ import { useVeFXN } from '@/hooks/useContracts'
 import styles from './styles.module.scss'
 
 export default function ExtendModal({ onCancel, pageData, refreshAction }) {
-  const { isAllReady, currentAccount } = useWeb3()
+  const { isAllReady, sendTransaction } = useWeb3()
   const [locktime, setLocktime] = useState(moment())
   const [current, setCurrent] = useState()
   const [locking, setLocking] = useState(false)
@@ -25,10 +25,12 @@ export default function ExtendModal({ onCancel, pageData, refreshAction }) {
       const apiCall = veFXNContract.methods.increase_unlock_time(
         locktime.unix()
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: veFXNContract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'ctr',
           action: 'lock',

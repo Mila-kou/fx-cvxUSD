@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
@@ -6,7 +6,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import NoPayableAction from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 import useApprove from '@/hooks/useApprove'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
@@ -17,7 +17,7 @@ import {
 import { getZapOutParams } from '@/hooks/useZap'
 
 export default function RedeemX({ slippage, assetInfo }) {
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const [isLoading, setIsLoading] = useState(0)
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
@@ -324,7 +324,6 @@ export default function RedeemX({ slippage, assetInfo }) {
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(1).toString(10))
       setMinOutETHtAmount({
         minout_ETH: checkNotZoroNumOption(
           minout_ETH,
@@ -335,7 +334,11 @@ export default function RedeemX({ slippage, assetInfo }) {
           false,
           config.zapTokens[symbol].decimals
         ),
-        minout_slippage_tvl: _minOut_fETH_tvl,
+        minout_slippage_tvl: fb4(
+          _minOut_CBN.multipliedBy(toUsd).toString(10),
+          false,
+          config.zapTokens[symbol].decimals
+        ),
       })
 
       const _minBaseOut_CBN = (cBN(baseOut) || cBN(0)).multipliedBy(
@@ -356,38 +359,6 @@ export default function RedeemX({ slippage, assetInfo }) {
     }
   }
 
-  const handleSwap = async () => {
-    // try {
-    //   setIsLoading(true)
-    //   const _minOut = await getMinAmount()
-    //   const apiCall = await FxGatewayContract.methods.swap(
-    //     fromAmount,
-    //     symbol === 'xETH',
-    //     _minOut
-    //   )
-    //   const estimatedGas = await apiCall.estimateGas({
-    //     from: _currentAccount,
-    //   })
-    //   const gas = parseInt(estimatedGas * 1, 10) || 0
-    //   await NoPayableAction(
-    //     () =>
-    //       apiCall.send({
-    //         from: _currentAccount,
-    //         gas,
-    //       }),
-    //     {
-    //       key: 'Redeem',
-    //       action: 'Redeem',
-    //     }
-    //   )
-    //   setIsLoading(false)
-    //   initPage()
-    // } catch (error) {
-    //   setIsLoading(false)
-    //   noPayableErrorAction(`error_mint`, error)
-    // }
-  }
-
   const handleRedeem = async () => {
     // if (isSwap) {
     //   handleSwap()
@@ -404,14 +375,17 @@ export default function RedeemX({ slippage, assetInfo }) {
       }
 
       let apiCall
+      let to
 
       if (['wstETH', 'sfrxETH'].includes(symbol)) {
+        to = MarketContract._address
         apiCall = await MarketContract.methods.redeemXToken(
           fromAmount,
           _currentAccount,
           _minBaseoutETH
         )
       } else {
+        to = fxUSD_GatewayRouterContract._address
         const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
         const convertParams = getZapOutParams(
           config.tokens[baseSymbol],
@@ -425,12 +399,12 @@ export default function RedeemX({ slippage, assetInfo }) {
           _minBaseoutETH
         )
       }
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'Redeem',
           action: 'Redeem',
@@ -505,7 +479,7 @@ export default function RedeemX({ slippage, assetInfo }) {
           title="Min. Received:"
           content={[
             minOutETHtAmount.minout_slippage,
-            // minOutETHtAmount.minout_slippage_tvl,
+            minOutETHtAmount.minout_slippage_tvl,
           ]}
         />
       )}

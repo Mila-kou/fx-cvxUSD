@@ -9,7 +9,7 @@ import styles from './styles.module.scss'
 
 export default function WithdrawModal(props) {
   const { onCancel, info, poolData, FX_RebalancePoolContract } = props
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
   const { logo, name, stakeTokenDecimals } = info
@@ -34,12 +34,17 @@ export default function WithdrawModal(props) {
         sharesInWei,
         currentAccount
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'earn',
-        action: 'Withdraw',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: FX_RebalancePoolContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'earn',
+          action: 'Withdraw',
+        }
+      )
       onCancel()
       setWithdrawing(false)
     } catch (error) {

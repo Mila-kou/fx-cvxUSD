@@ -16,7 +16,7 @@ import MockTwapOracleABI from '@/config/abi/common/MockTwapOracle'
 
 export default function AssetsPage() {
   const { theme } = useGlobal()
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const { fETH, xETH, fxUSD, xstETH, xfrxETH } = useSelector(
     (state) => state.asset
   )
@@ -61,12 +61,12 @@ export default function AssetsPage() {
       const _minOut = cBN(_price).toString(10)
       const apiCall = await _contract.methods.setPrice(_minOut)
 
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await noPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: _contract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'Price',
           action: 'Price',
@@ -90,12 +90,12 @@ export default function AssetsPage() {
 
       const apiCall = await _contract.methods.setIsValid(true)
 
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await noPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: _contract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'Price',
           action: 'Price',

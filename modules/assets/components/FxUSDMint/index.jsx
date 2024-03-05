@@ -22,32 +22,8 @@ import {
   useFxUSD_GatewayRouter_contract,
 } from '@/hooks/useFXUSDContract'
 
-/**
- * 两种 baseToken 的都一起call，选择返回最大的那个（用户获取最多）
- * 选择的是baseToken的就是baseToken的
- * 展示最大的可mint数量： mintcap - managed  和 maxMintableFToken
- */
-
-/**
- * isRecap 时，不可mint
- */
-
-/**
- * ------ mint
- *            wstETH       sfrxETH
- * ETH     convert(特殊)    1inch
- * stETH   convert          不可以
- * frxETH  不可以           wrap
- * USDT    convert/1inch  convert/1inch
- * USDC    convert/1inch  convert/1inch
- * Frax    convert/1inch  convert/1inch
- * crvUSD  convert/1inch  convert/1inch
- * wstETH
- * sfrxETH
- */
-
 export default function FxUSDMint({ slippage, assetInfo }) {
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
   const [clearTrigger, clearInput] = useClearInput()
@@ -456,7 +432,9 @@ export default function FxUSDMint({ slippage, assetInfo }) {
       }
 
       let apiCall
+      let to
       if (['wstETH', 'sfrxETH'].includes(symbol)) {
+        to = FXUSD_contract._address
         if (isEarnActive) {
           apiCall = await FXUSD_contract.methods.mintAndEarn(
             poolAdddress,
@@ -473,6 +451,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
           )
         }
       } else {
+        to = fxUSD_GatewayRouterContract._address
         const convertParams = await getZapInParams({
           from: symbol,
           to: baseSymbol,
@@ -495,17 +474,13 @@ export default function FxUSDMint({ slippage, assetInfo }) {
           )
         }
       }
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-        value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
+
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to,
             value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Mint',

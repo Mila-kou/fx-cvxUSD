@@ -68,7 +68,7 @@ const LockPage = () => {
   const [loading, setLoading] = useState(false)
   const [crLoading, setCrLoading] = useState(false)
   const { contract: veContract } = useVeFXNFee()
-  const { isAllReady, currentAccount } = useWeb3()
+  const { isAllReady, currentAccount, sendTransaction } = useWeb3()
   const { contract: veFXN } = useVeFXN()
   const { theme } = useGlobal()
 
@@ -78,12 +78,17 @@ const LockPage = () => {
     setLoading(true)
     try {
       const apiCall = veFXN.methods.withdraw()
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'ctr',
-        action: 'withdraw',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: veFXN._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'ctr',
+          action: 'withdraw',
+        }
+      )
       setRefreshTrigger((prev) => prev + 1)
       setLoading(false)
     } catch (error) {
@@ -97,12 +102,17 @@ const LockPage = () => {
     setCrLoading(true)
     try {
       const apiCall = veContract.methods.claim()
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 've_claim',
-        action: 'claim',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: veContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 've_claim',
+          action: 'claim',
+        }
+      )
       setRefreshTrigger((prev) => prev + 1)
       setCrLoading(false)
     } catch (error) {

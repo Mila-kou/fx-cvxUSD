@@ -18,7 +18,7 @@ function InfoItem({ title, value, unit }) {
 
 export default function VestingPage() {
   const { theme } = useGlobal()
-  const { currentAccount } = useWeb3()
+  const { sendTransaction } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const {
@@ -40,14 +40,17 @@ export default function VestingPage() {
     try {
       setClaiming(true)
       const apiCall = vestContract.methods.claim()
-      const estimatedGas = await apiCall.estimateGas({
-        from: currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'Claim',
-        action: 'Claim',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: vestContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'Claim',
+          action: 'Claim',
+        }
+      )
       setClaiming(false)
       setRefreshTrigger((prev) => prev + 1)
     } catch (error) {

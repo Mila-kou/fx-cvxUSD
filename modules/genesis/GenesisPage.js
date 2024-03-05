@@ -40,7 +40,7 @@ export default function GenesisPage() {
   const [stage, setStage] = useState(STAGE.LAUNCHED)
 
   const [clearTrigger, clearInput] = useClearInput()
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const [activeIndex, setActiveIndex] = useState(0)
   const [symbol, setSymbol] = useState('ETH')
   const [isDepositing, setIsDepositing] = useState(false)
@@ -226,17 +226,12 @@ export default function GenesisPage() {
           convertParams,
           _valueAddress
         )
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-        value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to: fxUSD_GatewayRouterContract._address,
             value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Deposit',
@@ -293,15 +288,11 @@ export default function GenesisPage() {
       const apiCall = await getInitialFundContract(
         genesis[_symbol].address
       ).contract.methods.withdraw(_currentAccount)
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to: genesis[_symbol].address,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Withdraw',
@@ -358,15 +349,11 @@ export default function GenesisPage() {
       const apiCall = await getInitialFundContract(
         genesis[_symbol].address
       ).contract.methods.withdrawBaseToken(_currentAccount, _mintOut)
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to: genesis[_symbol].address,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Withdraw',

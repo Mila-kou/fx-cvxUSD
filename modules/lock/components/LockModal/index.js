@@ -20,7 +20,7 @@ import {
 import { useVeFXN, useErc20Token } from '@/hooks/useContracts'
 
 export default function LockModal({ onCancel, refreshAction }) {
-  const { isAllReady, currentAccount } = useWeb3()
+  const { isAllReady, sendTransaction } = useWeb3()
   const [lockAmount, setLockAmount] = useState()
   const [locktime, setLocktime] = useState(moment().add(1, 'day'))
   const [startTime, setStartTime] = useState(moment())
@@ -67,10 +67,12 @@ export default function LockModal({ onCancel, refreshAction }) {
         lockAmountInWei.toString(),
         timestamp
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: veFXNContract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'ctr',
           action: 'lock',

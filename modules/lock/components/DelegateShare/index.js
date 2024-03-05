@@ -18,7 +18,7 @@ export default function DelegateShare({ refreshAction }) {
   const [canceling, setCanceling] = useState(false)
   const [showModalIndex, setShowModalIndex] = useState(-1)
   const pageData = useInfo()
-  const { isAllReady, currentAccount } = useWeb3()
+  const { isAllReady, sendTransaction } = useWeb3()
   console.log('pageData---', pageData)
   const {
     contract: VotingEscrowBoostContract,
@@ -95,10 +95,12 @@ export default function DelegateShare({ refreshAction }) {
           item.index,
           item.initialAmount.toString()
         )
-        const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-        const gas = parseInt(estimatedGas * 1, 10) || 0
         await noPayableAction(
-          () => apiCall.send({ from: currentAccount, gas }),
+          () =>
+            sendTransaction({
+              to: VotingEscrowBoostContract._address,
+              data: apiCall.encodeABI(),
+            }),
           {
             key: 'boost',
             action: 'boost',

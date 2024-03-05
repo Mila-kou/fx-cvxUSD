@@ -21,7 +21,7 @@ export default function DepositModal(props) {
   const { fxUSD } = useSelector((state) => state.asset)
   const { onCancel, info, contractType, FX_RebalancePoolContract } = props
   const [depositing, setDepositing] = useState(false)
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [selectToken, setSelectToken] = useState(info.zapTokens[0])
 
   const isRecap = baseToken?.[info.baseSymbol]?.data?.isRecap
@@ -53,12 +53,15 @@ export default function DepositModal(props) {
 
     try {
       let apiCall
+      let to
       if (selectToken.symbol === 'fETH') {
+        to = FX_RebalancePoolContract._address
         apiCall = FX_RebalancePoolContract.methods.deposit(
           depositAmountInWei,
           currentAccount
         )
       } else {
+        to = fxUSD_contract._address
         apiCall = fxUSD_contract.methods.earn(
           info.rebalancePoolAddress,
           depositAmountInWei,
@@ -66,12 +69,17 @@ export default function DepositModal(props) {
         )
       }
 
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Deposit',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'lp',
+          action: 'Deposit',
+        }
+      )
       onCancel()
       setDepositing(false)
     } catch (error) {

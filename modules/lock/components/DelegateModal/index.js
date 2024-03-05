@@ -46,7 +46,7 @@ export default function DelegateShareModal({
   onCancel,
   refreshAction,
 }) {
-  const { isAllReady, web3, currentAccount } = useWeb3()
+  const { isAllReady, web3, sendTransaction } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
   const [share_to, setShareTo] = useState(OPTIONS[0].shareAddress)
   const [amount, setAmount] = useState()
@@ -125,10 +125,12 @@ export default function DelegateShareModal({
         boostAmountInWei.toString(),
         timestamp
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: VotingEscrowBoostContract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'boost',
           action: 'boost',

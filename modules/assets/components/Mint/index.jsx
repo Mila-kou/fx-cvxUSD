@@ -1,5 +1,5 @@
 /* eslint-disable no-lonely-if */
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
@@ -15,11 +15,11 @@ import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
-import { useFx_FxGateway, useStETH } from '@/hooks/useContracts'
+import { useFx_FxGateway } from '@/hooks/useContracts'
 import useCurveSwap from '@/hooks/useCurveSwap'
 
 export default function Mint({ slippage, assetInfo }) {
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const [clearTrigger, clearInput] = useClearInput()
   const { getCurveSwapABI, getCurveSwapMinout } = useCurveSwap()
@@ -38,7 +38,6 @@ export default function Mint({ slippage, assetInfo }) {
   const [pausedError, setPausedError] = useState(false)
   const [symbol, setSymbol] = useState('ETH')
   const { contract: FxGatewayContract } = useFx_FxGateway()
-  const { contract: stETHContract } = useStETH()
 
   const minGas = 234854
   const [fromAmount, setFromAmount] = useState(0)
@@ -361,15 +360,11 @@ export default function Mint({ slippage, assetInfo }) {
         symbol === 'fETH',
         _minOut
       )
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to: FxGatewayContract._address,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Mint',
@@ -435,16 +430,11 @@ export default function Mint({ slippage, assetInfo }) {
         _minOut
       )
 
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-        value: _ETHtAmountAndGas,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to: FxGatewayContract._address,
+            data: apiCall.encodeABI(),
             value: _ETHtAmountAndGas,
           }),
         {
@@ -480,15 +470,11 @@ export default function Mint({ slippage, assetInfo }) {
         isF ? 'mintFToken' : 'mintXToken'
       ](_ETHtAmountAndGas, _currentAccount, _minOut)
 
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to: marketContract._address,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Mint',

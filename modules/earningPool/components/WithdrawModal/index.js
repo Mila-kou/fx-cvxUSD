@@ -11,7 +11,7 @@ import styles from './styles.module.scss'
 export default function Withdraw(props) {
   const { onCancel, info } = props
   const { lpGaugeContract, zapTokens, name, userInfo } = info
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
 
@@ -30,12 +30,17 @@ export default function Withdraw(props) {
         sharesInWei,
         currentAccount
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'withdraw',
-        action: 'Withdraw',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: lpGaugeContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'withdraw',
+          action: 'Withdraw',
+        }
+      )
       onCancel()
       setWithdrawing(false)
     } catch (error) {

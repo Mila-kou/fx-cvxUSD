@@ -11,7 +11,7 @@ import styles from './styles.module.scss'
 export default function DepositModal(props) {
   const { onCancel, info, contractType, FX_RebalancePoolContract } = props
   const [depositing, setDepositing] = useState(false)
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [selectToken, setSelectToken] = useState(info.zapTokens[0])
 
   const [depositAmount, setDepositAmount] = useState(0)
@@ -37,12 +37,17 @@ export default function DepositModal(props) {
         depositAmountInWei,
         currentAccount
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Deposit',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: FX_RebalancePoolContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'lp',
+          action: 'Deposit',
+        }
+      )
       onCancel()
       setDepositing(false)
     } catch (error) {

@@ -14,7 +14,7 @@ export default function DepositModal(props) {
   const { onCancel, info } = props
   const { zapTokens, name } = info
   const [depositing, setDepositing] = useState(false)
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const { getContract } = useContract()
   const [selectToken, setSelectToken] = useState(zapTokens[0])
 
@@ -57,12 +57,17 @@ export default function DepositModal(props) {
         currentAccount,
         true
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Deposit',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: lpGaugeContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'lp',
+          action: 'Deposit',
+        }
+      )
       onCancel()
       setDepositing(false)
     } catch (error) {

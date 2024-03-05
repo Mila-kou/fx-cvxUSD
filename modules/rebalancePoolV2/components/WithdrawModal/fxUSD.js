@@ -16,8 +16,7 @@ import SlippageInfo from '@/components/SlippageInfo'
 export default function WithdrawModal(props) {
   const { onCancel, info, poolData } = props
 
-  console.log('WithdrawModal---props----', props)
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [slippage, setSlippage] = useState(0.3)
 
@@ -128,25 +127,23 @@ export default function WithdrawModal(props) {
           _minOut_CBN.toFixed(0, 1)
         )
 
-        console.log(
-          'fxUSD_GatewayRouterContract--fxRebalancePoolWithdrawAs---',
-          JSON.stringify(convertParams),
-          info.rebalancePoolAddress,
-          sharesInWei
-        )
-
         apiCall = fxUSD_GatewayRouterContract.methods.fxRebalancePoolWithdrawAs(
           convertParams,
           info.rebalancePoolAddress,
           sharesInWei
         )
       }
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'earn',
-        action: 'Withdraw',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: fxUSD_GatewayRouterContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'earn',
+          action: 'Withdraw',
+        }
+      )
       onCancel()
       setWithdrawing(false)
     } catch (error) {

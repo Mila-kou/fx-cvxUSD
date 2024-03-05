@@ -20,17 +20,13 @@ import {
   shortDate,
   lockTimeTipText,
 } from '../../util'
-import { useVeFXN, useErc20Token } from '@/hooks/useContracts'
-import { useVotingEscrowBoost } from '@/hooks/useVeContracts'
-import useVeBoostDelegateShare_c from '../../controllers/useVeboost_c'
 import Button from '@/components/Button'
-import useInfo from '../../controllers/useInfo'
 import useVeShare_c from '../../controllers/useVeShare_c'
 
 const OPTIONS = [...POOLS_LIST, ...REBALANCE_POOLS_LIST]
 
 export default function DelegateShareModal({ onCancel, refreshAction }) {
-  const { isAllReady, web3, currentAccount } = useWeb3()
+  const { isAllReady, web3, currentAccount, sendTransaction } = useWeb3()
   const [delegation_to_address, setAddress] = useState('')
   const [share_to, setShareTo] = useState(
     OPTIONS[0].lpGaugeAddress || OPTIONS[0].rebalancePoolAddress
@@ -107,10 +103,12 @@ export default function DelegateShareModal({ onCancel, refreshAction }) {
       const apiCall = gaugeContract.methods.toggleVoteSharing(
         delegation_to_address
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: gaugeContract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'share',
           action: 'share',

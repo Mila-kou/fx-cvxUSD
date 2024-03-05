@@ -18,31 +18,8 @@ import {
 } from '@/hooks/useFXUSDContract'
 import { getZapOutParams } from '@/hooks/useZap'
 
-/**
- * 选择baseToken时，展示其最大的可Redeem数量： managed
- * zap时，展示两种managed 之和
- */
-
-/**
- * isRecap 时，没有baseToken选项
- */
-
-/**
- * ------ redeem
- *（Redeem）wstETH     sfrxETH  （baseToken）
- * WETH        有           有
- * stETH       有           无
- * frxETH      无           有
- * USDT        无           无
- * USDC        有           有
- * Frax        无           无
- * crvUSD      无           无
- * wstETH
- * sfrxETH
- */
-
 export default function FxUSDRedeem({ slippage, assetInfo }) {
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const [isLoading, setIsLoading] = useState(0)
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
@@ -306,18 +283,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       if (checkNotZoroNum(fromAmount)) {
         let resData
         if (['wstETH', 'sfrxETH'].includes(symbol)) {
-          // if (isRecap) {
-          //   resData = await FXUSD_contract.methods
-          //     .autoRedeem(fromAmount, _account, [0, 0])
-          //     .call({
-          //       from: _account,
-          //     })
-          //   console.log('resData----', resData)
-          //   minout_ETH = cBN(resData._amountOuts[0]).plus(
-          //     resData._amountOuts[1]
-          //   )
-          //   __bonus = cBN(resData._bonusOuts[0])
-          // } else {
           resData = await FXUSD_contract.methods
             .redeem(config.tokens[symbol], _mockAmount, _account, 0)
             .call({
@@ -375,7 +340,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(1).toString(10))
       setMinOutETHtAmount({
         minout_ETH: checkNotZoroNumOption(
           minout_ETH,
@@ -386,7 +350,11 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
           false,
           config.zapTokens[symbol].decimals
         ),
-        minout_slippage_tvl: _minOut_fETH_tvl,
+        minout_slippage_tvl: fb4(
+          _minOut_CBN.multipliedBy(toUsd).toString(10),
+          false,
+          config.zapTokens[symbol].decimals
+        ),
       })
 
       setBonus(
@@ -421,38 +389,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     }
   }
 
-  const handleSwap = async () => {
-    // try {
-    //   setIsLoading(true)
-    //   const _minOut = await getMinAmount()
-    //   const apiCall = await FxGatewayContract.methods.swap(
-    //     fromAmount,
-    //     symbol === 'xETH',
-    //     _minOut
-    //   )
-    //   const estimatedGas = await apiCall.estimateGas({
-    //     from: _currentAccount,
-    //   })
-    //   const gas = parseInt(estimatedGas * 1, 10) || 0
-    //   await NoPayableAction(
-    //     () =>
-    //       apiCall.send({
-    //         from: _currentAccount,
-    //         gas,
-    //       }),
-    //     {
-    //       key: 'Redeem',
-    //       action: 'Redeem',
-    //     }
-    //   )
-    //   setIsLoading(false)
-    //   initPage()
-    // } catch (error) {
-    //   setIsLoading(false)
-    //   noPayableErrorAction(`error_mint`, error)
-    // }
-  }
-
   const handleRedeem = async () => {
     // if (isSwap) {
     //   handleSwap()
@@ -464,23 +400,18 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       const [_minoutETH, _min_baseOuts] = await getMinAmount()
 
       let apiCall
+      let to
 
       if (['wstETH', 'sfrxETH'].includes(symbol)) {
-        // if (isRecap) {
-        //   apiCall = await FXUSD_contract.methods.autoRedeem(
-        //     fromAmount,
-        //     _currentAccount,
-        //     [0, 0]
-        //   )
-        // } else {
+        to = FXUSD_contract._address
         apiCall = await FXUSD_contract.methods.redeem(
           config.tokens[symbol],
           fromAmount,
           _currentAccount,
           _minoutETH
         )
-        // }
       } else {
+        to = fxUSD_GatewayRouterContract._address
         const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
         const convertParams_baseToken_1 = getZapOutParams(
           config.tokens.wstETH,
@@ -501,13 +432,12 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         )
       }
 
-      console.log('apiCall--apiCall--', apiCall.encodeABI())
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'Redeem',
           action: 'Redeem',
@@ -595,7 +525,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
           title="Min. Received:"
           content={[
             minOutETHtAmount.minout_slippage,
-            // minOutETHtAmount.minout_slippage_tvl,
+            minOutETHtAmount.minout_slippage_tvl,
           ]}
         />
       )}

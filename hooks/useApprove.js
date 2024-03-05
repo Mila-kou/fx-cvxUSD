@@ -23,7 +23,7 @@ import { cBN } from '@/utils/index'
  */
 
 export const useApprove = (props) => {
-  const { currentAccount, web3, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const {
     allowance,
     approveAmount = 0,
@@ -57,12 +57,17 @@ export const useApprove = (props) => {
     }
 
     const apiCall = tokenContract.methods.approve(approveAddress, '0')
-    const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-    const gas = parseInt(estimatedGas * 1, 10) || 0
-    await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-      key: 'Approve',
-      action: 'Reset Approve',
-    })
+    await NoPayableAction(
+      () =>
+        sendTransaction({
+          to: tokenContract._address,
+          data: apiCall.encodeABI(),
+        }),
+      {
+        key: 'Approve',
+        action: 'Reset Approve',
+      }
+    )
   }
 
   const handleApprove = useCallback(
@@ -89,10 +94,12 @@ export const useApprove = (props) => {
           approveAddress,
           approveWei
         )
-        const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-        const gas = parseInt(estimatedGas * 1, 10) || 0
         await NoPayableAction(
-          () => apiCall.send({ from: currentAccount, gas }),
+          () =>
+            sendTransaction({
+              to: tokenContract._address,
+              data: apiCall.encodeABI(),
+            }),
           {
             key: 'earn',
             action: 'approv',

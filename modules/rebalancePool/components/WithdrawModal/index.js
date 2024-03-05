@@ -9,7 +9,7 @@ import styles from './styles.module.scss'
 
 export default function WithdrawModal(props) {
   const { onCancel, info, poolData, FX_RebalancePoolContract } = props
-  const { currentAccount, isAllReady } = useWeb3()
+  const { sendTransaction, isAllReady } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
 
@@ -30,12 +30,17 @@ export default function WithdrawModal(props) {
         sharesInWei = userInfo.stabilityPoolBalanceOfRes
       }
       const apiCall = FX_RebalancePoolContract.methods.unlock(sharesInWei)
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'earn',
-        action: 'Unlock',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: FX_RebalancePoolContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'earn',
+          action: 'Unlock',
+        }
+      )
       onCancel()
       setWithdrawing(false)
     } catch (error) {

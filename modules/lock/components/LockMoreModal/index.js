@@ -3,17 +3,17 @@ import { Modal, Tooltip } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import config from 'config'
-import BalanceInput from '@/components/BalanceInput'
 import useApprove from 'hooks/useApprove'
 import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import useWeb3 from 'hooks/useWeb3'
 import { cBN, fb4, checkNotZoroNum } from 'utils'
+import BalanceInput from '@/components/BalanceInput'
 import styles from './styles.module.scss'
 import { YEARS, lockTimeTipText } from '../../util'
 import { useVeFXN, useErc20Token } from '@/hooks/useContracts'
 
 export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
-  const { isAllReady, currentAccount } = useWeb3()
+  const { isAllReady, sendTransaction } = useWeb3()
   const [lockAmount, setLockAmount] = useState()
   const [locking, setLocking] = useState(false)
   const { userLocked } = pageData.contractInfo
@@ -50,10 +50,12 @@ export default function LockMoreModal({ onCancel, pageData, refreshAction }) {
       const apiCall = veFXNContract.methods.increase_amount(
         lockAmountInWei.toString()
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: veFXNContract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'ctr',
           action: 'lock',

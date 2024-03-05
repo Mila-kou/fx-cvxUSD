@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
-import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
+import { useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
 import ConvertModal from './ConvertModal'
 
 export default function FXN() {
-  const { currentAccount } = useWeb3()
+  const { currentAccount, sendTransaction } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [showConvert, setShowConvert] = useState(false)
   const [converting, setConverting] = useState(false)
@@ -52,14 +52,17 @@ export default function FXN() {
         __indices,
         __index
       )
-      const estimatedGas = await apiCall.estimateGas({
-        from: currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'Convert',
-        action: 'Convert',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: ManageableVestingContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'Convert',
+          action: 'Convert',
+        }
+      )
       setClaiming(false)
       setShowConvert(false)
       setConverting(false)

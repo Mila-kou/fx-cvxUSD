@@ -1,19 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Tooltip } from 'antd'
-import cn from 'classnames'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import Button from '@/components/Button'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
-import {
-  cBN,
-  checkNotZoroNum,
-  checkNotZoroNumOption,
-  dollarText,
-  fb4,
-} from '@/utils/index'
-import useVeBoost_c from '../../controller/useVeBoost_c'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
@@ -21,9 +13,7 @@ import config from '@/config/index'
 import { useFXNTokenMinter } from '@/hooks/useGaugeContracts'
 import { useVeBoostAllGauge } from '@/hooks/calculator/useVeBoost_AllGauge'
 
-const FXNImg = '/images/FXN.svg'
-
-export default function PoolCell({ cellData, ...pageOthers }) {
+export default function PoolCell({ cellData }) {
   const {
     userInfo = {},
     useFXNClaimable,
@@ -36,7 +26,7 @@ export default function PoolCell({ cellData, ...pageOthers }) {
   const veBoostAllData = useVeBoostAllGauge()
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
-  const { isAllReady, currentAccount } = useWeb3()
+  const { isAllReady, currentAccount, sendTransaction } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
   const { contract: FXNTokenMinterContract } = useFXNTokenMinter()
@@ -65,12 +55,17 @@ export default function PoolCell({ cellData, ...pageOthers }) {
     try {
       setClaiming(true)
       const apiCall = lpGaugeContract.methods.claim(currentAccount)
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Claim',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: lpGaugeContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'lp',
+          action: 'Claim',
+        }
+      )
       setClaiming(false)
     } catch (error) {
       setClaiming(true)
@@ -85,12 +80,17 @@ export default function PoolCell({ cellData, ...pageOthers }) {
     try {
       setClaiming(true)
       const apiCall = FXNTokenMinterContract.methods.mint(lpGaugeAddress)
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Claim',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: FXNTokenMinterContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'lp',
+          action: 'Claim',
+        }
+      )
       setClaiming(false)
     } catch (error) {
       setClaiming(true)

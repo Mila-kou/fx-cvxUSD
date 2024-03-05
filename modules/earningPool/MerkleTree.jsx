@@ -9,7 +9,7 @@ import { useAladdinTree } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 const MerkleTree = () => {
-  const { currentAccount } = useWeb3()
+  const { currentAccount, sendTransaction } = useWeb3()
 
   const [data, setData] = useState({})
   const [claiming, setClaiming] = useState(false)
@@ -40,10 +40,12 @@ const MerkleTree = () => {
         data.amount,
         data.proof
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: AladdinMerkleTreeContract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'Claim',
           action: 'Claim',

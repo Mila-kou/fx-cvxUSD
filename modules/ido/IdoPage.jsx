@@ -18,7 +18,7 @@ const depositTokenInfo = tokensList.depositTokens[0]
 export default function IdoPage() {
   const PageData = useIDO()
   console.log('PageData---', PageData)
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const [claiming, setClaiming] = useState(false)
   const [slippage, setSlippage] = useState(0)
   const [depositAmount, setDepositAmount] = useState(0)
@@ -105,10 +105,12 @@ export default function IdoPage() {
     try {
       setClaiming(true)
       const apiCall = IdoSaleContract.methods.claim()
-      const estimatedGas = await apiCall.estimateGas({ from: _currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to: IdoSaleContract._address,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'Claim',
           action: 'Claim',
@@ -209,14 +211,14 @@ export default function IdoPage() {
       )
       const callValue =
         config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-        value: callValue,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
 
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas, value: callValue }),
+        () =>
+          sendTransaction({
+            to: IdoSaleContract._address,
+            value: callValue,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'ido',
           action: 'buy',

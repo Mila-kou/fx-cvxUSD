@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
@@ -17,7 +17,7 @@ import Button from '@/components/Button'
 import useFxCommon_New from '../../hooks/useFxCommon_New'
 
 export default function Redeem({ slippage, assetInfo }) {
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const [isLoading, setIsLoading] = useState(0)
   const { tokens } = useSelector((state) => state.token)
   const [clearTrigger, clearInput] = useClearInput()
@@ -25,8 +25,7 @@ export default function Redeem({ slippage, assetInfo }) {
   const fxCommonNew = useFxCommon_New()
 
   const [symbol, setSymbol] = useState('stETH')
-  const { contract: FxGatewayContract, address: fxGatewayContractAddress } =
-    useFx_FxGateway()
+  const { contract: FxGatewayContract } = useFx_FxGateway()
 
   const [bouns, setBouns] = useState(0)
 
@@ -414,15 +413,11 @@ export default function Redeem({ slippage, assetInfo }) {
         symbol === 'xETH',
         _minOut
       )
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to: FxGatewayContract._address,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Redeem',
@@ -457,7 +452,9 @@ export default function Redeem({ slippage, assetInfo }) {
       }
 
       let apiCall
+      let to
       if (symbol === 'stETH') {
+        to = marketContract._address
         apiCall = await marketContract.methods.redeem(
           _fTokenIn,
           _xTokenIn,
@@ -465,6 +462,7 @@ export default function Redeem({ slippage, assetInfo }) {
           _minoutETH
         )
       } else {
+        to = FxGatewayContract._address
         const route = OPTIONS.filter((item) => item[0] === symbol)[0][2]
 
         const { _dstOut, _baseOut } = await FxGatewayContract.methods
@@ -498,12 +496,12 @@ export default function Redeem({ slippage, assetInfo }) {
           dstOut.toString()
         )
       }
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
       await NoPayableAction(
-        () => apiCall.send({ from: _currentAccount, gas }),
+        () =>
+          sendTransaction({
+            to,
+            data: apiCall.encodeABI(),
+          }),
         {
           key: 'Redeem',
           action: 'Redeem',

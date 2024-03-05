@@ -1,6 +1,5 @@
 /* eslint-disable no-lonely-if */
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
@@ -20,14 +19,14 @@ import {
 import { useZapIn } from '@/hooks/useZap'
 
 export default function MintX({ slippage, assetInfo }) {
-  const { _currentAccount } = useWeb3()
+  const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
   const [clearTrigger, clearInput] = useClearInput()
   const getMarketContract = useV2MarketContract()
   const { getZapInParams } = useZapIn()
 
-  const { isF, symbol: toSymbol, nav_text, baseTokenInfo } = assetInfo
+  const { isF, symbol: toSymbol, nav, nav_text, baseTokenInfo } = assetInfo
 
   const { baseSymbol, contracts } = baseTokenInfo
 
@@ -258,7 +257,9 @@ export default function MintX({ slippage, assetInfo }) {
       const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
         cBN(1).minus(cBN(slippage).dividedBy(100))
       )
-      const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(1).toString(10))
+      const _minOut_fETH_tvl = fb4(
+        _minOut_CBN.multipliedBy(nav).dividedBy(1e18).toString(10)
+      )
       setMinOutAmount({
         minout_ETH: checkNotZoroNumOption(
           minout_ETH,
@@ -319,13 +320,16 @@ export default function MintX({ slippage, assetInfo }) {
       }
 
       let apiCall
+      let to
       if (['wstETH', 'sfrxETH'].includes(symbol)) {
+        to = MarketContract._address
         apiCall = await MarketContract.methods.mintXToken(
           _ETHtAmountAndGas,
           _currentAccount,
           _minOut
         )
       } else {
+        to = fxUSD_GatewayRouterContract._address
         const convertParams = await getZapInParams({
           from: symbol,
           to: baseSymbol,
@@ -339,17 +343,13 @@ export default function MintX({ slippage, assetInfo }) {
           _minOut
         )
       }
-      const estimatedGas = await apiCall.estimateGas({
-        from: _currentAccount,
-        value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-      })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
+
       await NoPayableAction(
         () =>
-          apiCall.send({
-            from: _currentAccount,
-            gas,
+          sendTransaction({
+            to,
             value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+            data: apiCall.encodeABI(),
           }),
         {
           key: 'Mint',

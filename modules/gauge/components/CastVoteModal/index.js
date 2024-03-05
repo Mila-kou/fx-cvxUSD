@@ -2,11 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { Modal } from 'antd'
 import useWeb3 from '@/hooks/useWeb3'
 import Button from '@/components/Button'
-import {
-  useContract,
-  useVeFXN,
-  useFxGaugeController,
-} from '@/hooks/useContracts'
+import { useFxGaugeController } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 
@@ -18,7 +14,7 @@ const icons = {
 
 export default function CastVoteModal({ onCancel, voteData }) {
   const [voting, setVoting] = useState(false)
-  const { currentAccount, isAllReady } = useWeb3()
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const { contract: gaugeControllerContract } = useFxGaugeController()
 
   const handleVote = async () => {
@@ -29,12 +25,17 @@ export default function CastVoteModal({ onCancel, voteData }) {
         voteData.lpGaugeAddress,
         voteData.newPower * 100
       )
-      const estimatedGas = await apiCall.estimateGas({ from: currentAccount })
-      const gas = parseInt(estimatedGas * 1, 10) || 0
-      await NoPayableAction(() => apiCall.send({ from: currentAccount, gas }), {
-        key: 'lp',
-        action: 'Vot',
-      })
+      await NoPayableAction(
+        () =>
+          sendTransaction({
+            to: gaugeControllerContract._address,
+            data: apiCall.encodeABI(),
+          }),
+        {
+          key: 'lp',
+          action: 'Vot',
+        }
+      )
       onCancel()
       setVoting(false)
     } catch (error) {

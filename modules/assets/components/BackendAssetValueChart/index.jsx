@@ -78,8 +78,6 @@ export default function BackendAssetValueChart({ assetInfo, dateList, list }) {
     color: ['rgba(255, 255, 255, 0.8)'],
   }
 
-  console.log('list----', list)
-
   return (
     <div className={styles.container}>
       <ReactECharts
