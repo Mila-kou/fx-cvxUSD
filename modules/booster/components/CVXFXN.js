@@ -4,7 +4,7 @@ import useVesting from '../controller/useVesting'
 import { useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
-import { fb4 } from '@/utils/index'
+import { fb4, numberLess } from '@/utils/index'
 import config from '@/config/index'
 
 export default function CVXFXN() {
@@ -56,7 +56,7 @@ export default function CVXFXN() {
           (item) => item.token.toLowerCase() == token.toLowerCase()
         )
         if (_data) {
-          return fb4(_data.amount)
+          return numberLess(fb4(_data.amount), 0.01)
         }
       }
       return 0

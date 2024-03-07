@@ -4,7 +4,7 @@ import useVesting from '../controller/useVesting'
 import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import Cell from './Cell'
-import { checkNotZoroNum, fb4 } from '@/utils/index'
+import { checkNotZoroNum, fb4, numberLess } from '@/utils/index'
 
 export default function SDFXN() {
   const { currentAccount } = useWeb3()
@@ -51,7 +51,7 @@ export default function SDFXN() {
     {
       icon: '/tokens/sdt.svg',
       symbol: 'SDT',
-      amount: fb4(statkeDaoRewards),
+      amount: numberLess(fb4(statkeDaoRewards), 0.01),
       iconSize: '18',
     },
     // {
@@ -62,7 +62,7 @@ export default function SDFXN() {
     {
       icon: '/tokens/steth.svg',
       symbol: 'wstETH',
-      amount: fb4(statkeDaoWstETHRewards),
+      amount: numberLess(fb4(statkeDaoWstETHRewards), 0.01),
       iconSize: '20px',
     },
   ]
