@@ -15,7 +15,7 @@ export default function Symbol() {
 }
 
 export async function getStaticPaths() {
-  const paths = ASSETS.map(({ symbol }) => ({
+  const paths = ASSETS.filter((item) => !item.isComing).map(({ symbol }) => ({
     params: { symbol },
   }))
 

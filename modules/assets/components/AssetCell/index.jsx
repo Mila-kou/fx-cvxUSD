@@ -35,7 +35,7 @@ export default function AssetCell({ info }) {
             />
           </div>
           <div>
-            <p className="text-[16px]">{info.symbol}</p>
+            <p className="text-[16px]">{info.name || info.symbol}</p>
             <p className="text-[14px] mt-[4px]">{info.descrition}</p>
           </div>
         </div>
@@ -49,7 +49,8 @@ export default function AssetCell({ info }) {
               {info.symbol !== 'fxUSD' ? (
                 <p className="text-[14px] mt-[4px] text-[var(--third-text-color)]">
                   {totalSupply_text}
-                </p>) : null}
+                </p>
+              ) : null}
             </div>
           )}
         </div>
@@ -79,8 +80,10 @@ export function ComingAssetCell({ info }) {
             />
           </div>
           <div>
-            <p className="text-[16px]">{info.symbol}</p>
-            <p className="text-[14px]">Coming soon</p>
+            <p className="text-[16px] text-[#fff]">
+              {info.name || info.symbol}
+            </p>
+            <p className="text-[14px] text-[#fff]">Coming soon</p>
           </div>
         </div>
       </div>

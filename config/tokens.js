@@ -12,6 +12,8 @@ export const contracts = {
   idoSale: '0x674A745ADb09c3333D655cC63e2d77ACbE6De935', // round 2
   fundsRaisedToken: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // weth
 
+  Llamas: '0xe127ce638293fa123be79c25782a5652581db234',
+
   // fx ----
   ChainlinkTwapOracleV3: '0xAd36C7B3C5E0e097884DE951C271eDf5e99EB567', // 0xce3b7f32b98599260F4a057b47fa55DcBDa0A757
   fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
@@ -499,9 +501,10 @@ export const ASSET_MAP = {
   },
   xETH: {
     symbol: 'xETH',
+    name: 'xETH (Lido)',
     address: TOKENS_INFO.xETH[1],
     decimals: TOKENS_INFO.xETH[2],
-    descrition: 'Long ETH up to 4x',
+    descrition: 'Long stETH up to 4x',
     icon: '/images/x-logo.svg',
     subIcon: '/tokens/steth.svg',
     isX: true,
@@ -511,7 +514,7 @@ export const ASSET_MAP = {
   fxUSD: {
     symbol: 'fxUSD',
     address: contracts.FxUSD,
-    descrition: '$1.00 Pegged Stablecoin',
+    descrition: '$1.00 Pegged',
     icon: '/tokens/fxusd.svg',
     isBreakdownChart: true,
     background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
@@ -520,6 +523,7 @@ export const ASSET_MAP = {
   },
   xstETH: {
     symbol: 'xstETH',
+    name: 'xstETH (Lido)',
     address: contracts.fxUSD_wstETH_LeveragedToken,
     descrition: 'Long stETH up to 4.3x',
     icon: '/images/x-logo.svg',
@@ -531,6 +535,7 @@ export const ASSET_MAP = {
   },
   xfrxETH: {
     symbol: 'xfrxETH',
+    name: 'xfrxETH (Frax)',
     address: contracts.fxUSD_sfrxETH_LeveragedToken,
     descrition: 'Long frxETH up to 4.3x',
     icon: '/images/x-logo.svg',
@@ -539,6 +544,32 @@ export const ASSET_MAP = {
     isShow24Change: true,
     baseSymbol: 'sfrxETH',
     baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
+  },
+  fCVX: {
+    symbol: 'fCVX',
+    // address: '',
+    // descrition: 'Coming soon',
+    icon: '/tokens/fxusd.svg',
+    // subIcon: '/tokens/frxeth.svg',
+    // isX: true,
+    // isShow24Change: true,
+    isComing: true,
+    // baseSymbol: 'sfrxETH',
+    isF: true,
+    // baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
+  },
+  xCVX: {
+    symbol: 'xCVX',
+    name: 'xCVX (Convex)',
+    // address: '',
+    // descrition: 'Coming soon',
+    icon: '/images/x-logo.svg',
+    subIcon: '/tokens/crypto-icons-stack.svg#cvx',
+    isX: true,
+    // isShow24Change: true,
+    isComing: true,
+    // baseSymbol: 'sfrxETH',
+    // baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
   },
 }
 

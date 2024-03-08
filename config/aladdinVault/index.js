@@ -180,7 +180,7 @@ export const REBALANCE_POOLS_LIST = [
     icon: '/images/f-logo.svg',
     subIcon: '/tokens/steth.svg',
     gaugeType: 'boostRebalance',
-    nameShow: 'fETH Rebalance Pool Redeem to stETH',
+    nameShow: 'fETH Rebalance Pool Redeem to wstETH',
     poolType: 'fETH',
     withdrawDefaultToken: 'fETH',
     rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_APool,
@@ -188,7 +188,7 @@ export const REBALANCE_POOLS_LIST = [
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
     infoKey: 'rebalancePoolV2_info_A',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceReward: [config.TOKENS_INFO.stETH],
+    rebalanceRewards: [config.TOKENS_INFO.wstETH],
     zapTokens: [
       {
         symbol: 'fETH',
@@ -213,7 +213,7 @@ export const REBALANCE_POOLS_LIST = [
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
     infoKey: 'rebalancePoolV2_info_B',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: [config.TOKENS_INFO.stETH, config.TOKENS_INFO.xETH],
+    rebalanceRewards: [config.TOKENS_INFO.wstETH, config.TOKENS_INFO.xETH],
     zapTokens: [
       {
         symbol: 'fETH',

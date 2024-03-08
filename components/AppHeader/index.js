@@ -17,6 +17,7 @@ import { addToMetamask, fb4 } from '@/utils/index'
 import Select from '@/components/Select'
 import Menu from '@/components/menu'
 import FAQ from '@/components/FAQ'
+import useLlamaNFT from './useLlamaNFT'
 
 const routers = [
   ['Mint & Redeem', '/assets'],
@@ -34,6 +35,7 @@ const routers = [
 export default function AppHeader() {
   const { tokens } = useSelector((state) => state.token)
   const { theme, toggleTheme, showMenuPanel, toggleShowMenuPanel } = useGlobal()
+  const LlamaNFT = useLlamaNFT()
   const {
     connect,
     disconnect,
@@ -258,6 +260,7 @@ export default function AppHeader() {
             className={styles.account}
             ref={refAccount}
           >
+            {LlamaNFT ? <img src={LlamaNFT} /> : null}
             <p>{currentAccount ? _account : 'Connect Wallet'}</p>
           </div>
           <div className="w-0" onClick={toggleShowMenuPanel} ref={refMenu} />

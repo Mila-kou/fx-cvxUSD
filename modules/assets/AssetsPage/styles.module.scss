@@ -8,8 +8,13 @@
 
   .wrap {
     justify-content: center;
-    gap: 20px;
     display: flex;
+    background: var(--background-color);
+    margin-top: 46px;
+    border-radius: 10px;
+    .header {
+      background: transparent;
+    }
   }
 
   h2 {
@@ -19,7 +24,7 @@
 
   .header {
     border-radius: 10px;
-    max-width: 1132px;
+    max-width: 1112px;
     width: 100%;
     background: var(--background-color);
     padding: 36px;

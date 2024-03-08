@@ -65,6 +65,12 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    gap: 8px;
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+    }
     p {
       font-size: 16px;
     }

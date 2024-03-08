@@ -9,6 +9,7 @@ import styles from './styles.module.scss'
 
 export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
   const {
+    name,
     symbol,
     baseSymbol,
     nav_text,
@@ -83,7 +84,7 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
           ) : null}
         </div>
         <p>
-          {symbol} <span className="mx-[8px]">{nav_text}</span>
+          {name || symbol} <span className="mx-[8px]">{nav_text}</span>
           {isShow24Change ? <ChangedPrice value={change24h} isRed /> : null}
         </p>
       </div>

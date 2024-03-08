@@ -164,43 +164,65 @@ export default function RebalancePoolCell({
         wstETHApy_text,
         sfrxETHApy_text,
         fxnApy_min_text,
+        fxnApy_current_min_text,
         fxnApy_max_text,
+        fxnApy_current_max_text,
         userApy,
         userFxnApy_text,
+        userFxnCurrentApy_text,
         userApy_text,
+        userCurrentApy_text,
         minApy,
         minApy_text,
+        minCurrentApy_text,
         maxApy_text,
+        maxCurrentApy_text,
       } = poolData.apyObj
       let _apyList = []
+      let _apyList_current = []
       if (checkNotZoroNum(userApy)) {
         _apyAndBoostDom = (
           <>
-            <p>{userApy_text} %</p>
+            <p>{userCurrentApy_text} %</p>
             <p>Boost: {boostLever_text}x</p>
           </>
         )
-        _apyDom = `${userApy_text} %`
+        _apyDom = `${userCurrentApy_text} %`
         _apyList = [`FXN APR: ${userFxnApy_text} %`]
+        _apyList_current = [`FXN Current APR: ${userFxnCurrentApy_text} %`]
       } else if (checkNotZoroNum(minApy)) {
-        _apyAndBoostDom = `${minApy_text} % -> ${maxApy_text} %`
+        _apyAndBoostDom = `${minCurrentApy_text} % -> ${maxCurrentApy_text} %`
         _apyDom = _apyAndBoostDom
         _apyList = [
           // `APY: ${minApy_text} % -> ${maxApy_text} %`,
           `FXN APR: ${fxnApy_min_text} % -> ${fxnApy_max_text} %`,
         ]
+        _apyList_current = [
+          `FXN Current APR: ${fxnApy_current_min_text} % -> ${fxnApy_current_max_text} %`,
+        ]
       }
 
       if (isWstETH) {
         _apyList.push(`wstETH APR: ${wstETHApy_text}`)
+        _apyList_current.push(`wstETH APR: ${wstETHApy_text}`)
       }
       if (isSfrxETH) {
         _apyList.push(`sfrxETH APR: ${sfrxETHApy_text}`)
+        _apyList_current.push(`sfrxETH APR: ${sfrxETHApy_text}`)
       }
       if (checkNotZoroNum(minApy)) {
-        _apyDetailDom = _apyList.map((apyText) => {
-          return <p className="text-[14px]">{apyText}</p>
-        })
+        _apyDetailDom = (
+          <>
+            <p>Current APR </p>{' '}
+            {_apyList_current.map((apyText) => (
+              <p className="text-[14px]">{apyText}</p>
+            ))}
+            <p>Project APR </p>{' '}
+            {_apyList.map((apyText) => (
+              <p className="text-[14px]">{apyText}</p>
+            ))}
+          </>
+        )
       }
       return [_apyAndBoostDom, _apyDom, _apyDetailDom]
     } catch (error) {
@@ -240,7 +262,18 @@ export default function RebalancePoolCell({
             {poolData.poolTotalSupply}
           </p>
         </div>
-        <div className="w-[170px] text-[16px]">{apyAndBoostDom}</div>
+        <div className="w-[170px] text-[16px]">
+          {apyAndBoostDom}{' '}
+          <Tooltip
+            placement="topLeft"
+            title={apyDetailDom}
+            arrow
+            color="#000"
+            overlayInnerStyle={{ width: '300px' }}
+          >
+            <InfoCircleOutlined className="ml-[8px]" />
+          </Tooltip>
+        </div>
         <div className="w-[110px] text-[16px]">
           <p className="text-[16px]">{userDepositTvl_text}</p>
           <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
@@ -264,7 +297,7 @@ export default function RebalancePoolCell({
               } will be used for rebalance`}
             </div> */}
             <div className="mt-[12px]">
-              Projected APR: {apyDom}{' '}
+              Current APR: {apyDom}{' '}
               <Tooltip
                 placement="topLeft"
                 title={apyDetailDom}

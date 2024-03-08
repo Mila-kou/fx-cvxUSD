@@ -68,6 +68,7 @@ const useStabiltyPool = (infoKey, baseToken) => {
         let wstETH_apyWei = 0
         let sfrxETH_apyWei = 0
         let _fxnApy = 0
+        let _fxnCurrentApy = 0
         const _fxnPrice = getTokenPrice('FXN')
         const _wstETHPrice = getTokenPrice('wstETH')
         const _sfrxETHPrice = getTokenPrice('sfrxETH')
@@ -78,17 +79,17 @@ const useStabiltyPool = (infoKey, baseToken) => {
           boostableRebalancePoolInfo.rebalanceConfig
         )
 
-        // // FXN Current Apy
-        // if (_currentTime > finishAt_fxn) {
-        //   _fxnApy = cBN(0)
-        // } else {
-        //   _fxnApy = cBN(rate_fxn)
-        //     .div(1e18)
-        //     .multipliedBy(config.yearSecond)
-        //     .multipliedBy(_fxnPrice)
-        //     .div(rebalanceTvl)
-        //     .times(100)
-        // }
+        // FXN Current Apy
+        if (_currentTime > finishAt_fxn) {
+          _fxnCurrentApy = cBN(0)
+        } else {
+          _fxnCurrentApy = cBN(rate_fxn)
+            .div(1e18)
+            .multipliedBy(config.yearSecond)
+            .multipliedBy(_fxnPrice)
+            .div(rebalanceTvl)
+            .times(100)
+        }
 
         // wstETH apy
         if (_currentTime > finishAt) {
@@ -153,43 +154,78 @@ const useStabiltyPool = (infoKey, baseToken) => {
           _fxnApy,
           `${fb4(_fxnApy, false, 0, 2)} %`
         )
+        const fxnCurrentApy_text = checkNotZoroNumOption(
+          _fxnCurrentApy,
+          `${fb4(_fxnCurrentApy, false, 0, 2)} %`
+        )
         // Current Apy
         // const fxnApy_text = checkNotZoroNumOption(
         //   _fxnApy,
         //   `${fb4(_fxnApy, false, 0, 2)} %`
         // )
         const _fxnApy_min = _fxnApy * 0.4
+        const _fxnApy_current_min = _fxnCurrentApy * 0.4
         const fxnApy_min_text = fb4(_fxnApy_min, false, 0, 2)
+        const fxnApy_current_min_text = fb4(_fxnApy_current_min, false, 0, 2)
         const fxnApy_max_text = fb4(_fxnApy, false, 0, 2)
+        const fxnApy_current_max_text = fb4(_fxnCurrentApy, false, 0, 2)
         const minApy = wstETH_apyWei.plus(sfrxETH_apyWei).plus(_fxnApy_min)
+        const min_current_Apy = wstETH_apyWei
+          .plus(sfrxETH_apyWei)
+          .plus(_fxnApy_current_min)
         const maxApy = wstETH_apyWei.plus(sfrxETH_apyWei).plus(_fxnApy)
+        const max_current_Apy = wstETH_apyWei
+          .plus(sfrxETH_apyWei)
+          .plus(_fxnCurrentApy)
         const minApy_text = checkNotZoroNumOption(
           minApy,
           `${fb4(minApy, false, 0, 2)}`
+        )
+        const min_current_Apy_text = checkNotZoroNumOption(
+          min_current_Apy,
+          `${fb4(min_current_Apy, false, 0, 2)}`
         )
         const maxApy_text = checkNotZoroNumOption(
           maxApy,
           `${fb4(maxApy, false, 0, 2)}`
         )
+        const max_current_Apy_text = checkNotZoroNumOption(
+          max_current_Apy,
+          `${fb4(max_current_Apy, false, 0, 2)}`
+        )
         let userApy = 0
         let userApy_text = 0
+        let user_current_Apy = 0
+        let user_current_Apy_text = 0
         let boostLever = 0
         let boostLever_text = 0
         let userFxnApy = 0
+        let userFxn_current_Apy = 0
         let userFxnApy_text = 0
+        let userFxn_current_Apy_text = 0
         const { BoostRatioRes } = boostableRebalancePoolInfo?.userInfo
         console.log('BoostRatioRes---', BoostRatioRes)
         if (checkNotZoroNum(BoostRatioRes)) {
           boostLever = cBN(BoostRatioRes).div(1e18).times(2.5)
           if (cBN(boostLever).gt(1)) {
             userFxnApy = cBN(_fxnApy_min).times(boostLever)
+            userFxn_current_Apy = cBN(_fxnApy_current_min).times(boostLever)
             userApy = wstETH_apyWei.plus(sfrxETH_apyWei).plus(userFxnApy)
+            user_current_Apy = wstETH_apyWei
+              .plus(sfrxETH_apyWei)
+              .plus(userFxn_current_Apy)
+
             userApy_text = checkNotZoroNumOption(
               userApy,
               fb4(userApy, false, 0, 2)
             )
+            user_current_Apy_text = checkNotZoroNumOption(
+              user_current_Apy,
+              fb4(user_current_Apy, false, 0, 2)
+            )
             boostLever_text = fb4(boostLever, false, 0, 2)
             userFxnApy_text = fb4(userFxnApy, false, 0, 2)
+            userFxn_current_Apy_text = fb4(userFxn_current_Apy, false, 0, 2)
           }
         }
         console.log('BoostRatioRes---', BoostRatioRes)
@@ -202,16 +238,29 @@ const useStabiltyPool = (infoKey, baseToken) => {
           // xETHApy_text,
           fxnApy: _fxnApy,
           fxnApy_text,
+          fxnCurrentApy: _fxnCurrentApy,
+          fxnCurrentApy_text,
+
           minApy,
+          minCurrentApy: min_current_Apy,
           minApy_text,
+          minCurrentApy_text: min_current_Apy_text,
+          maxApy,
           maxApy_text,
+          maxCurrentApy: max_current_Apy,
+          maxCurrentApy_text: max_current_Apy_text,
           fxnApy_min_text,
+          fxnApy_current_min_text,
           fxnApy_max_text,
+          fxnApy_current_max_text,
           userApy,
+          userCurrentApy: user_current_Apy,
           userApy_text,
+          userCurrentApy_text: user_current_Apy_text,
           boostLever,
           boostLever_text,
           userFxnApy_text,
+          userFxnCurrentApy_text: userFxn_current_Apy_text,
         }
       } catch (error) {
         console.log('apy---', error)

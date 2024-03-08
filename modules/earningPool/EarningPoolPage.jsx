@@ -117,7 +117,7 @@ export default function EarningPoolPage() {
             <p className="text-[14px]">
               Earn wstETH
               <br />
-              Redeem to stETH
+              Redeem to wstETH
             </p>
           }
           {...poolAData}

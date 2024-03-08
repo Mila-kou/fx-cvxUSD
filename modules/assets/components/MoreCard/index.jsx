@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
+import { useSelector } from 'react-redux'
 import styles from './styles.module.scss'
-import { useSelector } from '@/store/index'
 import { ChangedPrice } from '../Common'
 
 export default function MoreCard({ assetInfo }) {

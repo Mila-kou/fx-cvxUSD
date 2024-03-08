@@ -6,6 +6,7 @@ import styles from './styles.module.scss'
 
 export default function TokenStatistics({ assetInfo }) {
   const {
+    name,
     symbol,
     nav_text,
     totalSupply_text,
@@ -39,7 +40,7 @@ export default function TokenStatistics({ assetInfo }) {
 
   return (
     <div className={styles.container}>
-      <div className="flex gap-[8px] items-center mb-[24px]">
+      <div className="flex gap-[18px] items-center mb-[24px]">
         <div className="relative">
           <img className="w-[28px]" src={icon} />
           {subIcon ? (
@@ -50,7 +51,7 @@ export default function TokenStatistics({ assetInfo }) {
           ) : null}
         </div>
         <p>
-          {symbol} <span className="mx-[8px]">{nav_text}</span>
+          {name || symbol} <span className="mx-[8px]">{nav_text}</span>
           {isShow24Change ? <ChangedPrice value={change24h} isRed /> : null}
         </p>
       </div>

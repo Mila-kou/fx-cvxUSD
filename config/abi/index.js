@@ -86,6 +86,8 @@ import RateProvider_ABI from './fxUSD/RateProvider.json'
 // common
 import MultiPathConverter_ABI from './common/MultiPathConverter.json'
 
+import Llamas_ABI from './Llamas.json'
+
 export default {
   erc20ABI,
   multiCallABI,
@@ -166,4 +168,6 @@ export default {
   MultiPathConverter_ABI,
 
   FXUSD_ReservePoolV2_ABI,
+
+  Llamas_ABI,
 }

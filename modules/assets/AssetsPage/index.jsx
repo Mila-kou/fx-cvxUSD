@@ -147,22 +147,97 @@ export default function AssetsPage() {
         <div className={styles.wrap}>
           {[
             [
-              'Mint & Redeem (Stablecoins)',
-              [fxUSD, fETH],
+              'Mint & Redeem fxUSD Stablecoin',
+              [fxUSD],
               false,
               `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
             ],
             [
-              'Mint and Redeem (Leveraged Tokens)',
-              [xETH, xstETH, xfrxETH],
+              'Mint and Redeem Leveraged Tokens',
+              [xstETH, xfrxETH],
               true,
               `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
             ],
           ].map(([name, list, isX, icon]) => (
-            <div
-              className={`${styles.header} min-w-[556px] mt-[32px]`}
-              key={name}
-            >
+            <div className={`${styles.header} min-w-[556px]`} key={name}>
+              <div className={styles.headerTitle}>
+                <img src={icon} />
+                {name}
+              </div>
+
+              <div className="px-[16px] mt-[16px] flex justify-between">
+                <div className="w-[200px]" />
+                <div className="w-[120px] text-[14px]">
+                  {isX ? 'Leverage' : 'TVL'}
+                </div>
+                <div className="w-[60px] text-[14px]">Nav</div>
+                <div className="w-[72px] text-[14px]">24h Change</div>
+              </div>
+
+              {list.map((item) => (
+                <Link href={`assets/${item.symbol}`}>
+                  <AssetCell info={item} />
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.wrap}>
+          {[
+            [
+              'Mint & Redeem fETH',
+              [fETH],
+              false,
+              `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+            [
+              'Mint and Redeem xETH',
+              [xETH],
+              true,
+              `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+          ].map(([name, list, isX, icon]) => (
+            <div className={`${styles.header} min-w-[556px]`} key={name}>
+              <div className={styles.headerTitle}>
+                <img src={icon} />
+                {name}
+              </div>
+
+              <div className="px-[16px] mt-[16px] flex justify-between">
+                <div className="w-[200px]" />
+                <div className="w-[120px] text-[14px]">
+                  {isX ? 'Leverage' : 'TVL'}
+                </div>
+                <div className="w-[60px] text-[14px]">Nav</div>
+                <div className="w-[72px] text-[14px]">24h Change</div>
+              </div>
+
+              {list.map((item) => (
+                <Link href={`assets/${item.symbol}`}>
+                  <AssetCell info={item} />
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* <div className={styles.wrap}>
+          {[
+            [
+              'Mint & Redeem Stable Farming Tokens',
+              [],
+              false,
+              `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+            [
+              'Mint and Leveraged Farming Tokens',
+              [],
+              true,
+              `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+          ].map(([name, list, isX, icon]) => (
+            <div className={`${styles.header} min-w-[556px]`} key={name}>
               <div className={styles.headerTitle}>
                 <img src={icon} />
                 {name}
@@ -192,7 +267,7 @@ export default function AssetsPage() {
                 ))}
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
       {/* <div className={styles.container}>
         <SimpleInput onChange={handleChange_CurrentStETHPrice} /> <br />

@@ -425,3 +425,15 @@ export const useMultiPathConverterContract = () => {
     [getContract]
   )
 }
+
+export const useLlamasContract = () => {
+  const address = config.contracts.Llamas
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.Llamas_ABI),
+      address,
+    }),
+    [getContract]
+  )
+}
