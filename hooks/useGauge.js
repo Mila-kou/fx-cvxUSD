@@ -87,7 +87,7 @@ const useGauge = () => {
               ),
             },
           }
-          if (item.gaugeTypeName !== 'Rebalance Pool Gauge') {
+          if (item.gaugeTypeName !== 'Stability Pool Gauge') {
             _apiCall.baseInfo = {
               symbol: symbol(),
               totalSupply: totalSupply(),

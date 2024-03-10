@@ -59,7 +59,7 @@ export default function EarningPoolPage() {
 
         <Header title="Stake fxUSD" />
         <RebalancePoolCell
-          title="fxUSD Staking Pool"
+          title="fxUSD Stability Pool"
           contractType="rebalancePoolV2_info_fxUSD_wstETH"
           subTitle={
             <p className="text-[14px]">
@@ -71,7 +71,7 @@ export default function EarningPoolPage() {
           {...fxUSD_wstETH_pool}
         />
         <RebalancePoolCell
-          title="fxUSD Staking Pool"
+          title="fxUSD Stability Pool"
           contractType="rebalancePoolV2_info_fxUSD_xstETH"
           subTitle={
             <p className="text-[14px]">
@@ -83,7 +83,7 @@ export default function EarningPoolPage() {
           {...fxUSD_xstETH_pool}
         />
         <RebalancePoolCell
-          title="fxUSD Staking Pool"
+          title="fxUSD Stability Pool"
           contractType="rebalancePoolV2_info_fxUSD_sfrxETH"
           subTitle={
             <p className="text-[14px]">
@@ -95,7 +95,7 @@ export default function EarningPoolPage() {
           {...fxUSD_sfrxETH_pool}
         />
         <RebalancePoolCell
-          title="fxUSD Staking Pool"
+          title="fxUSD Stability Pool"
           contractType="rebalancePoolV2_info_fxUSD_xfrxETH"
           subTitle={
             <p className="text-[14px]">
@@ -111,7 +111,7 @@ export default function EarningPoolPage() {
       <div className={`${styles.content} `}>
         <Header title="Stake fETH" />
         <RebalancePoolCell
-          title="fETH Staking Pool"
+          title="fETH Stability Pool"
           contractType="rebalancePoolV2_info_A"
           subTitle={
             <p className="text-[14px]">
@@ -123,7 +123,7 @@ export default function EarningPoolPage() {
           {...poolAData}
         />
         <RebalancePoolCell
-          title="fETH Staking Pool"
+          title="fETH Stability Pool"
           contractType="rebalancePoolV2_info_B"
           subTitle={
             <p className="text-[14px]">
@@ -152,7 +152,7 @@ export default function EarningPoolPage() {
         is possible that the f(x) system will enter stability mode for various
         assets in volatile market conditions. User’s supplied assets may be
         redeemed for ETH, an ETH Liquid Staking Derivative or an X-token
-        depending on which rebalance pool their tokens are deposited. Please
+        depending on which stability pool their tokens are deposited. Please
         proceed with caution.
       </p>
     </div>
