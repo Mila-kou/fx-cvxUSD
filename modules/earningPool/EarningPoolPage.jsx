@@ -54,7 +54,7 @@ export default function EarningPoolPage() {
       <div className={`${styles.content} mt-[32px]`}>
         <div className={styles.headerTitle}>
           <DotChartOutlined />
-          Staking Pools
+          Stability Pools
         </div>
 
         <Header title="Stake fxUSD" />

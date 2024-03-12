@@ -22,7 +22,7 @@ import useLlamaNFT from './useLlamaNFT'
 const routers = [
   ['Mint & Redeem', '/assets'],
   // ['f(x) Protocol', '/home'],
-  ['Staking Pools', '/staking'],
+  ['Stability Pools', '/staking'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
   ['Genesis', '/genesis'],
