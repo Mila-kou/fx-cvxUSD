@@ -65,13 +65,17 @@ export default function PoolCell({
         }}
         onClick={() => setOpenPanel(!openPanel)}
       >
-        <div className="w-[200px] flex items-center gap-[16px]">
-          <div className="relative flex-shrink-0">
-            <img className="w-[30px]" src={cellData.icon} />
-            <img
-              className="w-[18px] absolute right-[-8px] bottom-[-3px]"
-              src={cellData.subIcon}
-            />
+        <div className="w-[200px] flex items-center gap-[26px]">
+          <div className="flex items-center">
+            {cellData.icons?.map((item) => (
+              <div className="relative flex-shrink-0 mr-[-10px]">
+                <img className="w-[30px]" src={item.icon} />
+                <img
+                  className="w-[18px] absolute right-[-8px] bottom-[-3px]"
+                  src={item.subIcon}
+                />
+              </div>
+            ))}
           </div>
           <span style={{ marginLeft: '5px' }}>{cellData.name}</span>
         </div>
@@ -121,8 +125,8 @@ export default function PoolCell({
             <Button
               size="small"
               // disabled={!canCast}
-              type="second"
               disabled
+              type="second"
               onClick={() => onCastVote(power)}
             >
               Cast Vote

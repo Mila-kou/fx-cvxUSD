@@ -3,7 +3,11 @@ import { Checkbox } from 'antd'
 import { MedicineBoxOutlined } from '@ant-design/icons'
 import tokens from '@/config/tokens'
 import CastVoteModal from './components/CastVoteModal'
-import { REBALANCE_GAUGE_LIST, POOLS_LIST } from '@/config/aladdinVault'
+import {
+  REBALANCE_GAUGE_LIST,
+  POOLS_LIST,
+  OTHER_GAUGE_LIST,
+} from '@/config/aladdinVault'
 import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
@@ -103,6 +107,16 @@ export default function GaugePage() {
 
         <Header title="f(x) Curve LPs" />
         {POOLS_LIST.map((item) => (
+          <PoolCell
+            cellData={item}
+            voteData={poolVoteInfo[item.lpGaugeAddress]}
+            remaining={userVoteInfo.remaining}
+            onCastVote={(newPower) => onCastVote(item, newPower)}
+          />
+        ))}
+
+        <Header title="Other" />
+        {OTHER_GAUGE_LIST.map((item) => (
           <PoolCell
             cellData={item}
             voteData={poolVoteInfo[item.lpGaugeAddress]}

@@ -267,13 +267,17 @@ export default function PoolCell({ cellData }) {
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
-        <div className="flex w-[230px] gap-[16px] items-center">
-          <div className="relative flex-shrink-0">
-            <img className="w-[30px]" src={cellData.icon} />
-            <img
-              className="w-[18px] absolute right-[-8px] bottom-[-3px]"
-              src={cellData.subIcon}
-            />
+        <div className="flex w-[230px] gap-[26px] items-center">
+          <div className="flex items-center">
+            {cellData.icons?.map((item) => (
+              <div className="relative flex-shrink-0 mr-[-10px]">
+                <img className="w-[30px]" src={item.icon} />
+                <img
+                  className="w-[18px] absolute right-[-8px] bottom-[-3px]"
+                  src={item.subIcon}
+                />
+              </div>
+            ))}
           </div>
           <div>
             <p className="text-[16px]">{cellData.name}</p>

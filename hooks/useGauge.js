@@ -87,7 +87,11 @@ const useGauge = () => {
               ),
             },
           }
-          if (item.gaugeTypeName !== 'Stability Pool Gauge') {
+          if (
+            !['Stability Pool Gauge', 'Fundraising'].includes(
+              item.gaugeTypeName
+            )
+          ) {
             _apiCall.baseInfo = {
               symbol: symbol(),
               totalSupply: totalSupply(),

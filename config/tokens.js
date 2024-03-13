@@ -172,9 +172,23 @@ const gaugeTokenList = {
   ConvexCurveManager_FXN_cvxFXN: '0x607Fb364d8D7fBB4630d3020eC582e4D75d1949a',
   fx_FXN_sdFXN: '0x5b1D12365BEc01b8b672eE45912d1bbc86305dba',
   ConvexCurveManager_FXN_sdFXN: '0x06688aC314dA737a1E9841B374F393A7982fA6D1',
-  // // rebalance pool gauge
-  // BoostableRebalancePool_fETH_FundraiseGauge:
-  //   '0x3F3eBc5deA2eA29ceE5177032D6bFD936e4e3e7D',
+
+  crvUSD_fxUSD: '0xF4Bd6D66bAFEA1E0500536d52236f64c3e8a2a84',
+  ConvexCurveManager_crvUSD_fxUSD: '0x7a57429755Fc2F6fEa171Bdb7d9788E4A0E7f63c',
+  PYUSD_fxUSD: '0xeD113B925AC3f972161Be012cdFEE33470040E6a',
+  ConvexCurveManager_PYUSD_fxUSD: '0x6735151401D038F72C1B2a69aE2dD27453703263',
+  DOLA_fxUSD: '0x61F32964C39Cca4353144A6DB2F8Efdb3216b35B',
+  ConvexCurveManager_DOLA_fxUSD: '0x5C8223439bC15CA61a973D942F1C4684508239c0',
+  GRAI_fxUSD: '0xfa4761512aaf899b010438a10C60D01EBdc0eFcA',
+  ConvexCurveManager_GRAI_fxUSD: '0x0909fd92f0b700F7Ac69715AAc4C63ACB215b1E5',
+  FRAX_fxUSD: '0x31b630B21065664dDd2dBa0eD3a60D8ff59501F0',
+  ConvexCurveManager_FRAX_fxUSD: '0xCef4fFA670E2672E15F2ca76dc661d847f3B5b4D',
+  GHO_fxUSD: '0xf0A3ECed42Dbd8353569639c0eaa833857aA0A75',
+  ConvexCurveManager_GHO_fxUSD: '0xfefB84273A4DEdd40D242f4C007190DE21C9E39e',
+  mkUSD_fxUSD: '0xDbA9a415bae1983a945ba078150CAe8b690c9229',
+  ConvexCurveManager_mkUSD_fxUSD: '0xfefB84273A4DEdd40D242f4C007190DE21C9E39e', // toDO update address
+  ULTRA_fxUSD: '0x0d3e9A29E856CF00d670368a7ab0512cb0c29FAC',
+  ConvexCurveManager_ULTRA_fxUSD: '0xfefB84273A4DEdd40D242f4C007190DE21C9E39e', // toDO update address
 }
 
 export const tokens = {
@@ -397,23 +411,14 @@ export const zapTokens = {
 }
 
 const POOLS_LIST_GAUGE = {
-  // ETH_xETH: {
-  //   lpPoolCurveToken: '0x053d5be7c653325b58d88b942fb2454f8ffd8673',
-  //   // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
-  //   token: '0x16ead9a10b1a77007e6e329b076ad1fe97a6f7c0',
-  //   manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_xETH,
-  //   gauge: gaugeTokenList.fx_ETH_xETH,
-  // },
   ETH_FXN: {
     lpPoolCurveToken: '0xc15f285679a1ef2d25f53d4cbd0265e1d02f2a92',
-    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0xE06A65e09Ae18096B99770A809BA175FA05960e2',
     manageConvexGauge: gaugeTokenList.ConvexCurveManager_ETH_FXN,
     gauge: gaugeTokenList.fx_ETH_FXN,
   },
   FXN_cvxFXN: {
     lpPoolCurveToken: '0x1062fd8ed633c1f080754c19317cb3912810b5e5',
-    // lpPoolConvexToken: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     token: '0x1062fd8ed633c1f080754c19317cb3912810b5e5',
     manageConvexGauge: gaugeTokenList.ConvexCurveManager_FXN_cvxFXN,
     gauge: gaugeTokenList.fx_FXN_cvxFXN,
@@ -423,6 +428,54 @@ const POOLS_LIST_GAUGE = {
     token: '0x28ca243dc0ac075dd012fcf9375c25d18a844d96',
     manageConvexGauge: gaugeTokenList.ConvexCurveManager_FXN_sdFXN,
     gauge: gaugeTokenList.fx_FXN_sdFXN,
+  },
+  crvUSD_fxUSD: {
+    lpPoolCurveToken: '0x8fFC7b89412eFD0D17EDEa2018F6634eA4C2FCb2',
+    token: '0x8fFC7b89412eFD0D17EDEa2018F6634eA4C2FCb2',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_crvUSD_fxUSD,
+    gauge: gaugeTokenList.crvUSD_fxUSD,
+  },
+  PYUSD_fxUSD: {
+    lpPoolCurveToken: '0xd6982da59f1d26476e259559508f4135135cf9b8',
+    token: '0xd6982da59f1d26476e259559508f4135135cf9b8',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_PYUSD_fxUSD,
+    gauge: gaugeTokenList.PYUSD_fxUSD,
+  },
+  DOLA_fxUSD: {
+    lpPoolCurveToken: '0x189b4e49b5caf33565095097b4b960f14032c7d0',
+    token: '0x189b4e49b5caf33565095097b4b960f14032c7d0',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_DOLA_fxUSD,
+    gauge: gaugeTokenList.DOLA_fxUSD,
+  },
+  GRAI_fxUSD: {
+    lpPoolCurveToken: '0x69cf42f15f9325986154b61a013da6e8fec82ccf',
+    token: '0x69cf42f15f9325986154b61a013da6e8fec82ccf',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_GRAI_fxUSD,
+    gauge: gaugeTokenList.GRAI_fxUSD,
+  },
+  FRAX_fxUSD: {
+    lpPoolCurveToken: '0x1ee81c56e42ec34039d993d12410d437ddea341e',
+    token: '0x1ee81c56e42ec34039d993d12410d437ddea341e',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_FRAX_fxUSD,
+    gauge: gaugeTokenList.FRAX_fxUSD,
+  },
+  GHO_fxUSD: {
+    lpPoolCurveToken: '0x74345504eaea3d9408fc69ae7eb2d14095643c5b',
+    token: '0x74345504eaea3d9408fc69ae7eb2d14095643c5b',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_GHO_fxUSD,
+    gauge: gaugeTokenList.GHO_fxUSD,
+  },
+  mkUSD_fxUSD: {
+    lpPoolCurveToken: '0xca554e2e2948a211d4650fe0f4e271f01f9cb5f1',
+    token: '0xca554e2e2948a211d4650fe0f4e271f01f9cb5f1',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_mkUSD_fxUSD,
+    gauge: gaugeTokenList.mkUSD_fxUSD,
+  },
+  ULTRA_fxUSD: {
+    lpPoolCurveToken: '0xf33ab11e5c4e55dacb13644f0c0a9d1e199a796f',
+    token: '0xf33ab11e5c4e55dacb13644f0c0a9d1e199a796f',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ULTRA_fxUSD,
+    gauge: gaugeTokenList.ULTRA_fxUSD,
   },
 }
 

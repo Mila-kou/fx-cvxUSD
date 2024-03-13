@@ -17,12 +17,19 @@ const explorerUri = 'https://www.etherscan.io'
 //   label: 'Mainnet Fork',
 //   rpcUrl: 'https://apitest.aladdin.club/rpc',
 // }
+// const chainInfo = {
+//   id: '0x18653',
+//   token: 'ETH',
+//   label: 'Phalcon-fxUSD-gauge',
+//   rpcUrl:
+//     'https://rpc.phalcon.blocksec.com/rpc_4b973444c3504c3287a47b3daf0f62cb',
+// }
 const chainInfo = {
-  id: '0x18652',
+  id: '0x1',
   token: 'ETH',
-  label: 'Phalcon-fxUSD-online',
+  label: 'Phalcon-fxUSD-gauge-1',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_50d11d9e0ab744ae95af95e8c0a10e6a',
+    'https://rpc.phalcon.blocksec.com/rpc_a16e2055cf844d8c83ed13667769d7bc',
 }
 
 const contracts = {

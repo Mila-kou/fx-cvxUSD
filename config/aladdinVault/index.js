@@ -11,6 +11,12 @@ export const POOLS_LIST = [
     logo2: `/tokens/crypto-icons-stack.svg#eth`,
     icon: '/images/FXN.svg',
     subIcon: `${cryptoIcons}#crv`,
+    icons: [
+      { icon: '/tokens/crypto-icons-stack.svg#eth' },
+      {
+        icon: '/images/FXN.svg',
+      },
+    ],
     id: 1,
     name: 'ETH+FXN',
     platform: 'FX',
@@ -40,6 +46,13 @@ export const POOLS_LIST = [
     logo: FLogo,
     icon: '/images/FXN.svg',
     subIcon: `${cryptoIcons}#crv`,
+    icons: [
+      { icon: '/images/FXN.svg' },
+      {
+        icon: '/images/FXN.svg',
+        subIcon: '/tokens/crypto-icons-stack.svg#cvx',
+      },
+    ],
     id: 2,
     name: 'FXN+cvxFXN',
     platform: 'FX',
@@ -70,6 +83,13 @@ export const POOLS_LIST = [
     logo: FLogo,
     icon: '/images/FXN.svg',
     subIcon: `${cryptoIcons}#crv`,
+    icons: [
+      { icon: '/images/FXN.svg' },
+      {
+        icon: '/images/FXN.svg',
+        subIcon: '/tokens/stakedao.png',
+      },
+    ],
     id: 3,
     name: 'FXN+sdFXN',
     nameShow: ['FXN+sdFXN Curve', ' Pool'],
@@ -96,12 +116,297 @@ export const POOLS_LIST = [
       },
     ],
   },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/crvUSD.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 4,
+    name: 'crvUSD+fxUSD',
+    nameShow: ['crvUSD+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-106/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.crvUSD_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.crvUSD_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_crvUSD_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.crvUSD_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/pyusd.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 5,
+    name: 'PYUSD+fxUSD',
+    nameShow: ['PYUSD+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-107/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.PYUSD_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.PYUSD_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_PYUSD_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.PYUSD_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/crypto-icons-stack.svg#dola' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 6,
+    name: 'DOLA+fxUSD',
+    nameShow: ['DOLA+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-108/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.DOLA_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.DOLA_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_DOLA_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.DOLA_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/grai.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 7,
+    name: 'GRAI+fxUSD',
+    nameShow: ['GRAI+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-109/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.GRAI_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.GRAI_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_GRAI_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.GRAI_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/crypto-icons-stack.svg#frax' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 8,
+    name: 'FRAX+fxUSD',
+    nameShow: ['FRAX+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-110/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.FRAX_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.FRAX_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_FRAX_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.FRAX_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/gho.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 9,
+    name: 'GHO+fxUSD',
+    nameShow: ['GHO+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-111/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.GHO_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.GHO_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_GHO_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.GHO_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/mkusd.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 10,
+    name: 'mkUSD+fxUSD',
+    nameShow: ['mkUSD+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-115/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.mkUSD_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.mkUSD_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_mkUSD_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.mkUSD_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    logo: FLogo,
+    icons: [
+      { icon: '/tokens/ultra.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 11,
+    name: 'ULTRA+fxUSD',
+    nameShow: ['ULTRA+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-116/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.ULTRA_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.ULTRA_fxUSD.gauge,
+    // manageConvexGaugeAddress:
+    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_ULTRA_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.ULTRA_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
 ]
 
 export const REBALANCE_GAUGE_LIST = [
   {
     logo: FLogo,
     icon: '/images/f-logo.svg',
+    icons: [
+      {
+        icon: '/images/f-logo.svg',
+      },
+    ],
     id: 1,
     name: 'fETH - wstETH',
     platform: 'FX',
@@ -127,6 +432,12 @@ export const REBALANCE_GAUGE_LIST = [
     logo: FLogo,
     icon: '/tokens/fxusd.svg',
     subIcon: '/tokens/steth.svg',
+    icons: [
+      {
+        icon: '/tokens/fxusd.svg',
+        subIcon: '/tokens/steth.svg',
+      },
+    ],
     id: 2,
     name: 'fxUSD - wstETH',
     platform: 'FX',
@@ -152,6 +463,12 @@ export const REBALANCE_GAUGE_LIST = [
     logo: FLogo,
     icon: '/tokens/fxusd.svg',
     subIcon: `${cryptoIcons}#frax`,
+    icons: [
+      {
+        icon: '/tokens/fxusd.svg',
+        subIcon: `${cryptoIcons}#frax`,
+      },
+    ],
     id: 3,
     name: 'fxUSD - sfrxETH',
     platform: 'FX',
@@ -322,6 +639,28 @@ export const REBALANCE_POOLS_LIST = [
   },
 ]
 
-export const GAUGE_LIST = [...REBALANCE_GAUGE_LIST, ...POOLS_LIST]
+export const OTHER_GAUGE_LIST = [
+  {
+    logo: FLogo,
+    icons: [
+      {
+        icon: '/images/FXN.svg',
+      },
+    ],
+    id: 1,
+    name: 'veFund',
+    gaugeType: 2,
+    gaugeTypeName: 'Fundraising',
+    lpAddress: '0x558e7Dd3A72aaA8D54002cabc4565ad9dB58A6dF',
+    lpGaugeAddress: '0x558e7Dd3A72aaA8D54002cabc4565ad9dB58A6dF',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+  },
+]
+
+export const GAUGE_LIST = [
+  ...REBALANCE_GAUGE_LIST,
+  ...POOLS_LIST,
+  ...OTHER_GAUGE_LIST,
+]
 
 export default POOLS_LIST

@@ -192,7 +192,7 @@ export default function AssetsPage() {
               `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
             ],
             [
-              'Mint and Redeem xETH',
+              'Mint and Redeem Leveraged xETH',
               [xETH],
               true,
               `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
