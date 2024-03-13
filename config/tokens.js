@@ -186,9 +186,9 @@ const gaugeTokenList = {
   GHO_fxUSD: '0xf0A3ECed42Dbd8353569639c0eaa833857aA0A75',
   ConvexCurveManager_GHO_fxUSD: '0xfefB84273A4DEdd40D242f4C007190DE21C9E39e',
   mkUSD_fxUSD: '0xDbA9a415bae1983a945ba078150CAe8b690c9229',
-  ConvexCurveManager_mkUSD_fxUSD: '0xfefB84273A4DEdd40D242f4C007190DE21C9E39e', // toDO update address
+  ConvexCurveManager_mkUSD_fxUSD: '0xDF4a66110C3d2d9e13fDC9BC20db9Cb7c51f2CbF',
   ULTRA_fxUSD: '0x0d3e9A29E856CF00d670368a7ab0512cb0c29FAC',
-  ConvexCurveManager_ULTRA_fxUSD: '0xfefB84273A4DEdd40D242f4C007190DE21C9E39e', // toDO update address
+  ConvexCurveManager_ULTRA_fxUSD: '0x70d6C973Cf38D9AbFdb7474c9e1277Ad6E074645',
 }
 
 export const tokens = {
