@@ -24,98 +24,112 @@ export default function FAQ({ open, onCancel }) {
             <div className={styles.content}>
               <h1>f(x) FAQ</h1>
 
-              <h2>1. What?</h2>
+              <h2>1) What?</h2>
 
               <p>
-                f(x) splits ETH into a mix of low-volatility “floating
-                stablecoins” called fETH and high volatility “leveraged ETH”
-                tokens called xETH. Users can supply ETH or stETH to mint either
-                one (pure ETH is zapped into stETH before deposit)
+                Big Picture: f(x) splits yield-bearing tokens into two
+                derivative coins: a stable one, and a more volatile one. On the
+                stable side, the headliners are fETH and fxUSD: both stable (one
+                USD-pegged, one that increases or decreases a little with the
+                price of ETH. Holding the high volatility tokens like xETH,
+                xstETH, and others are like holding leverage on the reserve,
+                i.e. leveraged ETH, but with zero funding costs and no
+                individual liquidations.
               </p>
 
-              <h2>2. Can I get stETH back out again?</h2>
-
+              <h2>2) </h2>
               <p>
-                Yes! Every fETH or xETH token is instantly redeemable for stETH
-                at any time, in the amount of its current NAV. The NAV of xETH
-                and fETH change continuously with the price of ETH.
+                Tokens on f(x) can be minted by supplying to their reserve: for
+                example, supply stETH or frxETH to mint fxUSD. Just use what you
+                have to mint what you want; stable or ‘volatility amplified,’ or
+                any combination thereof. No slippage or collateral to manage
+                (fees and gas still apply!)
               </p>
 
-              <h2>3. What is NAV?</h2>
+              <h2>3) Can I get stETH/ReserveToken back out again?</h2>
 
               <p>
-                NAV is net asset value. It’s the current value, as determined by
-                the protocol, of fETH or xETH. You can mint or redeem xETH or
-                fETH for their respective NAVs.
+                Yes! Every minted token is always redeemable for a share of the
+                reserve, with its redemption value determined by its NAV.
               </p>
 
-              <h2>4. Why would I want fETH?</h2>
+              <h2>4) What is NAV?</h2>
 
               <p>
-                fETH can be used like a stablecoin. It’s decentralized (backed
-                only by stETH) so it avoids exposure to the shenanigans of
-                central banks or other IRL entities.
+                NAV is net asset value, i.e. the current cost to mint or amount
+                received to redeem for a given token. As the value (in dollars)
+                of the reserve changes, the protocol sets the NAV of each
+                derivative token such that the stable tokens stay stable (or
+                nearly stable in the case of fETH) and the xETH tokens absorb
+                the difference.
+              </p>
+              <p>
+                If the value of the reserve rises or falls, the value of stables
+                minted against it stays the same while the value of its X tokens
+                rises and falls by <b>a bigger % than the reserve</b>, to make
+                up the difference.
               </p>
 
+              <h2>5) What’s so special about fxUSD and fETH?</h2>
+
               <p>
-                fETH isn’t exactly a stablecoin, because it gains and loses a
-                small amount of value as ETH rises and falls. Those price
-                movements are fixed at 10% of the size of ETH’s. In this way
-                it’s anchored to the Ethereum economy, rather than the US one.
-                If you think that USD will devalue over time compared to ETH,
-                you might like to hold it instead of USD stablecoins.
+                These stablecoins are designed to power the next generation of
+                on-chain activity without exposure to the risks of banks,
+                governments, or real world assets. Unlike decentralized
+                stablecoins before them, they can do this while still being
+                scalable. And to top it off, each can be staked in the stability
+                pool to earn a share of ETH staking yields from the reserve.
+              </p>
+              <p>
+                Value-wise, fxUSD is a traditional stablecoin: pegged to $1.
+                fETH is different: its value stays mostly stable, but it follows
+                the price of ETH by adjusting its NAV by 10% of the change in
+                ETH price. If ETH goes up a lot, fETH goes up a little. You can
+                think of it as the first stablecoin anchored in the crypto
+                economy. If you want to be able to plan for expenses but not
+                totally get left behind in fiat as ETH price moves, it’s for
+                you.
               </p>
 
-              <h2>5. Why would I want xETH?</h2>
-
+              <h2>6) What’s with xETH and these other x tokens?</h2>
               <p>
-                xETH provides powerful, free leverage on ETH. No funding rate,
-                very low risk of liquidation. It’s a great token to amplify your
-                gains on a long-term bet on ETH price growth.
+                xETH and its ilk provide powerful, free leverage on ETH (or
+                whichever token is in their reserve. No funding rate, very low
+                risk of liquidation. It’s a great token to amplify your gains on
+                a long-term bet on ETH price growth. Its “equivalent leverage”
+                varies between about 1.5 and 4, changing with the makeup of the
+                derivative tokens against that reserve. If the balance is skewed
+                to stable tokens the multiplier is higher, when it skews toward
+                x tokens the multiplier is lower.
               </p>
 
               <h2>
-                6. What the heck does “low risk of liquidation” for xETH even
+                7) What the heck does “low risk of liquidation” for xETH even
                 mean?
               </h2>
+
               <p>
                 xETH has no concept of ‘liquidation’ (unlike leveraged perps or
                 CDPs). When we talk about risk of xETH “liquidation”, we really
                 mean the risk of xETH’s price going to zero due to an extreme
-                drop in ETH price (see Bad Things section). We used analysis of
-                ETH daily price data back to 2017 to characterize this risk at
-                various collateral ratios. As long as the f(x) collateral ratio
-                is above 130%, the risk is below 0.1%, and that doesn’t even
-                factor in stability mode which automatically kicks in and
-                deploys rebalance pool capital to push the CR back up if it ever
-                drops below 130%.
+                drop in ETH price (see Bad Things section). We analyzed ETH
+                daily price data over years to set parameters to keep this risk
+                below 0.1% and that doesn’t even factor in stability mode which
+                automatically deploys stability pool capital and bonus
+                incentives to restabilize the system.
               </p>
 
-              <h2>7. Where can I trade fETH/xETH?</h2>
+              <h2>8) What risks am I taking when I hold fxUSD or fETH?</h2>
 
               <p>
-                Mint and redeem on the f(x) website, or trade on{' '}
-                <a
-                  href="https://curve.fi/#/ethereum/pools"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Curve
-                </a>
-                !
-              </p>
-
-              <h2>8. What risks am I taking when I hold fETH/xETH?</h2>
-
-              <p>
-                f(x) was created to avoid centralized risks from real-world
-                assets. Apart from smart contract and oracle risk, which are
-                common to nearly all DeFi protocols, the main risk for f(x) is
-                of an extreme outlier rapid ETH price drop which is larger than
-                the ability of the currently minted xETH to absorb. In that case
-                xETH price would go to zero (sort of like a liquidation) and
-                fETH would lose its low volatility nature, reverting to 1:1 ETH
-                price movements.
+                f(x) headline stablecoins fETH and fxUSD were created to avoid
+                centralized risks from real-world assets. Apart from smart
+                contract and oracle risk, which are common to nearly all DeFi
+                protocols, the main risk for these stables is of an extreme
+                outlier rapid ETH price drop which is larger than the ability of
+                the currently minted xETH to absorb. In that case xETH price
+                would go to zero (sort of like a liquidation) and fETH would
+                lose its low volatility nature, reverting to 1:1 ETH.
               </p>
 
               <p>
@@ -128,70 +142,48 @@ export default function FAQ({ open, onCancel }) {
                 >
                   whitepaper
                 </a>
+                .
               </p>
 
-              <h2>9. What’s the Rebalancing Pool?</h2>
+              <h2>9) What’s a Stability Pool?</h2>
 
               <p>
-                The Rebalancing pool is a farming vault for fETH which earns
-                high yields (in stETH!) sourced from the staking yields of the
-                reserve. fETH in this vault can be automatically redeemed into
-                stETH if the amount of fETH minted ever gets too high compared
-                to xETH (see risks above, and{' '}
-                <a
-                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/f(x)_whitepaper_v2.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  whitepaper
-                </a>
-                ). When this operation is needed, the protocol redeems only as
-                much fETH as necessary to return the protocol to stability, with
-                fETH sourced proportionally from all depositors. Two important
-                notes:
+                There is one stability pool for every stable-leverage pair on
+                f(x). When stable holders deposit there, they earn part of the
+                yields generated by the reserve <b>plus</b> FXN emissions.
               </p>
               <p>
-                * until it is claimed, withdrawal-requested fETH earns no yield
-                but may still be used for redemptions
-              </p>
-              <p>
-                TL;DR: Deposit fETH to Rebalancing Pool to farm high stETH
-                yields and periodically DCA into stETH 🙂
+                If the stable-leverage pair is ever at risk of becoming unstable
+                because of too much minted stable and not enough minted x token,
+                stables in the stability pool are redeemed for reserve assets at
+                their NAV. If the protocol enters stability mode, for stability
+                pool users it is like automatically buying ETH (or whatever the
+                reserve token is) at market price, with no slippage. Otherwise
+                it’s farming unstable, real yields using stable coins.
               </p>
 
-              <h2>10. How much does it cost?</h2>
+              <h2>10) How much does it cost?</h2>
 
               <p>
-                f(x) charges very small minting and redemption fees. Those can
-                be avoided by swapping in and out on secondary (and some fees
-                are waived in certain circumstances, see whitepaper).
+                f(x) charges small minting and redemption fees which vary by
+                asset. Those can be avoided by swapping in and out on secondary
+                (and some fees are waived in certain circumstances, see
+                whitepaper).
               </p>
               <p>
                 Aside from that, users do not pay any cost. Protocol revenue and
-                stability services (see the Rebalancing pool above) come from
+                stability services (see the Stability pool above) come from
                 staking yields earned by stETH in the reserve.
-              </p>
-
-              <h2>11. What is the “reference price” ? </h2>
-              <p>
-                When f(x) reports the price change of ETH, we compare the
-                current 30-minute TWAP from Chainlink with the reference price.
-                To start with, the reference price was the price of ETH at the
-                moment the protocol was turned on, but we update the reference
-                price periodically whenever the current price deviates
-                significantly. Doing this helps the numbers reported on the UI
-                to reflect more recent price fluctuations Reference price
-                updates do not affect the NAV of fETH or xETH.
               </p>
 
               <h1>What if bad things happen?</h1>
 
               <h2>
-                12. What happens if there’s a huge flash crash in ETH price?
+                11) What happens if there’s a huge flash crash in ETH price?
               </h2>
               <p>
                 In the unlikely (&lt;0.1%; see whitepaper) event of a price
-                crash in ETH that’s so big that the rebalancing pool and minting
+                crash in ETH that’s so big that the Stability pool and minting
                 incentives fail to restabilize the system, the price of xETH can
                 fall to zero [this is the closest thing to a liquidation on
                 f(x)] and in that case fETH will have sole claim on the reserve.
@@ -204,19 +196,20 @@ export default function FAQ({ open, onCancel }) {
                 recapitalizing the protocol described in the whitepaper.
               </p>
 
-              <h2>13. What happens if stETH depegs from ETH?</h2>
+              <h2>12) What happens if stETH or other LSD depegs from ETH?</h2>
               <p>
                 f(x) has an automatic emergency brake built-in which protects
-                fETH and xETH holders if there is a stETH depeg. Using multiple
-                oracle feeds f(x) can determine if the price of stETH has
-                diverged more than 1% from the price of ETH, and if so minting
-                is (temporarily) disabled. Redemptions remain enabled (as
-                always), however fETH redemptions use the higher of the two
-                prices (stETH, ETH) and xETH redemptions use the lower. When the
-                stETH peg normalizes, minting resumes. This mechanism ensures
-                fETH and xETH holders are protected, and ensures that{' '}
+                stable and leverage token holders if there is a depeg. Using
+                multiple oracle feeds f(x) can determine if the price of an LSD
+                has diverged more than 1% from the price of ETH, and if so
+                minting with it is (temporarily) disabled. Redemptions remain
+                enabled (as always), however fETH redemptions use the higher of
+                the two divergent prices (ETH or LSD) and xETH redemptions use
+                the lower. When the stETH peg normalizes, minting resumes. This
+                mechanism ensures fETH and xETH holders are protected, and
+                ensures that{' '}
                 <b>
-                  no urgent action is ever needed in the event of a stETH depeg
+                  no urgent action is ever needed in the event of an LSD depeg
                 </b>
                 .
               </p>
