@@ -4,6 +4,16 @@ import useGlobal from '@/hooks/useGlobal'
 
 import styles from './styles.module.scss'
 
+const Whitepaper = () => (
+  <a
+    href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/f(x)_whitepaper_v2.pdf"
+    target="_blank"
+    rel="noreferrer"
+  >
+    whitepaper
+  </a>
+)
+
 export default function FAQ({ open, onCancel }) {
   const { theme } = useGlobal()
   return (
@@ -135,14 +145,7 @@ export default function FAQ({ open, onCancel }) {
               <p>
                 f(x) has extensive and thoughtful risk management systems to
                 prevent this from happening, clearly explained in the{' '}
-                <a
-                  href="https://github.com/AladdinDAO/aladdin-v3-contracts/blob/main/whitepapers/f(x)_whitepaper_v2.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  whitepaper
-                </a>
-                .
+                <Whitepaper />.
               </p>
 
               <h2>9) What’s a Stability Pool?</h2>
@@ -167,8 +170,9 @@ export default function FAQ({ open, onCancel }) {
               <p>
                 f(x) charges small minting and redemption fees which vary by
                 asset. Those can be avoided by swapping in and out on secondary
-                (and some fees are waived in certain circumstances, see
-                whitepaper).
+                (and some fees are waived in certain circumstances, see{' '}
+                <Whitepaper />
+                ).
               </p>
               <p>
                 Aside from that, users do not pay any cost. Protocol revenue and
@@ -182,7 +186,7 @@ export default function FAQ({ open, onCancel }) {
                 11) What happens if there’s a huge flash crash in ETH price?
               </h2>
               <p>
-                In the unlikely (&lt;0.1%; see whitepaper) event of a price
+                In the unlikely (&lt;0.1%; see <Whitepaper />) event of a price
                 crash in ETH that’s so big that the Stability pool and minting
                 incentives fail to restabilize the system, the price of xETH can
                 fall to zero [this is the closest thing to a liquidation on
@@ -193,7 +197,7 @@ export default function FAQ({ open, onCancel }) {
               </p>
               <p>
                 If this ever were to happen there are provisions for
-                recapitalizing the protocol described in the whitepaper.
+                recapitalizing the protocol described in the <Whitepaper />.
               </p>
 
               <h2>12) What happens if stETH or other LSD depegs from ETH?</h2>
