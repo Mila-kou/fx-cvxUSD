@@ -32,6 +32,7 @@ const useVoteController = () => {
         fb4(_allocatedVotes)
       ),
       remaining: 100 - votePower,
+      _remainingVotes: _remainingVotes.toFixed(2),
       remainingVotes: checkNotZoroNumOption(
         _remainingVotes,
         fb4(_remainingVotes)

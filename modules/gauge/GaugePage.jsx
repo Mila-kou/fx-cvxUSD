@@ -86,6 +86,7 @@ export default function GaugePage() {
           (item) => (
             <PoolCell
               cellData={item}
+              userVoteInfo={userVoteInfo}
               voteData={poolVoteInfo[item.lpGaugeAddress]}
               remaining={userVoteInfo.remaining}
               onCastVote={(newPower) => onCastVote(item, newPower)}
@@ -98,6 +99,7 @@ export default function GaugePage() {
           (item) => (
             <PoolCell
               cellData={item}
+              userVoteInfo={userVoteInfo}
               voteData={poolVoteInfo[item.lpGaugeAddress]}
               remaining={userVoteInfo.remaining}
               onCastVote={(newPower) => onCastVote(item, newPower)}
@@ -109,6 +111,7 @@ export default function GaugePage() {
         {POOLS_LIST.map((item) => (
           <PoolCell
             cellData={item}
+            userVoteInfo={userVoteInfo}
             voteData={poolVoteInfo[item.lpGaugeAddress]}
             remaining={userVoteInfo.remaining}
             onCastVote={(newPower) => onCastVote(item, newPower)}
@@ -119,6 +122,7 @@ export default function GaugePage() {
         {OTHER_GAUGE_LIST.map((item) => (
           <PoolCell
             cellData={item}
+            userVoteInfo={userVoteInfo}
             voteData={poolVoteInfo[item.lpGaugeAddress]}
             remaining={userVoteInfo.remaining}
             onCastVote={(newPower) => onCastVote(item, newPower)}
@@ -128,6 +132,8 @@ export default function GaugePage() {
         {voteData && (
           <CastVoteModal
             voteData={voteData}
+            userVoteInfo={userVoteInfo}
+            remaining={userVoteInfo.remaining}
             onCancel={() => setVoteData(null)}
           />
         )}

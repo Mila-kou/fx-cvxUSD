@@ -22,6 +22,7 @@ export default function PoolCell({
   voteData,
   onCastVote,
   remaining,
+  userVoteInfo
 }) {
   const { isAllReady, currentAccount } = useWeb3()
   const [openPanel, setOpenPanel] = useState(false)
@@ -32,7 +33,12 @@ export default function PoolCell({
       const _remaining = remaining + voteData.userPower
       return voteData?.canVote && _remaining >= power
     }
-    return power && voteData?.canVote && remaining >= power
+    return (
+      power &&
+      voteData?.canVote &&
+      checkNotZoroNum(userVoteInfo?._remainingVotes) &&
+      remaining >= power
+    )
   }, [voteData, power, remaining])
 
   const onChange = (v) => {
