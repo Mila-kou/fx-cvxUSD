@@ -259,7 +259,7 @@ export const POOLS_LIST = [
   {
     logo: FLogo,
     icons: [
-      { icon: '/tokens/crypto-icons-stack.svg#dola' },
+      { icon: '/tokens/dola.svg' },
       {
         icon: '/tokens/fxusd.svg',
       },
