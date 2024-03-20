@@ -43,8 +43,8 @@ module.exports = {
         permanent: false,
       },
       {
-        source: '/earning-pool',
-        destination: '/staking',
+        source: '/staking',
+        destination: '/earn',
         permanent: false,
       },
       {
