@@ -45,7 +45,7 @@ export default function RebalancePoolCellV2({
 
   const canClaim = checkNotZoroNum(userTotalClaimable)
 
-  const { rebalanceRewards, baseSymbol } = _poolConfig
+  const { rebalanceRewards, baseSymbol,poolType } = _poolConfig
 
   const WithdrawModal = useMemo(
     () =>
@@ -141,6 +141,14 @@ export default function RebalancePoolCellV2({
     }
   }, [poolData.apyObj, rebalanceRewards])
 
+  const subMessage = useMemo(() => {
+    if (poolType == 'fxUSD') {
+      return ' then stake here to earn LSD and FXN rewards'
+    }
+    if (poolType == 'rUSD') {
+      return ' then stake here to earn LRT yields, ~ 4x Etherfi Points, ~ 2x Eigen Layer Points and FXN rewards'
+    }
+  }, [poolType])
   return (
     <div key={_poolConfig.infoKey} className={styles.poolWrap}>
       <div
@@ -212,7 +220,7 @@ export default function RebalancePoolCellV2({
               </Link>{' '}
               with{' '}
               {BASE_TOKENS_MAP[_poolConfig.baseSymbol]?.baseName || 'stETH'},
-              then stake here to earn LSD and FXN rewards
+              {subMessage}
             </p>
             <div className="mt-[12px]">
               Current APR: {apyDom}{' '}
