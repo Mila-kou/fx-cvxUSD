@@ -72,9 +72,13 @@ export default function GenesisPage() {
 
   const { baseTokenInfos } = ASSET_MAP[assetSymbol]
 
-  const [stage, setStage] = useState(
-    { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.LAUNCHING }[assetSymbol]
-  )
+  // const [stage, setStage] = useState(
+  //   { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.LAUNCHING }[assetSymbol]
+  // )
+
+  const stage = { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.LAUNCHING }[
+    assetSymbol
+  ]
 
   const showBonusFarming = ['fxUSD'].includes(assetSymbol)
 
@@ -88,6 +92,10 @@ export default function GenesisPage() {
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
   const getInitialFundContract = useInitialFundContract()
+
+  useEffect(() => {
+    setSymbol(assetSymbol === 'rUSD' ? 'weETH' : 'ETH')
+  }, [assetSymbol, setSymbol])
 
   const [withdrawInfo, setWithdrawInfo] = useState(null)
   const [isBaseToken, setIsBaseToken] = useState(false)
