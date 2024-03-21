@@ -532,7 +532,7 @@ export default function GenesisPage() {
               <div className="py-[6px]" key={item.symbol}>
                 <p className="text-center">{item.symbol}</p>
                 <h2 className="text-[20px] mt-[8px] text-[var(--primary-color)]">
-                  MAX APY {item.apy}
+                  {item.apy} &nbsp;+ 2x Etherfi Points + Eigen Layer Points
                 </h2>
               </div>
             ))}
