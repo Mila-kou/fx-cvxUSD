@@ -5,6 +5,12 @@ import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
 import { NoticeCard } from '@/modules/assets/components/Common'
 
+const NOTICE_MAP = {
+  fxUSD:
+    'You will lose at least 50% of the rewards which will be allocated proportionally to users who keep their position till the end of the seeding event',
+  rUSD: 'You will lose at least Etherfi Point+EigenLayer Point, which will be proportionally distributed to users who maintain their positions till the end of the seeding event.',
+}
+
 export default function WithdrawModal(props) {
   const {
     onCancel,
@@ -13,6 +19,7 @@ export default function WithdrawModal(props) {
     isBaseToken,
     getMinoutBaseToken,
     isFullLaunched,
+    assetSymbol,
   } = props
   const { xToken, symbol, baseSymbol, sharesRes } = info
 
@@ -37,7 +44,7 @@ export default function WithdrawModal(props) {
     } else {
       setList([
         {
-          symbol: 'fxUSD',
+          symbol: assetSymbol,
           amount: info.fToken_text,
         },
         {
@@ -116,7 +123,7 @@ export default function WithdrawModal(props) {
           <div className="mt-[6px] pl-[24px]">
             <NoticeCard
               content={[
-                `You can withdraw fxUSD + ${info.xToken} after the event.`,
+                `You can withdraw ${assetSymbol} + ${info.xToken} after the event.`,
               ]}
             />
             <div className="flex gap-[32px] mt-[32px]">
@@ -168,11 +175,7 @@ export default function WithdrawModal(props) {
             end.
           </p> */}
 
-          <NoticeCard
-            content={[
-              'You will lose at least 50% of the rewards which will be allocated proportionally to users who keep their position till the end of the seeding event',
-            ]}
-          />
+          <NoticeCard content={[NOTICE_MAP[assetSymbol]]} />
         </div>
 
         <div className="flex gap-[32px] mt-[32px]">

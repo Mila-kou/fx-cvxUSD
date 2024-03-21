@@ -1,30 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import useWeb3 from '@/hooks/useWeb3'
 import useStabiltyPool from '../controller/useStabiltyPool'
-import { useContract, useFX_stETHTreasury } from '@/hooks/useContracts'
+import { useContract } from '@/hooks/useContracts'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 import abi from '@/config/abi'
 
-export default function usePool({
-  rebalancePoolAddress,
-  rebalanceWithBonusTokenAddress,
-  infoKey,
-}) {
-  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
-  const { contract: FX_stETHTreasuryContract } = useFX_stETHTreasury()
+export default function usePool({ rebalancePoolAddress }) {
+  const { isAllReady, sendTransaction } = useWeb3()
   const { contract: FX_RebalancePoolContract } = useContract(
     rebalancePoolAddress,
     abi.FX_RebalancePoolABI
   )
 
-  const { contract: FX_RebalanceWithBonusTokenContract } = useContract(
-    rebalanceWithBonusTokenAddress,
-    abi.FX_RebalanceWithBonusTokenABI
-  )
-
-  const poolData = useStabiltyPool(infoKey)
+  const poolData = useStabiltyPool()
 
   const {
     stabilityPoolInfo,
@@ -40,8 +30,6 @@ export default function usePool({
     xETH: false,
   })
   const [unlocking, setUnlocking] = useState(false)
-
-  const [harvesting, setHarvesting] = useState(false)
 
   const handleDeposit = () => {
     if (!isAllReady) return
@@ -135,50 +123,8 @@ export default function usePool({
     return !!checkNotZoroNum(userUnlockedBalanceTvl)
   }, [userUnlockedBalanceTvl])
 
-  const handleHarvest = async () => {
-    if (!isAllReady) return
-    try {
-      setHarvesting(true)
-      const apiCall = FX_stETHTreasuryContract.methods.harvest()
-      await NoPayableAction(
-        () =>
-          sendTransaction({
-            to: FX_stETHTreasuryContract._address,
-            data: apiCall.encodeABI(),
-          }),
-        {
-          key: 'lp',
-          action: 'Harvest',
-        }
-      )
-      setHarvesting(false)
-    } catch (error) {
-      setHarvesting(false)
-      console.log('harvest-error---', error)
-      noPayableErrorAction(`error_harvest`, error)
-    }
-  }
-
-  const handleLiquidatorWithBonus = async () => {
-    try {
-      // const _totalFETH = cBN(stabilityPoolInfo.baseInfo?.stabilityPoolTotalSupplyRes).plus(stabilityPoolInfo.baseInfo?.totalUnlockingRes).toString(10)
-      const apiCall = FX_RebalanceWithBonusTokenContract.methods.liquidate(0)
-      const tx = await sendTransaction({
-        to: FX_RebalanceWithBonusTokenContract._address,
-        data: apiCall.encodeABI(),
-      })
-      console.log('liquidate success---', tx)
-    } catch (error) {
-      console.log('liquidate error', error)
-    }
-  }
-
   return {
     ...poolData,
-
-    harvesting,
-    handleHarvest,
-    handleLiquidatorWithBonus,
 
     handleDeposit,
     handleWithdraw,

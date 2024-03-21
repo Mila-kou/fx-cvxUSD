@@ -17,10 +17,12 @@ import MockTwapOracleABI from '@/config/abi/common/MockTwapOracle'
 export default function AssetsPage() {
   const { theme } = useGlobal()
   const { _currentAccount, sendTransaction } = useWeb3()
-  const { fETH, xETH, fxUSD, xstETH, xfrxETH } = useSelector(
+  // const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH, fCVX, xCVX } =
+  //   useSelector((state) => state.asset)
+  const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH } = useSelector(
     (state) => state.asset
   )
-  const { wstETH, sfrxETH } = useSelector((state) => state.baseToken)
+  const { wstETH, sfrxETH, weETH } = useSelector((state) => state.baseToken)
 
   // usePools()
 
@@ -108,9 +110,8 @@ export default function AssetsPage() {
     }
   }
 
-  const getTotalBaseTokenUSD = () => {
+  const getTotalBaseTokenUSD = (list) => {
     let totalBaseTokenUSD = cBN(0)
-    const list = [wstETH, sfrxETH]
     list.forEach(({ data }) => {
       totalBaseTokenUSD = totalBaseTokenUSD.plus(
         checkNotZoroNum(data.totalBaseTokenRes)
@@ -126,7 +127,11 @@ export default function AssetsPage() {
   const LIST = [
     {
       title: 'fxUSD Reserve Asset Value',
-      value: getTotalBaseTokenUSD() || '-',
+      value: getTotalBaseTokenUSD([wstETH, sfrxETH]) || '-',
+    },
+    {
+      title: 'rUSD Reserve Asset Value',
+      value: getTotalBaseTokenUSD([weETH]) || '-',
     },
     { title: 'fETH Reserve Asset Value', value: fETH.totalBaseTokenUSD_text },
   ]
@@ -147,7 +152,7 @@ export default function AssetsPage() {
         <div className={styles.wrap}>
           {[
             [
-              'Mint & Redeem fxUSD Stablecoin',
+              'Mint & Redeem fxUSD Stablecoin (LSD Backed)',
               [fxUSD],
               false,
               `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
@@ -186,7 +191,46 @@ export default function AssetsPage() {
         <div className={styles.wrap}>
           {[
             [
-              'Mint & Redeem fETH',
+              'Mint & Redeem rUSD Stablecoin (LRT Backed)',
+              [rUSD],
+              false,
+              `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+            [
+              'Mint and Redeem Leveraged Tokens',
+              [xeETH],
+              true,
+              `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+          ].map(([name, list, isX, icon]) => (
+            <div className={`${styles.header} min-w-[556px]`} key={name}>
+              <div className={styles.headerTitle}>
+                <img src={icon} />
+                {name}
+              </div>
+
+              <div className="px-[16px] mt-[16px] flex justify-between">
+                <div className="w-[200px]" />
+                <div className="w-[120px] text-[14px]">
+                  {isX ? 'Leverage' : 'TVL'}
+                </div>
+                <div className="w-[60px] text-[14px]">Nav</div>
+                <div className="w-[72px] text-[14px]">24h Change</div>
+              </div>
+
+              {list.map((item) => (
+                <Link href="genesis/rUSD">
+                  <AssetCell info={item} />
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.wrap}>
+          {[
+            [
+              'Mint & Redeem fETH (LSD Backed)',
               [fETH],
               false,
               `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
@@ -221,8 +265,8 @@ export default function AssetsPage() {
             </div>
           ))}
         </div>
-
-        {/* <div className={styles.wrap}>
+        {/*
+        <div className={styles.wrap}>
           {[
             [
               'Mint & Redeem Stable Farming Tokens',
@@ -252,11 +296,11 @@ export default function AssetsPage() {
                 <div className="w-[72px] text-[14px]">24h Change</div>
               </div>
 
-              {list.map((item) => (
+              list.map((item) => (
                 <Link href={`assets/${item.symbol}`}>
                   <AssetCell info={item} />
                 </Link>
-              ))}
+              )) 
 
               {comingList
                 .filter((item) => !!item.isX === !!isX)
@@ -267,8 +311,10 @@ export default function AssetsPage() {
                 ))}
             </div>
           ))}
-        </div> */}
+        </div> 
+        */}
       </div>
+
       {/* <div className={styles.container}>
         <SimpleInput onChange={handleChange_CurrentStETHPrice} /> <br />
         <Button

@@ -6,19 +6,20 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { updateTokens, updateTokenPrice } from '@/store/slices/token'
 import { useToken, useTokenBalance } from '@/hooks/useTokenInfo'
-import { cBN, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import { cBN, fb4 } from '@/utils/index'
 import { getTokenListPrice, getLpPrice } from '@/services/dataInfo'
 
 const useTokenData = () => {
   const { web3, blockNumber } = useWeb3()
   const dispatch = useDispatch()
-  const { fETH, xETH, fxUSD, xstETH, xfrxETH } = useSelector(
+  // const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH, fCVX, xCVX } =
+  //   useSelector((state) => state.asset)
+  const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH } = useSelector(
     (state) => state.asset
   )
 
   const ethToken = useToken(config.tokens.eth)
   const wethToken = useTokenBalance(config.tokens.weth)
-  const stETHToken = useTokenBalance(config.tokens.stETH)
   const fETHToken = useTokenBalance(config.tokens.fETH)
   const xETHToken = useTokenBalance(config.tokens.xETH)
   const usdcToken = useTokenBalance(config.tokens.usdc)
@@ -26,11 +27,23 @@ const useTokenData = () => {
   const fxUSDToken = useTokenBalance(config.tokens.fxUSD)
   const fraxToken = useTokenBalance(config.tokens.frax)
   const crvUSDToken = useTokenBalance(config.tokens.crvUSD)
+
+  const stETHToken = useTokenBalance(config.tokens.stETH)
   const wstETHToken = useTokenBalance(config.tokens.wstETH)
+  const xstETHToken = useTokenBalance(config.tokens.xstETH)
+
   const sfrxETHToken = useTokenBalance(config.tokens.sfrxETH)
   const frxETHToken = useTokenBalance(config.tokens.frxETH)
-  const xstETHToken = useTokenBalance(config.tokens.xstETH)
   const xfrxETHToken = useTokenBalance(config.tokens.xfrxETH)
+
+  const rUSDToken = useTokenBalance(config.tokens.rUSD)
+  const xeETHToken = useTokenBalance(config.tokens.xeETH)
+  const weETHToken = useTokenBalance(config.tokens.weETH)
+  const eETHToken = useTokenBalance(config.tokens.eETH)
+
+  // const aCVXToken = useTokenBalance(config.tokens.aCVX)
+  // const xCVXToken = useTokenBalance(config.tokens.xCVX)
+  // const fCVXToken = useTokenBalance(config.tokens.fCVX)
 
   const { data: tokenPrice, refetch: refetch1 } = useQuery({
     queryKey: ['tokenPrice'],
@@ -57,36 +70,15 @@ const useTokenData = () => {
       const data = {
         ETH: {
           balance: ethToken.balance,
-          price: fb4(cBN(fETH._baseNav) || 0, false),
-          // usd: checkNotZoroNumOption(
-          //   ethToken.balance,
-          //   fb4(
-          //     cBN(ethToken.balance).multipliedBy(fETH?._baseNav).div(1e18) || 0,
-          //     true
-          //   )
-          // ),
+          price: tokenPrice?.ETH?.usd?.toFixed(4) ?? 0,
         },
         fETH: {
           balance: fETHToken.balance,
           price: fb4(cBN(fETH.nav) || 0, false),
-          // usd: checkNotZoroNumOption(
-          //   fETHToken.balance,
-          //   fb4(
-          //     cBN(fETHToken.balance).multipliedBy(fETH?._fNav).div(1e18) || 0,
-          //     true
-          //   )
-          // ),
         },
         xETH: {
           balance: xETHToken.balance,
           price: fb4(cBN(xETH.nav) || 0, false),
-          // usd: checkNotZoroNumOption(
-          //   xETHToken.balance,
-          //   fb4(
-          //     cBN(xETHToken.balance).multipliedBy(xETH?._xNav).div(1e18) || 0,
-          //     true
-          //   )
-          // ),
         },
         fxUSD: {
           balance: fxUSDToken.balance,
@@ -106,18 +98,10 @@ const useTokenData = () => {
         },
         USDC: {
           balance: usdcToken.balance,
-          // usd: checkNotZoroNumOption(
-          //   usdcToken.balance,
-          //   fb4(cBN(usdcToken.balance).div(1e6) || 0, true)
-          // ),
           price: tokenPrice?.USDC?.usd?.toFixed(4) ?? 0,
         },
         USDT: {
           balance: usdtToken.balance,
-          // usd: checkNotZoroNumOption(
-          //   usdtToken.balance,
-          //   fb4(cBN(usdtToken.balance).div(1e6) || 0, true)
-          // ),
           // USDT 数据不正常，用DAI
           price: tokenPrice?.DAI?.usd?.toFixed(4) ?? 0,
         },
@@ -148,6 +132,34 @@ const useTokenData = () => {
           balance: frxETHToken.balance,
           price: tokenPrice?.frxETH?.usd?.toFixed(4) ?? 0,
         },
+        rUSD: {
+          balance: rUSDToken.balance,
+          price: fb4(cBN(rUSD.nav) || 0, false),
+        },
+        xeETH: {
+          balance: xeETHToken.balance,
+          price: fb4(cBN(xeETH.nav) || 0, false),
+        },
+        weETH: {
+          balance: weETHToken.balance,
+          price: tokenPrice?.['wrapped-eeth']?.usd?.toFixed(4) ?? 0,
+        },
+        eETH: {
+          balance: eETHToken.balance,
+          price: tokenPrice?.eETH?.usd?.toFixed(4) ?? 0,
+        },
+        // aCVX: {
+        //   balance: aCVXToken.balance,
+        //   price: tokenPrice?.CVX?.usd?.toFixed(4) ?? 0,
+        // },
+        // xCVX: {
+        //   balance: xCVXToken.balance,
+        //   price: fb4(cBN(xCVX.nav) || 0, false),
+        // },
+        // fCVX: {
+        //   balance: fCVXToken.balance,
+        //   price: fb4(cBN(fCVX.nav) || 0, false),
+        // },
       }
 
       dispatch(updateTokens(data))
@@ -163,13 +175,18 @@ const useTokenData = () => {
     fxUSDToken,
     fraxToken,
     crvUSDToken,
-    fETH,
-    xETH,
-    fxUSD,
+    wstETHToken,
+    sfrxETHToken,
+    frxETHToken,
+    xstETHToken,
+    xfrxETHToken,
+    rUSDToken,
+    xeETHToken,
+    weETHToken,
+    // aCVXToken,
+    // xCVXToken,
+    // fCVXToken,
   ])
-
-  // tokens,
-  //     tokenPrice,
 }
 
 export default useTokenData

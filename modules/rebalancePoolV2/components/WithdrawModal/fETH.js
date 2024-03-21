@@ -8,11 +8,10 @@ import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import styles from './styles.module.scss'
 
 export default function WithdrawModal(props) {
-  const { onCancel, info, poolData, FX_RebalancePoolContract } = props
+  const { onCancel, poolData, FX_RebalancePoolContract } = props
   const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
-  const { logo, name, stakeTokenDecimals } = info
   const { userInfo } = poolData
 
   const handleInputChange = (val) => setWithdrawAmount(val)

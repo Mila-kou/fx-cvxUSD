@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
 import Button from '@/components/Button'
@@ -10,7 +11,8 @@ import useApprove from '@/hooks/useApprove'
 import { useToken } from '@/hooks/useTokenInfo'
 import { getGas } from '@/utils/gas'
 import WithdrawModal from './WithdrawModal'
-import Select from '@/components/Select'
+// import Select from '@/components/Select'
+import { ASSET_MAP } from '@/config/tokens'
 import SlippageInfo from '@/components/SlippageInfo'
 import {
   useFxUSD_GatewayRouter_contract,
@@ -30,19 +32,56 @@ const STAGE = {
   FULL_LAUNCHED: 'Full Launched',
 }
 
+const TOKEN_OPTIONS = {
+  stETH: [
+    ['ETH', config.tokens.eth],
+    ['stETH', config.tokens.stETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+  ],
+  frxETH: [
+    ['ETH', config.tokens.eth],
+    ['frxETH', config.tokens.frxETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+  ],
+  eETH: [
+    ['weETH', config.tokens.weETH],
+    // ['ETH', config.tokens.eth],
+    // ['eETH', config.tokens.eETH],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+  ],
+}
+
 export default function GenesisPage() {
-  const { stETHApy, sfrxETHApy } = useGenesis_c()
+  const { query } = useRouter()
+  const { assetSymbol = 'fxUSD' } = query
+
+  const genesisData = useGenesis_c()
   const { tokens } = useSelector((state) => state.token)
+
   const genesis = useSelector((state) => state.genesis)
   const [slippage, setSlippage] = useState(0.3)
   const { getZapInParams } = useZapIn()
 
-  const [stage, setStage] = useState(STAGE.FULL_LAUNCHED)
+  const { baseTokenInfos } = ASSET_MAP[assetSymbol]
+
+  const [stage, setStage] = useState(
+    { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.LAUNCHING }[assetSymbol]
+  )
+
+  const showBonusFarming = ['fxUSD'].includes(assetSymbol)
 
   const [clearTrigger, clearInput] = useClearInput()
   const { _currentAccount, sendTransaction } = useWeb3()
   const [activeIndex, setActiveIndex] = useState(0)
-  const [symbol, setSymbol] = useState('ETH')
+  const [symbol, setSymbol] = useState(assetSymbol === 'rUSD' ? 'weETH' : 'ETH')
   const [isDepositing, setIsDepositing] = useState(false)
   const [fromAmount, setFromAmount] = useState(0)
   const [minOut, setMinOut] = useState(0)
@@ -56,40 +95,37 @@ export default function GenesisPage() {
   const [isWithdrawing, setIsWithdrawing] = useState({
     stETH: false,
     frxETH: false,
+    eETH: false,
   })
   const [isWithdrawBaseTokening, setIsWithdrawBaseTokening] = useState({
     stETH: false,
     frxETH: false,
+    eETH: false,
   })
+
+  const pools = baseTokenInfos.map((item) => ({
+    ...item,
+    ...genesis[item.baseName],
+    apy: genesisData[item.baseName].apy,
+  }))
+
+  const pool = pools[activeIndex]
+
+  const { baseName, baseSymbol } = pool
 
   const showDeposited =
-    stage !== STAGE.LAUNCHING ||
-    genesis?.stETH.isDeposited ||
-    genesis?.frxETH.isDeposited
+    stage !== STAGE.LAUNCHING || !!pools.find((item) => item.isDeposited)
 
-  const OPTIONS = [
-    ['ETH', config.tokens.eth],
-    ['stETH', config.tokens.stETH],
-    ['frxETH', config.tokens.frxETH],
-    ['USDT', config.tokens.usdt],
-    ['USDC', config.tokens.usdc],
-    ['Frax', config.tokens.frax],
-    ['crvUSD', config.tokens.crvUSD],
-  ].filter(([item]) => {
-    if (activeIndex === 0) {
-      return item !== 'frxETH'
-    }
-    if (activeIndex === 1) {
-      return item !== 'stETH'
-    }
-    return true
-  })
+  const OPTIONS = TOKEN_OPTIONS[baseName]
 
   const selectTokenAddress = useMemo(() => {
     return OPTIONS.find((item) => item[0] === symbol)[1]
   }, [symbol])
 
-  const selectTokenInfo = useToken(selectTokenAddress, 'fxUSD_gateway_router')
+  const selectTokenInfo = useToken(
+    selectTokenAddress,
+    symbol === baseSymbol ? pool.address : 'fxUSD_gateway_router'
+  )
 
   const { BtnWapper, needApprove } = useApprove({
     approveAmount: fromAmount,
@@ -148,22 +184,15 @@ export default function GenesisPage() {
       if (checkNotZoroNum(fromAmount)) {
         const _ETHtAmountAndGas = await getMintGas(fromAmount)
 
-        const _valueAddress =
-          config.contracts[
-            activeIndex === 0
-              ? 'fxUSD_FxInitialFund_wstETH'
-              : 'fxUSD_FxInitialFund_sfrxETH'
-          ]
-
         const convertParams = await getZapInParams({
           from: symbol,
-          to: activeIndex === 0 ? 'wstETH' : 'sfrxETH',
+          to: baseSymbol,
           amount: _ETHtAmountAndGas,
           slippage,
         })
 
         const resData = await fxUSD_GatewayRouterContract.methods
-          .fxInitialFundDeposit(convertParams, _valueAddress)
+          .fxInitialFundDeposit(convertParams, pool.address)
           .call({
             from: _currentAccount,
             value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
@@ -200,36 +229,43 @@ export default function GenesisPage() {
     try {
       setIsDepositing(true)
       const _ETHtAmountAndGas = await getMintGas(fromAmount)
-      const _minOut = await getMinAmount()
 
-      if (!_minOut) return
+      let apiCall
+      let to
 
-      const _valueAddress =
-        config.contracts[
-          activeIndex === 0
-            ? 'fxUSD_FxInitialFund_wstETH'
-            : 'fxUSD_FxInitialFund_sfrxETH'
-        ]
+      if (symbol === baseSymbol) {
+        apiCall = await getInitialFundContract(
+          pool.address
+        ).contract.methods.deposit(_ETHtAmountAndGas, _currentAccount)
+        to = pool.address
+      } else {
+        const _minOut = await getMinAmount()
 
-      const convertParams = await getZapInParams({
-        from: symbol,
-        to: activeIndex === 0 ? 'wstETH' : 'sfrxETH',
-        amount: _ETHtAmountAndGas,
-        minOut: _minOut,
-        slippage,
-      })
+        if (!_minOut) return
 
-      console.log('convertParams---', convertParams, symbol)
+        const convertParams = await getZapInParams({
+          from: symbol,
+          to: baseSymbol,
+          amount: _ETHtAmountAndGas,
+          minOut: _minOut,
+          slippage,
+        })
 
-      const apiCall =
-        await fxUSD_GatewayRouterContract.methods.fxInitialFundDeposit(
-          convertParams,
-          _valueAddress
-        )
+        console.log('convertParams---', convertParams, symbol)
+
+        apiCall =
+          await fxUSD_GatewayRouterContract.methods.fxInitialFundDeposit(
+            convertParams,
+            pool.address
+          )
+
+        to = fxUSD_GatewayRouterContract._address
+      }
+
       await NoPayableAction(
         () =>
           sendTransaction({
-            to: fxUSD_GatewayRouterContract._address,
+            to,
             value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
             data: apiCall.encodeABI(),
           }),
@@ -251,20 +287,7 @@ export default function GenesisPage() {
     setFromAmount(v.toString(10))
   }
 
-  const pools = [
-    {
-      ...genesis.stETH,
-      apy: stETHApy,
-    },
-    {
-      ...genesis.frxETH,
-      apy: sfrxETHApy,
-    },
-  ]
-
-  const deposits = [genesis.stETH, genesis.frxETH].filter(
-    (item) => genesis[item.symbol].isDeposited
-  )
+  const deposits = pools.filter((item) => genesis[item.symbol].isDeposited)
 
   const withdraw = async (_symbol) => {
     setIsBaseToken(false)
@@ -377,7 +400,7 @@ export default function GenesisPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <h2 className="flex gap-[6px] text-[22px]">fxUSD Genesis</h2>
+          <h2 className="flex gap-[6px] text-[22px]">{assetSymbol} Genesis</h2>
           {/* <p className="md:float-right">{stage}</p> */}
           <h2 className="flex gap-[6px] mt-[16px]">Current Deposited</h2>
 
@@ -427,7 +450,7 @@ export default function GenesisPage() {
                   {/* stage === STAGE.LAUNCHED && (
                     <div>
                       <p className="text-[16px] text-[var(--second-text-color)]">
-                        You can withdraw fxUSD + {item.xToken} after the event.
+                        You can withdraw {assetSymbol} + {item.xToken} after the event.
                       </p>
                     </div>
                   ) */}
@@ -436,7 +459,7 @@ export default function GenesisPage() {
                     <div>
                       <p>Fully Rewarded</p>
                       <p className="text-[16px] mt-[6px] text-[var(--second-text-color)]">
-                        All Reward, fxUSD (equal to your deposit) or withdraw
+                        All Reward, {assetSymbol} (equal to your deposit) or withdraw
                         your deposit.
                       </p>
                     </div>
@@ -450,7 +473,7 @@ export default function GenesisPage() {
                       loading={isWithdrawing[item.symbol]}
                       disabled={!item.isDeposited}
                     >
-                      Get fxUSD + {item.xToken}
+                      Get {assetSymbol} + {item.xToken}
                     </Button>
                     <Button
                       className="md:flex-1"
@@ -466,11 +489,13 @@ export default function GenesisPage() {
                 </div>
               ))}
 
-              <div className="mt-[32px] flex flex-col gap-[16px]">
-                <MerkleTree />
-                <MerkleTree tokenName="wstETH" title="" />
-                <MerkleTree tokenName="FXS" title="" />
-              </div>
+              {showBonusFarming && (
+                <div className="mt-[32px] flex flex-col gap-[16px]">
+                  <MerkleTree />
+                  <MerkleTree tokenName="wstETH" title="" />
+                  <MerkleTree tokenName="FXS" title="" />
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -479,7 +504,7 @@ export default function GenesisPage() {
       {stage === STAGE.LAUNCHING && (
         <div className={styles.content}>
           <h2 className="flex gap-[6px]  text-[22px]">Participate</h2>
-          <p className="mt-[16px]">Deposit ETH</p>
+          {/* <p className="mt-[16px]">Deposit ETH</p> */}
           <p className="text-[16px] mt-[16px] text-[var(--second-text-color)]">
             Any deposit to either vault will be minted into 50:50 ratio of
             stable & leverage tokens for that vault. No mint fees apply!
@@ -490,6 +515,7 @@ export default function GenesisPage() {
           <Tabs
             selecedIndex={activeIndex}
             onChange={(v) => {
+              if (activeIndex === v) return
               setActiveIndex(v)
               setSymbol('ETH')
             }}
@@ -522,15 +548,15 @@ export default function GenesisPage() {
             onSymbolChanged={(v) => setSymbol(v)}
             withUsd={false}
           />
-          <div className="my-[16px]">
-            <SlippageInfo slippage={slippage} slippageChange={setSlippage} />
-          </div>
+          {symbol !== baseSymbol && (
+            <div className="my-[16px]">
+              <SlippageInfo slippage={slippage} slippageChange={setSlippage} />
+            </div>
+          )}
           {checkNotZoroNum(minOut) ? (
             <DetailCell
               title="Min. Received:"
-              content={[
-                `${minOut} ${activeIndex === 0 ? 'wstETH' : 'sfrxETH'}`,
-              ]}
+              content={[`${minOut} ${pool.baseSymbol}`]}
             />
           ) : null}
           <div className="mx-[auto] w-[50%] mt-[32px]">
@@ -551,6 +577,7 @@ export default function GenesisPage() {
           onCancel={() => setWithdrawInfo(null)}
           onClaim={isBaseToken ? withdrawBaseToken : withdraw}
           info={withdrawInfo}
+          assetSymbol={assetSymbol}
           getMinoutBaseToken={getMinoutBaseToken}
           isBaseToken={isBaseToken}
           isFullLaunched={stage === STAGE.FULL_LAUNCHED}

@@ -1,0 +1,29 @@
+@import '../../../../assets/css/mixin.scss';
+
+.container {
+  position: relative;
+  width: 408px;
+  .arrow {
+    width: 10px;
+    margin: 10px auto;
+  }
+
+  .inputItem {
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .action {
+    margin-top: 24px;
+  }
+
+  .yellow {
+    color: var(--yellow-color);
+  }
+}
+
+@media (max-width: 474px) {
+  .container {
+    width: calc(100vw - 60px) !important;
+  }
+}

@@ -4,7 +4,6 @@ import { useContract, useWstETH } from 'hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import abi from '@/config/abi'
 import { useBoostableRebalancePool } from '@/hooks/useGaugeContracts'
 import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 
@@ -35,7 +34,6 @@ const useRebalancePoolUseInfo = (infoKey) => {
         rewardData(config.tokens.wstETH),
         rewardData(config.tokens.FXN),
         rewardData(config.tokens.xETH),
-        wstETHContract.methods.tokensPerStEth(),
       ]
       const [
         BoostableRebalancePoolTotalSupplyRes,
@@ -44,7 +42,6 @@ const useRebalancePoolUseInfo = (infoKey) => {
         rewardData_wstETH_Res,
         rewardData_FXN_Res,
         rewardData_xETH_Res,
-        tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
 
       return {
@@ -53,7 +50,6 @@ const useRebalancePoolUseInfo = (infoKey) => {
         rewardData_wstETH_Res,
         rewardData_FXN_Res,
         rewardData_xETH_Res,
-        tokensPerStEth,
       }
     } catch (error) {
       console.log('rebalance--baseInfoError==>', error)
@@ -62,7 +58,6 @@ const useRebalancePoolUseInfo = (infoKey) => {
   }, [fx_BoostableRebalancePool_PoolContract, multiCallsV2, _currentAccount])
 
   const fetchUserInfo = useCallback(async () => {
-    console.log('rebalance--fetchUserInfo--')
     const {
       checkpoint,
       balanceOf: BoostableRebalancePoolBalanceOfFn,

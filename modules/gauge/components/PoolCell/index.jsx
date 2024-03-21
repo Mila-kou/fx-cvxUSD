@@ -62,12 +62,11 @@ export default function PoolCell({
       <div
         className={styles.card}
         style={{
-          background:
-            cellData.poolType == 'fxUSD'
-              ? 'var(--deep-green-color)'
-              : cellData.poolType == 'fETH'
-              ? 'var(--f-bg-color)'
-              : '',
+          background: ['fxUSD', 'rUSD'].includes(cellData.poolType)
+            ? 'var(--deep-green-color)'
+            : cellData.poolType == 'fETH'
+            ? 'var(--f-bg-color)'
+            : '',
         }}
         onClick={() => setOpenPanel(!openPanel)}
       >

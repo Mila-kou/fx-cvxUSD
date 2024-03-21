@@ -1,14 +1,12 @@
 import { useCallback, useContext, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useWeb3 from '@/hooks/useWeb3'
 import config from '../config'
 import { cBN, checkNotZoroNum } from '../utils'
 import useGlobal from './useGlobal'
 
 const useGaugeApyEstimate = () => {
   const { tokenPrice } = useSelector((state) => state.token)
-  const { _currentAccount, current, web3, isAllReady, blockNumber } = useWeb3()
-  const { lpPrice, ConvexVaultsAPY, fx_info, allGaugeBaseInfo } = useGlobal()
+  const { lpPrice, fx_info, allGaugeBaseInfo } = useGlobal()
 
   const baseToken = useSelector((state) => state.baseToken)
   const { tokens } = useSelector((state) => state.token)
@@ -45,20 +43,15 @@ const useGaugeApyEstimate = () => {
     (item) => {
       try {
         const _weekSecond = config.weekSecond
-        const {
-          FXNRate,
-          total_weight,
-          typesWeightDatas = [],
-          GaugeList,
-        } = allGaugeBaseInfo
+        const { FXNRate, typesWeightDatas = [], GaugeList } = allGaugeBaseInfo
         const { gaugeType: typeIndex, lpGaugeAddress } = item
-        const { type_weight, weights_sum_per_type } =
-          typesWeightDatas[typeIndex]
-        const { baseInfo, baseGaugeControllerInfo } = GaugeList.find(
+
+        const { type_weight = 0 } = typesWeightDatas[typeIndex]
+        const { baseGaugeControllerInfo } = GaugeList.find(
           (itemObj) =>
             itemObj.lpGaugeAddress.toLowerCase() == lpGaugeAddress.toLowerCase()
         )
-        console.log('gaugeEstimate----3--', baseInfo)
+
         const { this_week_gauge_weight, next_week_gauge_weight } =
           baseGaugeControllerInfo
         const _thisWeek_gaugeEstimate = cBN(FXNRate)
@@ -79,7 +72,7 @@ const useGaugeApyEstimate = () => {
           .toFixed(2)
         return { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate }
       } catch (error) {
-        console.log('gaugeEstimate----error--', error)
+        console.log('gaugeEstimate----error--', item.name, error)
         return {
           _thisWeek_gaugeEstimate: 0,
           _nextWeek_gaugeEstimate: 0,
@@ -95,41 +88,33 @@ const useGaugeApyEstimate = () => {
         const { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate } =
           getGaugeEstimate(item)
         const { GaugeList } = allGaugeBaseInfo
-        const { lpGaugeAddress, lpAddress } = item
+        const { lpGaugeAddress, lpAddress, baseSymbol, poolType } = item
         const { baseInfo } = GaugeList.find(
           (itemObj) =>
             itemObj.lpGaugeAddress.toLowerCase() == lpGaugeAddress.toLowerCase()
         )
-        const wstETH_rebalancePool_total =
-          baseToken.wstETH.data.RebalancePoolRegistryPoolTotalSupplyRes
-
-        const sfrxETH_rebalancePool_total =
-          baseToken.sfrxETH.data.RebalancePoolRegistryPoolTotalSupplyRes
 
         const stETH_rebalancePool_total =
           fx_info.baseInfo.RebalancePoolRegistryPoolTotalSupplyRes
+
         const { totalSupply } = baseInfo
         const _fxnPrice = getTokenPrice('FXN')
-        const _fETHPrice = getTokenPrice('fETH')
-        const _fxUSDPrice = tokens.fxUSD?.price // getTokenPrice('fxUSD')
         const _lpPrice = getLpTokenPrice(lpAddress)
         let _tvl = cBN(totalSupply).div(1e18).times(_lpPrice)
-        if (
-          lpGaugeAddress ==
-          config.contracts.FxUSD_ShareableRebalancePool_sfrxETH_FundraiseGauge
-        ) {
-          _tvl = cBN(_fxUSDPrice).times(sfrxETH_rebalancePool_total).div(1e18)
-        } else if (
-          lpGaugeAddress ==
-          config.contracts.FxUSD_ShareableRebalancePool_wstETH_FundraiseGauge
-        ) {
-          _tvl = cBN(_fxUSDPrice).times(wstETH_rebalancePool_total).div(1e18)
+
+        if (['fxUSD', 'rUSD'].includes(poolType)) {
+          const poolTotalSupply =
+            baseToken[baseSymbol].data.RebalancePoolRegistryPoolTotalSupplyRes
+          const _fPrice = tokens[poolType]?.price
+          _tvl = cBN(_fPrice).times(poolTotalSupply).div(1e18)
         } else if (
           lpGaugeAddress ==
           config.contracts.fx_BoostableRebalancePool_APool_FundraiseGauge
         ) {
+          const _fETHPrice = getTokenPrice('fETH')
           _tvl = cBN(_fETHPrice).times(stETH_rebalancePool_total).div(1e18)
         }
+
         const _times = cBN(config.yearSecond).div(config.weekSecond)
         const _thisWeek_apy = checkNotZoroNum(_tvl)
           ? cBN(_thisWeek_gaugeEstimate)
@@ -162,7 +147,7 @@ const useGaugeApyEstimate = () => {
         // )
         return { _thisWeek_apy, _nextWeek_apy }
       } catch (error) {
-        console.log('getGaugeApy----error', error)
+        console.log('getGaugeApy----error', item.name, error)
         return { _thisWeek_apy: 0, _nextWeek_apy: 0 }
       }
     },

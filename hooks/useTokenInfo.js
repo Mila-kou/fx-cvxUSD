@@ -129,31 +129,6 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fx_RebalancePool_A':
             _contractAddress = config.contracts.fx_RebalancePool_A
             break
-          case 'fx_RebalancePool_B':
-            _contractAddress = config.contracts.fx_RebalancePool_B
-            break
-          case 'rebalancePoolV2_info_A':
-            _contractAddress = config.contracts.fx_BoostableRebalancePool_APool
-            break
-          case 'rebalancePoolV2_info_B':
-            _contractAddress = config.contracts.fx_BoostableRebalancePool_BPool
-            break
-          case 'rebalancePoolV2_info_fxUSD_wstETH':
-            _contractAddress =
-              config.contracts.FxUSD_ShareableRebalancePool_wstETH
-            break
-          case 'rebalancePoolV2_info_fxUSD_xstETH':
-            _contractAddress =
-              config.contracts.FxUSD_ShareableRebalancePool_xstETH
-            break
-          case 'rebalancePoolV2_info_fxUSD_sfrxETH':
-            _contractAddress =
-              config.contracts.FxUSD_ShareableRebalancePool_sfrxETH
-            break
-          case 'rebalancePoolV2_info_fxUSD_xfrxETH':
-            _contractAddress =
-              config.contracts.FxUSD_ShareableRebalancePool_xfrxETH
-            break
           case 'fx_gauge':
             _contractAddress = lpInfo.lpGaugeAddress
             break
@@ -169,8 +144,11 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fxUSD':
             _contractAddress = config.tokens.fxUSD
             break
+          case 'rUSD':
+            _contractAddress = config.tokens.rUSD
+            break
           default:
-            _contractAddress = config.contracts.idoSale
+            _contractAddress = contractType
             break
         }
         const tokenContract = erc20Contract(address)

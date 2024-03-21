@@ -30,7 +30,7 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
   const navList = navsData.navList[symbol]
   const totalBaseTokenList = navsData.totalBaseTokenList[baseSymbol]
 
-  const isFXUSD = symbol === 'fxUSD'
+  const isFXUSD = ['fxUSD', 'rUSD'].includes(symbol)
 
   const getTotalBaseTokenUSD = () => {
     let totalBaseTokenUSD = cBN(0)
@@ -101,7 +101,7 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
                     {data.totalBaseToken} / {data.baseTokenCap_text} {baseName}
                   </p>
                   <progress
-                    value={(data.totalBaseToken || '').replace(',', '')}
+                    value={(data.totalBaseToken || '').replace(/,/g, '')}
                     max={data.baseTokenCap}
                   />
                 </div>

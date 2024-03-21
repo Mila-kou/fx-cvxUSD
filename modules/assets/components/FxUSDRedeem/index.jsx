@@ -5,7 +5,13 @@ import BigNumber from 'bignumber.js'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import {
+  cBN,
+  checkNotZoroNum,
+  checkNotZoroNumOption,
+  fb4,
+  numberLess,
+} from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
@@ -33,7 +39,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
   const [bouns, setBonus] = useState([])
 
-  const { nav_text, isF, markets } = assetInfo
+  const { symbol: fromSymbol, nav_text, isF, markets } = assetInfo
 
   const isSwap = useMemo(() => ['xstETH', 'xfrxETH'].includes(symbol), [symbol])
 
@@ -120,7 +126,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
   const [selectTokenAddress, tokenAmount] = useMemo(() => {
     let _tokenAmount = 0
-    const _selectTokenAddress = config.tokens.fxUSD
+    const _selectTokenAddress = config.tokens[fromSymbol]
     _tokenAmount = fromAmount
     return [_selectTokenAddress, _tokenAmount]
   }, [fromAmount])
@@ -310,6 +316,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
           resData = await fxUSD_GatewayRouterContract.methods
             .fxAutoRedeemFxUSD(
               [convertParams_baseToken_1, convertParams_baseToken_2],
+              // config.tokens.fxUSD,
               _mockAmount,
               [0, 0]
             )
@@ -427,6 +434,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
         apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
           [convertParams_baseToken_1, convertParams_baseToken_2],
+          // config.tokens.fxUSD,
           fromAmount,
           _min_baseOuts
         )
@@ -468,9 +476,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     if (symbol === 'frxETH') {
       return baseToken.sfrxETH.data?.prices?.inRedeemF
     }
-    // if (symbol === 'ETH') {
-    //   return tokens[symbol].price
-    // }
     return tokens[symbol].price
   }, [symbol, tokens, baseToken, baseTokenData])
 
@@ -533,7 +538,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         ? bouns.map((item, index) => (
             <DetailCell
               title={!index && 'Redeem fxUSD Bonus:'}
-              content={[fb4(item.bonus), '', item.symbol]}
+              content={[numberLess(fb4(item.bonus), 0.01), '', item.symbol]}
             />
           ))
         : null}

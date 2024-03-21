@@ -170,7 +170,6 @@ const processBaseToken = (data) => {
       collateralRatio_text,
       restBaseToken,
       isCRLow130,
-      canLiquite: isCRLow130,
       maxMintableFTokenRes: baseToken.maxMintableFTokenRes._maxFTokenMintable,
       maxRedeemableXTokenRes:
         baseToken.maxRedeemableXTokenRes._maxXTokenRedeemable,

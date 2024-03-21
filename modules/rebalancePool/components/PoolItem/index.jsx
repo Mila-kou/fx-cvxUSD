@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { Tooltip } from 'antd'
 import cn from 'classnames'
 import Button from '@/components/Button'
 import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
-import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
+import { checkNotZoroNum, dollarText } from '@/utils/index'
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
@@ -15,11 +14,6 @@ const xETHImg = '/images/x-logo.svg'
 const item = REBALANCE_POOLS_LIST[0]
 
 export default function PoolItem({
-  harvesting,
-  handleHarvest,
-  handleLiquidatorWithBonus,
-
-  handleDeposit,
   handleWithdraw,
   canUnlock,
   handleUnlock,
@@ -113,18 +107,6 @@ export default function PoolItem({
                 <Button onClick={handleWithdraw} type="second">
                   Withdraw
                 </Button>
-                {/*        
-                <Button
-                  loading={harvesting}
-                  onClick={handleHarvest}
-                  type="second"
-                >
-                  Harvest
-                </Button>
-                */}
-                {/* <Button onClick={handleLiquidatorWithBonus} type="second">
-                  Liquidator
-                </Button> */}
               </div>
             </div>
 

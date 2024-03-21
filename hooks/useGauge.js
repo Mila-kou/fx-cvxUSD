@@ -57,7 +57,7 @@ const useGauge = () => {
         const { rate } = FXNContract.methods
         const _lpGaugeContractList = []
 
-        const GaugeList = arr.map((item, index) => {
+        const GaugeList = arr.map((item) => {
           const _lpGaugeContract = getGaugeContract(item.lpGaugeAddress)
           const {
             symbol,
@@ -68,10 +68,6 @@ const useGauge = () => {
           } = _lpGaugeContract.methods
           _lpGaugeContractList.push(_lpGaugeContract)
 
-          console.log(
-            '__GaugeList---GaugeList-_lpGaugeContract--',
-            _lpGaugeContract
-          )
           const _apiCall = {
             baseInfo: {},
             baseGaugeControllerInfo: {
@@ -153,7 +149,6 @@ const useGauge = () => {
           })
         }
         const typesWeightDatas = await multiCallsV2(typesWeightCalls)
-        console.log('__GaugeList--success--typesWeightDatas', allGaugeBaseInfo)
         setData({
           ...allGaugeBaseInfo,
           typesWeightDatas,

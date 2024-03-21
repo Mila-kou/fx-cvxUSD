@@ -25,7 +25,7 @@ const routers = [
   ['Earn', '/earn'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
-  ['Genesis', '/genesis'],
+  ['rUSD Genesis', '/genesis/rUSD'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
@@ -46,7 +46,7 @@ export default function AppHeader() {
     isAllowChain,
     blockTime,
   } = useWeb3()
-  const { route, push } = useRouter()
+  const { asPath, push } = useRouter()
   const [showAccountPanel, { toggle: toggleShowAccountPanel }] = useToggle()
   const [openFAQ, { toggle: toggleFAQ }] = useToggle()
 
@@ -84,7 +84,7 @@ export default function AppHeader() {
     //   return list.slice(0, 1)
     // }
     return list
-  }, [tokens, route])
+  }, [tokens])
 
   const handleAdd = (symbol) => {
     const map = {
@@ -184,6 +184,10 @@ export default function AppHeader() {
       label: 'Governance',
       onClick: () => window.open('https://snapshot.org/#/fxn.eth', '_blank'),
     },
+    {
+      label: 'fxUSD Genesis',
+      onClick: () => push('/genesis/fxUSD'),
+    },
   ]
 
   return (
@@ -214,7 +218,7 @@ export default function AppHeader() {
               href={href}
               className={cn(
                 styles.route,
-                route.includes(href) && styles.active
+                asPath.includes(href) && styles.active
               )}
             >
               {label} {tag ? <p className={styles.tag}>{tag}</p> : null}
@@ -320,7 +324,7 @@ export default function AppHeader() {
                     href={href}
                     className={cn(
                       styles.route,
-                      route.includes(href) && styles.active
+                      asPath.includes(href) && styles.active
                     )}
                   >
                     {label}
@@ -342,7 +346,7 @@ export default function AppHeader() {
                   <p
                     className={cn(
                       styles.route,
-                      route.includes(item?.url) && styles.active
+                      asPath.includes(item?.url) && styles.active
                     )}
                     onClick={item.onClick}
                   >

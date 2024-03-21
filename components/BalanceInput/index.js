@@ -5,7 +5,7 @@ import { SyncOutlined } from '@ant-design/icons'
 import InputSelect from '@/components/InputSelect'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
-import { ASSET_MAP, TOKEN_MAP } from '@/config/tokens'
+import { ASSET_MAP, TOKEN_ICON_MAP } from '@/config/tokens'
 
 export const useClearInput = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
@@ -28,7 +28,7 @@ function BalanceInput(props) {
     changeValue,
     maxAmount,
     className = '',
-    symbol,
+    symbol = '',
     hideLogo,
     tip,
     disabled,
@@ -69,12 +69,12 @@ function BalanceInput(props) {
   }
 
   const setMax = () => {
-    setVal(fb4(maxAmount, false, decimals ?? 18).replace(',', ''))
+    setVal(fb4(maxAmount, false, decimals ?? 18).replace(/,/g, ''))
   }
 
   useEffect(() => {
     if (changeValue) {
-      setVal(fb4(changeValue, false, decimals ?? 18).replace(',', ''))
+      setVal(fb4(changeValue, false, decimals ?? 18).replace(/,/g, ''))
     }
   }, [changeValue])
 
@@ -83,13 +83,13 @@ function BalanceInput(props) {
   }, [clearTrigger])
 
   const logoSrc = useMemo(() => {
-    if (['fETH', 'FXN'].includes(symbol)) {
+    if (['fETH', 'FXN', 'fCVX'].includes(symbol)) {
       return '/images/f-logo.svg'
     }
-    if (['xETH', 'xstETH', 'xfrxETH'].includes(symbol)) {
+    if (['xETH', 'xstETH', 'xfrxETH', 'xeETH', 'xCVX'].includes(symbol)) {
       return '/images/x-logo.svg'
     }
-    if (symbol === 'fxUSD') {
+    if (['fxUSD'].includes(symbol)) {
       return '/tokens/fxusd.svg'
     }
     if (symbol === 'crvUSD') {
@@ -101,11 +101,20 @@ function BalanceInput(props) {
     if (symbol === 'ETH') {
       return '/tokens/crypto-icons-stack.svg#eth'
     }
+    if (symbol === 'rUSD') {
+      return '/tokens/rUSD.svg'
+    }
     if (symbol === 'frxETH') {
       return '/tokens/frxeth.svg'
     }
     if (symbol === 'sfrxETH') {
       return '/tokens/sfrxeth.svg'
+    }
+    if (['weETH', 'eETH'].includes(symbol)) {
+      return '/tokens/eETH.svg'
+    }
+    if (['aCVX'].includes(symbol)) {
+      return `/tokens/crypto-icons-stack.svg#cvx`
     }
     return `/tokens/crypto-icons-stack.svg#${symbol.toLowerCase()}`
   }, [symbol])

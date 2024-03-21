@@ -10,6 +10,14 @@ const initialState = {
     ...BASE_TOKENS_MAP.sfrxETH,
     data: {},
   },
+  weETH: {
+    ...BASE_TOKENS_MAP.weETH,
+    data: {},
+  },
+  aCVX: {
+    ...BASE_TOKENS_MAP.aCVX,
+    data: {},
+  },
 }
 
 const slice = createSlice({

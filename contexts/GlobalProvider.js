@@ -6,9 +6,8 @@ import React, {
   useState,
 } from 'react'
 import { useDebounceEffect, useToggle } from 'ahooks'
-import { useQuery, useQueries } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 import useWeb3 from '@/hooks/useWeb3'
-import config from '@/config/index'
 import { useTheme } from './ThemeProvider'
 import {
   getConvexVaultsAPY,
@@ -16,14 +15,13 @@ import {
   getFX_cvxFXN_sdFXN_apy,
 } from '@/services/dataInfo'
 import useInfo from '@/modules/assets/hooks/useInfo'
-import useRebalancePoolUseInfo from '@/modules/rebalancePool/hooks/useRebalancePoolUseInfo'
-import useBoostableRebalancePoolData from '@/modules/rebalancePoolV2/hooks/useBoostableRebalancePoolData'
 import useFxETH from '@/hooks/assets/useFxETH'
 import useFxUSD from '@/hooks/assets/useFxUSD'
+import useRUSD from '@/hooks/assets/useRUSD'
 import useTokenData from '@/hooks/useTokenData'
 import useV2Assets from '@/hooks/assets/useV2Assets'
 import useBaseToken from '@/hooks/assets/useBaseToken'
-import { ASSET_MAP } from '@/config/tokens'
+import { ASSET_MAP, BASE_TOKENS_MAP } from '@/config/tokens'
 import useGauge from '@/hooks/useGauge'
 
 const GlobalContext = createContext(null)
@@ -38,23 +36,25 @@ function GlobalProvider({ children }) {
 
   useFxETH()
   useFxUSD()
+  useRUSD()
+
   fetchBaseTokensData(ASSET_MAP.fxUSD.baseTokenInfos)
-  useV2Assets()
+  fetchBaseTokensData(ASSET_MAP.rUSD.baseTokenInfos)
+  // fetchBaseTokensData([BASE_TOKENS_MAP.aCVX])
+
+  useV2Assets([
+    ASSET_MAP.xstETH,
+    ASSET_MAP.xfrxETH,
+    ASSET_MAP.xeETH,
+    // ASSET_MAP.fCVX,
+    // ASSET_MAP.xCVX,
+  ])
   useTokenData()
 
   const refMenu2 = useRef(null)
 
   const fx_info = useInfo()
   const allGaugeBaseInfo = useGauge()
-  const rebalancePool_info_A = useRebalancePoolUseInfo(
-    config.contracts.fx_RebalancePool_A
-  )
-  const rebalancePoolV2_info_A = useBoostableRebalancePoolData(
-    'rebalancePoolV2_info_A'
-  )
-  const rebalancePoolV2_info_B = useBoostableRebalancePoolData(
-    'rebalancePoolV2_info_B'
-  )
 
   const [
     { data: ConvexVaultsAPY, refetch: refetch3 },
@@ -100,9 +100,6 @@ function GlobalProvider({ children }) {
       refMenu2,
 
       fx_info,
-      rebalancePool_info_A,
-      rebalancePoolV2_info_A,
-      rebalancePoolV2_info_B,
 
       lpPrice,
       ConvexVaultsAPY,
@@ -123,9 +120,6 @@ function GlobalProvider({ children }) {
       refMenu2,
 
       fx_info,
-      rebalancePool_info_A,
-      rebalancePoolV2_info_A,
-      rebalancePoolV2_info_B,
 
       lpPrice,
       ConvexVaultsAPY,

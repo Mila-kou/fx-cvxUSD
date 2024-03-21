@@ -1,11 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import abi from 'config/abi'
-import { useContract, useVeFXN } from '@/hooks/useContracts'
+import { useContract } from '@/hooks/useContracts'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { GAUGE_LIST } from '@/config/aladdinVault'
-import config from '@/config/index'
 import { useFXNTokenMinter } from '@/hooks/useGaugeContracts'
 
 const useGaugeData = () => {
@@ -20,17 +19,6 @@ const useGaugeData = () => {
       const _lpGaugeContract = getContract(
         lpGaugeAddress,
         abi.FX_fx_SharedLiquidityGaugeABI
-      )
-      return _lpGaugeContract
-    },
-    [getContract]
-  )
-
-  const getManageGaugeContract = useCallback(
-    (lpManageGaugeAddress) => {
-      const _lpGaugeContract = getContract(
-        lpManageGaugeAddress,
-        abi.FX_ConvexCurveManagerABI
       )
       return _lpGaugeContract
     },
@@ -108,17 +96,16 @@ const useGaugeData = () => {
     [getContract, multiCallsV2, _currentAccount]
   )
 
-  const [{ data: allPoolsUserInfo, refetch: refetchUserInfo, isFetching }] =
-    useQueries({
-      queries: [
-        {
-          queryKey: ['allPoolsUserInfo', _currentAccount],
-          queryFn: () => fetchAllPoolUserData(GAUGE_LIST),
-          enabled: isAllReady,
-          initialData: [],
-        },
-      ],
-    })
+  const [{ refetch: refetchUserInfo, isFetching }] = useQueries({
+    queries: [
+      {
+        queryKey: ['allPoolsUserInfo', _currentAccount],
+        queryFn: () => fetchAllPoolUserData(GAUGE_LIST),
+        enabled: isAllReady,
+        initialData: [],
+      },
+    ],
+  })
 
   useEffect(() => {
     if (isFetching) return

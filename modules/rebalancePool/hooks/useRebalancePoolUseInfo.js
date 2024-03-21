@@ -39,18 +39,6 @@ const useRebalancePoolUseInfo = (contractAddress) => {
         tokensPerStEth,
       ] = await multiCallsV2(apiCalls)
 
-      console.log(
-        'stabilityPoolInfo---BaseInfo222222-----',
-        // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-        // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
-        //  betaRes,
-        stabilityPoolTotalSupplyRes,
-        totalUnlockingRes,
-        rewardsRes,
-        extraRewardState,
-        tokensPerStEth
-      )
-
       return {
         stabilityPoolTotalSupplyRes,
         totalUnlockingRes,

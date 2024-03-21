@@ -8,7 +8,9 @@ import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4, checkNotZoroNumOption, dollarText } from '@/utils/index'
 import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 
-const POOLS = REBALANCE_POOLS_LIST.filter((item) => item.poolType === 'fxUSD')
+const POOLS = REBALANCE_POOLS_LIST.filter((item) =>
+  ['fxUSD', 'rUSD'].includes(item.poolType)
+)
 
 const usePools = () => {
   const { blockNumber } = useWeb3()
@@ -49,7 +51,7 @@ const usePools = () => {
   const [{ data: pools }] = useQueries({
     queries: [
       {
-        queryKey: ['rebalance pools', 'fxUSD'],
+        queryKey: ['rebalance pools', 'fxUSD', 'rUSD'],
         queryFn: () => fetchPools(POOLS),
         initialData: [],
         refetchInterval: 10000,

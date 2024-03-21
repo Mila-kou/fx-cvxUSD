@@ -46,7 +46,7 @@ export default function AssetCell({ info }) {
           ) : (
             <div>
               <p className="text-[16px]">{marketCap_text}</p>
-              {info.symbol !== 'fxUSD' ? (
+              {!['fxUSD', ' rUSD'].includes(info.symbol) ? (
                 <p className="text-[14px] mt-[4px] text-[var(--third-text-color)]">
                   {totalSupply_text}
                 </p>
@@ -68,9 +68,7 @@ export default function AssetCell({ info }) {
 export function ComingAssetCell({ info }) {
   return (
     <div key={info.id} className={styles.poolWrap}>
-      <div
-        className={cn(styles.card, info.isX ? styles.redbg : styles.greenbg)}
-      >
+      <div className={cn(styles.card, info.isX ? styles.redbg : styles.bluebg)}>
         <div className="flex w-[220px] gap-[16px] items-center">
           <div className="relative">
             <img className="w-[30px]" src={info.icon} />

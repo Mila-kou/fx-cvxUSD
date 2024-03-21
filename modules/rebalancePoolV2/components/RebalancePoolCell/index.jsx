@@ -14,19 +14,13 @@ import {
   checkNotZoroNumOption,
   dollarText,
 } from '@/utils/index'
+import { ASSET_MAP } from '@/config/tokens'
 
 const stETHImg = '/tokens/steth.svg'
-const sfrxEthImg = '/tokens/sfrxeth.svg'
 const xETHImg = '/images/x-logo.svg'
-const xfrxETHImg = '/images/x-logo.svg'
-const fETHImg = '/images/f-logo.svg'
 const fxnImg = '/images/FXN.svg'
 
 export default function RebalancePoolCell({
-  harvesting,
-  handleHarvest,
-  handleLiquidatorWithBonus,
-
   handleDeposit,
   handleWithdraw,
   canUnlock,
@@ -64,7 +58,6 @@ export default function RebalancePoolCell({
   withdrawVisible,
   setWithdrawVisible,
 
-  contractType,
   FX_RebalancePoolContract,
 
   hasXETH,
@@ -74,8 +67,6 @@ export default function RebalancePoolCell({
   const [openPanel, setOpenPanel] = useState(false)
 
   const canClaim = checkNotZoroNum(userTotalClaimable)
-
-  const isFXUSDPool = _poolConfig.withdrawDefaultToken === 'fxUSD'
 
   const WithdrawModal = useMemo(
     () =>
@@ -98,56 +89,37 @@ export default function RebalancePoolCell({
     return ['rebalancePoolV2_info_fxUSD_xstETH'].includes(_poolConfig.infoKey)
   }, [_poolConfig])
 
-  const isSfrxETH = useMemo(() => {
-    return [
-      'rebalancePoolV2_info_fxUSD_sfrxETH',
-      'rebalancePoolV2_info_fxUSD_xfrxETH',
-    ].includes(_poolConfig.infoKey)
-  }, [_poolConfig])
-
-  const isSfrxETH_x = useMemo(() => {
-    return ['rebalancePoolV2_info_fxUSD_xfrxETH'].includes(_poolConfig.infoKey)
-  }, [_poolConfig])
-
   const getRewards = (props = {}) => (
     <div {...props}>
-      <div className="flex gap-[6px] py-[2px]">
+      <div className="flex gap-[16px] py-[2px]">
         <img alt="FXN" className="h-[20px] w-[20px]" src={fxnImg} />
         <p className="text-[16px]">{userFXNClaimable_text}</p>
       </div>
 
       {isWstETH ? (
-        <div className="flex gap-[6px] py-[2px]">
+        <div className="flex gap-[16px] py-[2px]">
           <img alt="wstETH" className="h-[20px] w-[20px]" src={stETHImg} />
           <p className="text-[16px]">{userWstETHClaimable_text}</p>
         </div>
       ) : null}
 
-      {isSfrxETH ? (
-        <div className="flex gap-[6px] py-[2px]">
-          <img alt="sfrxETH" className="h-[20px] w-[20px]" src={sfrxEthImg} />
-          <p className="text-[16px]">{userSfrxETHClaimable_text}</p>
-        </div>
-      ) : null}
-
       {hasXETH ? (
-        <div className="flex gap-[6px] py-[2px]">
-          <img alt="xETH" className="h-[20px] w-[20px]" src={xETHImg} />
+        <div className="flex gap-[16px] py-[2px]">
+          <div className="relative">
+            <img className="w-[20px]" src={ASSET_MAP.xETH.icon} />
+            <img
+              className="w-[12px] absolute right-[-4px] bottom-[2px]"
+              src={ASSET_MAP.xETH.subIcon}
+            />
+          </div>
           <p className="text-[16px]">{userXETHClaimable_text}</p>
         </div>
       ) : null}
 
       {isWstETH_x ? (
-        <div className="flex gap-[6px] py-[2px]">
+        <div className="flex gap-[16px] py-[2px]">
           <img alt="xstETH" className="h-[20px] w-[20px]" src={xETHImg} />
           <p className="text-[16px]">{userWstETH_x_Claimable_text}</p>
-        </div>
-      ) : null}
-
-      {isSfrxETH_x ? (
-        <div className="flex gap-[6px] py-[2px]">
-          <img alt="xfrxETH" className="h-[20px] w-[20px]" src={xfrxETHImg} />
-          <p className="text-[16px]">{userSfrxETH_x_Claimable_text}</p>
         </div>
       ) : null}
     </div>
@@ -162,7 +134,6 @@ export default function RebalancePoolCell({
         fxnApyV1_text,
         boostLever_text,
         wstETHApy_text,
-        sfrxETHApy_text,
         fxnApy_min_text,
         fxnApy_current_min_text,
         fxnApy_max_text,
@@ -205,10 +176,6 @@ export default function RebalancePoolCell({
       if (isWstETH) {
         _apyList.push(`wstETH APR: ${wstETHApy_text}`)
         _apyList_current.push(`wstETH APR: ${wstETHApy_text}`)
-      }
-      if (isSfrxETH) {
-        _apyList.push(`sfrxETH APR: ${sfrxETHApy_text}`)
-        _apyList_current.push(`sfrxETH APR: ${sfrxETHApy_text}`)
       }
       if (checkNotZoroNum(minApy)) {
         _apyDetailDom = (
@@ -262,7 +229,7 @@ export default function RebalancePoolCell({
             {poolData.poolTotalSupply}
           </p>
         </div>
-        <div className="w-[170px] text-[16px]">
+        <div className="w-[200px] text-[16px]">
           {apyAndBoostDom}{' '}
           <Tooltip
             placement="topLeft"
@@ -291,11 +258,16 @@ export default function RebalancePoolCell({
       {openPanel ? (
         <div className={`${styles.panel}`}>
           <div className={styles.content}>
-            {/* <div className="flex items-center">
-              {`CR < 130% ${
-                isFXUSDPool ? 'fxUSD' : 'fETH'
-              } will be used for rebalance`}
-            </div> */}
+            <p>
+              Mint{' '}
+              <Link
+                href={`assets/${_poolConfig.poolType}`}
+                className="text-[var(--blue-color)] underline"
+              >
+                {_poolConfig.poolType}
+              </Link>{' '}
+              with stETH, then stake here to earn LSD and FXN rewards
+            </p>
             <div className="mt-[12px]">
               Current APR: {apyDom}{' '}
               <Tooltip
@@ -308,7 +280,6 @@ export default function RebalancePoolCell({
                 <InfoCircleOutlined className="ml-[8px]" />
               </Tooltip>
             </div>
-
             <div className={`${styles.item} mt-[12px]`}>
               <div>
                 <div className="flex">
@@ -333,24 +304,6 @@ export default function RebalancePoolCell({
                     Claim
                   </Button>
                 </div>
-                {/* 
-                <div className="flex gap-[32px]">
-                  <Button
-                    size="small"
-                    onClick={handleLiquidatorWithBonus}
-                    type="second"
-                  >
-                    Liquidator
-                  </Button>
-                </div>
-                <Button
-                  size="small"
-                  loading={harvesting}
-                  onClick={handleHarvest}
-                  type="second"
-                >
-                  Harvest
-                </Button> */}
               </div>
             </div>
           </div>
@@ -360,7 +313,6 @@ export default function RebalancePoolCell({
       {depositVisible && (
         <DepositModal
           info={_poolConfig}
-          contractType={contractType}
           FX_RebalancePoolContract={FX_RebalancePoolContract}
           poolData={boostableRebalancePoolInfo}
           onCancel={() => setDepositVisible(false)}

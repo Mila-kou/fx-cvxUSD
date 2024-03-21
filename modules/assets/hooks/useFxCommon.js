@@ -399,13 +399,6 @@ const useFxCommon = () => {
       .div(1e18)
       .toString(10)
     const limitCollecteralRatio = fx_info.baseInfo.collateralRatioRes / 1e18
-    console.log(
-      'limitCollecteralRatio-limitCollecteralRatio_0-limitCollecteralRatio_1-limitCollecteralRatio_2',
-      limitCollecteralRatio,
-      limitCollecteralRatio_0,
-      limitCollecteralRatio_1,
-      limitCollecteralRatio_2
-    )
     let _status = 0
     if (
       cBN(limitCollecteralRatio).isGreaterThanOrEqualTo(limitCollecteralRatio_0)
@@ -524,7 +517,6 @@ const useFxCommon = () => {
     const p2 = cBN(1).minus(cBN(1).div(CR))
     const res = p1.div(p2).toString(10)
     const res_text = checkNotZoroNumOption(res, fb4(res, false, 0, 2))
-    console.log('r--CR--beta--p1--p2--res', r, CR, beta, p1, p2, res)
     return [res, res_text]
   }, [fx_info])
 

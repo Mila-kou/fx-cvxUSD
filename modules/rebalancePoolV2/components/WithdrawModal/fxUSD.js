@@ -7,11 +7,43 @@ import useWeb3 from '@/hooks/useWeb3'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import styles from './styles.module.scss'
-import { useFxUSD_GatewayRouter_contract } from '@/hooks/useFXUSDContract'
+import {
+  useFxUSD_GatewayRouter_contract,
+  useFXUSD_contract,
+} from '@/hooks/useFXUSDContract'
 import { NoticeCard } from '@/modules/assets/components/Common'
 import config from '@/config/index'
 import { getZapOutParams } from '@/hooks/useZap'
 import SlippageInfo from '@/components/SlippageInfo'
+
+const WITHDRAW_OPTIONS = {
+  wstETH: [
+    ['fxUSD', config.tokens.fxUSD],
+    ['WETH', config.tokens.weth],
+    ['stETH', config.tokens.stETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+  ],
+  sfrxETH: [
+    ['fxUSD', config.tokens.fxUSD],
+    ['WETH', config.tokens.weth],
+    ['frxETH', config.tokens.frxETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+  ],
+  weETH: [
+    ['rUSD', config.tokens.rUSD],
+    // ['ETH', config.tokens.eth],
+    // ['eETH', config.tokens.eETH],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+  ],
+}
 
 export default function WithdrawModal(props) {
   const { onCancel, info, poolData } = props
@@ -20,9 +52,11 @@ export default function WithdrawModal(props) {
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [slippage, setSlippage] = useState(0.3)
 
+  const { contract: rUSDContract } = useFXUSD_contract('rUSD')
+
   const baseToken = useSelector((state) => state.baseToken)
   const [withdrawing, setWithdrawing] = useState(false)
-  const { logo, stakeTokenDecimals, withdrawDefaultToken, baseSymbol } = info
+  const { withdrawDefaultToken, baseSymbol, rebalancePoolAddress } = info
   const [symbol, setSymbol] = useState(withdrawDefaultToken)
   const { userInfo } = poolData
   const { contract: fxUSD_GatewayRouterContract } =
@@ -30,26 +64,7 @@ export default function WithdrawModal(props) {
 
   const [errorText, setErrorText] = useState('')
 
-  const OPTIONS = [
-    ['fxUSD', config.tokens.fxUSD],
-    ['WETH', config.tokens.weth],
-    ['stETH', config.tokens.stETH],
-    ['frxETH', config.tokens.frxETH],
-    ['USDT', config.tokens.usdt],
-    ['USDC', config.tokens.usdc],
-    ['Frax', config.tokens.frax],
-    ['crvUSD', config.tokens.crvUSD],
-    // ['wstETH', config.tokens.wstETH],
-    // ['sfrxETH', config.tokens.sfrxETH],
-  ].filter(([item]) => {
-    if (baseSymbol === 'wstETH') {
-      return item !== 'frxETH'
-    }
-    if (baseSymbol === 'sfrxETH') {
-      return item !== 'stETH'
-    }
-    return true
-  })
+  const OPTIONS = WITHDRAW_OPTIONS[baseSymbol]
 
   const selectTokenAddress = useMemo(() => {
     return OPTIONS.find((item) => item[0] === symbol)[1]
@@ -71,7 +86,7 @@ export default function WithdrawModal(props) {
   useEffect(() => {
     if (
       !baseToken[baseSymbol].data?.isBaseTokenPriceValid &&
-      symbol === 'fxUSD'
+      symbol === withdrawDefaultToken
     ) {
       setErrorText(
         `f(x) governance decision to temporarily disable ${symbol} redemption.`
@@ -96,10 +111,19 @@ export default function WithdrawModal(props) {
       }
 
       let apiCall
+      let to = fxUSD_GatewayRouterContract._address
 
-      if (symbol === 'fxUSD') {
+      if (symbol === 'rUSD') {
+        apiCall = rUSDContract.methods.wrapFrom(
+          rebalancePoolAddress,
+          sharesInWei,
+          currentAccount
+        )
+        to = rUSDContract._address
+      } else if (symbol === withdrawDefaultToken) {
         apiCall = fxUSD_GatewayRouterContract.methods.fxRebalancePoolWithdraw(
-          info.rebalancePoolAddress,
+          // config.tokens[withdrawDefaultToken],
+          rebalancePoolAddress,
           sharesInWei
         )
       } else {
@@ -111,7 +135,7 @@ export default function WithdrawModal(props) {
         const _amountOut = await fxUSD_GatewayRouterContract.methods
           .fxRebalancePoolWithdrawAs(
             _convertParams,
-            info.rebalancePoolAddress,
+            rebalancePoolAddress,
             sharesInWei
           )
           .call({
@@ -129,14 +153,14 @@ export default function WithdrawModal(props) {
 
         apiCall = fxUSD_GatewayRouterContract.methods.fxRebalancePoolWithdrawAs(
           convertParams,
-          info.rebalancePoolAddress,
+          rebalancePoolAddress,
           sharesInWei
         )
       }
       await NoPayableAction(
         () =>
           sendTransaction({
-            to: fxUSD_GatewayRouterContract._address,
+            to,
             data: apiCall.encodeABI(),
           }),
         {
@@ -155,7 +179,7 @@ export default function WithdrawModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">Withdraw fxUSD </h2>
+        <h2 className="mb-[16px]">Withdraw {withdrawDefaultToken} </h2>
         <BalanceInput
           placeholder="0"
           symbol={symbol}
@@ -170,7 +194,7 @@ export default function WithdrawModal(props) {
 
       {errorText ? <NoticeCard content={[errorText]} /> : null}
 
-      {symbol !== 'fxUSD' && (
+      {symbol !== withdrawDefaultToken && (
         <div className="my-[16px]">
           <SlippageInfo slippage={slippage} slippageChange={setSlippage} />
         </div>

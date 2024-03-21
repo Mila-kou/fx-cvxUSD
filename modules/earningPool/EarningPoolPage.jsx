@@ -5,6 +5,7 @@ import styles from './styles.module.scss'
 import useGaugeController from './controller/useGaugeController'
 
 import RebalancePoolCell from '@/modules/rebalancePoolV2/components/RebalancePoolCell'
+import RebalancePoolCellV2 from '@/modules/rebalancePoolV2/components/RebalancePoolCellV2'
 import usePool from '@/modules/rebalancePoolV2/controller/usePool'
 import usePoolV2 from '@/modules/rebalancePoolV2/controller/usePoolV2'
 import MerkleTree from './MerkleTree'
@@ -15,7 +16,7 @@ const Header = ({ title }) => (
     <div className="px-[16px] flex justify-between">
       <div className="w-[230px]" />
       <div className="w-[120px] text-[14px]">TVL</div>
-      <div className="w-[170px] text-[14px]">APR Range</div>
+      <div className="w-[200px] text-[14px]">APR Range</div>
       <div className="w-[110px] text-[14px]">Deposit</div>
       <div className="w-[100px] text-[14px]">Earn</div>
       <div className="w-[20px]" />
@@ -49,6 +50,22 @@ export default function EarningPoolPage() {
     infoKey: 'rebalancePoolV2_info_fxUSD_xfrxETH',
   })
 
+  const rUSD_weETH_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_rUSD_weETH',
+  })
+
+  const rUSD_xeETH_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_rUSD_xeETH',
+  })
+
+  // const fCVX_aCVX_pool = usePoolV2({
+  //   infoKey: 'rebalancePoolV2_info_fCVX_aCVX',
+  // })
+
+  // const fCVX_xCVX_pool = usePoolV2({
+  //   infoKey: 'rebalancePoolV2_info_fCVX_xCVX',
+  // })
+
   return (
     <div className={styles.container}>
       <div className={`${styles.content} mt-[32px]`}>
@@ -58,9 +75,8 @@ export default function EarningPoolPage() {
         </div>
 
         <Header title="Stake fxUSD" />
-        <RebalancePoolCell
+        <RebalancePoolCellV2
           title="fxUSD Stability Pool"
-          contractType="rebalancePoolV2_info_fxUSD_wstETH"
           subTitle={
             <p className="text-[14px]">
               Earn wstETH
@@ -70,9 +86,8 @@ export default function EarningPoolPage() {
           }
           {...fxUSD_wstETH_pool}
         />
-        <RebalancePoolCell
+        <RebalancePoolCellV2
           title="fxUSD Stability Pool"
-          contractType="rebalancePoolV2_info_fxUSD_xstETH"
           subTitle={
             <p className="text-[14px]">
               Earn wstETH
@@ -82,9 +97,8 @@ export default function EarningPoolPage() {
           }
           {...fxUSD_xstETH_pool}
         />
-        <RebalancePoolCell
+        <RebalancePoolCellV2
           title="fxUSD Stability Pool"
-          contractType="rebalancePoolV2_info_fxUSD_sfrxETH"
           subTitle={
             <p className="text-[14px]">
               Earn frxETH
@@ -94,9 +108,8 @@ export default function EarningPoolPage() {
           }
           {...fxUSD_sfrxETH_pool}
         />
-        <RebalancePoolCell
+        <RebalancePoolCellV2
           title="fxUSD Stability Pool"
-          contractType="rebalancePoolV2_info_fxUSD_xfrxETH"
           subTitle={
             <p className="text-[14px]">
               Earn frxETH
@@ -109,10 +122,35 @@ export default function EarningPoolPage() {
       </div>
 
       <div className={`${styles.content} `}>
+        <Header title="Stake rUSD" />
+        <RebalancePoolCellV2
+          title="rUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn weETH
+              <br />
+              Redeem to weETH
+            </p>
+          }
+          {...rUSD_weETH_pool}
+        />
+        <RebalancePoolCellV2
+          title="rUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn weETH
+              <br />
+              Redeem to xeETH
+            </p>
+          }
+          {...rUSD_xeETH_pool}
+        />
+      </div>
+
+      <div className={`${styles.content} `}>
         <Header title="Stake fETH" />
         <RebalancePoolCell
           title="fETH Stability Pool"
-          contractType="rebalancePoolV2_info_A"
           subTitle={
             <p className="text-[14px]">
               Earn wstETH
@@ -124,7 +162,7 @@ export default function EarningPoolPage() {
         />
         <RebalancePoolCell
           title="fETH Stability Pool"
-          contractType="rebalancePoolV2_info_B"
+          hasXETH
           subTitle={
             <p className="text-[14px]">
               Earn wstETH
@@ -132,10 +170,35 @@ export default function EarningPoolPage() {
               Redeem to xETH
             </p>
           }
-          hasXETH
           {...poolBData}
         />
       </div>
+
+      {/* <div className={`${styles.content} `}>
+        <Header title="Stake fCVX" />
+        <RebalancePoolCellV2
+          title="fCVX Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn aCVX
+              <br />
+              Redeem to aCVX
+            </p>
+          }
+          {...fCVX_aCVX_pool}
+        />
+        <RebalancePoolCellV2
+          title="fCVX Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn aCVX
+              <br />
+              Redeem to xCVX
+            </p>
+          }
+          {...fCVX_xCVX_pool}
+        />
+        </div> */}
 
       <div className={`${styles.content} `}>
         <Header title="Stake f(x) Curve LPs" />

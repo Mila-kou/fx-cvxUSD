@@ -28,7 +28,7 @@ export default function TokenStatistics({ assetInfo }) {
   const navsData = useFxNavs()
   const navList = navsData.navList[symbol]
 
-  const totalBaseTokenNumber = (totalBaseToken || '').replace(',', '')
+  const totalBaseTokenNumber = (totalBaseToken || '').replace(/,/g, '')
 
   const getCollateralRatioDom = () => {
     return (

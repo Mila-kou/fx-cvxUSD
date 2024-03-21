@@ -344,7 +344,12 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
           if (isEarnActive) {
             resData = await fxUSD_GatewayRouterContract.methods
-              .fxMintFxUSDAndEarn(convertParams, poolAdddress, 0)
+              .fxMintFxUSDAndEarn(
+                convertParams,
+                // config.tokens.fxUSD,
+                poolAdddress,
+                0
+              )
               .call({
                 from: _account,
                 value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
@@ -352,12 +357,18 @@ export default function FxUSDMint({ slippage, assetInfo }) {
             console.log('fxMintFxUSD--resData-----', symbol, _account, resData)
           } else {
             console.log(
-              'resData----',
+              'convertParams----',
               JSON.stringify(convertParams),
-              baseSymbol
+              baseSymbol,
+              symbol
             )
             resData = await fxUSD_GatewayRouterContract.methods
-              .fxMintFxUSD(convertParams, config.tokens[baseSymbol], 0)
+              .fxMintFxUSD(
+                convertParams,
+                // config.tokens.fxUSD,
+                config.tokens[baseSymbol],
+                0
+              )
               .call({
                 from: _account,
                 value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
@@ -463,12 +474,14 @@ export default function FxUSDMint({ slippage, assetInfo }) {
           apiCall =
             await fxUSD_GatewayRouterContract.methods.fxMintFxUSDAndEarn(
               convertParams,
+              // config.tokens.fxUSD,
               poolAdddress,
               _minOut
             )
         } else {
           apiCall = await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
             convertParams,
+            // config.tokens.fxUSD,
             config.tokens[baseSymbol],
             _minOut
           )

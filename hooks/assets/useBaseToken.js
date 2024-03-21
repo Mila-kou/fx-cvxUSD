@@ -10,7 +10,6 @@ import {
   useRebalancePoolRegistry,
   useReservePoolV2,
   useETHTwapOracle,
-  useRateProvider,
 } from '@/hooks/useFXUSDContract'
 import config from '@/config/index'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
@@ -30,7 +29,6 @@ const useBaseToken = () => {
   const getRebalancePoolRegistryContract = useRebalancePoolRegistry()
   const { contract: reservePoolContract } = useReservePoolV2()
   const getETHTwapOracleContract = useETHTwapOracle()
-  const getRateProviderContract = useRateProvider()
 
   const fetchBaseTokensData = async (arr) => {
     try {
@@ -63,12 +61,10 @@ const useBaseToken = () => {
           referenceBaseTokenPrice,
           isBaseTokenPriceValid,
           isUnderCollateral,
+          getUnderlyingValue,
         } = getTreasuryContract(contracts.treasury).contract.methods
 
         const { getPrice } = getETHTwapOracleContract(contracts.twapOracle)
-          .contract.methods
-
-        const { getRate } = getRateProviderContract(contracts.rateProvider)
           .contract.methods
 
         const { totalSupply: RebalancePoolRegistryPoolTotalSupply } =
@@ -79,7 +75,7 @@ const useBaseToken = () => {
           baseSymbol,
 
           twapPriceRes: getPrice(),
-          priceRateRes: getRate(),
+          priceRateRes: getUnderlyingValue((1e18).toString()),
           fNav: fNav(),
           xNav: xNav(),
           collateralRatioRes: collateralRatio(),

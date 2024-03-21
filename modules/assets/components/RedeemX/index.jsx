@@ -16,6 +16,42 @@ import {
 } from '@/hooks/useFXUSDContract'
 import { getZapOutParams } from '@/hooks/useZap'
 
+const MINT_OPTIONS = {
+  xstETH: [
+    ['wstETH', config.tokens.wstETH],
+    ['stETH', config.tokens.stETH],
+    ['WETH', config.tokens.weth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+  ],
+  xfrxETH: [
+    ['sfrxETH', config.tokens.sfrxETH],
+    ['frxETH', config.tokens.frxETH],
+    ['WETH', config.tokens.weth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+  ],
+  xeETH: [
+    ['weETH', config.tokens.weETH],
+    // ['ETH', config.tokens.eth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+    // ['eETH', config.tokens.eETH],
+  ],
+  xCVX: [
+    ['aCVX', config.tokens.aCVX],
+    ['ETH', config.tokens.eth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
+  ],
+}
+
 export default function RedeemX({ slippage, assetInfo }) {
   const { _currentAccount, sendTransaction } = useWeb3()
   const [isLoading, setIsLoading] = useState(0)
@@ -24,7 +60,7 @@ export default function RedeemX({ slippage, assetInfo }) {
   const [clearTrigger, clearInput] = useClearInput()
   const getMarketContract = useV2MarketContract()
 
-  const { symbol: fromSymbol, nav_text, baseTokenInfo } = assetInfo
+  const { symbol: fromSymbol, nav_text, baseTokenInfo, baseList } = assetInfo
 
   const { baseSymbol, contracts } = baseTokenInfo
 
@@ -36,25 +72,6 @@ export default function RedeemX({ slippage, assetInfo }) {
 
   const isSwap = useMemo(() => ['xstETH', 'xfrxETH'].includes(symbol), [symbol])
 
-  const OPTIONS = [
-    [baseSymbol, config.tokens[baseSymbol]],
-    ['stETH', config.tokens.stETH],
-    ['frxETH', config.tokens.frxETH],
-    ['WETH', config.tokens.weth],
-    ['USDT', config.tokens.usdt],
-    ['USDC', config.tokens.usdc],
-    ['Frax', config.tokens.frax],
-    ['crvUSD', config.tokens.crvUSD],
-  ].filter(([item]) => {
-    if (baseSymbol === 'wstETH') {
-      return item !== 'frxETH'
-    }
-    if (baseSymbol === 'sfrxETH') {
-      return item !== 'stETH'
-    }
-    return true
-  })
-
   const [pausedError, setPausedError] = useState('')
   const [maxError, setMaxError] = useState('')
 
@@ -62,6 +79,8 @@ export default function RedeemX({ slippage, assetInfo }) {
     () => baseToken[baseSymbol].data,
     [baseToken, baseSymbol]
   )
+
+  const OPTIONS = MINT_OPTIONS[fromSymbol]
 
   const {
     mintPaused,
@@ -132,11 +151,8 @@ export default function RedeemX({ slippage, assetInfo }) {
   }
 
   const getContractAddress = () => {
-    if (symbol === 'wstETH') {
-      return 'fxUSD_wstETH_Market'
-    }
-    if (symbol === 'sfrxETH') {
-      return 'fxUSD_sfrxETH_Market'
+    if (symbol === baseSymbol) {
+      return contracts.market
     }
     return 'fxUSD_gateway_router'
   }
@@ -150,7 +166,7 @@ export default function RedeemX({ slippage, assetInfo }) {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
-  console.log('selectTokenInfo----', selectTokenInfo)
+  // console.log('selectTokenInfo----', selectTokenInfo)
 
   const _account = useMemo(() => {
     const isInsufficient = cBN(tokenAmount).isGreaterThan(
@@ -164,7 +180,7 @@ export default function RedeemX({ slippage, assetInfo }) {
   }, [needApprove, _currentAccount, tokenAmount, symbol])
 
   const checkPause = () => {
-    let _fTokenMintPausedInStabilityMode = false
+    // let _fTokenMintPausedInStabilityMode = false
 
     // redeem
     if (redeemPaused || isRecap) {
@@ -174,19 +190,19 @@ export default function RedeemX({ slippage, assetInfo }) {
       return true
     }
 
-    if (isSwap) {
-      // mint
-      if (symbol === 'fETH') {
-        _fTokenMintPausedInStabilityMode =
-          fTokenMintPausedInStabilityMode && isCRLow130
-      }
-      if (mintPaused || _fTokenMintPausedInStabilityMode) {
-        setPausedError(
-          `f(x) governance decision to temporarily disable ${symbol} minting.`
-        )
-        return true
-      }
-    }
+    // if (isSwap) {
+    //   // mint
+    //   if (symbol === 'fETH') {
+    //     _fTokenMintPausedInStabilityMode =
+    //       fTokenMintPausedInStabilityMode && isCRLow130
+    //   }
+    //   if (mintPaused || _fTokenMintPausedInStabilityMode) {
+    //     setPausedError(
+    //       `f(x) governance decision to temporarily disable ${symbol} minting.`
+    //     )
+    //     return true
+    //   }
+    // }
     setPausedError('')
     return false
   }
@@ -281,13 +297,7 @@ export default function RedeemX({ slippage, assetInfo }) {
       const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
       if (checkNotZoroNum(_mockAmount)) {
         let resData
-        if (['wstETH', 'sfrxETH'].includes(symbol)) {
-          console.log(
-            'MarketContract-----',
-            MarketContract,
-            contracts.market,
-            _account
-          )
+        if (symbol === baseSymbol) {
           resData = await MarketContract.methods
             .redeemXToken(_mockAmount, _account, 0)
             .call({
@@ -305,7 +315,6 @@ export default function RedeemX({ slippage, assetInfo }) {
             .fxRedeemXTokenV2(convertParams, contracts.market, _mockAmount, 0)
             .call({
               from: _account,
-              value: symbol == 'ETH' ? _mockAmount : 0,
             })
 
           minout_ETH = resData._dstOut
@@ -348,7 +357,7 @@ export default function RedeemX({ slippage, assetInfo }) {
       setPriceLoading(false)
       return _minBaseOut_CBN.toFixed(0, 1)
     } catch (error) {
-      console.log('fxMintFxUSD----error--', error)
+      console.log('RedeemX----error--', error)
       setMinOutETHtAmount({
         minout_ETH: 0,
         minout_slippage: 0,
@@ -377,7 +386,7 @@ export default function RedeemX({ slippage, assetInfo }) {
       let apiCall
       let to
 
-      if (['wstETH', 'sfrxETH'].includes(symbol)) {
+      if (symbol === baseSymbol) {
         to = MarketContract._address
         apiCall = await MarketContract.methods.redeemXToken(
           fromAmount,
@@ -423,23 +432,14 @@ export default function RedeemX({ slippage, assetInfo }) {
   }, [slippage, tokenAmount, symbol, _account])
 
   const toUsd = useMemo(() => {
-    if (symbol === 'wstETH') {
-      return baseToken.wstETH.data?.baseTokenPrices?.inRedeemX
+    if (symbol === baseSymbol) {
+      return baseTokenData?.baseTokenPrices?.inRedeemX
     }
-    if (symbol === 'stETH') {
-      return baseToken.wstETH.data?.prices?.inRedeemX
+    if (baseList.filter((item) => item !== 'ETH').includes(symbol)) {
+      return baseTokenData.prices?.inRedeemX
     }
-    if (symbol === 'sfrxETH') {
-      return baseToken.sfrxETH.data?.baseTokenPrices?.inRedeemX
-    }
-    if (symbol === 'frxETH') {
-      return baseToken.sfrxETH.data?.prices?.inRedeemX
-    }
-    // if (symbol === 'ETH') {
-    //   return baseTokenData?.prices?.inRedeemX
-    // }
     return tokens[symbol].price
-  }, [symbol, tokens, baseToken, baseTokenData])
+  }, [symbol, tokens, baseSymbol, baseTokenData])
 
   return (
     <div className={styles.container}>

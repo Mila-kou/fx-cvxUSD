@@ -78,7 +78,6 @@ const useFxUSD = () => {
           marketCap_text,
         }
       })
-      console.log('fxUSD-AssetsData ----', data)
       return data
     } catch (error) {
       console.log('fxUSD-AssetsData ----error', error)

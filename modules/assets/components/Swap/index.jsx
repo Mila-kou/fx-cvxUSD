@@ -6,9 +6,12 @@ import Mint from '../Mint'
 import Redeem from '../Redeem'
 import FxUSDMint from '../FxUSDMint'
 import FxUSDRedeem from '../FxUSDRedeem'
+import RUSDMint from '../RUSDMint'
+import RUSDRedeem from '../RUSDRedeem'
 import MintX from '../MintX'
 import RedeemX from '../RedeemX'
-import useETH from '../../controller/useETH'
+import MintF from '../MintF'
+import RedeemF from '../RedeemF'
 import SlippageModal, { useSlippage } from '../SlippageModal'
 
 // import Select from '@/components/Select'
@@ -22,30 +25,31 @@ import SlippageModal, { useSlippage } from '../SlippageModal'
 const AUTO = 0.3
 
 export default function Swap({ isValidPrice, assetInfo }) {
-  const { systemStatus } = useETH()
   const [tab, setTab] = useState(0)
   // const { routeType, setRouteType } = useGlobal()
 
   const slippageProps = useSlippage(AUTO)
 
   const [MintCmp, RedeemCmp] = useMemo(() => {
+    if (['fETH', 'xETH'].includes(assetInfo.symbol)) {
+      return [Mint, Redeem]
+    }
+
     if (assetInfo.symbol === 'fxUSD') {
       return [FxUSDMint, FxUSDRedeem]
     }
-    if (['xstETH', 'xfrxETH'].includes(assetInfo.symbol)) {
-      return [MintX, RedeemX]
+    if (assetInfo.symbol === 'rUSD') {
+      return [RUSDMint, RUSDRedeem]
     }
-    return [Mint, Redeem]
+
+    if (['fCVX'].includes(assetInfo.symbol)) {
+      return [MintF, RedeemF]
+    }
+
+    return [MintX, RedeemX]
   }, [assetInfo.symbol])
 
   const { slippage, toggle } = slippageProps
-
-  const tabs = useMemo(() => {
-    const _tabs = ['Mint', 'Redeem']
-
-    if (tab >= _tabs.length) setTab(0)
-    return _tabs
-  }, [systemStatus])
 
   return (
     <div className={styles.container}>
@@ -58,7 +62,7 @@ export default function Swap({ isValidPrice, assetInfo }) {
         <SettingOutlined />
       </div>
       <div className={styles.tabs}>
-        {tabs.map((item, index) => (
+        {['Mint', 'Redeem'].map((item, index) => (
           <div
             key={item}
             className={styles.tab}

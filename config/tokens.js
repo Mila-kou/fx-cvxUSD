@@ -95,7 +95,7 @@ export const contracts = {
 
   // rebalance
   fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
-  fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
+  // fx_RebalancePool_B: '0x1C33BDb791e952C4Dd9b65C9C0D7590d215aF0d2',
   fx_RebalanceWithBonusToken_A: '0x74E9234A6e03c382A01Bb942B1aF05B639371309',
   fx_RebalanceWithBonusToken_B: '0x5a161B94c737326cA115eC46f4Eaf4eEC5037dBE',
   fx_RebalancePoolSplitter: '0x79c5f5b0753acE25ecdBdA4c2Bc86Ab074B6c2Bb', // fx_BoostableRebalancePool_APool_RebalancePoolSplitter
@@ -132,6 +132,8 @@ export const contracts = {
   fxUSD_sfrxETH_Market: '0x714B853b3bA73E439c652CfE79660F329E6ebB42',
   fxUSD_sfrxETH_FractionalToken: '0xa87F04c9743Fd1933F82bdDec9692e9D97673769',
   fxUSD_sfrxETH_LeveragedToken: '0x2bb0C32101456F5960d4e994Bac183Fe0dc6C82c',
+
+  // 所有都用这个
   fxUSD_GatewayRouter: '0xA5e2Ec4682a32605b9098Ddd7204fe84Ab932fE4',
 
   // fxUSD rebalance pool
@@ -162,8 +164,35 @@ export const contracts = {
   fxUSD_FxStETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
   fxUSD_FxFrxETHTwapOracle: '0x939c38921c961DecB3cc16f601C32d07C41cd25C',
 
-  wstETHRateProvider: '0x81A777c4aB65229d1Bf64DaE4c831bDf628Ccc7f',
-  sfrxETHRateProvider: '0x7ceD6167b5A08111dC8d0D2f9F7E482c4Da62506',
+  // rUSD
+  rUSD: '0x65D72AA8DA931F047169112fcf34f52DbaAE7D18',
+  rUSD_FxInitialFund_weETH: '0x6dc7a100d09DDbF344FC4Dd0398f79500D0c2716',
+  rUSD_weETH_Treasury: '0x781BA968d5cc0b40EB592D5c8a9a3A4000063885',
+  rUSD_weETH_Market: '0x267C6A96Db7422faA60Aa7198FfEeeC4169CD65f',
+  rUSD_weETH_FractionalToken: '0x9216272158F563488FfC36AFB877acA2F265C560',
+  rUSD_weETH_LeveragedToken: '0xACB3604AaDF26e6C0bb8c720420380629A328d2C',
+  rUSD_ShareableRebalancePool_weETH:
+    '0xc2DeF1E39FF35367F2F2a312a793477C576fD4c3',
+  rUSD_ShareableRebalancePool_weETH_FundraiseGauge:
+    '0xf594bDfafE4197144C6459FcA611d7B868d36bEa',
+  rUSD_ShareableRebalancePool_xeETH:
+    '0x7EB0ed173480299e1310d55E04Ece401c2B06626',
+  rUSD_weETH_RebalancePoolRegistry:
+    '0xb1dD23468a69DFDDb7211298e609C0DB1522B2D6',
+  rUSD_FxeETHTwapOracle: '0x834E87262A00b0aC38eD49Cb1110838866bE4a20',
+
+  // aCVX
+  FxInitialFund_aCVX: '0x4F16fbac03d342795521A4BD9C46c21781c2aE04',
+  aCVX_Treasury: '0xd8213a22cd1eB754B4088Ee492Ce67991e7aF5e4',
+  aCVX_Market: '0x93ecD30bff87e4ef1A249344D85aAeFBd789506f',
+  aCVX_FractionalToken: '0xbd41d557Bb16e3524A99CB923DFe0e456f8e8FC5',
+  aCVX_LeveragedToken: '0x5aDA9cD4dbA4023bDc032E76284ce9d7c15906F9',
+  ShareableRebalancePool_aCVX: '0x1EC306922a233b79414C51b5d26665A912a210f4',
+  ShareableRebalancePool_aCVX_FundraiseGauge:
+    '0xE7CC1Eefb350C46275E7bE053dd261bC2Cd799CD',
+  ShareableRebalancePool_xCVX: '0x6ABF454f61f459e1bE75E5D5e1d31970e6B1dDc3',
+  aCVX_RebalancePoolRegistry: '0x04BB5cbDa2370980743C8cC095eb2123A0731D69',
+  FxCVXTwapOracle: '0x6735151401D038F72C1B2a69aE2dD27453703263',
 }
 
 const gaugeTokenList = {
@@ -193,6 +222,7 @@ const gaugeTokenList = {
 }
 
 export const tokens = {
+  eth_0: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   eth: '0x0000000000000000000000000000000000000000',
   weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
   idoSale: '0x3eB6Da2d3f39BA184AEA23876026E0747Fb0E17f',
@@ -221,7 +251,6 @@ export const tokens = {
   cvxcrv: '0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7',
 
   frax: '0x853d955aCEf822Db058eb8505911ED77F175b99e',
-  cvx: '0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B',
   fxs: '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0',
 
   reth: '0xae78736cd615f374d3085123a210448e74fc6393',
@@ -241,6 +270,19 @@ export const tokens = {
   frxETH: '0x5e8422345238f34275888049021821e8e08caa1f',
 
   crvUSD: '0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E',
+
+  eETH: '0x35fa164735182de50811e8e2e824cfb9b6118ac2',
+  rUSD: contracts.rUSD,
+  weETH: '0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee',
+  xeETH: contracts.rUSD_weETH_LeveragedToken,
+
+  apxETH: '0x9Ba021B0a9b958B5E75cE9f6dff97C7eE52cb3E6',
+  pxETH: '0x04C154b66CB340F3Ae24111CC767e0184Ed00Cc6',
+
+  aCVX: '0xb0903Ab70a7467eE5756074b31ac88aEBb8fB777',
+  cvx: '0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B',
+  fCVX: contracts.aCVX_FractionalToken,
+  xCVX: contracts.aCVX_LeveragedToken,
 }
 
 const TOKENS_INFO = {
@@ -273,6 +315,11 @@ const TOKENS_INFO = {
   xstETH: ['xstETH', tokens.xstETH, 18, 'xstETH', 'xstETH'],
   xfrxETH: ['xfrxETH', tokens.xfrxETH, 18, 'xfrxETH', 'xfrxETH'],
   crvUSD: ['crvusd', tokens.crvUSD, 18],
+  eETH: ['eETH', tokens.eETH, 18, 'eETH', 'eETH'],
+  weETH: ['weETH', tokens.weETH, 18, 'weETH', 'weETH'],
+  aCVX: ['aCVX', tokens.aCVX, 18, 'aCVX', 'aCVX'],
+  fCVX: ['fCVX', tokens.fCVX, 18, 'fCVX', 'fCVX'],
+  xCVX: ['xCVX', tokens.xCVX, 18, 'xCVX', 'xCVX'],
 }
 
 export const zapTokens = {
@@ -409,6 +456,27 @@ export const zapTokens = {
     address: TOKENS_INFO.frax[1],
     needZap: true,
   },
+  weETH: {
+    symbol: 'weETH',
+    icon: 'weETH',
+    decimals: TOKENS_INFO.weETH[2],
+    address: TOKENS_INFO.weETH[1],
+    needZap: true,
+  },
+  aCVX: {
+    symbol: 'aCVX',
+    icon: 'aCVX',
+    decimals: TOKENS_INFO.aCVX[2],
+    address: TOKENS_INFO.aCVX[1],
+    needZap: true,
+  },
+  eETH: {
+    symbol: 'eETH',
+    icon: 'eETH',
+    decimals: TOKENS_INFO.eETH[2],
+    address: TOKENS_INFO.eETH[1],
+    needZap: true,
+  },
 }
 
 const POOLS_LIST_GAUGE = {
@@ -502,6 +570,12 @@ export const GENESIS_MAP = {
     xToken: 'xfrxETH',
     address: contracts.fxUSD_FxInitialFund_sfrxETH,
   },
+  eETH: {
+    symbol: 'eETH',
+    baseSymbol: 'weETH',
+    xToken: 'xeETH',
+    address: contracts.rUSD_FxInitialFund_weETH,
+  },
 }
 
 export const BASE_TOKENS_MAP = {
@@ -524,7 +598,6 @@ export const BASE_TOKENS_MAP = {
       fToken: contracts.fxUSD_wstETH_FractionalToken,
       xToken: contracts.fxUSD_wstETH_LeveragedToken,
       twapOracle: contracts.fxUSD_FxStETHTwapOracle,
-      rateProvider: contracts.wstETHRateProvider,
     },
   },
   sfrxETH: {
@@ -537,7 +610,30 @@ export const BASE_TOKENS_MAP = {
       fToken: contracts.fxUSD_sfrxETH_FractionalToken,
       xToken: contracts.fxUSD_sfrxETH_LeveragedToken,
       twapOracle: contracts.fxUSD_FxFrxETHTwapOracle,
-      rateProvider: contracts.sfrxETHRateProvider,
+    },
+  },
+  weETH: {
+    baseSymbol: 'weETH',
+    baseName: 'eETH',
+    contracts: {
+      market: contracts.rUSD_weETH_Market,
+      treasury: contracts.rUSD_weETH_Treasury,
+      rebalancePoolRegistry: contracts.rUSD_weETH_RebalancePoolRegistry,
+      fToken: contracts.rUSD_weETH_FractionalToken,
+      xToken: contracts.rUSD_weETH_LeveragedToken,
+      twapOracle: contracts.rUSD_FxeETHTwapOracle,
+    },
+  },
+  aCVX: {
+    baseSymbol: 'aCVX',
+    baseName: 'CVX',
+    contracts: {
+      market: contracts.aCVX_Market,
+      treasury: contracts.aCVX_Treasury,
+      rebalancePoolRegistry: contracts.aCVX_RebalancePoolRegistry,
+      fToken: contracts.aCVX_FractionalToken,
+      xToken: contracts.aCVX_LeveragedToken,
+      twapOracle: contracts.FxCVXTwapOracle,
     },
   },
 }
@@ -567,6 +663,7 @@ export const ASSET_MAP = {
   },
   fxUSD: {
     symbol: 'fxUSD',
+    baseList: ['ETH', 'stETH', 'frxETH'],
     address: contracts.FxUSD,
     descrition: '$1.00 Pegged',
     icon: '/tokens/fxusd.svg',
@@ -577,6 +674,7 @@ export const ASSET_MAP = {
   },
   xstETH: {
     symbol: 'xstETH',
+    baseList: ['ETH', 'stETH'],
     name: 'xstETH (Lido)',
     address: contracts.fxUSD_wstETH_LeveragedToken,
     descrition: 'Long stETH up to 4.3x',
@@ -589,6 +687,7 @@ export const ASSET_MAP = {
   },
   xfrxETH: {
     symbol: 'xfrxETH',
+    baseList: ['ETH', 'frxETH'],
     name: 'xfrxETH (Frax)',
     address: contracts.fxUSD_sfrxETH_LeveragedToken,
     descrition: 'Long frxETH up to 4.3x',
@@ -600,30 +699,60 @@ export const ASSET_MAP = {
     baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
   },
   fCVX: {
-    symbol: 'fCVX',
-    // address: '',
-    // descrition: 'Coming soon',
-    icon: '/tokens/fxusd.svg',
-    // subIcon: '/tokens/frxeth.svg',
-    // isX: true,
-    // isShow24Change: true,
     isComing: true,
-    // baseSymbol: 'sfrxETH',
+    symbol: 'fCVX',
+    baseList: ['CVX'],
+    name: 'fCVX (Frax)',
+    address: contracts.aCVX_FractionalToken,
+    descrition: 'Coming soon',
+    // descrition: '10% Volatility of CVX',
+    icon: '/images/f-logo.svg',
+    // subIcon: '/tokens/frxeth.svg',
     isF: true,
-    // baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
+    isShow24Change: true,
+    baseSymbol: 'aCVX',
+    baseTokenInfo: BASE_TOKENS_MAP.aCVX,
   },
   xCVX: {
+    isComing: true,
     symbol: 'xCVX',
+    baseList: ['CVX'],
     name: 'xCVX (Convex)',
-    // address: '',
-    // descrition: 'Coming soon',
+    address: contracts.aCVX_LeveragedToken,
+    descrition: 'Coming soon',
+    // descrition: 'Long CVX up to 4x',
     icon: '/images/x-logo.svg',
     subIcon: '/tokens/crypto-icons-stack.svg#cvx',
     isX: true,
-    // isShow24Change: true,
-    isComing: true,
-    // baseSymbol: 'sfrxETH',
-    // baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
+    isShow24Change: true,
+    baseSymbol: 'aCVX',
+    baseTokenInfo: BASE_TOKENS_MAP.aCVX,
+  },
+  rUSD: {
+    symbol: 'rUSD',
+    baseList: ['ETH', 'eETH'],
+    name: 'rUSD',
+    address: contracts.rUSD,
+    descrition: '$1.00 Pegged',
+    icon: '/tokens/rUSD.svg',
+    isF: true,
+    isShow24Change: false,
+    background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
+    baseSymbol: 'weETH',
+    baseTokenInfos: [BASE_TOKENS_MAP.weETH],
+  },
+  xeETH: {
+    symbol: 'xeETH',
+    baseList: ['ETH', 'eETH'],
+    name: 'xeETH (Ether.fi)',
+    address: contracts.rUSD_weETH_LeveragedToken,
+    descrition: 'Long eETH up to 4.3x',
+    icon: '/images/x-logo.svg',
+    subIcon: '/tokens/eETH.svg',
+    isX: true,
+    isShow24Change: true,
+    baseSymbol: 'weETH',
+    baseTokenInfo: BASE_TOKENS_MAP.weETH,
   },
 }
 
@@ -640,28 +769,30 @@ export default {
   ASSETS,
 }
 
-// market: "0xeCbA45f077df21D9142312a5aa21411371E1f943",
-//   baseToken: ADDRESS.WETH,
-//   fToken: "0xfAb5Bc982111A8cA5c3D8306622D7bAFD3382d0c",
-//   xToken: "0xd43555d5e5Af8DE5302ff12911DCE11C42c21db0",
-//   platform: "0xFC08757c505eA28709dF66E54870fB6dE09f0C5E",
-//   priceOracle: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
-//   beta: 1e15,
-//   initialMintRatio: 1e15,
-//   treasury: "0xf1A4c4D30D90D49DbA8Baf0e14dA5fff54B638b8"
-
-export const TOKEN_MAP = {
+export const TOKEN_ICON_MAP = {
   ETH: '/tokens/crypto-icons-stack.svg#eth',
+  FXN: '/images/FXN.svg',
   stETH: '/tokens/steth.svg',
   wstETH: '/tokens/steth.svg',
   sfrxETH: '/tokens/sfrxeth.svg',
   crvUSD: '/tokens/crvUSD.png',
-  fxUSD: '/tokens/fxusd.svg',
   frxETH: '/tokens/frxeth.svg',
   Frax: '/tokens/crypto-icons-stack.svg#frax',
   USDC: '/tokens/crypto-icons-stack.svg#usdc',
   USDT: '/tokens/crypto-icons-stack.svg#usdt',
   WETH: '/tokens/crypto-icons-stack.svg#weth',
-  xETH: '/images/x-logo.svg',
   fETH: '/images/f-logo.svg',
+
+  eETH: '/tokens/eETH.svg',
+  weETH: '/tokens/eETH.svg',
+  aCVX: '/tokens/crypto-icons-stack.svg#cvx',
+
+  xETH: '/images/x-logo.svg',
+  xstETH: '/images/x-logo.svg',
+  xfrxETH: '/images/x-logo.svg',
+  xeETH: '/images/x-logo.svg',
+  xCVX: '/images/x-logo.svg',
+
+  fxUSD: '/tokens/fxusd.svg',
+  rUSD: '/tokens/rUSD.svg',
 }

@@ -67,7 +67,7 @@ export default function SystemStatistics() {
   } = useETH()
   const navsData = useNavs()
 
-  const totalBaseTokenNumber = (totalBaseToken || '').replace(',', '')
+  const totalBaseTokenNumber = (totalBaseToken || '').replace(/,/g, '')
   const MAX_ETH = baseTokenCap
   return (
     <div className={styles.container}>

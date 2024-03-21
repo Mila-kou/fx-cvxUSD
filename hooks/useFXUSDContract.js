@@ -5,8 +5,8 @@ import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCall } from '@/hooks/useMutiCalls'
 import { useContract } from './useContracts'
 
-export const useFXUSD_contract = () => {
-  const address = config.contracts.FxUSD
+export const useFXUSD_contract = (symbol = 'fxUSD') => {
+  const address = config.tokens[symbol]
   const { getContract } = useContract()
   return useMemo(
     () => ({
@@ -209,17 +209,6 @@ export const useETHTwapOracle = () => {
   return useCallback(
     (address) => ({
       contract: getContract(address, abi.ETHTwapOracle_ABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useRateProvider = () => {
-  const { getContract } = useContract()
-  return useCallback(
-    (address) => ({
-      contract: getContract(address, abi.RateProvider_ABI),
       address,
     }),
     [getContract]

@@ -6,14 +6,13 @@ import PoolItem from './components/PoolItem'
 import usePool from './hooks/usePool'
 
 import styles from './styles.module.scss'
-import { cBN, fb4, checkNotZoroNum, dollarText } from '@/utils/index'
+import { cBN, fb4, dollarText } from '@/utils/index'
 
 export default function RebalancePoolPage() {
   const poolAData = usePool({
     rebalancePoolAddress: tokens.contracts.fx_RebalancePool_A,
     rebalanceWithBonusTokenAddress:
       tokens.contracts.fx_RebalanceWithBonusToken_A,
-    infoKey: 'rebalancePool_info_A',
   })
 
   const totalSupplyTvlText = fb4(
@@ -63,11 +62,6 @@ export default function RebalancePoolPage() {
             <h2>{poolAData.apy}%</h2>
             <p>{poolAData.stabilityPoolTotalSupply} fETH</p>
           </div>
-          {/* <div className={styles.item}>
-            <p>B Pool APR (xETH)</p>
-            <h2>{poolBData.apy}%</h2>
-            <p>{poolBData.stabilityPoolTotalSupply} fETH</p>
-          </div> */}
         </div>
       </div>
 
@@ -76,12 +70,6 @@ export default function RebalancePoolPage() {
         contractType="fx_RebalancePool_A"
         {...poolAData}
       />
-      {/* <PoolItem
-        title="My Rebalance Pool B"
-        contractType="fx_RebalancePool_B"
-        hasXETH
-        {...poolBData}
-      /> */}
     </div>
   )
 }

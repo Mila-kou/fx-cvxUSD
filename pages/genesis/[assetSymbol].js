@@ -12,3 +12,18 @@ export default function Genesis() {
     </React.Fragment>
   )
 }
+
+export async function getStaticPaths() {
+  const paths = ['fxUSD', 'rUSD'].map((assetSymbol) => ({
+    params: { assetSymbol },
+  }))
+
+  return {
+    paths,
+    fallback: false,
+  }
+}
+
+export async function getStaticProps() {
+  return { props: {} }
+}

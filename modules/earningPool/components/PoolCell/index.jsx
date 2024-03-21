@@ -176,7 +176,6 @@ export default function PoolCell({ cellData }) {
     ) {
       const _projectApy = getTypeApy(apyInfo, 'project')
       const _currentApy = getTypeApy(apyInfo, 'current')
-      console.log('apy----_projectApy---', _projectApy)
       // console.log('apy----_currentApy---', _currentApy)
       let _apyAndBoostDom = '-'
       let _apyDom = '-'
@@ -222,7 +221,6 @@ export default function PoolCell({ cellData }) {
     }
     return ['-', '-', '-']
   }, [cellData.apyInfo, boostInfo])
-  console.log('cellData----', cellData, apyDom)
 
   const rewardTokenDom = useMemo(() => {
     return (
@@ -292,7 +290,7 @@ export default function PoolCell({ cellData }) {
         <div className="w-[120px] text-[16px]">
           {cellData.tvl_text} <br /> {cellData.totalSupply_text}
         </div>
-        <div className="w-[170px] text-[16px]">{apyAndBoostDom}</div>
+        <div className="w-[200px] text-[16px]">{apyAndBoostDom}</div>
         <div className="w-[110px] text-[16px]">
           {cellData.userShare_tvl_text} <br /> {cellData.userShare_text}{' '}
         </div>
@@ -372,22 +370,14 @@ export default function PoolCell({ cellData }) {
 
       {showDepositModal && (
         <DepositModal
-          // cellData={cellData}
           info={cellData}
-          // contractType={contractType}
-          // FX_RebalancePoolContract={FX_RebalancePoolContract}
-          // poolData={stabilityPoolInfo}
           onCancel={() => setShowDepositModal(false)}
         />
       )}
 
       {showWithdrawModal && (
         <WithdrawModal
-          // cellData={cellData}
           info={cellData}
-          // contractType={contractType}
-          // FX_RebalancePoolContract={FX_RebalancePoolContract}
-          // poolData={stabilityPoolInfo}
           onCancel={() => setShowWithdrawModal(false)}
         />
       )}

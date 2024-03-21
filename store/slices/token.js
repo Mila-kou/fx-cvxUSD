@@ -4,12 +4,14 @@ const tokens = {}
 
 const list = [
   'ETH',
-  'wstETH',
-  'sfrxETH',
-  'frxETH',
-  'stETH',
   'fETH',
   'xETH',
+  'stETH',
+  'wstETH',
+  'frxETH',
+  'sfrxETH',
+  'xstETH',
+  'xfrxETH',
   'fxUSD',
   'USDC',
   'USDT',
@@ -17,8 +19,14 @@ const list = [
   'FXN',
   'Frax',
   'crvUSD',
-  'xstETH',
-  'xfrxETH',
+  'eETH',
+  'weETH',
+  'xeETH',
+  'rUSD',
+  'CVX',
+  'aCVX',
+  'fCVX',
+  'xCVX',
 ]
 
 list.forEach((item) => {

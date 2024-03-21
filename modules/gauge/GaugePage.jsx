@@ -1,18 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Checkbox } from 'antd'
 import { MedicineBoxOutlined } from '@ant-design/icons'
-import tokens from '@/config/tokens'
 import CastVoteModal from './components/CastVoteModal'
 import {
   REBALANCE_GAUGE_LIST,
   POOLS_LIST,
   OTHER_GAUGE_LIST,
 } from '@/config/aladdinVault'
-import Button from '@/components/Button'
 
 import styles from './styles.module.scss'
 import { cBN, fb4, checkNotZoroNumOption, dollarText } from '@/utils/index'
-import useGaugeController from '@/modules/earningPool/controller/useGaugeController'
 import PoolCell from './components/PoolCell'
 import useVoteController from './controller/useVoteController'
 
@@ -87,6 +83,18 @@ export default function GaugePage() {
             <PoolCell
               cellData={item}
               userVoteInfo={userVoteInfo}
+              voteData={poolVoteInfo[item.lpGaugeAddress]}
+              remaining={userVoteInfo.remaining}
+              onCastVote={(newPower) => onCastVote(item, newPower)}
+            />
+          )
+        )}
+
+        <Header title="rUSD Pools" />
+        {REBALANCE_GAUGE_LIST.filter((item) => item.poolType === 'rUSD').map(
+          (item) => (
+            <PoolCell
+              cellData={item}
               voteData={poolVoteInfo[item.lpGaugeAddress]}
               remaining={userVoteInfo.remaining}
               onCastVote={(newPower) => onCastVote(item, newPower)}

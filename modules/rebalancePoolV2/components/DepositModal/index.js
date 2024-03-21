@@ -10,26 +10,32 @@ import { NoticeCard } from '@/modules/assets/components/Common'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
-import {
-  useFXUSD_contract,
-  useFxUSD_GatewayRouter_contract,
-} from '@/hooks/useFXUSDContract'
+import { useFXUSD_contract } from '@/hooks/useFXUSDContract'
 import Button from '@/components/Button'
 
 export default function DepositModal(props) {
   const baseToken = useSelector((state) => state.baseToken)
-  const { fxUSD } = useSelector((state) => state.asset)
-  const { onCancel, info, contractType, FX_RebalancePoolContract } = props
+  const asset = useSelector((state) => state.asset)
+  const { onCancel, info, FX_RebalancePoolContract } = props
   const [depositing, setDepositing] = useState(false)
   const { currentAccount, isAllReady, sendTransaction } = useWeb3()
-  const [selectToken, setSelectToken] = useState(info.zapTokens[0])
+  const { rebalancePoolAddress, baseSymbol, poolType, zapTokens } = info
 
-  const isRecap = baseToken?.[info.baseSymbol]?.data?.isRecap
+  const selectToken = zapTokens[0]
+
+  const { symbol } = selectToken
+
+  const isRecap = baseToken?.[baseSymbol]?.data?.isRecap
 
   const [depositAmount, setDepositAmount] = useState(0)
-  const { contract: fxUSD_contract } = useFXUSD_contract()
 
-  const selectTokenInfo = useToken(selectToken.address, contractType, info)
+  const { contract: fxUSD_contract } = useFXUSD_contract(poolType)
+
+  const selectTokenInfo = useToken(
+    selectToken.address,
+    rebalancePoolAddress,
+    info
+  )
   const tokenContract = selectTokenInfo.contract
   const tokenApproveContractAddress = selectTokenInfo.contractAddress
   const userTokenBalance = selectTokenInfo.balance
@@ -42,9 +48,9 @@ export default function DepositModal(props) {
   })
 
   const [showManaged, managed] = useMemo(() => {
-    const _managed = fxUSD.markets?.[info.baseSymbol]?.managed
+    const _managed = asset[symbol]?.markets?.[baseSymbol]?.managed
     return [cBN(depositAmount).isGreaterThan(_managed), _managed]
-  }, [depositAmount, fxUSD, info])
+  }, [depositAmount, asset, symbol, info])
 
   const handleDeposit = async () => {
     if (!isAllReady) return
@@ -54,7 +60,7 @@ export default function DepositModal(props) {
     try {
       let apiCall
       let to
-      if (selectToken.symbol === 'fETH') {
+      if (symbol === 'fETH') {
         to = FX_RebalancePoolContract._address
         apiCall = FX_RebalancePoolContract.methods.deposit(
           depositAmountInWei,
@@ -63,7 +69,7 @@ export default function DepositModal(props) {
       } else {
         to = fxUSD_contract._address
         apiCall = fxUSD_contract.methods.earn(
-          info.rebalancePoolAddress,
+          rebalancePoolAddress,
           depositAmountInWei,
           currentAccount
         )
@@ -98,11 +104,11 @@ export default function DepositModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">Deposit {selectToken.symbol} </h2>
+        <h2 className="mb-[16px]">Deposit {symbol} </h2>
 
         <BalanceInput
           placeholder="0"
-          symbol={selectToken.symbol}
+          symbol={symbol}
           balance={fb4(userTokenBalance, false)}
           maxAmount={userTokenBalance}
           onChange={handleInputChange}
@@ -113,9 +119,9 @@ export default function DepositModal(props) {
           period. Pending withdrawals earn no yield, but may be used for stETH
           redemption.
         </p> */}
-        <Link href={`/assets/${selectToken.symbol}/`}>
+        <Link href={`/assets/${symbol}/`}>
           <p className="text-center mt-[20px] text-[16px] underline text-[var(--a-button-color)]">
-            Get {selectToken.symbol} to Deposit
+            Get {symbol} to Deposit
           </p>
         </Link>
       </div>
@@ -130,12 +136,12 @@ export default function DepositModal(props) {
 
       {showManaged ? (
         <NoticeCard
-          content={[`A maximum of ${fb4(managed)} fxUSD can be deposited `]}
+          content={[`A maximum of ${fb4(managed)} ${symbol} can be deposited `]}
         />
       ) : null}
 
       <div className="mt-[30px]">
-        {selectToken.symbol === 'fETH' ? (
+        {symbol === 'fETH' ? (
           <BtnWapper
             width="100%"
             loading={depositing}

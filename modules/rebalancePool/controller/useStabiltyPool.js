@@ -5,11 +5,14 @@ import { useGlobal } from '@/contexts/GlobalProvider'
 import useFxCommon from '@/modules/assets/hooks/useFxCommon'
 import config from '@/config/index'
 import useWeb3 from '@/hooks/useWeb3'
+import useRebalancePoolUseInfo from '../hooks/useRebalancePoolUseInfo'
 
-const useStabiltyPool = (infoKey) => {
+const useStabiltyPool = () => {
   const globalState = useGlobal()
   const fxInfo = globalState.fx_info
-  const stabilityPoolInfo = globalState[infoKey]
+  const stabilityPoolInfo = useRebalancePoolUseInfo(
+    config.contracts.fx_RebalancePool_A
+  )
 
   const { current } = useWeb3()
   const { ethPrice } = useFxCommon()

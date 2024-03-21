@@ -4,7 +4,13 @@ import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import {
+  cBN,
+  checkNotZoroNum,
+  checkNotZoroNumOption,
+  fb4,
+  numberLess,
+} from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -18,6 +24,42 @@ import {
 } from '@/hooks/useFXUSDContract'
 import { useZapIn } from '@/hooks/useZap'
 
+const MINT_OPTIONS = {
+  xstETH: [
+    ['ETH', config.tokens.eth],
+    ['stETH', config.tokens.stETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+    ['wstETH', config.tokens.wstETH],
+  ],
+  xfrxETH: [
+    ['ETH', config.tokens.eth],
+    ['frxETH', config.tokens.frxETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+    ['sfrxETH', config.tokens.sfrxETH],
+  ],
+  xeETH: [
+    // ['ETH', config.tokens.eth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+    ['weETH', config.tokens.weETH],
+    // ['eETH', config.tokens.eETH],
+  ],
+  xCVX: [
+    ['ETH', config.tokens.eth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
+    ['aCVX', config.tokens.aCVX],
+  ],
+}
+
 export default function MintX({ slippage, assetInfo }) {
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
@@ -26,14 +68,21 @@ export default function MintX({ slippage, assetInfo }) {
   const getMarketContract = useV2MarketContract()
   const { getZapInParams } = useZapIn()
 
-  const { isF, symbol: toSymbol, nav, nav_text, baseTokenInfo } = assetInfo
+  const {
+    isF,
+    symbol: toSymbol,
+    nav,
+    nav_text,
+    baseTokenInfo,
+    baseList,
+  } = assetInfo
 
   const { baseSymbol, contracts } = baseTokenInfo
 
   const MarketContract = getMarketContract(contracts.market).contract
 
   const [pausedError, setPausedError] = useState(false)
-  const [symbol, setSymbol] = useState('ETH')
+  const [symbol, setSymbol] = useState(baseSymbol === 'weETH' ? 'weETH' : 'ETH')
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
 
@@ -79,26 +128,9 @@ export default function MintX({ slippage, assetInfo }) {
 
   const isSwap = false
 
-  const OPTIONS = [
-    ['ETH', config.tokens.eth],
-    ['stETH', config.tokens.stETH],
-    ['frxETH', config.tokens.frxETH],
-    ['USDT', config.tokens.usdt],
-    ['USDC', config.tokens.usdc],
-    ['Frax', config.tokens.frax],
-    ['crvUSD', config.tokens.crvUSD],
-    [baseSymbol, config.tokens[baseSymbol]],
-  ]
-    .filter((item) => !(isRecap && ['wstETH', 'sfrxETH'].includes(item[0])))
-    .filter(([item]) => {
-      if (baseSymbol === 'wstETH') {
-        return item !== 'frxETH'
-      }
-      if (baseSymbol === 'sfrxETH') {
-        return item !== 'stETH'
-      }
-      return true
-    })
+  const OPTIONS = MINT_OPTIONS[toSymbol].filter(
+    (item) => !(isRecap && baseSymbol === item[0])
+  )
 
   const selectTokenAddress = useMemo(() => {
     return OPTIONS.find((item) => item[0] === symbol)[1]
@@ -109,18 +141,15 @@ export default function MintX({ slippage, assetInfo }) {
   }, [symbol])
 
   const getContractAddress = () => {
-    if (symbol === 'wstETH') {
-      return 'fxUSD_wstETH_Market'
-    }
-    if (symbol === 'sfrxETH') {
-      return 'fxUSD_sfrxETH_Market'
+    if (symbol === baseSymbol) {
+      return contracts.market
     }
     return 'fxUSD_gateway_router'
   }
 
   const selectTokenInfo = useToken(selectTokenAddress, getContractAddress())
 
-  console.log('selectTokenInfo-----', selectTokenInfo)
+  // console.log('selectTokenInfo-----', selectTokenInfo)
 
   const { BtnWapper, needApprove } = useApprove({
     approveAmount: fromAmount,
@@ -216,7 +245,7 @@ export default function MintX({ slippage, assetInfo }) {
       if (checkNotZoroNum(fromAmount)) {
         let resData
 
-        if (['wstETH', 'sfrxETH'].includes(symbol)) {
+        if (symbol === baseSymbol) {
           resData = await MarketContract.methods
             .mintXToken(_mockAmount, _account, 0)
             .call({
@@ -321,7 +350,7 @@ export default function MintX({ slippage, assetInfo }) {
 
       let apiCall
       let to
-      if (['wstETH', 'sfrxETH'].includes(symbol)) {
+      if (symbol === baseSymbol) {
         to = MarketContract._address
         apiCall = await MarketContract.methods.mintXToken(
           _ETHtAmountAndGas,
@@ -380,7 +409,8 @@ export default function MintX({ slippage, assetInfo }) {
   )
 
   const checkPause = () => {
-    if (mintPaused || !isBaseTokenPriceValid || isRecap) {
+    // 奖励优先
+    if (mintPaused || isRecap || (!isFXBouns && !isBaseTokenPriceValid)) {
       setPausedError(`f(x) governance decision to temporarily disable minting.`)
       return true
     }
@@ -425,23 +455,14 @@ export default function MintX({ slippage, assetInfo }) {
   }, [isF, slippage, fromAmount, _account])
 
   const fromUsd = useMemo(() => {
-    if (symbol === 'wstETH') {
-      return baseToken.wstETH.data?.baseTokenPrices?.inMint
+    if (symbol === baseSymbol) {
+      return baseTokenData?.baseTokenPrices?.inMint
     }
-    if (symbol === 'stETH') {
-      return baseToken.wstETH.data?.prices?.inMint
-    }
-    if (symbol === 'sfrxETH') {
-      return baseToken.sfrxETH.data?.baseTokenPrices?.inMint
-    }
-    if (symbol === 'frxETH') {
-      return baseToken.sfrxETH.data?.prices?.inMint
-    }
-    if (symbol === 'ETH') {
-      return baseTokenData?.prices?.inMint
+    if (baseList.includes(symbol)) {
+      return baseTokenData.data?.prices?.inMint
     }
     return tokens[symbol].price
-  }, [symbol, tokens, baseToken, baseTokenData])
+  }, [symbol, tokens, baseSymbol, baseTokenData])
 
   return (
     <div className={styles.container}>
@@ -500,7 +521,7 @@ export default function MintX({ slippage, assetInfo }) {
       {isFXBouns && Number(mintXBouns) ? (
         <DetailCell
           title={`Mint ${toSymbol} Bonus:`}
-          content={[fb4(mintXBouns), '', baseSymbol]}
+          content={[numberLess(fb4(mintXBouns), 0.01), '', baseSymbol]}
         />
       ) : null}
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}

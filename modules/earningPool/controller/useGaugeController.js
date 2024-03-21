@@ -9,25 +9,19 @@ import {
   numberLess,
 } from '@/utils/index'
 import { useGlobal } from '@/contexts/GlobalProvider'
-import config from '@/config/index'
-import useWeb3 from '@/hooks/useWeb3'
 import useGaugeData from '../hooks/useGaugeData'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { POOLS_LIST } from '@/config/aladdinVault'
-import { useContract, useVeFXN } from '@/hooks/useContracts'
+import { useContract } from '@/hooks/useContracts'
 import abi from '@/config/abi'
 import useGaugeApyEstimate from '@/hooks/useGaugeApyEstimate'
-import { useVeBoostAllGauge } from '@/hooks/calculator/useVeBoost_AllGauge'
 
 const useGaugeController = (LIST = POOLS_LIST) => {
   const { lpPrice, ConvexVaultsAPY, allGaugeBaseInfo } = useGlobal()
   const { tokenPrice } = useSelector((state) => state.token)
-  const { currentAccount, isAllReady } = useWeb3()
   const { getContract } = useContract()
   const { allPoolsUserInfo } = useGaugeData()
-  const veBoostData = useVeBoostAllGauge()
   const { GaugeList = [], allPoolsInfo, allPoolsApyInfo } = allGaugeBaseInfo
-  const { getGaugeEstimate, getGaugeApy } = useGaugeApyEstimate()
+  const { getGaugeApy } = useGaugeApyEstimate()
 
   const _newGaugeList = useMemo(() => {
     return GaugeList.filter((item) => item.gaugeType == 0)
@@ -207,7 +201,7 @@ const useGaugeController = (LIST = POOLS_LIST) => {
       const _crvPrice = getTokenPrice('CRV')
       const _cvxPrice = getTokenPrice('CVX')
       const _fxnPrice = getTokenPrice('FXN')
-      console.log('gauge--LIST---', rewardName, fxnRewardData, GaugeUserInfo)
+
       let _rewardTokenPrice = _crvPrice
       if (rewardName == 'CRV') {
         _rewardTokenNum = GaugeUserInfo?.userClaimables[0]
@@ -282,13 +276,7 @@ const useGaugeController = (LIST = POOLS_LIST) => {
           item.lpGaugeAddress,
           abi.FX_fx_SharedLiquidityGaugeABI
         )
-        console.log(
-          'gauge--LIST---_userInfo--',
-          LIST.length,
-          index,
-          _userInfo,
-          _allPoolsUserInfo[index]
-        )
+
         // FXN
         const {
           userRewardTokenClaimableRes: useFXNClaimable,

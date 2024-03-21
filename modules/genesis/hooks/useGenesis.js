@@ -1,7 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
-import { useInitialFundContract } from '@/hooks/useFXUSDContract'
+import {
+  useInitialFundContract,
+  useV2TreasuryContract,
+} from '@/hooks/useFXUSDContract'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import { useWstETH, useSfrxETH } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
@@ -12,16 +15,14 @@ import {
   dollarText,
   checkNotZoroNum,
 } from '@/utils/index'
-import { GENESIS_MAP } from '@/config/tokens'
+import { GENESIS_MAP, BASE_TOKENS_MAP } from '@/config/tokens'
 import { updateGenesis } from '@/store/slices/genesis'
 
 const useGenesis = () => {
-  const { blockNumber, currentAccount } = useWeb3()
+  const { blockNumber, _currentAccount } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
   const dispatch = useDispatch()
-  const { contract: wstETHContract } = useWstETH()
-  const { contract: sfrxETHContract } = useSfrxETH()
-
+  const getTreasuryContract = useV2TreasuryContract()
   const getInitialFundContract = useInitialFundContract()
 
   const fetchGenesisData = async (arr) => {
@@ -37,8 +38,9 @@ const useGenesis = () => {
 
         return {
           symbol: item.symbol,
+          treasury: BASE_TOKENS_MAP[item.baseSymbol].contracts.treasury,
           totalSharesRes: totalShares(),
-          sharesRes: shares(currentAccount),
+          sharesRes: shares(_currentAccount),
           fxWithdrawalEnabled: fxWithdrawalEnabled(),
           totalFTokenRes: totalFToken(),
           totalXTokenRes: totalXToken(),
@@ -48,18 +50,18 @@ const useGenesis = () => {
       const callData = await multiCallsV2(calls)
 
       const countCalls = callData.map((item) => {
-        const { sharesRes, totalSharesRes, symbol } = item
+        const { sharesRes, totalSharesRes, treasury } = item
 
-        const countFunc =
-          symbol === 'stETH'
-            ? wstETHContract.methods.getStETHByWstETH
-            : sfrxETHContract.methods.convertToAssets
+        const { getUnderlyingValue } =
+          getTreasuryContract(treasury).contract.methods
 
         return {
           totalShare: checkNotZoroNum(totalSharesRes)
-            ? countFunc(totalSharesRes)
+            ? getUnderlyingValue(totalSharesRes)
             : 0,
-          shares: checkNotZoroNum(sharesRes) ? countFunc(sharesRes) : 0,
+          shares: checkNotZoroNum(sharesRes)
+            ? getUnderlyingValue(sharesRes)
+            : 0,
         }
       })
 
@@ -109,7 +111,7 @@ const useGenesis = () => {
     useQueries({
       queries: [
         {
-          queryKey: ['genesisData', currentAccount],
+          queryKey: ['genesisData', _currentAccount],
           queryFn: () => fetchGenesisData(Object.values(GENESIS_MAP)),
         },
       ],

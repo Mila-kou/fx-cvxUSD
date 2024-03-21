@@ -2,12 +2,8 @@ import config from '@/config/index'
 
 const cryptoIcons = '/assets/crypto-icons-stack.svg'
 
-const FLogo = '/images/f-logo.svg'
-const XLogo = '/images/x-logo.svg'
-
 export const POOLS_LIST = [
   {
-    logo: FLogo,
     logo2: `/tokens/crypto-icons-stack.svg#eth`,
     icon: '/images/FXN.svg',
     subIcon: `${cryptoIcons}#crv`,
@@ -20,14 +16,12 @@ export const POOLS_LIST = [
     id: 1,
     name: 'ETH+FXN',
     platform: 'FX',
-    fromPlatformIcon: `${cryptoIcons}#crv`,
     fromPlatform: 'Curve',
     platformUrl: 'https://curve.fi/#/ethereum/pools/factory-crypto-311/deposit',
     curveType: 'curveCopyto',
     nameShow: [' ETH+FXN Curve', ' Pool'],
     gaugeType: 0,
     gaugeTypeName: 'Liquidity Gauge',
-    // lpPoolToken: config.POOLS_LIST_GAUGE.ETH_xETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.ETH_FXN.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_FXN.gauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
@@ -43,7 +37,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icon: '/images/FXN.svg',
     subIcon: `${cryptoIcons}#crv`,
     icons: [
@@ -56,7 +49,6 @@ export const POOLS_LIST = [
     id: 2,
     name: 'FXN+cvxFXN',
     platform: 'FX',
-    fromPlatformIcon: `${cryptoIcons}#crv`,
     fromPlatform: 'Curve',
     platformUrl: 'https://curve.fi/#/ethereum/pools/factory-v2-358/deposit',
     nameShow: ['FXN+cvxFXN Curve', ' Pool'],
@@ -80,7 +72,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icon: '/images/FXN.svg',
     subIcon: `${cryptoIcons}#crv`,
     icons: [
@@ -94,7 +85,6 @@ export const POOLS_LIST = [
     name: 'FXN+sdFXN',
     nameShow: ['FXN+sdFXN Curve', ' Pool'],
     platform: 'FX',
-    fromPlatformIcon: `${cryptoIcons}#crv`,
     fromPlatform: 'Curve',
     platformUrl: 'https://curve.fi/#/ethereum/pools/factory-v2-359/deposit',
     gaugeType: 0,
@@ -117,7 +107,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/gho.png' },
       {
@@ -152,7 +141,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/crvUSD.png' },
       {
@@ -187,7 +175,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/pyusd.png' },
       {
@@ -222,7 +209,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/crypto-icons-stack.svg#frax' },
       {
@@ -257,7 +243,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/dola.svg' },
       {
@@ -292,7 +277,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/mkusd.png' },
       {
@@ -327,7 +311,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/ultra.png' },
       {
@@ -362,7 +345,6 @@ export const POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     icons: [
       { icon: '/tokens/grai.png' },
       {
@@ -400,7 +382,6 @@ export const POOLS_LIST = [
 
 export const REBALANCE_GAUGE_LIST = [
   {
-    logo: FLogo,
     icon: '/images/f-logo.svg',
     icons: [
       {
@@ -410,9 +391,9 @@ export const REBALANCE_GAUGE_LIST = [
     id: 1,
     name: 'fETH - wstETH',
     platform: 'FX',
-    fromPlatformIcon: FLogo,
     fromPlatform: 'Fx',
     poolType: 'fETH',
+    baseSymbol: 'stETH',
     platformUrl: 'https://fx.aladdin.club/staking',
     curveType: 'Rebalance Pool',
     nameShow: 'Fx fETH',
@@ -429,7 +410,6 @@ export const REBALANCE_GAUGE_LIST = [
     rewardTokens: [],
   },
   {
-    logo: FLogo,
     icon: '/tokens/fxusd.svg',
     subIcon: '/tokens/steth.svg',
     icons: [
@@ -441,9 +421,9 @@ export const REBALANCE_GAUGE_LIST = [
     id: 2,
     name: 'fxUSD - wstETH',
     platform: 'FX',
-    fromPlatformIcon: `${cryptoIcons}#crv`,
     fromPlatform: 'Fx',
     poolType: 'fxUSD',
+    baseSymbol: 'wstETH',
     platformUrl: 'https://fx.aladdin.club/staking',
     nameShow: 'fxUSD wstETH Rebalance Pool',
     gaugeType: 1,
@@ -460,7 +440,6 @@ export const REBALANCE_GAUGE_LIST = [
     rewardTokens: [],
   },
   {
-    logo: FLogo,
     icon: '/tokens/fxusd.svg',
     subIcon: `${cryptoIcons}#frax`,
     icons: [
@@ -472,9 +451,9 @@ export const REBALANCE_GAUGE_LIST = [
     id: 3,
     name: 'fxUSD - sfrxETH',
     platform: 'FX',
-    fromPlatformIcon: `${cryptoIcons}#crv`,
     fromPlatform: 'Fx',
     poolType: 'fxUSD',
+    baseSymbol: 'sfrxETH',
     gaugeType: 1,
     gaugeTypeName: 'Stability Pool Gauge',
     actionRebalancePool: [
@@ -488,11 +467,40 @@ export const REBALANCE_GAUGE_LIST = [
     gaugeRewards: [config.TOKENS_INFO.fxn],
     rewardTokens: [],
   },
+  {
+    icon: '/tokens/rUSD.svg',
+    subIcon: '/tokens/eETH.svg',
+    icons: [
+      {
+        icon: '/tokens/rUSD.svg',
+        subIcon: '/tokens/eETH.svg',
+      },
+    ],
+    id: 4,
+    name: 'rUSD - weETH',
+    platform: 'FX',
+    fromPlatform: 'Fx',
+    poolType: 'rUSD',
+    baseSymbol: 'weETH',
+    platformUrl: 'https://fx.aladdin.club/staking',
+    nameShow: 'rUSD weETH Rebalance Pool',
+    gaugeType: 1,
+    gaugeTypeName: 'Stability Pool Gauge',
+    actionRebalancePool: [
+      config.contracts.rUSD_ShareableRebalancePool_weETH,
+      config.contracts.rUSD_ShareableRebalancePool_xeETH,
+    ],
+    lpAddress:
+      config.contracts.rUSD_ShareableRebalancePool_weETH_FundraiseGauge,
+    lpGaugeAddress:
+      config.contracts.rUSD_ShareableRebalancePool_weETH_FundraiseGauge,
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rewardTokens: [],
+  },
 ]
 
 export const REBALANCE_POOLS_LIST = [
   {
-    logo: FLogo,
     id: 1,
     icon: '/images/f-logo.svg',
     subIcon: '/tokens/steth.svg',
@@ -505,7 +513,7 @@ export const REBALANCE_POOLS_LIST = [
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
     infoKey: 'rebalancePoolV2_info_A',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: [config.TOKENS_INFO.wstETH],
+    rebalanceRewards: ['FXN', 'wstETH'],
     zapTokens: [
       {
         symbol: 'fETH',
@@ -517,7 +525,6 @@ export const REBALANCE_POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     id: 2,
     icon: '/images/f-logo.svg',
     subIcon: '/tokens/steth.svg',
@@ -530,7 +537,7 @@ export const REBALANCE_POOLS_LIST = [
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
     infoKey: 'rebalancePoolV2_info_B',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: [config.TOKENS_INFO.wstETH, config.TOKENS_INFO.xETH],
+    rebalanceRewards: ['FXN', 'wstETH', 'xETH'],
     zapTokens: [
       {
         symbol: 'fETH',
@@ -542,7 +549,6 @@ export const REBALANCE_POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     id: 3,
     icon: '/tokens/fxusd.svg',
     subIcon: '/tokens/steth.svg',
@@ -555,7 +561,7 @@ export const REBALANCE_POOLS_LIST = [
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_wstETH',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: [config.TOKENS_INFO.wstETH],
+    rebalanceRewards: ['FXN', 'wstETH'],
     zapTokens: [
       {
         symbol: 'fxUSD',
@@ -566,7 +572,6 @@ export const REBALANCE_POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     id: 4,
     icon: '/tokens/fxusd.svg',
     subIcon: '/tokens/steth.svg',
@@ -579,7 +584,7 @@ export const REBALANCE_POOLS_LIST = [
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_xstETH',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: [config.TOKENS_INFO.wstETH, config.TOKENS_INFO.xstETH],
+    rebalanceRewards: ['FXN', 'wstETH', 'xstETH'],
     zapTokens: [
       {
         symbol: 'fxUSD',
@@ -590,7 +595,6 @@ export const REBALANCE_POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     id: 5,
     icon: '/tokens/fxusd.svg',
     subIcon: `${cryptoIcons}#frax`,
@@ -603,7 +607,7 @@ export const REBALANCE_POOLS_LIST = [
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_sfrxETH',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: [config.TOKENS_INFO.sfrxETH],
+    rebalanceRewards: ['FXN', 'sfrxETH'],
     zapTokens: [
       {
         symbol: 'fxUSD',
@@ -614,7 +618,6 @@ export const REBALANCE_POOLS_LIST = [
     ],
   },
   {
-    logo: FLogo,
     id: 6,
     icon: '/tokens/fxusd.svg',
     subIcon: `${cryptoIcons}#frax`,
@@ -627,7 +630,7 @@ export const REBALANCE_POOLS_LIST = [
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_xfrxETH',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: [config.TOKENS_INFO.sfrxETH, config.TOKENS_INFO.xfrxETH],
+    rebalanceRewards: ['FXN', 'sfrxETH', 'xfrxETH'],
     zapTokens: [
       {
         symbol: 'fxUSD',
@@ -637,11 +640,102 @@ export const REBALANCE_POOLS_LIST = [
       },
     ],
   },
+  {
+    id: 7,
+    icon: '/tokens/rUSD.svg',
+    subIcon: '/tokens/eETH.svg',
+    baseSymbol: 'weETH',
+    gaugeType: 'boostRebalance',
+    nameShow: 'rUSD Stability Pool Redeem to weETH',
+    poolType: 'rUSD',
+    withdrawDefaultToken: 'rUSD',
+    rebalancePoolAddress: config.contracts.rUSD_ShareableRebalancePool_weETH,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_rUSD_weETH',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'weETH'],
+    zapTokens: [
+      {
+        symbol: 'rUSD',
+        address: config.tokens.rUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    id: 8,
+    icon: '/tokens/rUSD.svg',
+    subIcon: '/tokens/eETH.svg',
+    baseSymbol: 'weETH',
+    gaugeType: 'boostRebalance',
+    nameShow: 'rUSD Stability Pool Redeem to xeETH',
+    poolType: 'rUSD',
+    withdrawDefaultToken: 'rUSD',
+    rebalancePoolAddress: config.contracts.rUSD_ShareableRebalancePool_xeETH,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_rUSD_xeETH',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'weETH', 'xeETH'],
+    zapTokens: [
+      {
+        symbol: 'rUSD',
+        address: config.tokens.rUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  // {
+  //   id: 9,
+  //   icon: '/images/f-logo.svg',
+  //   subIcon: '/tokens/crypto-icons-stack.svg#cvx',
+  //   baseSymbol: 'aCVX',
+  //   gaugeType: 'boostRebalance',
+  //   nameShow: 'fCVX Stability Pool Redeem to aCVX',
+  //   poolType: 'fCVX',
+  //   withdrawDefaultToken: 'fCVX',
+  //   rebalancePoolAddress: config.contracts.ShareableRebalancePool_aCVX,
+  //   rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+  //   infoKey: 'rebalancePoolV2_info_fCVX_aCVX',
+  //   gaugeRewards: [config.TOKENS_INFO.fxn],
+  //   rebalanceRewards: ['FXN', 'aCVX'],
+  //   zapTokens: [
+  //     {
+  //       symbol: 'aCVX',
+  //       address: config.tokens.aCVX,
+  //       needZap: false,
+  //       isLp: true,
+  //     },
+  //   ],
+  // },
+  // {
+  //   id: 10,
+  //   icon: '/images/f-logo.svg',
+  //   subIcon: '/tokens/crypto-icons-stack.svg#cvx',
+  //   baseSymbol: 'aCVX',
+  //   gaugeType: 'boostRebalance',
+  //   nameShow: 'fCVX Stability Pool Redeem to xCVX',
+  //   poolType: 'fCVX',
+  //   withdrawDefaultToken: 'fCVX',
+  //   rebalancePoolAddress: config.contracts.ShareableRebalancePool_xCVX,
+  //   rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+  //   infoKey: 'rebalancePoolV2_info_fCVX_xCVX',
+  //   gaugeRewards: [config.TOKENS_INFO.fxn],
+  //   rebalanceRewards: ['FXN', 'aCVX', 'xCVX'],
+  //   zapTokens: [
+  //     {
+  //       symbol: 'aCVX',
+  //       address: config.tokens.aCVX,
+  //       needZap: false,
+  //       isLp: true,
+  //     },
+  //   ],
+  // },
 ]
 
 export const OTHER_GAUGE_LIST = [
   {
-    logo: FLogo,
     icons: [
       {
         icon: '/images/FXN.svg',

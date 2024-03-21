@@ -1,24 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { Button, InputNumber } from 'antd'
-import { useRouter, useHis } from 'next/router'
+import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import useWeb3 from '@/hooks/useWeb3'
-import config from '@/config/index'
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
-import useGlobal from '@/hooks/useGlobal'
 import Swap from '../components/Swap'
 import TokenStatistics from '../components/TokenStatistics'
 import TokenStatisticsV2 from '../components/TokenStatisticsV2'
-import Tabs from '../components/Tabs'
-import MoreCard from '../components/MoreCard'
 import styles from './styles.module.scss'
-import { ASSETS, ASSET_MAP } from '@/config/tokens'
 
 export default function SymbolPage() {
   const asset = useSelector((state) => state.asset)
   const baseToken = useSelector((state) => state.baseToken)
 
-  const { query, push } = useRouter()
+  const { query } = useRouter()
   const { symbol } = query
 
   const baseTokens = useMemo(() => {
@@ -27,10 +20,17 @@ export default function SymbolPage() {
     if (symbol === 'xstETH') return [baseToken.wstETH]
 
     if (symbol === 'xfrxETH') return [baseToken.sfrxETH]
+
+    if (symbol === 'rUSD') return [baseToken.weETH]
+
+    if (symbol === 'xeETH') return [baseToken.weETH]
+
+    if (['xCVX', 'fCVX'].includes(symbol)) return [baseToken.aCVX]
+
     return []
   }, [symbol, baseToken])
 
-  console.log('baseToken----', baseToken, baseTokens)
+  // console.log('baseToken----', baseToken, baseTokens)
 
   const isV2 = !['fETH', 'xETH'].includes(symbol)
 

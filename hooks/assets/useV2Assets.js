@@ -1,11 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
-import {
-  useV2FContract,
-  useV2XContract,
-  useV2TreasuryContract,
-} from '@/hooks/useFXUSDContract'
+import { useV2FContract, useV2XContract } from '@/hooks/useFXUSDContract'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, fb4, checkNotZoroNumOption, dollarText } from '@/utils/index'
@@ -13,17 +9,16 @@ import { ASSET_MAP } from '@/config/tokens'
 import { updateAsset } from '@/store/slices/asset'
 import useFxUSDNavs from '@/modules/assets/hooks/useFxUSDNavs'
 
-const useV2Assets = () => {
+const useV2Assets = (arr) => {
   const { blockNumber } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
   const dispatch = useDispatch()
 
   const getFContract = useV2FContract()
   const getXContract = useV2XContract()
-  const getTreasuryContract = useV2TreasuryContract()
   const { lastDayPrice } = useFxUSDNavs()
 
-  const fetchAssetsData = async (arr) => {
+  const fetchAssetsData = async () => {
     try {
       const calls = arr.map((item) => {
         const { totalSupply, nav } = (
@@ -93,7 +88,7 @@ const useV2Assets = () => {
       queries: [
         {
           queryKey: ['v2_assets'],
-          queryFn: () => fetchAssetsData([ASSET_MAP.xstETH, ASSET_MAP.xfrxETH]),
+          queryFn: () => fetchAssetsData(),
         },
       ],
     })

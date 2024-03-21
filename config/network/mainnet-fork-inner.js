@@ -17,20 +17,21 @@ const explorerUri = 'https://www.etherscan.io'
 //   label: 'Mainnet Fork',
 //   rpcUrl: 'https://apitest.aladdin.club/rpc',
 // }
-// const chainInfo = {
-//   id: '0x18653',
-//   token: 'ETH',
-//   label: 'Phalcon-fxUSD-gauge',
-//   rpcUrl:
-//     'https://rpc.phalcon.blocksec.com/rpc_4b973444c3504c3287a47b3daf0f62cb',
-// }
 const chainInfo = {
-  id: '0x1',
+  id: '0x1864e', // 99918
   token: 'ETH',
-  label: 'Phalcon-fxUSD-gauge-1',
+  label: 'online-1',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_a16e2055cf844d8c83ed13667769d7bc',
+    'https://rpc.phalcon.blocksec.com/rpc_ed3f76d88fac4cf5a1adeae87afce429',
 }
+
+// const chainInfo = {
+//   id: '0x1864c', // 99916
+//   token: 'ETH',
+//   label: 'online-2',
+//   rpcUrl:
+//     'https://rpc.phalcon.blocksec.com/rpc_21320a5eee4e4eb18eba48ad926b04d3',
+// }
 
 const contracts = {
   ...tokensInfo.contracts,
@@ -55,7 +56,6 @@ const tokens = {
 
 const TOKENS_INFO = {
   ...tokensInfo.TOKENS_INFO,
-  fETH: ['fETH', tokens.fETH, 18],
 }
 
 const POOLS_LIST_GAUGE = {
@@ -64,13 +64,6 @@ const POOLS_LIST_GAUGE = {
 
 const zapTokens = {
   ...tokensInfo.zapTokens,
-  fETH: {
-    symbol: 'fETH',
-    icon: 'eth',
-    decimals: TOKENS_INFO.fETH[2],
-    address: TOKENS_INFO.fETH[1],
-    needZap: true,
-  },
 }
 
 const gaugeTokenList = {

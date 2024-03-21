@@ -1,14 +1,11 @@
 import { useEffect, useState, useContext, useCallback, useMemo } from 'react'
-import moment from 'moment'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
-import { useGlobal } from '@/contexts/GlobalProvider'
 import useWeb3 from '@/hooks/useWeb3'
 import useVoteData from '../hooks/useVoteData'
 import useGaugeApyEstimate from '@/hooks/useGaugeApyEstimate'
 
 const useVoteController = () => {
-  const { currentAccount, isAllReady, blockTime } = useWeb3()
-  // const { allGaugeBaseInfo } = useGlobal()
+  const { blockTime } = useWeb3()
   const {
     voteInfo: { allVoteData, votePower, veFXNAmount, lastScheduled },
   } = useVoteData()
@@ -23,7 +20,7 @@ const useVoteController = () => {
     const _remainingVotes = cBN(veFXNAmount)
       .multipliedBy(100 - votePower)
       .dividedBy(100)
-    const next_time = new Date(lastScheduled * 1000).toLocaleString() // moment().format('lll')
+    const next_time = new Date(lastScheduled * 1000).toLocaleString()
 
     return {
       allocated: votePower,

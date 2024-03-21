@@ -57,7 +57,6 @@ const useFxETH = () => {
           totalSupply_text,
         }
       })
-      console.log('fetchAssetsData----', data)
       return data
     } catch (error) {
       console.log('fetchAssetsData----error', error)
