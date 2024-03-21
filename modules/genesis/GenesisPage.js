@@ -513,13 +513,13 @@ export default function GenesisPage() {
         <div className={styles.content}>
           <h2 className="flex gap-[6px]  text-[22px]">Participate</h2>
           {/* <p className="mt-[16px]">Deposit ETH</p> */}
-          <p className="text-[16px] mt-[16px] text-[var(--second-text-color)]">
+          {/* <p className="text-[16px] mt-[16px] text-[var(--second-text-color)]">
             Any deposit to either vault will be minted into 50:50 ratio of
             stable & leverage tokens for that vault. No mint fees apply!
-          </p>
-          <h2 className="flex gap-[6px] my-[16px] text-[16px]">
+          </p> */}
+          {/* <h2 className="flex gap-[6px] my-[16px] text-[16px]">
             Choose BaseToken Vault
-          </h2>
+          </h2> */}
           <Tabs
             selecedIndex={activeIndex}
             onChange={(v) => {
