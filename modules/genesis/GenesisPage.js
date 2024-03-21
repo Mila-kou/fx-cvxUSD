@@ -76,10 +76,9 @@ export default function GenesisPage() {
   //   { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.LAUNCHING }[assetSymbol]
   // )
 
-  const stage = { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.LAUNCHING }[
+  const stage = { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.FULL_LAUNCHED }[
     assetSymbol
   ]
-
   const showBonusFarming = ['fxUSD'].includes(assetSymbol)
 
   const [clearTrigger, clearInput] = useClearInput()
@@ -419,7 +418,9 @@ export default function GenesisPage() {
                 <h2 className="text-[22px]">{item.totalShares_text}</h2>
                 {stage !== STAGE.LAUNCHING && (
                   <h2 className="text-[20px] mt-[8px] text-[var(--primary-color)]">
-                    MAX APY {item.apy}
+                    {assetSymbol == 'rUSD'
+                      ? `${item.apy} + 2x Etherfi Points + Eigen Layer Points`
+                      : `MAX APY ${item.apy}`}
                   </h2>
                 )}
               </div>
@@ -532,7 +533,9 @@ export default function GenesisPage() {
               <div className="py-[6px]" key={item.symbol}>
                 <p className="text-center">{item.symbol}</p>
                 <h2 className="text-[20px] mt-[8px] text-[var(--primary-color)]">
-                  {item.apy} &nbsp;+ 2x Etherfi Points + Eigen Layer Points
+                  {assetSymbol == 'rUSD'
+                    ? `${item.apy} + 2x Etherfi Points + Eigen Layer Points`
+                    : `MAX APY ${item.apy}`}
                 </h2>
               </div>
             ))}
