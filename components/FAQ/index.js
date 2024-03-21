@@ -34,7 +34,7 @@ export default function FAQ({ open, onCancel }) {
             <div className={styles.content}>
               <h1>f(x) FAQ</h1>
 
-              <h2>1) What?</h2>
+              <h2>1) What</h2>
 
               <p>
                 Big Picture: f(x) splits yield-bearing tokens into two
@@ -101,7 +101,22 @@ export default function FAQ({ open, onCancel }) {
                 you.
               </p>
 
-              <h2>6) What’s with xETH and these other x tokens?</h2>
+              <h2>6) What’s rUSD?</h2>
+              <p>
+                rUSD is a stablecoin that uses the same mechanism as fxUSD, but
+                with its reserve comprised of only ETH Liquid Restaking Tokens
+                (LRT), starting with Ether.fi’s eETH. Even though the risk
+                profile of LRTs are different enough to LSTs that they should
+                not be included in fxUSD, restaked ETH is an excellent use-case
+                for the powerful f(x) mechanism. Stability pool depositors can
+                earn very high restaking rewards, including points, all without
+                taking ETH price exposure. In fact, since 100% of reserve points
+                flow to the rUSD stability pool, along with 50% of LST yields,
+                points accrual in the rUSD Stability Pool is much higher, dollar
+                for dollar, than holding the LST itself!
+              </p>
+
+              <h2>7) What’s with xETH and these other x tokens?</h2>
               <p>
                 xETH and its ilk provide powerful, free leverage on ETH (or
                 whichever token is in their reserve. No funding rate, very low
@@ -114,7 +129,7 @@ export default function FAQ({ open, onCancel }) {
               </p>
 
               <h2>
-                7) What the heck does “low risk of liquidation” for xETH even
+                8) What the heck does “low risk of liquidation” for xETH even
                 mean?
               </h2>
 
@@ -129,7 +144,7 @@ export default function FAQ({ open, onCancel }) {
                 incentives to restabilize the system.
               </p>
 
-              <h2>8) What risks am I taking when I hold fxUSD or fETH?</h2>
+              <h2>9) What risks am I taking when I hold fxUSD or fETH?</h2>
 
               <p>
                 f(x) headline stablecoins fETH and fxUSD were created to avoid
@@ -148,7 +163,7 @@ export default function FAQ({ open, onCancel }) {
                 <Whitepaper />.
               </p>
 
-              <h2>9) What’s a Stability Pool?</h2>
+              <h2>10) What’s a Stability Pool?</h2>
 
               <p>
                 There is one stability pool for every stable-leverage pair on
@@ -165,7 +180,7 @@ export default function FAQ({ open, onCancel }) {
                 it’s farming unstable, real yields using stable coins.
               </p>
 
-              <h2>10) How much does it cost?</h2>
+              <h2>11) How much does it cost?</h2>
 
               <p>
                 f(x) charges small minting and redemption fees which vary by
@@ -183,7 +198,7 @@ export default function FAQ({ open, onCancel }) {
               <h1>What if bad things happen?</h1>
 
               <h2>
-                11) What happens if there’s a huge flash crash in ETH price?
+                12) What happens if there’s a huge flash crash in ETH price?
               </h2>
               <p>
                 In the unlikely (&lt;0.1%; see <Whitepaper />) event of a price
@@ -200,20 +215,24 @@ export default function FAQ({ open, onCancel }) {
                 recapitalizing the protocol described in the <Whitepaper />.
               </p>
 
-              <h2>12) What happens if stETH or other LSD depegs from ETH?</h2>
+              <h2>
+                13) What happens if stETH or other LSD/LRT depegs from ETH?
+              </h2>
               <p>
                 f(x) has an automatic emergency brake built-in which protects
                 stable and leverage token holders if there is a depeg. Using
-                multiple oracle feeds f(x) can determine if the price of an LSD
-                has diverged more than 1% from the price of ETH, and if so
-                minting with it is (temporarily) disabled. Redemptions remain
-                enabled (as always), however fETH redemptions use the higher of
-                the two divergent prices (ETH or LSD) and xETH redemptions use
-                the lower. When the stETH peg normalizes, minting resumes. This
-                mechanism ensures fETH and xETH holders are protected, and
-                ensures that{' '}
+                multiple oracle feeds f(x) can determine if the price of a
+                liquid staked/restaked derivative has diverged more than 1% from
+                the price of ETH, and if so minting with it is (temporarily)
+                disabled. Redemptions remain enabled (as always), however
+                stable-side (f token) redemptions use the higher of the two
+                divergent prices (ETH or LSD) and leverage-side (x token)
+                redemptions use the lower. When the peg normalizes, minting
+                resumes. This mechanism ensures f and x token holders are
+                protected, and ensures that{' '}
                 <b>
-                  no urgent action is ever needed in the event of an LSD depeg
+                  no urgent action is ever needed in the event of an LSD or LRT
+                  depeg
                 </b>
                 .
               </p>
