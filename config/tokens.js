@@ -117,6 +117,7 @@ export const contracts = {
     '0x81243a88Dd9Fb963c643bD3f2194c2cA9CCFc428',
 
   aladdinTreeAddress: '0xabc6a4e345801cb5f57629e79cd5eb2e9e514e98',
+  PlatformFeeBurnerAddress: '0x6440e21A3634C319c69CEf8d17601DBC4E97C3dB',
 
   // fxUSD
   FxUSD: '0x085780639CC2cACd35E474e71f4d000e2405d8f6',

@@ -88,8 +88,11 @@ const useInfo = (refreshTrigger) => {
       userVeRewards3,
       userVeRewards4,
       platformFeeSpliterStETH,
+      PlatformFeeBurnerStETH,
       platformFeeSpliterSfrxETH,
+      PlatformFeeBurnerSfrxETH,
       platformFeeSpliterwstETH,
+      PlatformFeeBurnerwstETH,
       veFXNFeeTokenLastBalance,
       stETHTowstETHRate,
     } = info
@@ -168,12 +171,27 @@ const useInfo = (refreshTrigger) => {
               .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
           .plus(
+            cBN(PlatformFeeBurnerStETH)
+              .times(platformFeeSpliterStETH_rewardRate)
+              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
+          )
+          .plus(
             cBN(_PlatformFeeSfrxETHToWstETHNum).times(
               platformFeeSpliterStETH_rewardRate
             )
           )
           .plus(
+            cBN(PlatformFeeBurnerSfrxETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
+          .plus(
             cBN(platformFeeSpliterwstETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
+          .plus(
+            cBN(PlatformFeeBurnerwstETH).times(
               platformFeeSpliterStETH_rewardRate
             )
           )
@@ -186,12 +204,27 @@ const useInfo = (refreshTrigger) => {
               .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
           )
           .plus(
+            cBN(PlatformFeeBurnerStETH)
+              .times(platformFeeSpliterStETH_rewardRate)
+              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
+          )
+          .plus(
             cBN(_PlatformFeeSfrxETHToWstETHNum).times(
               platformFeeSpliterStETH_rewardRate
             )
           )
           .plus(
+            cBN(PlatformFeeBurnerSfrxETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
+          .plus(
             cBN(platformFeeSpliterwstETH).times(
+              platformFeeSpliterStETH_rewardRate
+            )
+          )
+          .plus(
+            cBN(PlatformFeeBurnerwstETH).times(
               platformFeeSpliterStETH_rewardRate
             )
           )

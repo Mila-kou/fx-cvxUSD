@@ -73,11 +73,20 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.tokens_per_week(thisWeekTimestamp),
         veFXNFeeContract.methods.tokens_per_week(preWeekTimestamp),
         stETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
+        stETHContract.methods.balanceOf(
+          config.contracts.PlatformFeeBurnerAddress
+        ),
         sfrxETHContract.methods.balanceOf(
           config.contracts.fx_PlatformFeeSpliter
         ),
+        sfrxETHContract.methods.balanceOf(
+          config.contracts.PlatformFeeBurnerAddress
+        ),
         wstETHContract.methods.balanceOf(
           config.contracts.fx_PlatformFeeSpliter
+        ),
+        wstETHContract.methods.balanceOf(
+          config.contracts.PlatformFeeBurnerAddress
         ),
         wstETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
         veFXNFeeContract.methods.token_last_balance(),
@@ -93,8 +102,11 @@ const useData = (refreshTrigger) => {
         tokensThisWeek,
         tokensPerWeek,
         platformFeeSpliterStETH,
+        PlatformFeeBurnerStETH,
         platformFeeSpliterSfrxETH,
+        PlatformFeeBurnerSfrxETH,
         platformFeeSpliterwstETH,
+        PlatformFeeBurnerwstETH,
         feeBalance,
         veFXNFeeTokenLastBalance,
         userVeRewards,
@@ -110,8 +122,11 @@ const useData = (refreshTrigger) => {
       //   tokensThisWeek,
       //   tokensPerWeek,
       //   platformFeeSpliterStETH,
+      //   PlatformFeeBurnerStETH,
       //   platformFeeSpliterSfrxETH,
+      //   PlatformFeeBurnerSfrxETH,
       //   platformFeeSpliterwstETH,
+      //   PlatformFeeBurnerwstETH,
       //   feeBalance,
       //   veFXNFeeTokenLastBalance,
       //   userVeRewards,
@@ -142,8 +157,11 @@ const useData = (refreshTrigger) => {
           fxnCirculationSupply,
           userLocked: { amount, end: moment(end * 1000).unix() },
           platformFeeSpliterStETH,
+          PlatformFeeBurnerStETH,
           platformFeeSpliterSfrxETH,
+          PlatformFeeBurnerSfrxETH,
           platformFeeSpliterwstETH,
+          PlatformFeeBurnerwstETH,
           veFXNFeeTokenLastBalance,
           stETHTowstETHRate,
         }
