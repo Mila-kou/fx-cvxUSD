@@ -30,6 +30,7 @@ const useGauge = () => {
     vote_user_power,
     last_user_vote,
     get_gauge_weight,
+    gauge_relative_weight_write,
     gauge_relative_weight,
     checkpoint_gauge,
     time_total,
@@ -73,6 +74,9 @@ const useGauge = () => {
             baseGaugeControllerInfo: {
               // checkpoint_gauge: checkpoint_gauge(item.lpGaugeAddress),
               gauge_weight: get_gauge_weight(item.lpGaugeAddress),
+              gauge_relative_weight_write: gauge_relative_weight_write(
+                item.lpGaugeAddress
+              ),
               this_week_gauge_weight: gauge_relative_weight(
                 item.lpGaugeAddress,
                 currentTimes
