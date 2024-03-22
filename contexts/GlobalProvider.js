@@ -23,6 +23,7 @@ import useV2Assets from '@/hooks/assets/useV2Assets'
 import useBaseToken from '@/hooks/assets/useBaseToken'
 import { ASSET_MAP, BASE_TOKENS_MAP } from '@/config/tokens'
 import useGauge from '@/hooks/useGauge'
+import useSignCode from '@/hooks/useSignCode'
 
 const GlobalContext = createContext(null)
 
@@ -55,6 +56,8 @@ function GlobalProvider({ children }) {
 
   const fx_info = useInfo()
   const allGaugeBaseInfo = useGauge()
+
+  useSignCode()
 
   const [
     { data: ConvexVaultsAPY, refetch: refetch3 },

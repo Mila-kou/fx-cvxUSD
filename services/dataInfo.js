@@ -1,3 +1,4 @@
+import axios from 'axios'
 import config from '@/config/index'
 import fetcher from '@/utils/fetcher'
 
@@ -28,3 +29,20 @@ export const getFX_cvxFXN_sdFXN_apy = () =>
   fetcher(`${_fetchUrl}/api1/getFX_cvxFXN_sdFXN_apy`)
     .then((res) => res.data)
     .catch(() => ({}))
+
+export const getCodeList = () =>
+  fetcher(`${_fetchUrl}/api1/get_inviteCode`)
+    .then((res) => res.data)
+    .catch(() => [])
+
+export const getInviteUser = (signerAddress) =>
+  fetcher({
+    url: `${_fetchUrl}/api1/get_inviteUser`,
+    params: {
+      signerAddress,
+    },
+  })
+    .then((res) => res.data)
+    .catch(() => null)
+
+export const invite = (data) => axios.post(`${_fetchUrl}/api1/invite`, data)

@@ -134,6 +134,16 @@ function Web3ContextProvider({ children }) {
     [currentAccount, wallet]
   )
 
+  const signMessage = useCallback(
+    async (msg) => {
+      const ethersProvider = new ethers.BrowserProvider(wallet.provider, 'any')
+
+      const signer = await ethersProvider.getSigner(currentAccount)
+      return signer.signMessage(msg)
+    },
+    [currentAccount, wallet]
+  )
+
   const value = useMemo(
     () => ({
       web3,
@@ -154,6 +164,7 @@ function Web3ContextProvider({ children }) {
       settingChain,
       isAllowChain,
       sendTransaction,
+      signMessage,
     }),
     [
       web3,
@@ -173,6 +184,7 @@ function Web3ContextProvider({ children }) {
       settingChain,
       isAllowChain,
       sendTransaction,
+      signMessage,
     ]
   )
 
