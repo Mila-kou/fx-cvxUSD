@@ -22,8 +22,8 @@ export const get1inchParams = (params) => {
 
   return axios.get(`${INCH_HOST}/swap`, {
     headers: {
-      Authorization: 'Bearer jKzO36s1w1XN7DeRYOByvKfFTfvMV9A5',
-      // Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
+      // Authorization: 'Bearer jKzO36s1w1XN7DeRYOByvKfFTfvMV9A5',
+      Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
       'Cache-Control': 'no-cache',
 
       accept: 'application/json',
