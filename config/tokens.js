@@ -737,6 +737,7 @@ export const ASSET_MAP = {
     icon: '/tokens/rUSD.svg',
     isF: true,
     isShow24Change: false,
+    isBreakdownChart: true,
     background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
     baseSymbol: 'weETH',
     baseTokenInfos: [BASE_TOKENS_MAP.weETH],

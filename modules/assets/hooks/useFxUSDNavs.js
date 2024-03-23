@@ -7,24 +7,27 @@ const query = `
     query MyQuery {
       navs(first: 168, orderBy: timestamp, orderDirection: desc) {
         id
-        fxUSD_nav
-        xstETH_nav
-        xfrxETH_nav
-        wstETH_totalBaseToken
-        wstETH_price
-        sfrxETH_totalBaseToken
-        sfrxETH_price
         timestamp
+        assets(first: 100) {
+          symbol
+          nav
+        }
+        baseTokens(first: 100) {
+          symbol
+          price
+          collateralRatio
+          totalBaseToken
+        }
       }
     }
     `
 
 export default function useFxUSDNavs() {
   const { data, isSuccess } = useQuery({
-    queryKey: ['fxUSD-navs'],
+    queryKey: ['fx-assets'],
     queryFn: async () =>
       request(
-        'https://api.thegraph.com/subgraphs/name/aladdindaogroup/fxusd-navs',
+        'https://api.thegraph.com/subgraphs/name/aladdindaogroup/fx-assets',
         query
       ).then((res) => res.navs.reverse()),
   })
@@ -33,61 +36,52 @@ export default function useFxUSDNavs() {
     const res = {
       navList: {
         fxUSD: [],
+        rUSD: [],
         xstETH: [],
         xfrxETH: [],
+        xeETH: [],
       },
       totalBaseTokenList: {
         wstETH: [],
         sfrxETH: [],
+        weETH: [],
       },
       lastDayPrice: {
         xstETH: '',
         xfrxETH: '',
+        xeETH: '',
       },
       dateList: [],
     }
     if (isSuccess) {
-      data.forEach(
-        ({
-          fxUSD_nav,
-          xstETH_nav,
-          xfrxETH_nav,
-          wstETH_totalBaseToken,
-          wstETH_price,
-          sfrxETH_totalBaseToken,
-          sfrxETH_price,
-          timestamp,
-        }) => {
-          res.navList.fxUSD.push(fb4(cBN(fxUSD_nav)))
-          res.navList.xstETH.push(fb4(cBN(xstETH_nav)))
-          res.navList.xfrxETH.push(fb4(cBN(xfrxETH_nav)))
+      data.forEach(({ assets, baseTokens, timestamp }) => {
+        Object.keys(res.navList).forEach((key) => {
+          const asset = assets.find((item) => item.symbol === key)
+          res.navList[key].push(fb4(cBN(asset.nav)))
+        })
 
-          const _totalUSD_wstETH = checkNotZoroNum(wstETH_totalBaseToken)
-            ? cBN(wstETH_totalBaseToken)
-                .multipliedBy(cBN(wstETH_price).div(1e18))
-                .toFixed(0, 1)
-            : '0'
-
-          res.totalBaseTokenList.wstETH.push(_totalUSD_wstETH.replace(/,/g, ''))
-
-          const _totalUSD_sfrxETH = checkNotZoroNum(sfrxETH_totalBaseToken)
-            ? cBN(sfrxETH_totalBaseToken)
-                .multipliedBy(cBN(sfrxETH_price).div(1e18))
-                .toFixed(0, 1)
-            : '0'
-
-          res.totalBaseTokenList.sfrxETH.push(
-            _totalUSD_sfrxETH.replace(/,/g, '')
+        Object.keys(res.totalBaseTokenList).forEach((key) => {
+          const { totalBaseToken, price } = baseTokens.find(
+            (item) => item.symbol === key
           )
+          const _totalUSD = checkNotZoroNum(totalBaseToken)
+            ? cBN(totalBaseToken)
+                .multipliedBy(cBN(price).div(1e18))
+                .toFixed(0, 1)
+            : '0'
 
-          res.dateList.push(timestamp)
-        }
-      )
+          res.totalBaseTokenList[key].push(_totalUSD.replace(/,/g, ''))
+        })
+
+        res.dateList.push(timestamp)
+      })
 
       const lastDay = data[data.length - 25]
       if (lastDay) {
-        res.lastDayPrice.xstETH = lastDay.xstETH_nav
-        res.lastDayPrice.xfrxETH = lastDay.xfrxETH_nav
+        Object.keys(res.lastDayPrice).forEach((key) => {
+          const asset = lastDay.assets.find((item) => item.symbol === key)
+          res.lastDayPrice[key] = asset.nav
+        })
       }
     }
 

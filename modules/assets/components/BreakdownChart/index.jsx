@@ -9,8 +9,7 @@ const ReactECharts = dynamic(() => import('echarts-for-react'), {
 
 export default function BreakdownChart({ assetInfo, dateList, baseTokens }) {
   const ref = useRef(null)
-  const { symbol, address } = assetInfo
-  const { wstETH, sfrxETH } = baseTokens
+  const { symbol, address, baseTokenInfos } = assetInfo
 
   const option = {
     grid: { top: 8, right: 0, bottom: 22, left: 36 },
@@ -52,34 +51,32 @@ export default function BreakdownChart({ assetInfo, dateList, baseTokens }) {
         },
       },
     },
-    series: [
-      {
-        data: wstETH,
-        type: 'bar',
-        stack: 'total',
-        symbol: 'none',
-      },
-      {
-        data: sfrxETH,
-        type: 'bar',
-        stack: 'total',
-        symbol: 'none',
-      },
-    ],
+    series: baseTokenInfos.map((item) => ({
+      data: baseTokens[item.baseSymbol],
+      type: 'bar',
+      stack: 'total',
+      symbol: 'none',
+    })),
     tooltip: {
       trigger: 'axis',
       formatter: (params) => {
-        console.log('params----', params)
-        const { axisValue, value } = params[0]
-        const { value: value_s } = params[1]
+        let valueStr = ''
+        params.forEach((item, index) => {
+          const { value } = item
+          valueStr += `${baseTokenInfos[index].baseSymbol}: $${fb4(
+            value
+          )} <br /> `
+        })
+
+        const { axisValue } = params[0]
         const time = new Date(axisValue * 1000)
         const _time = `${time.getFullYear()}-${
           time.getMonth() + 1
         }-${time.getDate()} ${time.getHours()}:00:00`
+
         return `${_time} <br />
         Backed Asset: <br /> 
-        stETH: $${fb4(value)} <br />  
-        frxETH: $${fb4(value_s)} 
+        ${valueStr}
         `
       },
     },
