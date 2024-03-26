@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, formatBalance, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
@@ -132,7 +132,7 @@ export default function RedeemF({ slippage, assetInfo }) {
       .multipliedBy(100)
       .toString(10)
 
-    return fb4(_fee)
+    return formatBalance(_fee)
   }, [isCRLow130, isSwap])
 
   const hanldeFromAmountChanged = (v) => {

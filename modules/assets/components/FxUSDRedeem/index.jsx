@@ -8,7 +8,7 @@ import config from '@/config/index'
 import {
   cBN,
   checkNotZoroNum,
-  checkNotZoroNumOption,
+  formatBalance,
   fb4,
   numberLess,
 } from '@/utils/index'
@@ -159,7 +159,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       .multipliedBy(100)
       .toString(10)
 
-    return fb4(_fee)
+    return formatBalance(_fee)
   }, [isCRLow130, isSwap])
 
   const hanldeFromAmountChanged = (v) => {

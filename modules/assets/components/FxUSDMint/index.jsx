@@ -6,7 +6,7 @@ import { Switch } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, formatBalance, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -267,7 +267,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         .multipliedBy(100)
         .toString(10)
     }
-    return fb4(_fee)
+    return formatBalance(_fee)
   }, [isF, isCRLow130, isSwap])
 
   const hanldeETHAmountChanged = (v) => {

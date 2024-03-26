@@ -4,7 +4,13 @@ import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
-import { cBN, checkNotZoroNum, fb4, numberLess } from '@/utils/index'
+import {
+  cBN,
+  checkNotZoroNum,
+  fb4,
+  numberLess,
+  formatBalance,
+} from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -199,7 +205,7 @@ export default function MintX({ slippage, assetInfo }) {
         .multipliedBy(100)
         .toString(10)
     }
-    return fb4(_fee)
+    return formatBalance(_fee)
   }, [isF, isCRLow130, isSwap])
 
   const hanldeETHAmountChanged = (v) => {
