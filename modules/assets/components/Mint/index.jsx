@@ -6,7 +6,7 @@ import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 
-import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -17,12 +17,16 @@ import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 import { useFx_FxGateway } from '@/hooks/useContracts'
 import useCurveSwap from '@/hooks/useCurveSwap'
+import useOutAmount from '../../hooks/useOutAmount'
 
 export default function Mint({ slippage, assetInfo }) {
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const [clearTrigger, clearInput] = useClearInput()
   const { getCurveSwapABI, getCurveSwapMinout } = useCurveSwap()
+
+  const { updateOutAmount, resetOutAmount, minOutAmount } =
+    useOutAmount(slippage)
 
   const { isF, isX, symbol: toSymbol, nav_text, leverage_text } = assetInfo
 
@@ -42,11 +46,7 @@ export default function Mint({ slippage, assetInfo }) {
   const minGas = 234854
   const [fromAmount, setFromAmount] = useState(0)
   const [mintXBouns, setMintXBouns] = useState(0)
-  const [minOutAmount, setMinOutAmount] = useState({
-    minout_slippage: 0,
-    minout_ETH: 0,
-    minout_slippage_tvl: 0,
-  })
+
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
   const {
@@ -264,83 +264,33 @@ export default function Mint({ slippage, assetInfo }) {
       }
       console.log('minout_ETH----', minout_ETH)
 
-      let _minOut_CBN = cBN(0)
       // 比例计算
       minout_ETH *= _mockRatio
+
+      let _minOut = 0
+
       if (isF) {
         minout_ETH = BigNumber.min(
           maxMintableFTokenRes?._maxFTokenMintable,
           minout_ETH
         )
 
-        _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-          cBN(1).minus(cBN(slippage).dividedBy(100))
-        )
-
-        const _minOut_fETH_tvl = fb4(
-          _minOut_CBN.multipliedBy(fnav).toString(10)
-        )
-
-        console.log(
-          'maxMintableFTokenRes----',
-          maxMintableFTokenRes,
-          fb4(_minOut_CBN.toString(10))
-        )
-        setMinOutAmount({
-          minout_ETH: checkNotZoroNumOption(
-            minout_ETH,
-            fb4(minout_ETH.toString(10))
-          ),
-          minout_slippage: fb4(_minOut_CBN.toString(10)),
-          minout_slippage_tvl: _minOut_fETH_tvl,
-        })
+        _minOut = updateOutAmount(minout_ETH, fnav)
       } else {
         if (!checkNotZoroNum(minout_ETH)) {
           const { _xTokenMinted } = minout_ETH || {}
-          _minOut_CBN = (cBN(_xTokenMinted) || cBN(0)).multipliedBy(
-            cBN(1).minus(cBN(slippage).dividedBy(100))
-          )
 
-          const _minOut_xETH_tvl = fb4(
-            _minOut_CBN.multipliedBy(xnav).toString(10)
-          )
-
-          setMinOutAmount({
-            minout_ETH: checkNotZoroNumOption(
-              _xTokenMinted,
-              fb4(_xTokenMinted.toString(10))
-            ),
-            minout_slippage: fb4(_minOut_CBN.toString(10)),
-            minout_slippage_tvl: _minOut_xETH_tvl,
-          })
+          _minOut = updateOutAmount(_xTokenMinted, xnav)
         } else {
-          _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-            cBN(1).minus(cBN(slippage).dividedBy(100))
-          )
-
-          const _minOut_xETH_tvl = fb4(
-            _minOut_CBN.multipliedBy(xnav).toString(10)
-          )
-          setMinOutAmount({
-            minout_ETH: checkNotZoroNumOption(
-              minout_ETH,
-              fb4(minout_ETH.toString(10))
-            ),
-            minout_slippage: fb4(_minOut_CBN.toString(10)),
-            minout_slippage_tvl: _minOut_xETH_tvl,
-          })
+          _minOut = updateOutAmount(minout_ETH, xnav)
         }
       }
 
       setPriceLoading(false)
-      return _minOut_CBN.toFixed(0, 1)
+      return _minOut
     } catch (error) {
       console.log('minout_ETH--error----', error)
-      setMinOutAmount({
-        minout_ETH: 0,
-        minout_slippage: 0,
-        minout_slippage_tvl: 0,
-      })
+      resetOutAmount()
       setPriceLoading(false)
       if (error?.message && error.message.includes('Exceed total cap')) {
         noPayableErrorAction(`error_mint`, 'Exceed total cap')
@@ -540,7 +490,7 @@ export default function Mint({ slippage, assetInfo }) {
       cBN(fromAmount).isLessThanOrEqualTo(tokens[symbol].balance) &&
       cBN(fromAmount).isGreaterThan(0)
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
-    return !mintPaused && _enableETH && minOutAmount.minout_ETH !== '-'
+    return !mintPaused && _enableETH && minOutAmount.minout !== '-'
   }, [
     fromAmount,
     mintPaused,
@@ -603,7 +553,7 @@ export default function Mint({ slippage, assetInfo }) {
           false,
           config.zapTokens[symbol].decimals
         )}
-        usd={`$${fromUsd}`}
+        usd={fromUsd}
         maxAmount={tokens[symbol].balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
@@ -617,9 +567,8 @@ export default function Mint({ slippage, assetInfo }) {
         <BalanceInput
           symbol="fETH"
           color="blue"
-          placeholder={
-            checkNotZoroNum(fromAmount) ? minOutAmount.minout_ETH : '-'
-          }
+          placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
+          amountUSD={minOutAmount.minout_tvl}
           disabled
           className={styles.inputItem}
           usd={nav_text}
@@ -631,9 +580,8 @@ export default function Mint({ slippage, assetInfo }) {
           symbol="xETH"
           // tip="Bonus+"
           color="red"
-          placeholder={
-            checkNotZoroNum(fromAmount) ? minOutAmount.minout_ETH : '-'
-          }
+          placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
+          amountUSD={minOutAmount.minout_tvl}
           disabled
           className={styles.inputItem}
           usd={nav_text}

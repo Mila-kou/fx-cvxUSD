@@ -116,7 +116,9 @@ export default function AssetsPage() {
       totalBaseTokenUSD = totalBaseTokenUSD.plus(
         checkNotZoroNum(data.totalBaseTokenRes)
           ? cBN(data.totalBaseTokenRes)
-              .multipliedBy(cBN(data.prices.inMint))
+              .multipliedBy(
+                cBN(data?.prices?.inMint || cBN(data?._baseNav).div(1e18))
+              )
               .toFixed(0, 1)
           : 0
       )
@@ -140,6 +142,20 @@ export default function AssetsPage() {
     <>
       <div className={styles.container}>
         <div className={styles.header}>
+          <div className="flex justify-between mb-[24px]">
+            <p>
+              Total Reserve Asset Value:{' '}
+              <span className="text-[var(--blue-color)] text-[20px] ml-2">
+                $
+                {getTotalBaseTokenUSD([
+                  wstETH,
+                  sfrxETH,
+                  weETH,
+                  { data: fETH },
+                ]) || '-'}
+              </span>
+            </p>
+          </div>
           <div className={styles.items}>
             {LIST.map((item) => (
               <div className={styles.item} key={item.symbol}>

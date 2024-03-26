@@ -23,6 +23,7 @@ import {
   useFXUSD_contract,
 } from '@/hooks/useFXUSDContract'
 import { getZapOutParams } from '@/hooks/useZap'
+import useOutAmount from '../../hooks/useOutAmount'
 
 export default function RUSDRedeem({ slippage, assetInfo }) {
   const { _currentAccount, sendTransaction } = useWeb3()
@@ -125,10 +126,9 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
 
   const [fromAmount, setFromAmount] = useState(0)
   const [priceLoading, setPriceLoading] = useState(false)
-  const [minOutETHtAmount, setMinOutETHtAmount] = useState({
-    minout_slippage: 0,
-    minout_slippage_tvl: 0,
-  })
+
+  const { updateOutAmount, resetOutAmount, minOutAmount, getMinOutBySlippage } =
+    useOutAmount(slippage)
 
   const [selectTokenAddress, tokenAmount] = useMemo(() => {
     let _tokenAmount = 0
@@ -144,11 +144,11 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
 
   const canReceived = useMemo(() => {
     if (priceLoading) return false
-    if (!minOutETHtAmount.minout_slippage) return false
+    if (!minOutAmount.minout_slippage) return false
     return cBN(tokenAmount).isLessThanOrEqualTo(tokens.rUSD.balance)
   }, [
     tokenAmount,
-    minOutETHtAmount.minout_slippage,
+    minOutAmount.minout_slippage,
     tokens.rUSD.balance,
     priceLoading,
   ])
@@ -240,7 +240,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
     _enableETH =
       _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.rUSD.balance)
 
-    return _enableETH && (needApprove || minOutETHtAmount.minout_ETH)
+    return _enableETH && (needApprove || minOutAmount.minout)
   }, [
     tokenAmount,
     redeemPaused,
@@ -248,7 +248,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
     fTokenMintPausedInStabilityMode,
     xTokenRedeemPausedInStabilityMode,
     tokens.rUSD.balance,
-    minOutETHtAmount,
+    minOutAmount,
     priceLoading,
     needApprove,
   ])
@@ -266,20 +266,12 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
   const initPage = () => {
     setFromAmount(0)
     clearInput()
-    setMinOutETHtAmount({
-      minout_ETH: '-',
-      minout_slippage: 0,
-      minout_slippage_tvl: 0,
-    })
+    resetOutAmount()
     setBonus([])
   }
 
   useEffect(() => {
-    setMinOutETHtAmount({
-      minout_ETH: '-',
-      minout_slippage: 0,
-      minout_slippage_tvl: 0,
-    })
+    resetOutAmount()
     setBonus([])
   }, [symbol])
 
@@ -374,25 +366,11 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
       // 比例计算
       minout_ETH *= _mockRatio
 
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
+      const _minOut = updateOutAmount(
+        minout_ETH,
+        toUsd,
+        config.zapTokens[symbol].decimals
       )
-      setMinOutETHtAmount({
-        minout_ETH: checkNotZoroNumOption(
-          minout_ETH,
-          fb4(minout_ETH.toString(10), false, config.zapTokens[symbol].decimals)
-        ),
-        minout_slippage: fb4(
-          _minOut_CBN.toString(10),
-          false,
-          config.zapTokens[symbol].decimals
-        ),
-        minout_slippage_tvl: fb4(
-          _minOut_CBN.multipliedBy(toUsd).toString(10),
-          false,
-          config.zapTokens[symbol].decimals
-        ),
-      })
 
       setBonus(
         __bonus.map((item) => ({
@@ -403,17 +381,12 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
       setPriceLoading(false)
 
       const _min_baseOuts = min_baseOuts.map((item) =>
-        (cBN(item) || cBN(0))
-          .multipliedBy(cBN(1).minus(cBN(slippage).dividedBy(100)))
-          .toFixed(0, 1)
+        getMinOutBySlippage(item)
       )
-      return [_minOut_CBN.toFixed(0, 1), _min_baseOuts]
+
+      return [_minOut, _min_baseOuts]
     } catch (error) {
-      setMinOutETHtAmount({
-        minout_ETH: 0,
-        minout_slippage: 0,
-        minout_slippage_tvl: 0,
-      })
+      resetOutAmount()
       setBonus([])
       setPriceLoading(false)
       // if (
@@ -541,9 +514,10 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
 
       <BalanceInput
         symbol={symbol}
-        placeholder={minOutETHtAmount.minout_ETH}
+        placeholder={minOutAmount.minout}
+        amountUSD={minOutAmount.minout_tvl}
         decimals={config.zapTokens[symbol].decimals}
-        usd={`$${toUsd}`}
+        usd={toUsd}
         disabled
         loading={priceLoading}
         className={styles.inputItem}
@@ -559,8 +533,8 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
         <DetailCell
           title="Min. Received:"
           content={[
-            minOutETHtAmount.minout_slippage,
-            minOutETHtAmount.minout_slippage_tvl,
+            minOutAmount.minout_slippage,
+            minOutAmount.minout_slippage_tvl,
           ]}
         />
       )}

@@ -46,7 +46,7 @@ export default function AssetCell({ info }) {
           ) : (
             <div>
               <p className="text-[16px]">{marketCap_text}</p>
-              {!['fxUSD', ' rUSD'].includes(info.symbol) ? (
+              {!['fxUSD', 'rUSD'].includes(info.symbol) ? (
                 <p className="text-[14px] mt-[4px] text-[var(--third-text-color)]">
                   {totalSupply_text}
                 </p>

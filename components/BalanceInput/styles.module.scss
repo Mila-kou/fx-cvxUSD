@@ -81,10 +81,12 @@
   }
 
   .right {
+    text-align: end;
     .balanceWrap {
+      padding-top: 4px;
       font-size: 16px;
       text-align: end;
-      color: var(--second-text-color);
+      color: var(--third-text-color);
       .max {
         @include max-button;
         margin-left: 10px;

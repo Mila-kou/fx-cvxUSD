@@ -17,6 +17,7 @@ import {
   useFxUSD_GatewayRouter_contract,
   useV2MarketContract,
 } from '@/hooks/useFXUSDContract'
+import useOutAmount from '../../hooks/useOutAmount'
 
 const MINT_OPTIONS = {
   fCVX: [
@@ -65,11 +66,9 @@ export default function MintF({ slippage, assetInfo }) {
   const minGas = 234854
   const [fromAmount, setFromAmount] = useState(0)
 
-  const [minOutAmount, setMinOutAmount] = useState({
-    minout_slippage: 0,
-    minout_ETH: 0,
-    minout_slippage_tvl: 0,
-  })
+  const { updateOutAmount, resetOutAmount, minOutAmount } =
+    useOutAmount(slippage)
+
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
 
@@ -261,28 +260,13 @@ export default function MintF({ slippage, assetInfo }) {
       // 比例计算
       minout_ETH *= _mockRatio
 
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
-      )
-      const _minOut_fETH_tvl = fb4(_minOut_CBN.multipliedBy(1).toString(10))
-      setMinOutAmount({
-        minout_ETH: checkNotZoroNumOption(
-          minout_ETH,
-          fb4(minout_ETH.toString(10))
-        ),
-        minout_slippage: fb4(_minOut_CBN.toString(10)),
-        minout_slippage_tvl: _minOut_fETH_tvl,
-      })
+      const _minOut = updateOutAmount(minout_ETH, 1)
 
       setPriceLoading(false)
-      return _minOut_CBN.toFixed(0, 1)
+      return _minOut
     } catch (error) {
       console.log('fxMintFxUSD--finnal--error--', _account, error)
-      setMinOutAmount({
-        minout_ETH: 0,
-        minout_slippage: 0,
-        minout_slippage_tvl: 0,
-      })
+      resetOutAmount()
       setPriceLoading(false)
       return [0]
     }
@@ -404,7 +388,7 @@ export default function MintF({ slippage, assetInfo }) {
 
     if (needApprove && _enableETH) return true
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
-    return !mintPaused && _enableETH && minOutAmount.minout_ETH !== '-'
+    return !mintPaused && _enableETH && minOutAmount.minout !== '-'
   }, [
     fromAmount,
     mintPaused,
@@ -435,7 +419,7 @@ export default function MintF({ slippage, assetInfo }) {
       return baseTokenData?.baseTokenPrices?.inMint
     }
     if (baseList.includes(symbol)) {
-      return baseTokenData.data?.prices?.inMint
+      return baseTokenData?.prices?.inMint
     }
     return tokens[symbol].price
   }, [symbol, tokens, baseSymbol, baseTokenData])
@@ -451,7 +435,7 @@ export default function MintF({ slippage, assetInfo }) {
           false,
           config.zapTokens[symbol].decimals
         )}
-        usd={`$${fromUsd || '-'}`}
+        usd={fromUsd}
         maxAmount={tokens[symbol].balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
@@ -464,9 +448,8 @@ export default function MintF({ slippage, assetInfo }) {
       <BalanceInput
         symbol={toSymbol}
         color="blue"
-        placeholder={
-          checkNotZoroNum(fromAmount) ? minOutAmount.minout_ETH : '-'
-        }
+        placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
+        amountUSD={minOutAmount.minout_tvl}
         disabled
         className={styles.inputItem}
         usd={nav_text}

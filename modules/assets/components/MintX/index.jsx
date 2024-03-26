@@ -4,13 +4,7 @@ import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
-import {
-  cBN,
-  checkNotZoroNum,
-  checkNotZoroNumOption,
-  fb4,
-  numberLess,
-} from '@/utils/index'
+import { cBN, checkNotZoroNum, fb4, numberLess } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
@@ -23,6 +17,7 @@ import {
   useFxUSD_GatewayRouter_contract,
 } from '@/hooks/useFXUSDContract'
 import { useZapIn } from '@/hooks/useZap'
+import useOutAmount from '../../hooks/useOutAmount'
 
 const MINT_OPTIONS = {
   xstETH: [
@@ -68,6 +63,9 @@ export default function MintX({ slippage, assetInfo }) {
   const getMarketContract = useV2MarketContract()
   const { getZapInParams } = useZapIn()
 
+  const { updateOutAmount, resetOutAmount, minOutAmount } =
+    useOutAmount(slippage)
+
   const {
     isF,
     symbol: toSymbol,
@@ -95,11 +93,6 @@ export default function MintX({ slippage, assetInfo }) {
   const [fromAmount, setFromAmount] = useState(0)
   const [mintXBouns, setMintXBouns] = useState(0)
 
-  const [minOutAmount, setMinOutAmount] = useState({
-    minout_slippage: 0,
-    minout_ETH: 0,
-    minout_slippage_tvl: 0,
-  })
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
   const {
@@ -283,30 +276,17 @@ export default function MintX({ slippage, assetInfo }) {
       // 比例计算
       minout_ETH *= _mockRatio
 
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
+      const _minout = updateOutAmount(
+        minout_ETH,
+        cBN(nav).dividedBy(1e18).toString()
       )
-      const _minOut_fETH_tvl = fb4(
-        _minOut_CBN.multipliedBy(nav).dividedBy(1e18).toString(10)
-      )
-      setMinOutAmount({
-        minout_ETH: checkNotZoroNumOption(
-          minout_ETH,
-          fb4(minout_ETH.toString(10))
-        ),
-        minout_slippage: fb4(_minOut_CBN.toString(10)),
-        minout_slippage_tvl: _minOut_fETH_tvl,
-      })
 
       setPriceLoading(false)
-      return _minOut_CBN.toFixed(0, 1)
+
+      return _minout
     } catch (error) {
       console.log('mintX----error--', error)
-      setMinOutAmount({
-        minout_ETH: 0,
-        minout_slippage: 0,
-        minout_slippage_tvl: 0,
-      })
+      resetOutAmount()
       setPriceLoading(false)
       return 0
     }
@@ -429,7 +409,7 @@ export default function MintX({ slippage, assetInfo }) {
 
     if (needApprove && _enableETH) return true
     // console.log('_fTokenMintInSystemStabilityModePaused---', !mintPaused, _enableETH, isF, systemStatus, fTokenMintInSystemStabilityModePaused, _fTokenMintInSystemStabilityModePaused)
-    return !mintPaused && _enableETH && minOutAmount.minout_ETH !== '-'
+    return !mintPaused && _enableETH && minOutAmount.minout !== '-'
   }, [
     fromAmount,
     mintPaused,
@@ -459,7 +439,7 @@ export default function MintX({ slippage, assetInfo }) {
       return baseTokenData?.baseTokenPrices?.inMint
     }
     if (baseList.includes(symbol)) {
-      return baseTokenData.data?.prices?.inMint
+      return baseTokenData?.prices?.inMint
     }
     return tokens[symbol].price
   }, [symbol, tokens, baseSymbol, baseTokenData])
@@ -487,7 +467,7 @@ export default function MintX({ slippage, assetInfo }) {
           false,
           config.zapTokens[symbol].decimals
         )}
-        usd={`$${fromUsd || '-'}`}
+        usd={fromUsd}
         maxAmount={tokens[symbol].balance}
         clearTrigger={clearTrigger}
         onChange={hanldeETHAmountChanged}
@@ -500,9 +480,8 @@ export default function MintX({ slippage, assetInfo }) {
       <BalanceInput
         symbol={toSymbol}
         color="red"
-        placeholder={
-          checkNotZoroNum(fromAmount) ? minOutAmount.minout_ETH : '-'
-        }
+        placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
+        amountUSD={minOutAmount.minout_tvl}
         disabled
         className={styles.inputItem}
         usd={nav_text}

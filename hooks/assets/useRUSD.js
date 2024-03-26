@@ -72,7 +72,7 @@ const useRUSD = () => {
           ...asset,
           nav_text: checkNotZoroNumOption(
             nav,
-            fb4(nav, true, asset.decimals, 2, false)
+            fb4(nav, false, asset.decimals, 2, false)
           ),
           totalSupply_text,
           marketCap_text,

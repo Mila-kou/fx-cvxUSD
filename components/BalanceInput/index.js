@@ -21,6 +21,7 @@ function BalanceInput(props) {
   const {
     balance,
     usd = '-',
+    amountUSD,
     withUsd = true,
     placeholder,
     clearTrigger,
@@ -158,7 +159,7 @@ function BalanceInput(props) {
             {symbol} <span className={styles.tip}>{tip}</span>
           </p>
         )}
-        {withUsd ? <p className={styles.usd}>(~{usd})</p> : null}
+        {withUsd ? <p className={styles.usd}>(~{`$${usd || '-'}`})</p> : null}
       </div>
       <div className={styles.right}>
         {type == 'select' ? null : (
@@ -191,6 +192,9 @@ function BalanceInput(props) {
                   MAX
                 </span>
               </p>
+            )}
+            {!balance && amountUSD && (
+              <p className={styles.balanceWrap}>{amountUSD}</p>
             )}
           </>
         )}

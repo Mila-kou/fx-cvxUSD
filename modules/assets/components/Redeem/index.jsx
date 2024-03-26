@@ -15,6 +15,7 @@ import { useFx_FxGateway } from '@/hooks/useContracts'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import Button from '@/components/Button'
 import useFxCommon_New from '../../hooks/useFxCommon_New'
+import useOutAmount from '../../hooks/useOutAmount'
 
 export default function Redeem({ slippage, assetInfo }) {
   const { _currentAccount, sendTransaction } = useWeb3()
@@ -26,6 +27,9 @@ export default function Redeem({ slippage, assetInfo }) {
 
   const [symbol, setSymbol] = useState('stETH')
   const { contract: FxGatewayContract } = useFx_FxGateway()
+
+  const { updateOutAmount, resetOutAmount, minOutAmount } =
+    useOutAmount(slippage)
 
   const [bouns, setBouns] = useState(0)
 
@@ -88,10 +92,6 @@ export default function Redeem({ slippage, assetInfo }) {
 
   const [fromAmount, setFromAmount] = useState(0)
   const [priceLoading, setPriceLoading] = useState(false)
-  const [minOutETHtAmount, setMinOutETHtAmount] = useState({
-    minout_slippage: 0,
-    minout_slippage_tvl: 0,
-  })
 
   const [selectTokenAddress, tokenAmount] = useMemo(() => {
     let _selectTokenAddress
@@ -138,14 +138,14 @@ export default function Redeem({ slippage, assetInfo }) {
   }, [baseInfo, isF])
 
   const canReceived = useMemo(() => {
-    if (!minOutETHtAmount.minout_slippage) return false
+    if (!minOutAmount.minout_slippage) return false
     if (isF) {
       return cBN(tokenAmount).isLessThanOrEqualTo(tokens.fETH.balance)
     }
     return cBN(tokenAmount).isLessThanOrEqualTo(tokens.xETH.balance)
   }, [
     tokenAmount,
-    minOutETHtAmount.minout_slippage,
+    minOutAmount.minout_slippage,
     tokens.fETH.balance,
     tokens.xETH.balance,
     isF,
@@ -279,33 +279,21 @@ export default function Redeem({ slippage, assetInfo }) {
   ])
 
   useEffect(() => {
-    setMinOutETHtAmount({
-      minout_ETH: '-',
-      minout_slippage: 0,
-      minout_slippage_tvl: 0,
-    })
+    resetOutAmount()
     setBouns(0)
   }, [symbol])
 
   const initPage = () => {
     setFromAmount(0)
     clearInput()
-    setMinOutETHtAmount({
-      minout_ETH: '-',
-      minout_slippage: 0,
-      minout_slippage_tvl: 0,
-    })
+    resetOutAmount()
     setBouns(0)
   }
 
   const getMinAmount = async (needLoading) => {
     try {
       if (!checkNotZoroNum(tokenAmount)) {
-        setMinOutETHtAmount({
-          minout_ETH: 0,
-          minout_slippage: 0,
-          minout_slippage_tvl: 0,
-        })
+        resetOutAmount()
         setBouns(0)
         return 0
       }
@@ -364,32 +352,19 @@ export default function Redeem({ slippage, assetInfo }) {
       }
       // 比例计算
       minout_ETH *= _mockRatio
-      const _minOut_CBN = (cBN(minout_ETH) || cBN(0)).multipliedBy(
-        cBN(1).minus(cBN(slippage).dividedBy(100))
+
+      const _minOut = updateOutAmount(
+        minout_ETH,
+        toUsd,
+        config.zapTokens[symbol].decimals
       )
-      const _minOut_ETH_tvl = fb4(_minOut_CBN.times(ethPrice).toString(10))
-      setMinOutETHtAmount({
-        minout_ETH: checkNotZoroNumOption(
-          minout_ETH,
-          fb4(minout_ETH.toString(10), false, config.zapTokens[symbol].decimals)
-        ),
-        minout_slippage: fb4(
-          _minOut_CBN.toString(10),
-          false,
-          config.zapTokens[symbol].decimals
-        ),
-        minout_slippage_tvl: _minOut_ETH_tvl,
-      })
       setBouns(__bonus.multipliedBy(_mockRatio))
       setPriceLoading(false)
-      return _minOut_CBN.toFixed(0, 1)
+
+      return _minOut
     } catch (error) {
       console.log(error)
-      setMinOutETHtAmount({
-        minout_ETH: 0,
-        minout_slippage: 0,
-        minout_slippage_tvl: 0,
-      })
+      resetOutAmount()
       setBouns(0)
       setPriceLoading(false)
       if (
@@ -577,9 +552,10 @@ export default function Redeem({ slippage, assetInfo }) {
 
       <BalanceInput
         symbol={symbol}
-        placeholder={minOutETHtAmount.minout_ETH}
+        placeholder={minOutAmount.minout}
+        amountUSD={minOutAmount.minout_tvl}
         decimals={config.zapTokens[symbol].decimals}
-        usd={`$${toUsd}`}
+        usd={toUsd}
         disabled
         loading={priceLoading}
         className={styles.inputItem}
@@ -596,8 +572,8 @@ export default function Redeem({ slippage, assetInfo }) {
         <DetailCell
           title="Min. Received:"
           content={[
-            minOutETHtAmount.minout_slippage,
-            // minOutETHtAmount.minout_slippage_tvl,
+            minOutAmount.minout_slippage,
+            // minOutAmount.minout_slippage_tvl,
           ]}
         />
       )}
