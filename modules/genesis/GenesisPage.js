@@ -79,7 +79,6 @@ export default function GenesisPage() {
   const stage = { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.FULL_LAUNCHED }[
     assetSymbol
   ]
-  const showBonusFarming = ['fxUSD'].includes(assetSymbol)
 
   const [clearTrigger, clearInput] = useClearInput()
   const { _currentAccount, sendTransaction } = useWeb3()
@@ -498,11 +497,16 @@ export default function GenesisPage() {
                 </div>
               ))}
 
-              {showBonusFarming && (
+              {['fxUSD'].includes(assetSymbol) && (
                 <div className="mt-[32px] flex flex-col gap-[16px]">
                   <MerkleTree />
                   <MerkleTree tokenName="wstETH" title="" />
                   <MerkleTree tokenName="FXS" title="" />
+                </div>
+              )}
+              {['rUSD'].includes(assetSymbol) && (
+                <div className="mt-[32px] flex flex-col gap-[16px]">
+                  <MerkleTree />
                 </div>
               )}
             </div>
