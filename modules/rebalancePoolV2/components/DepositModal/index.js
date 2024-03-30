@@ -8,7 +8,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
 import { NoticeCard } from '@/modules/assets/components/Common'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 import { useFXUSD_contract } from '@/hooks/useFXUSDContract'
 import Button from '@/components/Button'
@@ -75,7 +75,7 @@ export default function DepositModal(props) {
         )
       }
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to,

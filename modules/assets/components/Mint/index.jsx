@@ -8,7 +8,7 @@ import useWeb3 from '@/hooks/useWeb3'
 
 import { cBN, checkNotZoroNum, fb4, formatBalance } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import styles from './styles.module.scss'
@@ -310,7 +310,7 @@ export default function Mint({ slippage, assetInfo }) {
         symbol === 'fETH',
         _minOut
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FxGatewayContract._address,
@@ -380,7 +380,7 @@ export default function Mint({ slippage, assetInfo }) {
         _minOut
       )
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FxGatewayContract._address,
@@ -420,7 +420,7 @@ export default function Mint({ slippage, assetInfo }) {
         isF ? 'mintFToken' : 'mintXToken'
       ](_ETHtAmountAndGas, _currentAccount, _minOut)
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: marketContract._address,

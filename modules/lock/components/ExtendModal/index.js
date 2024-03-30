@@ -3,7 +3,7 @@ import { Modal, Tooltip, DatePicker } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import useWeb3 from 'hooks/useWeb3'
-import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import { cBN, fb4 } from 'utils'
 import Button from 'components/Button'
 import { WEEK, YEARS, calc4, tipText, lockTimeTipText } from '../../util'
@@ -25,7 +25,7 @@ export default function ExtendModal({ onCancel, pageData, refreshAction }) {
       const apiCall = veFXNContract.methods.increase_unlock_time(
         locktime.unix()
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: veFXNContract._address,

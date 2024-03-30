@@ -135,6 +135,9 @@ export const contracts = {
 
   // 所有都用这个
   fxUSD_GatewayRouter: '0xA5e2Ec4682a32605b9098Ddd7204fe84Ab932fE4',
+  fstETH_Claimer: '0xCa0563ab14a87ee64d6b097B0dfC46E9B56820aD',
+  ffrxETH_Claimer: '0x4ae3BE52c411CC08434d28645FD391497C69c815',
+  feETH_Claimer: '0x835191186745e63f9e325E741B273ff925174d7e',
 
   // fxUSD rebalance pool
   FxUSD_ShareableRebalancePool_wstETH:
@@ -219,6 +222,8 @@ const gaugeTokenList = {
   ConvexCurveManager_mkUSD_fxUSD: '0xDF4a66110C3d2d9e13fDC9BC20db9Cb7c51f2CbF',
   ULTRA_fxUSD: '0x0d3e9A29E856CF00d670368a7ab0512cb0c29FAC',
   ConvexCurveManager_ULTRA_fxUSD: '0x70d6C973Cf38D9AbFdb7474c9e1277Ad6E074645',
+  fxUSD_rUSD: '0x697DDb8e742047561C8e4bB69d2DDB1b8Bb42b60',
+  alUSD_fxUSD: '0x9c7003bC16F2A1AA47451C858FEe6480B755363e',
 }
 
 export const tokens = {
@@ -545,6 +550,18 @@ const POOLS_LIST_GAUGE = {
     token: '0xf33ab11e5c4e55dacb13644f0c0a9d1e199a796f',
     manageConvexGauge: gaugeTokenList.ConvexCurveManager_ULTRA_fxUSD,
     gauge: gaugeTokenList.ULTRA_fxUSD,
+  },
+  fxUSD_rUSD: {
+    lpPoolCurveToken: '0x2116bfad62b383043230501f6a124c6ea60ccfa5',
+    token: '0x2116bfad62b383043230501f6a124c6ea60ccfa5',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ULTRA_fxUSD,
+    gauge: gaugeTokenList.fxUSD_rUSD,
+  },
+  alUSD_fxUSD: {
+    lpPoolCurveToken: '0x27cb9629ae3ee05cb266b99ca4124ec999303c9d',
+    token: '0x27cb9629ae3ee05cb266b99ca4124ec999303c9d',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_ULTRA_fxUSD,
+    gauge: gaugeTokenList.alUSD_fxUSD,
   },
 }
 

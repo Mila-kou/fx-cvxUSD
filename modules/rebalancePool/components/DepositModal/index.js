@@ -5,7 +5,7 @@ import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 
 export default function DepositModal(props) {
@@ -37,7 +37,7 @@ export default function DepositModal(props) {
         depositAmountInWei,
         currentAccount
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FX_RebalancePoolContract._address,

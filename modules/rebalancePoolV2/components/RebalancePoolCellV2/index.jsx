@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Tooltip } from 'antd'
 import Link from 'next/link'
 import { InfoCircleOutlined } from '@ant-design/icons'
@@ -9,6 +9,11 @@ import FxUSDWithdrawModal from '../WithdrawModal/fxUSD'
 import styles from './styles.module.scss'
 import { checkNotZoroNum } from '@/utils/index'
 import { TOKEN_ICON_MAP, BASE_TOKENS_MAP, ASSET_MAP } from '@/config/tokens'
+import { useFxUSD_Type_Treasury_contract } from '@/hooks/useFXUSDContract'
+import { useContract } from '@/hooks/useContracts'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import abi from '@/config/abi'
+import useWeb3 from '@/hooks/useWeb3'
 
 export default function RebalancePoolCellV2({
   handleDeposit,
@@ -41,11 +46,106 @@ export default function RebalancePoolCellV2({
   _poolConfig,
   ...poolData
 }) {
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [openPanel, setOpenPanel] = useState(false)
-
+  const [harvesting, setHarvesting] = useState(false)
   const canClaim = checkNotZoroNum(userTotalClaimable)
 
-  const { rebalanceRewards, baseSymbol,poolType } = _poolConfig
+  const { contract: treasuryContract } = useFxUSD_Type_Treasury_contract(
+    _poolConfig.baseSymbol
+  )
+  const { getContract } = useContract()
+
+  const rpGaugeClaimContract = getContract(
+    _poolConfig.gaugeClaimer,
+    abi.FX_RebalancePoolGaugeClaimerABI
+  )
+
+  const { rebalanceRewards, baseSymbol, poolType } = _poolConfig
+
+  const handleHarvestType = useCallback(
+    async (type) => {
+      setHarvesting(true)
+      try {
+        let apiCall
+        let to
+        switch (type) {
+          case 'LSDDOM':
+          case 'LTRDOM':
+            to = treasuryContract._address
+            apiCall = treasuryContract.methods.harvest()
+            break
+          case 'FXNDOM':
+            to = rpGaugeClaimContract._address
+            apiCall = rpGaugeClaimContract.methods.claim(currentAccount)
+            break
+          default:
+            break
+        }
+        await noPayableAction(
+          () =>
+            sendTransaction({
+              to,
+              data: apiCall.encodeABI(),
+            }),
+          {
+            key: 'lp',
+            action: 'Harvest',
+          }
+        )
+        setHarvesting(false)
+      } catch (error) {
+        console.log('error_harvest---', error)
+        setHarvesting(false)
+        noPayableErrorAction(`error_harvest`, error)
+      }
+    },
+    [treasuryContract, rpGaugeClaimContract, currentAccount, sendTransaction]
+  )
+
+  const harvestTypeDom = useCallback(
+    (type, gaugeAddress) => {
+      let _text
+      let _earnText
+      switch (type) {
+        case 'LSDDOM':
+          _text = 'Harvest LSD'
+          _earnText = '2%'
+          break
+        case 'LTRDOM':
+          _text = 'Harvest LTR'
+          _earnText = '2%'
+          break
+        case 'FXNDOM':
+          _text = 'Harvest FXN'
+          _earnText = '2%'
+          break
+        case 'ConvexDOM':
+          _text = 'Harvest Convex'
+          _earnText = '2%'
+          break
+        default:
+          _text = 'Harvest FXN'
+          _earnText = '2%'
+          break
+      }
+      return (
+        <>
+          {/* <p>Earn {_earnText}</p> */}
+          <Button
+            size="small"
+            type="second"
+            onClick={() => {
+              handleHarvestType(type)
+            }}
+          >
+            {_text}
+          </Button>
+        </>
+      )
+    },
+    [handleHarvestType]
+  )
 
   const WithdrawModal = useMemo(
     () =>
@@ -143,12 +243,58 @@ export default function RebalancePoolCellV2({
 
   const subMessage = useMemo(() => {
     if (poolType == 'fxUSD') {
-      return ' then stake here to earn LSD and FXN rewards'
+      return (
+        <>
+          {' '}
+          then stake here to earn{' '}
+          <Tooltip
+            placement="top"
+            title={harvestTypeDom('LSDDOM')}
+            arrow
+            color="#000"
+          >
+            <span className="underline text-[var(--a-button-color)]">LSD</span>
+          </Tooltip>{' '}
+          and{' '}
+          <Tooltip
+            placement="top"
+            title={harvestTypeDom('FXNDOM')}
+            arrow
+            color="#000"
+          >
+            <span className="underline text-[var(--a-button-color)]">FXN</span>
+          </Tooltip>{' '}
+          rewards
+        </>
+      )
     }
     if (poolType == 'rUSD') {
-      return ' then stake here to earn LRT yields, ~ 4x Etherfi Points, ~ 2x Eigen Layer Points and FXN rewards'
+      return (
+        <>
+          {' '}
+          then stake here to earn{' '}
+          <Tooltip
+            placement="topLeft"
+            title={harvestTypeDom('LTRDOM')}
+            arrow
+            color="#000"
+          >
+            <span className="underline text-[var(--a-button-color)]">LRT</span>
+          </Tooltip>{' '}
+          yields, ~ 4x Etherfi Points, ~ 2x Eigen Layer Points and{' '}
+          <Tooltip
+            placement="topLeft"
+            title={harvestTypeDom('FXNDOM')}
+            arrow
+            color="#000"
+          >
+            <span className="underline text-[var(--a-button-color)]">FXN</span>
+          </Tooltip>{' '}
+          rewards
+        </>
+      )
     }
-  }, [poolType])
+  }, [poolType, harvestTypeDom])
   return (
     <div key={_poolConfig.infoKey} className={styles.poolWrap}>
       <div

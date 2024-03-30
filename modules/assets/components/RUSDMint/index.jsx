@@ -8,7 +8,7 @@ import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, checkNotZoroNum, formatBalance, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import Select from '@/components/Select'
@@ -465,7 +465,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
         }
       }
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to,

@@ -10,7 +10,7 @@ import { cBN, checkNotZoroNum, fb4 } from '@/utils/index'
 import Countdown from './Countdown/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import { tokensList } from '@/config/ido'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 
 const depositTokenInfo = tokensList.depositTokens[0]
@@ -105,7 +105,7 @@ export default function IdoPage() {
     try {
       setClaiming(true)
       const apiCall = IdoSaleContract.methods.claim()
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: IdoSaleContract._address,
@@ -212,7 +212,7 @@ export default function IdoPage() {
       const callValue =
         config.zeroAddress == depositTokenInfo.address ? payAmountInWei : 0
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: IdoSaleContract._address,

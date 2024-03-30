@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import Button from '@/components/Button'
 import Tabs from '@/modules/assets/components/Tabs'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
 import useApprove from '@/hooks/useApprove'
 import { useToken } from '@/hooks/useTokenInfo'
@@ -268,7 +268,7 @@ export default function GenesisPage() {
         to = fxUSD_GatewayRouterContract._address
       }
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to,
@@ -317,7 +317,7 @@ export default function GenesisPage() {
       const apiCall = await getInitialFundContract(
         genesis[_symbol].address
       ).contract.methods.withdraw(_currentAccount)
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: genesis[_symbol].address,
@@ -378,7 +378,7 @@ export default function GenesisPage() {
       const apiCall = await getInitialFundContract(
         genesis[_symbol].address
       ).contract.methods.withdrawBaseToken(_currentAccount, _mintOut)
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: genesis[_symbol].address,

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Tooltip } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
@@ -14,7 +14,12 @@ import {
   checkNotZoroNumOption,
   dollarText,
 } from '@/utils/index'
-import { ASSET_MAP } from '@/config/tokens'
+import { ASSET_MAP, contracts } from '@/config/tokens'
+import { useFxUSD_Type_Treasury_contract } from '@/hooks/useFXUSDContract'
+import { useContract, useFX_stETHTreasury } from '@/hooks/useContracts'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import useWeb3 from '@/hooks/useWeb3'
+import abi from '@/config/abi'
 
 const stETHImg = '/tokens/steth.svg'
 const xETHImg = '/images/x-logo.svg'
@@ -65,8 +70,16 @@ export default function RebalancePoolCell({
   ...poolData
 }) {
   const [openPanel, setOpenPanel] = useState(false)
+  const [harvesting, setHarvesting] = useState(false)
+  const { currentAccount, isAllReady, sendTransaction } = useWeb3()
+  const { getContract } = useContract()
 
   const canClaim = checkNotZoroNum(userTotalClaimable)
+  const { contract: treasuryContract } = useFX_stETHTreasury()
+  const rpGaugeClaimContract = getContract(
+    _poolConfig.gaugeClaimer,
+    abi.FX_RebalancePoolGaugeClaimerABI
+  )
 
   const WithdrawModal = useMemo(
     () =>
@@ -196,6 +209,86 @@ export default function RebalancePoolCell({
       return [_apyAndBoostDom, _apyDom, _apyDetailDom]
     }
   }, [poolData.apyObj])
+
+  const handleHarvestType = useCallback(
+    async (type) => {
+      setHarvesting(true)
+      try {
+        let apiCall
+        let to
+        switch (type) {
+          case 'LSDDOM':
+            to = treasuryContract._address
+            apiCall = treasuryContract.methods.harvest()
+            break
+          case 'FXNDOM':
+            to = rpGaugeClaimContract._address
+            apiCall = rpGaugeClaimContract.methods.claim(currentAccount)
+            break
+          default:
+            break
+        }
+        await noPayableAction(
+          () =>
+            sendTransaction({
+              to,
+              data: apiCall.encodeABI(),
+            }),
+          {
+            key: 'lp',
+            action: 'Harvest',
+          }
+        )
+        setHarvesting(false)
+      } catch (error) {
+        console.log('error_harvest---', error)
+        setHarvesting(false)
+        noPayableErrorAction(`error_harvest`, error)
+      }
+    },
+    [treasuryContract, rpGaugeClaimContract, currentAccount, sendTransaction]
+  )
+
+  const harvestTypeDom = useCallback(
+    (type, gaugeAddress) => {
+      let _text
+      let _earnText
+      switch (type) {
+        case 'LSDDOM':
+          _text = 'Harvest LSD'
+          _earnText = '2%'
+          break
+        case 'FXNDOM':
+          _text = 'Harvest FXN'
+          _earnText = '2%'
+          break
+        case 'ConvexDOM':
+          _text = 'Harvest Convex'
+          _earnText = '2%'
+          break
+        default:
+          _text = 'Harvest FXN'
+          _earnText = '2%'
+          break
+      }
+      return (
+        <>
+          {/* <p>Earn {_earnText}</p> */}
+          <Button
+            size="small"
+            type="second"
+            onClick={() => {
+              handleHarvestType(type)
+            }}
+          >
+            {_text}
+          </Button>
+        </>
+      )
+    },
+    [handleHarvestType]
+  )
+
   return (
     <div key={_poolConfig.infoKey} className={styles.poolWrap}>
       <div
@@ -266,7 +359,29 @@ export default function RebalancePoolCell({
               >
                 {_poolConfig.poolType}
               </Link>{' '}
-              with stETH, then stake here to earn LSD and FXN rewards
+              with stETH, then stake here to earn{' '}
+              <Tooltip
+                placement="topLeft"
+                title={harvestTypeDom('LSDDOM')}
+                arrow
+                color="#000"
+              >
+                <span className="underline text-[var(--a-button-color)]">
+                  LSD
+                </span>
+              </Tooltip>{' '}
+              and{' '}
+              <Tooltip
+                placement="topLeft"
+                title={harvestTypeDom('FXNDOM')}
+                arrow
+                color="#000"
+              >
+                <span className="underline text-[var(--a-button-color)]">
+                  FXN
+                </span>
+              </Tooltip>{' '}
+              rewards
             </p>
             <div className="mt-[12px]">
               Current APR: {apyDom}{' '}

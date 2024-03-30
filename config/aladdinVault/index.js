@@ -24,6 +24,7 @@ export const POOLS_LIST = [
     gaugeTypeName: 'Liquidity Gauge',
     lpAddress: config.POOLS_LIST_GAUGE.ETH_FXN.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.ETH_FXN.gauge,
+    manageConvexGaugeAddress: config.POOLS_LIST_GAUGE.ETH_FXN.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -57,8 +58,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.ETH_FXN.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.FXN_cvxFXN.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.FXN_cvxFXN.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_cvxFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.FXN_cvxFXN.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -92,8 +93,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.FXN_sdFXN.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.FXN_sdFXN.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -126,8 +127,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.GHO_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.GHO_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.GHO_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -160,8 +161,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.crvUSD_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.crvUSD_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.crvUSD_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -194,8 +195,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.PYUSD_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.PYUSD_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.PYUSD_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -228,8 +229,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.FRAX_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.FRAX_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.FRAX_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -262,8 +263,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.DOLA_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.DOLA_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.DOLA_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -296,8 +297,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.mkUSD_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.mkUSD_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.mkUSD_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -330,8 +331,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.ULTRA_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.ULTRA_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.ULTRA_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -364,8 +365,8 @@ export const POOLS_LIST = [
     // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
     lpAddress: config.POOLS_LIST_GAUGE.GRAI_fxUSD.token,
     lpGaugeAddress: config.POOLS_LIST_GAUGE.GRAI_fxUSD.gauge,
-    // manageConvexGaugeAddress:
-    //   config.POOLS_LIST_GAUGE.FXN_sdFXN.manageConvexGauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.GRAI_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -373,6 +374,76 @@ export const POOLS_LIST = [
         symbol: 'curve_GRAI_fxUSD',
         icon: 'cvx',
         address: config.POOLS_LIST_GAUGE.GRAI_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    icons: [
+      { icon: '/tokens/fxusd.svg' },
+      {
+        icon: '/tokens/rUSD.svg',
+      },
+    ],
+    id: 12,
+    name: 'fxUSD+rUSD',
+    nameShow: ['fxUSD+rUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-138/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.fxUSD_rUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.fxUSD_rUSD.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.fxUSD_rUSD.manageConvexGauge,
+    isCloseManageConvex: true,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_fxUSD_rUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.fxUSD_rUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    icons: [
+      { icon: '/tokens/alusd.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 13,
+    name: 'alUSD+fxUSD',
+    nameShow: ['alUSD+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-139/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.alUSD_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.alUSD_fxUSD.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.alUSD_fxUSD.manageConvexGauge,
+    isCloseManageConvex: true,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_alUSD_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.alUSD_fxUSD.token,
         needZap: false,
         isLp: true,
       },
@@ -511,6 +582,9 @@ export const REBALANCE_POOLS_LIST = [
     rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_APool,
     rebalanceWithBonusTokenAddress:
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceAPool,
+    gaugeClaimer:
+      config.contracts
+        .fx_BoostableRebalancePool_APool_RebalancePoolGaugeClaimer,
     infoKey: 'rebalancePoolV2_info_A',
     gaugeRewards: [config.TOKENS_INFO.fxn],
     rebalanceRewards: ['FXN', 'wstETH'],
@@ -532,6 +606,9 @@ export const REBALANCE_POOLS_LIST = [
     nameShow: 'fETH Rebalance Pool Redeem to xETH',
     poolType: 'fETH',
     withdrawDefaultToken: 'fETH',
+    gaugeClaimer:
+      config.contracts
+        .fx_BoostableRebalancePool_APool_RebalancePoolGaugeClaimer,
     rebalancePoolAddress: config.contracts.fx_BoostableRebalancePool_BPool,
     rebalanceWithBonusTokenAddress:
       config.contracts.fx_RebalanceWithBonusToken_BoostRebalanceBPool,
@@ -557,6 +634,7 @@ export const REBALANCE_POOLS_LIST = [
     nameShow: 'fxUSD Stability Pool Redeem to wstETH',
     poolType: 'fxUSD',
     withdrawDefaultToken: 'fxUSD',
+    gaugeClaimer: config.contracts.fstETH_Claimer,
     rebalancePoolAddress: config.contracts.FxUSD_ShareableRebalancePool_wstETH,
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_wstETH',
@@ -580,6 +658,7 @@ export const REBALANCE_POOLS_LIST = [
     nameShow: 'fxUSD Stability Pool Redeem to xstETH',
     poolType: 'fxUSD',
     withdrawDefaultToken: 'fxUSD',
+    gaugeClaimer: config.contracts.fstETH_Claimer,
     rebalancePoolAddress: config.contracts.FxUSD_ShareableRebalancePool_xstETH,
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_xstETH',
@@ -603,6 +682,7 @@ export const REBALANCE_POOLS_LIST = [
     nameShow: 'fxUSD Stability Pool Redeem to sfrxETH',
     poolType: 'fxUSD',
     withdrawDefaultToken: 'fxUSD',
+    gaugeClaimer: config.contracts.ffrxETH_Claimer,
     rebalancePoolAddress: config.contracts.FxUSD_ShareableRebalancePool_sfrxETH,
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_sfrxETH',
@@ -626,6 +706,7 @@ export const REBALANCE_POOLS_LIST = [
     nameShow: 'fxUSD Stability Pool Redeem to xfrxETH',
     poolType: 'fxUSD',
     withdrawDefaultToken: 'fxUSD',
+    gaugeClaimer: config.contracts.ffrxETH_Claimer,
     rebalancePoolAddress: config.contracts.FxUSD_ShareableRebalancePool_xfrxETH,
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_fxUSD_xfrxETH',
@@ -649,6 +730,7 @@ export const REBALANCE_POOLS_LIST = [
     nameShow: 'rUSD Stability Pool Redeem to weETH',
     poolType: 'rUSD',
     withdrawDefaultToken: 'rUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
     rebalancePoolAddress: config.contracts.rUSD_ShareableRebalancePool_weETH,
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_rUSD_weETH',
@@ -672,6 +754,7 @@ export const REBALANCE_POOLS_LIST = [
     nameShow: 'rUSD Stability Pool Redeem to xeETH',
     poolType: 'rUSD',
     withdrawDefaultToken: 'rUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
     rebalancePoolAddress: config.contracts.rUSD_ShareableRebalancePool_xeETH,
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_rUSD_xeETH',

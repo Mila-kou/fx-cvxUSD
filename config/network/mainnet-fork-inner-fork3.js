@@ -18,11 +18,11 @@ const explorerUri = 'https://www.etherscan.io'
 //   rpcUrl: 'https://apitest.aladdin.club/rpc',
 // }
 const chainInfo = {
-  id: '0x1864d',
+  id: '0x1',
   token: 'ETH',
-  label: 'Phalcon-fxUSD-3',
+  label: 'Phalcon-newGauge',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_6eaeef3ca9fa49c3a35888d185dc56cc',
+    'https://rpc.phalcon.blocksec.com/rpc_c259bf1b34514c0fb8b56c823c09139a',
 }
 
 const contracts = {

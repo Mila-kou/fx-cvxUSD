@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import useWeb3 from '@/hooks/useWeb3'
 import useRebalancePool from './useRebalancePoolV2'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import {
   useBoostableRebalancePool,
   useRebalanceWithBonusToken,
@@ -50,7 +50,7 @@ export default function usePoolV2({ infoKey }) {
       console.log('handleClaim-----', symbol, wrap)
 
       const apiCall = FX_RebalancePoolContract.methods.claim(currentAccount)
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FX_RebalancePoolContract._address,

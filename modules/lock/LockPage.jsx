@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Visible from 'components/Visible'
 import { Tooltip } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
-import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import useWeb3 from 'hooks/useWeb3'
 import useGlobal from 'hooks/useGlobal'
 import { cBN, fb4 } from 'utils'
@@ -78,7 +78,7 @@ const LockPage = () => {
     setLoading(true)
     try {
       const apiCall = veFXN.methods.withdraw()
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: veFXN._address,
@@ -102,7 +102,7 @@ const LockPage = () => {
     setCrLoading(true)
     try {
       const apiCall = veContract.methods.claim()
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: veContract._address,

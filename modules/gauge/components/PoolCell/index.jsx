@@ -13,7 +13,7 @@ import {
   fb4,
 } from '@/utils/index'
 import NumberInput from '@/components/NumberInput'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
 

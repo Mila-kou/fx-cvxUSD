@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { Modal } from 'antd'
 import { useSelector } from 'react-redux'
 import Button from '@/components/Button'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
@@ -157,7 +157,7 @@ export default function WithdrawModal(props) {
           sharesInWei
         )
       }
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to,

@@ -29,6 +29,8 @@
     z-index: 1000;
     left: 0;
     right: 0;
+    max-height: 350px;
+    overflow-y: scroll;
     background: var(--modal-background-color);
     margin-top: 4px;
     border-radius: 4px;

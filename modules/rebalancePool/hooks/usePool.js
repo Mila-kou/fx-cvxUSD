@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import useWeb3 from '@/hooks/useWeb3'
 import useStabiltyPool from '../controller/useStabiltyPool'
 import { useContract } from '@/hooks/useContracts'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, dollarText } from '@/utils/index'
 import abi from '@/config/abi'
@@ -49,7 +49,7 @@ export default function usePool({ rebalancePoolAddress }) {
         false,
         true
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FX_RebalancePoolContract._address,
@@ -82,7 +82,7 @@ export default function usePool({ rebalancePoolAddress }) {
         config.tokens[symbol],
         wrap
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FX_RebalancePoolContract._address,

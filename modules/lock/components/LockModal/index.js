@@ -4,7 +4,7 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import config from 'config'
 import useApprove from 'hooks/useApprove'
-import NoPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from 'utils/noPayableAction'
 import useWeb3 from 'hooks/useWeb3'
 import { checkNotZoroNum, cBN, fb4 } from 'utils'
 import BalanceInput from '@/components/BalanceInput'
@@ -67,7 +67,7 @@ export default function LockModal({ onCancel, refreshAction }) {
         lockAmountInWei.toString(),
         timestamp
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: veFXNContract._address,

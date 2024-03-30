@@ -12,7 +12,7 @@ import {
   formatBalance,
 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import styles from './styles.module.scss'
@@ -359,7 +359,7 @@ export default function MintX({ slippage, assetInfo }) {
         )
       }
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to,

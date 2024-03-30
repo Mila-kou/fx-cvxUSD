@@ -4,7 +4,7 @@ import Button from '@/components/Button'
 import useWeb3 from '@/hooks/useWeb3'
 import Visible from '@/components/Visible'
 import config from '@/config/index'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { cBN } from '@/utils/index'
 
 /**
@@ -57,7 +57,7 @@ export const useApprove = (props) => {
     }
 
     const apiCall = tokenContract.methods.approve(approveAddress, '0')
-    await NoPayableAction(
+    await noPayableAction(
       () =>
         sendTransaction({
           to: tokenContract._address,
@@ -94,7 +94,7 @@ export const useApprove = (props) => {
           approveAddress,
           approveWei
         )
-        await NoPayableAction(
+        await noPayableAction(
           () =>
             sendTransaction({
               to: tokenContract._address,

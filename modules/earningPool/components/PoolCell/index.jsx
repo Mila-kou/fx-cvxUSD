@@ -6,12 +6,14 @@ import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import styles from './styles.module.scss'
 import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { useFXNTokenMinter } from '@/hooks/useGaugeContracts'
 import { useVeBoostAllGauge } from '@/hooks/calculator/useVeBoost_AllGauge'
+import abi from '@/config/abi'
+import { useContract } from '@/hooks/useContracts'
 
 export default function PoolCell({ cellData }) {
   const {
@@ -22,7 +24,9 @@ export default function PoolCell({ cellData }) {
     useCVXClaimable_text,
     lpGaugeAddress,
     lpGaugeContract,
+    manageConvexGaugeAddress,
   } = cellData
+  const [harvesting, setHarvesting] = useState(false)
   const veBoostAllData = useVeBoostAllGauge()
   const [showDepositModal, setShowDepositModal] = useState(false)
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
@@ -30,7 +34,12 @@ export default function PoolCell({ cellData }) {
   const [claiming, setClaiming] = useState(false)
   const [openPanel, setOpenPanel] = useState(false)
   const { contract: FXNTokenMinterContract } = useFXNTokenMinter()
+  const { getContract } = useContract()
 
+  const manageConvexGaugeContract = getContract(
+    manageConvexGaugeAddress,
+    abi.FX_ConvexCurveManagerABI
+  )
   const _rewardTokensList = [cellData.baseRewardToken].concat(
     cellData.rewardTokens
   )
@@ -55,7 +64,7 @@ export default function PoolCell({ cellData }) {
     try {
       setClaiming(true)
       const apiCall = lpGaugeContract.methods.claim(currentAccount)
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: lpGaugeContract._address,
@@ -80,7 +89,7 @@ export default function PoolCell({ cellData }) {
     try {
       setClaiming(true)
       const apiCall = FXNTokenMinterContract.methods.mint(lpGaugeAddress)
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FXNTokenMinterContract._address,
@@ -262,6 +271,74 @@ export default function PoolCell({ cellData }) {
       </>
     )
   }, [cellData])
+
+  const handleHarvestType = useCallback(
+    async (type) => {
+      setHarvesting(true)
+      try {
+        let apiCall
+        let to
+        switch (type) {
+          case 'manageConvexDOM':
+            to = manageConvexGaugeContract._address
+            apiCall = manageConvexGaugeContract.methods.harvest(currentAccount)
+            break
+          default:
+            break
+        }
+        await noPayableAction(
+          () =>
+            sendTransaction({
+              to,
+              data: apiCall.encodeABI(),
+            }),
+          {
+            key: 'lp',
+            action: 'Harvest',
+          }
+        )
+        setHarvesting(false)
+      } catch (error) {
+        console.log('error_harvest---', error)
+        setHarvesting(false)
+        noPayableErrorAction(`error_harvest`, error)
+      }
+    },
+    [manageConvexGaugeContract, currentAccount, sendTransaction]
+  )
+
+  const harvestTypeDom = useCallback(
+    (type) => {
+      let _text
+      let _earnText
+      switch (type) {
+        case 'manageConvexDOM':
+          _text = 'Harvest Convex Reward'
+          _earnText = '2%'
+          break
+        default:
+          _text = 'Harvest Convex Reward'
+          _earnText = '2%'
+          break
+      }
+      return (
+        <>
+          {/* <p>Earn {_earnText}</p> */}
+          <Button
+            size="small"
+            type="second"
+            onClick={() => {
+              handleHarvestType(type)
+            }}
+          >
+            {_text}
+          </Button>
+        </>
+      )
+    },
+    [handleHarvestType]
+  )
+
   return (
     <div key={cellData.id} className={styles.poolWrap}>
       <div className={styles.card} onClick={() => setOpenPanel(!openPanel)}>
@@ -305,7 +382,6 @@ export default function PoolCell({ cellData }) {
           />
         </div>
       </div>
-
       {openPanel ? (
         <div className={`${styles.panel}`}>
           <p className="text-[var(--second-text-color)]">
@@ -318,7 +394,17 @@ export default function PoolCell({ cellData }) {
             >
               {cellData.fromPlatform} {cellData.name} pool
             </a>
-            , and then stake your LP tokens here
+            , and then stake your LP tokens here to earn{' '}
+            <Tooltip
+              placement="top"
+              title={harvestTypeDom('manageConvexDOM')}
+              arrow
+              color="#000"
+            >
+              <span className="underline text-[var(--a-button-color)]">
+                rewards
+              </span>
+            </Tooltip>
           </p>
           <div className="mt-[12px]">
             Projected APR: {apyDom}{' '}
@@ -367,14 +453,12 @@ export default function PoolCell({ cellData }) {
           </div>
         </div>
       ) : null}
-
       {showDepositModal && (
         <DepositModal
           info={cellData}
           onCancel={() => setShowDepositModal(false)}
         />
       )}
-
       {showWithdrawModal && (
         <WithdrawModal
           info={cellData}

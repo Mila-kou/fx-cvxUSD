@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
 import { useFXNVesting, useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'

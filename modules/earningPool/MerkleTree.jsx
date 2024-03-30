@@ -6,7 +6,7 @@ import useWeb3 from 'hooks/useWeb3'
 import styles from './styles.module.scss'
 import useMerkleTreeData from './controller/useMerkleTreeData'
 import { useAladdinTree } from '@/hooks/useContracts'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 
 // FXN、wstETH、FXS
 const tokenMap = {
@@ -58,7 +58,7 @@ const MerkleTree = ({ title = 'Bonus Farming:', tokenName = 'FXN' }) => {
         data.amount,
         data.proof
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: AladdinMerkleTreeContract._address,

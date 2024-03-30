@@ -3,7 +3,7 @@ import { Modal } from 'antd'
 import useWeb3 from '@/hooks/useWeb3'
 import Button from '@/components/Button'
 import { useFxGaugeController } from '@/hooks/useContracts'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 
 const icons = {
@@ -25,7 +25,7 @@ export default function CastVoteModal({ onCancel, voteData }) {
         voteData.lpGaugeAddress,
         voteData.newPower * 100
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: gaugeControllerContract._address,

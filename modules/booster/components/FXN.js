@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from '../controller/useVesting'
 import { useFX_ManageableVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
@@ -52,7 +52,7 @@ export default function FXN() {
         __indices,
         __index
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: ManageableVestingContract._address,

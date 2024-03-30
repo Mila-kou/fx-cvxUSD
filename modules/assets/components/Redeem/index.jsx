@@ -7,7 +7,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { cBN, checkNotZoroNum, formatBalance, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 import useETH from '../../controller/useETH'
 import useApprove from '@/hooks/useApprove'
@@ -388,7 +388,7 @@ export default function Redeem({ slippage, assetInfo }) {
         symbol === 'xETH',
         _minOut
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: FxGatewayContract._address,
@@ -471,7 +471,7 @@ export default function Redeem({ slippage, assetInfo }) {
           dstOut.toString()
         )
       }
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to,

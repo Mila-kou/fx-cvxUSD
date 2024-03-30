@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { cBN, fb4, checkNotZoroNum, checkNotZoroNumOption } from 'utils'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVestingData from '../hook/useVestingData_manageable'
 import useWeb3 from '@/hooks/useWeb3'
 import { useFX_ManageableVesting } from '@/hooks/useContracts'
@@ -269,7 +269,7 @@ const useVesting = (refreshTrigger) => {
         apiCall = ManageableVestingContract.methods.claim(_index)
       }
 
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: ManageableVestingContract._address,
@@ -296,7 +296,7 @@ const useVesting = (refreshTrigger) => {
         __index,
         currentAccount
       )
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: ManageableVestingContract._address,

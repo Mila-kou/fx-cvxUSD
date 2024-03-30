@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 import Button from '@/components/Button'
-import NoPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
+import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useVesting from './hook/useVesting'
 import { useFXNVesting } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
@@ -40,7 +40,7 @@ export default function VestingPage() {
     try {
       setClaiming(true)
       const apiCall = vestContract.methods.claim()
-      await NoPayableAction(
+      await noPayableAction(
         () =>
           sendTransaction({
             to: vestContract._address,
