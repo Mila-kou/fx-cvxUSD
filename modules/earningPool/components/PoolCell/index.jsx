@@ -395,8 +395,8 @@ export default function PoolCell({ cellData }) {
             >
               {cellData.fromPlatform} {cellData.name} pool
             </a>
-            , and then stake your LP tokens here to earn{' '}
-            <Tooltip
+            , and then stake your LP tokens here to earn rewards
+            {/* <Tooltip
               placement="top"
               title={harvestTypeDom('manageConvexDOM')}
               arrow
@@ -405,7 +405,7 @@ export default function PoolCell({ cellData }) {
               <span className="underline text-[var(--a-button-color)]">
                 rewards
               </span>
-            </Tooltip>
+            </Tooltip> */}
           </p>
           <div className="mt-[12px]">
             Projected APR: {apyDom}{' '}

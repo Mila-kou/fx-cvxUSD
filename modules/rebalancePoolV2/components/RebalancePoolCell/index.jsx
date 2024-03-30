@@ -361,7 +361,8 @@ export default function RebalancePoolCell({
                 {_poolConfig.poolType}
               </Link>{' '}
               with stETH, then stake here to earn{' '}
-              <Tooltip
+              LSD{' '}
+              {/* <Tooltip
                 placement="topLeft"
                 title={harvestTypeDom('LSDDOM')}
                 arrow
@@ -370,9 +371,9 @@ export default function RebalancePoolCell({
                 <span className="underline text-[var(--a-button-color)]">
                   LSD
                 </span>
-              </Tooltip>{' '}
+              </Tooltip>{' '} */}
               and{' '}
-              <Tooltip
+              {/* <Tooltip
                 placement="topLeft"
                 title={harvestTypeDom('FXNDOM')}
                 arrow
@@ -381,8 +382,8 @@ export default function RebalancePoolCell({
                 <span className="underline text-[var(--a-button-color)]">
                   FXN
                 </span>
-              </Tooltip>{' '}
-              rewards
+              </Tooltip>{' '} */}
+              FXN rewards
             </p>
             <div className="mt-[12px]">
               Current APR: {apyDom}{' '}

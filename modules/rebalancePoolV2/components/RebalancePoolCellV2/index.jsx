@@ -248,24 +248,24 @@ export default function RebalancePoolCellV2({
         <>
           {' '}
           then stake here to earn{' '}
-          <Tooltip
+          {/* <Tooltip
             placement="top"
             title={harvestTypeDom('LSDDOM')}
             arrow
             color="#000"
           >
             <span className="underline text-[var(--a-button-color)]">LSD</span>
-          </Tooltip>{' '}
-          and{' '}
-          <Tooltip
+          </Tooltip>{' '} */}
+          LSD and{' '}
+          {/* <Tooltip
             placement="top"
             title={harvestTypeDom('FXNDOM')}
             arrow
             color="#000"
           >
             <span className="underline text-[var(--a-button-color)]">FXN</span>
-          </Tooltip>{' '}
-          rewards
+          </Tooltip>{' '} */}
+          FXN rewards
         </>
       )
     }
@@ -274,24 +274,24 @@ export default function RebalancePoolCellV2({
         <>
           {' '}
           then stake here to earn{' '}
-          <Tooltip
+          {/* <Tooltip
             placement="topLeft"
             title={harvestTypeDom('LTRDOM')}
             arrow
             color="#000"
           >
             <span className="underline text-[var(--a-button-color)]">LRT</span>
-          </Tooltip>{' '}
-          yields, ~ 4x Etherfi Points, ~ 2x Eigen Layer Points and{' '}
-          <Tooltip
+          </Tooltip>{' '} */}
+          LRT yields, ~ 4x Etherfi Points, ~ 2x Eigen Layer Points and{' '}
+          {/* <Tooltip
             placement="topLeft"
             title={harvestTypeDom('FXNDOM')}
             arrow
             color="#000"
           >
             <span className="underline text-[var(--a-button-color)]">FXN</span>
-          </Tooltip>{' '}
-          rewards
+          </Tooltip>{' '} */}
+          FXN rewards
         </>
       )
     }
