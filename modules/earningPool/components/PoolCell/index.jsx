@@ -274,6 +274,7 @@ export default function PoolCell({ cellData }) {
 
   const handleHarvestType = useCallback(
     async (type) => {
+      if (!isAllReady) return
       setHarvesting(true)
       try {
         let apiCall

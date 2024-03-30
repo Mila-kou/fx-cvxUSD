@@ -65,6 +65,7 @@ export default function RebalancePoolCellV2({
 
   const handleHarvestType = useCallback(
     async (type) => {
+      if (!isAllReady) return
       setHarvesting(true)
       try {
         let apiCall
