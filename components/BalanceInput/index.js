@@ -53,7 +53,7 @@ function BalanceInput(props) {
     },
     [val, decimals],
     {
-      wait: 500,
+      wait: 1000,
     }
   )
 

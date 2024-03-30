@@ -1,5 +1,6 @@
 import axios from 'axios'
 import config from '../config'
+import { error } from 'highcharts'
 
 // const INCH_HOST =
 //   process.env.NODE_ENV === 'production'
@@ -7,7 +8,18 @@ import config from '../config'
 //     : '/INCH_HOST'
 const INCH_HOST = '/INCH_HOST'
 
-export const get1inchParams = (params) => {
+let headerIndex = 0
+
+const HEADER_LIST = [
+  'OpyqO0n2nLv0gJOvI18uBSJkzYcTxMYB',
+  'KGQicjJLdDZ4sCGLlwMFuwS6ouNqni09',
+  'vq7BrT4cTVrS7BCX87PGOpGETrpzd8Ef',
+]
+
+export const get1inchParams = (
+  params,
+  header = 'jKzO36s1w1XN7DeRYOByvKfFTfvMV9A5'
+) => {
   // for test
   // const testParams = {
   //   src: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -20,16 +32,24 @@ export const get1inchParams = (params) => {
   // }
   // params = testParams
 
-  return axios.get(`${INCH_HOST}/swap`, {
-    headers: {
-      // Authorization: 'Bearer jKzO36s1w1XN7DeRYOByvKfFTfvMV9A5',
-      Authorization: 'Bearer ViaMsaZ3WcPtcakj34tWvI8gqkYyOFXS',
-      'Cache-Control': 'no-cache',
+  return axios
+    .get(`${INCH_HOST}/swap`, {
+      headers: {
+        Authorization: `Bearer ${header}`,
+        'Cache-Control': 'no-cache',
 
-      accept: 'application/json',
-    },
-    params,
-  })
+        accept: 'application/json',
+      },
+      params,
+    })
+    .catch((e) => {
+      const { status } = e.response
+      if (status == 429) {
+        headerIndex = headerIndex === 2 ? 0 : headerIndex + 1
+        return get1inchParams(params, HEADER_LIST[headerIndex])
+      }
+      return {}
+    })
 }
 
 export const get1InchData = async (
