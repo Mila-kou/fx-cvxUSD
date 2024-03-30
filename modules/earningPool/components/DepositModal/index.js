@@ -89,7 +89,7 @@ export default function DepositModal(props) {
       <div className={styles.content}>
         <h2 className="mb-[16px] flex justify-between items-center">
           {name}
-          <div className="flex gap-[8px] text-[var(--second-text-color)] items-center">
+          {/* <div className="flex gap-[8px] text-[var(--second-text-color)] items-center">
             Gas optimized
             <Switch
               disabled={isCloseManageConvex}
@@ -111,7 +111,7 @@ export default function DepositModal(props) {
             >
               <InfoCircleOutlined className="mt-[10px]" />
             </Tooltip>
-          </div>
+          </div> */}
         </h2>
         <BalanceInput
           placeholder="0"
