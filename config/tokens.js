@@ -813,6 +813,8 @@ export const TOKEN_ICON_MAP = {
 
   fxUSD: '/tokens/fxusd.svg',
   rUSD: '/tokens/rUSD.svg',
+
+  FRAXBP: '/tokens/FRAXBP.svg',
 }
 
 export const getTokenIcon = (name) => {

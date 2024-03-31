@@ -9,6 +9,7 @@ import RebalancePoolCellV2 from '@/modules/rebalancePoolV2/components/RebalanceP
 import usePool from '@/modules/rebalancePoolV2/controller/usePool'
 import usePoolV2 from '@/modules/rebalancePoolV2/controller/usePoolV2'
 import MerkleTree from './MerkleTree'
+import ThirdPools from './components/ThirdPools'
 
 const Header = ({ title }) => (
   <div>
@@ -205,6 +206,20 @@ export default function EarningPoolPage() {
         {pageData.map((item) => (
           <PoolCell cellData={item} {...pageOthers} />
         ))}
+      </div>
+
+      <div className={`${styles.content} `}>
+        <p className="font-bold">f(x) Earn</p>
+        <div className="mt-[32px] px-[16px] flex justify-between">
+          <div className="w-[180px] text-[14px]">Pool/Token Name</div>
+          <div className="w-[90px] text-[14px]">Protocol/Platform</div>
+          <div className="w-[70px] text-[14px]">Category</div>
+          <div className="w-[90px] text-[14px]">TVL</div>
+          <div className="w-[100px] text-[14px]">APR Range</div>
+          <div className="w-[70px]" />
+        </div>
+
+        <ThirdPools />
       </div>
 
       <MerkleTree />

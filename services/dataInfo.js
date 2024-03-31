@@ -30,6 +30,11 @@ export const getFX_cvxFXN_sdFXN_apy = () =>
     .then((res) => res.data)
     .catch(() => ({}))
 
+export const getFxThirdList = () =>
+  fetcher(`${_fetchUrl}/api1/get_fx_third_list`)
+    .then((res) => res.data)
+    .catch(() => ({}))
+
 export const getCodeList = () =>
   fetcher(`${_fetchUrl}/api1/get_inviteCode`)
     .then((res) => res.data)
