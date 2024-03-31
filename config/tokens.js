@@ -814,3 +814,10 @@ export const TOKEN_ICON_MAP = {
   fxUSD: '/tokens/fxusd.svg',
   rUSD: '/tokens/rUSD.svg',
 }
+
+export const getTokenIcon = (name) => {
+  if (TOKEN_ICON_MAP[name]) {
+    return TOKEN_ICON_MAP[name]
+  }
+  return `/tokens/crypto-icons-stack.svg#${name.toLowerCase()}`
+}
