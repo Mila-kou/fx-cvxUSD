@@ -399,20 +399,26 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
         const sum = t_1.plus(t_2)
 
-        const minOut_1 = t_1.multipliedBy(_minoutETH).dividedBy(sum).toString()
+        const minOut_1 = t_1
+          .multipliedBy(_minoutETH)
+          .dividedBy(sum)
+          .toFixed(0, 1)
 
-        const minOut_2 = t_2.multipliedBy(_minoutETH).dividedBy(sum).toString()
+        const minOut_2 = t_2
+          .multipliedBy(_minoutETH)
+          .dividedBy(sum)
+          .toFixed(0, 1)
 
         const convertParams_baseToken_1 = getZapOutParams(
           config.tokens.wstETH,
           _symbolAddress,
-          getMinOutBySlippage(minOut_1)
+          minOut_1
         )
 
         const convertParams_baseToken_2 = getZapOutParams(
           config.tokens.sfrxETH,
           _symbolAddress,
-          getMinOutBySlippage(minOut_2)
+          minOut_2
         )
 
         apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
