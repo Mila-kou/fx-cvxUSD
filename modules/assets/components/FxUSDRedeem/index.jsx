@@ -350,11 +350,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       )
       setPriceLoading(false)
 
-      const _min_baseOuts = min_baseOuts.map((item) =>
-        getMinOutBySlippage(item)
-      )
-
-      return [_minOut, _min_baseOuts]
+      return [_minOut, min_baseOuts]
     } catch (error) {
       resetOutAmount()
       setBonus([])
@@ -377,7 +373,11 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
     try {
       setIsLoading(true)
-      const [_minoutETH, _min_baseOuts] = await getMinAmount()
+      const [_minoutETH, min_baseOuts] = await getMinAmount()
+
+      const _min_baseOuts = min_baseOuts.map((item) =>
+        getMinOutBySlippage(item)
+      )
 
       let apiCall
       let to
@@ -393,17 +393,26 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       } else {
         to = fxUSD_GatewayRouterContract._address
         const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
+
+        const sum =
+          min_baseOuts[0] * tokens.wstETH.price +
+          min_baseOuts[1] * tokens.sfrxETH.price
+        const minOut_1 =
+          (min_baseOuts[0] * tokens.wstETH.price * _minoutETH) / sum
+        const minOut_2 =
+          (min_baseOuts[1] * tokens.sfrxETH.price * _minoutETH) / sum
+
         const convertParams_baseToken_1 = getZapOutParams(
           config.tokens.wstETH,
-          _symbolAddress
+          _symbolAddress,
+          getMinOutBySlippage(minOut_1)
         )
 
         const convertParams_baseToken_2 = getZapOutParams(
           config.tokens.sfrxETH,
-          _symbolAddress
+          _symbolAddress,
+          getMinOutBySlippage(minOut_2)
         )
-
-        console.log('_min_baseOuts----', _min_baseOuts)
 
         apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
           [convertParams_baseToken_1, convertParams_baseToken_2],
