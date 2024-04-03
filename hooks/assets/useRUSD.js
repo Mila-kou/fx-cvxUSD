@@ -20,9 +20,9 @@ const useRUSD = () => {
     BASE_TOKENS_MAP.weETH.contracts.fToken
   ).contract.methods
 
-  // const { totalSupply: sfrxETH_fTokenTotalSupply } = getFContract(
-  //   BASE_TOKENS_MAP.sfrxETH.contracts.fToken
-  // ).contract.methods
+  const { totalSupply: ezETH_fTokenTotalSupply } = getFContract(
+    BASE_TOKENS_MAP.ezETH.contracts.fToken
+  ).contract.methods
 
   const fetchAssetsData = async (arr) => {
     try {
@@ -34,10 +34,10 @@ const useRUSD = () => {
           totalSupplyRes: totalSupply(),
           nav: nav(),
           weETH_fTokenTotalSupply: weETH_fTokenTotalSupply(),
-          // sfrxETH_fTokenTotalSupply: sfrxETH_fTokenTotalSupply(),
+          sfrxETH_fTokenTotalSupply: ezETH_fTokenTotalSupply(),
           markets: {
             weETH: markets(tokens.weETH),
-            // sfrxETH: markets(tokens.sfrxETH),
+            ezETH: markets(tokens.ezETH),
           },
         }
       })
@@ -48,13 +48,12 @@ const useRUSD = () => {
       callData.forEach((item) => {
         const {
           weETH_fTokenTotalSupply: _weETH_fTokenTotalSupply,
-          // sfrxETH_fTokenTotalSupply: _sfrxETH_fTokenTotalSupply,
+          sfrxETH_fTokenTotalSupply: _sfrxETH_fTokenTotalSupply,
           nav,
         } = item
-        const totalSupply = cBN(_weETH_fTokenTotalSupply || 0)
-        //   .plus(
-        //   _sfrxETH_fTokenTotalSupply || 0
-        // )
+        const totalSupply = cBN(_weETH_fTokenTotalSupply || 0).plus(
+          _sfrxETH_fTokenTotalSupply || 0
+        )
 
         const totalSupply_text = checkNotZoroNumOption(
           totalSupply,

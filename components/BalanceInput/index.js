@@ -84,38 +84,8 @@ function BalanceInput(props) {
   }, [clearTrigger])
 
   const logoSrc = useMemo(() => {
-    if (['fETH', 'FXN', 'fCVX'].includes(symbol)) {
-      return '/images/f-logo.svg'
-    }
-    if (['xETH', 'xstETH', 'xfrxETH', 'xeETH', 'xCVX'].includes(symbol)) {
-      return '/images/x-logo.svg'
-    }
-    if (['fxUSD'].includes(symbol)) {
-      return '/tokens/fxusd.svg'
-    }
-    if (symbol === 'crvUSD') {
-      return '/tokens/crvUSD.png'
-    }
-    if (['stETH', 'wstETH'].includes(symbol)) {
-      return '/tokens/steth.svg'
-    }
-    if (symbol === 'ETH') {
-      return '/tokens/crypto-icons-stack.svg#eth'
-    }
-    if (symbol === 'rUSD') {
-      return '/tokens/rUSD.svg'
-    }
-    if (symbol === 'frxETH') {
-      return '/tokens/frxeth.svg'
-    }
-    if (symbol === 'sfrxETH') {
-      return '/tokens/sfrxeth.svg'
-    }
-    if (['weETH', 'eETH'].includes(symbol)) {
-      return '/tokens/eETH.svg'
-    }
-    if (['aCVX'].includes(symbol)) {
-      return `/tokens/crypto-icons-stack.svg#cvx`
+    if (TOKEN_ICON_MAP[symbol]) {
+      return TOKEN_ICON_MAP[symbol]
     }
     return `/tokens/crypto-icons-stack.svg#${symbol.toLowerCase()}`
   }, [symbol])

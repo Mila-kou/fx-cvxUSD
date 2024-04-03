@@ -151,7 +151,12 @@ export default function DepositModal(props) {
             Deposit
           </BtnWapper>
         ) : (
-          <Button width="100%" loading={depositing} onClick={handleDeposit}>
+          <Button
+            width="100%"
+            loading={depositing}
+            disabled={!canSubmit}
+            onClick={handleDeposit}
+          >
             Deposit
           </Button>
         )}

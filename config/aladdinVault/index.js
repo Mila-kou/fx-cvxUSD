@@ -568,6 +568,36 @@ export const REBALANCE_GAUGE_LIST = [
     gaugeRewards: [config.TOKENS_INFO.fxn],
     rewardTokens: [],
   },
+  {
+    icon: '/tokens/rUSD.svg',
+    subIcon: '/tokens/ezETH.png',
+    icons: [
+      {
+        icon: '/tokens/rUSD.svg',
+        subIcon: '/tokens/ezETH.png',
+      },
+    ],
+    id: 5,
+    name: 'rUSD - ezETH',
+    platform: 'FX',
+    fromPlatform: 'Fx',
+    poolType: 'rUSD',
+    baseSymbol: 'ezETH',
+    platformUrl: 'https://fx.aladdin.club/staking',
+    nameShow: 'rUSD ezETH Rebalance Pool',
+    gaugeType: 1,
+    gaugeTypeName: 'Stability Pool Gauge',
+    actionRebalancePool: [
+      config.contracts.rUSD_ShareableRebalancePool_ezETH,
+      config.contracts.rUSD_ShareableRebalancePool_xeETH,
+    ],
+    lpAddress:
+      config.contracts.rUSD_ShareableRebalancePool_ezETH_FundraiseGauge,
+    lpGaugeAddress:
+      config.contracts.rUSD_ShareableRebalancePool_ezETH_FundraiseGauge,
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rewardTokens: [],
+  },
 ]
 
 export const REBALANCE_POOLS_LIST = [
@@ -769,8 +799,56 @@ export const REBALANCE_POOLS_LIST = [
       },
     ],
   },
+  {
+    id: 9,
+    icon: '/tokens/rUSD.svg',
+    subIcon: '/tokens/ezETH.png',
+    baseSymbol: 'ezETH',
+    gaugeType: 'boostRebalance',
+    nameShow: 'rUSD Stability Pool Redeem to ezETH',
+    poolType: 'rUSD',
+    withdrawDefaultToken: 'rUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
+    rebalancePoolAddress: config.contracts.rUSD_ShareableRebalancePool_ezETH,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_rUSD_ezETH',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'ezETH'],
+    zapTokens: [
+      {
+        symbol: 'rUSD',
+        address: config.tokens.rUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    id: 10,
+    icon: '/tokens/rUSD.svg',
+    subIcon: '/tokens/ezETH.png',
+    baseSymbol: 'ezETH',
+    gaugeType: 'boostRebalance',
+    nameShow: 'rUSD Stability Pool Redeem to xezETH',
+    poolType: 'rUSD',
+    withdrawDefaultToken: 'rUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
+    rebalancePoolAddress: config.contracts.rUSD_ShareableRebalancePool_xezETH,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_rUSD_xezETH',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'ezETH', 'xezETH'],
+    zapTokens: [
+      {
+        symbol: 'rUSD',
+        address: config.tokens.rUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
   // {
-  //   id: 9,
+  //   id: 11,
   //   icon: '/images/f-logo.svg',
   //   subIcon: '/tokens/crypto-icons-stack.svg#cvx',
   //   baseSymbol: 'aCVX',
@@ -793,7 +871,7 @@ export const REBALANCE_POOLS_LIST = [
   //   ],
   // },
   // {
-  //   id: 10,
+  //   id: 12,
   //   icon: '/images/f-logo.svg',
   //   subIcon: '/tokens/crypto-icons-stack.svg#cvx',
   //   baseSymbol: 'aCVX',

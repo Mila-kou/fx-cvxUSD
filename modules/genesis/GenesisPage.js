@@ -11,8 +11,8 @@ import useApprove from '@/hooks/useApprove'
 import { useToken } from '@/hooks/useTokenInfo'
 import { getGas } from '@/utils/gas'
 import WithdrawModal from './WithdrawModal'
-// import Select from '@/components/Select'
-import { ASSET_MAP } from '@/config/tokens'
+import Select from '@/components/Select'
+import { ASSET_MAP, BASE_TOKENS_MAP } from '@/config/tokens'
 import SlippageInfo from '@/components/SlippageInfo'
 import {
   useFxUSD_GatewayRouter_contract,
@@ -57,11 +57,21 @@ const TOKEN_OPTIONS = {
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
   ],
+  ezETH: [
+    ['ezETH', config.tokens.ezETH],
+    // ['ETH', config.tokens.eth],
+    // ['eETH', config.tokens.eETH],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+  ],
 }
 
 export default function GenesisPage() {
   const { query } = useRouter()
-  const { assetSymbol = 'fxUSD' } = query
+  const { assetSymbol: _assetSymbol = 'fxUSD' } = query
+
+  const [assetSymbol, _baseSymbol = 'ETH'] = _assetSymbol.split('_')
 
   const genesisData = useGenesis_c()
   const { tokens } = useSelector((state) => state.token)
@@ -72,18 +82,24 @@ export default function GenesisPage() {
 
   const { baseTokenInfos } = ASSET_MAP[assetSymbol]
 
-  // const [stage, setStage] = useState(
-  //   { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.LAUNCHING }[assetSymbol]
-  // )
+  // const stage = {
+  //   fxUSD: STAGE.FULL_LAUNCHED,
+  //   rUSD_eETH: STAGE.FULL_LAUNCHED,
+  //   rUSD_ezETH: STAGE.LAUNCHING,
+  // }[_assetSymbol]
 
-  const stage = { fxUSD: STAGE.FULL_LAUNCHED, rUSD: STAGE.FULL_LAUNCHED }[
-    assetSymbol
-  ]
+  const [stage, setStage] = useState(
+    {
+      fxUSD: STAGE.FULL_LAUNCHED,
+      rUSD_eETH: STAGE.FULL_LAUNCHED,
+      rUSD_ezETH: STAGE.LAUNCHING,
+    }[_assetSymbol]
+  )
 
   const [clearTrigger, clearInput] = useClearInput()
   const { _currentAccount, sendTransaction } = useWeb3()
   const [activeIndex, setActiveIndex] = useState(0)
-  const [symbol, setSymbol] = useState(assetSymbol === 'rUSD' ? 'weETH' : 'ETH')
+  const [symbol, setSymbol] = useState(_baseSymbol)
   const [isDepositing, setIsDepositing] = useState(false)
   const [fromAmount, setFromAmount] = useState(0)
   const [minOut, setMinOut] = useState(0)
@@ -92,8 +108,8 @@ export default function GenesisPage() {
   const getInitialFundContract = useInitialFundContract()
 
   useEffect(() => {
-    setSymbol(assetSymbol === 'rUSD' ? 'weETH' : 'ETH')
-  }, [assetSymbol, setSymbol])
+    setSymbol(_baseSymbol)
+  }, [assetSymbol, setSymbol, _baseSymbol])
 
   const [withdrawInfo, setWithdrawInfo] = useState(null)
   const [isBaseToken, setIsBaseToken] = useState(false)
@@ -102,14 +118,19 @@ export default function GenesisPage() {
     stETH: false,
     frxETH: false,
     eETH: false,
+    ezETH: false,
   })
   const [isWithdrawBaseTokening, setIsWithdrawBaseTokening] = useState({
     stETH: false,
     frxETH: false,
     eETH: false,
+    ezETH: false,
   })
 
-  const pools = baseTokenInfos.map((item) => ({
+  const _baseTokenInfos =
+    assetSymbol === 'rUSD' ? [BASE_TOKENS_MAP[_baseSymbol]] : baseTokenInfos
+
+  const pools = _baseTokenInfos.map((item) => ({
     ...item,
     ...genesis[item.baseName],
     apy: genesisData[item.baseName].apy,
@@ -402,6 +423,15 @@ export default function GenesisPage() {
     }
   }
 
+  const getApyText = (apy) => {
+    if (assetSymbol === 'rUSD') {
+      return `${apy} + 2x ${
+        _baseSymbol === 'ezETH' ? 'Renzo ezPoints' : 'Etherfi Points'
+      } + Eigen Layer Points`
+    }
+    return `MAX APY ${apy}`
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -417,9 +447,7 @@ export default function GenesisPage() {
                 <h2 className="text-[22px]">{item.totalShares_text}</h2>
                 {stage !== STAGE.LAUNCHING && (
                   <h2 className="text-[20px] mt-[8px] text-[var(--primary-color)]">
-                    {assetSymbol == 'rUSD'
-                      ? `${item.apy} + 2x Etherfi Points + Eigen Layer Points`
-                      : `MAX APY ${item.apy}`}
+                    {getApyText(item.apy)}
                   </h2>
                 )}
               </div>
@@ -537,9 +565,7 @@ export default function GenesisPage() {
               <div className="py-[6px]" key={item.symbol}>
                 <p className="text-center">{item.symbol}</p>
                 <h2 className="text-[20px] mt-[8px] text-[var(--primary-color)]">
-                  {assetSymbol == 'rUSD'
-                    ? `${item.apy} + 2x Etherfi Points + Eigen Layer Points`
-                    : `MAX APY ${item.apy}`}
+                  {getApyText(item.apy)}
                 </h2>
               </div>
             ))}

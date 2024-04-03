@@ -184,6 +184,21 @@ export const contracts = {
     '0xb1dD23468a69DFDDb7211298e609C0DB1522B2D6',
   rUSD_FxeETHTwapOracle: '0x834E87262A00b0aC38eD49Cb1110838866bE4a20',
 
+  rUSD_FxInitialFund_ezETH: '0x7612bCAbd3D66c71fF740472e063be6a74f126D1',
+  rUSD_ezETH_Treasury: '0x38965311507D4E54973F81475a149c09376e241e',
+  rUSD_ezETH_Market: '0x69518D1D70AD537C41401303BDf96032338E40dE',
+  rUSD_ezETH_FractionalToken: '0x50B4DC15b34E31671c9cA40F9eb05D7eBd6b13f9',
+  rUSD_ezETH_LeveragedToken: '0x2e5A5AF7eE900D34BCFB70C47023bf1d6bE35CF5',
+  rUSD_ShareableRebalancePool_ezETH:
+    '0xf58c499417e36714e99803Cb135f507a95ae7169',
+  rUSD_ShareableRebalancePool_ezETH_FundraiseGauge:
+    '0xb2E43ECecA7c110c74Cf13Ba35105B0633B74E91',
+  rUSD_ShareableRebalancePool_xezETH:
+    '0xBa947cba270D30967369Bf1f73884Be2533d7bDB',
+  rUSD_ezETH_RebalancePoolRegistry:
+    '0x5e3ca2A5736fb093328e4CA19A9A1966025f3905',
+  rUSD_FxezETHTwapOracle: '0x51Ef9FD457b9607911fB6cB72B9E47ffd5f053a6',
+
   // aCVX
   FxInitialFund_aCVX: '0x4F16fbac03d342795521A4BD9C46c21781c2aE04',
   aCVX_Treasury: '0xd8213a22cd1eB754B4088Ee492Ce67991e7aF5e4',
@@ -280,6 +295,8 @@ export const tokens = {
   rUSD: contracts.rUSD,
   weETH: '0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee',
   xeETH: contracts.rUSD_weETH_LeveragedToken,
+  ezETH: '0xbf5495Efe5DB9ce00f80364C8B423567e58d2110',
+  xezETH: contracts.rUSD_ezETH_LeveragedToken,
 
   apxETH: '0x9Ba021B0a9b958B5E75cE9f6dff97C7eE52cb3E6',
   pxETH: '0x04C154b66CB340F3Ae24111CC767e0184Ed00Cc6',
@@ -325,6 +342,7 @@ const TOKENS_INFO = {
   aCVX: ['aCVX', tokens.aCVX, 18, 'aCVX', 'aCVX'],
   fCVX: ['fCVX', tokens.fCVX, 18, 'fCVX', 'fCVX'],
   xCVX: ['xCVX', tokens.xCVX, 18, 'xCVX', 'xCVX'],
+  ezETH: ['ezETH', tokens.ezETH, 18, 'ezETH', 'ezETH'],
 }
 
 export const zapTokens = {
@@ -482,6 +500,13 @@ export const zapTokens = {
     address: TOKENS_INFO.eETH[1],
     needZap: true,
   },
+  ezETH: {
+    symbol: 'ezETH',
+    icon: 'ezETH',
+    decimals: TOKENS_INFO.ezETH[2],
+    address: TOKENS_INFO.ezETH[1],
+    needZap: true,
+  },
 }
 
 const POOLS_LIST_GAUGE = {
@@ -593,6 +618,12 @@ export const GENESIS_MAP = {
     xToken: 'xeETH',
     address: contracts.rUSD_FxInitialFund_weETH,
   },
+  ezETH: {
+    symbol: 'ezETH',
+    baseSymbol: 'ezETH',
+    xToken: 'xezETH',
+    address: contracts.rUSD_FxInitialFund_ezETH,
+  },
 }
 
 export const BASE_TOKENS_MAP = {
@@ -639,6 +670,18 @@ export const BASE_TOKENS_MAP = {
       fToken: contracts.rUSD_weETH_FractionalToken,
       xToken: contracts.rUSD_weETH_LeveragedToken,
       twapOracle: contracts.rUSD_FxeETHTwapOracle,
+    },
+  },
+  ezETH: {
+    baseSymbol: 'ezETH',
+    baseName: 'ezETH',
+    contracts: {
+      market: contracts.rUSD_ezETH_Market,
+      treasury: contracts.rUSD_ezETH_Treasury,
+      rebalancePoolRegistry: contracts.rUSD_ezETH_RebalancePoolRegistry,
+      fToken: contracts.rUSD_ezETH_FractionalToken,
+      xToken: contracts.rUSD_ezETH_LeveragedToken,
+      twapOracle: contracts.rUSD_FxezETHTwapOracle,
     },
   },
   aCVX: {
@@ -757,7 +800,7 @@ export const ASSET_MAP = {
     isBreakdownChart: true,
     background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
     baseSymbol: 'weETH',
-    baseTokenInfos: [BASE_TOKENS_MAP.weETH],
+    baseTokenInfos: [BASE_TOKENS_MAP.weETH, BASE_TOKENS_MAP.ezETH],
   },
   xeETH: {
     symbol: 'xeETH',
@@ -771,6 +814,19 @@ export const ASSET_MAP = {
     isShow24Change: true,
     baseSymbol: 'weETH',
     baseTokenInfo: BASE_TOKENS_MAP.weETH,
+  },
+  xezETH: {
+    symbol: 'xezETH',
+    baseList: ['ETH'],
+    name: 'xezETH',
+    address: contracts.rUSD_ezETH_LeveragedToken,
+    descrition: 'Long ezETH up to 4.3x',
+    icon: '/images/x-logo.svg',
+    subIcon: '/tokens/ezETH.png',
+    isX: true,
+    isShow24Change: true,
+    baseSymbol: 'ezETH',
+    baseTokenInfo: BASE_TOKENS_MAP.ezETH,
   },
 }
 
@@ -790,6 +846,7 @@ export default {
 export const TOKEN_ICON_MAP = {
   ETH: '/tokens/crypto-icons-stack.svg#eth',
   FXN: '/images/FXN.svg',
+  veFXN: '/images/FXN.svg',
   stETH: '/tokens/steth.svg',
   wstETH: '/tokens/steth.svg',
   sfrxETH: '/tokens/sfrxeth.svg',
@@ -803,12 +860,14 @@ export const TOKEN_ICON_MAP = {
 
   eETH: '/tokens/eETH.svg',
   weETH: '/tokens/eETH.svg',
+  ezETH: '/tokens/ezETH.png',
   aCVX: '/tokens/crypto-icons-stack.svg#cvx',
 
   xETH: '/images/x-logo.svg',
   xstETH: '/images/x-logo.svg',
   xfrxETH: '/images/x-logo.svg',
   xeETH: '/images/x-logo.svg',
+  xezETH: '/images/x-logo.svg',
   xCVX: '/images/x-logo.svg',
 
   fxUSD: '/tokens/fxusd.svg',

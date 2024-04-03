@@ -20,11 +20,16 @@ const configs = [
     fxnNum: 0,
     total: 10000,
   },
+  {
+    symbol: 'ezETH',
+    fxnNum: 0,
+    total: 10000,
+  },
 ]
 
 const useGenesis_c = () => {
   useGenesis()
-  const { tokenPrice } = useSelector((state) => state.token)
+  const { tokenPrice, tokens } = useSelector((state) => state.token)
   const genesis = useSelector((state) => state.genesis)
 
   const getTokenPrice = useCallback(
@@ -33,6 +38,9 @@ const useGenesis_c = () => {
         const _tokenPrice = tokenPrice[tokenName]
         if (_tokenPrice) {
           return _tokenPrice.usd
+        }
+        if (tokens[tokenName]) {
+          return tokens[tokenName]?.price
         }
         return 0
       } catch (e) {

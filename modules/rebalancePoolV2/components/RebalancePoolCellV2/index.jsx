@@ -282,7 +282,11 @@ export default function RebalancePoolCellV2({
           >
             <span className="underline text-[var(--a-button-color)]">LRT</span>
           </Tooltip>{' '} */}
-          LRT yields, ~ 4x Etherfi Points, ~ 2x Eigen Layer Points and{' '}
+          LRT yields, ~ 4x{' '}
+          {_poolConfig.baseSymbol === 'ezETH'
+            ? 'Renzo ezPoints'
+            : 'Etherfi Points'}
+          , ~ 2x Eigen Layer Points and{' '}
           {/* <Tooltip
             placement="topLeft"
             title={harvestTypeDom('FXNDOM')}

@@ -17,21 +17,21 @@ const explorerUri = 'https://www.etherscan.io'
 //   label: 'Mainnet Fork',
 //   rpcUrl: 'https://apitest.aladdin.club/rpc',
 // }
-const chainInfo = {
-  id: '0x1864e', // 99918
-  token: 'ETH',
-  label: 'online-1',
-  rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_ed3f76d88fac4cf5a1adeae87afce429',
-}
-
 // const chainInfo = {
-//   id: '0x1864c', // 99916
+//   id: '0x1864e', // 99918
 //   token: 'ETH',
-//   label: 'online-2',
+//   label: 'online-1',
 //   rpcUrl:
-//     'https://rpc.phalcon.blocksec.com/rpc_21320a5eee4e4eb18eba48ad926b04d3',
+//     'https://rpc.phalcon.blocksec.com/rpc_ed3f76d88fac4cf5a1adeae87afce429',
 // }
+
+const chainInfo = {
+  id: '0x18648', // 99912
+  token: 'ETH',
+  label: 'ezETH-test02',
+  rpcUrl:
+    'https://rpc.phalcon.blocksec.com/rpc_7f60160c35614cf9819395e3ff6e41ac',
+}
 
 const contracts = {
   ...tokensInfo.contracts,

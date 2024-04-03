@@ -40,13 +40,14 @@ function GlobalProvider({ children }) {
   useRUSD()
 
   fetchBaseTokensData(ASSET_MAP.fxUSD.baseTokenInfos)
-  fetchBaseTokensData(ASSET_MAP.rUSD.baseTokenInfos)
-  // fetchBaseTokensData([BASE_TOKENS_MAP.aCVX])
+  fetchBaseTokensData([BASE_TOKENS_MAP.weETH])
+  fetchBaseTokensData([BASE_TOKENS_MAP.ezETH])
 
   useV2Assets([
     ASSET_MAP.xstETH,
     ASSET_MAP.xfrxETH,
     ASSET_MAP.xeETH,
+    ASSET_MAP.xezETH,
     // ASSET_MAP.fCVX,
     // ASSET_MAP.xCVX,
   ])

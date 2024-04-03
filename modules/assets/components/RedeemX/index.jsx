@@ -44,6 +44,14 @@ const MINT_OPTIONS = {
     // ['crvUSD', config.tokens.crvUSD],
     // ['eETH', config.tokens.eETH],
   ],
+  xezETH: [
+    ['ezETH', config.tokens.ezETH],
+    // ['ETH', config.tokens.eth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+    // ['eETH', config.tokens.eETH],
+  ],
   xCVX: [
     ['aCVX', config.tokens.aCVX],
     ['ETH', config.tokens.eth],

@@ -54,7 +54,9 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
         <div>
           {baseTokens.map((item) => (
             <div className={styles.nums}>
-              {item.data.collateralRatio_text}%{' '}
+              {item.data?.collateralRatio_text
+                ? `${item.data?.collateralRatio_text}% `
+                : '- '}
               <span className="text-[16px] text-[var(--second-text-color)]">
                 ({item.baseName})
               </span>

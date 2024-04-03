@@ -6,7 +6,7 @@ import config from '@/config/index'
 import { useBoostableRebalancePool } from '@/hooks/useGaugeContracts'
 import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
 
-const REWARD_TOKENS = ['FXN', 'wstETH', 'sfrxETH', 'weETH']
+const REWARD_TOKENS = ['FXN', 'wstETH', 'sfrxETH', 'weETH', 'ezETH']
 // const REWARD_TOKENS = ['FXN', 'wstETH', 'sfrxETH', 'weETH', 'aCVX']
 
 const useRebalancePoolUseInfo = (infoKey) => {

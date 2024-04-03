@@ -31,6 +31,8 @@ export default function GaugePage() {
   const [clearPrev, setClearPrev] = useState(false)
   const [voteData, setVoteData] = useState(null)
 
+  console.log('userVoteInfo----', userVoteInfo)
+
   const onCastVote = (item, newPower) => {
     const _powerVote = cBN(userVoteInfo.veFXNAmount)
       .multipliedBy(newPower)
@@ -95,6 +97,7 @@ export default function GaugePage() {
           (item) => (
             <PoolCell
               cellData={item}
+              userVoteInfo={userVoteInfo}
               voteData={poolVoteInfo[item.lpGaugeAddress]}
               remaining={userVoteInfo.remaining}
               onCastVote={(newPower) => onCastVote(item, newPower)}

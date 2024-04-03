@@ -25,7 +25,7 @@ const routers = [
   ['Earn', '/earn'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
-  ['rUSD Genesis', '/genesis/rUSD'],
+  ['rUSD Genesis', '/genesis/rUSD_ezETH'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
@@ -187,6 +187,10 @@ export default function AppHeader() {
     {
       label: 'fxUSD Genesis',
       onClick: () => push('/genesis/fxUSD'),
+    },
+    {
+      label: 'rUSD weETH Genesis',
+      onClick: () => push('/genesis/rUSD_weETH'),
     },
   ]
 

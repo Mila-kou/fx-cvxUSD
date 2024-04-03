@@ -59,6 +59,14 @@ export default function EarningPoolPage() {
     infoKey: 'rebalancePoolV2_info_rUSD_xeETH',
   })
 
+  const rUSD_ezETH_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_rUSD_ezETH',
+  })
+
+  const rUSD_xezETH_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_rUSD_xezETH',
+  })
+
   // const fCVX_aCVX_pool = usePoolV2({
   //   infoKey: 'rebalancePoolV2_info_fCVX_aCVX',
   // })
@@ -145,6 +153,28 @@ export default function EarningPoolPage() {
             </p>
           }
           {...rUSD_xeETH_pool}
+        />
+        <RebalancePoolCellV2
+          title="rUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn ezETH
+              <br />
+              Redeem to ezETH
+            </p>
+          }
+          {...rUSD_ezETH_pool}
+        />
+        <RebalancePoolCellV2
+          title="rUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn ezETH
+              <br />
+              Redeem to xezETH
+            </p>
+          }
+          {...rUSD_xezETH_pool}
         />
       </div>
 

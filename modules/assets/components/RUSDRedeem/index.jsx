@@ -49,43 +49,27 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
 
   const [baseSymbol, baseTokenData, managed, isRecap, isFXBouns] =
     useMemo(() => {
-      const wstETH_m = cBN(markets?.weETH?.managed || 0)
-      return [
-        'weETH',
-        baseToken.weETH.data,
-        wstETH_m,
-        baseToken.weETH.data?.isRecap,
-        baseToken.weETH.data?.isFXBouns,
-      ]
-
-      const sfrxETH_m = cBN(markets?.sfrxETH?.managed || 0)
+      const weETH_m = cBN(markets?.weETH?.managed || 0)
+      const ezETH_m = cBN(markets?.ezETH?.managed || 0)
 
       const _isRecap =
-        baseToken.weETH.data?.isRecap || baseToken.sfrxETH.data?.isRecap
+        baseToken.weETH.data?.isRecap || baseToken.ezETH.data?.isRecap
 
       const _isFXBouns =
-        baseToken.weETH.data?.isFXBouns || baseToken.sfrxETH.data?.isFXBouns
+        baseToken.weETH.data?.isFXBouns || baseToken.ezETH.data?.isFXBouns
 
       if (['weETH', 'eETH'].includes(symbol)) {
-        return ['weETH', baseToken.weETH.data, wstETH_m, _isRecap, _isFXBouns]
+        return ['weETH', baseToken.weETH.data, weETH_m, _isRecap, _isFXBouns]
       }
-      if (symbol == 'sfrxETH') {
-        return [
-          'sfrxETH',
-          baseToken.sfrxETH.data,
-          sfrxETH_m,
-          _isRecap,
-          _isFXBouns,
-        ]
+      if (symbol == 'ezETH') {
+        return ['ezETH', baseToken.ezETH.data, ezETH_m, _isRecap, _isFXBouns]
       }
 
-      const _baseSymbol = wstETH_m.isGreaterThan(sfrxETH_m)
-        ? 'weETH'
-        : 'sfrxETH'
+      const _baseSymbol = weETH_m.isGreaterThan(ezETH_m) ? 'weETH' : 'ezETH'
       return [
         _baseSymbol,
         baseToken[_baseSymbol].data,
-        BigNumber.max(wstETH_m, sfrxETH_m),
+        BigNumber.max(weETH_m, ezETH_m),
         _isRecap,
         _isFXBouns,
       ]
@@ -95,11 +79,12 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
     // ['ETH', config.tokens.eth],
     // ['eETH', config.tokens.eETH],
     ['weETH', config.tokens.weETH],
+    // ['ezETH', config.tokens.ezETH],
     // ['USDT', config.tokens.usdt],
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
   ].filter((item) => !(isRecap && ['weETH'].includes(item[0])))
-  // ].filter((item) => !(isRecap && ['weETH', 'sfrxETH'].includes(item[0])))
+  // ].filter((item) => !(isRecap && ['weETH', 'ezETH'].includes(item[0])))
 
   const {
     mintPaused,
@@ -299,7 +284,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
 
       if (checkNotZoroNum(fromAmount)) {
         let resData
-        if (['weETH', 'sfrxETH'].includes(symbol)) {
+        if (['weETH', 'ezETH'].includes(symbol)) {
           resData = await RUSD_contract.methods
             .redeem(config.tokens[symbol], _mockAmount, _account, 0)
             .call({
@@ -321,7 +306,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
           )
 
           // const convertParams_baseToken_2 = getZapOutParams(
-          //   config.tokens.sfrxETH,
+          //   config.tokens.ezETH,
           //   _symbolAddress
           // )
           // resData = await fxUSD_GatewayRouterContract.methods
@@ -353,7 +338,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
             if (Number(item)) {
               __bonus.push({
                 bonus: cBN(item),
-                symbol: index ? 'sfrxETH' : 'weETH',
+                symbol: index ? 'ezETH' : 'weETH',
               })
             }
           })
@@ -412,7 +397,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
       let apiCall
       let to
 
-      if (['weETH', 'sfrxETH'].includes(symbol)) {
+      if (['weETH', 'ezETH'].includes(symbol)) {
         to = RUSD_contract._address
         apiCall = await RUSD_contract.methods.redeem(
           config.tokens[symbol],
@@ -429,7 +414,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
         )
 
         // const convertParams_baseToken_2 = getZapOutParams(
-        //   config.tokens.sfrxETH,
+        //   config.tokens.ezETH,
         //   _symbolAddress
         // )
 

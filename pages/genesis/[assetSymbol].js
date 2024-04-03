@@ -14,7 +14,7 @@ export default function Genesis() {
 }
 
 export async function getStaticPaths() {
-  const paths = ['fxUSD', 'rUSD'].map((assetSymbol) => ({
+  const paths = ['fxUSD', 'rUSD_weETH', 'rUSD_ezETH'].map((assetSymbol) => ({
     params: { assetSymbol },
   }))
 

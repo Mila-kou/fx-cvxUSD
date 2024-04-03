@@ -43,6 +43,14 @@ const WITHDRAW_OPTIONS = {
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
   ],
+  ezETH: [
+    ['rUSD', config.tokens.rUSD],
+    // ['ETH', config.tokens.eth],
+    // ['eETH', config.tokens.eETH],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+  ],
 }
 
 export default function WithdrawModal(props) {

@@ -21,9 +21,11 @@ export default function SymbolPage() {
 
     if (symbol === 'xfrxETH') return [baseToken.sfrxETH]
 
-    if (symbol === 'rUSD') return [baseToken.weETH]
+    if (symbol === 'rUSD') return [baseToken.weETH, baseToken.ezETH]
 
     if (symbol === 'xeETH') return [baseToken.weETH]
+
+    if (symbol === 'xezETH') return [baseToken.ezETH]
 
     if (['xCVX', 'fCVX'].includes(symbol)) return [baseToken.aCVX]
 

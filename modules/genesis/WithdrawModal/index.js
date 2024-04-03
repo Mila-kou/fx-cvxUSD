@@ -5,12 +5,6 @@ import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
 import { NoticeCard } from '@/modules/assets/components/Common'
 
-const NOTICE_MAP = {
-  fxUSD:
-    'You will lose at least 50% of the rewards which will be allocated proportionally to users who keep their position till the end of the seeding event',
-  rUSD: 'You will lose at least Etherfi Point+EigenLayer Point, which will be proportionally distributed to users who maintain their positions till the end of the seeding event.',
-}
-
 export default function WithdrawModal(props) {
   const {
     onCancel,
@@ -22,6 +16,14 @@ export default function WithdrawModal(props) {
     assetSymbol,
   } = props
   const { xToken, symbol, baseSymbol, sharesRes } = info
+
+  const NOTICE_MAP = {
+    fxUSD:
+      'You will lose at least 50% of the rewards which will be allocated proportionally to users who keep their position till the end of the seeding event',
+    rUSD: `You will lose at least ${
+      baseSymbol === 'ezETH' ? 'Renzo ezPoints' : 'Etherfi Points'
+    }+EigenLayer Point, which will be proportionally distributed to users who maintain their positions till the end of the seeding event.`,
+  }
 
   const [list, setList] = useState([])
 

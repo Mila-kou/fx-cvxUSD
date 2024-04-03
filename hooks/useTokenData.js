@@ -14,9 +14,8 @@ const useTokenData = () => {
   const dispatch = useDispatch()
   // const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH, fCVX, xCVX } =
   //   useSelector((state) => state.asset)
-  const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH } = useSelector(
-    (state) => state.asset
-  )
+  const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH, xezETH } =
+    useSelector((state) => state.asset)
 
   const ethToken = useToken(config.tokens.eth)
   const wethToken = useTokenBalance(config.tokens.weth)
@@ -40,6 +39,9 @@ const useTokenData = () => {
   const xeETHToken = useTokenBalance(config.tokens.xeETH)
   const weETHToken = useTokenBalance(config.tokens.weETH)
   const eETHToken = useTokenBalance(config.tokens.eETH)
+
+  const ezETHToken = useTokenBalance(config.tokens.ezETH)
+  const xezETHToken = useTokenBalance(config.tokens.xezETH)
 
   // const aCVXToken = useTokenBalance(config.tokens.aCVX)
   // const xCVXToken = useTokenBalance(config.tokens.xCVX)
@@ -148,6 +150,14 @@ const useTokenData = () => {
           balance: eETHToken.balance,
           price: tokenPrice?.eETH?.usd?.toFixed(4) ?? 0,
         },
+        ezETH: {
+          balance: ezETHToken.balance,
+          price: tokenPrice?.['renzo-restaked-eth']?.usd?.toFixed(4) ?? 0,
+        },
+        xezETH: {
+          balance: xezETHToken.balance,
+          price: fb4(cBN(xezETH.nav) || 0, false),
+        },
         // aCVX: {
         //   balance: aCVXToken.balance,
         //   price: tokenPrice?.CVX?.usd?.toFixed(4) ?? 0,
@@ -183,6 +193,8 @@ const useTokenData = () => {
     rUSDToken,
     xeETHToken,
     weETHToken,
+    ezETHToken,
+    xezETHToken,
     // aCVXToken,
     // xCVXToken,
     // fCVXToken,

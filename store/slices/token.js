@@ -22,6 +22,8 @@ const list = [
   'eETH',
   'weETH',
   'xeETH',
+  'ezETH',
+  'xezETH',
   'rUSD',
   'CVX',
   'aCVX',

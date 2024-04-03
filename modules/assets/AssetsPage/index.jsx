@@ -19,9 +19,8 @@ export default function AssetsPage() {
   const { _currentAccount, sendTransaction } = useWeb3()
   // const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH, fCVX, xCVX } =
   //   useSelector((state) => state.asset)
-  const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH } = useSelector(
-    (state) => state.asset
-  )
+  const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH, xezETH } =
+    useSelector((state) => state.asset)
   const { wstETH, sfrxETH, weETH } = useSelector((state) => state.baseToken)
 
   // usePools()
@@ -214,7 +213,7 @@ export default function AssetsPage() {
             ],
             [
               'Mint and Redeem Leveraged Tokens',
-              [xeETH],
+              [xeETH, xezETH],
               true,
               `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
             ],
@@ -235,7 +234,13 @@ export default function AssetsPage() {
               </div>
 
               {list.map((item) => (
-                <Link href={`assets/${item.symbol}`}>
+                <Link
+                  href={
+                    item.symbol === 'xezETH'
+                      ? 'genesis/rUSD_ezETH'
+                      : `assets/${item.symbol}`
+                  }
+                >
                   <AssetCell info={item} />
                 </Link>
               ))}

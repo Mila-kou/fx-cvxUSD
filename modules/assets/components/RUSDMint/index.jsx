@@ -42,6 +42,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
     ['weETH', config.tokens.weETH],
+    // ['ezETH', config.tokens.ezETH],
   ].filter((item) => item[0] !== toSymbol)
 
   const [pausedError, setPausedError] = useState(false)
@@ -57,10 +58,10 @@ export default function RUSDMint({ slippage, assetInfo }) {
   )
 
   const isRecap = useMemo(() => {
-    const wstETH_data = baseToken.weETH.data
-    // const sfrxETH_data = baseToken.sfrxETH.data
+    const weETH_data = baseToken.weETH.data
+    const ezETH_data = baseToken.ezETH.data
 
-    return wstETH_data?.isRecap // || sfrxETH_data?.isRecap
+    return weETH_data?.isRecap || ezETH_data?.isRecap
   }, [baseToken])
 
   const minGas = 234854
@@ -73,13 +74,13 @@ export default function RUSDMint({ slippage, assetInfo }) {
   const [mintLoading, setMintLoading] = useState(false)
 
   const POOL_LIST = poolList
-    .filter((item) => ['weETH', 'sfrxETH'].includes(item.baseSymbol))
+    .filter((item) => ['weETH', 'ezETH'].includes(item.baseSymbol))
     .filter((item) => {
       if (['weETH'].includes(symbol)) {
         return item.baseSymbol === 'weETH'
       }
-      if (['sfrxETH', 'frxETH'].includes(symbol)) {
-        return item.baseSymbol === 'sfrxETH'
+      if (['ezETH', 'frxETH'].includes(symbol)) {
+        return item.baseSymbol === 'ezETH'
       }
       return true
     })
@@ -96,74 +97,71 @@ export default function RUSDMint({ slippage, assetInfo }) {
     }
   }, [POOL_LIST.length])
 
-  // useEffect(() => {
-  //   const wstETH_data = baseToken.weETH.data
-  //   const sfrxETH_data = baseToken.sfrxETH.data
+  useEffect(() => {
+    const weETH_data = baseToken.weETH.data
+    const ezETH_data = baseToken.ezETH.data
 
-  //   if (isEarnActive) {
-  //     const pool = poolList.find(
-  //       (item) => item.rebalancePoolAddress === poolAdddress
-  //     )
+    // if (isEarnActive) {
+    //   const pool = poolList.find(
+    //     (item) => item.rebalancePoolAddress === poolAdddress
+    //   )
 
-  //     if (['weETH'].includes(symbol) && pool.baseSymbol !== 'weETH') {
-  //       setPoolAdddress(POOL_LIST[0].value)
-  //     }
-  //     if (
-  //       ['sfrxETH', 'frxETH'].includes(symbol) &&
-  //       pool.baseSymbol !== 'sfrxETH'
-  //     ) {
-  //       setPoolAdddress(POOL_LIST[0].value)
-  //     }
-  //     setBaseSymbol(pool.baseSymbol)
-  //     return
-  //   }
+    //   if (['weETH'].includes(symbol) && pool.baseSymbol !== 'weETH') {
+    //     setPoolAdddress(POOL_LIST[0].value)
+    //   }
+    //   if (['ezETH', 'frxETH'].includes(symbol) && pool.baseSymbol !== 'ezETH') {
+    //     setPoolAdddress(POOL_LIST[0].value)
+    //   }
+    //   setBaseSymbol(pool.baseSymbol)
+    //   return
+    // }
 
-  //   if (['weETH'].includes(symbol)) {
-  //     setBaseSymbol('weETH')
-  //     return
-  //   }
-  //   if (['frxETH', 'sfrxETH'].includes(symbol)) {
-  //     setBaseSymbol('sfrxETH')
-  //     return
-  //   }
+    if (['weETH'].includes(symbol)) {
+      setBaseSymbol('weETH')
+      return
+    }
+    if (['ezETH'].includes(symbol)) {
+      setBaseSymbol('ezETH')
+      return
+    }
 
-  //   if (
-  //     cBN(wstETH_data.fTokenTotalSupplyRes).isGreaterThan(
-  //       markets?.weETH.mintCap
-  //     ) ||
-  //     !wstETH_data.isBaseTokenPriceValid
-  //   ) {
-  //     setBaseSymbol('sfrxETH')
-  //     return
-  //   }
+    if (
+      cBN(weETH_data.fTokenTotalSupplyRes).isGreaterThan(
+        markets?.weETH.mintCap
+      ) ||
+      !weETH_data.isBaseTokenPriceValid
+    ) {
+      setBaseSymbol('ezETH')
+      return
+    }
 
-  //   if (
-  //     cBN(sfrxETH_data.fTokenTotalSupplyRes).isGreaterThan(
-  //       markets?.sfrxETH.mintCap
-  //     ) ||
-  //     !sfrxETH_data.isBaseTokenPriceValid
-  //   ) {
-  //     setBaseSymbol('weETH')
-  //     return
-  //   }
+    if (
+      cBN(ezETH_data.fTokenTotalSupplyRes).isGreaterThan(
+        markets?.ezETH.mintCap
+      ) ||
+      !ezETH_data.isBaseTokenPriceValid
+    ) {
+      setBaseSymbol('weETH')
+      return
+    }
 
-  //   const _baseSymbol = cBN(wstETH_data.collateralRatioRes).isGreaterThan(
-  //     sfrxETH_data.collateralRatioRes
-  //   )
-  //     ? 'weETH'
-  //     : 'sfrxETH'
+    const _baseSymbol = cBN(weETH_data.collateralRatioRes).isGreaterThan(
+      ezETH_data.collateralRatioRes
+    )
+      ? 'weETH'
+      : 'ezETH'
 
-  //   setBaseSymbol(_baseSymbol)
-  // }, [
-  //   baseToken,
-  //   symbol,
-  //   markets,
-  //   isEarn,
-  //   poolAdddress,
-  //   POOL_LIST,
-  //   setBaseSymbol,
-  //   setPoolAdddress,
-  // ])
+    setBaseSymbol(_baseSymbol)
+  }, [
+    baseToken,
+    symbol,
+    markets,
+    isEarn,
+    poolAdddress,
+    POOL_LIST,
+    setBaseSymbol,
+    setPoolAdddress,
+  ])
 
   const {
     mintPaused,
@@ -198,7 +196,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
   }, [symbol])
 
   const getContractAddress = () => {
-    if (['weETH', 'sfrxETH'].includes(symbol)) return 'rUSD'
+    if (['weETH', 'ezETH'].includes(symbol)) return 'rUSD'
     return 'fxUSD_gateway_router'
   }
 
@@ -297,7 +295,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
         let _ETHtAmountAndGas = _mockAmount
         let resData
 
-        if (['weETH', 'sfrxETH'].includes(symbol)) {
+        if (['weETH', 'ezETH'].includes(symbol)) {
           if (isEarnActive) {
             resData = await RUSD_contract.methods
               .mintAndEarn(poolAdddress, _ETHtAmountAndGas, _account, 0)
@@ -421,7 +419,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
 
       let apiCall
       let to
-      if (['weETH', 'sfrxETH'].includes(symbol)) {
+      if (['weETH', 'ezETH'].includes(symbol)) {
         to = RUSD_contract._address
         if (isEarnActive) {
           apiCall = await RUSD_contract.methods.mintAndEarn(

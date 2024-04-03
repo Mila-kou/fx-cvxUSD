@@ -14,6 +14,10 @@ const initialState = {
     ...BASE_TOKENS_MAP.weETH,
     data: {},
   },
+  ezETH: {
+    ...BASE_TOKENS_MAP.ezETH,
+    data: {},
+  },
   aCVX: {
     ...BASE_TOKENS_MAP.aCVX,
     data: {},

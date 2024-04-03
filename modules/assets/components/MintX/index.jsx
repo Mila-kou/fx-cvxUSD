@@ -27,22 +27,22 @@ import useOutAmount from '../../hooks/useOutAmount'
 
 const MINT_OPTIONS = {
   xstETH: [
+    ['wstETH', config.tokens.wstETH],
     ['ETH', config.tokens.eth],
     ['stETH', config.tokens.stETH],
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
     ['Frax', config.tokens.frax],
     ['crvUSD', config.tokens.crvUSD],
-    ['wstETH', config.tokens.wstETH],
   ],
   xfrxETH: [
+    ['sfrxETH', config.tokens.sfrxETH],
     ['ETH', config.tokens.eth],
     ['frxETH', config.tokens.frxETH],
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
     ['Frax', config.tokens.frax],
     ['crvUSD', config.tokens.crvUSD],
-    ['sfrxETH', config.tokens.sfrxETH],
   ],
   xeETH: [
     // ['ETH', config.tokens.eth],
@@ -52,12 +52,20 @@ const MINT_OPTIONS = {
     ['weETH', config.tokens.weETH],
     // ['eETH', config.tokens.eETH],
   ],
+  xezETH: [
+    // ['ETH', config.tokens.eth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+    ['ezETH', config.tokens.ezETH],
+    // ['eETH', config.tokens.eETH],
+  ],
   xCVX: [
+    ['aCVX', config.tokens.aCVX],
     ['ETH', config.tokens.eth],
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
     ['crvUSD', config.tokens.crvUSD],
-    ['aCVX', config.tokens.aCVX],
   ],
 }
 
@@ -86,7 +94,7 @@ export default function MintX({ slippage, assetInfo }) {
   const MarketContract = getMarketContract(contracts.market).contract
 
   const [pausedError, setPausedError] = useState(false)
-  const [symbol, setSymbol] = useState(baseSymbol === 'weETH' ? 'weETH' : 'ETH')
+  const [symbol, setSymbol] = useState(baseSymbol)
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
 
