@@ -818,7 +818,7 @@ export const ASSET_MAP = {
   xezETH: {
     symbol: 'xezETH',
     baseList: ['ETH'],
-    name: 'xezETH',
+    name: 'xezETH (Renzo)',
     address: contracts.rUSD_ezETH_LeveragedToken,
     descrition: 'Long ezETH up to 4.3x',
     icon: '/images/x-logo.svg',
