@@ -178,8 +178,8 @@ export default function GenesisPage() {
 
     if (needApprove && _enableETH) return true
 
-    return _enableETH && cBN(minOut).isGreaterThan(0)
-  }, [fromAmount, symbol, needApprove, minOut])
+    return _enableETH && (symbol === baseSymbol || cBN(minOut).isGreaterThan(0))
+  }, [fromAmount, symbol, needApprove, minOut, symbol === baseSymbol])
 
   const minGas = 234854
 
@@ -205,7 +205,7 @@ export default function GenesisPage() {
     const _mockAmount = fromAmount
     const _mockRatio = 1
 
-    console.log('_mockAmount-----', _mockAmount, symbol)
+    console.log('_mockAmount-----', _mockAmount, symbol, baseSymbol)
     try {
       let minout_ETH
       if (checkNotZoroNum(fromAmount)) {
@@ -217,7 +217,6 @@ export default function GenesisPage() {
           amount: _ETHtAmountAndGas,
           slippage,
         })
-
         const resData = await fxUSD_GatewayRouterContract.methods
           .fxInitialFundDeposit(convertParams, pool.address)
           .call({
