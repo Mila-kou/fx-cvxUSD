@@ -25,11 +25,14 @@
     }
     .tag {
       background: var(--adverse-primary-color);
-      padding: 0 4px;
-      height: 13px;
+      color: #fff;
+      padding: 2px 6px;
+      height: 16px;
+      margin-top: -4px;
       text-align: center;
-      font-size: 10px;
-      border-radius: 4px;
+      font-style: italic;
+      font-size: 9px;
+      border-radius: 2px;
       display: inline-block;
     }
   }

@@ -25,7 +25,7 @@ const routers = [
   ['Earn', '/earn'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
-  ['rUSD Genesis', '/genesis/rUSD_ezETH'],
+  ['rUSD Genesis', '/genesis/rUSD_ezETH', 'New Launch!'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
