@@ -82,19 +82,19 @@ export default function GenesisPage() {
 
   const { baseTokenInfos } = ASSET_MAP[assetSymbol]
 
-  // const stage = {
-  //   fxUSD: STAGE.FULL_LAUNCHED,
-  //   rUSD_eETH: STAGE.FULL_LAUNCHED,
-  //   rUSD_ezETH: STAGE.LAUNCHING,
-  // }[_assetSymbol]
+  const stage = {
+    fxUSD: STAGE.FULL_LAUNCHED,
+    rUSD_eETH: STAGE.FULL_LAUNCHED,
+    rUSD_ezETH: STAGE.LAUNCHING,
+  }[_assetSymbol]
 
-  const [stage, setStage] = useState(
-    {
-      fxUSD: STAGE.FULL_LAUNCHED,
-      rUSD_eETH: STAGE.FULL_LAUNCHED,
-      rUSD_ezETH: STAGE.LAUNCHING,
-    }[_assetSymbol]
-  )
+  // const [stage, setStage] = useState(
+  //   {
+  //     fxUSD: STAGE.FULL_LAUNCHED,
+  //     rUSD_eETH: STAGE.FULL_LAUNCHED,
+  //     rUSD_ezETH: STAGE.LAUNCHING,
+  //   }[_assetSymbol]
+  // )
 
   const [clearTrigger, clearInput] = useClearInput()
   const { _currentAccount, sendTransaction } = useWeb3()
