@@ -26,11 +26,11 @@ const explorerUri = 'https://www.etherscan.io'
 // }
 
 const chainInfo = {
-  id: '0x18648', // 99912
+  id: '0x1864c', // 99912
   token: 'ETH',
   label: 'ezETH-test02',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_7f60160c35614cf9819395e3ff6e41ac',
+    'https://rpc.phalcon.blocksec.com/rpc_c0793d51badf4938803544f738124b6e',
 }
 
 const contracts = {
