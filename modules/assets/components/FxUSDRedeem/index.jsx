@@ -394,13 +394,14 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         to = fxUSD_GatewayRouterContract._address
         const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
 
-        const sum =
-          min_baseOuts[0] * tokens.wstETH.price +
-          min_baseOuts[1] * tokens.sfrxETH.price
-        const minOut_1 =
-          (min_baseOuts[0] * tokens.wstETH.price * _minoutETH) / sum
-        const minOut_2 =
-          (min_baseOuts[1] * tokens.sfrxETH.price * _minoutETH) / sum
+        const t_1 = cBN(min_baseOuts[0]).multipliedBy(tokens.wstETH.price)
+        const t_2 = cBN(min_baseOuts[1]).multipliedBy(tokens.sfrxETH.price)
+
+        const sum = t_1.plus(t_2)
+
+        const minOut_1 = t_1.multipliedBy(_minoutETH).dividedBy(sum).toString()
+
+        const minOut_2 = t_2.multipliedBy(_minoutETH).dividedBy(sum).toString()
 
         const convertParams_baseToken_1 = getZapOutParams(
           config.tokens.wstETH,
