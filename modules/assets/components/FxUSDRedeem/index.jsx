@@ -86,11 +86,11 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
   const OPTIONS = [
     ['stETH', config.tokens.stETH],
     ['frxETH', config.tokens.frxETH],
-    ['WETH', config.tokens.weth],
-    ['USDT', config.tokens.usdt],
-    ['USDC', config.tokens.usdc],
-    ['Frax', config.tokens.frax],
-    ['crvUSD', config.tokens.crvUSD],
+    // ['WETH', config.tokens.weth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['Frax', config.tokens.frax],
+    // ['crvUSD', config.tokens.crvUSD],
     ['wstETH', config.tokens.wstETH],
     ['sfrxETH', config.tokens.sfrxETH],
   ].filter((item) => !(isRecap && ['wstETH', 'sfrxETH'].includes(item[0])))
