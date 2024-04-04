@@ -79,7 +79,7 @@ export default function RUSDRedeem({ slippage, assetInfo }) {
     // ['ETH', config.tokens.eth],
     // ['eETH', config.tokens.eETH],
     ['weETH', config.tokens.weETH],
-    // ['ezETH', config.tokens.ezETH],
+    ['ezETH', config.tokens.ezETH],
     // ['USDT', config.tokens.usdt],
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],

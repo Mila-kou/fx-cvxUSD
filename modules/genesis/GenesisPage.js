@@ -85,7 +85,7 @@ export default function GenesisPage() {
   const stage = {
     fxUSD: STAGE.FULL_LAUNCHED,
     rUSD_eETH: STAGE.FULL_LAUNCHED,
-    rUSD_ezETH: STAGE.LAUNCHING,
+    rUSD_ezETH: STAGE.LAUNCHED,
   }[_assetSymbol]
 
   // const [stage, setStage] = useState(
@@ -531,7 +531,7 @@ export default function GenesisPage() {
                   <MerkleTree tokenName="FXS" title="" />
                 </div>
               )}
-              {['rUSD'].includes(assetSymbol) && (
+              {['weETH'].includes(_baseSymbol) && (
                 <div className="mt-[32px] flex flex-col gap-[16px]">
                   <MerkleTree />
                 </div>

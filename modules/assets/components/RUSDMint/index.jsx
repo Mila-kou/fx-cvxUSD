@@ -42,7 +42,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
     ['weETH', config.tokens.weETH],
-    // ['ezETH', config.tokens.ezETH],
+    ['ezETH', config.tokens.ezETH],
   ].filter((item) => item[0] !== toSymbol)
 
   const [pausedError, setPausedError] = useState(false)

@@ -234,13 +234,7 @@ export default function AssetsPage() {
               </div>
 
               {list.map((item) => (
-                <Link
-                  href={
-                    item.symbol === 'xezETH'
-                      ? 'genesis/rUSD_ezETH'
-                      : `assets/${item.symbol}`
-                  }
-                >
+                <Link href={`assets/${item.symbol}`}>
                   <AssetCell info={item} />
                 </Link>
               ))}
