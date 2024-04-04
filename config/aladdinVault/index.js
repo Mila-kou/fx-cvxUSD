@@ -299,7 +299,6 @@ export const POOLS_LIST = [
     lpGaugeAddress: config.POOLS_LIST_GAUGE.fxUSD_rUSD.gauge,
     manageConvexGaugeAddress:
       config.POOLS_LIST_GAUGE.fxUSD_rUSD.manageConvexGauge,
-    isCloseManageConvex: true,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
@@ -334,7 +333,6 @@ export const POOLS_LIST = [
     lpGaugeAddress: config.POOLS_LIST_GAUGE.alUSD_fxUSD.gauge,
     manageConvexGaugeAddress:
       config.POOLS_LIST_GAUGE.alUSD_fxUSD.manageConvexGauge,
-    isCloseManageConvex: true,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
     zapTokens: [
