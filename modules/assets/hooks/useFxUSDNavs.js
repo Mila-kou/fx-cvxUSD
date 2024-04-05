@@ -40,11 +40,13 @@ export default function useFxUSDNavs() {
         xstETH: [],
         xfrxETH: [],
         xeETH: [],
+        xezETH: [],
       },
       totalBaseTokenList: {
         wstETH: [],
         sfrxETH: [],
         weETH: [],
+        ezETH: [],
       },
       lastDayPrice: {
         xstETH: '',

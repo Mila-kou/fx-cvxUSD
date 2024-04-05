@@ -21,7 +21,9 @@ export default function AssetsPage() {
   //   useSelector((state) => state.asset)
   const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH, xezETH } =
     useSelector((state) => state.asset)
-  const { wstETH, sfrxETH, weETH } = useSelector((state) => state.baseToken)
+  const { wstETH, sfrxETH, weETH, ezETH } = useSelector(
+    (state) => state.baseToken
+  )
 
   // usePools()
 
@@ -132,7 +134,7 @@ export default function AssetsPage() {
     },
     {
       title: 'rUSD Reserve Asset Value',
-      value: getTotalBaseTokenUSD([weETH]) || '-',
+      value: getTotalBaseTokenUSD([weETH, ezETH]) || '-',
     },
     { title: 'fETH Reserve Asset Value', value: fETH.totalBaseTokenUSD_text },
   ]
@@ -150,6 +152,7 @@ export default function AssetsPage() {
                   wstETH,
                   sfrxETH,
                   weETH,
+                  ezETH,
                   { data: fETH },
                 ]) || '-'}
               </span>
