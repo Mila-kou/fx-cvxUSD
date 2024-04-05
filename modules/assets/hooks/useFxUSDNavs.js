@@ -52,6 +52,7 @@ export default function useFxUSDNavs() {
         xstETH: '',
         xfrxETH: '',
         xeETH: '',
+        xezETH: '',
       },
       dateList: [],
     }
