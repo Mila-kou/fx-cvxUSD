@@ -242,6 +242,11 @@ export default function RebalancePoolCellV2({
     }
   }, [poolData.apyObj, rebalanceRewards])
 
+  const pointsText =
+    _poolConfig.baseSymbol === 'ezETH'
+      ? '~ 4x Renzo ezPoints'
+      : '~ 4x Etherfi Points'
+
   const subMessage = useMemo(() => {
     if (poolType == 'fxUSD') {
       return (
@@ -282,11 +287,7 @@ export default function RebalancePoolCellV2({
           >
             <span className="underline text-[var(--a-button-color)]">LRT</span>
           </Tooltip>{' '} */}
-          LRT yields, ~ 4x{' '}
-          {_poolConfig.baseSymbol === 'ezETH'
-            ? 'Renzo ezPoints'
-            : 'Etherfi Points'}
-          , ~ 2x Eigen Layer Points and{' '}
+          LRT yields, {pointsText}, ~ 2x Eigen Layer Points and{' '}
           {/* <Tooltip
             placement="topLeft"
             title={harvestTypeDom('FXNDOM')}
@@ -300,6 +301,7 @@ export default function RebalancePoolCellV2({
       )
     }
   }, [poolType, harvestTypeDom])
+
   return (
     <div key={_poolConfig.infoKey} className={styles.poolWrap}>
       <div
@@ -332,17 +334,25 @@ export default function RebalancePoolCellV2({
             {poolData.poolTotalSupply}
           </p>
         </div>
-        <div className="w-[200px] text-[16px] flex items-center">
-          <div className="text-[16px]">{apyAndBoostDom}</div>
-          <Tooltip
-            placement="topLeft"
-            title={apyDetailDom}
-            arrow
-            color="#000"
-            overlayInnerStyle={{ width: '300px' }}
-          >
-            <InfoCircleOutlined className="ml-[8px]" />
-          </Tooltip>
+        <div className="w-[200px]">
+          <div className="text-[16px] flex items-center">
+            <div className="text-[16px]">{apyAndBoostDom}</div>
+            <Tooltip
+              placement="topLeft"
+              title={apyDetailDom}
+              arrow
+              color="#000"
+              overlayInnerStyle={{ width: '300px' }}
+            >
+              <InfoCircleOutlined className="ml-[8px]" />
+            </Tooltip>
+          </div>
+          {poolType == 'rUSD' && (
+            <p className="text-[14px] mt-[6px]">
+              {pointsText}
+              <br /> ~ 2x Eigen Layer Points
+            </p>
+          )}
         </div>
         <div className="w-[110px] text-[16px]">
           <p className="text-[16px]">{userDepositTvl_text}</p>
