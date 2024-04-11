@@ -241,6 +241,12 @@ const gaugeTokenList = {
   ConvexCurveManager_fxUSD_rUSD: '0x0dDCF4c31Ee27C4D33d902434999cb358Fde9b69',
   alUSD_fxUSD: '0x9c7003bC16F2A1AA47451C858FEe6480B755363e',
   ConvexCurveManager_alUSD_fxUSD: '0x4F73CDdB5c3F29b0e31f96bc29c973f5297e7411',
+  MIM_fxUSD: '0xDF7fbDBAE50C7931a11765FAEd9fe1A002605B55',
+  ConvexCurveManager_MIM_fxUSD: '0x4F73CDdB5c3F29b0e31f96bc29c973f5297e7411',
+  eUSD_fxUSD: '0x5801Bb8f568979C722176Df36b1a74654A9C52b5',
+  ConvexCurveManager_eUSD_fxUSD: '0x4F73CDdB5c3F29b0e31f96bc29c973f5297e7411',
+  rgUSD_fxUSD: '0x4CA79F4FE25BCD329445CDBE7E065427ACa98380',
+  ConvexCurveManager_rgUSD_fxUSD: '0x4F73CDdB5c3F29b0e31f96bc29c973f5297e7411',
 }
 
 export const tokens = {
@@ -589,6 +595,24 @@ const POOLS_LIST_GAUGE = {
     token: '0x27cb9629ae3ee05cb266b99ca4124ec999303c9d',
     manageConvexGauge: gaugeTokenList.ConvexCurveManager_alUSD_fxUSD,
     gauge: gaugeTokenList.alUSD_fxUSD,
+  },
+  MIM_fxUSD: {
+    lpPoolCurveToken: '0xd7bf9bb6bd088317effd116e2b70ea3a054cbceb',
+    token: '0xd7bf9bb6bd088317effd116e2b70ea3a054cbceb',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_MIM_fxUSD,
+    gauge: gaugeTokenList.MIM_fxUSD,
+  },
+  eUSD_fxUSD: {
+    lpPoolCurveToken: '0x16b54e3ac8e3ba088333985035b869847e36e770',
+    token: '0x16b54e3ac8e3ba088333985035b869847e36e770',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_eUSD_fxUSD,
+    gauge: gaugeTokenList.eUSD_fxUSD,
+  },
+  rgUSD_fxUSD: {
+    lpPoolCurveToken: '0x6fc7ea6ca8cd2759803eb78159c931a8ff5e0557',
+    token: '0x6fc7ea6ca8cd2759803eb78159c931a8ff5e0557',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_rgUSD_fxUSD,
+    gauge: gaugeTokenList.rgUSD_fxUSD,
   },
 }
 
