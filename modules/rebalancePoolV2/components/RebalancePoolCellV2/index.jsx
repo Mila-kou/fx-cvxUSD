@@ -245,7 +245,7 @@ export default function RebalancePoolCellV2({
   const pointsText =
     _poolConfig.baseSymbol === 'ezETH'
       ? '~ 4x Renzo ezPoints'
-      : '~ 4x Etherfi Points'
+      : '~ 4x ether.fi loyalty points'
 
   const subMessage = useMemo(() => {
     if (poolType == 'fxUSD') {
@@ -287,7 +287,7 @@ export default function RebalancePoolCellV2({
           >
             <span className="underline text-[var(--a-button-color)]">LRT</span>
           </Tooltip>{' '} */}
-          LRT yields, {pointsText}, ~ 2x Eigen Layer Points and{' '}
+          LRT yields, {pointsText}, ~ 2x EigenLayer Points and{' '}
           {/* <Tooltip
             placement="topLeft"
             title={harvestTypeDom('FXNDOM')}
@@ -350,7 +350,7 @@ export default function RebalancePoolCellV2({
           {poolType == 'rUSD' && (
             <p className="text-[14px] mt-[6px]">
               {pointsText}
-              <br /> ~ 2x Eigen Layer Points
+              <br /> ~ 2x EigenLayer Points
             </p>
           )}
         </div>

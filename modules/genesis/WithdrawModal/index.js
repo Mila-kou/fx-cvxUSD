@@ -21,7 +21,7 @@ export default function WithdrawModal(props) {
     fxUSD:
       'You will lose at least 50% of the rewards which will be allocated proportionally to users who keep their position till the end of the seeding event',
     rUSD: `You will lose at least ${
-      baseSymbol === 'ezETH' ? 'Renzo ezPoints' : 'Etherfi Points'
+      baseSymbol === 'ezETH' ? 'Renzo ezPoints' : 'ether.fi loyalty points'
     }+EigenLayer Point, which will be proportionally distributed to users who maintain their positions till the end of the seeding event.`,
   }
 

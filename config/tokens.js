@@ -807,7 +807,7 @@ export const ASSET_MAP = {
   xeETH: {
     symbol: 'xeETH',
     baseList: ['ETH', 'eETH'],
-    name: 'xeETH (Ether.fi)',
+    name: 'xeETH (ether.fi)',
     address: contracts.rUSD_weETH_LeveragedToken,
     descrition: 'Long eETH up to 4.3x',
     icon: '/images/x-logo.svg',

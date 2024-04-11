@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { DotChartOutlined } from '@ant-design/icons'
+import { DotChartOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { Tooltip } from 'antd'
 import PoolCell from './components/PoolCell'
 import styles from './styles.module.scss'
 import useGaugeController from './controller/useGaugeController'
@@ -8,8 +9,10 @@ import RebalancePoolCell from '@/modules/rebalancePoolV2/components/RebalancePoo
 import RebalancePoolCellV2 from '@/modules/rebalancePoolV2/components/RebalancePoolCellV2'
 import usePool from '@/modules/rebalancePoolV2/controller/usePool'
 import usePoolV2 from '@/modules/rebalancePoolV2/controller/usePoolV2'
+import { fb4 } from '@/utils/index'
 import MerkleTree from './MerkleTree'
 import ThirdPools from './components/ThirdPools'
+import useRUSDScore from './hooks/useRUSDScore'
 
 const Header = ({ title }) => (
   <div>
@@ -27,6 +30,7 @@ const Header = ({ title }) => (
 
 export default function EarningPoolPage() {
   const { pageData, ...pageOthers } = useGaugeController()
+  const rUSDUserScore = useRUSDScore()
 
   const poolAData = usePool({
     infoKey: 'rebalancePoolV2_info_A',
@@ -154,6 +158,39 @@ export default function EarningPoolPage() {
           }
           {...rUSD_xeETH_pool}
         />
+
+        <div className="flex justify-end gap-[32px] pr-[46px] my-[20px]">
+          <div className="flex items-center gap-[6px]">
+            <img src="/tokens/etherfiPoint.svg" className="w-[16px]" />
+            <p className="text-[16px]">
+              <a
+                href="https://app.ether.fi/portfolio"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[var(--a-button-color)]"
+              >
+                ether.fi loyalty points
+              </a>
+              <Tooltip
+                title="The points below are only estimates. Please refer to the etherfi for actual details."
+                arrow
+                color="#000"
+                overlayInnerStyle={{ width: '300px' }}
+              >
+                <InfoCircleOutlined className="mx-[6px]" />
+              </Tooltip>
+              : {fb4(rUSDUserScore.weETH.etherfi, false, 0)}
+            </p>
+          </div>
+          <div className="flex items-center gap-[6px]">
+            <img src="/tokens/eigenLayer.svg" className="w-[16px]" />
+            <p className="text-[16px]">
+              Eigen Layer Points:{' '}
+              {fb4(rUSDUserScore.weETH.eigenlayer, false, 0)}
+            </p>
+          </div>
+        </div>
+
         <RebalancePoolCellV2
           title="rUSD Stability Pool"
           subTitle={
@@ -176,6 +213,38 @@ export default function EarningPoolPage() {
           }
           {...rUSD_xezETH_pool}
         />
+
+        <div className="flex justify-end gap-[32px] pr-[46px] mt-[20px]">
+          <div className="flex items-center gap-[6px]">
+            <img src="/tokens/renzo.png" className="w-[16px]" />
+            <p className="text-[16px]">
+              <a
+                href="https://app.renzoprotocol.com/portfolio"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[var(--a-button-color)]"
+              >
+                Renzo ezPoints
+              </a>
+              <Tooltip
+                title="The points below are only estimates. Please refer to the renzoprotocol for actual details."
+                arrow
+                color="#000"
+                overlayInnerStyle={{ width: '300px' }}
+              >
+                <InfoCircleOutlined className="mx-[6px]" />
+              </Tooltip>
+              : {fb4(rUSDUserScore.ezETH.renzo, false, 0)}
+            </p>
+          </div>
+          <div className="flex items-center gap-[6px]">
+            <img src="/tokens/eigenLayer.svg" className="w-[16px]" />
+            <p className="text-[16px]">
+              Eigen Layer Points:{' '}
+              {fb4(rUSDUserScore.ezETH.eigenlayer, false, 0)}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className={`${styles.content} `}>

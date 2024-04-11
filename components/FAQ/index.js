@@ -105,7 +105,7 @@ export default function FAQ({ open, onCancel }) {
               <p>
                 rUSD is a stablecoin that uses the same mechanism as fxUSD, but
                 with its reserve comprised of only ETH Liquid Restaking Tokens
-                (LRT), starting with Ether.fi’s eETH. Even though the risk
+                (LRT), starting with ether.fi’s eETH. Even though the risk
                 profile of LRTs are different enough to LSTs that they should
                 not be included in fxUSD, restaked ETH is an excellent use-case
                 for the powerful f(x) mechanism. Stability pool depositors can

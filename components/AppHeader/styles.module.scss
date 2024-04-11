@@ -93,7 +93,6 @@
 }
 
 .accountPanel {
-  color: #231f20;
   @include overlay;
   .content {
     padding: 30px 36px;
@@ -101,7 +100,7 @@
     top: 85px;
     right: 54px;
     border-radius: 8px;
-    background: var(--panel-background-color);
+    background: #000;
     max-width: 100vw;
     max-height: 80vh;
     overflow-y: scroll;
@@ -111,16 +110,13 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      color: #231f20;
       p {
-        color: #231f20;
       }
     }
 
     .title {
       font-weight: 500;
       margin-bottom: 10px;
-      color: #231f20;
     }
 
     .histories {
@@ -171,7 +167,6 @@
       justify-content: center;
       margin: 28px auto 0;
       background: #ffffff;
-      border: 1px solid #ff0000;
       color: #f90606;
       box-shadow: 0px 5px 10px 1px rgba(251, 194, 194, 0.5);
       border-radius: 6px;

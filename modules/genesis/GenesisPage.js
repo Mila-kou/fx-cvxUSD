@@ -85,7 +85,7 @@ export default function GenesisPage() {
   const stage = {
     fxUSD: STAGE.FULL_LAUNCHED,
     rUSD_eETH: STAGE.FULL_LAUNCHED,
-    rUSD_ezETH: STAGE.LAUNCHED,
+    rUSD_ezETH: STAGE.FULL_LAUNCHED,
   }[_assetSymbol]
 
   // const [stage, setStage] = useState(
@@ -425,8 +425,8 @@ export default function GenesisPage() {
   const getApyText = (apy) => {
     if (assetSymbol === 'rUSD') {
       return `${apy} + 2x ${
-        _baseSymbol === 'ezETH' ? 'Renzo ezPoints' : 'Etherfi Points'
-      } + Eigen Layer Points`
+        _baseSymbol === 'ezETH' ? 'Renzo ezPoints' : 'ether.fi loyalty points'
+      } + EigenLayer Points`
     }
     return `MAX APY ${apy}`
   }
@@ -531,7 +531,7 @@ export default function GenesisPage() {
                   <MerkleTree tokenName="FXS" title="" />
                 </div>
               )}
-              {['weETH'].includes(_baseSymbol) && (
+              {['weETH', 'ezETH'].includes(_baseSymbol) && (
                 <div className="mt-[32px] flex flex-col gap-[16px]">
                   <MerkleTree />
                 </div>

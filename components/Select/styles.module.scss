@@ -31,19 +31,18 @@
     z-index: 10;
     left: 0;
     right: 0;
-    background: #c3c3c4;
+    background: #000;
     margin-top: 4px;
     border-radius: 4px;
     .item {
-      color: #000;
       padding: 10px 0;
       font-size: 16px;
       &:hover {
-        color: var(--primary-color);
+        color: #fff;
       }
     }
     .active {
-      color: var(--primary-color);
+      color: #fff;
       font-size: 17px;
     }
   }

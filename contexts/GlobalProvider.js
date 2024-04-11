@@ -58,7 +58,7 @@ function GlobalProvider({ children }) {
   const fx_info = useInfo()
   const allGaugeBaseInfo = useGauge()
 
-  useSignCode()
+  // useSignCode()
 
   const [
     { data: ConvexVaultsAPY, refetch: refetch3 },
