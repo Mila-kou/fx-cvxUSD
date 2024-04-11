@@ -471,6 +471,7 @@ export const POOLS_LIST = [
       config.POOLS_LIST_GAUGE.MIM_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    isCloseManageConvex: true,
     zapTokens: [
       {
         symbol: 'curve_MIM_fxUSD',
@@ -505,6 +506,7 @@ export const POOLS_LIST = [
       config.POOLS_LIST_GAUGE.eUSD_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    isCloseManageConvex: true,
     zapTokens: [
       {
         symbol: 'curve_eUSD_fxUSD',
@@ -539,6 +541,7 @@ export const POOLS_LIST = [
       config.POOLS_LIST_GAUGE.rgUSD_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    isCloseManageConvex: true,
     zapTokens: [
       {
         symbol: 'curve_rgUSD_fxUSD',
