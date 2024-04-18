@@ -313,6 +313,40 @@ export const POOLS_LIST = [
   },
   {
     icons: [
+      { icon: '/tokens/alusd.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 13,
+    name: 'alUSD+fxUSD',
+    nameShow: ['alUSD+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-139/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.alUSD_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.alUSD_fxUSD.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.alUSD_fxUSD.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    zapTokens: [
+      {
+        symbol: 'curve_alUSD_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.alUSD_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    icons: [
       { icon: '/tokens/0xa0d69e286b938e21cbf7e51d71f6a4c8918f482f.png' },
       {
         icon: '/tokens/fxusd.svg',
@@ -376,40 +410,6 @@ export const POOLS_LIST = [
         symbol: 'curve_rgUSD_fxUSD',
         icon: 'cvx',
         address: config.POOLS_LIST_GAUGE.rgUSD_fxUSD.token,
-        needZap: false,
-        isLp: true,
-      },
-    ],
-  },
-  {
-    icons: [
-      { icon: '/tokens/alusd.png' },
-      {
-        icon: '/tokens/fxusd.svg',
-      },
-    ],
-    id: 13,
-    name: 'alUSD+fxUSD',
-    nameShow: ['alUSD+fxUSD Curve', ' Pool'],
-    platform: 'FX',
-    fromPlatformIcon: `${cryptoIcons}#crv`,
-    fromPlatform: 'Curve',
-    platformUrl:
-      'https://curve.fi/#/ethereum/pools/factory-stable-ng-139/deposit',
-    gaugeType: 0,
-    gaugeTypeName: 'Liquidity Gauge',
-    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
-    lpAddress: config.POOLS_LIST_GAUGE.alUSD_fxUSD.token,
-    lpGaugeAddress: config.POOLS_LIST_GAUGE.alUSD_fxUSD.gauge,
-    manageConvexGaugeAddress:
-      config.POOLS_LIST_GAUGE.alUSD_fxUSD.manageConvexGauge,
-    baseRewardToken: config.TOKENS_INFO.fxn,
-    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
-    zapTokens: [
-      {
-        symbol: 'curve_alUSD_fxUSD',
-        icon: 'cvx',
-        address: config.POOLS_LIST_GAUGE.alUSD_fxUSD.token,
         needZap: false,
         isLp: true,
       },
