@@ -116,6 +116,7 @@ const useGaugeApyEstimate = () => {
         }
 
         const _times = cBN(config.yearSecond).div(config.weekSecond)
+        let otherApy = 0
         const _thisWeek_apy = checkNotZoroNum(_tvl)
           ? cBN(_thisWeek_gaugeEstimate)
               .times(_fxnPrice)
@@ -124,6 +125,12 @@ const useGaugeApyEstimate = () => {
               .times(100)
               .toFixed(2)
           : '0'
+        if (
+          !checkNotZoroNum(_thisWeek_apy) &&
+          checkNotZoroNum(_thisWeek_gaugeEstimate)
+        ) {
+          otherApy = '500%+'
+        }
         const _nextWeek_apy = checkNotZoroNum(_tvl)
           ? cBN(_nextWeek_gaugeEstimate)
               .times(_fxnPrice)
@@ -145,10 +152,10 @@ const useGaugeApyEstimate = () => {
         //   _tvl.toFixed(0, 1),
         //   _thisWeek_apy
         // )
-        return { _thisWeek_apy, _nextWeek_apy }
+        return { _thisWeek_apy, _nextWeek_apy, otherApy }
       } catch (error) {
         console.log('getGaugeApy----error', item.name, error)
-        return { _thisWeek_apy: 0, _nextWeek_apy: 0 }
+        return { _thisWeek_apy: 0, _nextWeek_apy: 0, otherApy: 0 }
       }
     },
     [allGaugeBaseInfo, tokens, baseToken]

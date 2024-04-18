@@ -183,6 +183,9 @@ export default function PoolCell({ cellData }) {
       apyInfo.convexLpApy.apy &&
       apyInfo.apyList.length
     ) {
+      if (apyInfo?.fxnApy?.otherApy) {
+        return ['500+ %', '500+ %', '500+ %']
+      }
       const _projectApy = getTypeApy(apyInfo, 'project')
       const _currentApy = getTypeApy(apyInfo, 'current')
       // console.log('apy----_currentApy---', _currentApy)
