@@ -25,7 +25,7 @@ function BalanceInput(props) {
     withUsd = true,
     placeholder,
     clearTrigger,
-    decimals,
+    decimals = 18,
     changeValue,
     maxAmount,
     className = '',
