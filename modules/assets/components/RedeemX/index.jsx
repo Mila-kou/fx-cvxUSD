@@ -50,7 +50,6 @@ const MINT_OPTIONS = {
     // ['USDT', config.tokens.usdt],
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
-    // ['eETH', config.tokens.eETH],
   ],
   xCVX: [
     ['aCVX', config.tokens.aCVX],
@@ -58,6 +57,12 @@ const MINT_OPTIONS = {
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
     ['crvUSD', config.tokens.crvUSD],
+  ],
+  xWBTC: [
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+    ['WBTC', config.tokens.WBTC],
   ],
 }
 
@@ -82,7 +87,7 @@ export default function RedeemX({ slippage, assetInfo }) {
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
 
-  const isSwap = useMemo(() => ['xstETH', 'xfrxETH'].includes(symbol), [symbol])
+  const isSwap = false
 
   const [pausedError, setPausedError] = useState('')
   const [maxError, setMaxError] = useState('')
@@ -326,10 +331,14 @@ export default function RedeemX({ slippage, assetInfo }) {
       minout_ETH *= _mockRatio
       baseOut *= _mockRatio
 
-      updateOutAmount(minout_ETH, toUsd, config.zapTokens[symbol].decimals)
+      const _minout_ETH = updateOutAmount(
+        minout_ETH,
+        toUsd,
+        config.zapTokens[symbol].decimals
+      )
 
       setPriceLoading(false)
-      return getMinOutBySlippage(baseOut)
+      return [_minout_ETH, getMinOutBySlippage(baseOut)]
     } catch (error) {
       console.log('RedeemX----error--', error)
       resetOutAmount()
@@ -346,7 +355,7 @@ export default function RedeemX({ slippage, assetInfo }) {
 
     try {
       setIsLoading(true)
-      const _minBaseoutETH = await getMinAmount()
+      const [_minout_ETH, _minBaseoutETH] = await getMinAmount()
 
       if (!checkNotZoroNum(_minBaseoutETH)) {
         setIsLoading(false)
@@ -368,7 +377,8 @@ export default function RedeemX({ slippage, assetInfo }) {
         const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
         const convertParams = getZapOutParams(
           config.tokens[baseSymbol],
-          _symbolAddress
+          _symbolAddress,
+          _minout_ETH
         )
 
         apiCall = await fxUSD_GatewayRouterContract.methods.fxRedeemXTokenV2(

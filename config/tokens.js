@@ -4,6 +4,50 @@ const stETHIcon = '/tokens/steth.svg'
 const crvIcon = '/tokens/0xd533a949740bb3306d119cc777fa900ba034cd52.png'
 const cvxIcon = '/tokens/0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b.png'
 
+export const TOKEN_ICON_MAP = {
+  ETH: '/tokens/crypto-icons-stack.svg#eth',
+  FXN: '/images/FXN.svg',
+  veFXN: '/images/FXN.svg',
+  stETH: '/tokens/steth.svg',
+  wstETH: '/tokens/steth.svg',
+  sfrxETH: '/tokens/sfrxeth.svg',
+  crvUSD: '/tokens/crvUSD.png',
+  frxETH: '/tokens/frxeth.svg',
+  Frax: '/tokens/crypto-icons-stack.svg#frax',
+  USDC: '/tokens/crypto-icons-stack.svg#usdc',
+  USDT: '/tokens/crypto-icons-stack.svg#usdt',
+  WETH: '/tokens/crypto-icons-stack.svg#weth',
+  fETH: '/images/f-logo.svg',
+
+  eETH: '/tokens/eETH.svg',
+  weETH: '/tokens/eETH.svg',
+  ezETH: '/tokens/ezETH.png',
+  aCVX: '/tokens/crypto-icons-stack.svg#cvx',
+
+  xETH: '/images/x-logo.svg',
+  xstETH: '/images/x-logo.svg',
+  xfrxETH: '/images/x-logo.svg',
+  xeETH: '/images/x-logo.svg',
+  xezETH: '/images/x-logo.svg',
+  xCVX: '/images/x-logo.svg',
+
+  fxUSD: '/tokens/fxusd.svg',
+  rUSD: '/tokens/rUSD.svg',
+
+  FRAXBP: '/tokens/FRAXBP.svg',
+
+  WBTC: '/tokens/WBTC.svg',
+  btcUSD: '/tokens/btcUSD.svg',
+  xWBTC: '/images/x-logo.svg',
+}
+
+export const getTokenIcon = (name) => {
+  if (TOKEN_ICON_MAP[name]) {
+    return TOKEN_ICON_MAP[name]
+  }
+  return `/tokens/crypto-icons-stack.svg#${name.toLowerCase()}`
+}
+
 export const contracts = {
   eth: '0x0000000000000000000000000000000000000000',
   multiCall: '0xeefba1e63905ef1d7acba5a8513c70307c1ce441',
@@ -211,6 +255,46 @@ export const contracts = {
   ShareableRebalancePool_xCVX: '0x6ABF454f61f459e1bE75E5D5e1d31970e6B1dDc3',
   aCVX_RebalancePoolRegistry: '0x04BB5cbDa2370980743C8cC095eb2123A0731D69',
   FxCVXTwapOracle: '0x6735151401D038F72C1B2a69aE2dD27453703263',
+
+  // btcUSD
+  // btcUSD: '0x7d85a9ae9ea89069a71289c167cd3502a773e113',
+  // btcUSD_FxInitialFund_WBTC: '0xE3F251a33ad2129eEd3234A53ca7E94Fe7555dAd',
+  // btcUSD_WBTC_Treasury: '0x82012139b29BC5Ac2ff4066832c836122bC6c690',
+  // btcUSD_WBTC_Market: '0xe3202d6029320b6592B439bD67b7E2C154441413',
+  // btcUSD_WBTC_FractionalToken: '0x7e94c07C6C3b2C931E9517529F56553770a7C0D2',
+  // btcUSD_WBTC_LeveragedToken: '0xAd95d0c8782f8c9076e8F081F7A5E1A4ac4499a3',
+  // btcUSD_ShareableRebalancePool_WBTC:
+  //   '0x29eE4B752fE14B0BC1F279DCA98415f2Fa6F3A8d',
+  // btcUSD_ShareableRebalancePool_WBTC_FundraiseGauge:
+  //   '0x2A61648D1309605d7a69aA82F36C30f44F305ed2',
+  // btcUSD_ShareableRebalancePool_xWBTC:
+  //   '0x163283D59FE2A579f2920A7F8eA19F7799B32fA0',
+  // btcUSD_WBTC_RebalancePoolRegistry:
+  //   '0x6DC760531d64894F6E51827937b6d4dfdE1ec0f7',
+  // btcUSD_WBTCTwapOracle: '0x6F7be8eF0cdA0AbcF73e2646109246b395863A42',
+
+  // btcUSD-2
+  btcUSD: '0x9D11ab23d33aD026C466CE3c124928fDb69Ba20E',
+  btcUSD_FxInitialFund_WBTC: '0x29eE4B752fE14B0BC1F279DCA98415f2Fa6F3A8d',
+  btcUSD_WBTC_Treasury: '0x63Fe55B3fe3f74B42840788cFbe6229869590f83',
+  btcUSD_WBTC_Market: '0x56B85438F1E16a91eAc5Fe2DAAb2C3Dd57690175',
+  btcUSD_WBTC_FractionalToken: '0x576b4779727F5998577bb4e25bf726abE742b9F7',
+  btcUSD_WBTC_LeveragedToken: '0x9f23562ec47249761222EF7Ac02b327a8C45Ba7D',
+  btcUSD_ShareableRebalancePool_WBTC:
+    '0xf291EC9C2F87A41386fd94eC4BCdC3270eD04482',
+  btcUSD_ShareableRebalancePool_WBTC_FundraiseGauge:
+    '0x4E6A1dC233f264dd07b63E206Fc451d986bA9908',
+  btcUSD_ShareableRebalancePool_xWBTC:
+    '0xBB549046497364A1E26F94f7e93685Dc29FAd8c0',
+  btcUSD_WBTC_RebalancePoolRegistry:
+    '0x163283D59FE2A579f2920A7F8eA19F7799B32fA0',
+  // btcUSD_WBTCTwapOracle: '0x7e94c07C6C3b2C931E9517529F56553770a7C0D2',
+  btcUSD_WBTCTwapOracle: '0x7e94c07C6C3b2C931E9517529F56553770a7C0D2', // for test
+  btcUSD_RebalancePoolGaugeClaimer_WBTC:
+    '0x93670efe073e0d75BE16445779a8399E6b418004',
+  btcUSD_RebalancePoolSplitter: '0x054fAC7aA44F85A59FD41c33006336EC8b03E916',
+  btcUSD_LeveragedTokenWrapper_WBTC_xWBTC:
+    '0x1A17Ccf198E03858227c27205f15a4b388235DB7',
 }
 
 const gaugeTokenList = {
@@ -265,7 +349,7 @@ export const tokens = {
   usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',
   dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
-  wbtc: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+  WBTC: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
   seth: '0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb',
   stETH: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
   renBTC: '0xEB4C2781e4ebA804CE9a9803C67d0893436bB27D',
@@ -313,15 +397,18 @@ export const tokens = {
   cvx: '0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B',
   fCVX: contracts.aCVX_FractionalToken,
   xCVX: contracts.aCVX_LeveragedToken,
+
+  btcUSD: contracts.btcUSD,
+  xWBTC: contracts.btcUSD_WBTC_LeveragedToken,
 }
 
-const TOKENS_INFO = {
+export const TOKENS_INFO = {
   eth: ['ethereum', tokens.eth, 18, 'eth'],
   usdc: ['usd-coin', tokens.usdc, 6, 'usdc'],
   usdt: ['usdt', tokens.usdt, 6, 'usdt'],
   dai: ['dai', tokens.dai, 18, 'dai'],
   weth: ['weth', tokens.weth, 18, 'weth'],
-  wbtc: ['bitcoin', tokens.wbtc, 8, 'wbtc'],
+  WBTC: ['bitcoin', tokens.WBTC, 8, 'WBTC'],
   seth: ['seth', tokens.seth, 18, 'seth'],
   stETH: ['staked-ether', tokens.stETH, 18, 'stETH', stETHIcon],
   renBTC: ['renbtc', tokens.renBTC, 8, 'renBTC'],
@@ -356,164 +443,123 @@ const TOKENS_INFO = {
 export const zapTokens = {
   USDC: {
     symbol: 'USDC',
-    icon: 'usdc',
     decimals: TOKENS_INFO.usdc[2],
     address: TOKENS_INFO.usdc[1],
-    needZap: true,
   },
   USDT: {
     symbol: 'USDT',
-    icon: 'usdt',
     decimals: TOKENS_INFO.usdt[2],
     address: TOKENS_INFO.usdt[1],
-    needZap: true,
   },
   ETH: {
     symbol: 'ETH',
-    icon: 'eth',
     decimals: TOKENS_INFO.eth[2],
     address: TOKENS_INFO.eth[1],
-    needZap: true,
   },
   stETH: {
     symbol: 'stETH',
-    icon: 'weth',
     decimals: TOKENS_INFO.stETH[2],
     address: TOKENS_INFO.stETH[1],
-    needZap: true,
   },
   fETH: {
     symbol: 'fETH',
-    icon: 'eth',
     decimals: TOKENS_INFO.fETH[2],
     address: TOKENS_INFO.fETH[1],
-    needZap: true,
   },
   xETH: {
     symbol: 'xETH',
-    icon: 'eth',
     decimals: TOKENS_INFO.xETH[2],
     address: TOKENS_INFO.xETH[1],
-    needZap: true,
   },
   WETH: {
     symbol: 'WETH',
-    icon: 'weth',
     decimals: TOKENS_INFO.weth[2],
     address: TOKENS_INFO.weth[1],
-    needZap: true,
   },
   CLEV: {
     symbol: 'CLEV',
-    icon: CLEVIcon,
     decimals: TOKENS_INFO.clev[2],
     address: TOKENS_INFO.clev[1],
-    needZap: true,
   },
   CVX: {
     symbol: 'CVX',
-    icon: 'cvx',
     decimals: TOKENS_INFO.cvx[2],
     address: TOKENS_INFO.cvx[1],
-    needZap: true,
   },
   CLEVCVX: {
     symbol: 'CLEVCVX',
-    icon: CLEVIcon,
     decimals: TOKENS_INFO.clevCVX[2],
     address: TOKENS_INFO.clevCVX[1],
-    needZap: true,
   },
   FRAX: {
     symbol: 'FRAX',
-    icon: 'frax',
     decimals: TOKENS_INFO.frax[2],
     address: TOKENS_INFO.frax[1],
-    needZap: true,
   },
   LUSD: {
     symbol: 'LUSD',
-    icon: 'lusd',
     decimals: TOKENS_INFO.lusd[2],
     address: TOKENS_INFO.lusd[1],
-    needZap: true,
   },
   BUSD: {
     symbol: 'BUSD',
-    icon: 'busd',
     decimals: TOKENS_INFO.busd[2],
     address: TOKENS_INFO.busd[1],
-    needZap: true,
   },
   TUSD: {
     symbol: 'TUSD',
-    icon: 'tusd',
     decimals: TOKENS_INFO.tusd[2],
     address: TOKENS_INFO.tusd[1],
-    needZap: true,
   },
   wstETH: {
     symbol: 'wstETH',
-    icon: 'wstETH',
     decimals: TOKENS_INFO.wstETH[2],
     address: TOKENS_INFO.wstETH[1],
-    needZap: true,
   },
   frxETH: {
     symbol: 'frxETH',
-    icon: 'frxETH',
     decimals: TOKENS_INFO.frxETH[2],
     address: TOKENS_INFO.frxETH[1],
-    needZap: true,
   },
   sfrxETH: {
     symbol: 'sfrxETH',
-    icon: 'sfrxETH',
     decimals: TOKENS_INFO.sfrxETH[2],
     address: TOKENS_INFO.sfrxETH[1],
-    needZap: true,
   },
   crvUSD: {
     symbol: 'crvUSD',
-    icon: 'crvUSD',
     decimals: TOKENS_INFO.crvUSD[2],
     address: TOKENS_INFO.crvUSD[1],
-    needZap: true,
   },
   Frax: {
     symbol: 'Frax',
-    icon: 'frax',
     decimals: TOKENS_INFO.frax[2],
     address: TOKENS_INFO.frax[1],
-    needZap: true,
   },
   weETH: {
     symbol: 'weETH',
-    icon: 'weETH',
     decimals: TOKENS_INFO.weETH[2],
     address: TOKENS_INFO.weETH[1],
-    needZap: true,
   },
   aCVX: {
     symbol: 'aCVX',
-    icon: 'aCVX',
     decimals: TOKENS_INFO.aCVX[2],
     address: TOKENS_INFO.aCVX[1],
-    needZap: true,
   },
   eETH: {
     symbol: 'eETH',
-    icon: 'eETH',
     decimals: TOKENS_INFO.eETH[2],
     address: TOKENS_INFO.eETH[1],
-    needZap: true,
   },
   ezETH: {
     symbol: 'ezETH',
-    icon: 'ezETH',
     decimals: TOKENS_INFO.ezETH[2],
     address: TOKENS_INFO.ezETH[1],
-    needZap: true,
+  },
+  WBTC: {
+    symbol: 'WBTC',
+    decimals: TOKENS_INFO.WBTC[2],
+    address: TOKENS_INFO.WBTC[1],
   },
 }
 
@@ -650,6 +696,12 @@ export const GENESIS_MAP = {
     xToken: 'xezETH',
     address: contracts.rUSD_FxInitialFund_ezETH,
   },
+  WBTC: {
+    symbol: 'WBTC',
+    baseSymbol: 'WBTC',
+    xToken: 'xWBTC',
+    address: contracts.btcUSD_FxInitialFund_WBTC,
+  },
 }
 
 export const BASE_TOKENS_MAP = {
@@ -722,6 +774,20 @@ export const BASE_TOKENS_MAP = {
       twapOracle: contracts.FxCVXTwapOracle,
     },
   },
+  WBTC: {
+    baseSymbol: 'WBTC',
+    baseName: 'WBTC',
+    decimals: TOKENS_INFO.WBTC[2],
+    hasFundingCost: true,
+    contracts: {
+      market: contracts.btcUSD_WBTC_Market,
+      treasury: contracts.btcUSD_WBTC_Treasury,
+      rebalancePoolRegistry: contracts.btcUSD_WBTC_RebalancePoolRegistry,
+      fToken: contracts.btcUSD_WBTC_FractionalToken,
+      xToken: contracts.btcUSD_WBTC_LeveragedToken,
+      twapOracle: contracts.btcUSD_WBTCTwapOracle,
+    },
+  },
 }
 
 export const ASSET_MAP = {
@@ -757,6 +823,7 @@ export const ASSET_MAP = {
     background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
     isF: true,
     baseTokenInfos: [BASE_TOKENS_MAP.wstETH, BASE_TOKENS_MAP.sfrxETH],
+    baseTokenSymbols: ['wstETH', 'sfrxETH'],
   },
   xstETH: {
     symbol: 'xstETH',
@@ -827,6 +894,7 @@ export const ASSET_MAP = {
     background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
     baseSymbol: 'weETH',
     baseTokenInfos: [BASE_TOKENS_MAP.weETH, BASE_TOKENS_MAP.ezETH],
+    baseTokenSymbols: ['weETH', 'ezETH'],
   },
   xeETH: {
     symbol: 'xeETH',
@@ -854,6 +922,34 @@ export const ASSET_MAP = {
     baseSymbol: 'ezETH',
     baseTokenInfo: BASE_TOKENS_MAP.ezETH,
   },
+  btcUSD: {
+    symbol: 'btcUSD',
+    baseList: ['WBTC'],
+    name: 'btcUSD',
+    address: contracts.btcUSD,
+    descrition: '$1.00 Pegged',
+    icon: getTokenIcon('btcUSD'),
+    isF: true,
+    isShow24Change: false,
+    isBreakdownChart: true,
+    background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
+    baseSymbol: 'WBTC',
+    baseTokenInfos: [BASE_TOKENS_MAP.WBTC],
+    baseTokenSymbols: ['WBTC'],
+  },
+  xWBTC: {
+    symbol: 'xWBTC',
+    baseList: ['WBTC'],
+    name: 'xWBTC (WBTC Backed)',
+    address: contracts.btcUSD_WBTC_LeveragedToken,
+    descrition: 'Long WBTC up to 5.6x',
+    icon: '/images/x-logo.svg',
+    subIcon: getTokenIcon('WBTC'),
+    isX: true,
+    isShow24Change: true,
+    baseSymbol: 'WBTC',
+    baseTokenInfo: BASE_TOKENS_MAP.WBTC,
+  },
 }
 
 export const ASSETS = Object.values(ASSET_MAP)
@@ -867,44 +963,4 @@ export default {
   gaugeTokenList,
   getTokenInfoByAddress,
   ASSETS,
-}
-
-export const TOKEN_ICON_MAP = {
-  ETH: '/tokens/crypto-icons-stack.svg#eth',
-  FXN: '/images/FXN.svg',
-  veFXN: '/images/FXN.svg',
-  stETH: '/tokens/steth.svg',
-  wstETH: '/tokens/steth.svg',
-  sfrxETH: '/tokens/sfrxeth.svg',
-  crvUSD: '/tokens/crvUSD.png',
-  frxETH: '/tokens/frxeth.svg',
-  Frax: '/tokens/crypto-icons-stack.svg#frax',
-  USDC: '/tokens/crypto-icons-stack.svg#usdc',
-  USDT: '/tokens/crypto-icons-stack.svg#usdt',
-  WETH: '/tokens/crypto-icons-stack.svg#weth',
-  fETH: '/images/f-logo.svg',
-
-  eETH: '/tokens/eETH.svg',
-  weETH: '/tokens/eETH.svg',
-  ezETH: '/tokens/ezETH.png',
-  aCVX: '/tokens/crypto-icons-stack.svg#cvx',
-
-  xETH: '/images/x-logo.svg',
-  xstETH: '/images/x-logo.svg',
-  xfrxETH: '/images/x-logo.svg',
-  xeETH: '/images/x-logo.svg',
-  xezETH: '/images/x-logo.svg',
-  xCVX: '/images/x-logo.svg',
-
-  fxUSD: '/tokens/fxusd.svg',
-  rUSD: '/tokens/rUSD.svg',
-
-  FRAXBP: '/tokens/FRAXBP.svg',
-}
-
-export const getTokenIcon = (name) => {
-  if (TOKEN_ICON_MAP[name]) {
-    return TOKEN_ICON_MAP[name]
-  }
-  return `/tokens/crypto-icons-stack.svg#${name.toLowerCase()}`
 }

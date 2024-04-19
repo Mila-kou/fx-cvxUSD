@@ -13,8 +13,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        main: '#fff',
+        second: '#a6a6ae',
+        third: '#d7d3d3',
+
         blue: '#5488fe',
         red: '#fa2454',
+        green: '#44b904',
+
+        blueBg: 'rgba(126, 165, 255, 0.2)',
       },
     },
   },

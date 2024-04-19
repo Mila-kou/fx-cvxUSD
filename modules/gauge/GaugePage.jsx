@@ -92,6 +92,19 @@ export default function GaugePage() {
           )
         )}
 
+        <Header title="btcUSD Pools" />
+        {REBALANCE_GAUGE_LIST.filter((item) => item.poolType === 'btcUSD').map(
+          (item) => (
+            <PoolCell
+              cellData={item}
+              userVoteInfo={userVoteInfo}
+              voteData={poolVoteInfo[item.lpGaugeAddress]}
+              remaining={userVoteInfo.remaining}
+              onCastVote={(newPower) => onCastVote(item, newPower)}
+            />
+          )
+        )}
+
         <Header title="rUSD Pools" />
         {REBALANCE_GAUGE_LIST.filter((item) => item.poolType === 'rUSD').map(
           (item) => (

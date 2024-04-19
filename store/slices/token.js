@@ -19,16 +19,22 @@ const list = [
   'FXN',
   'Frax',
   'crvUSD',
+
+  'rUSD',
   'eETH',
   'weETH',
   'xeETH',
   'ezETH',
   'xezETH',
-  'rUSD',
+
   'CVX',
   'aCVX',
   'fCVX',
   'xCVX',
+
+  'btcUSD',
+  'WBTC',
+  'xWBTC',
 ]
 
 list.forEach((item) => {

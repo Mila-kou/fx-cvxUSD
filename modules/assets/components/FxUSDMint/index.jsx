@@ -1,8 +1,6 @@
 /* eslint-disable no-lonely-if */
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { Switch } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
@@ -11,31 +9,23 @@ import { useToken } from '@/hooks/useTokenInfo'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
-import Select from '@/components/Select'
 import styles from './styles.module.scss'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
-// import usePools from './usePools'
-import { useZapIn } from '@/hooks/useZap'
+import { ROUTE_TYPE, useZapIn } from '@/hooks/useZap'
 import {
   useFXUSD_contract,
   useFxUSD_GatewayRouter_contract,
 } from '@/hooks/useFXUSDContract'
+import useGlobal from '@/hooks/useGlobal'
 import useOutAmount from '../../hooks/useOutAmount'
+import useCurveSwapV2 from '@/hooks/useCurveSwapV2'
+import RouteCard from '../RouteCard'
+import useRouteList from '../RouteCard/useRouteList'
+import Button from '@/components/Button'
 
-export default function FxUSDMint({ slippage, assetInfo }) {
-  const { _currentAccount, sendTransaction } = useWeb3()
-  const { tokens } = useSelector((state) => state.token)
-  const baseToken = useSelector((state) => state.baseToken)
-  const [clearTrigger, clearInput] = useClearInput()
-  const [isEarn, setIsEarn] = useState(false)
-  const { getZapInParams } = useZapIn()
-
-  const poolList = [] // usePools()
-
-  const { isF, symbol: toSymbol, nav_text, markets } = assetInfo
-
-  const OPTIONS = [
+const MINT_OPTIONS = {
+  fxUSD: [
     ['ETH', config.tokens.eth],
     ['stETH', config.tokens.stETH],
     ['frxETH', config.tokens.frxETH],
@@ -45,14 +35,51 @@ export default function FxUSDMint({ slippage, assetInfo }) {
     ['crvUSD', config.tokens.crvUSD],
     ['wstETH', config.tokens.wstETH],
     ['sfrxETH', config.tokens.sfrxETH],
-  ].filter((item) => item[0] !== toSymbol)
+  ],
+  rUSD: [
+    // ['ETH', config.tokens.eth],
+    // ['eETH', config.tokens.eETH],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+    ['weETH', config.tokens.weETH],
+    ['ezETH', config.tokens.ezETH],
+  ],
+  btcUSD: [
+    // ['ETH', config.tokens.eth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    ['WBTC', config.tokens.WBTC],
+  ],
+}
+
+export default function FxUSDMint({ slippage, assetInfo }) {
+  const { showRouteCard } = useGlobal()
+  const { _currentAccount, sendTransaction } = useWeb3()
+  const { tokens } = useSelector((state) => state.token)
+  const baseToken = useSelector((state) => state.baseToken)
+  const [clearTrigger, clearInput] = useClearInput()
+  const { getZapInParams } = useZapIn()
+  const { swapByCurve, getOutAmountByCurve } = useCurveSwapV2()
+
+  const {
+    isF,
+    symbol: toSymbol,
+    nav_text,
+    markets,
+    baseList,
+    address,
+    baseTokenSymbols,
+  } = assetInfo
+
+  const OPTIONS = MINT_OPTIONS[toSymbol].filter((item) => item[0] !== toSymbol)
 
   const [pausedError, setPausedError] = useState(false)
-  const [symbol, setSymbol] = useState('ETH')
+  const [symbol, setSymbol] = useState(baseTokenSymbols[0])
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
-  const { contract: FXUSD_contract } = useFXUSD_contract()
-  const [baseSymbol, setBaseSymbol] = useState('wstETH')
+  const { contract: FXUSD_contract } = useFXUSD_contract(toSymbol)
+  const [baseSymbol, setBaseSymbol] = useState(baseTokenSymbols[0])
 
   const baseTokenData = useMemo(
     () => baseToken[baseSymbol].data,
@@ -60,10 +87,15 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   )
 
   const isRecap = useMemo(() => {
-    const wstETH_data = baseToken.wstETH.data
-    const sfrxETH_data = baseToken.sfrxETH.data
+    let flag = false
 
-    return wstETH_data?.isRecap || sfrxETH_data?.isRecap
+    baseTokenSymbols.forEach((item) => {
+      if (baseToken[item].data?.isRecap) {
+        flag = true
+      }
+    })
+
+    return flag
   }, [baseToken])
 
   const minGas = 234854
@@ -75,101 +107,103 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
 
-  const POOL_LIST = poolList
-    .filter((item) => ['wstETH', 'sfrxETH'].includes(item.baseSymbol))
-    .filter((item) => {
-      if (['wstETH', 'stETH'].includes(symbol)) {
-        return item.baseSymbol === 'wstETH'
-      }
-      if (['sfrxETH', 'frxETH'].includes(symbol)) {
-        return item.baseSymbol === 'sfrxETH'
-      }
-      return true
-    })
-    .map((item) => ({
-      label: item.nameShow,
-      value: item.rebalancePoolAddress,
-    }))
+  const routeTypeRef = useRef(null)
+  const { routeList, refreshRouteList } = useRouteList()
 
-  const [poolAdddress, setPoolAdddress] = useState('')
+  const isBaseSymbol = useMemo(
+    () => baseTokenSymbols.includes(symbol),
+    [symbol]
+  )
 
   useEffect(() => {
-    if (POOL_LIST.length) {
-      setPoolAdddress(POOL_LIST[0].value)
-    }
-  }, [POOL_LIST.length])
+    if (toSymbol === 'fxUSD') {
+      const wstETH_data = baseToken.wstETH.data
+      const sfrxETH_data = baseToken.sfrxETH.data
 
-  useEffect(() => {
-    const wstETH_data = baseToken.wstETH.data
-    const sfrxETH_data = baseToken.sfrxETH.data
+      if (['stETH', 'wstETH'].includes(symbol)) {
+        setBaseSymbol('wstETH')
+        return
+      }
+      if (['frxETH', 'sfrxETH'].includes(symbol)) {
+        setBaseSymbol('sfrxETH')
+        return
+      }
 
-    if (isEarnActive) {
-      const pool = poolList.find(
-        (item) => item.rebalancePoolAddress === poolAdddress
+      if (
+        cBN(wstETH_data.fTokenTotalSupplyRes).isGreaterThan(
+          markets?.wstETH.mintCap
+        ) ||
+        !wstETH_data.isBaseTokenPriceValid
+      ) {
+        setBaseSymbol('sfrxETH')
+        return
+      }
+
+      if (
+        cBN(sfrxETH_data.fTokenTotalSupplyRes).isGreaterThan(
+          markets?.sfrxETH.mintCap
+        ) ||
+        !sfrxETH_data.isBaseTokenPriceValid
+      ) {
+        setBaseSymbol('wstETH')
+        return
+      }
+
+      const _baseSymbol = cBN(wstETH_data.collateralRatioRes).isGreaterThan(
+        sfrxETH_data.collateralRatioRes
       )
+        ? 'wstETH'
+        : 'sfrxETH'
+
+      setBaseSymbol(_baseSymbol)
+    }
+
+    if (toSymbol === 'rUSD') {
+      const weETH_data = baseToken.weETH.data
+      const ezETH_data = baseToken.ezETH.data
+
+      if (['weETH'].includes(symbol)) {
+        setBaseSymbol('weETH')
+        return
+      }
+      if (['ezETH'].includes(symbol)) {
+        setBaseSymbol('ezETH')
+        return
+      }
 
       if (
-        ['wstETH', 'stETH'].includes(symbol) &&
-        pool.baseSymbol !== 'wstETH'
+        cBN(weETH_data.fTokenTotalSupplyRes).isGreaterThan(
+          markets?.weETH.mintCap
+        ) ||
+        !weETH_data.isBaseTokenPriceValid
       ) {
-        setPoolAdddress(POOL_LIST[0].value)
+        setBaseSymbol('ezETH')
+        return
       }
+
       if (
-        ['sfrxETH', 'frxETH'].includes(symbol) &&
-        pool.baseSymbol !== 'sfrxETH'
+        cBN(ezETH_data.fTokenTotalSupplyRes).isGreaterThan(
+          markets?.ezETH.mintCap
+        ) ||
+        !ezETH_data.isBaseTokenPriceValid
       ) {
-        setPoolAdddress(POOL_LIST[0].value)
+        setBaseSymbol('weETH')
+        return
       }
-      setBaseSymbol(pool.baseSymbol)
-      return
+
+      const _baseSymbol = cBN(weETH_data.collateralRatioRes).isGreaterThan(
+        ezETH_data.collateralRatioRes
+      )
+        ? 'weETH'
+        : 'ezETH'
+
+      setBaseSymbol(_baseSymbol)
     }
 
-    if (['stETH', 'wstETH'].includes(symbol)) {
-      setBaseSymbol('wstETH')
-      return
+    if (toSymbol === 'btcUSD') {
+      setBaseSymbol('WBTC')
     }
-    if (['frxETH', 'sfrxETH'].includes(symbol)) {
-      setBaseSymbol('sfrxETH')
-      return
-    }
-
-    if (
-      cBN(wstETH_data.fTokenTotalSupplyRes).isGreaterThan(
-        markets?.wstETH.mintCap
-      ) ||
-      !wstETH_data.isBaseTokenPriceValid
-    ) {
-      setBaseSymbol('sfrxETH')
-      return
-    }
-
-    if (
-      cBN(sfrxETH_data.fTokenTotalSupplyRes).isGreaterThan(
-        markets?.sfrxETH.mintCap
-      ) ||
-      !sfrxETH_data.isBaseTokenPriceValid
-    ) {
-      setBaseSymbol('wstETH')
-      return
-    }
-
-    const _baseSymbol = cBN(wstETH_data.collateralRatioRes).isGreaterThan(
-      sfrxETH_data.collateralRatioRes
-    )
-      ? 'wstETH'
-      : 'sfrxETH'
-
-    setBaseSymbol(_baseSymbol)
-  }, [
-    baseToken,
-    symbol,
-    markets,
-    isEarn,
-    poolAdddress,
-    POOL_LIST,
-    setBaseSymbol,
-    setPoolAdddress,
-  ])
+  }, [baseToken, symbol, markets, setBaseSymbol, toSymbol])
 
   const {
     mintPaused,
@@ -204,7 +238,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   }, [symbol])
 
   const getContractAddress = () => {
-    if (['wstETH', 'sfrxETH'].includes(symbol)) return 'fxUSD'
+    if (isBaseSymbol) return toSymbol
     return 'fxUSD_gateway_router'
   }
 
@@ -277,11 +311,13 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   const initPage = () => {
     clearInput()
     setFromAmount('0')
+    routeTypeRef.current = ''
   }
 
-  const getMinAmount = async (needLoading) => {
+  const getMinAmount = async (needLoading, _routeType) => {
     if (needLoading) {
       setPriceLoading(true)
+      routeTypeRef.current = ''
     }
 
     let _mockAmount = fromAmount
@@ -303,20 +339,13 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         let _ETHtAmountAndGas = _mockAmount
         let resData
 
-        if (['wstETH', 'sfrxETH'].includes(symbol)) {
-          if (isEarnActive) {
-            resData = await FXUSD_contract.methods
-              .mintAndEarn(poolAdddress, _ETHtAmountAndGas, _account, 0)
-              .call({
-                from: _account,
-              })
-          } else {
-            resData = await FXUSD_contract.methods
-              .mint(config.tokens[symbol], _ETHtAmountAndGas, _account, 0)
-              .call({
-                from: _account,
-              })
-          }
+        if (isBaseSymbol) {
+          resData = await FXUSD_contract.methods
+            .mint(config.tokens[symbol], _ETHtAmountAndGas, _account, 0)
+            .call({
+              from: _account,
+            })
+          minout_ETH = resData * _mockRatio
         } else {
           if (symbol === 'ETH') {
             const getGasPrice = await getGas()
@@ -334,55 +363,60 @@ export default function FxUSDMint({ slippage, assetInfo }) {
             }
           }
 
-          const convertParams = await getZapInParams({
-            from: symbol,
-            to: baseSymbol,
-            amount: _ETHtAmountAndGas,
-            slippage,
-          })
-
-          if (isEarnActive) {
-            resData = await fxUSD_GatewayRouterContract.methods
-              .fxMintFxUSDAndEarn(
-                convertParams,
-                // config.tokens.fxUSD,
-                poolAdddress,
-                0
-              )
-              .call({
-                from: _account,
-                value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-              })
-            console.log('fxMintFxUSD--resData-----', symbol, _account, resData)
+          let list
+          if (_routeType && routeList.length) {
+            list = routeList
+            routeTypeRef.current = _routeType
           } else {
-            console.log(
-              'convertParams----',
-              JSON.stringify(convertParams),
-              baseSymbol,
-              symbol
+            list = await refreshRouteList(
+              {
+                from: symbol,
+                to: baseSymbol,
+                amount: _ETHtAmountAndGas,
+                slippage,
+                symbol: toSymbol,
+              },
+              async (convertParams) => {
+                let res
+                if (convertParams?.routeType === ROUTE_TYPE.CURVE) {
+                  res = await getOutAmountByCurve({
+                    from: config.zapTokens[symbol].address,
+                    decimals: config.zapTokens[symbol].decimals,
+                    to: address,
+                    amount: _ETHtAmountAndGas,
+                  })
+                  res = cBN(res).multipliedBy(1e18).toString()
+                } else {
+                  res = await fxUSD_GatewayRouterContract.methods
+                    .fxMintFxUSD(
+                      convertParams,
+                      // address,
+                      config.tokens[baseSymbol],
+                      0
+                    )
+                    .call({
+                      from: _account,
+                      value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+                    })
+                }
+                // 比例计算
+                return { outAmount: res * _mockRatio, result: res }
+              }
             )
-            resData = await fxUSD_GatewayRouterContract.methods
-              .fxMintFxUSD(
-                convertParams,
-                // config.tokens.fxUSD,
-                config.tokens[baseSymbol],
-                0
-              )
-              .call({
-                from: _account,
-                value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-              })
-            console.log('fxMintFxUSD--resData-', resData)
           }
-        }
 
-        minout_ETH = resData
+          const { amount } =
+            list.find((item) => item.routeType === routeTypeRef.current) ||
+            list[0]
+
+          if (!routeTypeRef.current) {
+            routeTypeRef.current = list[0].routeType
+          }
+          minout_ETH = amount
+        }
       } else {
         minout_ETH = 0
       }
-
-      // 比例计算
-      minout_ETH *= _mockRatio
 
       const _minOut = updateOutAmount(minout_ETH, 1)
 
@@ -417,73 +451,66 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   const handleMint = async () => {
     try {
       setMintLoading(true)
-
       const _ETHtAmountAndGas = await getMintGas(fromAmount)
-      const _minOut = await getMinAmount()
 
-      if (!checkNotZoroNum(_minOut)) {
-        setMintLoading(false)
-        return
-      }
+      if (routeTypeRef.current === ROUTE_TYPE.CURVE) {
+        await swapByCurve({
+          from: config.zapTokens[symbol].address,
+          decimals: config.zapTokens[symbol].decimals,
+          to: address,
+          amount: _ETHtAmountAndGas,
+          slippage,
+        })
+      } else {
+        const _minOut = await getMinAmount()
 
-      let apiCall
-      let to
-      if (['wstETH', 'sfrxETH'].includes(symbol)) {
-        to = FXUSD_contract._address
-        if (isEarnActive) {
-          apiCall = await FXUSD_contract.methods.mintAndEarn(
-            poolAdddress,
-            _ETHtAmountAndGas,
-            _currentAccount,
-            _minOut
-          )
-        } else {
+        if (!checkNotZoroNum(_minOut)) {
+          setMintLoading(false)
+          return
+        }
+        let apiCall
+        let to
+        if (isBaseSymbol) {
+          to = FXUSD_contract._address
+
           apiCall = await FXUSD_contract.methods.mint(
             config.tokens[symbol],
             _ETHtAmountAndGas,
             _currentAccount,
             _minOut
           )
-        }
-      } else {
-        to = fxUSD_GatewayRouterContract._address
-        const convertParams = await getZapInParams({
-          from: symbol,
-          to: baseSymbol,
-          amount: _ETHtAmountAndGas,
-          slippage,
-        })
-
-        if (isEarnActive) {
-          apiCall =
-            await fxUSD_GatewayRouterContract.methods.fxMintFxUSDAndEarn(
-              convertParams,
-              // config.tokens.fxUSD,
-              poolAdddress,
-              _minOut
-            )
         } else {
+          to = fxUSD_GatewayRouterContract._address
+          const convertParams = await getZapInParams({
+            from: symbol,
+            to: baseSymbol,
+            amount: _ETHtAmountAndGas,
+            slippage,
+            routeType: routeTypeRef.current,
+          })
+
           apiCall = await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
             convertParams,
-            // config.tokens.fxUSD,
+            // address,
             config.tokens[baseSymbol],
             _minOut
           )
         }
+
+        await noPayableAction(
+          () =>
+            sendTransaction({
+              to,
+              value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+              data: apiCall.encodeABI(),
+            }),
+          {
+            key: 'Mint',
+            action: 'Mint',
+          }
+        )
       }
 
-      await noPayableAction(
-        () =>
-          sendTransaction({
-            to,
-            value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-            data: apiCall.encodeABI(),
-          }),
-        {
-          key: 'Mint',
-          action: 'Mint',
-        }
-      )
       setMintLoading(false)
       initPage()
     } catch (error) {
@@ -556,29 +583,17 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
   useEffect(() => {
     getMinAmount(true)
-  }, [isF, slippage, fromAmount, _account, isEarn, poolAdddress])
-
-  const isEarnActive = useMemo(
-    () => isEarn && poolAdddress,
-    [isEarn, poolAdddress]
-  )
+  }, [isF, slippage, fromAmount, _account, showRouteCard])
 
   const fromUsd = useMemo(() => {
-    if (symbol === 'wstETH') {
-      return baseToken.wstETH.data?.baseTokenPrices?.inMint
+    if (symbol === baseSymbol) {
+      return baseTokenData?.baseTokenPrices?.inMint
     }
-    if (symbol === 'stETH') {
-      return baseToken.wstETH.data?.prices?.inMint
-    }
-    if (symbol === 'sfrxETH') {
-      return baseToken.sfrxETH.data?.baseTokenPrices?.inMint
-    }
-    if (symbol === 'frxETH') {
-      return baseToken.sfrxETH.data?.prices?.inMint
-    }
-    if (symbol === 'ETH') {
+
+    if (baseList.includes(symbol)) {
       return baseTokenData?.prices?.inMint
     }
+
     return tokens[symbol].price
   }, [symbol, tokens, baseToken, baseTokenData])
 
@@ -604,10 +619,10 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         <DownOutlined />
       </div>
       <BalanceInput
-        symbol="fxUSD"
+        symbol={toSymbol}
         color="deep-green"
         placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
-        amountUSD={minOutAmount.minout_tvl}
+        amountUSD={priceLoading ? '-' : minOutAmount.minout_tvl}
         disabled
         className={styles.inputItem}
         usd={nav_text}
@@ -627,37 +642,40 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
 
-      {/* <div className="flex justify-between mt-[16px]">
-        <p className="text-[var(--yellow-color)]">
-          Deposit into rebalance pool
-        </p>
+      <div className={styles.action}>
+        {routeTypeRef.current === ROUTE_TYPE.CURVE ? (
+          <Button
+            style={{ fontSize: '20px' }}
+            loading={mintLoading}
+            disabled={!canMint}
+            onClick={handleMint}
+            width="100%"
+          >
+            {`Mint ${toSymbol}`}
+          </Button>
+        ) : (
+          <BtnWapper
+            loading={mintLoading}
+            disabled={!canMint}
+            onClick={handleMint}
+            width="100%"
+          >
+            {`Mint ${toSymbol}`}
+          </BtnWapper>
+        )}
+      </div>
 
-        <Switch checked={isEarn} onChange={setIsEarn} />
-      </div> 
-      {isEarn && (
-        <Select
-          className="mt-[16px] h-[58px]"
-          style={{
-            border: '1px solid #a6a6ae',
-            borderRadius: '4px',
+      {showRouteCard && !isBaseSymbol && (
+        <RouteCard
+          onRefresh={getMinAmount}
+          options={routeList}
+          routeType={routeTypeRef.current}
+          onSelect={(_routeType) => {
+            getMinAmount(false, _routeType)
           }}
-          options={POOL_LIST}
-          value={poolAdddress}
-          onChange={setPoolAdddress}
+          loading={priceLoading || !checkNotZoroNum(fromAmount)}
         />
       )}
-      */}
-
-      <div className={styles.action}>
-        <BtnWapper
-          loading={mintLoading}
-          disabled={!canMint}
-          onClick={handleMint}
-          width="100%"
-        >
-          {isEarn ? 'Mint & Deposit' : 'Mint fxUSD'}
-        </BtnWapper>
-      </div>
     </div>
   )
 }

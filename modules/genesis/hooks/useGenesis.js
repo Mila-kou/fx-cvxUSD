@@ -15,7 +15,7 @@ import {
   dollarText,
   checkNotZoroNum,
 } from '@/utils/index'
-import { GENESIS_MAP, BASE_TOKENS_MAP } from '@/config/tokens'
+import { GENESIS_MAP, BASE_TOKENS_MAP, TOKENS_INFO } from '@/config/tokens'
 import { updateGenesis } from '@/store/slices/genesis'
 
 const useGenesis = () => {

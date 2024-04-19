@@ -87,7 +87,7 @@ const useV2Assets = (arr) => {
     useQueries({
       queries: [
         {
-          queryKey: ['v2_assets'],
+          queryKey: ['v2_assets', ...arr.map((item) => item.symbol)],
           queryFn: () => fetchAssetsData(),
         },
       ],

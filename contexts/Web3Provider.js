@@ -13,7 +13,6 @@ const Web3Context = React.createContext(null)
 function Web3ContextProvider({ children }) {
   const [{ wallet, connecting }, connect, _disconnect] = useConnectWallet()
   const [{ chains, connectedChain, settingChain }, setChain] = useSetChain()
-
   useEffect(() => {
     if (!wallet && !connecting) {
       const previouslySelectedWallet =
@@ -165,6 +164,7 @@ function Web3ContextProvider({ children }) {
       isAllowChain,
       sendTransaction,
       signMessage,
+      provider,
     }),
     [
       web3,
@@ -185,6 +185,7 @@ function Web3ContextProvider({ children }) {
       isAllowChain,
       sendTransaction,
       signMessage,
+      provider,
     ]
   )
 

@@ -43,7 +43,7 @@ const processFxETH = (asset, baseToken, lastDayPrice) => {
     _baseToken.leverage = leverage
     _baseToken.leverage_text = checkNotZoroNumOption(
       leverage,
-      `x${fb4(leverage, false, 0, 2)}`
+      `${fb4(leverage, false, 0, 2)}x`
     )
   }
 

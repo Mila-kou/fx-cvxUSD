@@ -150,7 +150,7 @@ export default function RebalancePoolCellV2({
 
   const WithdrawModal = useMemo(
     () =>
-      ['fxUSD', 'rUSD'].includes(_poolConfig.withdrawDefaultToken)
+      ['fxUSD', 'rUSD', 'btcUSD'].includes(_poolConfig.withdrawDefaultToken)
         ? FxUSDWithdrawModal
         : FETHWithdrawModal,
     [_poolConfig, FxUSDWithdrawModal, FETHWithdrawModal]
@@ -248,7 +248,7 @@ export default function RebalancePoolCellV2({
       : '~ 4x ether.fi loyalty points'
 
   const subMessage = useMemo(() => {
-    if (poolType == 'fxUSD') {
+    if (['fxUSD'].includes(poolType)) {
       return (
         <>
           {' '}
@@ -262,6 +262,32 @@ export default function RebalancePoolCellV2({
             <span className="underline text-[var(--a-button-color)]">LSD</span>
           </Tooltip>{' '} */}
           LSD and{' '}
+          {/* <Tooltip
+            placement="top"
+            title={harvestTypeDom('FXNDOM')}
+            arrow
+            color="#000"
+          >
+            <span className="underline text-[var(--a-button-color)]">FXN</span>
+          </Tooltip>{' '} */}
+          FXN rewards
+        </>
+      )
+    }
+    if (['btcUSD'].includes(poolType)) {
+      return (
+        <>
+          {' '}
+          then stake here to earn{' '}
+          {/* <Tooltip
+            placement="top"
+            title={harvestTypeDom('LSDDOM')}
+            arrow
+            color="#000"
+          >
+            <span className="underline text-[var(--a-button-color)]">LSD</span>
+          </Tooltip>{' '} */}
+          WBTC and{' '}
           {/* <Tooltip
             placement="top"
             title={harvestTypeDom('FXNDOM')}
@@ -307,7 +333,7 @@ export default function RebalancePoolCellV2({
       <div
         className={styles.card}
         style={{
-          background: ['fxUSD', 'rUSD'].includes(_poolConfig.poolType)
+          background: ['fxUSD', 'rUSD', 'btcUSD'].includes(_poolConfig.poolType)
             ? 'var(--deep-green-color)'
             : 'var(--f-bg-color)',
         }}
@@ -379,9 +405,7 @@ export default function RebalancePoolCellV2({
               >
                 {_poolConfig.poolType}
               </Link>{' '}
-              with{' '}
-              {BASE_TOKENS_MAP[_poolConfig.baseSymbol]?.baseName || 'stETH'},
-              {subMessage}
+              , {subMessage}
             </p>
             <div className="mt-[12px]">
               Current APR: {apyDom}{' '}

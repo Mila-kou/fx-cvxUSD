@@ -16,10 +16,12 @@ import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import { updateDataList } from '@/store/slices/baseToken'
 import processBaseToken from './processBaseToken'
 import { BASE_TOKENS_MAP } from '@/config/tokens'
+import useWeb3 from '@/hooks/useWeb3'
 
 const useBaseToken = () => {
   const multiCallsV2 = useMutiCallV2()
   const dispatch = useDispatch()
+  const { blockTime } = useWeb3()
 
   const { erc20Contract } = useContract()
   const getMarketContract = useV2MarketContract()
@@ -33,7 +35,7 @@ const useBaseToken = () => {
   const fetchBaseTokensData = async (arr) => {
     try {
       const calls = arr.map((item) => {
-        const { contracts, baseSymbol } = item
+        const { contracts, baseSymbol, decimals = 18, hasFundingCost } = item
         const { nav: fNav, totalSupply: fTokenTotalSupply } = getFContract(
           contracts.fToken
         ).contract.methods
@@ -62,6 +64,8 @@ const useBaseToken = () => {
           isBaseTokenPriceValid,
           isUnderCollateral,
           getUnderlyingValue,
+          borrowRateSnapshot,
+          getFundingRate,
         } = getTreasuryContract(contracts.treasury).contract.methods
 
         const { getPrice } = getETHTwapOracleContract(contracts.twapOracle)
@@ -75,7 +79,7 @@ const useBaseToken = () => {
           baseSymbol,
 
           twapPriceRes: getPrice(),
-          priceRateRes: getUnderlyingValue((1e18).toString()),
+          priceRateRes: getUnderlyingValue((10 ** decimals).toString()),
           fNav: fNav(),
           xNav: xNav(),
           collateralRatioRes: collateralRatio(),
@@ -107,6 +111,9 @@ const useBaseToken = () => {
           isRecap: isUnderCollateral(),
 
           fTokenTotalSupplyRes: fTokenTotalSupply(),
+
+          borrowRateSnapshotRes: hasFundingCost ? borrowRateSnapshot() : null,
+          fundingRateRes: hasFundingCost ? getFundingRate() : 0,
         }
       })
 
@@ -144,7 +151,7 @@ const useBaseToken = () => {
         Object.assign(data[item.baseSymbol], item)
       })
 
-      const list = processBaseToken(data)
+      const list = processBaseToken(data, blockTime)
       dispatch(updateDataList(list))
       return list
     } catch (error) {

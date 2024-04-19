@@ -29,6 +29,10 @@ export default function SymbolPage() {
 
     if (['xCVX', 'fCVX'].includes(symbol)) return [baseToken.aCVX]
 
+    if (symbol === 'btcUSD') return [baseToken.WBTC]
+
+    if (symbol === 'xWBTC') return [baseToken.WBTC]
+
     return []
   }, [symbol, baseToken])
 

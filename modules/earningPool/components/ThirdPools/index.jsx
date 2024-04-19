@@ -24,21 +24,24 @@ export default function ThirdPools() {
   }
 
   const list = useMemo(() => {
-    return fxThirdList.map((item) => {
-      const { name = '' } = item
-      let icons = []
-      if (name.includes('+')) {
-        icons = name.split('+')
-      } else if (name.includes('/')) {
-        icons = name.split('/')
-      } else {
-        icons = [name]
-      }
-      return {
-        ...item,
-        iconList: icons.map((icon) => TOKEN_ICON_MAP[icon]),
-      }
-    })
+    if (fxThirdList && Array.isArray(fxThirdList)) {
+      return fxThirdList.map((item) => {
+        const { name = '' } = item
+        let icons = []
+        if (name.includes('+')) {
+          icons = name.split('+')
+        } else if (name.includes('/')) {
+          icons = name.split('/')
+        } else {
+          icons = [name]
+        }
+        return {
+          ...item,
+          iconList: icons.map((icon) => TOKEN_ICON_MAP[icon]),
+        }
+      })
+    }
+    return []
   }, [fxThirdList])
 
   return (

@@ -18,6 +18,7 @@ import useInfo from '@/modules/assets/hooks/useInfo'
 import useFxETH from '@/hooks/assets/useFxETH'
 import useFxUSD from '@/hooks/assets/useFxUSD'
 import useRUSD from '@/hooks/assets/useRUSD'
+import useBtcUSD from '@/hooks/assets/useBtcUSD'
 import useTokenData from '@/hooks/useTokenData'
 import useV2Assets from '@/hooks/assets/useV2Assets'
 import useBaseToken from '@/hooks/assets/useBaseToken'
@@ -31,17 +32,19 @@ function GlobalProvider({ children }) {
   const { blockNumber } = useWeb3()
   const { theme, toggleTheme } = useTheme()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
-  const [routeType, setRouteType] = useState('')
+  const [showRouteCard, setShowRouteCard] = useState('')
 
   const { fetchBaseTokensData } = useBaseToken()
 
   useFxETH()
   useFxUSD()
   useRUSD()
+  useBtcUSD()
 
   fetchBaseTokensData(ASSET_MAP.fxUSD.baseTokenInfos)
   fetchBaseTokensData([BASE_TOKENS_MAP.weETH])
   fetchBaseTokensData([BASE_TOKENS_MAP.ezETH])
+  fetchBaseTokensData(ASSET_MAP.btcUSD.baseTokenInfos)
 
   useV2Assets([
     ASSET_MAP.xstETH,
@@ -51,6 +54,8 @@ function GlobalProvider({ children }) {
     // ASSET_MAP.fCVX,
     // ASSET_MAP.xCVX,
   ])
+  useV2Assets([ASSET_MAP.xWBTC])
+
   useTokenData()
 
   const refMenu2 = useRef(null)
@@ -113,8 +118,8 @@ function GlobalProvider({ children }) {
       fAssetList: [],
       xAssetList: [],
 
-      routeType,
-      setRouteType,
+      showRouteCard,
+      setShowRouteCard,
     }),
     [
       theme,
@@ -130,8 +135,8 @@ function GlobalProvider({ children }) {
       cvxFXN_sdFXN_apy,
       allGaugeBaseInfo,
 
-      routeType,
-      setRouteType,
+      showRouteCard,
+      setShowRouteCard,
     ]
   )
 

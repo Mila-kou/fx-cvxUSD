@@ -20,9 +20,9 @@ const explorerUri = 'https://www.etherscan.io'
 const chainInfo = {
   id: '0x1',
   token: 'ETH',
-  label: 'Phalcon-newGauge',
+  label: 'btcUSD-041901',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_c259bf1b34514c0fb8b56c823c09139a',
+    'https://rpc.phalcon.blocksec.com/rpc_3f9d7c80ebf6492aba784aa1de8d8470',
 }
 
 const contracts = {

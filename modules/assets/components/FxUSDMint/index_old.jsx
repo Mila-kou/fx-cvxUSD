@@ -1,6 +1,5 @@
 /* eslint-disable no-lonely-if */
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { Switch } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
@@ -16,41 +15,50 @@ import styles from './styles.module.scss'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
 // import usePools from './usePools'
-import { useZapIn } from '@/hooks/useZap'
+import { ROUTE_TYPE, useZapIn } from '@/hooks/useZap'
 import {
   useFXUSD_contract,
   useFxUSD_GatewayRouter_contract,
 } from '@/hooks/useFXUSDContract'
+import useGlobal from '@/hooks/useGlobal'
 import useOutAmount from '../../hooks/useOutAmount'
+import useCurveSwapV2 from '@/hooks/useCurveSwapV2'
+import RouteCard from '../RouteCard'
+import useRouteList from '../RouteCard/useRouteList'
+import Button from '@/components/Button'
 
-export default function RUSDMint({ slippage, assetInfo }) {
+export default function FxUSDMint({ slippage, assetInfo }) {
+  const { showRouteCard } = useGlobal()
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
   const [clearTrigger, clearInput] = useClearInput()
   const [isEarn, setIsEarn] = useState(false)
   const { getZapInParams } = useZapIn()
+  const { swapByCurve, getOutAmountByCurve } = useCurveSwapV2()
 
   const poolList = [] // usePools()
 
-  const { isF, symbol: toSymbol, nav_text, markets, baseList } = assetInfo
+  const { isF, symbol: toSymbol, nav_text, markets } = assetInfo
 
   const OPTIONS = [
-    // ['ETH', config.tokens.eth],
-    // ['eETH', config.tokens.eETH],
-    // ['USDT', config.tokens.usdt],
-    // ['USDC', config.tokens.usdc],
-    // ['crvUSD', config.tokens.crvUSD],
-    ['weETH', config.tokens.weETH],
-    ['ezETH', config.tokens.ezETH],
+    ['ETH', config.tokens.eth],
+    ['stETH', config.tokens.stETH],
+    ['frxETH', config.tokens.frxETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['Frax', config.tokens.frax],
+    ['crvUSD', config.tokens.crvUSD],
+    ['wstETH', config.tokens.wstETH],
+    ['sfrxETH', config.tokens.sfrxETH],
   ].filter((item) => item[0] !== toSymbol)
 
   const [pausedError, setPausedError] = useState(false)
-  const [symbol, setSymbol] = useState('weETH')
+  const [symbol, setSymbol] = useState('ETH')
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
-  const { contract: RUSD_contract } = useFXUSD_contract('rUSD')
-  const [baseSymbol, setBaseSymbol] = useState('weETH')
+  const { contract: FXUSD_contract } = useFXUSD_contract()
+  const [baseSymbol, setBaseSymbol] = useState('wstETH')
 
   const baseTokenData = useMemo(
     () => baseToken[baseSymbol].data,
@@ -58,10 +66,10 @@ export default function RUSDMint({ slippage, assetInfo }) {
   )
 
   const isRecap = useMemo(() => {
-    const weETH_data = baseToken.weETH.data
-    const ezETH_data = baseToken.ezETH.data
+    const wstETH_data = baseToken.wstETH.data
+    const sfrxETH_data = baseToken.sfrxETH.data
 
-    return weETH_data?.isRecap || ezETH_data?.isRecap
+    return wstETH_data?.isRecap || sfrxETH_data?.isRecap
   }, [baseToken])
 
   const minGas = 234854
@@ -74,13 +82,13 @@ export default function RUSDMint({ slippage, assetInfo }) {
   const [mintLoading, setMintLoading] = useState(false)
 
   const POOL_LIST = poolList
-    .filter((item) => ['weETH', 'ezETH'].includes(item.baseSymbol))
+    .filter((item) => ['wstETH', 'sfrxETH'].includes(item.baseSymbol))
     .filter((item) => {
-      if (['weETH'].includes(symbol)) {
-        return item.baseSymbol === 'weETH'
+      if (['wstETH', 'stETH'].includes(symbol)) {
+        return item.baseSymbol === 'wstETH'
       }
-      if (['ezETH', 'frxETH'].includes(symbol)) {
-        return item.baseSymbol === 'ezETH'
+      if (['sfrxETH', 'frxETH'].includes(symbol)) {
+        return item.baseSymbol === 'sfrxETH'
       }
       return true
     })
@@ -91,6 +99,14 @@ export default function RUSDMint({ slippage, assetInfo }) {
 
   const [poolAdddress, setPoolAdddress] = useState('')
 
+  const routeTypeRef = useRef(null)
+  const { routeList, refreshRouteList } = useRouteList()
+
+  const isBaseSymbol = useMemo(
+    () => ['wstETH', 'sfrxETH'].includes(symbol),
+    [symbol]
+  )
+
   useEffect(() => {
     if (POOL_LIST.length) {
       setPoolAdddress(POOL_LIST[0].value)
@@ -98,58 +114,64 @@ export default function RUSDMint({ slippage, assetInfo }) {
   }, [POOL_LIST.length])
 
   useEffect(() => {
-    const weETH_data = baseToken.weETH.data
-    const ezETH_data = baseToken.ezETH.data
+    const wstETH_data = baseToken.wstETH.data
+    const sfrxETH_data = baseToken.sfrxETH.data
 
-    // if (isEarnActive) {
-    //   const pool = poolList.find(
-    //     (item) => item.rebalancePoolAddress === poolAdddress
-    //   )
+    if (isEarnActive) {
+      const pool = poolList.find(
+        (item) => item.rebalancePoolAddress === poolAdddress
+      )
 
-    //   if (['weETH'].includes(symbol) && pool.baseSymbol !== 'weETH') {
-    //     setPoolAdddress(POOL_LIST[0].value)
-    //   }
-    //   if (['ezETH', 'frxETH'].includes(symbol) && pool.baseSymbol !== 'ezETH') {
-    //     setPoolAdddress(POOL_LIST[0].value)
-    //   }
-    //   setBaseSymbol(pool.baseSymbol)
-    //   return
-    // }
-
-    if (['weETH'].includes(symbol)) {
-      setBaseSymbol('weETH')
-      return
-    }
-    if (['ezETH'].includes(symbol)) {
-      setBaseSymbol('ezETH')
+      if (
+        ['wstETH', 'stETH'].includes(symbol) &&
+        pool.baseSymbol !== 'wstETH'
+      ) {
+        setPoolAdddress(POOL_LIST[0].value)
+      }
+      if (
+        ['sfrxETH', 'frxETH'].includes(symbol) &&
+        pool.baseSymbol !== 'sfrxETH'
+      ) {
+        setPoolAdddress(POOL_LIST[0].value)
+      }
+      setBaseSymbol(pool.baseSymbol)
       return
     }
 
-    if (
-      cBN(weETH_data.fTokenTotalSupplyRes).isGreaterThan(
-        markets?.weETH.mintCap
-      ) ||
-      !weETH_data.isBaseTokenPriceValid
-    ) {
-      setBaseSymbol('ezETH')
+    if (['stETH', 'wstETH'].includes(symbol)) {
+      setBaseSymbol('wstETH')
+      return
+    }
+    if (['frxETH', 'sfrxETH'].includes(symbol)) {
+      setBaseSymbol('sfrxETH')
       return
     }
 
     if (
-      cBN(ezETH_data.fTokenTotalSupplyRes).isGreaterThan(
-        markets?.ezETH.mintCap
+      cBN(wstETH_data.fTokenTotalSupplyRes).isGreaterThan(
+        markets?.wstETH.mintCap
       ) ||
-      !ezETH_data.isBaseTokenPriceValid
+      !wstETH_data.isBaseTokenPriceValid
     ) {
-      setBaseSymbol('weETH')
+      setBaseSymbol('sfrxETH')
       return
     }
 
-    const _baseSymbol = cBN(weETH_data.collateralRatioRes).isGreaterThan(
-      ezETH_data.collateralRatioRes
+    if (
+      cBN(sfrxETH_data.fTokenTotalSupplyRes).isGreaterThan(
+        markets?.sfrxETH.mintCap
+      ) ||
+      !sfrxETH_data.isBaseTokenPriceValid
+    ) {
+      setBaseSymbol('wstETH')
+      return
+    }
+
+    const _baseSymbol = cBN(wstETH_data.collateralRatioRes).isGreaterThan(
+      sfrxETH_data.collateralRatioRes
     )
-      ? 'weETH'
-      : 'ezETH'
+      ? 'wstETH'
+      : 'sfrxETH'
 
     setBaseSymbol(_baseSymbol)
   }, [
@@ -196,7 +218,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
   }, [symbol])
 
   const getContractAddress = () => {
-    if (['weETH', 'ezETH'].includes(symbol)) return 'rUSD'
+    if (isBaseSymbol) return 'fxUSD'
     return 'fxUSD_gateway_router'
   }
 
@@ -269,11 +291,13 @@ export default function RUSDMint({ slippage, assetInfo }) {
   const initPage = () => {
     clearInput()
     setFromAmount('0')
+    routeTypeRef.current = ''
   }
 
-  const getMinAmount = async (needLoading) => {
+  const getMinAmount = async (needLoading, _routeType) => {
     if (needLoading) {
       setPriceLoading(true)
+      routeTypeRef.current = ''
     }
 
     let _mockAmount = fromAmount
@@ -295,20 +319,21 @@ export default function RUSDMint({ slippage, assetInfo }) {
         let _ETHtAmountAndGas = _mockAmount
         let resData
 
-        if (['weETH', 'ezETH'].includes(symbol)) {
+        if (isBaseSymbol) {
           if (isEarnActive) {
-            resData = await RUSD_contract.methods
+            resData = await FXUSD_contract.methods
               .mintAndEarn(poolAdddress, _ETHtAmountAndGas, _account, 0)
               .call({
                 from: _account,
               })
           } else {
-            resData = await RUSD_contract.methods
+            resData = await FXUSD_contract.methods
               .mint(config.tokens[symbol], _ETHtAmountAndGas, _account, 0)
               .call({
                 from: _account,
               })
           }
+          minout_ETH = resData * _mockRatio
         } else {
           if (symbol === 'ETH') {
             const getGasPrice = await getGas()
@@ -326,54 +351,72 @@ export default function RUSDMint({ slippage, assetInfo }) {
             }
           }
 
-          const convertParams = await getZapInParams({
-            from: symbol,
-            to: baseSymbol,
-            amount: _ETHtAmountAndGas,
-            slippage,
-          })
-
-          if (isEarnActive) {
-            resData = await fxUSD_GatewayRouterContract.methods
-              .fxMintFxUSDAndEarn(
-                convertParams,
-                // config.tokens.rUSD,
-                poolAdddress,
-                0
-              )
-              .call({
-                from: _account,
-                value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-              })
-            console.log('fxMintFxUSD--resData-----', symbol, _account, resData)
+          let list
+          if (_routeType && routeList.length) {
+            list = routeList
+            routeTypeRef.current = _routeType
           } else {
-            console.log(
-              'resData----',
-              JSON.stringify(convertParams),
-              baseSymbol
+            list = await refreshRouteList(
+              {
+                from: symbol,
+                to: baseSymbol,
+                amount: _ETHtAmountAndGas,
+                slippage,
+                symbol: 'fxUSD',
+              },
+              async (convertParams) => {
+                let res
+                if (isEarnActive) {
+                  res = await fxUSD_GatewayRouterContract.methods
+                    .fxMintFxUSDAndEarn(
+                      convertParams,
+                      // config.tokens.fxUSD,
+                      poolAdddress,
+                      0
+                    )
+                    .call({
+                      from: _account,
+                      value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+                    })
+                } else if (convertParams?.routeType === ROUTE_TYPE.CURVE) {
+                  res = await getOutAmountByCurve({
+                    from: config.zapTokens[symbol].address,
+                    decimals: config.zapTokens[symbol].decimals,
+                    to: config.tokens.fxUSD,
+                    amount: _ETHtAmountAndGas,
+                  })
+                  res = cBN(res).multipliedBy(1e18).toString()
+                } else {
+                  res = await fxUSD_GatewayRouterContract.methods
+                    .fxMintFxUSD(
+                      convertParams,
+                      // config.tokens.fxUSD,
+                      config.tokens[baseSymbol],
+                      0
+                    )
+                    .call({
+                      from: _account,
+                      value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+                    })
+                }
+                // 比例计算
+                return { outAmount: res * _mockRatio, result: res }
+              }
             )
-            resData = await fxUSD_GatewayRouterContract.methods
-              .fxMintFxUSD(
-                convertParams,
-                // config.tokens.rUSD,
-                config.tokens[baseSymbol],
-                0
-              )
-              .call({
-                from: _account,
-                value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-              })
-            console.log('fxMintFxUSD--resData-', resData)
           }
-        }
 
-        minout_ETH = resData
+          const { amount } =
+            list.find((item) => item.routeType === routeTypeRef.current) ||
+            list[0]
+
+          if (!routeTypeRef.current) {
+            routeTypeRef.current = list[0].routeType
+          }
+          minout_ETH = amount
+        }
       } else {
         minout_ETH = 0
       }
-
-      // 比例计算
-      minout_ETH *= _mockRatio
 
       const _minOut = updateOutAmount(minout_ETH, 1)
 
@@ -408,77 +451,88 @@ export default function RUSDMint({ slippage, assetInfo }) {
   const handleMint = async () => {
     try {
       setMintLoading(true)
-
       const _ETHtAmountAndGas = await getMintGas(fromAmount)
-      const _minOut = await getMinAmount()
 
-      if (!checkNotZoroNum(_minOut)) {
-        setMintLoading(false)
-        return
-      }
-
-      let apiCall
-      let to
-      if (['weETH', 'ezETH'].includes(symbol)) {
-        to = RUSD_contract._address
-        if (isEarnActive) {
-          apiCall = await RUSD_contract.methods.mintAndEarn(
-            poolAdddress,
-            _ETHtAmountAndGas,
-            _currentAccount,
-            _minOut
-          )
-        } else {
-          apiCall = await RUSD_contract.methods.mint(
-            config.tokens[symbol],
-            _ETHtAmountAndGas,
-            _currentAccount,
-            _minOut
-          )
-        }
-      } else {
-        to = fxUSD_GatewayRouterContract._address
-        const convertParams = await getZapInParams({
-          from: symbol,
-          to: baseSymbol,
+      if (routeTypeRef.current === ROUTE_TYPE.CURVE) {
+        await swapByCurve({
+          from: config.zapTokens[symbol].address,
+          decimals: config.zapTokens[symbol].decimals,
+          to: config.tokens.fxUSD,
           amount: _ETHtAmountAndGas,
           slippage,
         })
+      } else {
+        const _minOut = await getMinAmount()
 
-        if (isEarnActive) {
-          apiCall =
-            await fxUSD_GatewayRouterContract.methods.fxMintFxUSDAndEarn(
-              convertParams,
-              // config.tokens.rUSD,
+        if (!checkNotZoroNum(_minOut)) {
+          setMintLoading(false)
+          return
+        }
+        let apiCall
+        let to
+        if (isBaseSymbol) {
+          to = FXUSD_contract._address
+          if (isEarnActive) {
+            apiCall = await FXUSD_contract.methods.mintAndEarn(
               poolAdddress,
+              _ETHtAmountAndGas,
+              _currentAccount,
               _minOut
             )
+          } else {
+            apiCall = await FXUSD_contract.methods.mint(
+              config.tokens[symbol],
+              _ETHtAmountAndGas,
+              _currentAccount,
+              _minOut
+            )
+          }
         } else {
-          apiCall = await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
-            convertParams,
-            // config.tokens.rUSD,
-            config.tokens[baseSymbol],
-            _minOut
-          )
+          to = fxUSD_GatewayRouterContract._address
+          const convertParams = await getZapInParams({
+            from: symbol,
+            to: baseSymbol,
+            amount: _ETHtAmountAndGas,
+            slippage,
+            routeType: routeTypeRef.current,
+          })
+
+          if (isEarnActive) {
+            apiCall =
+              await fxUSD_GatewayRouterContract.methods.fxMintFxUSDAndEarn(
+                convertParams,
+                // config.tokens.fxUSD,
+                poolAdddress,
+                _minOut
+              )
+          } else {
+            apiCall = await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
+              convertParams,
+              // config.tokens.fxUSD,
+              config.tokens[baseSymbol],
+              _minOut
+            )
+          }
         }
+
+        await noPayableAction(
+          () =>
+            sendTransaction({
+              to,
+              value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+              data: apiCall.encodeABI(),
+            }),
+          {
+            key: 'Mint',
+            action: 'Mint',
+          }
+        )
       }
 
-      await noPayableAction(
-        () =>
-          sendTransaction({
-            to,
-            value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-            data: apiCall.encodeABI(),
-          }),
-        {
-          key: 'Mint',
-          action: 'Mint',
-        }
-      )
       setMintLoading(false)
       initPage()
     } catch (error) {
-      console.log('mint----rUSD---error---', _currentAccount, error)
+      console.log('mint----fxUSD---error---', _currentAccount, error)
       setMintLoading(false)
       noPayableErrorAction(`error_mint`, error)
     }
@@ -497,13 +551,6 @@ export default function RUSDMint({ slippage, assetInfo }) {
 
     _fTokenMintPausedInStabilityMode =
       fTokenMintPausedInStabilityMode && isCRLow130
-
-    // console.log(
-    //   'cBN(fTokenTotalSupplyRes).isGreaterThan(markets?.[baseSymbol].mintCap)---',
-    //   cBN(fTokenTotalSupplyRes).isGreaterThan(markets?.[baseSymbol].mintCap),
-    //   fTokenTotalSupplyRes,
-    //   markets?.[baseSymbol].mintCap
-    // )
 
     if (
       isRecap ||
@@ -554,7 +601,7 @@ export default function RUSDMint({ slippage, assetInfo }) {
 
   useEffect(() => {
     getMinAmount(true)
-  }, [isF, slippage, fromAmount, _account, isEarn, poolAdddress])
+  }, [isF, slippage, fromAmount, _account, isEarn, poolAdddress, showRouteCard])
 
   const isEarnActive = useMemo(
     () => isEarn && poolAdddress,
@@ -562,14 +609,23 @@ export default function RUSDMint({ slippage, assetInfo }) {
   )
 
   const fromUsd = useMemo(() => {
-    if (symbol === baseSymbol) {
-      return baseTokenData?.baseTokenPrices?.inMint
+    if (symbol === 'wstETH') {
+      return baseToken.wstETH.data?.baseTokenPrices?.inMint
     }
-    if (baseList.includes(symbol)) {
+    if (symbol === 'stETH') {
+      return baseToken.wstETH.data?.prices?.inMint
+    }
+    if (symbol === 'sfrxETH') {
+      return baseToken.sfrxETH.data?.baseTokenPrices?.inMint
+    }
+    if (symbol === 'frxETH') {
+      return baseToken.sfrxETH.data?.prices?.inMint
+    }
+    if (symbol === 'ETH') {
       return baseTokenData?.prices?.inMint
     }
     return tokens[symbol].price
-  }, [symbol, tokens, baseSymbol, baseTokenData])
+  }, [symbol, tokens, baseToken, baseTokenData])
 
   return (
     <div className={styles.container}>
@@ -593,10 +649,10 @@ export default function RUSDMint({ slippage, assetInfo }) {
         <DownOutlined />
       </div>
       <BalanceInput
-        symbol="rUSD"
+        symbol="fxUSD"
         color="deep-green"
         placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
-        amountUSD={minOutAmount.minout_tvl}
+        amountUSD={priceLoading ? '-' : minOutAmount.minout_tvl}
         disabled
         className={styles.inputItem}
         usd={nav_text}
@@ -638,15 +694,39 @@ export default function RUSDMint({ slippage, assetInfo }) {
       */}
 
       <div className={styles.action}>
-        <BtnWapper
-          loading={mintLoading}
-          disabled={!canMint}
-          onClick={handleMint}
-          width="100%"
-        >
-          {isEarn ? 'Mint & Deposit' : 'Mint rUSD'}
-        </BtnWapper>
+        {routeTypeRef.current === ROUTE_TYPE.CURVE ? (
+          <Button
+            style={{ fontSize: '20px' }}
+            loading={mintLoading}
+            disabled={!canMint}
+            onClick={handleMint}
+            width="100%"
+          >
+            {isEarn ? 'Mint & Deposit' : 'Mint fxUSD'}
+          </Button>
+        ) : (
+          <BtnWapper
+            loading={mintLoading}
+            disabled={!canMint}
+            onClick={handleMint}
+            width="100%"
+          >
+            {isEarn ? 'Mint & Deposit' : 'Mint fxUSD'}
+          </BtnWapper>
+        )}
       </div>
+
+      {showRouteCard && !isBaseSymbol && (
+        <RouteCard
+          onRefresh={getMinAmount}
+          options={routeList}
+          routeType={routeTypeRef.current}
+          onSelect={(_routeType) => {
+            getMinAmount(false, _routeType)
+          }}
+          loading={priceLoading || !checkNotZoroNum(fromAmount)}
+        />
+      )}
     </div>
   )
 }

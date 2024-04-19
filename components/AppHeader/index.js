@@ -25,7 +25,7 @@ const routers = [
   ['Earn', '/earn'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
-  ['rUSD Genesis', '/genesis/rUSD_ezETH', 'New Launch!'],
+  ['btcUSD Genesis', '/genesis/btcUSD_WBTC', 'New Launch!'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
@@ -191,6 +191,10 @@ export default function AppHeader() {
     {
       label: 'rUSD weETH Genesis',
       onClick: () => push('/genesis/rUSD_weETH'),
+    },
+    {
+      label: 'rUSD ezETH Genesis',
+      onClick: () => push('/genesis/rUSD_ezETH'),
     },
   ]
 

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import BigNumber from 'bignumber.js'
@@ -16,74 +16,21 @@ import { useToken } from '@/hooks/useTokenInfo'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 import useApprove from '@/hooks/useApprove'
+import useGlobal from '@/hooks/useGlobal'
 import { DetailCell, NoticeCard, BonusCard } from '../Common'
 import Button from '@/components/Button'
 import {
   useFxUSD_GatewayRouter_contract,
   useFXUSD_contract,
 } from '@/hooks/useFXUSDContract'
-import { getZapOutParams } from '@/hooks/useZap'
+import { getZapOutParams, ROUTE_TYPE } from '@/hooks/useZap'
+import useCurveSwapV2 from '@/hooks/useCurveSwapV2'
+import RouteCard from '../RouteCard'
+import useRouteList from '../RouteCard/useRouteList'
 import useOutAmount from '../../hooks/useOutAmount'
 
-export default function FxUSDRedeem({ slippage, assetInfo }) {
-  const { _currentAccount, sendTransaction } = useWeb3()
-  const [isLoading, setIsLoading] = useState(0)
-  const { tokens } = useSelector((state) => state.token)
-  const baseToken = useSelector((state) => state.baseToken)
-  const [clearTrigger, clearInput] = useClearInput()
-
-  const [symbol, setSymbol] = useState('stETH')
-  const { contract: fxUSD_GatewayRouterContract } =
-    useFxUSD_GatewayRouter_contract()
-
-  const { contract: FXUSD_contract } = useFXUSD_contract()
-
-  const [bouns, setBonus] = useState([])
-
-  const { symbol: fromSymbol, nav_text, isF, markets } = assetInfo
-
-  const isSwap = useMemo(() => ['xstETH', 'xfrxETH'].includes(symbol), [symbol])
-
-  const [pausedError, setPausedError] = useState(false)
-  const [showManaged, setShowManaged] = useState(false)
-
-  const [baseSymbol, baseTokenData, managed, isRecap, isFXBouns] =
-    useMemo(() => {
-      const wstETH_m = cBN(markets?.wstETH?.managed || 0)
-      const sfrxETH_m = cBN(markets?.sfrxETH?.managed || 0)
-
-      const _isRecap =
-        baseToken.wstETH.data?.isRecap || baseToken.sfrxETH.data?.isRecap
-
-      const _isFXBouns =
-        baseToken.wstETH.data?.isFXBouns || baseToken.sfrxETH.data?.isFXBouns
-
-      if (['wstETH', 'stETH'].includes(symbol)) {
-        return ['wstETH', baseToken.wstETH.data, wstETH_m, _isRecap, _isFXBouns]
-      }
-      if (symbol == 'sfrxETH') {
-        return [
-          'sfrxETH',
-          baseToken.sfrxETH.data,
-          sfrxETH_m,
-          _isRecap,
-          _isFXBouns,
-        ]
-      }
-
-      const _baseSymbol = wstETH_m.isGreaterThan(sfrxETH_m)
-        ? 'wstETH'
-        : 'sfrxETH'
-      return [
-        _baseSymbol,
-        baseToken[_baseSymbol].data,
-        BigNumber.max(wstETH_m, sfrxETH_m),
-        _isRecap,
-        _isFXBouns,
-      ]
-    }, [baseToken, symbol, markets])
-
-  const OPTIONS = [
+const REDEEM_OPTIONS = {
+  fxUSD: [
     ['stETH', config.tokens.stETH],
     ['frxETH', config.tokens.frxETH],
     ['WETH', config.tokens.weth],
@@ -93,7 +40,146 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     ['crvUSD', config.tokens.crvUSD],
     ['wstETH', config.tokens.wstETH],
     ['sfrxETH', config.tokens.sfrxETH],
-  ].filter((item) => !(isRecap && ['wstETH', 'sfrxETH'].includes(item[0])))
+  ],
+  rUSD: [
+    // ['ETH', config.tokens.eth],
+    // ['eETH', config.tokens.eETH],
+    ['weETH', config.tokens.weETH],
+    ['ezETH', config.tokens.ezETH],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+  ],
+  btcUSD: [
+    // ['ETH', config.tokens.eth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    ['WBTC', config.tokens.WBTC],
+  ],
+}
+
+export default function FxUSDRedeem({ slippage, assetInfo }) {
+  const { showRouteCard } = useGlobal()
+  const { _currentAccount, sendTransaction } = useWeb3()
+  const [isLoading, setIsLoading] = useState(0)
+  const { tokens } = useSelector((state) => state.token)
+  const baseToken = useSelector((state) => state.baseToken)
+  const [clearTrigger, clearInput] = useClearInput()
+
+  const {
+    symbol: fromSymbol,
+    nav_text,
+    isF,
+    markets,
+    baseTokenSymbols,
+    address,
+    baseList,
+  } = assetInfo
+
+  const { swapByCurve, getOutAmountByCurve } = useCurveSwapV2()
+
+  const [symbol, setSymbol] = useState(baseTokenSymbols[0])
+  const { contract: fxUSD_GatewayRouterContract } =
+    useFxUSD_GatewayRouter_contract()
+
+  const { contract: FXUSD_contract } = useFXUSD_contract(fromSymbol)
+
+  const [bouns, setBonus] = useState([])
+
+  const isSwap = false
+
+  const [pausedError, setPausedError] = useState(false)
+  const [showManaged, setShowManaged] = useState(false)
+
+  const routeTypeRef = useRef(null)
+  const { routeList, refreshRouteList } = useRouteList()
+
+  const isBaseSymbol = useMemo(
+    () => baseTokenSymbols.includes(symbol),
+    [symbol]
+  )
+
+  const [baseSymbol, baseTokenData, managed, isRecap, isFXBouns] =
+    useMemo(() => {
+      const baseDataList = baseTokenSymbols.map((item) => baseToken[item].data)
+
+      let _isRecap = false
+      let _isFXBouns = false
+
+      baseDataList.forEach((item) => {
+        if (item.isRecap) {
+          _isRecap = true
+        }
+        if (item.isFXBouns) {
+          _isFXBouns = true
+        }
+      })
+
+      if (baseTokenSymbols.includes(symbol)) {
+        return [
+          symbol,
+          baseToken[symbol].data,
+          cBN(markets?.[symbol]?.managed || 0),
+          _isRecap,
+          _isFXBouns,
+        ]
+      }
+
+      if (fromSymbol === 'btcUSD') {
+        const WBTC_m = cBN(markets?.WBTC?.managed || 0)
+
+        return [
+          'WBTC',
+          baseToken[_baseSymbol].data,
+          WBTC_m,
+          _isRecap,
+          _isFXBouns,
+        ]
+      }
+
+      if (fromSymbol === 'rUSD') {
+        const weETH_m = cBN(markets?.weETH?.managed || 0)
+        const ezETH_m = cBN(markets?.ezETH?.managed || 0)
+
+        if (['eETH'].includes(symbol)) {
+          return ['weETH', baseToken.weETH.data, weETH_m, _isRecap, _isFXBouns]
+        }
+
+        const _baseSymbol = weETH_m.isGreaterThan(ezETH_m) ? 'weETH' : 'ezETH'
+
+        return [
+          _baseSymbol,
+          baseToken[_baseSymbol].data,
+          BigNumber.max(weETH_m, ezETH_m),
+          _isRecap,
+          _isFXBouns,
+        ]
+      }
+
+      // fxUSD
+      const wstETH_m = cBN(markets?.wstETH?.managed || 0)
+      const sfrxETH_m = cBN(markets?.sfrxETH?.managed || 0)
+
+      if (['stETH'].includes(symbol)) {
+        return ['wstETH', baseToken.wstETH.data, wstETH_m, _isRecap, _isFXBouns]
+      }
+
+      const _baseSymbol = wstETH_m.isGreaterThan(sfrxETH_m)
+        ? 'wstETH'
+        : 'sfrxETH'
+
+      return [
+        _baseSymbol,
+        baseToken[_baseSymbol].data,
+        BigNumber.max(wstETH_m, sfrxETH_m),
+        _isRecap,
+        _isFXBouns,
+      ]
+    }, [baseToken, symbol, markets])
+
+  const OPTIONS = REDEEM_OPTIONS[fromSymbol].filter(
+    (item) => !(isRecap && baseTokenSymbols.includes(item[0]))
+  )
 
   const {
     mintPaused,
@@ -126,7 +212,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
   const [selectTokenAddress, tokenAmount] = useMemo(() => {
     let _tokenAmount = 0
-    const _selectTokenAddress = config.tokens[fromSymbol]
+    const _selectTokenAddress = address
     _tokenAmount = fromAmount
     return [_selectTokenAddress, _tokenAmount]
   }, [fromAmount])
@@ -139,11 +225,11 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
   const canReceived = useMemo(() => {
     if (priceLoading) return false
     if (!minOutAmount.minout_slippage) return false
-    return cBN(tokenAmount).isLessThanOrEqualTo(tokens.fxUSD.balance)
+    return cBN(tokenAmount).isLessThanOrEqualTo(tokens[fromSymbol].balance)
   }, [
     tokenAmount,
     minOutAmount.minout_slippage,
-    tokens.fxUSD.balance,
+    tokens[fromSymbol].balance,
     priceLoading,
   ])
 
@@ -176,13 +262,26 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
   })
 
   const _account = useMemo(() => {
-    const isInsufficient = cBN(tokenAmount).isGreaterThan(tokens.fxUSD.balance)
+    const isInsufficient = cBN(tokenAmount).isGreaterThan(
+      tokens[fromSymbol].balance
+    )
 
     if (isInsufficient) {
       return config.approvedAddress
     }
+
+    if (symbol === baseSymbol) {
+      return _currentAccount
+    }
     return needApprove ? config.approvedAddress : _currentAccount
-  }, [needApprove, _currentAccount, tokenAmount, symbol, tokens.fxUSD.balance])
+  }, [
+    needApprove,
+    _currentAccount,
+    tokenAmount,
+    symbol,
+    baseSymbol,
+    tokens[fromSymbol].balance,
+  ])
 
   const checkPause = () => {
     let _fTokenMintPausedInStabilityMode = false
@@ -219,7 +318,8 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
 
     _enableETH =
-      _enableETH && cBN(tokenAmount).isLessThanOrEqualTo(tokens.fxUSD.balance)
+      _enableETH &&
+      cBN(tokenAmount).isLessThanOrEqualTo(tokens[fromSymbol].balance)
 
     return _enableETH && (needApprove || minOutAmount.minout)
   }, [
@@ -228,7 +328,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     mintPaused,
     fTokenMintPausedInStabilityMode,
     xTokenRedeemPausedInStabilityMode,
-    tokens.fxUSD.balance,
+    tokens[fromSymbol].balance,
     minOutAmount,
     priceLoading,
     needApprove,
@@ -249,6 +349,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     clearInput()
     resetOutAmount()
     setBonus([])
+    routeTypeRef.current = ''
   }
 
   useEffect(() => {
@@ -256,10 +357,11 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     setBonus([])
   }, [symbol])
 
-  const getMinAmount = async (needLoading) => {
+  const getMinAmount = async (needLoading, _routeType) => {
     setShowManaged(false)
     if (needLoading) {
       setPriceLoading(true)
+      routeTypeRef.current = ''
     }
 
     setBonus([])
@@ -280,50 +382,94 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
       if (checkNotZoroNum(fromAmount)) {
         let resData
-        if (['wstETH', 'sfrxETH'].includes(symbol)) {
+        if (isBaseSymbol) {
           resData = await FXUSD_contract.methods
             .redeem(config.tokens[symbol], _mockAmount, _account, 0)
             .call({
               from: _account,
             })
 
-          minout_ETH = resData._amountOut
+          minout_ETH = resData._amountOut * _mockRatio
           if (Number(resData._bonusOut)) {
             __bonus.push({
               bonus: cBN(resData._bonusOut),
               symbol,
             })
           }
-          // }
         } else {
-          const convertParams_baseToken_1 = getZapOutParams(
-            config.tokens.wstETH,
-            _symbolAddress
-          )
+          let list
+          if (_routeType && routeList.length) {
+            list = routeList
+            routeTypeRef.current = _routeType
+          } else {
+            list = await refreshRouteList(
+              {
+                from: fromSymbol,
+                to: symbol,
+                amount: _mockAmount,
+                slippage,
+                symbol,
+                decimals: config.zapTokens[symbol].decimals,
+                isZapIn: false,
+              },
+              async (params) => {
+                let res
+                if (params?.routeType === ROUTE_TYPE.CURVE) {
+                  res = await getOutAmountByCurve({
+                    from: address,
+                    decimals: 18,
+                    to: config.zapTokens[symbol].address,
+                    amount: _mockAmount,
+                  })
+                  res = {
+                    _dstOut: cBN(res)
+                      .multipliedBy(10 ** config.zapTokens[symbol].decimals)
+                      .toString(),
+                  }
+                } else {
+                  const convertParamsList = baseTokenSymbols.map((item) =>
+                    getZapOutParams(config.tokens[item], _symbolAddress)
+                  )
 
-          const convertParams_baseToken_2 = getZapOutParams(
-            config.tokens.sfrxETH,
-            _symbolAddress
-          )
-          resData = await fxUSD_GatewayRouterContract.methods
-            .fxAutoRedeemFxUSD(
-              [convertParams_baseToken_1, convertParams_baseToken_2],
-              // config.tokens.fxUSD,
-              _mockAmount,
-              [0, 0]
+                  res = await fxUSD_GatewayRouterContract.methods
+                    .fxAutoRedeemFxUSD(
+                      convertParamsList,
+                      // address,
+                      _mockAmount,
+                      new Array(baseTokenSymbols.length).fill(0)
+                      // 0
+                    )
+                    .call({
+                      from: _account,
+                    })
+                }
+
+                // 比例计算
+                return {
+                  outAmount: res._dstOut * _mockRatio,
+                  result: res,
+                }
+              }
             )
-            .call({
-              from: _account,
-            })
+          }
 
-          minout_ETH = resData._dstOut
-          min_baseOuts = resData._baseOuts
+          const { amount, result } =
+            list.find((item) => item.routeType === routeTypeRef.current) ||
+            list[0]
 
-          resData._bonusOuts.forEach((item, index) => {
+          if (!routeTypeRef.current) {
+            routeTypeRef.current = list[0].routeType
+          }
+
+          minout_ETH = amount
+
+          const { _baseOuts = [], _bonusOuts = [] } = result
+          min_baseOuts = _baseOuts
+          _bonusOuts.forEach((item, index) => {
             if (Number(item)) {
               __bonus.push({
                 bonus: cBN(item),
-                symbol: index ? 'sfrxETH' : 'wstETH',
+                symbol: baseTokenSymbols[index],
               })
             }
           })
@@ -332,9 +478,6 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
         minout_ETH = 0
         min_baseOuts = []
       }
-
-      // 比例计算
-      minout_ETH *= _mockRatio
 
       const _minOut = updateOutAmount(
         minout_ETH,
@@ -373,73 +516,79 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
     try {
       setIsLoading(true)
-      const [_minoutETH, min_baseOuts] = await getMinAmount()
-
-      const _min_baseOuts = min_baseOuts.map((item) =>
-        getMinOutBySlippage(item)
-      )
-
-      let apiCall
-      let to
-
-      if (['wstETH', 'sfrxETH'].includes(symbol)) {
-        to = FXUSD_contract._address
-        apiCall = await FXUSD_contract.methods.redeem(
-          config.tokens[symbol],
-          fromAmount,
-          _currentAccount,
-          _minoutETH
-        )
+      if (routeTypeRef.current === ROUTE_TYPE.CURVE) {
+        await swapByCurve({
+          from: address,
+          decimals: 18,
+          to: config.zapTokens[symbol].address,
+          amount: fromAmount,
+          slippage,
+        })
       } else {
-        to = fxUSD_GatewayRouterContract._address
-        const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
+        const [_minoutETH, min_baseOuts] = await getMinAmount()
 
-        const t_1 = cBN(min_baseOuts[0]).multipliedBy(tokens.wstETH.price)
-        const t_2 = cBN(min_baseOuts[1]).multipliedBy(tokens.sfrxETH.price)
-
-        const sum = t_1.plus(t_2)
-
-        const minOut_1 = t_1
-          .multipliedBy(_minoutETH)
-          .dividedBy(sum)
-          .toFixed(0, 1)
-
-        const minOut_2 = t_2
-          .multipliedBy(_minoutETH)
-          .dividedBy(sum)
-          .toFixed(0, 1)
-
-        const convertParams_baseToken_1 = getZapOutParams(
-          config.tokens.wstETH,
-          _symbolAddress,
-          minOut_1
+        const _min_baseOuts = min_baseOuts.map((item) =>
+          getMinOutBySlippage(item)
         )
 
-        const convertParams_baseToken_2 = getZapOutParams(
-          config.tokens.sfrxETH,
-          _symbolAddress,
-          minOut_2
-        )
+        let apiCall
+        let to
 
-        apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
-          [convertParams_baseToken_1, convertParams_baseToken_2],
-          // config.tokens.fxUSD,
-          fromAmount,
-          _min_baseOuts
+        if (isBaseSymbol) {
+          to = FXUSD_contract._address
+          apiCall = await FXUSD_contract.methods.redeem(
+            config.tokens[symbol],
+            fromAmount,
+            _currentAccount,
+            _minoutETH
+          )
+        } else {
+          to = fxUSD_GatewayRouterContract._address
+          const _symbolAddress = OPTIONS.find((item) => item[0] == symbol)[1]
+
+          const t_list = baseTokenSymbols.map((item, index) =>
+            cBN(min_baseOuts[index]).multipliedBy(tokens[item].price)
+          )
+
+          let sum = cBN(0)
+
+          t_list.forEach((item) => {
+            sum = sum.plus(item)
+          })
+
+          const minOut_list = t_list.map((item) =>
+            item.multipliedBy(_minoutETH).dividedBy(sum).toFixed(0, 1)
+          )
+
+          const convertParamsList = baseTokenSymbols.map((item, index) =>
+            getZapOutParams(
+              config.tokens[item],
+              _symbolAddress,
+              minOut_list[index]
+            )
+          )
+
+          apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
+            convertParamsList,
+            // address,
+            fromAmount,
+            _min_baseOuts
+            // _minoutETH
+          )
+        }
+
+        await noPayableAction(
+          () =>
+            sendTransaction({
+              to,
+              data: apiCall.encodeABI(),
+            }),
+          {
+            key: 'Redeem',
+            action: 'Redeem',
+          }
         )
       }
-
-      await noPayableAction(
-        () =>
-          sendTransaction({
-            to,
-            data: apiCall.encodeABI(),
-          }),
-        {
-          key: 'Redeem',
-          action: 'Redeem',
-        }
-      )
       setIsLoading(false)
       initPage()
     } catch (e) {
@@ -450,31 +599,23 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
   useEffect(() => {
     getMinAmount(true)
-  }, [isF, slippage, tokenAmount, symbol, _account])
+  }, [isF, slippage, tokenAmount, symbol, _account, showRouteCard])
 
   const toUsd = useMemo(() => {
-    if (symbol === 'wstETH') {
-      return baseToken.wstETH.data?.baseTokenPrices?.inRedeemF
+    if (symbol === baseSymbol) {
+      return baseTokenData?.baseTokenPrices?.inRedeemF
     }
-    if (symbol === 'stETH') {
-      return baseToken.wstETH.data?.prices?.inRedeemF
-    }
-    if (symbol === 'sfrxETH') {
-      return baseToken.sfrxETH.data?.baseTokenPrices?.inRedeemF
-    }
-    if (symbol === 'frxETH') {
-      return baseToken.sfrxETH.data?.prices?.inRedeemF
+    if (baseList.filter((item) => item !== 'ETH').includes(symbol)) {
+      return baseTokenData.prices?.inRedeemF
     }
     return tokens[symbol].price
-  }, [symbol, tokens, baseToken, baseTokenData])
-
-  console.log('bouns----', bouns)
+  }, [symbol, baseSymbol, tokens, baseToken, baseTokenData])
 
   return (
     <div className={styles.container}>
       {isFXBouns ? (
         <BonusCard
-          title={`Redeem fxUSD could potentially earn ${fb4(
+          title={`Redeem ${fromSymbol} could potentially earn ${fb4(
             cBN(bonusRatioRes),
             false,
             16
@@ -485,12 +626,12 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       ) : null}
       <BalanceInput
         placeholder="-"
-        balance={fb4(tokens.fxUSD.balance, false)}
-        symbol="fxUSD"
+        balance={fb4(tokens[fromSymbol].balance, false)}
+        symbol={fromSymbol}
         color="deep-green"
         className={styles.inputItem}
         usd={nav_text}
-        maxAmount={tokens.fxUSD.balance}
+        maxAmount={tokens[fromSymbol].balance}
         onChange={hanldeFromAmountChanged}
         clearTrigger={clearTrigger}
       />
@@ -501,7 +642,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       <BalanceInput
         symbol={symbol}
         placeholder={minOutAmount.minout}
-        amountUSD={minOutAmount.minout_tvl}
+        amountUSD={priceLoading ? '-' : minOutAmount.minout_tvl}
         decimals={config.zapTokens[symbol].decimals}
         usd={toUsd}
         disabled
@@ -527,27 +668,60 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       {isFXBouns && bouns.length
         ? bouns.map((item, index) => (
             <DetailCell
-              title={!index && 'Redeem fxUSD Bonus:'}
-              content={[numberLess(fb4(item.bonus), 0.01), '', item.symbol]}
+              title={!index && `Redeem ${fromSymbol} Bonus:`}
+              content={[
+                numberLess(
+                  fb4(item.bonus, false, config.TOKENS_INFO[item.symbol][2]),
+                  0.01
+                ),
+                '',
+                item.symbol,
+              ]}
             />
           ))
         : null}
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
       {showManaged ? (
         <NoticeCard
-          content={[`A maximum of ${fb4(managed)} fxUSD can be redeemed `]}
+          content={[
+            `A maximum of ${fb4(managed)} ${fromSymbol} can be redeemed `,
+          ]}
         />
       ) : null}
       <div className={styles.action}>
-        <BtnWapper
-          loading={isLoading}
-          disabled={!canRedeem}
-          onClick={handleRedeem}
-          width="100%"
-        >
-          Redeem
-        </BtnWapper>
+        {routeTypeRef.current === ROUTE_TYPE.CURVE || symbol === baseSymbol ? (
+          <Button
+            style={{ fontSize: '20px' }}
+            loading={isLoading}
+            disabled={!canRedeem}
+            onClick={handleRedeem}
+            width="100%"
+          >
+            Redeem
+          </Button>
+        ) : (
+          <BtnWapper
+            loading={isLoading}
+            disabled={!canRedeem}
+            onClick={handleRedeem}
+            width="100%"
+          >
+            Redeem
+          </BtnWapper>
+        )}
       </div>
+
+      {showRouteCard && !isBaseSymbol && (
+        <RouteCard
+          onRefresh={getMinAmount}
+          options={routeList}
+          routeType={routeTypeRef.current}
+          onSelect={(_routeType) => {
+            getMinAmount(false, _routeType)
+          }}
+          loading={priceLoading || !checkNotZoroNum(fromAmount)}
+        />
+      )}
     </div>
   )
 }

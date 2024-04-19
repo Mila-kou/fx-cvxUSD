@@ -4,10 +4,7 @@ import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import useWeb3 from '@/hooks/useWeb3'
 import config from '@/config/index'
 import { useBoostableRebalancePool } from '@/hooks/useGaugeContracts'
-import { REBALANCE_POOLS_LIST } from '@/config/aladdinVault'
-
-const REWARD_TOKENS = ['FXN', 'wstETH', 'sfrxETH', 'weETH', 'ezETH']
-// const REWARD_TOKENS = ['FXN', 'wstETH', 'sfrxETH', 'weETH', 'aCVX']
+import { REBALANCE_POOLS_LIST, REWARD_TOKENS } from '@/config/aladdinVault'
 
 const useRebalancePoolUseInfo = (infoKey) => {
   const { _currentAccount, web3, blockNumber } = useWeb3()

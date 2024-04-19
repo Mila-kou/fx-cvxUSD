@@ -15,7 +15,6 @@ import {
   dollarText,
 } from '@/utils/index'
 import { ASSET_MAP, contracts } from '@/config/tokens'
-import { useFxUSD_Type_Treasury_contract } from '@/hooks/useFXUSDContract'
 import { useContract, useFX_stETHTreasury } from '@/hooks/useContracts'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import useWeb3 from '@/hooks/useWeb3'
@@ -360,8 +359,7 @@ export default function RebalancePoolCell({
               >
                 {_poolConfig.poolType}
               </Link>{' '}
-              with stETH, then stake here to earn{' '}
-              LSD{' '}
+              , then stake here to earn LSD{' '}
               {/* <Tooltip
                 placement="topLeft"
                 title={harvestTypeDom('LSDDOM')}

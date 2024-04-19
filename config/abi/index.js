@@ -74,7 +74,8 @@ import FXUSD_FractionalTokenV2_ABI from './fxUSD/FractionalTokenV2.json'
 import FXUSD_LeveragedTokenV2_ABI from './fxUSD/LeveragedTokenV2.json'
 import FXUSD_FxMarketV1Facet_ABI from './fxUSD/FxMarketV1Facet.json'
 import FXUSD_FxUSD_ABI from './fxUSD/FxUSD.json'
-import FXUSD_FxUSDFacet_ABI from './fxUSD/FxUSDFacet.json'
+// import FXUSD_FxUSDFacet_ABI from './fxUSD/FxUSDFacet.json'
+import FXUSD_FxUSDFacet_ABI from './fxUSD/FxUSDFacet_old.json'
 import FXUSD_MarketV2_ABI from './fxUSD/MarketV2.json'
 import FXUSD_TreasuryV2_ABI from './fxUSD/TreasuryV2.json'
 import FXUSD_WrappedTokenTreasuryV2_ABI from './fxUSD/WrappedTokenTreasuryV2.json'
@@ -87,6 +88,9 @@ import RateProvider_ABI from './fxUSD/RateProvider.json'
 import MultiPathConverter_ABI from './common/MultiPathConverter.json'
 
 import Llamas_ABI from './Llamas.json'
+
+import FXUSD_MarketWithFundingCost_ABI from './fxUSD/MarketWithFundingCost.json'
+import FXUSD_TreasuryWithFundingCost_ABI from './fxUSD/TreasuryWithFundingCost.json'
 
 export default {
   erc20ABI,
@@ -170,4 +174,7 @@ export default {
   FXUSD_ReservePoolV2_ABI,
 
   Llamas_ABI,
+
+  FXUSD_MarketWithFundingCost_ABI,
+  FXUSD_TreasuryWithFundingCost_ABI,
 }

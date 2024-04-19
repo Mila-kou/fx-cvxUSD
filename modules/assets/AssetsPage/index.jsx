@@ -19,9 +19,19 @@ export default function AssetsPage() {
   const { _currentAccount, sendTransaction } = useWeb3()
   // const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH, fCVX, xCVX } =
   //   useSelector((state) => state.asset)
-  const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH, xezETH } =
-    useSelector((state) => state.asset)
-  const { wstETH, sfrxETH, weETH, ezETH } = useSelector(
+  const {
+    fETH,
+    xETH,
+    fxUSD,
+    xstETH,
+    xfrxETH,
+    rUSD,
+    xeETH,
+    xezETH,
+    btcUSD,
+    xWBTC,
+  } = useSelector((state) => state.asset)
+  const { wstETH, sfrxETH, weETH, ezETH, WBTC } = useSelector(
     (state) => state.baseToken
   )
 
@@ -133,6 +143,10 @@ export default function AssetsPage() {
       value: getTotalBaseTokenUSD([wstETH, sfrxETH]) || '-',
     },
     {
+      title: 'btcUSD Reserve Asset Value',
+      value: getTotalBaseTokenUSD([WBTC]) || '-',
+    },
+    {
       title: 'rUSD Reserve Asset Value',
       value: getTotalBaseTokenUSD([weETH, ezETH]) || '-',
     },
@@ -153,6 +167,7 @@ export default function AssetsPage() {
                   sfrxETH,
                   weETH,
                   ezETH,
+                  WBTC,
                   { data: fETH },
                 ]) || '-'}
               </span>
@@ -161,12 +176,13 @@ export default function AssetsPage() {
           <div className={styles.items}>
             {LIST.map((item) => (
               <div className={styles.item} key={item.symbol}>
-                <p>{item.title}</p>
+                <p className="text-[16px]">{item.title}</p>
                 <h2 className="text-[22px]">${item.value}</h2>
               </div>
             ))}
           </div>
         </div>
+
         <div className={styles.wrap}>
           {[
             [
@@ -199,6 +215,45 @@ export default function AssetsPage() {
 
               {list.map((item) => (
                 <Link href={`assets/${item.symbol}`}>
+                  <AssetCell info={item} />
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.wrap}>
+          {[
+            [
+              'Mint & Redeem btcUSD Stablecoin (WBTC Backed)',
+              [btcUSD],
+              false,
+              `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+            [
+              'Mint and Redeem Leveraged Tokens',
+              [xWBTC],
+              true,
+              `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+          ].map(([name, list, isX, icon]) => (
+            <div className={`${styles.header} min-w-[556px]`} key={name}>
+              <div className={styles.headerTitle}>
+                <img src={icon} />
+                {name}
+              </div>
+
+              <div className="px-[16px] mt-[16px] flex justify-between">
+                <div className="w-[200px]" />
+                <div className="w-[120px] text-[14px]">
+                  {isX ? 'Leverage' : 'TVL'}
+                </div>
+                <div className="w-[60px] text-[14px]">Nav</div>
+                <div className="w-[72px] text-[14px]">24h Change</div>
+              </div>
+
+              {list.map((item) => (
+                <Link href="genesis/btcUSD_WBTC">
                   <AssetCell info={item} />
                 </Link>
               ))}

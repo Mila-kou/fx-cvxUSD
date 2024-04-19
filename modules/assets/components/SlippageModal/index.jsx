@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Modal } from 'antd'
+import { Modal, Switch } from 'antd'
 import { useToggle, useSetState } from 'ahooks'
+import useGlobal from '@/hooks/useGlobal'
 import styles from './styles.module.scss'
 
 export function useSlippage(initSlippage = 0) {
@@ -22,6 +23,7 @@ export function useSlippage(initSlippage = 0) {
 export default function SlippageModal(props) {
   const { visible, toggle, slippage, setSlippage, initSlippage } = props
   const [slippageTab, setSlippageTab] = useState(0)
+  const { showRouteCard, setShowRouteCard } = useGlobal()
 
   const [val, setVal] = useState(slippage)
 
@@ -92,6 +94,11 @@ export default function SlippageModal(props) {
             disabled={slippageTab == 0}
           />
           <div className={styles.suffix}>%</div>
+        </div>
+
+        <div className="mt-[32px] flex justify-between">
+          <p>Select Route</p>
+          <Switch checked={showRouteCard} onChange={setShowRouteCard} />
         </div>
       </div>
     </Modal>

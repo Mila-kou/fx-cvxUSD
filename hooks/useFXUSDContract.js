@@ -1,8 +1,6 @@
 import { useCallback, useMemo, useState, useEffect } from 'react'
 import config from '@/config/index'
 import abi from '@/config/abi'
-import useWeb3 from '@/hooks/useWeb3'
-import { useMutiCall } from '@/hooks/useMutiCalls'
 import { useContract } from './useContracts'
 
 export const useFXUSD_contract = (symbol = 'fxUSD') => {
@@ -11,75 +9,6 @@ export const useFXUSD_contract = (symbol = 'fxUSD') => {
   return useMemo(
     () => ({
       contract: getContract(address, abi.FXUSD_FxUSD_ABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useFxUSD_Type_FractionalToken_contract = (baseTokenType) => {
-  let address
-  switch (baseTokenType) {
-    case 'sfrxETH':
-      address = config.contracts.fxUSD_sfrxETH_FractionalToken
-      break
-    case 'wstETH':
-      address = config.contracts.fxUSD_wstETH_FractionalToken
-      break
-    default:
-      address = config.contracts.fxUSD_sfrxETH_FractionalToken
-      break
-  }
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FXUSD_FractionalTokenV2_ABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useFxUSD_Type_LeveragedToken_contract = (baseTokenType) => {
-  let address
-  switch (baseTokenType) {
-    case 'sfrxETH':
-      address = config.contracts.fxUSD_sfrxETH_LeveragedToken
-      break
-    case 'wstETH':
-      address = config.contracts.fxUSD_wstETH_LeveragedToken
-      break
-    default:
-      address = config.contracts.fxUSD_sfrxETH_LeveragedToken
-      break
-  }
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FXUSD_LeveragedTokenV2_ABI),
-      address,
-    }),
-    [getContract]
-  )
-}
-
-export const useFxUSD_Type_Market_contract = (baseTokenType) => {
-  let address
-  switch (baseTokenType) {
-    case 'sfrxETH':
-      address = config.contracts.fxUSD_sfrxETH_Market
-      break
-    case 'wstETH':
-      address = config.contracts.fxUSD_wstETH_Market
-      break
-    default:
-      address = config.contracts.fxUSD_sfrxETH_Market
-      break
-  }
-  const { getContract } = useContract()
-  return useMemo(
-    () => ({
-      contract: getContract(address, abi.FXUSD_MarketV2_ABI),
       address,
     }),
     [getContract]
@@ -130,7 +59,7 @@ export const useV2MarketContract = () => {
   const { getContract } = useContract()
   return useCallback(
     (address) => ({
-      contract: getContract(address, abi.FXUSD_MarketV2_ABI),
+      contract: getContract(address, abi.FXUSD_MarketWithFundingCost_ABI),
       address,
     }),
     [getContract]
@@ -141,7 +70,7 @@ export const useV2TreasuryContract = () => {
   const { getContract } = useContract()
   return useCallback(
     (address) => ({
-      contract: getContract(address, abi.FXUSD_TreasuryV2_ABI),
+      contract: getContract(address, abi.FXUSD_TreasuryWithFundingCost_ABI),
       address,
     }),
     [getContract]

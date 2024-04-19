@@ -65,7 +65,6 @@ export default function NavChart({ dateList, navs }) {
       // formatter: '{b0}<br />Net Assets Value: ${c0}',
       formatter: (params) => {
         const { axisValue, value } = params[0]
-        console.log('params----', params)
         const time = new Date(axisValue * 1000)
         const _time = `${time.getFullYear()}-${
           time.getMonth() + 1

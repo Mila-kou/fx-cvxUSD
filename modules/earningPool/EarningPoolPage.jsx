@@ -71,6 +71,14 @@ export default function EarningPoolPage() {
     infoKey: 'rebalancePoolV2_info_rUSD_xezETH',
   })
 
+  const btcUSD_WBTC_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_btcUSD_WBTC',
+  })
+
+  const btcUSD_xWBTC_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_btcUSD_xWBTC',
+  })
+
   // const fCVX_aCVX_pool = usePoolV2({
   //   infoKey: 'rebalancePoolV2_info_fCVX_aCVX',
   // })
@@ -131,6 +139,32 @@ export default function EarningPoolPage() {
             </p>
           }
           {...fxUSD_xfrxETH_pool}
+        />
+      </div>
+
+      <div className={`${styles.content} `}>
+        <Header title="Stake btcUSD" />
+        <RebalancePoolCellV2
+          title="btcUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn WBTC
+              <br />
+              Redeem to WBTC
+            </p>
+          }
+          {...btcUSD_WBTC_pool}
+        />
+        <RebalancePoolCellV2
+          title="btcUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn WBTC
+              <br />
+              Redeem to xWBTC
+            </p>
+          }
+          {...btcUSD_xWBTC_pool}
         />
       </div>
 

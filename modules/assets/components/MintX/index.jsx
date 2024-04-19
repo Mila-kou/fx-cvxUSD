@@ -1,5 +1,5 @@
 /* eslint-disable no-lonely-if */
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
@@ -22,8 +22,11 @@ import {
   useV2MarketContract,
   useFxUSD_GatewayRouter_contract,
 } from '@/hooks/useFXUSDContract'
+import useGlobal from '@/hooks/useGlobal'
 import { useZapIn } from '@/hooks/useZap'
 import useOutAmount from '../../hooks/useOutAmount'
+import RouteCard from '../RouteCard'
+import useRouteList from '../RouteCard/useRouteList'
 
 const MINT_OPTIONS = {
   xstETH: [
@@ -67,9 +70,16 @@ const MINT_OPTIONS = {
     ['USDC', config.tokens.usdc],
     ['crvUSD', config.tokens.crvUSD],
   ],
+  xWBTC: [
+    // ['ETH', config.tokens.eth],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    ['WBTC', config.tokens.WBTC],
+  ],
 }
 
 export default function MintX({ slippage, assetInfo }) {
+  const { showRouteCard } = useGlobal()
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
@@ -89,7 +99,7 @@ export default function MintX({ slippage, assetInfo }) {
     baseList,
   } = assetInfo
 
-  const { baseSymbol, contracts } = baseTokenInfo
+  const { baseSymbol, contracts, hasFundingCost } = baseTokenInfo
 
   const MarketContract = getMarketContract(contracts.market).contract
 
@@ -131,6 +141,7 @@ export default function MintX({ slippage, assetInfo }) {
     bonusRatioRes,
     isRecap,
     stabilityRatioRes,
+    fundingRate = 0,
   } = baseTokenData
 
   const isSwap = false
@@ -142,6 +153,9 @@ export default function MintX({ slippage, assetInfo }) {
   const selectTokenAddress = useMemo(() => {
     return OPTIONS.find((item) => item[0] === symbol)[1]
   }, [symbol])
+
+  const routeTypeRef = useRef(null)
+  const { routeList, refreshRouteList } = useRouteList()
 
   useEffect(() => {
     initPage()
@@ -224,12 +238,14 @@ export default function MintX({ slippage, assetInfo }) {
     clearInput()
     setFromAmount('0')
     setMintXBouns(0)
+    routeTypeRef.current = ''
   }
 
-  const getMinAmount = async (needLoading) => {
+  const getMinAmount = async (needLoading, _routeType) => {
     setMintXBouns(0)
     if (needLoading) {
       setPriceLoading(true)
+      routeTypeRef.current = ''
     }
 
     let _mockAmount = fromAmount
@@ -250,45 +266,65 @@ export default function MintX({ slippage, assetInfo }) {
     try {
       let minout_ETH
       if (checkNotZoroNum(fromAmount)) {
-        let resData
-
         if (symbol === baseSymbol) {
-          resData = await MarketContract.methods
+          const resData = await MarketContract.methods
             .mintXToken(_mockAmount, _account, 0)
             .call({
               from: _account,
             })
 
-          minout_ETH = resData._xTokenMinted
+          minout_ETH = resData._xTokenMinted * _mockRatio
           const _userXETHBonus = cBN(resData._bonus || 0)
           setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
           console.log('fxMintXTokenV2--resData----', resData)
         } else {
-          const convertParams = await getZapInParams({
-            from: symbol,
-            to: baseSymbol,
-            amount: _mockAmount,
-            slippage,
-          })
-          console.log('fxMintXTokenV2--convertParams----', convertParams)
+          let list
+          if (_routeType && routeList.length) {
+            list = routeList
+            routeTypeRef.current = _routeType
+          } else {
+            list = await refreshRouteList(
+              {
+                from: symbol,
+                to: baseSymbol,
+                amount: _mockAmount,
+                slippage,
+                symbol: toSymbol,
+              },
+              async (convertParams) => {
+                const res = await fxUSD_GatewayRouterContract.methods
+                  .fxMintXTokenV2(convertParams, contracts.market, 0)
+                  .call({
+                    from: _account,
+                    value: symbol == 'ETH' ? _mockAmount : 0,
+                  })
 
-          resData = await fxUSD_GatewayRouterContract.methods
-            .fxMintXTokenV2(convertParams, contracts.market, 0)
-            .call({
-              from: _account,
-              value: symbol == 'ETH' ? _mockAmount : 0,
-            })
-          console.log('fxMintXTokenV2--resData----', resData)
-          minout_ETH = resData._xTokenMinted
-          const _userXETHBonus = cBN(resData._bonusOut || 0)
+                // 比例计算
+                return {
+                  outAmount: res._xTokenMinted * _mockRatio,
+                  result: res,
+                }
+              }
+            )
+          }
+
+          const { amount, result } =
+            list.find((item) => item.routeType === routeTypeRef.current) ||
+            list[0]
+
+          console.log('fxMintXTokenV2--resData----', result)
+
+          if (!routeTypeRef.current) {
+            routeTypeRef.current = list[0].routeType
+          }
+
+          minout_ETH = amount
+          const _userXETHBonus = cBN(result._bonusOut || 0)
           setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
         }
       } else {
         minout_ETH = 0
       }
-
-      // 比例计算
-      minout_ETH *= _mockRatio
 
       const _minout = updateOutAmount(
         minout_ETH,
@@ -358,6 +394,7 @@ export default function MintX({ slippage, assetInfo }) {
           to: baseSymbol,
           amount: _ETHtAmountAndGas,
           slippage,
+          routeType: routeTypeRef.current,
         })
 
         apiCall = await fxUSD_GatewayRouterContract.methods.fxMintXTokenV2(
@@ -403,8 +440,8 @@ export default function MintX({ slippage, assetInfo }) {
   )
 
   const checkPause = () => {
-    // 奖励优先
-    if (mintPaused || isRecap || (!isFXBouns && !isBaseTokenPriceValid)) {
+    // 无效价格不可以mint
+    if (mintPaused || isRecap || !isBaseTokenPriceValid) {
       setPausedError(`f(x) governance decision to temporarily disable minting.`)
       return true
     }
@@ -446,7 +483,7 @@ export default function MintX({ slippage, assetInfo }) {
 
   useEffect(() => {
     getMinAmount(true)
-  }, [isF, slippage, fromAmount, _account])
+  }, [isF, slippage, fromAmount, _account, showRouteCard])
 
   const fromUsd = useMemo(() => {
     if (symbol === baseSymbol) {
@@ -460,7 +497,7 @@ export default function MintX({ slippage, assetInfo }) {
 
   return (
     <div className={styles.container}>
-      {isFXBouns ? (
+      {isFXBouns && !pausedError ? (
         <BonusCard
           title={`Mint ${toSymbol} could potentially earn ${fb4(
             cBN(bonusRatioRes),
@@ -495,7 +532,7 @@ export default function MintX({ slippage, assetInfo }) {
         symbol={toSymbol}
         color="red"
         placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
-        amountUSD={minOutAmount.minout_tvl}
+        amountUSD={priceLoading ? '-' : minOutAmount.minout_tvl}
         disabled
         className={styles.inputItem}
         usd={nav_text}
@@ -514,7 +551,21 @@ export default function MintX({ slippage, assetInfo }) {
       {isFXBouns && Number(mintXBouns) ? (
         <DetailCell
           title={`Mint ${toSymbol} Bonus:`}
-          content={[numberLess(fb4(mintXBouns), 0.01), '', baseSymbol]}
+          content={[
+            numberLess(
+              fb4(mintXBouns, false, config.TOKENS_INFO[baseSymbol][2]),
+              0.01
+            ),
+            '',
+            baseSymbol,
+          ]}
+        />
+      ) : null}
+      {hasFundingCost ? (
+        <DetailCell
+          title="Funding Rate: "
+          content={[`${fundingRate.toFixed(4)}%`]}
+          tooltip=" Funding rate per 8 hours"
         />
       ) : null}
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
@@ -529,6 +580,18 @@ export default function MintX({ slippage, assetInfo }) {
           {`Mint Leveraged Long ${toSymbol}`}
         </BtnWapper>
       </div>
+
+      {showRouteCard && symbol !== baseSymbol && (
+        <RouteCard
+          onRefresh={getMinAmount}
+          options={routeList}
+          routeType={routeTypeRef.current}
+          onSelect={(_routeType) => {
+            getMinAmount(false, _routeType)
+          }}
+          loading={priceLoading || !checkNotZoroNum(fromAmount)}
+        />
+      )}
     </div>
   )
 }

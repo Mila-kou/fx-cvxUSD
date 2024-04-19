@@ -3,6 +3,7 @@ import { Modal } from 'antd'
 import Button from '@/components/Button'
 import styles from './styles.module.scss'
 import { cBN, fb4 } from '@/utils/index'
+import { TOKENS_INFO } from '@/config/tokens'
 import { NoticeCard } from '@/modules/assets/components/Common'
 
 export default function WithdrawModal(props) {
@@ -38,7 +39,7 @@ export default function WithdrawModal(props) {
         setList([
           {
             symbol: baseSymbol,
-            amount: fb4(res),
+            amount: fb4(res, false, TOKENS_INFO[baseSymbol][2]),
             fee,
           },
         ])

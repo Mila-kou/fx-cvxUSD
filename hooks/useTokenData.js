@@ -14,8 +14,18 @@ const useTokenData = () => {
   const dispatch = useDispatch()
   // const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH, fCVX, xCVX } =
   //   useSelector((state) => state.asset)
-  const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH, xezETH } =
-    useSelector((state) => state.asset)
+  const {
+    fETH,
+    xETH,
+    fxUSD,
+    rUSD,
+    xstETH,
+    xfrxETH,
+    xeETH,
+    xezETH,
+    btcUSD,
+    xWBTC,
+  } = useSelector((state) => state.asset)
 
   const ethToken = useToken(config.tokens.eth)
   const wethToken = useTokenBalance(config.tokens.weth)
@@ -46,6 +56,10 @@ const useTokenData = () => {
   // const aCVXToken = useTokenBalance(config.tokens.aCVX)
   // const xCVXToken = useTokenBalance(config.tokens.xCVX)
   // const fCVXToken = useTokenBalance(config.tokens.fCVX)
+
+  const btcUSDToken = useTokenBalance(config.tokens.btcUSD)
+  const WBTCToken = useTokenBalance(config.tokens.WBTC)
+  const xWBTCToken = useTokenBalance(config.tokens.xWBTC)
 
   const { data: tokenPrice, refetch: refetch1 } = useQuery({
     queryKey: ['tokenPrice'],
@@ -158,6 +172,18 @@ const useTokenData = () => {
           balance: xezETHToken.balance,
           price: fb4(cBN(xezETH.nav) || 0, false),
         },
+        btcUSD: {
+          balance: btcUSDToken.balance,
+          price: fb4(cBN(btcUSD.nav) || 0, false),
+        },
+        WBTC: {
+          balance: WBTCToken.balance,
+          price: tokenPrice?.WBTC?.usd?.toFixed(4) ?? 0,
+        },
+        xWBTC: {
+          balance: xWBTCToken.balance,
+          price: fb4(cBN(xWBTC.nav) || 0, false),
+        },
         // aCVX: {
         //   balance: aCVXToken.balance,
         //   price: tokenPrice?.CVX?.usd?.toFixed(4) ?? 0,
@@ -198,6 +224,18 @@ const useTokenData = () => {
     // aCVXToken,
     // xCVXToken,
     // fCVXToken,
+    WBTCToken,
+    xWBTCToken,
+    fETH,
+    xETH,
+    fxUSD,
+    rUSD,
+    xstETH,
+    xfrxETH,
+    xeETH,
+    xezETH,
+    btcUSD,
+    xWBTC,
   ])
 }
 

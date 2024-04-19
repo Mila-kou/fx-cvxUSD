@@ -27,7 +27,7 @@ const getLeverageData = (baseToken) => {
     leverage,
     leverage_text: checkNotZoroNumOption(
       leverage,
-      `x${fb4(leverage, false, 0, 2)}`
+      `${fb4(leverage, false, 0, 2)}x`
     ),
   }
 }
@@ -81,9 +81,9 @@ const getIsFXBouns = (baseToken, isCRLow130) => {
   return false
 }
 
-const getPrices = ({ twapPriceRes, priceRateRes }) => {
+const getPrices = ({ twapPriceRes, priceRateRes, decimals = 18 }) => {
   const safePrice = (twapPriceRes._safePrice / 1e18).toFixed(2) ?? 0
-  const priceRate = priceRateRes / 1e18 ?? 0
+  const priceRate = priceRateRes / 10 ** decimals ?? 0
 
   // ETH 与 stETH/frxETH
   const prices = {
@@ -117,7 +117,30 @@ const getPrices = ({ twapPriceRes, priceRateRes }) => {
   }
 }
 
-const processBaseToken = (data) => {
+const getFundingRate = (
+  { fundingRateRes, borrowRateSnapshotRes },
+  blockTime
+) => {
+  try {
+    const diff = blockTime - borrowRateSnapshotRes.timestamp
+    // console.log(
+    //   'blockTime----',
+    //   new Date().getTime() / 1000,
+    //   blockTime,
+    //   borrowRateSnapshotRes.timestamp,
+    //   diff
+    // )
+    if (diff <= 0) return 0
+
+    const secRate = fundingRateRes / diff
+    const fundingRate = (secRate * 60 * 60 * 8) / 1e16
+    return fundingRate
+  } catch (error) {
+    return 0
+  }
+}
+
+const processBaseToken = (data, blockTime) => {
   const baseTokens = []
 
   Object.values(data).forEach((baseToken) => {
@@ -176,6 +199,7 @@ const processBaseToken = (data) => {
       isFXBouns: getIsFXBouns(baseToken, isCRLow130),
       ...getLeverageData(baseToken),
       ...getFees(baseToken),
+      fundingRate: getFundingRate(baseToken, blockTime),
     })
   })
 

@@ -1,16 +1,5 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_fxUSD",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "inputs": [],
     "name": "ErrorInsufficientOutput",
     "type": "error"
@@ -23,6 +12,22 @@
   {
     "inputs": [],
     "name": "ErrorMsgValueMismatch",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum LibGatewayRouter.WhitelistKind",
+        "name": "expected",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum LibGatewayRouter.WhitelistKind",
+        "name": "found",
+        "type": "uint8"
+      }
+    ],
+    "name": "ErrorNotWhitelisted",
     "type": "error"
   },
   {
@@ -55,6 +60,11 @@
         "type": "tuple[]"
       },
       {
+        "internalType": "address",
+        "name": "_fxUSD",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "_fxUSDIn",
         "type": "uint256"
@@ -63,6 +73,11 @@
         "internalType": "uint256[]",
         "name": "_minBaseTokens",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minDstOut",
+        "type": "uint256"
       }
     ],
     "name": "fxAutoRedeemFxUSD",
@@ -88,6 +103,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "_fxUSD",
+        "type": "address"
+      },
       {
         "internalType": "address",
         "name": "_baseTokenIn",
@@ -268,6 +288,11 @@
       },
       {
         "internalType": "address",
+        "name": "_fxUSD",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "_baseToken",
         "type": "address"
       },
@@ -321,6 +346,11 @@
         "internalType": "struct LibGatewayRouter.ConvertInParams",
         "name": "_params",
         "type": "tuple"
+      },
+      {
+        "internalType": "address",
+        "name": "_fxUSD",
+        "type": "address"
       },
       {
         "internalType": "address",
@@ -407,6 +437,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "_fxUSD",
+        "type": "address"
+      },
       {
         "internalType": "address",
         "name": "_pool",
@@ -562,6 +597,11 @@
       },
       {
         "internalType": "address",
+        "name": "_fxUSD",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "_baseToken",
         "type": "address"
       },
@@ -667,6 +707,45 @@
       },
       {
         "internalType": "bool",
+        "name": "_fxUSDForXToken",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minOut",
+        "type": "uint256"
+      }
+    ],
+    "name": "fxSwapFxUSD",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amountOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonusOut",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_market",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amountIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
         "name": "_fTokenForXToken",
         "type": "bool"
       },
@@ -690,19 +769,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "fxUSD",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]

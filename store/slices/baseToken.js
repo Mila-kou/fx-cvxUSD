@@ -1,28 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { BASE_TOKENS_MAP } from '@/config/tokens'
 
-const initialState = {
-  wstETH: {
-    ...BASE_TOKENS_MAP.wstETH,
+const initialState = {}
+
+Object.values(BASE_TOKENS_MAP).forEach((item) => {
+  initialState[item.baseSymbol] = {
+    ...item,
     data: {},
-  },
-  sfrxETH: {
-    ...BASE_TOKENS_MAP.sfrxETH,
-    data: {},
-  },
-  weETH: {
-    ...BASE_TOKENS_MAP.weETH,
-    data: {},
-  },
-  ezETH: {
-    ...BASE_TOKENS_MAP.ezETH,
-    data: {},
-  },
-  aCVX: {
-    ...BASE_TOKENS_MAP.aCVX,
-    data: {},
-  },
-}
+  }
+})
 
 const slice = createSlice({
   name: 'baseToken',

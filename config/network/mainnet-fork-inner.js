@@ -25,33 +25,28 @@ const explorerUri = 'https://www.etherscan.io'
 //     'https://rpc.phalcon.blocksec.com/rpc_ed3f76d88fac4cf5a1adeae87afce429',
 // }
 
+// const chainInfo = {
+//   id: '0x1864e', // 99918 0x1864d 99917
+//   token: 'ETH',
+//   label: 'newBtcUSD',
+//   rpcUrl:
+//     'https://rpc.phalcon.blocksec.com/rpc_c64f88ceb5e246c5ba32a40cb690ac4b',
+// }
+
 const chainInfo = {
-  id: '0x1864c', // 99912
+  id: '0x1864d', // 99917
   token: 'ETH',
-  label: 'ezETH-test02',
+  label: 'btcusd-2',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_c0793d51badf4938803544f738124b6e',
+    'https://rpc.phalcon.blocksec.com/rpc_f7278926bad64067bd0d277f9ff9b2cb',
 }
 
 const contracts = {
   ...tokensInfo.contracts,
-
-  // ChainlinkTwapOracleV3: '0x460B3CdE57DfbA90DBed02fd83d3990a92DA1230',
-  // fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
-  // xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
-  // fx_Market: '0xe7b9c7c9cA85340b8c06fb805f7775e3015108dB',
-  // fx_stETHTreasury: '0x0e5CAA5c889Bdf053c9A76395f62267E653AFbb0',
-  // fx_stETHGateway: '0x4C5C52d507066780500e627d592DbE11476E7c21',
-
-  // fx_RebalancePool_A: '0xa677d95B91530d56791FbA72C01a862f1B01A49e',
-
-  // fx_ETHGateway: '0x38E0C09F0827326d1Cd603Da150346b2597b2792',
 }
 
 const tokens = {
   ...tokensInfo.tokens,
-  // fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',
-  // xETH: '0xe063F04f280c60aECa68b38341C2eEcBeC703ae2',
 }
 
 const TOKENS_INFO = {

@@ -135,17 +135,14 @@ export const useToken = (address, contractType, lpInfo) => {
           case 'fxUSD_gateway_router':
             _contractAddress = config.contracts.fxUSD_GatewayRouter
             break
-          case 'fxUSD_wstETH_Market':
-            _contractAddress = config.contracts.fxUSD_wstETH_Market
-            break
-          case 'fxUSD_sfrxETH_Market':
-            _contractAddress = config.contracts.fxUSD_sfrxETH_Market
-            break
           case 'fxUSD':
             _contractAddress = config.tokens.fxUSD
             break
           case 'rUSD':
             _contractAddress = config.tokens.rUSD
+            break
+          case 'btcUSD':
+            _contractAddress = config.tokens.btcUSD
             break
           default:
             _contractAddress = contractType

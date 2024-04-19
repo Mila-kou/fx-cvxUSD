@@ -80,7 +80,7 @@ const useRebalancePoolV2 = (infoKey, baseToken) => {
               .multipliedBy(config.yearSecond)
               .multipliedBy(_price)
               .div(rebalanceTvl)
-              .div(1e18)
+              .div(10 ** (config.TOKENS_INFO?.[symbol]?.[2] || 18))
               .times(100)
           }
 
@@ -252,16 +252,30 @@ const useRebalancePoolV2 = (infoKey, baseToken) => {
       const claimableData = {}
       claimableRes.forEach(({ symbol, reward }) => {
         const _price = getTokenPrice(symbol)
+        const decimals = config.TOKENS_INFO?.[symbol]?.[2] || 18
 
         const claimable_text = numberLess(
-          checkNotZoroNumOption(reward, fb4(reward)),
+          checkNotZoroNumOption(reward, fb4(reward, false, decimals)),
           0.01
         )
         let tvl = cBN(0)
         if (checkNotZoroNum(_price) && checkNotZoroNum(reward)) {
-          tvl = cBN(_price).times(reward)
+          tvl = cBN(_price)
+            .times(reward)
+            .dividedBy(10 ** decimals)
         }
-        const tvl_text = numberLess(checkNotZoroNumOption(tvl, fb4(tvl)), 0.01)
+        const tvl_text = numberLess(
+          checkNotZoroNumOption(tvl, fb4(tvl, false, 0)),
+          0.01
+        )
+
+        // console.log(
+        //   'claimable_text-----',
+        //   symbol,
+        //   _price,
+        //   claimable_text,
+        //   tvl_text
+        // )
 
         myTotalValue = myTotalValue.plus(tvl)
 
@@ -276,7 +290,7 @@ const useRebalancePoolV2 = (infoKey, baseToken) => {
 
       const userTotalClaimableTvl_text = checkNotZoroNumOption(
         userTotalClaimable,
-        fb4(userTotalClaimable, true)
+        fb4(userTotalClaimable, true, 0)
       )
 
       const apyObj = getPoolApy_snap(

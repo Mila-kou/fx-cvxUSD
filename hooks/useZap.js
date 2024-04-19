@@ -3,11 +3,14 @@ import { getFXUSDRouterByAddress } from '@/config/fxUSDRouter'
 import config from '@/config/index'
 import { zapTokens } from '@/config/tokens'
 import { get1InchData } from '@/services/inch'
-import useGlobal from '@/hooks/useGlobal'
+
+export const ROUTE_TYPE = {
+  FX_ROUTE: 'fx route',
+  INCH: '1inch',
+  CURVE: 'curve',
+}
 
 export const useZapIn = () => {
-  const { routeType } = useGlobal()
-
   const { contract: MultiPathConverterContract } =
     useMultiPathConverterContract()
 
@@ -45,34 +48,27 @@ export const useZapIn = () => {
     minOut = 0,
     contract = config.contracts.fxUSD_GatewayRouter,
     slippage,
+    routeType,
   }) => {
-    let is1Inch = routeType === '1inch'
-    switch (from) {
-      case 'ETH':
-        // is1Inch = to !== 'wstETH'
-        is1Inch = true
-        break
-      case 'stETH':
-        // is1Inch = to !== 'wstETH'
-        is1Inch = true
-        break
-      case 'WETH':
-        is1Inch = true
-        break
-      // case 'Frax':
-      //   is1Inch = true
-      //   break
-      // case 'crvUSD':
-      //   is1Inch = true
-      //   break
-      case 'frxETH':
-        is1Inch = to !== 'sfrxETH'
-        break
+    // let is1Inch = routeType === ROUTE_TYPE.INCH
+    // switch (from) {
+    //   case 'ETH':
+    //     is1Inch = true
+    //     break
+    //   case 'stETH':
+    //     is1Inch = true
+    //     break
+    //   case 'WETH':
+    //     is1Inch = true
+    //     break
+    //   case 'frxETH':
+    //     is1Inch = to !== 'sfrxETH'
+    //     break
 
-      default:
-        break
-    }
-    if (is1Inch) {
+    //   default:
+    //     break
+    // }
+    if (routeType === ROUTE_TYPE.INCH) {
       return get1InchData(
         zapTokens[from].address,
         zapTokens[to].address,
@@ -81,6 +77,13 @@ export const useZapIn = () => {
         slippage,
         minOut
       )
+    }
+    if (routeType === ROUTE_TYPE.CURVE) {
+      return {
+        amount,
+        slippage,
+        routeType,
+      }
     }
     return getConvertParams(
       zapTokens[from].address,

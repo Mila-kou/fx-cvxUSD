@@ -590,6 +590,15 @@ const fxUSD_ROUTER = {
   },
 }
 
+// export const isFxRouteSupported = (from, to) => {
+//   if (fxUSD_ROUTER[from]) {
+//     if (Object.values(fxUSD_ROUTER[from].routers)[0] === to) {
+//       return true
+//     }
+//   }
+//   return false
+// }
+
 export const getFXUSDRouterByAddress = (fromAddress, toAddress) => {
   let _router = []
   Object.keys(fxUSD_ROUTER).map((tokenName) => {

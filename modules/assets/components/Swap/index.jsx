@@ -6,8 +6,6 @@ import Mint from '../Mint'
 import Redeem from '../Redeem'
 import FxUSDMint from '../FxUSDMint'
 import FxUSDRedeem from '../FxUSDRedeem'
-import RUSDMint from '../RUSDMint'
-import RUSDRedeem from '../RUSDRedeem'
 import MintX from '../MintX'
 import RedeemX from '../RedeemX'
 import MintF from '../MintF'
@@ -26,7 +24,6 @@ const AUTO = 0.3
 
 export default function Swap({ isValidPrice, assetInfo }) {
   const [tab, setTab] = useState(0)
-  // const { routeType, setRouteType } = useGlobal()
 
   const slippageProps = useSlippage(AUTO)
 
@@ -35,11 +32,8 @@ export default function Swap({ isValidPrice, assetInfo }) {
       return [Mint, Redeem]
     }
 
-    if (assetInfo.symbol === 'fxUSD') {
+    if (['fxUSD', 'rUSD', 'btcUSD'].includes(assetInfo.symbol)) {
       return [FxUSDMint, FxUSDRedeem]
-    }
-    if (assetInfo.symbol === 'rUSD') {
-      return [RUSDMint, RUSDRedeem]
     }
 
     if (['fCVX'].includes(assetInfo.symbol)) {
@@ -85,17 +79,6 @@ export default function Swap({ isValidPrice, assetInfo }) {
       )}
 
       <SlippageModal {...slippageProps} />
-
-      {/* <Select
-        className="mt-[16px] h-[58px] w-[200px] mx-auto"
-        style={{
-          border: '1px solid #a6a6ae',
-          borderRadius: '4px',
-        }}
-        options={ROUTES}
-        value={routeType}
-        onChange={setRouteType}
-      /> */}
     </div>
   )
 }

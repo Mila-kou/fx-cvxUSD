@@ -2,6 +2,15 @@ import config from '@/config/index'
 
 const cryptoIcons = '/assets/crypto-icons-stack.svg'
 
+export const REWARD_TOKENS = [
+  'FXN',
+  'wstETH',
+  'sfrxETH',
+  'weETH',
+  'ezETH',
+  'WBTC',
+]
+
 export const POOLS_LIST = [
   {
     logo2: `/tokens/crypto-icons-stack.svg#eth`,
@@ -701,6 +710,36 @@ export const REBALANCE_GAUGE_LIST = [
     gaugeRewards: [config.TOKENS_INFO.fxn],
     rewardTokens: [],
   },
+  {
+    icon: '/tokens/btcUSD.svg',
+    subIcon: '/tokens/WBTC.svg',
+    icons: [
+      {
+        icon: '/tokens/btcUSD.svg',
+        subIcon: '/tokens/WBTC.svg',
+      },
+    ],
+    id: 6,
+    name: 'btcUSD - WBTC',
+    platform: 'FX',
+    fromPlatform: 'Fx',
+    poolType: 'btcUSD',
+    baseSymbol: 'WBTC',
+    platformUrl: 'https://fx.aladdin.club/staking',
+    nameShow: 'btcUSD WBTC Rebalance Pool',
+    gaugeType: 1,
+    gaugeTypeName: 'Stability Pool Gauge',
+    actionRebalancePool: [
+      config.contracts.btcUSD_ShareableRebalancePool_WBTC,
+      config.contracts.btcUSD_ShareableRebalancePool_xWBTC,
+    ],
+    lpAddress:
+      config.contracts.btcUSD_ShareableRebalancePool_WBTC_FundraiseGauge,
+    lpGaugeAddress:
+      config.contracts.btcUSD_ShareableRebalancePool_WBTC_FundraiseGauge,
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rewardTokens: [],
+  },
 ]
 
 export const REBALANCE_POOLS_LIST = [
@@ -996,6 +1035,54 @@ export const REBALANCE_POOLS_LIST = [
   //     },
   //   ],
   // },
+  {
+    id: 13,
+    icon: '/tokens/btcUSD.svg',
+    subIcon: '/tokens/WBTC.svg',
+    baseSymbol: 'WBTC',
+    gaugeType: 'boostRebalance',
+    nameShow: 'btcUSD Stability Pool Redeem to WBTC',
+    poolType: 'btcUSD',
+    withdrawDefaultToken: 'btcUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
+    rebalancePoolAddress: config.contracts.btcUSD_ShareableRebalancePool_WBTC,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_btcUSD_WBTC',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'WBTC'],
+    zapTokens: [
+      {
+        symbol: 'btcUSD',
+        address: config.tokens.btcUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    id: 14,
+    icon: '/tokens/btcUSD.svg',
+    subIcon: '/tokens/WBTC.svg',
+    baseSymbol: 'WBTC',
+    gaugeType: 'boostRebalance',
+    nameShow: 'btcUSD Stability Pool Redeem to xWBTC',
+    poolType: 'btcUSD',
+    withdrawDefaultToken: 'btcUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
+    rebalancePoolAddress: config.contracts.btcUSD_ShareableRebalancePool_xWBTC,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_btcUSD_xWBTC',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'WBTC', 'xWBTC'],
+    zapTokens: [
+      {
+        symbol: 'btcUSD',
+        address: config.tokens.btcUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
 ]
 
 export const OTHER_GAUGE_LIST = [

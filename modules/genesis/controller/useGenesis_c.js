@@ -25,6 +25,11 @@ const configs = [
     fxnNum: 0,
     total: 10000,
   },
+  {
+    symbol: 'WBTC',
+    fxnNum: 0,
+    total: 15000,
+  },
 ]
 
 const useGenesis_c = () => {

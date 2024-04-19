@@ -51,20 +51,30 @@ const WITHDRAW_OPTIONS = {
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
   ],
+  WBTC: [
+    ['btcUSD', config.tokens.btcUSD],
+    ['WBTC', config.tokens.WBTC],
+    // ['ETH', config.tokens.eth],
+    // ['eETH', config.tokens.eETH],
+    // ['USDT', config.tokens.usdt],
+    // ['USDC', config.tokens.usdc],
+    // ['crvUSD', config.tokens.crvUSD],
+  ],
 }
 
 export default function WithdrawModal(props) {
   const { onCancel, info, poolData } = props
+  const { withdrawDefaultToken, baseSymbol, rebalancePoolAddress, poolType } =
+    info
 
   const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [slippage, setSlippage] = useState(0.3)
 
-  const { contract: rUSDContract } = useFXUSD_contract('rUSD')
+  const { contract: FXUSD_Contract } = useFXUSD_contract(poolType)
 
   const baseToken = useSelector((state) => state.baseToken)
   const [withdrawing, setWithdrawing] = useState(false)
-  const { withdrawDefaultToken, baseSymbol, rebalancePoolAddress } = info
   const [symbol, setSymbol] = useState(withdrawDefaultToken)
   const { userInfo } = poolData
   const { contract: fxUSD_GatewayRouterContract } =
@@ -121,19 +131,30 @@ export default function WithdrawModal(props) {
       let apiCall
       let to = fxUSD_GatewayRouterContract._address
 
-      if (symbol === 'rUSD') {
-        apiCall = rUSDContract.methods.wrapFrom(
+      if (symbol === withdrawDefaultToken) {
+        apiCall = FXUSD_Contract.methods.wrapFrom(
           rebalancePoolAddress,
           sharesInWei,
           currentAccount
         )
-        to = rUSDContract._address
-      } else if (symbol === withdrawDefaultToken) {
-        apiCall = fxUSD_GatewayRouterContract.methods.fxRebalancePoolWithdraw(
-          // config.tokens[withdrawDefaultToken],
-          rebalancePoolAddress,
-          sharesInWei
+        to = FXUSD_Contract._address
+      } else if (symbol === 'WBTC') {
+        const { _amountOut } = await FXUSD_Contract.methods
+          .redeemFrom(rebalancePoolAddress, sharesInWei, currentAccount, 0)
+          .call({
+            from: currentAccount,
+          })
+
+        const _minOut_CBN = (cBN(_amountOut) || cBN(0)).multipliedBy(
+          cBN(1).minus(cBN(slippage).dividedBy(100))
         )
+        apiCall = FXUSD_Contract.methods.redeemFrom(
+          rebalancePoolAddress,
+          sharesInWei,
+          currentAccount,
+          _minOut_CBN.toFixed(0, 1)
+        )
+        to = FXUSD_Contract._address
       } else {
         const _convertParams = getZapOutParams(
           config.tokens[baseSymbol],
