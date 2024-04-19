@@ -87,7 +87,7 @@ export default function GenesisPage() {
     fxUSD: STAGE.FULL_LAUNCHED,
     rUSD_eETH: STAGE.FULL_LAUNCHED,
     rUSD_ezETH: STAGE.FULL_LAUNCHED,
-    btcUSD_WBTC: STAGE.LAUNCHING,
+    btcUSD_WBTC: STAGE.LAUNCHED,
   }[_assetSymbol]
 
   // const [stage, setStage] = useState(

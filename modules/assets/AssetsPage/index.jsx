@@ -253,7 +253,7 @@ export default function AssetsPage() {
               </div>
 
               {list.map((item) => (
-                <Link href="genesis/btcUSD_WBTC">
+                <Link href={`assets/${item.symbol}`}>
                   <AssetCell info={item} />
                 </Link>
               ))}
