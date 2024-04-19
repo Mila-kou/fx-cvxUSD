@@ -19,7 +19,12 @@ const useOutAmount = (slippage) => {
       )
 
       setMinOutAmount({
-        minout: fb4(out_CBN.toString(10), false, decimals),
+        minout: fb4(
+          out_CBN.toString(10),
+          false,
+          decimals,
+          decimals > 10 ? 2 : 4
+        ),
         minout_tvl: fb4(
           out_CBN.multipliedBy(_price).toString(10),
           true,

@@ -70,12 +70,22 @@ function BalanceInput(props) {
   }
 
   const setMax = () => {
-    setVal(fb4(maxAmount, false, decimals ?? 18).replace(/,/g, ''))
+    setVal(
+      fb4(maxAmount, false, decimals ?? 18, decimals > 10 ? 2 : 4).replace(
+        /,/g,
+        ''
+      )
+    )
   }
 
   useEffect(() => {
     if (changeValue) {
-      setVal(fb4(changeValue, false, decimals ?? 18).replace(/,/g, ''))
+      setVal(
+        fb4(changeValue, false, decimals ?? 18, decimals > 10 ? 2 : 4).replace(
+          /,/g,
+          ''
+        )
+      )
     }
   }, [changeValue])
 

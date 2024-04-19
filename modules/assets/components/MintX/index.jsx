@@ -516,7 +516,8 @@ export default function MintX({ slippage, assetInfo }) {
         balance={fb4(
           tokens[symbol].balance,
           false,
-          config.zapTokens[symbol].decimals
+          config.zapTokens[symbol].decimals,
+          config.zapTokens[symbol].decimals > 10 ? 2 : 4
         )}
         usd={fromUsd}
         maxAmount={tokens[symbol].balance}
