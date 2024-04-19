@@ -206,7 +206,7 @@ export default function RebalancePoolCellV2({
         _apyDom = `${userCurrentApy_text} %`
         _apyList = [`FXN APR: ${userFxnApy_text} %`]
         _apyList_current = [`FXN Current APR: ${userFxnCurrentApy_text} %`]
-      } else if (checkNotZoroNum(minApy)) {
+      } else {
         _apyAndBoostDom = `${minCurrentApy_text} % -> ${maxCurrentApy_text} %`
         _apyDom = _apyAndBoostDom
         _apyList = [
