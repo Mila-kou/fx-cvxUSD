@@ -607,7 +607,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
           tokens[symbol].balance,
           false,
           config.zapTokens[symbol].decimals,
-          config.zapTokens[symbol].decimals > 10 ? 2 : 4
+          config.zapTokens[symbol].decimals === 8 ? 4 : 2
         )}
         usd={fromUsd}
         maxAmount={tokens[symbol].balance}

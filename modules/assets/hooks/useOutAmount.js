@@ -23,7 +23,7 @@ const useOutAmount = (slippage) => {
           out_CBN.toString(10),
           false,
           decimals,
-          decimals > 10 ? 2 : 4
+          decimals === 8 ? 4 : 2
         ),
         minout_tvl: fb4(
           out_CBN.multipliedBy(_price).toString(10),
