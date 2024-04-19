@@ -246,7 +246,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       .toString(10)
 
     return formatBalance(_fee)
-  }, [isCRLow130, isSwap])
+  }, [isCRLow130, isSwap, baseTokenData])
 
   const hanldeFromAmountChanged = (v) => {
     setFromAmount(v.toString(10))

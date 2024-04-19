@@ -302,7 +302,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         .toString(10)
     }
     return formatBalance(_fee)
-  }, [isF, isCRLow130, isSwap])
+  }, [isF, isCRLow130, isSwap, baseTokenData])
 
   const hanldeETHAmountChanged = (v) => {
     setFromAmount(v.toString(10))
