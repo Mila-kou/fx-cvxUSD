@@ -128,15 +128,20 @@ export default function PoolCell({ cellData }) {
       _typeApy._allApy_min = cBN(_convexTypeApy)
       _typeApy._allApy_max = cBN(_convexTypeApy)
 
-      _typeApy._min_FXN_Apy = cBN(fxnApy._thisWeek_apy)
-        .times(boostInfo[3])
-        .toFixed(2)
-      _typeApy._max_FXN_Apy = cBN(fxnApy._thisWeek_apy)
-        .times(boostInfo[3])
-        .times(2.5)
-        .toFixed(2)
-      _typeApy._allApy_min = cBN(_convexTypeApy).plus(_typeApy._min_FXN_Apy)
-      _typeApy._allApy_max = cBN(_convexTypeApy).plus(_typeApy._max_FXN_Apy)
+      if (_apyInfo?.fxnApy?.otherApy) {
+        _typeApy._min_FXN_Apy = _apyInfo?.fxnApy?.otherApy
+        _typeApy._max_FXN_Apy = _apyInfo?.fxnApy?.otherApy        
+      } else {
+        _typeApy._min_FXN_Apy = cBN(fxnApy._thisWeek_apy)
+          .times(boostInfo[3])
+          .toFixed(2)
+        _typeApy._max_FXN_Apy = cBN(fxnApy._thisWeek_apy)
+          .times(boostInfo[3])
+          .times(2.5)
+          .toFixed(2)
+        _typeApy._allApy_min = cBN(_convexTypeApy).plus(_typeApy._min_FXN_Apy)
+        _typeApy._allApy_max = cBN(_convexTypeApy).plus(_typeApy._max_FXN_Apy)
+      }
       const boostLever = boostInfo[2]
       if (cBN(boostLever).gt(1)) {
         _typeApy.boostLever = boostLever
@@ -183,9 +188,6 @@ export default function PoolCell({ cellData }) {
       apyInfo.convexLpApy.apy &&
       apyInfo.apyList.length
     ) {
-      if (apyInfo?.fxnApy?.otherApy) {
-        return ['500+ %', '500+ %', '500+ %']
-      }
       const _projectApy = getTypeApy(apyInfo, 'project')
       const _currentApy = getTypeApy(apyInfo, 'current')
       // console.log('apy----_currentApy---', _currentApy)
@@ -200,6 +202,9 @@ export default function PoolCell({ cellData }) {
           </>
         )
         _apyDom = `${_projectApy.userApy_text} %`
+      } else if (apyInfo.fxnApy?.otherApy) {
+        _apyAndBoostDom = `500 %+ -> 500 %+`
+        _apyDom = _apyAndBoostDom
       } else if (checkNotZoroNum(_projectApy._allApy_min)) {
         _apyAndBoostDom = `${fb4(
           _projectApy._allApy_min,

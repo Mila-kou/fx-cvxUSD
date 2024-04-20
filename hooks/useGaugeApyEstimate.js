@@ -129,7 +129,7 @@ const useGaugeApyEstimate = () => {
           !checkNotZoroNum(_thisWeek_apy) &&
           checkNotZoroNum(_thisWeek_gaugeEstimate)
         ) {
-          otherApy = '500%+'
+          otherApy = '500'
         }
         const _nextWeek_apy = checkNotZoroNum(_tvl)
           ? cBN(_nextWeek_gaugeEstimate)
