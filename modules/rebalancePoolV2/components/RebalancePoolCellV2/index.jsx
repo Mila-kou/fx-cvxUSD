@@ -224,20 +224,20 @@ export default function RebalancePoolCellV2({
       _apyList.push(baseText)
       _apyList_current.push(baseText)
 
-      if (checkNotZoroNum(minApy)) {
-        _apyDetailDom = (
-          <>
-            <p>Current APR </p>{' '}
-            {_apyList_current.map((apyText) => (
-              <p className="text-[14px]">{apyText}</p>
-            ))}
-            <p>Project APR </p>{' '}
-            {_apyList.map((apyText) => (
-              <p className="text-[14px]">{apyText}</p>
-            ))}
-          </>
-        )
-      }
+      // if (checkNotZoroNum(minApy)) {
+      _apyDetailDom = (
+        <>
+          <p>Current APR </p>{' '}
+          {_apyList_current.map((apyText) => (
+            <p className="text-[14px]">{apyText}</p>
+          ))}
+          <p>Project APR </p>{' '}
+          {_apyList.map((apyText) => (
+            <p className="text-[14px]">{apyText}</p>
+          ))}
+        </>
+      )
+      // }
       return [_apyAndBoostDom, _apyDom, _apyDetailDom]
     } catch (error) {
       return [_apyAndBoostDom, _apyDom, _apyDetailDom]
