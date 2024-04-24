@@ -45,8 +45,8 @@ const WITHDRAW_OPTIONS = {
   ],
   ezETH: [
     ['rUSD', config.tokens.rUSD],
+    ['ezETH', config.tokens.ezETH],
     // ['ETH', config.tokens.eth],
-    // ['eETH', config.tokens.eETH],
     // ['USDT', config.tokens.usdt],
     // ['USDC', config.tokens.usdc],
     // ['crvUSD', config.tokens.crvUSD],
@@ -75,7 +75,9 @@ export default function WithdrawModal(props) {
 
   const baseToken = useSelector((state) => state.baseToken)
   const [withdrawing, setWithdrawing] = useState(false)
-  const [symbol, setSymbol] = useState(withdrawDefaultToken)
+  const [symbol, setSymbol] = useState(
+    baseSymbol === 'ezETH' ? 'ezETH' : withdrawDefaultToken
+  )
   const { userInfo } = poolData
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
