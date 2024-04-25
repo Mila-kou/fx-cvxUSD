@@ -37,6 +37,8 @@ export const useApprove = (props) => {
 
   const allowAction = allowance > 0
 
+  const isETH = tokenContract?._address === config.tokens.eth
+
   const needReset = useMemo(() => {
     if (approveAmount && allowance) {
       return (
@@ -48,8 +50,10 @@ export const useApprove = (props) => {
   }, [approveAmount, allowance])
 
   const needApprove = useMemo(() => {
+    if (isETH) return false
+
     return !allowAction || needReset
-  }, [allowAction, needReset])
+  }, [allowAction, needReset, isETH])
 
   const resetApprove = async () => {
     if (!isAllReady) {

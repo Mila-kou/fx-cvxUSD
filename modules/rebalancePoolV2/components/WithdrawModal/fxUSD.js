@@ -19,6 +19,7 @@ import SlippageInfo from '@/components/SlippageInfo'
 const WITHDRAW_OPTIONS = {
   wstETH: [
     ['fxUSD', config.tokens.fxUSD],
+    ['wstETH', config.tokens.wstETH],
     ['WETH', config.tokens.weth],
     ['stETH', config.tokens.stETH],
     ['USDT', config.tokens.usdt],
@@ -28,7 +29,7 @@ const WITHDRAW_OPTIONS = {
   ],
   sfrxETH: [
     ['fxUSD', config.tokens.fxUSD],
-    ['WETH', config.tokens.weth],
+    ['sfrxETH', config.tokens.sfrxETH],
     ['frxETH', config.tokens.frxETH],
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
@@ -37,6 +38,7 @@ const WITHDRAW_OPTIONS = {
   ],
   weETH: [
     ['rUSD', config.tokens.rUSD],
+    ['weETH', config.tokens.weETH],
     // ['ETH', config.tokens.eth],
     // ['eETH', config.tokens.eETH],
     // ['USDT', config.tokens.usdt],
@@ -140,7 +142,7 @@ export default function WithdrawModal(props) {
           currentAccount
         )
         to = FXUSD_Contract._address
-      } else if (symbol === 'WBTC') {
+      } else if (symbol === baseSymbol) {
         const { _amountOut } = await FXUSD_Contract.methods
           .redeemFrom(rebalancePoolAddress, sharesInWei, currentAccount, 0)
           .call({

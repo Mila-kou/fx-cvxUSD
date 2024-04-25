@@ -434,10 +434,10 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
                   res = await fxUSD_GatewayRouterContract.methods
                     .fxAutoRedeemFxUSD(
                       convertParamsList,
-                      // address,
+                      address,
                       _mockAmount,
-                      new Array(baseTokenSymbols.length).fill(0)
-                      // 0
+                      new Array(baseTokenSymbols.length).fill(0),
+                      0
                     )
                     .call({
                       from: _account,
@@ -570,10 +570,10 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
           apiCall = await fxUSD_GatewayRouterContract.methods.fxAutoRedeemFxUSD(
             convertParamsList,
-            // address,
+            address,
             fromAmount,
-            _min_baseOuts
-            // _minoutETH
+            _min_baseOuts,
+            _minoutETH
           )
         }
 

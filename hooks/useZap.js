@@ -50,24 +50,6 @@ export const useZapIn = () => {
     slippage,
     routeType,
   }) => {
-    // let is1Inch = routeType === ROUTE_TYPE.INCH
-    // switch (from) {
-    //   case 'ETH':
-    //     is1Inch = true
-    //     break
-    //   case 'stETH':
-    //     is1Inch = true
-    //     break
-    //   case 'WETH':
-    //     is1Inch = true
-    //     break
-    //   case 'frxETH':
-    //     is1Inch = to !== 'sfrxETH'
-    //     break
-
-    //   default:
-    //     break
-    // }
     if (routeType === ROUTE_TYPE.INCH) {
       return get1InchData(
         zapTokens[from].address,

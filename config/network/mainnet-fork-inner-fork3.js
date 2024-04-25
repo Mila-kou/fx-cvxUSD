@@ -20,14 +20,13 @@ const explorerUri = 'https://www.etherscan.io'
 const chainInfo = {
   id: '0x1',
   token: 'ETH',
-  label: 'btcUSD-041901',
+  label: 'Gateway update02',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_3f9d7c80ebf6492aba784aa1de8d8470',
+    'https://rpc.phalcon.blocksec.com/rpc_662788219e7a49afab4a8641a858ec16',
 }
 
 const contracts = {
   ...tokensInfo.contracts,
-  fxUSD_GatewayRouter: '0x9B2966e96513Ff4e36ADBB5941BbcD98Ee87286C',
 
   // ChainlinkTwapOracleV3: '0x460B3CdE57DfbA90DBed02fd83d3990a92DA1230',
   // fETH: '0x53805A76E1f5ebbFE7115F16f9c87C2f7e633726',

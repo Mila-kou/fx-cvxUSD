@@ -48,20 +48,19 @@ const MINT_OPTIONS = {
     ['crvUSD', config.tokens.crvUSD],
   ],
   xeETH: [
-    // ['ETH', config.tokens.eth],
-    // ['USDT', config.tokens.usdt],
-    // ['USDC', config.tokens.usdc],
-    // ['crvUSD', config.tokens.crvUSD],
+    ['ETH', config.tokens.eth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
     ['weETH', config.tokens.weETH],
-    // ['eETH', config.tokens.eETH],
+    ['eETH', config.tokens.eETH],
   ],
   xezETH: [
-    // ['ETH', config.tokens.eth],
-    // ['USDT', config.tokens.usdt],
-    // ['USDC', config.tokens.usdc],
-    // ['crvUSD', config.tokens.crvUSD],
+    ['ETH', config.tokens.eth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
     ['ezETH', config.tokens.ezETH],
-    // ['eETH', config.tokens.eETH],
   ],
   xCVX: [
     ['aCVX', config.tokens.aCVX],
@@ -71,9 +70,9 @@ const MINT_OPTIONS = {
     ['crvUSD', config.tokens.crvUSD],
   ],
   xWBTC: [
-    // ['ETH', config.tokens.eth],
-    // ['USDT', config.tokens.usdt],
-    // ['USDC', config.tokens.usdc],
+    ['ETH', config.tokens.eth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
     ['WBTC', config.tokens.WBTC],
   ],
 }
@@ -146,9 +145,7 @@ export default function MintX({ slippage, assetInfo }) {
 
   const isSwap = false
 
-  const OPTIONS = MINT_OPTIONS[toSymbol].filter(
-    (item) => !(isRecap && baseSymbol === item[0])
-  )
+  const OPTIONS = MINT_OPTIONS[toSymbol]
 
   const selectTokenAddress = useMemo(() => {
     return OPTIONS.find((item) => item[0] === symbol)[1]
@@ -237,6 +234,7 @@ export default function MintX({ slippage, assetInfo }) {
   const initPage = () => {
     clearInput()
     setFromAmount('0')
+    resetOutAmount()
     setMintXBouns(0)
     routeTypeRef.current = ''
   }
@@ -533,7 +531,11 @@ export default function MintX({ slippage, assetInfo }) {
         symbol={toSymbol}
         color="red"
         placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
-        amountUSD={priceLoading ? '-' : minOutAmount.minout_tvl}
+        amountUSD={
+          priceLoading || !checkNotZoroNum(fromAmount)
+            ? '-'
+            : minOutAmount.minout_tvl
+        }
         disabled
         className={styles.inputItem}
         usd={nav_text}

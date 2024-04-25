@@ -106,6 +106,7 @@ export const useToken = (address, contractType, lpInfo) => {
           address,
           balance: ethBalance,
           allowance: ethBalance,
+          contract: erc20Contract(address),
         })
       } else {
         let _contractAddress

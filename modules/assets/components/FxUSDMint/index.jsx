@@ -37,18 +37,18 @@ const MINT_OPTIONS = {
     ['sfrxETH', config.tokens.sfrxETH],
   ],
   rUSD: [
-    // ['ETH', config.tokens.eth],
-    // ['eETH', config.tokens.eETH],
-    // ['USDT', config.tokens.usdt],
-    // ['USDC', config.tokens.usdc],
-    // ['crvUSD', config.tokens.crvUSD],
+    ['ETH', config.tokens.eth],
+    ['eETH', config.tokens.eETH],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
     ['weETH', config.tokens.weETH],
     ['ezETH', config.tokens.ezETH],
   ],
   btcUSD: [
-    // ['ETH', config.tokens.eth],
-    // ['USDT', config.tokens.usdt],
-    // ['USDC', config.tokens.usdc],
+    ['ETH', config.tokens.eth],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
     ['WBTC', config.tokens.WBTC],
   ],
 }
@@ -311,6 +311,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   const initPage = () => {
     clearInput()
     setFromAmount('0')
+    resetOutAmount()
     routeTypeRef.current = ''
   }
 
@@ -387,10 +388,19 @@ export default function FxUSDMint({ slippage, assetInfo }) {
                   })
                   res = cBN(res).multipliedBy(1e18).toString()
                 } else {
+                  console.log(
+                    'fxUSD_GatewayRouterContract--传参--',
+                    JSON.stringify([
+                      convertParams,
+                      address,
+                      config.tokens[baseSymbol],
+                      0,
+                    ])
+                  )
                   res = await fxUSD_GatewayRouterContract.methods
                     .fxMintFxUSD(
                       convertParams,
-                      // address,
+                      address,
                       config.tokens[baseSymbol],
                       0
                     )
@@ -491,7 +501,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
           apiCall = await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
             convertParams,
-            // address,
+            address,
             config.tokens[baseSymbol],
             _minOut
           )
@@ -623,7 +633,11 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         symbol={toSymbol}
         color="deep-green"
         placeholder={checkNotZoroNum(fromAmount) ? minOutAmount.minout : '-'}
-        amountUSD={priceLoading ? '-' : minOutAmount.minout_tvl}
+        amountUSD={
+          priceLoading || !checkNotZoroNum(fromAmount)
+            ? '-'
+            : minOutAmount.minout_tvl
+        }
         disabled
         className={styles.inputItem}
         usd={nav_text}

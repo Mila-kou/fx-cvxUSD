@@ -11,20 +11,41 @@ import { cBN, fb4 } from '@/utils/index'
 const getZapInSupportRoutes = (from, to, symbol) => {
   // mint fxUSD
   if (symbol === 'fxUSD') {
-    if (['USDT', 'USDC', 'Frax', 'crvUSD'].includes(from)) {
-      return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
+    if (['ETH'].includes(from)) {
+      return [ROUTE_TYPE.INCH]
     }
+    return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
   }
 
-  if (['ETH', 'stETH', 'WETH'].includes(from)) {
+  if (['eETH'].includes(from)) {
     return [ROUTE_TYPE.INCH]
   }
 
-  if (['frxETH'].includes(from)) {
-    return [ROUTE_TYPE.FX_ROUTE]
+  // mint rUSD
+  if (symbol === 'rUSD') {
+    if (['ETH'].includes(from)) {
+      return [ROUTE_TYPE.INCH]
+    }
+    return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE]
   }
 
+  // mint btcUSD
   if (symbol === 'btcUSD' || ['WBTC'].includes(to)) {
+    return [ROUTE_TYPE.INCH]
+  }
+
+  // mint xToken
+  if (['xstETH', 'xfrxETH', 'xeETH'].includes(symbol)) {
+    if (['ETH'].includes(from)) {
+      return [ROUTE_TYPE.INCH]
+    }
+    return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE]
+  }
+
+  if (['xezETH'].includes(symbol)) {
+    if (['ETH'].includes(from)) {
+      return [ROUTE_TYPE.INCH]
+    }
     return [ROUTE_TYPE.INCH]
   }
 
@@ -34,9 +55,7 @@ const getZapInSupportRoutes = (from, to, symbol) => {
 const getZapOutSupportRoutes = (from, to) => {
   // redeem fxUSD
   if (from === 'fxUSD') {
-    if (['USDT', 'USDC', 'Frax', 'crvUSD'].includes(to)) {
-      return [ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
-    }
+    return [ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
   }
 
   return [ROUTE_TYPE.FX_ROUTE]
