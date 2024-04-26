@@ -550,7 +550,7 @@ export const POOLS_LIST = [
       config.POOLS_LIST_GAUGE.MIM_fxUSD.manageConvexGauge,
     baseRewardToken: config.TOKENS_INFO.fxn,
     rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
-    // isCloseManageConvex: true,
+    isCloseManageConvex: true,
     zapTokens: [
       {
         symbol: 'curve_MIM_fxUSD',
