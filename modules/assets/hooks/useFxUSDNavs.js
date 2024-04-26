@@ -37,22 +37,27 @@ export default function useFxUSDNavs() {
       navList: {
         fxUSD: [],
         rUSD: [],
+        btcUSD: [],
+
         xstETH: [],
         xfrxETH: [],
         xeETH: [],
         xezETH: [],
+        xWBTC: [],
       },
       totalBaseTokenList: {
         wstETH: [],
         sfrxETH: [],
         weETH: [],
         ezETH: [],
+        WBTC: [],
       },
       lastDayPrice: {
         xstETH: '',
         xfrxETH: '',
         xeETH: '',
         xezETH: '',
+        xWBTC: '',
       },
       dateList: [],
     }

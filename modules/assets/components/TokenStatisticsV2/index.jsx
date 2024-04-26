@@ -30,7 +30,7 @@ export default function TokenStatisticsV2({ assetInfo, baseTokens = [] }) {
   const navList = navsData.navList[symbol]
   const totalBaseTokenList = navsData.totalBaseTokenList[baseSymbol]
 
-  const isFXUSD = ['fxUSD', 'rUSD', 'btcUSD'].includes(symbol)
+  const isFXUSD = ['fxUSD', 'rUSD', 'btcUSD', 'btcUSD'].includes(symbol)
 
   const getTotalBaseTokenUSD = () => {
     let totalBaseTokenUSD = cBN(0)
