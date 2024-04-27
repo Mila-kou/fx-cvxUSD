@@ -29,11 +29,11 @@ const socialLinks = [
     icon: <img src="/socials/discord.svg" className={style.socialIcons} />,
     link: 'https://discord.gg/mCTXgANxWy',
   },
-  {
-    key: 'telegramm',
-    icon: <img src="/socials/telegram.svg" className={style.socialIcons} />,
-    link: 'https://t.me/aladdin_dao',
-  },
+  // {
+  //   key: 'telegramm',
+  //   icon: <img src="/socials/telegram.svg" className={style.socialIcons} />,
+  //   link: 'https://t.me/aladdin_dao',
+  // },
 ]
 
 const audits = [
