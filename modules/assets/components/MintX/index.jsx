@@ -288,6 +288,7 @@ export default function MintX({ slippage, assetInfo }) {
                 amount: _mockAmount,
                 slippage,
                 symbol: toSymbol,
+                price: nav_text,
               },
               async (convertParams) => {
                 const res = await fxUSD_GatewayRouterContract.methods
