@@ -411,6 +411,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
                 symbol,
                 decimals: config.zapTokens[symbol].decimals,
                 isZapIn: false,
+                price: toUsd,
               },
               async (params) => {
                 let res
