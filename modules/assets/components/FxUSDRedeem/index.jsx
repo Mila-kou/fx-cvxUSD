@@ -499,12 +499,13 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       resetOutAmount()
       setBonus([])
       setPriceLoading(false)
-      // if (
-      //   error?.message &&
-      //   error.message.includes('burn amount exceeds balance')
-      // ) {
-      //   setShowManaged(true)
-      // }
+      if (
+        error?.message &&
+        error.message.includes('burn amount exceeds balance') &&
+        managed.isLessThan(fromAmount)
+      ) {
+        setShowManaged(true)
+      }
       return 0
     }
   }
