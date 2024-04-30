@@ -14,7 +14,8 @@ const getZapInSupportRoutes = (from, to, symbol) => {
     if (['ETH'].includes(from)) {
       return [ROUTE_TYPE.INCH]
     }
-    return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
+    // return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
+    return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE]
   }
 
   if (['eETH'].includes(from)) {
@@ -55,7 +56,8 @@ const getZapInSupportRoutes = (from, to, symbol) => {
 const getZapOutSupportRoutes = (from, to) => {
   // redeem fxUSD
   if (from === 'fxUSD') {
-    return [ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
+    // return [ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
+    return [ROUTE_TYPE.FX_ROUTE]
   }
 
   return [ROUTE_TYPE.FX_ROUTE]
