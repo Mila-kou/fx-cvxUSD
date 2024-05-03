@@ -30,7 +30,7 @@ const useRUSDScore = () => {
         eigenlayer: 0,
       },
     }
-    if (weETHData) {
+    if (weETHData && weETHData.eigenlayer) {
       const eigenlayer = weETHData.eigenlayer.earnPoint.find(
         (item) => item.address.toLowerCase() == currentAccount.toLowerCase()
       )
@@ -46,7 +46,7 @@ const useRUSDScore = () => {
       }
     }
 
-    if (ezETHData) {
+    if (ezETHData && ezETHData.eigenlayer) {
       const eigenlayer = ezETHData.eigenlayer.earnPoint.find(
         (item) => item.address.toLowerCase() == currentAccount.toLowerCase()
       )
