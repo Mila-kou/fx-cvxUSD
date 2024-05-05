@@ -205,7 +205,7 @@ export default function RebalancePoolCellV2({
         )
         _apyDom = `${userCurrentApy_text} %`
         _apyList = [`FXN APR: ${userFxnApy_text} %`]
-        _apyList_current = [`FXN Current APR: ${userFxnCurrentApy_text} %`]
+        _apyList_current = [`FXN APR: ${userFxnCurrentApy_text} %`]
       } else {
         _apyAndBoostDom = `${minCurrentApy_text || '-'} % -> ${
           maxCurrentApy_text || '-'
@@ -216,7 +216,7 @@ export default function RebalancePoolCellV2({
           `FXN APR: ${fxnApy_min_text} % -> ${fxnApy_max_text} %`,
         ]
         _apyList_current = [
-          `FXN Current APR: ${fxnApy_current_min_text} % -> ${fxnApy_current_max_text} %`,
+          `FXN APR: ${fxnApy_current_min_text} % -> ${fxnApy_current_max_text} %`,
         ]
       }
 
@@ -231,7 +231,7 @@ export default function RebalancePoolCellV2({
           {_apyList_current.map((apyText) => (
             <p className="text-[14px]">{apyText}</p>
           ))}
-          <p>Project APR </p>{' '}
+          <p style={{ marginTop: '15px' }}>Projected APR </p>{' '}
           {_apyList.map((apyText) => (
             <p className="text-[14px]">{apyText}</p>
           ))}
