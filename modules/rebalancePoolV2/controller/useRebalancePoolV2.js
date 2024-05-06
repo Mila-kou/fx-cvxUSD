@@ -99,13 +99,13 @@ const useRebalancePoolV2 = (infoKey, baseToken) => {
         const _fxnPrice = getTokenPrice('FXN')
 
         // FXN Project Apy
-        const { _thisWeek_gaugeEstimate } =
+        const { _thisWeek_gaugeEstimate, _nextWeek_gaugeEstimate } =
           getRebalanceGaugeFXNAPY(rebalanceConfig)
 
         const _fxnCurrentApy = rewardsData.FXN?.currentApy
         const fxnCurrentApy_text = rewardsData.FXN.currentApy_text
 
-        const _fxnGaugeEstimate = cBN(_thisWeek_gaugeEstimate).div(2).toFixed(2)
+        const _fxnGaugeEstimate = cBN(_nextWeek_gaugeEstimate).div(2).toFixed(2) // change to _nextWeek_gaugeEstimate
 
         _fxnApy = cBN(_fxnGaugeEstimate)
           .multipliedBy(config.yearSecond)

@@ -34,11 +34,11 @@ const explorerUri = 'https://www.etherscan.io'
 // }
 
 const chainInfo = {
-  id: '0x1864d', // 99917
+  id: '0x2707', // 9991
   token: 'ETH',
-  label: 'btcusd-2',
+  label: 'updateRelativeWeight',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_f7278926bad64067bd0d277f9ff9b2cb',
+    'https://rpc.phalcon.blocksec.com/rpc_5334e4e8409b4cd588ef536ba286bbff',
 }
 
 const contracts = {
