@@ -618,6 +618,7 @@ export default function Mint({ slippage, assetInfo }) {
           disabled={!canMint}
           onClick={handleMint}
           width="100%"
+          auto={false}
         >
           {isF ? `Mint Stable ${toSymbol}` : `Mint Leveraged Long ${toSymbol}`}
         </BtnWapper>

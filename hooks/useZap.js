@@ -21,7 +21,7 @@ export const useZapIn = () => {
     minConvertOutAmount = 0
   ) => {
     if (fromAddress == config.zeroAddress) {
-      return [fromAddress, amountIn, toAddress, '0x', minConvertOutAmount]
+      return [[fromAddress, amountIn, toAddress, '0x', minConvertOutAmount]]
     }
 
     const routerData = getFXUSDRouterByAddress(fromAddress, toAddress)
@@ -33,11 +33,13 @@ export const useZapIn = () => {
       .encodeABI()
 
     return [
-      fromAddress,
-      amountIn,
-      config.contracts.MultiPathConverter,
-      _ConvertData,
-      minConvertOutAmount,
+      [
+        fromAddress,
+        amountIn,
+        config.contracts.MultiPathConverter,
+        _ConvertData,
+        minConvertOutAmount,
+      ],
     ]
   }
 
@@ -61,11 +63,13 @@ export const useZapIn = () => {
       )
     }
     if (routeType === ROUTE_TYPE.CURVE) {
-      return {
-        amount,
-        slippage,
-        routeType,
-      }
+      return [
+        {
+          amount,
+          slippage,
+          routeType,
+        },
+      ]
     }
     return getConvertParams(
       zapTokens[from].address,

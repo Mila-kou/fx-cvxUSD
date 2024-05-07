@@ -606,6 +606,7 @@ export default function Redeem({ slippage, assetInfo }) {
             disabled={!canRedeem}
             onClick={handleRedeem}
             width="100%"
+            auto={false}
           >
             Redeem
           </BtnWapper>

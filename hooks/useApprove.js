@@ -134,11 +134,12 @@ export const useApprove = (props) => {
     children,
     switchStyle,
     size,
+    auto = true,
     ...other
   }) {
     const handleBtnClick = useCallback(() => {
       if (needApprove) {
-        handleApprove(other.disabled ? null : confirmationCall)
+        handleApprove(other.disabled || !auto ? null : confirmationCall)
         return
       }
       confirmationCall()

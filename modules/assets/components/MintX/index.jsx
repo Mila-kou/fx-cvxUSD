@@ -85,6 +85,7 @@ export default function MintX({ slippage, assetInfo }) {
   const [clearTrigger, clearInput] = useClearInput()
   const getMarketContract = useV2MarketContract()
   const { getZapInParams } = useZapIn()
+  const timerRef = useRef(null)
 
   const { updateOutAmount, resetOutAmount, minOutAmount } =
     useOutAmount(slippage)
@@ -231,6 +232,12 @@ export default function MintX({ slippage, assetInfo }) {
     setFromAmount(v.toString(10))
   }
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.curent)
+    }
+  }, [])
+
   const initPage = () => {
     clearInput()
     setFromAmount('0')
@@ -240,6 +247,11 @@ export default function MintX({ slippage, assetInfo }) {
   }
 
   const getMinAmount = async (needLoading, _routeType) => {
+    clearTimeout(timerRef.curent)
+    timerRef.curent = setTimeout(() => {
+      getMinAmount(true)
+    }, 20000)
+
     setMintXBouns(0)
     if (needLoading) {
       setPriceLoading(true)
@@ -248,8 +260,13 @@ export default function MintX({ slippage, assetInfo }) {
 
     let _mockAmount = fromAmount
     let _mockRatio = 1
+
+    let isBTCMock = false
+
     // 默认比例 0.01
     if (_account !== _currentAccount) {
+      isBTCMock = symbol !== baseSymbol && toSymbol === 'xWBTC'
+
       _mockAmount = cBN(0.01)
         .shiftedBy(config.zapTokens[symbol].decimals)
         .toString()
@@ -285,22 +302,46 @@ export default function MintX({ slippage, assetInfo }) {
               {
                 from: symbol,
                 to: baseSymbol,
-                amount: _mockAmount,
+                amount: isBTCMock ? fromAmount : _mockAmount,
                 slippage,
                 symbol: toSymbol,
                 price: nav_text,
               },
-              async (convertParams) => {
-                const res = await fxUSD_GatewayRouterContract.methods
-                  .fxMintXTokenV2(convertParams, contracts.market, 0)
-                  .call({
-                    from: _account,
-                    value: symbol == 'ETH' ? _mockAmount : 0,
-                  })
+              async ([convertParams, baseOutAmount]) => {
+                let res
+                if (isBTCMock) {
+                  const { decimals } = config.zapTokens[baseSymbol]
+                  const resData = await MarketContract.methods
+                    .mintXToken(
+                      cBN(0.01).shiftedBy(decimals).toString(),
+                      _account,
+                      0
+                    )
+                    .call({
+                      from: _account,
+                    })
+                  res = {
+                    _xTokenMinted:
+                      resData._xTokenMinted *
+                      cBN(baseOutAmount).div(cBN(0.01).shiftedBy(decimals)),
+                    _bonusOut:
+                      resData._xTokenMinted *
+                      cBN(baseOutAmount).div(cBN(0.01).shiftedBy(decimals)),
+                  }
+                } else {
+                  res = await fxUSD_GatewayRouterContract.methods
+                    .fxMintXTokenV2(convertParams, contracts.market, 0)
+                    .call({
+                      from: _account,
+                      value: symbol == 'ETH' ? _mockAmount : 0,
+                    })
+                }
 
                 // 比例计算
                 return {
-                  outAmount: res._xTokenMinted * _mockRatio,
+                  outAmount: isBTCMock
+                    ? res._xTokenMinted
+                    : res._xTokenMinted * _mockRatio,
                   result: res,
                 }
               }
@@ -319,7 +360,7 @@ export default function MintX({ slippage, assetInfo }) {
 
           minout_ETH = amount
           const _userXETHBonus = cBN(result._bonusOut || 0)
-          setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
+          setMintXBouns(_userXETHBonus.multipliedBy(isBTCMock ? 1 : _mockRatio))
         }
       } else {
         minout_ETH = 0
@@ -388,7 +429,7 @@ export default function MintX({ slippage, assetInfo }) {
         )
       } else {
         to = fxUSD_GatewayRouterContract._address
-        const convertParams = await getZapInParams({
+        const [convertParams] = await getZapInParams({
           from: symbol,
           to: baseSymbol,
           amount: _ETHtAmountAndGas,
@@ -580,6 +621,7 @@ export default function MintX({ slippage, assetInfo }) {
           disabled={!canMint}
           onClick={handleMint}
           width="100%"
+          auto={false}
         >
           {`Mint Leveraged Long ${toSymbol}`}
         </BtnWapper>

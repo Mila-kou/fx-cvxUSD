@@ -77,6 +77,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
   } = assetInfo
 
   const { swapByCurve, getOutAmountByCurve } = useCurveSwapV2()
+  const timerRef = useRef(null)
 
   const [symbol, setSymbol] = useState(baseTokenSymbols[0])
   const { contract: fxUSD_GatewayRouterContract } =
@@ -98,6 +99,12 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     () => baseTokenSymbols.includes(symbol),
     [symbol]
   )
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.curent)
+    }
+  }, [])
 
   const [baseSymbol, baseTokenData, managed, isRecap, isFXBouns] =
     useMemo(() => {
@@ -358,6 +365,11 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
   }, [symbol])
 
   const getMinAmount = async (needLoading, _routeType) => {
+    clearTimeout(timerRef.curent)
+    timerRef.curent = setTimeout(() => {
+      getMinAmount(true)
+    }, 20000)
+
     setShowManaged(false)
     if (needLoading) {
       setPriceLoading(true)
@@ -707,6 +719,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
             disabled={!canRedeem}
             onClick={handleRedeem}
             width="100%"
+            auto={false}
           >
             Redeem
           </BtnWapper>

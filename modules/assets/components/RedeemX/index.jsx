@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
@@ -71,6 +71,7 @@ export default function RedeemX({ slippage, assetInfo }) {
   const baseToken = useSelector((state) => state.baseToken)
   const [clearTrigger, clearInput] = useClearInput()
   const getMarketContract = useV2MarketContract()
+  const timerRef = useRef(null)
 
   const { updateOutAmount, resetOutAmount, minOutAmount, getMinOutBySlippage } =
     useOutAmount(slippage)
@@ -177,6 +178,12 @@ export default function RedeemX({ slippage, assetInfo }) {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.curent)
+    }
+  }, [])
+
   // console.log('selectTokenInfo----', selectTokenInfo)
 
   const _account = useMemo(() => {
@@ -266,6 +273,11 @@ export default function RedeemX({ slippage, assetInfo }) {
   }, [symbol])
 
   const getMinAmount = async (needLoading) => {
+    clearTimeout(timerRef.curent)
+    timerRef.curent = setTimeout(() => {
+      getMinAmount(true)
+    }, 20000)
+
     // if (cBN(fromAmount).isGreaterThan(maxRedeemableXTokenRes)) {
     //   setMaxError(
     //     `A maximum of ${fb4(
@@ -470,6 +482,7 @@ export default function RedeemX({ slippage, assetInfo }) {
           disabled={!canRedeem}
           onClick={handleRedeem}
           width="100%"
+          auto={false}
         >
           Redeem
         </BtnWapper>

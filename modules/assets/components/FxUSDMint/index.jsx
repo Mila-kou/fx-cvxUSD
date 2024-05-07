@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
+import BigNumber from 'bignumber.js'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
 import useWeb3 from '@/hooks/useWeb3'
 import { cBN, checkNotZoroNum, formatBalance, fb4 } from '@/utils/index'
@@ -61,6 +62,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   const [clearTrigger, clearInput] = useClearInput()
   const { getZapInParams } = useZapIn()
   const { swapByCurve, getOutAmountByCurve } = useCurveSwapV2()
+  const timerRef = useRef(null)
 
   const {
     isF,
@@ -114,6 +116,12 @@ export default function FxUSDMint({ slippage, assetInfo }) {
     () => baseTokenSymbols.includes(symbol),
     [symbol]
   )
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.curent)
+    }
+  }, [])
 
   useEffect(() => {
     if (toSymbol === 'fxUSD') {
@@ -225,6 +233,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
     isBaseTokenPriceValid,
 
     fTokenTotalSupplyRes,
+    maxMintableFTokenRes,
   } = baseTokenData
 
   const isSwap = false
@@ -316,6 +325,11 @@ export default function FxUSDMint({ slippage, assetInfo }) {
   }
 
   const getMinAmount = async (needLoading, _routeType) => {
+    clearTimeout(timerRef.curent)
+    timerRef.curent = setTimeout(() => {
+      getMinAmount(true)
+    }, 20000)
+
     if (needLoading) {
       setPriceLoading(true)
       routeTypeRef.current = ''
@@ -323,8 +337,12 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
     let _mockAmount = fromAmount
     let _mockRatio = 1
+
+    let isBTCMock = false
+
     // 默认比例 0.01
     if (_account !== _currentAccount) {
+      isBTCMock = !isBaseSymbol && toSymbol === 'btcUSD'
       _mockAmount = cBN(0.01)
         .shiftedBy(config.zapTokens[symbol].decimals)
         .toString()
@@ -373,11 +391,11 @@ export default function FxUSDMint({ slippage, assetInfo }) {
               {
                 from: symbol,
                 to: baseSymbol,
-                amount: _ETHtAmountAndGas,
+                amount: isBTCMock ? fromAmount : _ETHtAmountAndGas,
                 slippage,
                 symbol: toSymbol,
               },
-              async (convertParams) => {
+              async ([convertParams, baseOutAmount]) => {
                 let res
                 if (convertParams?.routeType === ROUTE_TYPE.CURVE) {
                   res = await getOutAmountByCurve({
@@ -397,20 +415,40 @@ export default function FxUSDMint({ slippage, assetInfo }) {
                       0,
                     ])
                   )
-                  res = await fxUSD_GatewayRouterContract.methods
-                    .fxMintFxUSD(
-                      convertParams,
-                      address,
-                      config.tokens[baseSymbol],
-                      0
-                    )
-                    .call({
-                      from: _account,
-                      value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-                    })
+                  if (isBTCMock) {
+                    const { decimals } = config.zapTokens[baseSymbol]
+                    resData = await FXUSD_contract.methods
+                      .mint(
+                        config.tokens[baseSymbol],
+                        cBN(0.01).shiftedBy(decimals).toString(),
+                        _account,
+                        0
+                      )
+                      .call({
+                        from: _account,
+                      })
+                    res =
+                      resData *
+                      cBN(baseOutAmount).div(cBN(0.01).shiftedBy(decimals))
+                  } else {
+                    res = await fxUSD_GatewayRouterContract.methods
+                      .fxMintFxUSD(
+                        convertParams,
+                        address,
+                        config.tokens[baseSymbol],
+                        0
+                      )
+                      .call({
+                        from: _account,
+                        value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
+                      })
+                  }
                 }
                 // 比例计算
-                return { outAmount: res * _mockRatio, result: res }
+                return {
+                  outAmount: isBTCMock ? res : res * _mockRatio,
+                  result: res,
+                }
               }
             )
           }
@@ -426,6 +464,13 @@ export default function FxUSDMint({ slippage, assetInfo }) {
         }
       } else {
         minout_ETH = 0
+      }
+
+      if (_account !== _currentAccount) {
+        minout_ETH = BigNumber.min(
+          cBN(maxMintableFTokenRes),
+          cBN(minout_ETH)
+        ).toString()
       }
 
       const _minOut = updateOutAmount(minout_ETH, 1)
@@ -491,7 +536,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
           )
         } else {
           to = fxUSD_GatewayRouterContract._address
-          const convertParams = await getZapInParams({
+          const [convertParams] = await getZapInParams({
             from: symbol,
             to: baseSymbol,
             amount: _ETHtAmountAndGas,
@@ -674,6 +719,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
             disabled={!canMint}
             onClick={handleMint}
             width="100%"
+            auto={false}
           >
             {`Mint ${toSymbol}`}
           </BtnWapper>

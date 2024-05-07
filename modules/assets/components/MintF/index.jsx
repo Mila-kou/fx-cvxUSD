@@ -230,7 +230,7 @@ export default function MintF({ slippage, assetInfo }) {
             }
           }
 
-          const convertParams = await getZapInParams({
+          const [convertParams] = await getZapInParams({
             from: symbol,
             to: baseSymbol,
             amount: _ETHtAmountAndGas,
@@ -314,7 +314,7 @@ export default function MintF({ slippage, assetInfo }) {
         )
       } else {
         to = fxUSD_GatewayRouterContract._address
-        const convertParams = await getZapInParams({
+        const [convertParams] = await getZapInParams({
           from: symbol,
           to: baseSymbol,
           amount: _ETHtAmountAndGas,
@@ -475,6 +475,7 @@ export default function MintF({ slippage, assetInfo }) {
           disabled={!canMint}
           onClick={handleMint}
           width="100%"
+          auto={false}
         >
           {`Mint ${toSymbol}`}
         </BtnWapper>

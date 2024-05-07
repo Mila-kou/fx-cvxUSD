@@ -85,7 +85,10 @@ export const get1InchData = async (
 
   if (!data) return null
 
-  const { tx } = data
+  const { tx, toAmount } = data
 
-  return [fromAddress, amountIn, tx.to, tx.data, minConvertOutAmount]
+  return [
+    [fromAddress, amountIn, tx.to, tx.data, minConvertOutAmount],
+    toAmount,
+  ]
 }

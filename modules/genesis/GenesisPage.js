@@ -217,7 +217,7 @@ export default function GenesisPage() {
       if (checkNotZoroNum(fromAmount)) {
         const _ETHtAmountAndGas = await getMintGas(fromAmount)
 
-        const convertParams = await getZapInParams({
+        const [convertParams] = await getZapInParams({
           from: symbol,
           to: baseSymbol,
           amount: _ETHtAmountAndGas,
@@ -275,7 +275,7 @@ export default function GenesisPage() {
 
         if (!_minOut) return
 
-        const convertParams = await getZapInParams({
+        const [convertParams] = await getZapInParams({
           from: symbol,
           to: baseSymbol,
           amount: _ETHtAmountAndGas,
