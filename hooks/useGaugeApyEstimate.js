@@ -102,7 +102,7 @@ const useGaugeApyEstimate = () => {
         const _lpPrice = getLpTokenPrice(lpAddress)
         let _tvl = cBN(totalSupply).div(1e18).times(_lpPrice)
 
-        if (['fxUSD', 'rUSD'].includes(poolType)) {
+        if (['fxUSD', 'rUSD', 'btcUSD'].includes(poolType)) {
           const poolTotalSupply =
             baseToken[baseSymbol].data.RebalancePoolRegistryPoolTotalSupplyRes
           const _fPrice = tokens[poolType]?.price
