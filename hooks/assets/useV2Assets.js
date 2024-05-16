@@ -10,7 +10,7 @@ import { updateAsset } from '@/store/slices/asset'
 import useFxUSDNavs from '@/modules/assets/hooks/useFxUSDNavs'
 
 const useV2Assets = (arr) => {
-  const { blockNumber } = useWeb3()
+  const { blockNumber, _currentAccount } = useWeb3()
   const multiCallsV2 = useMutiCallV2()
   const dispatch = useDispatch()
 
@@ -21,7 +21,7 @@ const useV2Assets = (arr) => {
   const fetchAssetsData = async () => {
     try {
       const calls = arr.map((item) => {
-        const { totalSupply, nav } = (
+        const { totalSupply, nav, mintAt, coolingOffPeriod } = (
           item.isX ? getXContract(item.address) : getFContract(item.address)
         ).contract.methods
 
@@ -30,6 +30,10 @@ const useV2Assets = (arr) => {
           isX: item.isX,
           totalSupplyRes: totalSupply(),
           nav: nav(),
+          mintAtRes:
+            item.isNewOracle && item.isX ? mintAt(_currentAccount) : -1,
+          coolingOffPeriodRes:
+            item.isNewOracle && item.isX ? coolingOffPeriod() : -1,
         }
 
         return obj

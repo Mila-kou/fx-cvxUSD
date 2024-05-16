@@ -35,11 +35,19 @@ const useBaseToken = () => {
   const fetchBaseTokensData = async (arr) => {
     try {
       const calls = arr.map((item) => {
-        const { contracts, baseSymbol, decimals = 18, hasFundingCost } = item
+        const {
+          contracts,
+          baseSymbol,
+          baseTokenType,
+          decimals = 18,
+          hasFundingCost,
+        } = item
         const { nav: fNav, totalSupply: fTokenTotalSupply } = getFContract(
           contracts.fToken
         ).contract.methods
-        const { nav: xNav } = getXContract(contracts.xToken).contract.methods
+        const { nav: xNav, totalSupply: xTokenTotalSupply } = getXContract(
+          contracts.xToken
+        ).contract.methods
 
         const { bonusRatio } = reservePoolContract.methods
 
@@ -77,7 +85,7 @@ const useBaseToken = () => {
 
         return {
           baseSymbol,
-
+          baseTokenType,
           twapPriceRes: getPrice(),
           priceRateRes: getUnderlyingValue((10 ** decimals).toString()),
           fNav: fNav(),
@@ -111,6 +119,7 @@ const useBaseToken = () => {
           isRecap: isUnderCollateral(),
 
           fTokenTotalSupplyRes: fTokenTotalSupply(),
+          xTokenTotalSupplyRes: xTokenTotalSupply(),
 
           borrowRateSnapshotRes: hasFundingCost ? borrowRateSnapshot() : null,
           fundingRateRes: hasFundingCost ? getFundingRate() : 0,

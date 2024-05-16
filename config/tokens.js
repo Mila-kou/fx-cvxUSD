@@ -209,8 +209,8 @@ export const contracts = {
     '0x345a345DAd48c3504113539ce83c0cB765627B54',
   fxUSD_ReservePoolV2: '0xb592E01dd77084b36430ffCB9c9D2F76fDE32631',
 
-  fxUSD_FxStETHTwapOracle: '0xa84360896cE9152d1780c546305BB54125F962d9',
-  fxUSD_FxFrxETHTwapOracle: '0x939c38921c961DecB3cc16f601C32d07C41cd25C',
+  fxUSD_FxStETHTwapOracle: '0x83bDc459Ac3887B2A61aA47DCA3Acac26a333D20', // wstETH updatePriceOracle
+  fxUSD_FxFrxETHTwapOracle: '0xffe563c168C01e05DA4f3d81938AF158466ad793', // sfrxETH updatePriceOracle
 
   // rUSD
   rUSD: '0x65D72AA8DA931F047169112fcf34f52DbaAE7D18',
@@ -227,7 +227,8 @@ export const contracts = {
     '0x7EB0ed173480299e1310d55E04Ece401c2B06626',
   rUSD_weETH_RebalancePoolRegistry:
     '0xb1dD23468a69DFDDb7211298e609C0DB1522B2D6',
-  rUSD_FxeETHTwapOracle: '0x834E87262A00b0aC38eD49Cb1110838866bE4a20',
+  rUSD_FxeETHTwapOracle: '0x834E87262A00b0aC38eD49Cb1110838866bE4a20', // weETH updatePriceOracle
+  // rUSD_FxeETHTwapOracle: '0xE1B11bb0B6d1b321EEb7e0298A3f9EB92171693B', // 5.15 new
 
   rUSD_FxInitialFund_ezETH: '0x7612bCAbd3D66c71fF740472e063be6a74f126D1',
   rUSD_ezETH_Treasury: '0x38965311507D4E54973F81475a149c09376e241e',
@@ -242,7 +243,8 @@ export const contracts = {
     '0xBa947cba270D30967369Bf1f73884Be2533d7bDB',
   rUSD_ezETH_RebalancePoolRegistry:
     '0x5e3ca2A5736fb093328e4CA19A9A1966025f3905',
-  rUSD_FxezETHTwapOracle: '0x51Ef9FD457b9607911fB6cB72B9E47ffd5f053a6',
+  rUSD_FxezETHTwapOracle: '0x51Ef9FD457b9607911fB6cB72B9E47ffd5f053a6', // ezETH updatePriceOracle
+  // rUSD_FxezETHTwapOracle: '0x564a464c9C357de593Fa48EfD784048a9e366523', // 5.15 new
 
   // aCVX
   FxInitialFund_aCVX: '0x4F16fbac03d342795521A4BD9C46c21781c2aE04',
@@ -289,7 +291,7 @@ export const contracts = {
     '0xBB549046497364A1E26F94f7e93685Dc29FAd8c0',
   btcUSD_WBTC_RebalancePoolRegistry:
     '0x163283D59FE2A579f2920A7F8eA19F7799B32fA0',
-  btcUSD_WBTCTwapOracle: '0x7e94c07C6C3b2C931E9517529F56553770a7C0D2',
+  btcUSD_WBTCTwapOracle: '0x7e94c07C6C3b2C931E9517529F56553770a7C0D2', // WBTC updatePriceOracle
   btcUSD_RebalancePoolGaugeClaimer_WBTC:
     '0x93670efe073e0d75BE16445779a8399E6b418004',
   btcUSD_RebalancePoolSplitter: '0x054fAC7aA44F85A59FD41c33006336EC8b03E916',
@@ -708,6 +710,7 @@ export const BASE_TOKENS_MAP = {
   fxETH: {
     baseSymbol: 'fxETH',
     baseName: 'stETH',
+    baseTokenType: 'fETH',
     contracts: {
       market: contracts.fx_Market,
       treasury: contracts.fx_stETHTreasury,
@@ -717,6 +720,7 @@ export const BASE_TOKENS_MAP = {
   wstETH: {
     baseSymbol: 'wstETH',
     baseName: 'stETH',
+    baseTokenType: 'fxUSD',
     contracts: {
       market: contracts.fxUSD_wstETH_Market,
       treasury: contracts.fxUSD_wstETH_Treasury,
@@ -729,6 +733,7 @@ export const BASE_TOKENS_MAP = {
   sfrxETH: {
     baseSymbol: 'sfrxETH',
     baseName: 'frxETH',
+    baseTokenType: 'fxUSD',
     contracts: {
       market: contracts.fxUSD_sfrxETH_Market,
       treasury: contracts.fxUSD_sfrxETH_Treasury,
@@ -741,6 +746,7 @@ export const BASE_TOKENS_MAP = {
   weETH: {
     baseSymbol: 'weETH',
     baseName: 'eETH',
+    baseTokenType: 'rUSD',
     contracts: {
       market: contracts.rUSD_weETH_Market,
       treasury: contracts.rUSD_weETH_Treasury,
@@ -753,6 +759,7 @@ export const BASE_TOKENS_MAP = {
   ezETH: {
     baseSymbol: 'ezETH',
     baseName: 'ezETH',
+    baseTokenType: 'rUSD',
     contracts: {
       market: contracts.rUSD_ezETH_Market,
       treasury: contracts.rUSD_ezETH_Treasury,
@@ -765,6 +772,7 @@ export const BASE_TOKENS_MAP = {
   aCVX: {
     baseSymbol: 'aCVX',
     baseName: 'CVX',
+    baseTokenType: 'fCVX',
     contracts: {
       market: contracts.aCVX_Market,
       treasury: contracts.aCVX_Treasury,
@@ -777,6 +785,7 @@ export const BASE_TOKENS_MAP = {
   WBTC: {
     baseSymbol: 'WBTC',
     baseName: 'WBTC',
+    baseTokenType: 'btcUSD',
     decimals: TOKENS_INFO.WBTC[2],
     hasFundingCost: true,
     contracts: {
@@ -815,7 +824,7 @@ export const ASSET_MAP = {
   },
   fxUSD: {
     symbol: 'fxUSD',
-    baseList: ['ETH', 'stETH', 'frxETH'],
+    baseList: ['stETH', 'frxETH'],
     address: contracts.FxUSD,
     descrition: '$1.00 Pegged',
     icon: '/tokens/fxusd.svg',
@@ -827,7 +836,7 @@ export const ASSET_MAP = {
   },
   xstETH: {
     symbol: 'xstETH',
-    baseList: ['ETH', 'stETH'],
+    baseList: ['stETH'],
     name: 'xstETH (Lido)',
     address: contracts.fxUSD_wstETH_LeveragedToken,
     descrition: 'Long stETH up to 4.3x',
@@ -837,10 +846,11 @@ export const ASSET_MAP = {
     isShow24Change: true,
     baseSymbol: 'wstETH',
     baseTokenInfo: BASE_TOKENS_MAP.wstETH,
+    isNewOracle: true,
   },
   xfrxETH: {
     symbol: 'xfrxETH',
-    baseList: ['ETH', 'frxETH'],
+    baseList: ['frxETH'],
     name: 'xfrxETH (Frax)',
     address: contracts.fxUSD_sfrxETH_LeveragedToken,
     descrition: 'Long frxETH up to 4.3x',
@@ -850,6 +860,7 @@ export const ASSET_MAP = {
     isShow24Change: true,
     baseSymbol: 'sfrxETH',
     baseTokenInfo: BASE_TOKENS_MAP.sfrxETH,
+    isNewOracle: true,
   },
   fCVX: {
     isComing: true,
@@ -883,7 +894,7 @@ export const ASSET_MAP = {
   },
   rUSD: {
     symbol: 'rUSD',
-    baseList: ['ETH', 'eETH'],
+    baseList: ['eETH'],
     name: 'rUSD',
     address: contracts.rUSD,
     descrition: '$1.00 Pegged',
@@ -898,7 +909,7 @@ export const ASSET_MAP = {
   },
   xeETH: {
     symbol: 'xeETH',
-    baseList: ['ETH', 'eETH'],
+    baseList: ['eETH'],
     name: 'xeETH (ether.fi)',
     address: contracts.rUSD_weETH_LeveragedToken,
     descrition: 'Long eETH up to 4.3x',
@@ -911,7 +922,7 @@ export const ASSET_MAP = {
   },
   xezETH: {
     symbol: 'xezETH',
-    baseList: ['ETH'],
+    baseList: [],
     name: 'xezETH (Renzo)',
     address: contracts.rUSD_ezETH_LeveragedToken,
     descrition: 'Long ezETH up to 4.3x',

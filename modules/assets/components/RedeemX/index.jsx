@@ -9,7 +9,7 @@ import { useToken } from '@/hooks/useTokenInfo'
 import noPayableAction from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 import useApprove from '@/hooks/useApprove'
-import { DetailCell, NoticeCard, BonusCard } from '../Common'
+import { DetailCell, NoticeCard, NoticeMaxMinPrice, BonusCard } from '../Common'
 import {
   useV2MarketContract,
   useFxUSD_GatewayRouter_contract,
@@ -65,7 +65,7 @@ const MINT_OPTIONS = {
 }
 
 export default function RedeemX({ slippage, assetInfo }) {
-  const { _currentAccount, sendTransaction } = useWeb3()
+  const { _currentAccount, sendTransaction, blockTime } = useWeb3()
   const [isLoading, setIsLoading] = useState(0)
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
@@ -76,7 +76,13 @@ export default function RedeemX({ slippage, assetInfo }) {
   const { updateOutAmount, resetOutAmount, minOutAmount, getMinOutBySlippage } =
     useOutAmount(slippage)
 
-  const { symbol: fromSymbol, nav_text, baseTokenInfo, baseList } = assetInfo
+  const {
+    symbol: fromSymbol,
+    baseTokenInfo,
+    baseList,
+    mintAtRes,
+    coolingOffPeriodRes,
+  } = assetInfo
 
   const { baseSymbol, contracts } = baseTokenInfo
 
@@ -117,9 +123,17 @@ export default function RedeemX({ slippage, assetInfo }) {
     isFXBouns,
     reservePoolBalancesRes,
     price,
+    prices,
     maxRedeemableXTokenRes,
     isRecap,
+    xNav_min,
+    xNav_min_text,
+    xNav_min_invalid,
   } = baseTokenData
+
+  const [nav, nav_text] = useMemo(() => {
+    return [xNav_min, xNav_min_text]
+  }, [xNav_min, xNav_min_text])
 
   const [fromAmount, setFromAmount] = useState(0)
   const [priceLoading, setPriceLoading] = useState(false)
@@ -201,7 +215,7 @@ export default function RedeemX({ slippage, assetInfo }) {
     // let _fTokenMintPausedInStabilityMode = false
 
     // redeem
-    if (redeemPaused || isRecap) {
+    if (redeemPaused || isRecap || xNav_min_invalid) {
       setPausedError(
         'f(x) governance decision to temporarily disable redemption.'
       )
@@ -225,8 +239,20 @@ export default function RedeemX({ slippage, assetInfo }) {
     return false
   }
 
+  const [isLockRedeem = false, mintAtEnd] = useMemo(() => {
+    const _mintAtEnd = cBN(mintAtRes).plus(coolingOffPeriodRes)
+    let _isLockRedeem = false
+    if (cBN(blockTime).lt(_mintAtEnd)) {
+      _isLockRedeem = true
+    }
+    const _mintAtEnd_text = new Date(
+      _mintAtEnd.toString(10) * 1000
+    ).toLocaleString()
+    return [_isLockRedeem, _mintAtEnd_text]
+  }, [mintAtRes, coolingOffPeriodRes, blockTime])
+
   const canRedeem = useMemo(() => {
-    if (checkPause() || priceLoading) {
+    if (checkPause() || priceLoading || isLockRedeem) {
       return false
     }
     let _enableETH = cBN(tokenAmount).isGreaterThan(0)
@@ -250,6 +276,7 @@ export default function RedeemX({ slippage, assetInfo }) {
     minOutAmount,
     priceLoading,
     needApprove,
+    isLockRedeem,
   ])
 
   useEffect(() => {
@@ -425,7 +452,7 @@ export default function RedeemX({ slippage, assetInfo }) {
     if (symbol === baseSymbol) {
       return baseTokenData?.baseTokenPrices?.inRedeemX
     }
-    if (baseList.filter((item) => item !== 'ETH').includes(symbol)) {
+    if (baseList.includes(symbol)) {
       return baseTokenData.prices?.inRedeemX
     }
     return tokens[symbol].price
@@ -474,8 +501,23 @@ export default function RedeemX({ slippage, assetInfo }) {
           ]}
         />
       )}
+
+      {isLockRedeem && (
+        <NoticeCard
+          tooltip="New minted xTokens are non-transferable for 30 minutes"
+          content={[
+            `Since you recently minted xTokens, please wait until ${mintAtEnd} to redeem`,
+          ]}
+        />
+      )}
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
       {maxError ? <NoticeCard content={[maxError]} /> : null}
+      {prices?.isShowErrorMaxMinPrice && (
+        <NoticeMaxMinPrice
+          maxPrice={prices.maxPrice}
+          minPrice={prices.minPrice}
+        />
+      )}
       <div className={styles.action}>
         <BtnWapper
           loading={isLoading}

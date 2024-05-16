@@ -20,9 +20,9 @@ const explorerUri = 'https://www.etherscan.io'
 const chainInfo = {
   id: '0x1',
   token: 'ETH',
-  label: 'Gateway update02',
+  label: 'oracle online-02',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_662788219e7a49afab4a8641a858ec16',
+    'https://rpc.phalcon.blocksec.com/rpc_e30bb166205d4d43b331a49828957a92',
 }
 
 const contracts = {

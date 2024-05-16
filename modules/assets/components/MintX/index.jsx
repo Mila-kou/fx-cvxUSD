@@ -14,7 +14,7 @@ import {
 import { useToken } from '@/hooks/useTokenInfo'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
-import { DetailCell, NoticeCard, BonusCard } from '../Common'
+import { DetailCell, NoticeCard, NoticeMaxMinPrice, BonusCard } from '../Common'
 import styles from './styles.module.scss'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
@@ -93,8 +93,8 @@ export default function MintX({ slippage, assetInfo }) {
   const {
     isF,
     symbol: toSymbol,
-    nav,
-    nav_text,
+    nav: _nav,
+    nav_text: _nav_text,
     baseTokenInfo,
     baseList,
   } = assetInfo
@@ -142,7 +142,15 @@ export default function MintX({ slippage, assetInfo }) {
     isRecap,
     stabilityRatioRes,
     fundingRate = 0,
+    prices,
+    xNav_max,
+    xNav_max_text,
+    xNav_max_invalid,
   } = baseTokenData
+
+  const [nav, nav_text] = useMemo(() => {
+    return [xNav_max, xNav_max_text]
+  }, [xNav_max])
 
   const isSwap = false
 
@@ -481,7 +489,7 @@ export default function MintX({ slippage, assetInfo }) {
 
   const checkPause = () => {
     // 无效价格不可以mint
-    if (mintPaused || isRecap || !isBaseTokenPriceValid) {
+    if (mintPaused || isRecap || xNav_max_invalid) {
       setPausedError(`f(x) governance decision to temporarily disable minting.`)
       return true
     }
@@ -527,10 +535,10 @@ export default function MintX({ slippage, assetInfo }) {
 
   const fromUsd = useMemo(() => {
     if (symbol === baseSymbol) {
-      return baseTokenData?.baseTokenPrices?.inMint
+      return baseTokenData?.baseTokenPrices?.inMintX
     }
     if (baseList.includes(symbol)) {
-      return baseTokenData?.prices?.inMint
+      return baseTokenData?.prices?.inMintX
     }
     return tokens[symbol].price
   }, [symbol, tokens, baseSymbol, baseTokenData])
@@ -614,6 +622,14 @@ export default function MintX({ slippage, assetInfo }) {
         />
       ) : null}
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
+
+      {prices?.isShowErrorMaxMinPrice && (
+        <NoticeMaxMinPrice
+          maxPrice={prices.maxPrice}
+          minPrice={prices.minPrice}
+          isMint
+        />
+      )}
 
       <div className={styles.action}>
         <BtnWapper

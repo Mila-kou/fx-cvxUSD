@@ -81,34 +81,63 @@ const getIsFXBouns = (baseToken, isCRLow130) => {
   return false
 }
 
-const getPrices = ({ twapPriceRes, priceRateRes, decimals = 18 }) => {
-  const safePrice = (twapPriceRes._safePrice / 1e18).toFixed(2) ?? 0
+const getPrices = ({
+  baseTokenType,
+  twapPriceRes,
+  priceRateRes,
+  decimals = 18,
+}) => {
+  const safePrice = twapPriceRes._safePrice / 1e18 ?? 0
+  const safePrice_num = (twapPriceRes._safePrice / 1e18).toFixed(2) ?? 0
   const priceRate = priceRateRes / 10 ** decimals ?? 0
 
   // ETH 与 stETH/frxETH
+  const maxPrice = twapPriceRes._maxUnsafePrice / 1e18 ?? 0
+  const maxPrice_num = maxPrice.toFixed(2) ?? 0
+  const minPrice = twapPriceRes._minUnsafePrice / 1e18 ?? 0
+  const minPrice_num = minPrice.toFixed(2) ?? 0
+
+  const isShowErrorMaxMinPrice =
+    minPrice == 0 ? true : cBN(maxPrice).minus(minPrice).div(minPrice).gt(0.01)
+
+  const isNewOralcePrice = ['fxUSD'].includes(baseTokenType)
+
   const prices = {
-    inMint: safePrice,
-    inRedeemF: safePrice,
-    inRedeemX: safePrice,
+    inMint: safePrice_num,
+    inRedeemF: safePrice_num,
+    inRedeemX: safePrice_num,
+    inMintF: safePrice_num,
+    inMintX: safePrice_num,
+    maxPrice: maxPrice_num,
+    minPrice: minPrice_num,
+    isShowErrorMaxMinPrice: isShowErrorMaxMinPrice && isNewOralcePrice,
   }
 
-  const baseSafePrice = (safePrice * priceRate).toFixed(2) ?? 0
+  const baseSafePrice = cBN(safePrice).times(priceRate).toFixed(2) ?? 0
   // wstETH/sfrxETH
+  const baseToken_maxPrice = cBN(maxPrice).times(priceRate).toFixed(2) ?? 0
+  const baseToken_minPrice = cBN(minPrice).times(priceRate).toFixed(2) ?? 0
+
   const baseTokenPrices = {
     inMint: baseSafePrice,
     inRedeemF: baseSafePrice,
     inRedeemX: baseSafePrice,
+    inMintF: baseSafePrice,
+    inMintX: baseSafePrice,
+    maxPrice: baseToken_maxPrice,
+    minPrice: baseToken_minPrice,
   }
 
-  if (!twapPriceRes._isValid) {
-    const minPrice = (twapPriceRes._minUnsafePrice / 1e18).toFixed(2) ?? 0
-    const maxPrice = (twapPriceRes._maxUnsafePrice / 1e18).toFixed(2) ?? 0
+  if (isNewOralcePrice || !twapPriceRes._isValid) {
+    prices.inMintF = minPrice_num
+    prices.inRedeemX = minPrice_num
+    prices.inMintX = maxPrice_num
+    prices.inRedeemF = maxPrice_num
 
-    prices.inRedeemF = maxPrice
-    prices.inRedeemX = minPrice
-
-    baseTokenPrices.inRedeemF = (maxPrice * priceRate).toFixed(2) ?? 0
-    baseTokenPrices.inRedeemX = (minPrice * priceRate).toFixed(2) ?? 0
+    baseTokenPrices.inMintF = baseToken_minPrice
+    baseTokenPrices.inRedeemX = baseToken_minPrice
+    baseTokenPrices.inMintX = baseToken_maxPrice
+    baseTokenPrices.inRedeemF = baseToken_maxPrice
   }
 
   return {
@@ -144,6 +173,7 @@ const processBaseToken = (data, blockTime) => {
   const baseTokens = []
 
   Object.values(data).forEach((baseToken) => {
+    const { baseTokenType } = baseToken
     const { prices, baseTokenPrices } = getPrices(baseToken)
 
     const totalBaseToken = checkNotZoroNum(baseToken.totalBaseTokenRes)
@@ -181,6 +211,40 @@ const processBaseToken = (data, blockTime) => {
     const isCRLow130 = cBN(baseToken.collateralRatioRes).isLessThan(
       baseToken.stabilityRatioRes
     )
+    // xNav = (totalBaseToken*baseTokenPrices-totalFToken*1)/totalXToken
+    let _prices_maxPrice = prices.inMint
+    let _prices_minPrice = prices.inMint
+    const _filterSymbol = ['fxUSD']
+    if (_filterSymbol.includes(baseTokenType)) {
+      _prices_maxPrice = prices.maxPrice
+      _prices_minPrice = prices.minPrice
+    }
+    const xNav_max = checkNotZoroNum(baseToken.xTokenTotalSupplyRes)
+      ? cBN(_prices_maxPrice)
+          .times(baseToken.totalBaseTokenRes)
+          .minus(baseToken.fTokenTotalSupplyRes)
+          .div(baseToken.xTokenTotalSupplyRes)
+          .times(1e18)
+          .toFixed(0, 1)
+      : 0
+    const xNav_max_invalid = xNav_max < 0
+    const xNav_max_text = xNav_max_invalid
+      ? '0.00'
+      : checkNotZoroNumOption(xNav_max, fb4(xNav_max, false, 18, 2, false))
+
+    const xNav_min = checkNotZoroNum(baseToken.xTokenTotalSupplyRes)
+      ? cBN(_prices_minPrice)
+          .times(baseToken.totalBaseTokenRes)
+          .minus(baseToken.fTokenTotalSupplyRes)
+          .div(baseToken.xTokenTotalSupplyRes)
+          .times(1e18)
+          .toFixed(0, 1)
+      : 0
+
+    const xNav_min_invalid = xNav_min < 0
+    const xNav_min_text = xNav_min_invalid
+      ? '0.00'
+      : checkNotZoroNumOption(xNav_min, fb4(xNav_min, false, 18, 2, false))
 
     baseTokens.push({
       ...baseToken,
@@ -200,6 +264,12 @@ const processBaseToken = (data, blockTime) => {
       ...getLeverageData(baseToken),
       ...getFees(baseToken),
       fundingRate: getFundingRate(baseToken, blockTime),
+      xNav_max,
+      xNav_max_text,
+      xNav_min,
+      xNav_min_text,
+      xNav_max_invalid,
+      xNav_min_invalid,
     })
   })
 

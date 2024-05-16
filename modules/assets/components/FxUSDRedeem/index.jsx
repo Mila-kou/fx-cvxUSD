@@ -17,7 +17,7 @@ import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 import useApprove from '@/hooks/useApprove'
 import useGlobal from '@/hooks/useGlobal'
-import { DetailCell, NoticeCard, BonusCard } from '../Common'
+import { DetailCell, NoticeCard, BonusCard, NoticeMaxMinPrice } from '../Common'
 import Button from '@/components/Button'
 import {
   useFxUSD_GatewayRouter_contract,
@@ -170,7 +170,15 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       if (['stETH'].includes(symbol)) {
         return ['wstETH', baseToken.wstETH.data, wstETH_m, _isRecap, _isFXBouns]
       }
-
+      if (['frxETH'].includes(symbol)) {
+        return [
+          'sfrxETH',
+          baseToken.sfrxETH.data,
+          sfrxETH_m,
+          _isRecap,
+          _isFXBouns,
+        ]
+      }
       const _baseSymbol = wstETH_m.isGreaterThan(sfrxETH_m)
         ? 'wstETH'
         : 'sfrxETH'
@@ -209,6 +217,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     price,
     bonusRatioRes,
     stabilityRatioRes,
+    prices,
   } = baseTokenData
 
   const [fromAmount, setFromAmount] = useState(0)
@@ -702,6 +711,14 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
           ]}
         />
       ) : null}
+
+      {prices?.isShowErrorMaxMinPrice && (
+        <NoticeMaxMinPrice
+          maxPrice={prices.maxPrice}
+          minPrice={prices.minPrice}
+        />
+      )}
+
       <div className={styles.action}>
         {routeTypeRef.current === ROUTE_TYPE.CURVE || symbol === baseSymbol ? (
           <Button

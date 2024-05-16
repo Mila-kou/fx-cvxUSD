@@ -46,13 +46,40 @@ export function BonusCard({ title, amount, symbol }) {
   )
 }
 
-export function NoticeCard({ content = [] }) {
+export function NoticeCard({ content = [], tooltip }) {
   return (
     <div className={styles.noticeCard}>
-      <p className={styles.title}>Notice</p>
+      <p className={styles.title}>
+        Notice{' '}
+        {tooltip ? (
+          <Tooltip
+            placement="top"
+            title={<p className="text-[16px] py-[8px]">{tooltip}</p>}
+            arrow
+            color="#000"
+          >
+            <InfoCircleOutlined />
+          </Tooltip>
+        ) : null}
+      </p>
       {content.map((item) => (
         <p>{item}</p>
       ))}
+    </div>
+  )
+}
+
+export function NoticeMaxMinPrice({ maxPrice, minPrice, isMint }) {
+  return (
+    <div className={styles.noticeCard}>
+      <p>
+        The market appears to be experiencing volatility and there is a
+        difference of more than 1% between our price feeds. Please note that{' '}
+        {isMint ? 'minting' : 'redeeming'} now exposes you to the worst possible
+        price.
+      </p>
+      {/* <p> MaxPrice: {maxPrice}</p>
+          <p> MinPrice: {minPrice}</p> */}
     </div>
   )
 }

@@ -9,7 +9,7 @@ import { useToken } from '@/hooks/useTokenInfo'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import styles from './styles.module.scss'
 import useApprove from '@/hooks/useApprove'
-import { DetailCell, NoticeCard, BonusCard } from '../Common'
+import { DetailCell, NoticeCard, NoticeMaxMinPrice, BonusCard } from '../Common'
 import {
   useFxUSD_GatewayRouter_contract,
   useV2MarketContract,
@@ -86,6 +86,7 @@ export default function RedeemF({ slippage, assetInfo }) {
     isBaseTokenPriceValid,
     reservePoolBalancesRes,
     price,
+    prices,
     bonusRatioRes,
     stabilityRatioRes,
     isFXBouns,
@@ -391,7 +392,7 @@ export default function RedeemF({ slippage, assetInfo }) {
     if (symbol === baseSymbol) {
       return baseTokenData?.baseTokenPrices?.inRedeemF
     }
-    if (baseList.filter((item) => item !== 'ETH').includes(symbol)) {
+    if (baseList.includes(symbol)) {
       return baseTokenData.prices?.inRedeemF
     }
     return tokens[symbol].price
@@ -464,6 +465,12 @@ export default function RedeemF({ slippage, assetInfo }) {
           ]}
         />
       ) : null}
+      {prices?.isShowErrorMaxMinPrice && (
+        <NoticeMaxMinPrice
+          maxPrice={prices.maxPrice}
+          minPrice={prices.minPrice}
+        />
+      )}
       <div className={styles.action}>
         <BtnWapper
           loading={isLoading}

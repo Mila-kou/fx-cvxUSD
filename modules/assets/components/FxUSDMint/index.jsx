@@ -9,7 +9,7 @@ import { cBN, checkNotZoroNum, formatBalance, fb4 } from '@/utils/index'
 import { useToken } from '@/hooks/useTokenInfo'
 import noPayableAction, { noPayableErrorAction } from '@/utils/noPayableAction'
 import { getGas } from '@/utils/gas'
-import { DetailCell, NoticeCard, BonusCard } from '../Common'
+import { DetailCell, NoticeCard, NoticeMaxMinPrice, BonusCard } from '../Common'
 import styles from './styles.module.scss'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
@@ -233,6 +233,8 @@ export default function FxUSDMint({ slippage, assetInfo }) {
     isBaseTokenPriceValid,
 
     fTokenTotalSupplyRes,
+
+    prices,
     maxMintableFTokenRes,
   } = baseTokenData
 
@@ -642,11 +644,11 @@ export default function FxUSDMint({ slippage, assetInfo }) {
 
   const fromUsd = useMemo(() => {
     if (symbol === baseSymbol) {
-      return baseTokenData?.baseTokenPrices?.inMint
+      return baseTokenData?.baseTokenPrices?.inMintF
     }
 
     if (baseList.includes(symbol)) {
-      return baseTokenData?.prices?.inMint
+      return baseTokenData?.prices?.inMintF
     }
 
     return tokens[symbol].price
@@ -701,6 +703,14 @@ export default function FxUSDMint({ slippage, assetInfo }) {
       ) : null}
 
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
+
+      {prices?.isShowErrorMaxMinPrice && (
+        <NoticeMaxMinPrice
+          maxPrice={prices.maxPrice}
+          minPrice={prices.minPrice}
+          isMint
+        />
+      )}
 
       <div className={styles.action}>
         {routeTypeRef.current === ROUTE_TYPE.CURVE ? (

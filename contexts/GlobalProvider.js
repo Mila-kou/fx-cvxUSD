@@ -46,7 +46,8 @@ function GlobalProvider({ children }) {
   fetchBaseTokensData([BASE_TOKENS_MAP.ezETH])
   fetchBaseTokensData(ASSET_MAP.btcUSD.baseTokenInfos)
 
-  useV2Assets([ASSET_MAP.xstETH, ASSET_MAP.xfrxETH, ASSET_MAP.xeETH])
+  useV2Assets([ASSET_MAP.xstETH, ASSET_MAP.xfrxETH])
+  useV2Assets([ASSET_MAP.xeETH])
 
   useV2Assets([
     ASSET_MAP.xezETH,
