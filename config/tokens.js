@@ -227,8 +227,8 @@ export const contracts = {
     '0x7EB0ed173480299e1310d55E04Ece401c2B06626',
   rUSD_weETH_RebalancePoolRegistry:
     '0xb1dD23468a69DFDDb7211298e609C0DB1522B2D6',
-  rUSD_FxeETHTwapOracle: '0x834E87262A00b0aC38eD49Cb1110838866bE4a20', // weETH updatePriceOracle
-  // rUSD_FxeETHTwapOracle: '0xE1B11bb0B6d1b321EEb7e0298A3f9EB92171693B', // 5.15 new
+  // rUSD_FxeETHTwapOracle: '0x834E87262A00b0aC38eD49Cb1110838866bE4a20', // weETH updatePriceOracle
+  rUSD_FxeETHTwapOracle: '0xE1B11bb0B6d1b321EEb7e0298A3f9EB92171693B', // 5.15 new
 
   rUSD_FxInitialFund_ezETH: '0x7612bCAbd3D66c71fF740472e063be6a74f126D1',
   rUSD_ezETH_Treasury: '0x38965311507D4E54973F81475a149c09376e241e',
@@ -243,8 +243,8 @@ export const contracts = {
     '0xBa947cba270D30967369Bf1f73884Be2533d7bDB',
   rUSD_ezETH_RebalancePoolRegistry:
     '0x5e3ca2A5736fb093328e4CA19A9A1966025f3905',
-  rUSD_FxezETHTwapOracle: '0x51Ef9FD457b9607911fB6cB72B9E47ffd5f053a6', // ezETH updatePriceOracle
-  // rUSD_FxezETHTwapOracle: '0x564a464c9C357de593Fa48EfD784048a9e366523', // 5.15 new
+  // rUSD_FxezETHTwapOracle: '0x51Ef9FD457b9607911fB6cB72B9E47ffd5f053a6', // ezETH updatePriceOracle
+  rUSD_FxezETHTwapOracle: '0x564a464c9C357de593Fa48EfD784048a9e366523', // 5.15 new
 
   // aCVX
   FxInitialFund_aCVX: '0x4F16fbac03d342795521A4BD9C46c21781c2aE04',
@@ -919,6 +919,7 @@ export const ASSET_MAP = {
     isShow24Change: true,
     baseSymbol: 'weETH',
     baseTokenInfo: BASE_TOKENS_MAP.weETH,
+    isNewOracle: true,
   },
   xezETH: {
     symbol: 'xezETH',
@@ -932,6 +933,7 @@ export const ASSET_MAP = {
     isShow24Change: true,
     baseSymbol: 'ezETH',
     baseTokenInfo: BASE_TOKENS_MAP.ezETH,
+    isNewOracle: true,
   },
   btcUSD: {
     symbol: 'btcUSD',

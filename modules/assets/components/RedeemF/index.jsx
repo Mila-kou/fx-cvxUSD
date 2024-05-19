@@ -260,7 +260,7 @@ export default function RedeemF({ slippage, assetInfo }) {
     // 默认比例 0.01
     if (_account !== _currentAccount) {
       _mockAmount = cBN(1).shiftedBy(18).toString()
-      _mockRatio = cBN(tokenAmount).div(cBN(10).pow(18)).toFixed(4, 1)
+      _mockRatio = cBN(tokenAmount).div(cBN(10).pow(18)).toString()
     }
 
     try {

@@ -199,7 +199,7 @@ export default function MintF({ slippage, assetInfo }) {
       _mockRatio = cBN(fromAmount)
         .div(cBN(10).pow(config.zapTokens[symbol].decimals))
         .multipliedBy(100)
-        .toFixed(4, 1)
+        .toString()
       // console.log('fromAmount----', _mockAmount, _mockRatio)
     }
     try {
