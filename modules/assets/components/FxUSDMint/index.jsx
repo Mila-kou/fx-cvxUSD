@@ -170,7 +170,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
       const weETH_data = baseToken.weETH.data
       const ezETH_data = baseToken.ezETH.data
 
-      if (['weETH'].includes(symbol)) {
+      if (['weETH', 'eETH'].includes(symbol)) {
         setBaseSymbol('weETH')
         return
       }
