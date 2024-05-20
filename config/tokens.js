@@ -291,7 +291,8 @@ export const contracts = {
     '0xBB549046497364A1E26F94f7e93685Dc29FAd8c0',
   btcUSD_WBTC_RebalancePoolRegistry:
     '0x163283D59FE2A579f2920A7F8eA19F7799B32fA0',
-  btcUSD_WBTCTwapOracle: '0x7e94c07C6C3b2C931E9517529F56553770a7C0D2', // WBTC updatePriceOracle
+  // btcUSD_WBTCTwapOracle: '0x7e94c07C6C3b2C931E9517529F56553770a7C0D2', // WBTC updatePriceOracle
+  btcUSD_WBTCTwapOracle: '0x4F8330946669D71014eFDcE30Ef19A256643FBA8',
   btcUSD_RebalancePoolGaugeClaimer_WBTC:
     '0x93670efe073e0d75BE16445779a8399E6b418004',
   btcUSD_RebalancePoolSplitter: '0x054fAC7aA44F85A59FD41c33006336EC8b03E916',
@@ -962,6 +963,7 @@ export const ASSET_MAP = {
     isShow24Change: true,
     baseSymbol: 'WBTC',
     baseTokenInfo: BASE_TOKENS_MAP.WBTC,
+    isNewOracle: true,
   },
 }
 

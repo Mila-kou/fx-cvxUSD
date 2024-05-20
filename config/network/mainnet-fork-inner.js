@@ -17,13 +17,13 @@ const explorerUri = 'https://www.etherscan.io'
 //   label: 'Mainnet Fork',
 //   rpcUrl: 'https://apitest.aladdin.club/rpc',
 // }
-// const chainInfo = {
-//   id: '0x1864e', // 99918
-//   token: 'ETH',
-//   label: 'online-1',
-//   rpcUrl:
-//     'https://rpc.phalcon.blocksec.com/rpc_ed3f76d88fac4cf5a1adeae87afce429',
-// }
+const chainInfo = {
+  id: '0x1864b', // 99915
+  token: 'ETH',
+  label: 'online-1',
+  rpcUrl:
+    'https://rpc.phalcon.blocksec.com/rpc_6fbe0e31ae764c8b812a591a7b367bfc',
+}
 
 // const chainInfo = {
 //   id: '0x1864e', // 99918 0x1864d 99917
@@ -33,13 +33,13 @@ const explorerUri = 'https://www.etherscan.io'
 //     'https://rpc.phalcon.blocksec.com/rpc_c64f88ceb5e246c5ba32a40cb690ac4b',
 // }
 
-const chainInfo = {
-  id: '0x1864d', // 9991
-  token: 'ETH',
-  label: 'new-oracle2',
-  rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_30a834e782d14f2e9f30eae4bcd399b1',
-}
+// const chainInfo = {
+//   id: '0x1864d', // 9991
+//   token: 'ETH',
+//   label: 'new-oracle2',
+//   rpcUrl:
+//     'https://rpc.phalcon.blocksec.com/rpc_30a834e782d14f2e9f30eae4bcd399b1',
+// }
 
 const contracts = {
   ...tokensInfo.contracts,

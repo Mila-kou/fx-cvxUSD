@@ -100,7 +100,7 @@ const getPrices = ({
   const isShowErrorMaxMinPrice =
     minPrice == 0 ? true : cBN(maxPrice).minus(minPrice).div(minPrice).gt(0.01)
 
-  const isNewOralcePrice = ['fxUSD', 'rUSD'].includes(baseTokenType)
+  const isNewOralcePrice = true // ['fxUSD', 'rUSD'].includes(baseTokenType)
 
   const prices = {
     inMint: safePrice_num,
@@ -214,8 +214,8 @@ const processBaseToken = (data, blockTime) => {
     // xNav = (totalBaseToken*baseTokenPrices-totalFToken*1)/totalXToken
     let _prices_maxPrice = prices.inMint
     let _prices_minPrice = prices.inMint
-    const _filterSymbol = ['fxUSD', 'rUSD']
-    if (_filterSymbol.includes(baseTokenType)) {
+    const isNewOracle = true // ['fxUSD', 'rUSD'].includes(baseTokenType)
+    if (isNewOracle) {
       _prices_maxPrice = prices.maxPrice
       _prices_minPrice = prices.minPrice
     }

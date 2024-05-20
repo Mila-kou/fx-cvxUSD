@@ -21,7 +21,8 @@ const chainInfo = {
   id: '0x1',
   token: 'ETH',
   label: 'oracle',
-  rpcUrl: 'https://rpc.phalcon.blocksec.com/',
+  rpcUrl:
+    'https://rpc.phalcon.blocksec.com/rpc_0fc96e1965174397ac21e9eed1c69b30',
 }
 
 const contracts = {
