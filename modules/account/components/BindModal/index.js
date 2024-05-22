@@ -35,14 +35,14 @@ export default function BindModal({ onCancel }) {
           mint fx Token.
         </p> */}
         <p className="mt-[10px]">
-          4 FX/day for 1 fToken staked in any Stability Pool and/or LP on
+          4 FX points/day for 1 fToken staked in any Stability Pool and/or LP on
           Convex/f(x).
         </p>
         <p className="mt-[10px]">
-          2 FX/day for 1 xToken held in wallet and/or LP on Convex/f(x).
+          2 FX points/day for 1 xToken held in wallet and/or LP on Convex/f(x).
         </p>
         <p className="mt-[10px]">
-          50% - 50% FX split between referrer and referral.
+          50% - 50% split between referrer and referral.
         </p>
 
         {/* <p className="mt-[32px]">Invitees</p>
