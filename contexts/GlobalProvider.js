@@ -63,7 +63,7 @@ function GlobalProvider({ children }) {
   const fx_info = useInfo()
   const allGaugeBaseInfo = useGauge()
 
-  // useSignCode()
+  const signCodeProps = useSignCode()
 
   const [
     { data: ConvexVaultsAPY, refetch: refetch3 },
@@ -118,6 +118,8 @@ function GlobalProvider({ children }) {
       fAssetList: [],
       xAssetList: [],
 
+      ...signCodeProps,
+
       showRouteCard,
       setShowRouteCard,
     }),
@@ -134,6 +136,8 @@ function GlobalProvider({ children }) {
       ConvexVaultsAPY,
       cvxFXN_sdFXN_apy,
       allGaugeBaseInfo,
+
+      signCodeProps,
 
       showRouteCard,
       setShowRouteCard,

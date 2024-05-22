@@ -54,7 +54,7 @@ const MINT_OPTIONS = {
   ],
 }
 
-export default function FxUSDMint({ slippage, assetInfo }) {
+export default function FxUSDMint({ slippage, assetInfo, children }) {
   const { showRouteCard } = useGlobal()
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
@@ -713,6 +713,7 @@ export default function FxUSDMint({ slippage, assetInfo }) {
       )}
 
       <div className={styles.action}>
+        {children}
         {routeTypeRef.current === ROUTE_TYPE.CURVE ? (
           <Button
             style={{ fontSize: '20px' }}

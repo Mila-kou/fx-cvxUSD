@@ -25,11 +25,12 @@ const routers = [
   ['Earn', '/earn'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
-  ['btcUSD Genesis', '/genesis/btcUSD_WBTC', 'New Launch!'],
+  // ['btcUSD Genesis', '/genesis/btcUSD_WBTC', 'New Launch!'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
   ['Lock', '/lock'],
   // ['Offering', '/offering'],
+  ['Referral', '/account'],
 ]
 
 export default function AppHeader() {
@@ -196,6 +197,10 @@ export default function AppHeader() {
       label: 'rUSD ezETH Genesis',
       onClick: () => push('/genesis/rUSD_ezETH'),
     },
+    {
+      label: 'btcUSD Genesis',
+      onClick: () => push('/genesis/btcUSD_WBTC'),
+    },
   ]
 
   return (
@@ -282,40 +287,20 @@ export default function AppHeader() {
           <div className={styles.accountPanel}>
             <div ref={refAccountPanel} className={styles.content}>
               <div className={styles.header}>
-                <p>Account</p>
+                <p>{_account}</p>
                 <CloseOutlined onClick={toggleShowAccountPanel} />
               </div>
-              <p className={styles.title}>{_account}</p>
+              <Link href="/account">
+                <p className={styles.title}>Account Center</p>
+              </Link>
               <a
                 className={styles.histories}
                 href={historyUrl}
                 target="_blank"
                 rel="noreferrer"
               >
-                Transaction Histories <ShareAltOutlined />
+                Transaction Histories
               </a>
-              <p className={styles.title}>Assets</p>
-              {assets.map((item) => (
-                <div className={styles.assetItem} key={item.symbol}>
-                  <div className={styles.logo}>
-                    <img src={item.icon} className="w-[35px] h-[35px]" />
-                  </div>
-                  <div className={styles.main}>
-                    <div>{item.name}</div>
-                    <div className={styles.amount}>
-                      {item.amount} {item.symbol}
-                    </div>
-                  </div>
-                  {item.showAdd ? (
-                    <div
-                      className={styles.add}
-                      onClick={() => handleAdd(item.symbol)}
-                    >
-                      Add to wallet
-                    </div>
-                  ) : null}
-                </div>
-              ))}
               <div className={styles.disBtn} onClick={handleDisconnect}>
                 Disconnect Wallet
               </div>

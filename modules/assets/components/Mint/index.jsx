@@ -20,7 +20,7 @@ import { useFx_FxGateway } from '@/hooks/useContracts'
 import useCurveSwap from '@/hooks/useCurveSwap'
 import useOutAmount from '../../hooks/useOutAmount'
 
-export default function Mint({ slippage, assetInfo }) {
+export default function Mint({ slippage, assetInfo, children }) {
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const [clearTrigger, clearInput] = useClearInput()
@@ -613,6 +613,7 @@ export default function Mint({ slippage, assetInfo }) {
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
 
       <div className={styles.action}>
+        {children}
         <BtnWapper
           loading={mintLoading}
           disabled={!canMint}

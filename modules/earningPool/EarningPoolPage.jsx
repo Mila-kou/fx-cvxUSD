@@ -362,7 +362,7 @@ export default function EarningPoolPage() {
         risks with staking tokens in any of the staking pools listed above. It
         is possible that the f(x) system will enter stability mode for various
         assets in volatile market conditions. User’s supplied assets may be
-        redeemed for ETH, an ETH Liquid Staking Derivative or an X-token
+        redeemed for ETH, an ETH Liquid Staking Derivative or an xToken
         depending on which stability pool their tokens are deposited. Please
         proceed with caution.
       </p>

@@ -29,7 +29,7 @@ const MINT_OPTIONS = {
   ],
 }
 
-export default function MintF({ slippage, assetInfo }) {
+export default function MintF({ slippage, assetInfo, children }) {
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
@@ -479,6 +479,7 @@ export default function MintF({ slippage, assetInfo }) {
       )}
 
       <div className={styles.action}>
+        {children}
         <BtnWapper
           loading={mintLoading}
           disabled={!canMint}

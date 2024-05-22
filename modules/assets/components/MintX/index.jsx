@@ -77,7 +77,7 @@ const MINT_OPTIONS = {
   ],
 }
 
-export default function MintX({ slippage, assetInfo }) {
+export default function MintX({ slippage, assetInfo, children }) {
   const { showRouteCard } = useGlobal()
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
@@ -632,6 +632,7 @@ export default function MintX({ slippage, assetInfo }) {
       )}
 
       <div className={styles.action}>
+        {children}
         <BtnWapper
           loading={mintLoading}
           disabled={!canMint}

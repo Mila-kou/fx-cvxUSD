@@ -11,9 +11,10 @@ import RedeemX from '../RedeemX'
 import MintF from '../MintF'
 import RedeemF from '../RedeemF'
 import SlippageModal, { useSlippage } from '../SlippageModal'
+import useGlobal from '@/hooks/useGlobal'
+import BindModal from '../../../account/components/BindModal'
 
 // import Select from '@/components/Select'
-// import useGlobal from '@/hooks/useGlobal'
 
 // const ROUTES = [
 //   { label: 'Converter', value: '' },
@@ -24,6 +25,8 @@ const AUTO = 0.3
 
 export default function Swap({ isValidPrice, assetInfo }) {
   const [tab, setTab] = useState(0)
+  const [showBindModal, setShowBindModal] = useState(false)
+  const { myInviter } = useGlobal()
 
   const slippageProps = useSlippage(AUTO)
 
@@ -69,7 +72,21 @@ export default function Swap({ isValidPrice, assetInfo }) {
           </div>
         ))}
       </div>
-      {!!(tab == 0) && <MintCmp slippage={slippage} assetInfo={assetInfo} />}
+      {!!(tab == 0) && (
+        <MintCmp slippage={slippage} assetInfo={assetInfo}>
+          {!myInviter && (
+            <div className="flex gap-[6px] mb-[16px] text-[var(--yellow-color)] justify-between">
+              Earn FX Points
+              <p
+                className="text-[var(--a-button-color)] cursor-pointer"
+                onClick={() => setShowBindModal(true)}
+              >
+                Enter a Code
+              </p>
+            </div>
+          )}
+        </MintCmp>
+      )}
       {!!(tab == 1) && (
         <RedeemCmp
           slippage={slippage}
@@ -79,6 +96,8 @@ export default function Swap({ isValidPrice, assetInfo }) {
       )}
 
       <SlippageModal {...slippageProps} />
+
+      {showBindModal && <BindModal onCancel={() => setShowBindModal(false)} />}
     </div>
   )
 }

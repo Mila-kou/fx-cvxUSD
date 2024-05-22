@@ -1,0 +1,27 @@
+@import '../../../../assets/css/mixin.scss';
+
+.content {
+  h2 {
+    color: var(--main-text-color);
+    font-size: 26px;
+    font-weight: 600;
+  }
+
+  input {
+    height: 42px;
+    width: 100%;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+    background: var(--white-background-color);
+    color: #000;
+    padding: 16px;
+    text-align: left;
+    &::placeholder {
+      color: var(--priamry-color);
+    }
+    &[disabled] {
+      background: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
