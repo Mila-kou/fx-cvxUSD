@@ -28,9 +28,9 @@ const routers = [
   // ['btcUSD Genesis', '/genesis/btcUSD_WBTC', 'New Launch!'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
+  ['Referral', '/account', 'New Launch!'],
   ['Lock', '/lock'],
   // ['Offering', '/offering'],
-  ['Referral', '/account'],
 ]
 
 export default function AppHeader() {
