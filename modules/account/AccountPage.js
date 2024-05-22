@@ -47,7 +47,7 @@ export default function BoosterAccountPage() {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h2 className="flex gap-[6px] mb-[32px]">Account Center</h2>
+        <h2 className="flex gap-[6px] mb-[32px]">My Account</h2>
         <h2 className="flex gap-[6px] mb-[16px] justify-between">
           My Referral Link
           {!myCode && (
@@ -107,10 +107,11 @@ export default function BoosterAccountPage() {
 
         {/* <PointsPerToken /> */}
         <p className="mt-[10px]">
-          4 FX/day for 1 fToken staked in any LP on Curve/Convex/f(x).
+          4 FX/day for 1 fToken staked in any Stability Pool and/or LP on
+          Convex/f(x).
         </p>
         <p className="mt-[10px]">
-          2 FX/day for 1 xToken held in LP on Curve/Convex/f(x).
+          2 FX/day for 1 xToken held in wallet and/or LP on Curve/Convex/f(x).
         </p>
         <p className="mt-[10px]">
           50% - 50% FX split between referrer and referral.
