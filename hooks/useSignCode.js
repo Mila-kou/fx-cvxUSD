@@ -110,7 +110,7 @@ const useSignCode = () => {
       // console.log('data-dataCode--', data?.data?.dataCode)
       if (data?.data?.dataCode == 2) {
         notification.success({
-          description: `You are joined f(x) Protocol now!`,
+          description: `You have joined f(x) Protocol now!`,
         })
 
         refreshCodeInfo()

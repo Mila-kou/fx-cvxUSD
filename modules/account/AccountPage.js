@@ -130,8 +130,11 @@ export default function BoosterAccountPage() {
           className="flex gap-[6px] mb-[16px] justify-between"
           style={{ alignItems: 'center' }}
         >
-          You have been referred by a brilliant degen. <br />
-          Please enter his/her referral code to earn FX points.
+          You have been referred by a brilliant degen.
+          <br />
+          {!myInviter && (
+            <>Please enter his/her referral code to earn FX points.</>
+          )}
           {myInviter ? (
             <p>{myInviter}</p>
           ) : (
