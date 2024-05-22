@@ -92,7 +92,7 @@ const useSignCode = () => {
   const processSign = async () => {
     try {
       if (code === myCode) {
-        return 'Can not binding yourself.'
+        return 'Can not apply yourself.'
       }
       if (!currentAccount || !code || !codeList) {
         return 'Please try again later'

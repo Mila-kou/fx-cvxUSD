@@ -29,7 +29,7 @@ export default function BindModal({ onCancel }) {
         {/* <h2 className="mb-[16px]">FX Points Season</h2>
 
         <p className="text-[16px]">Welcome to FX Protocol Points Season.</p> */}
-        <h2 className="flex gap-[6px] mb-[16px]">How to earn?</h2>
+        <h2 className="flex gap-[6px] mb-[16px]">FX points distribution</h2>
         {/* <p className="mt-[10px] text-[16px]">
           Now if you binding a referral code, you will receive Points when you
           mint fx Token.
@@ -68,7 +68,7 @@ export default function BindModal({ onCancel }) {
           onClick={bind}
           loading={loading}
         >
-          Binding
+          Apply
         </Button>
       </div>
     </Modal>

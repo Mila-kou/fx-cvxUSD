@@ -291,7 +291,7 @@ export default function AppHeader() {
                 <CloseOutlined onClick={toggleShowAccountPanel} />
               </div>
               <Link href="/account">
-                <p className={styles.title}>My Account</p>
+                <p className={styles.title}>Referral Center</p>
               </Link>
               <a
                 className={styles.histories}

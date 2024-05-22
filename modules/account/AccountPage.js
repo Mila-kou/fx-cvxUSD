@@ -47,7 +47,7 @@ export default function BoosterAccountPage() {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h2 className="flex gap-[6px] mb-[32px]">My Account</h2>
+        <h2 className="flex gap-[6px] mb-[32px]">Referral Center</h2>
         <h2 className="flex gap-[6px] mb-[16px] justify-between">
           My Referral Link
           {!myCode && (
@@ -103,7 +103,7 @@ export default function BoosterAccountPage() {
       </div>
 
       <div className={styles.content}>
-        <h2 className="flex gap-[6px] mb-[16px]">How to earn?</h2>
+        <h2 className="flex gap-[6px] mb-[16px]">FX points distribution</h2>
 
         {/* <PointsPerToken /> */}
         <p className="mt-[10px]">
@@ -130,11 +130,14 @@ export default function BoosterAccountPage() {
           className="flex gap-[6px] mb-[16px] justify-between"
           style={{ alignItems: 'center' }}
         >
-          You have been referred by a brilliant degen.
+          If you've been referred by a fellow degen
           <br />
-          {!myInviter && (
-            <>Please enter his/her referral code to earn FX points.</>
-          )}
+          {/* {!myInviter && ( */}
+          {/* <> */}
+          please enter their referral code so you can both start earning FX
+          points.
+          {/* </> */}
+          {/* )} */}
           {myInviter ? (
             <p>{myInviter}</p>
           ) : (
