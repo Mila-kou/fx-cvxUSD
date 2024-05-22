@@ -111,7 +111,7 @@ export default function BoosterAccountPage() {
           Convex/f(x).
         </p>
         <p className="mt-[10px]">
-          2 FX/day for 1 xToken held in wallet and/or LP on Curve/Convex/f(x).
+          2 FX/day for 1 xToken held in wallet and/or LP on Convex/f(x).
         </p>
         <p className="mt-[10px]">
           50% - 50% FX split between referrer and referral.
@@ -126,8 +126,12 @@ export default function BoosterAccountPage() {
       </div>
 
       <div className={styles.content}>
-        <h2 className="flex gap-[6px] mb-[16px] justify-between">
-          Your Invite Code
+        <h2
+          className="flex gap-[6px] mb-[16px] justify-between"
+          style={{ alignItems: 'center' }}
+        >
+          You have been referred by a brilliant degen. <br />
+          Please enter his/her referral code to earn FX points.
           {myInviter ? (
             <p>{myInviter}</p>
           ) : (

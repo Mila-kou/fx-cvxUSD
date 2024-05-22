@@ -39,7 +39,7 @@ export default function BindModal({ onCancel }) {
           Convex/f(x).
         </p>
         <p className="mt-[10px]">
-          2 FX/day for 1 xToken held in wallet and/or LP on Curve/Convex/f(x).
+          2 FX/day for 1 xToken held in wallet and/or LP on Convex/f(x).
         </p>
         <p className="mt-[10px]">
           50% - 50% FX split between referrer and referral.
