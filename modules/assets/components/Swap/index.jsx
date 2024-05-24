@@ -81,7 +81,7 @@ export default function Swap({ isValidPrice, assetInfo }) {
                 className="text-[var(--a-button-color)] cursor-pointer"
                 onClick={() => setShowBindModal(true)}
               >
-                Enter a Code
+                Enter a Referral Code
               </p>
             </div>
           )}

@@ -148,7 +148,7 @@ export default function BoosterAccountPage() {
                 setModalType('bind')
               }}
             >
-              Enter a Code
+              Enter a Referral Code
             </p>
           )}
         </h2>

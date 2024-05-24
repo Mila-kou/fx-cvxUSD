@@ -50,7 +50,7 @@ export default function BindModal({ onCancel }) {
         <p className="mt-[32px]">Inviter</p>
         <PointsPerToken /> */}
 
-        <p className="mt-[32px] mb-[10px]">Enter a code</p>
+        <p className="mt-[32px] mb-[10px]">Enter a Referral Code</p>
         <input
           value={code}
           onChange={(e) => {
