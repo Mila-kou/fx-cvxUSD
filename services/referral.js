@@ -38,3 +38,13 @@ export const createCode = (data) =>
   axios.post(`${_fetchUrl}/api2/inviteCode`, data)
 
 export const invite = (data) => axios.post(`${_fetchUrl}/api2/invite`, data)
+
+export const getReferralUserInfo = (address) =>
+  fetcher({
+    url: `${_fetchUrl}/api2/get_referral_userInfo?`,
+    params: {
+      address,
+    },
+  })
+    .then((res) => res.data)
+    .catch(() => {})

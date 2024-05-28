@@ -1,10 +1,11 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import { notification } from 'antd'
+import { UserAddOutlined } from '@ant-design/icons'
 import useGlobal from '@/hooks/useGlobal'
 import useWeb3 from '@/hooks/useWeb3'
 import Button from '@/components/Button'
-import { getInviteCodeInfo } from '@/services/referral'
+import { getInviteCodeInfo, getReferralUserInfo } from '@/services/referral'
 import CreateModal from './components/CreateModal'
 import BindModal from './components/BindModal'
 import PointsPerToken from './components/PointsPerToken'
@@ -15,13 +16,20 @@ export default function BoosterAccountPage() {
   const { currentAccount } = useWeb3()
   const [modalType, setModalType] = useState('')
 
-  const [{ data: codeList }] = useQueries({
+  const [{ data: codeList }, { data: referralUserInfo }] = useQueries({
     queries: [
       {
         queryKey: ['inviteCodeInfo', myCode],
         queryFn: () => getInviteCodeInfo(myCode),
         enabled: !!myCode,
-        refetchInterval: 10000,
+        refetchInterval: 30000,
+        initialData: [],
+      },
+      {
+        queryKey: ['referralUserInfo', currentAccount],
+        queryFn: () => getReferralUserInfo(currentAccount),
+        enabled: !!currentAccount,
+        refetchInterval: 30000,
         initialData: [],
       },
     ],
@@ -46,6 +54,17 @@ export default function BoosterAccountPage() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.content}>
+        {/* <h2 className="flex gap-[6px] mb-[32px]">fx Boost 1st Round 4/1-5/1</h2> */}
+        <p className="flex gap-[6px] mb-[16px]">
+          <UserAddOutlined />
+          f(x) Referral Program 1st Epoch
+        </p>
+        <p>My FX Points</p>
+        <h2 className="text-[26px] text-blue">
+          {referralUserInfo?.score || 0}
+        </h2>
+      </div>
       <div className={styles.content}>
         <h2 className="flex gap-[6px] mb-[32px]">Referral Center</h2>
         <h2 className="flex gap-[6px] mb-[16px] justify-between">
@@ -78,8 +97,8 @@ export default function BoosterAccountPage() {
 
         <div className="flex justify-between">
           <p className="w-[140px]">Address</p>
-          {/* <p>Action</p>
-        <p>Points</p> */}
+          {/* <p>Action</p> */}
+          <p>Points</p>
         </div>
         {codeList.length ? (
           codeList.map(({ signerAddress, action, points }) => (
@@ -89,10 +108,10 @@ export default function BoosterAccountPage() {
               </p>
               {/* <p className="text-[var(--second-text-color)] text-[16px]">
                 {action || 'xxxx'}
-              </p>
+              </p>  */}
               <p className="text-[var(--second-text-color)] text-[16px]">
-                {points || 'xxxx'}
-          </p> */}
+                {points || '-'}
+              </p>
             </div>
           ))
         ) : (
@@ -139,7 +158,7 @@ export default function BoosterAccountPage() {
           {/* </> */}
           {/* )} */}
           {myInviter ? (
-            <p>{myInviter}</p>
+            <p className="text-blue text-[22px]">{myInviter}</p>
           ) : (
             <p
               className="text-[var(--a-button-color)] cursor-pointer"
