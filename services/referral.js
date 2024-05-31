@@ -41,7 +41,17 @@ export const invite = (data) => axios.post(`${_fetchUrl}/api2/invite`, data)
 
 export const getReferralUserInfo = (address) =>
   fetcher({
-    url: `${_fetchUrl}/api2/get_referral_userInfo?`,
+    url: `${_fetchUrl}/api2/get_referral_userInfo`,
+    params: {
+      address,
+    },
+  })
+    .then((res) => res.data)
+    .catch(() => {})
+
+export const getReferralConvex = (address) =>
+  fetcher({
+    url: `${_fetchUrl}/api2/get_referral_convex`,
     params: {
       address,
     },

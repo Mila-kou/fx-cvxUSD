@@ -4,6 +4,47 @@
   max-width: 863px;
   margin: 60px auto;
 
+  .header {
+    border-radius: 10px;
+    max-width: 1112px;
+    width: 100%;
+    background: var(--background-color);
+    padding: 36px;
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--main-text-color);
+    }
+
+    .headerTitle {
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      font-size: 18px;
+      gap: 6px;
+      img {
+        height: 16px;
+        margin-bottom: 4px;
+      }
+    }
+
+    .items {
+      display: flex;
+      gap: 30px;
+
+      .item {
+        flex: 1;
+        border-radius: 10px;
+        padding: 24px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: var(--input-background-color);
+      }
+    }
+  }
+
   .content {
     background: var(--background-color);
     margin-top: 24px;
