@@ -101,7 +101,7 @@ export default function BoosterAccountPage() {
             </h2>
           </div>
           <div className={styles.item}>
-            <p>My Stake DAO Point Airdrop</p>
+            <p>My StakeDAO Point Airdrop</p>
             <h2 className="text-[22px] text-blue">
               {Number(referralStakedao?.usd || '0').toFixed(4)}
             </h2>
