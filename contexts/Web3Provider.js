@@ -39,7 +39,7 @@ function Web3ContextProvider({ children }) {
     if (wallet?.accounts?.length) {
       window.localStorage.setItem('selectedWallet', wallet.label)
       return wallet.accounts[0].address
-      // return '0x20216577f78eE7D6d5b2b962C744a950efc77437'
+      // return '0x8560293f8d0583118cc1386133d307ace5acc8b6'
       // return '0x11E91BB6d1334585AA37D8F4fde3932C7960B938'
     }
     return ''

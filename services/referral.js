@@ -58,3 +58,13 @@ export const getReferralConvex = (address) =>
   })
     .then((res) => res.data)
     .catch(() => {})
+
+export const getReferralStakedao = (address) =>
+  fetcher({
+    url: `${_fetchUrl}/api2/get_referral_stakedao`,
+    params: {
+      address,
+    },
+  })
+    .then((res) => res.data)
+    .catch(() => {})

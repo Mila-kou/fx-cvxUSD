@@ -9,6 +9,7 @@ import {
   getInviteCodeInfo,
   getReferralUserInfo,
   getReferralConvex,
+  getReferralStakedao,
 } from '@/services/referral'
 import CreateModal from './components/CreateModal'
 import BindModal from './components/BindModal'
@@ -24,6 +25,7 @@ export default function BoosterAccountPage() {
     { data: codeList },
     { data: referralUserInfo },
     { data: referralConvex },
+    { data: referralStakedao },
   ] = useQueries({
     queries: [
       {
@@ -43,6 +45,13 @@ export default function BoosterAccountPage() {
       {
         queryKey: ['referralConvex', currentAccount],
         queryFn: () => getReferralConvex(currentAccount),
+        enabled: !!currentAccount,
+        refetchInterval: 30000,
+        initialData: {},
+      },
+      {
+        queryKey: ['referralStakedao', currentAccount],
+        queryFn: () => getReferralStakedao(currentAccount),
         enabled: !!currentAccount,
         refetchInterval: 30000,
         initialData: {},
@@ -82,13 +91,19 @@ export default function BoosterAccountPage() {
           <div className={styles.item}>
             <p>My FX Points</p>
             <h2 className="text-[22px] text-blue">
-              {referralUserInfo?.score || 0}
+              {Number(referralUserInfo?.score || '0').toFixed(4)}
             </h2>
           </div>
           <div className={styles.item}>
             <p>My Convex Point Airdrop</p>
             <h2 className="text-[22px] text-blue">
               {Number(referralConvex?.usd || '0').toFixed(4)}
+            </h2>
+          </div>
+          <div className={styles.item}>
+            <p>My Stake DAO Point Airdrop</p>
+            <h2 className="text-[22px] text-blue">
+              {Number(referralStakedao?.usd || '0').toFixed(4)}
             </h2>
           </div>
         </div>
