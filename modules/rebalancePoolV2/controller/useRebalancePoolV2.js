@@ -255,8 +255,11 @@ const useRebalancePoolV2 = (infoKey, baseToken) => {
         const decimals = config.TOKENS_INFO?.[symbol]?.[2] || 18
 
         const claimable_text = numberLess(
-          checkNotZoroNumOption(reward, fb4(reward, false, decimals)),
-          0.01
+          checkNotZoroNumOption(
+            reward,
+            fb4(reward, false, decimals, decimals == 8 ? 4 : 2)
+          ),
+          decimals == 8 ? 0.0001 : 0.01
         )
         let tvl = cBN(0)
         if (checkNotZoroNum(_price) && checkNotZoroNum(reward)) {
