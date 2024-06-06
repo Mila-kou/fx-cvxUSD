@@ -2,6 +2,14 @@ import { Skeleton } from 'antd'
 import { ReloadOutlined } from '@ant-design/icons'
 import cn from 'classnames'
 import styles from './styles.module.scss'
+import { ROUTE_MARKET_TYPE, ROUTE_TYPE } from '@/hooks/useZap'
+
+const ROUTE_ICONS = {
+  [ROUTE_TYPE.FX_ROUTE]: '/images/fx.svg',
+  [ROUTE_TYPE.INCH]: '/images/inch.svg',
+  [ROUTE_TYPE.CURVE]: '/images/curve.svg',
+  [ROUTE_TYPE.COWSWAP]: '/images/cowswap.svg',
+}
 
 export default function RouteCard({
   options,
@@ -13,7 +21,7 @@ export default function RouteCard({
   return (
     <div className="mt-[32px]">
       <div className="flex justify-between items-center">
-        <p>Select a route to perform a swap</p>
+        <p>Select a route to perform the swap</p>
         <ReloadOutlined className="cursor-pointer" onClick={onRefresh} />
       </div>
       <p className="text-second text-[14px]">
@@ -44,7 +52,11 @@ export default function RouteCard({
               )}
               onClick={() => {
                 if (routeType !== item.routeType && !loading) {
+                  // if (ROUTE_MARKET_TYPE.includes(item.routeType)) {
+                  //   window.open(item.swapUrl)
+                  // } else {
                   onSelect(item.routeType)
+                  // }
                 }
               }}
             >
@@ -61,7 +73,13 @@ export default function RouteCard({
               </div>
               <div className="flex justify-between mt-[8px]">
                 <p className="text-second text-[16px]">≈ ${item.usd}</p>
-                <p className="text-second text-[16px]">via {item.routeType}</p>
+                <p className="text-second text-[16px] flex gap-[6px] items-center">
+                  <img
+                    className="w-[18px] h-[18px]"
+                    src={ROUTE_ICONS[item.routeType]}
+                  />
+                  {item.routeType}
+                </p>
               </div>
             </div>
           )

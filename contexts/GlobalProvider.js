@@ -32,7 +32,7 @@ function GlobalProvider({ children }) {
   const { blockNumber } = useWeb3()
   const { theme, toggleTheme } = useTheme()
   const [showMenuPanel, { toggle: toggleShowMenuPanel }] = useToggle()
-  const [showRouteCard, setShowRouteCard] = useState('')
+  const [showRouteCard, setShowRouteCard] = useState(true)
 
   const { fetchBaseTokensData } = useBaseToken()
 

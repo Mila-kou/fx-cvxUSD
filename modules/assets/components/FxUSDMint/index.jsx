@@ -13,7 +13,7 @@ import { DetailCell, NoticeCard, NoticeMaxMinPrice, BonusCard } from '../Common'
 import styles from './styles.module.scss'
 import config from '@/config/index'
 import useApprove from '@/hooks/useApprove'
-import { ROUTE_TYPE, useZapIn } from '@/hooks/useZap'
+import { ROUTE_TYPE, useZapIn, ROUTE_MARKET_TYPE } from '@/hooks/useZap'
 import {
   useFXUSD_contract,
   useFxUSD_GatewayRouter_contract,
@@ -24,6 +24,7 @@ import useCurveSwapV2 from '@/hooks/useCurveSwapV2'
 import RouteCard from '../RouteCard'
 import useRouteList from '../RouteCard/useRouteList'
 import Button from '@/components/Button'
+import useCowSwap from '@/hooks/useCowSwap'
 
 const MINT_OPTIONS = {
   fxUSD: [
@@ -62,6 +63,7 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
   const [clearTrigger, clearInput] = useClearInput()
   const { getZapInParams } = useZapIn()
   const { swapByCurve, getOutAmountByCurve } = useCurveSwapV2()
+  const { getOutAmountByCowSwap } = useCowSwap()
   const timerRef = useRef(null)
 
   const {
@@ -330,7 +332,7 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
     clearTimeout(timerRef.curent)
     timerRef.curent = setTimeout(() => {
       getMinAmount(true)
-    }, 20000)
+    }, 30000)
 
     if (needLoading) {
       setPriceLoading(true)
@@ -404,9 +406,17 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
                     from: config.zapTokens[symbol].address,
                     decimals: config.zapTokens[symbol].decimals,
                     to: address,
-                    amount: _ETHtAmountAndGas,
+                    amount: fromAmount,
                   })
                   res = cBN(res).multipliedBy(1e18).toString()
+                } else if (convertParams?.routeType === ROUTE_TYPE.COWSWAP) {
+                  res = await getOutAmountByCowSwap({
+                    from: config.zapTokens[symbol].address,
+                    decimals: config.zapTokens[symbol].decimals,
+                    to: address,
+                    amount: fromAmount,
+                  })
+                  res = cBN(res).toString()
                 } else {
                   console.log(
                     'fxUSD_GatewayRouterContract--传参--',
@@ -448,7 +458,11 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
                 }
                 // 比例计算
                 return {
-                  outAmount: isBTCMock ? res : res * _mockRatio,
+                  outAmount:
+                    isBTCMock ||
+                    ROUTE_MARKET_TYPE.includes(convertParams?.routeType)
+                      ? res
+                      : res * _mockRatio,
                   result: res,
                 }
               }
@@ -654,6 +668,13 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
     return tokens[symbol].price
   }, [symbol, tokens, baseToken, baseTokenData])
 
+  const goMarket = (routeType) => {
+    const route = routeList.find((item) => item.routeType === routeType)
+    if (route && route.swapUrl) {
+      window.open(route.swapUrl, '_blank')
+    }
+  }
+
   return (
     <div className={styles.container}>
       <BalanceInput
@@ -714,15 +735,13 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
 
       <div className={styles.action}>
         {children}
-        {routeTypeRef.current === ROUTE_TYPE.CURVE ? (
+        {ROUTE_MARKET_TYPE.includes(routeTypeRef.current) ? (
           <Button
             style={{ fontSize: '20px' }}
-            loading={mintLoading}
-            disabled={!canMint}
-            onClick={handleMint}
+            onClick={() => goMarket(routeTypeRef.current)}
             width="100%"
           >
-            {`Mint ${toSymbol}`}
+            {`Trade on ${routeTypeRef.current}`}
           </Button>
         ) : (
           <BtnWapper

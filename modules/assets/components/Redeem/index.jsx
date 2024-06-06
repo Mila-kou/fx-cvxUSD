@@ -464,7 +464,7 @@ export default function Redeem({ slippage, assetInfo }) {
         // )
         // console.log('dstOut---', dstOut, baseOut)
         apiCall = await FxGatewayContract.methods.redeem(
-          ['0xAF345c813CE17Cc5837BfD14a910D365223F3B95', route],
+          [config.contracts.redeemConverter, route],
           _fTokenIn,
           _xTokenIn,
           baseOut.toString(),

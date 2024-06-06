@@ -303,7 +303,7 @@ export default function RedeemX({ slippage, assetInfo }) {
     clearTimeout(timerRef.curent)
     timerRef.curent = setTimeout(() => {
       getMinAmount(true)
-    }, 20000)
+    }, 30000)
 
     // if (cBN(fromAmount).isGreaterThan(maxRedeemableXTokenRes)) {
     //   setMaxError(

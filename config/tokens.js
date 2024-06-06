@@ -441,9 +441,27 @@ export const TOKENS_INFO = {
   fCVX: ['fCVX', tokens.fCVX, 18, 'fCVX', 'fCVX'],
   xCVX: ['xCVX', tokens.xCVX, 18, 'xCVX', 'xCVX'],
   ezETH: ['ezETH', tokens.ezETH, 18, 'ezETH', 'ezETH'],
+  fxUSD: ['fxUSD', tokens.fxUSD, 18, 'fxUSD', 'fxUSD'],
+  btcUSD: ['btcUSD', tokens.btcUSD, 18, 'btcUSD', 'btcUSD'],
+  rUSD: ['rUSD', tokens.rUSD, 18, 'rUSD', 'rUSD'],
 }
 
 export const zapTokens = {
+  fxUSD: {
+    symbol: 'fxUSD',
+    decimals: TOKENS_INFO.fxUSD[2],
+    address: TOKENS_INFO.fxUSD[1],
+  },
+  btcUSD: {
+    symbol: 'btcUSD',
+    decimals: TOKENS_INFO.btcUSD[2],
+    address: TOKENS_INFO.btcUSD[1],
+  },
+  rUSD: {
+    symbol: 'rUSD',
+    decimals: TOKENS_INFO.rUSD[2],
+    address: TOKENS_INFO.rUSD[1],
+  },
   USDC: {
     symbol: 'USDC',
     decimals: TOKENS_INFO.usdc[2],

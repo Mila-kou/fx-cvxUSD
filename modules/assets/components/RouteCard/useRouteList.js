@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useZapIn, ROUTE_TYPE } from '@/hooks/useZap'
 import { cBN, fb4 } from '@/utils/index'
+import { zapTokens } from '@/config/tokens'
 
 // {
 //   amount: '0.03564',
@@ -14,8 +15,12 @@ const getZapInSupportRoutes = (from, to, symbol) => {
     if (['ETH'].includes(from)) {
       return [ROUTE_TYPE.INCH]
     }
-    // return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
-    return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE]
+    return [
+      ROUTE_TYPE.INCH,
+      ROUTE_TYPE.FX_ROUTE,
+      ROUTE_TYPE.CURVE,
+      ROUTE_TYPE.COWSWAP,
+    ]
   }
 
   if (['eETH'].includes(from)) {
@@ -27,11 +32,20 @@ const getZapInSupportRoutes = (from, to, symbol) => {
     if (['ETH'].includes(from)) {
       return [ROUTE_TYPE.INCH]
     }
-    return [ROUTE_TYPE.INCH, ROUTE_TYPE.FX_ROUTE]
+    return [
+      ROUTE_TYPE.INCH,
+      ROUTE_TYPE.FX_ROUTE,
+      ROUTE_TYPE.CURVE,
+      ROUTE_TYPE.COWSWAP,
+    ]
   }
 
   // mint btcUSD
-  if (symbol === 'btcUSD' || ['WBTC'].includes(to)) {
+  if (symbol === 'btcUSD') {
+    return [ROUTE_TYPE.INCH, ROUTE_TYPE.COWSWAP]
+  }
+
+  if (['WBTC'].includes(to)) {
     return [ROUTE_TYPE.INCH]
   }
 
@@ -55,9 +69,9 @@ const getZapInSupportRoutes = (from, to, symbol) => {
 
 const getZapOutSupportRoutes = (from, to) => {
   // redeem fxUSD
-  if (from === 'fxUSD') {
-    // return [ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE]
-    return [ROUTE_TYPE.FX_ROUTE]
+  if (['fxUSD', 'btcUSD', 'rUSD'].includes(from)) {
+    return [ROUTE_TYPE.FX_ROUTE, ROUTE_TYPE.CURVE, ROUTE_TYPE.COWSWAP]
+    // return [ROUTE_TYPE.FX_ROUTE]
   }
 
   return [ROUTE_TYPE.FX_ROUTE]
@@ -108,7 +122,13 @@ const useRouteList = () => {
 
       const routes = supportedRoute.map((routeType, index) => {
         const out_CBN = cBN(resList[index].outAmount) || cBN(0)
-
+        let swapUrl = ''
+        if (routeType == ROUTE_TYPE.CURVE) {
+          swapUrl = `https://curve.fi/#/ethereum/swap?from=${zapTokens[from].address}&to=${zapTokens[symbol].address}`
+        }
+        if (routeType == ROUTE_TYPE.COWSWAP) {
+          swapUrl = `https://swap.cow.fi/#/1/swap/${zapTokens[from].symbol}/${zapTokens[symbol].symbol}`
+        }
         return {
           amount: out_CBN.toString(10),
           amount_text: fb4(out_CBN.toString(10), false, decimals),
@@ -116,9 +136,9 @@ const useRouteList = () => {
           symbol,
           routeType,
           result: resList[index].result,
+          swapUrl,
         }
       })
-
       const list = routes.sort((a, b) => b.amount - a.amount)
       if (list.length > 0) {
         const best = list[0]

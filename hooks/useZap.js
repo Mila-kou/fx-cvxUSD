@@ -5,11 +5,12 @@ import { zapTokens } from '@/config/tokens'
 import { get1InchData } from '@/services/inch'
 
 export const ROUTE_TYPE = {
-  FX_ROUTE: 'fx route',
-  INCH: '1inch',
-  CURVE: 'curve',
+  FX_ROUTE: 'f(x)',
+  INCH: '1inch+f(x)',
+  CURVE: 'Curve',
+  COWSWAP: 'Cow Swap',
 }
-
+export const ROUTE_MARKET_TYPE = [ROUTE_TYPE.CURVE, ROUTE_TYPE.COWSWAP]
 export const useZapIn = () => {
   const { contract: MultiPathConverterContract } =
     useMultiPathConverterContract()
@@ -63,6 +64,15 @@ export const useZapIn = () => {
       )
     }
     if (routeType === ROUTE_TYPE.CURVE) {
+      return [
+        {
+          amount,
+          slippage,
+          routeType,
+        },
+      ]
+    }
+    if (routeType === ROUTE_TYPE.COWSWAP) {
       return [
         {
           amount,

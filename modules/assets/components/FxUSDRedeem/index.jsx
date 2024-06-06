@@ -23,8 +23,9 @@ import {
   useFxUSD_GatewayRouter_contract,
   useFXUSD_contract,
 } from '@/hooks/useFXUSDContract'
-import { getZapOutParams, ROUTE_TYPE } from '@/hooks/useZap'
+import { getZapOutParams, ROUTE_TYPE, ROUTE_MARKET_TYPE } from '@/hooks/useZap'
 import useCurveSwapV2 from '@/hooks/useCurveSwapV2'
+import useCowSwap from '@/hooks/useCowSwap'
 import RouteCard from '../RouteCard'
 import useRouteList from '../RouteCard/useRouteList'
 import useOutAmount from '../../hooks/useOutAmount'
@@ -77,6 +78,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
   } = assetInfo
 
   const { swapByCurve, getOutAmountByCurve } = useCurveSwapV2()
+  const { getOutAmountByCowSwap } = useCowSwap()
   const timerRef = useRef(null)
 
   const [symbol, setSymbol] = useState(baseTokenSymbols[0])
@@ -377,7 +379,7 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     clearTimeout(timerRef.curent)
     timerRef.curent = setTimeout(() => {
       getMinAmount(true)
-    }, 20000)
+    }, 30000)
 
     setShowManaged(false)
     if (needLoading) {
@@ -441,12 +443,22 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
                     from: address,
                     decimals: 18,
                     to: config.zapTokens[symbol].address,
-                    amount: _mockAmount,
+                    amount: fromAmount,
                   })
                   res = {
                     _dstOut: cBN(res)
                       .multipliedBy(10 ** config.zapTokens[symbol].decimals)
                       .toString(),
+                  }
+                } else if (params?.routeType === ROUTE_TYPE.COWSWAP) {
+                  res = await getOutAmountByCowSwap({
+                    from: address,
+                    decimals: config.zapTokens[symbol].decimals,
+                    to: config.zapTokens[symbol].address,
+                    amount: fromAmount,
+                  })
+                  res = {
+                    _dstOut: cBN(res).toString(),
                   }
                 } else {
                   const convertParamsList = baseTokenSymbols.map((item) =>
@@ -468,7 +480,9 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
 
                 // 比例计算
                 return {
-                  outAmount: res._dstOut * _mockRatio,
+                  outAmount: ROUTE_MARKET_TYPE.includes(params?.routeType)
+                    ? res._dstOut
+                    : res._dstOut * _mockRatio,
                   result: res,
                 }
               }
@@ -634,6 +648,13 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
     return tokens[symbol].price
   }, [symbol, baseSymbol, tokens, baseToken, baseTokenData])
 
+  const goMarket = (routeType) => {
+    const route = routeList.find((item) => item.routeType === routeType)
+    if (route && route.swapUrl) {
+      window.open(route.swapUrl, '_blank')
+    }
+  }
+
   return (
     <div className={styles.container}>
       {isFXBouns ? (
@@ -720,7 +741,15 @@ export default function FxUSDRedeem({ slippage, assetInfo }) {
       )}
 
       <div className={styles.action}>
-        {routeTypeRef.current === ROUTE_TYPE.CURVE || symbol === baseSymbol ? (
+        {ROUTE_MARKET_TYPE.includes(routeTypeRef.current) ? (
+          <Button
+            style={{ fontSize: '20px' }}
+            onClick={() => goMarket(routeTypeRef.current)}
+            width="100%"
+          >
+            {`Trade on ${routeTypeRef.current}`}
+          </Button>
+        ) : symbol === baseSymbol ? (
           <Button
             style={{ fontSize: '20px' }}
             loading={isLoading}

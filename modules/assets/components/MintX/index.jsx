@@ -258,7 +258,7 @@ export default function MintX({ slippage, assetInfo, children }) {
     clearTimeout(timerRef.curent)
     timerRef.curent = setTimeout(() => {
       getMinAmount(true)
-    }, 20000)
+    }, 30000)
 
     setMintXBouns(0)
     if (needLoading) {
