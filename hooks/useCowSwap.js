@@ -40,7 +40,9 @@ const useCowSwap = () => {
         kind: 'sell',
       }
       const { quote } = await orderBookApi.getQuote(quoteRequest)
-      return quote.buyAmount
+      const { buyAmount, sellAmount } = quote
+      const _amount = cBN(amount).times(buyAmount).div(sellAmount).toFixed(0)
+      return _amount
     } catch (error) {
       console.log('quote---error--', error)
     }
