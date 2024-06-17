@@ -84,6 +84,7 @@ const useBaseToken = () => {
             .contract.methods
 
         return {
+          decimals,
           baseSymbol,
           baseTokenType,
           twapPriceRes: getPrice(),

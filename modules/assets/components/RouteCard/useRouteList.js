@@ -114,7 +114,12 @@ const useRouteList = () => {
 
       const resList = await Promise.all(
         paramsList.map((item) =>
-          callback(item).catch((e) => ({ outAmount: 0, result: 0 }))
+          callback(item).catch((e) => {
+            if (e?.message.includes('0x2cbf45d6')) {
+              return { outAmount: 0, result: 0, isCapReached: true }
+            }
+            return { outAmount: 0, result: 0 }
+          })
         )
       )
 
@@ -137,6 +142,7 @@ const useRouteList = () => {
           routeType,
           result: resList[index].result,
           swapUrl,
+          isCapReached: resList[index].isCapReached || false,
         }
       })
       const list = routes.sort((a, b) => b.amount - a.amount)
@@ -154,7 +160,7 @@ const useRouteList = () => {
 
       routesRef.current = list
       return list
-    } catch (error) {
+    } catch (e) {
       routesRef.current = []
       return []
     }

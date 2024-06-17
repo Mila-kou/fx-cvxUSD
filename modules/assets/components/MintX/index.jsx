@@ -104,6 +104,7 @@ export default function MintX({ slippage, assetInfo, children }) {
   const MarketContract = getMarketContract(contracts.market).contract
 
   const [pausedError, setPausedError] = useState(false)
+  const [showCapReachedError, setShowCapReachedError] = useState(false)
   const [symbol, setSymbol] = useState(baseSymbol)
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
@@ -270,6 +271,7 @@ export default function MintX({ slippage, assetInfo, children }) {
     let _mockRatio = 1
 
     let isBTCMock = false
+    setShowCapReachedError(false)
 
     // 默认比例 0.01
     if (_account !== _currentAccount) {
@@ -290,16 +292,22 @@ export default function MintX({ slippage, assetInfo, children }) {
       let minout_ETH
       if (checkNotZoroNum(fromAmount)) {
         if (symbol === baseSymbol) {
-          const resData = await MarketContract.methods
-            .mintXToken(_mockAmount, _account, 0)
-            .call({
-              from: _account,
-            })
+          if (cBN(fromAmount).isGreaterThan(baseTokenData.restBaseTokenRes)) {
+            setShowCapReachedError(true)
+            minout_ETH = 0
+            setMintXBouns(0)
+          } else {
+            const resData = await MarketContract.methods
+              .mintXToken(_mockAmount, _account, 0)
+              .call({
+                from: _account,
+              })
 
-          minout_ETH = resData._xTokenMinted * _mockRatio
-          const _userXETHBonus = cBN(resData._bonus || 0)
-          setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
-          console.log('fxMintXTokenV2--resData----', resData)
+            minout_ETH = resData._xTokenMinted * _mockRatio
+            const _userXETHBonus = cBN(resData._bonus || 0)
+            setMintXBouns(_userXETHBonus.multipliedBy(_mockRatio))
+            console.log('fxMintXTokenV2--resData----', resData)
+          }
         } else {
           let list
           if (_routeType && routeList.length) {
@@ -337,6 +345,18 @@ export default function MintX({ slippage, assetInfo, children }) {
                       cBN(baseOutAmount).div(cBN(0.01).shiftedBy(decimals)),
                   }
                 } else {
+                  // const call =
+                  //   await fxUSD_GatewayRouterContract.methods.fxMintXTokenV2(
+                  //     convertParams,
+                  //     contracts.market,
+                  //     0
+                  //   )
+                  // console.log(
+                  //   'fxMintXTokenV2-----',
+                  //   fxUSD_GatewayRouterContract._address,
+                  //   call.encodeABI()
+                  // )
+
                   res = await fxUSD_GatewayRouterContract.methods
                     .fxMintXTokenV2(convertParams, contracts.market, 0)
                     .call({
@@ -384,6 +404,11 @@ export default function MintX({ slippage, assetInfo, children }) {
       return _minout
     } catch (error) {
       console.log('mintX----error--', error)
+
+      if (error?.message.includes('0x2cbf45d6')) {
+        setShowCapReachedError(true)
+      }
+
       resetOutAmount()
       setPriceLoading(false)
       return 0
@@ -622,6 +647,12 @@ export default function MintX({ slippage, assetInfo, children }) {
         />
       ) : null}
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
+
+      {showCapReachedError ||
+      routeList.find((item) => item.routeType === routeTypeRef.current)
+        ?.isCapReached ? (
+        <NoticeCard content={[`${baseSymbol} cap has been reached.`]} />
+      ) : null}
 
       {prices?.isShowErrorMaxMinPrice && (
         <NoticeMaxMinPrice

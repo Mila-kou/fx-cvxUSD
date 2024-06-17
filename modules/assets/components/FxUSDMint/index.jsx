@@ -79,6 +79,7 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
   const OPTIONS = MINT_OPTIONS[toSymbol].filter((item) => item[0] !== toSymbol)
 
   const [pausedError, setPausedError] = useState(false)
+  const [showCapReachedError, setShowCapReachedError] = useState(false)
   const [symbol, setSymbol] = useState(baseTokenSymbols[0])
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
@@ -343,6 +344,7 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
     let _mockRatio = 1
 
     let isBTCMock = false
+    setShowCapReachedError(false)
 
     // 默认比例 0.01
     if (_account !== _currentAccount) {
@@ -363,12 +365,17 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
         let resData
 
         if (isBaseSymbol) {
-          resData = await FXUSD_contract.methods
-            .mint(config.tokens[symbol], _ETHtAmountAndGas, _account, 0)
-            .call({
-              from: _account,
-            })
-          minout_ETH = resData * _mockRatio
+          if (cBN(fromAmount).isGreaterThan(baseTokenData.restBaseTokenRes)) {
+            setShowCapReachedError(true)
+            minout_ETH = 0
+          } else {
+            resData = await FXUSD_contract.methods
+              .mint(config.tokens[symbol], _ETHtAmountAndGas, _account, 0)
+              .call({
+                from: _account,
+              })
+            minout_ETH = resData * _mockRatio
+          }
         } else {
           if (symbol === 'ETH') {
             const getGasPrice = await getGas()
@@ -495,6 +502,10 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
       return _minOut
     } catch (error) {
       console.log('fxMintFxUSD--finnal--error--', _account, error)
+
+      if (error?.message.includes('0x2cbf45d6')) {
+        setShowCapReachedError(true)
+      }
       resetOutAmount()
       setPriceLoading(false)
       return [0]
@@ -724,6 +735,12 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
       ) : null}
 
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
+
+      {showCapReachedError ||
+      routeList.find((item) => item.routeType === routeTypeRef.current)
+        ?.isCapReached ? (
+        <NoticeCard content={[`${baseSymbol} cap has been reached.`]} />
+      ) : null}
 
       {prices?.isShowErrorMaxMinPrice && (
         <NoticeMaxMinPrice

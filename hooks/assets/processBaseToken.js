@@ -198,10 +198,11 @@ const processBaseToken = (data, blockTime) => {
       ? fb4(baseToken.baseTokenCapRes)
       : 0
 
-    const restBaseToken = cBN(baseToken.baseTokenCapRes)
+    const restBaseTokenRes = cBN(baseToken.baseTokenCapRes)
       .minus(baseToken.totalBaseTokenRes)
-      .dividedBy(1e18)
-      .toFixed(4, 1)
+      .div(baseToken.priceRateRes)
+      .multipliedBy(10 ** baseToken.decimals)
+      .toString()
 
     const collateralRatio_text = checkNotZoroNum(baseToken.collateralRatioRes)
       ? fb4(baseToken.collateralRatioRes * 100, false, 18, 2)
@@ -255,7 +256,7 @@ const processBaseToken = (data, blockTime) => {
       baseTokenCap,
       baseTokenCap_text,
       collateralRatio_text,
-      restBaseToken,
+      restBaseTokenRes,
       isCRLow130,
       maxMintableFTokenRes: baseToken.maxMintableFTokenRes._maxFTokenMintable,
       maxRedeemableXTokenRes:
