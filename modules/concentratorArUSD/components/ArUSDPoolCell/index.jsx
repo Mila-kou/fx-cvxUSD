@@ -32,7 +32,7 @@ export default function ArUSDPoolCell({
     const _apyDom = poolData.apy
     const _apyDetailDom = poolData.apy
     return [_apyAndBoostDom, _apyDom, _apyDetailDom]
-  }, [])
+  }, [poolData])
 
   const CurrentIndexDom = useCallback(() => {
     return checkNotZoroNumOption(baseInfo.rate, baseInfo.rate)
