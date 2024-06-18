@@ -6,7 +6,7 @@ import { ROUTE_MARKET_TYPE, ROUTE_TYPE } from '@/hooks/useZap'
 
 const ROUTE_ICONS = {
   [ROUTE_TYPE.FX_ROUTE]: '/images/fx.svg',
-  [ROUTE_TYPE.INCH]: '/images/inch.svg',
+  [ROUTE_TYPE.INCH]: '/images/fx.svg',
   [ROUTE_TYPE.CURVE]: '/images/curve.svg',
   [ROUTE_TYPE.COWSWAP]: '/images/cowswap.svg',
 }

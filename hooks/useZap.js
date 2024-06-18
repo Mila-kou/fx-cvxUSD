@@ -6,7 +6,7 @@ import { get1InchData } from '@/services/inch'
 
 export const ROUTE_TYPE = {
   FX_ROUTE: 'f(x)',
-  INCH: '1inch+f(x)',
+  INCH: 'f(x)+1inch',
   CURVE: 'Curve',
   COWSWAP: 'Cow Swap',
 }

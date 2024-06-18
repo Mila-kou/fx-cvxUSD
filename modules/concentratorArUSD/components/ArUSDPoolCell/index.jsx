@@ -117,7 +117,7 @@ export default function ArUSDPoolCell({
             </div>
             <p className="my-[10px]">
               Earn up to ~ 6x ether.fi loyalty points and ~ 2x EigenLayer points
-              by depositing arUSD.
+              by depositing rUSD.
             </p>
             <p>
               The underlying asset of arUSD is{' '}

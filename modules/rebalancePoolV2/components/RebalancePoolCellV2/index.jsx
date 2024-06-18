@@ -247,7 +247,7 @@ export default function RebalancePoolCellV2({
   const pointsText =
     _poolConfig.baseSymbol === 'ezETH'
       ? '~ 4x Renzo ezPoints'
-      : '~ 4x ether.fi loyalty points'
+      : '~ 6x ether.fi loyalty points'
 
   const subMessage = useMemo(() => {
     if (['fxUSD'].includes(poolType)) {
