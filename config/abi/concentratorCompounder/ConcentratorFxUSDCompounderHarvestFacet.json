@@ -1,0 +1,36 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "compounder",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minBaseOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minFxUSD",
+        "type": "uint256"
+      }
+    ],
+    "name": "harvestConcentratorCompounder",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "baseOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fxUSDOut",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

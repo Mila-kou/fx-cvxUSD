@@ -13,6 +13,7 @@ import {
   getConvexVaultsAPY,
   getLpPrice,
   getFX_cvxFXN_sdFXN_apy,
+  getConvexFxPools,
 } from '@/services/dataInfo'
 import useInfo from '@/modules/assets/hooks/useInfo'
 import useFxETH from '@/hooks/assets/useFxETH'
@@ -69,6 +70,7 @@ function GlobalProvider({ children }) {
     { data: ConvexVaultsAPY, refetch: refetch3 },
     { data: lpPrice, refetch: refetch5 },
     { data: cvxFXN_sdFXN_apy, refetch: refetch7 },
+    { data: connvexFxPoolsData, refetch: refetch9 },
   ] = useQueries({
     queries: [
       {
@@ -87,6 +89,12 @@ function GlobalProvider({ children }) {
         refetchInterval: 600000,
         initialData: {},
       },
+      {
+        queryKey: ['connvexFxPoolsData'],
+        queryFn: getConvexFxPools,
+        refetchInterval: 30000,
+        initialData: {},
+      },
     ],
   })
 
@@ -95,6 +103,7 @@ function GlobalProvider({ children }) {
       refetch3()
       refetch5()
       refetch7()
+      refetch9()
     },
     [blockNumber],
     { wait: 30000 }
@@ -113,6 +122,7 @@ function GlobalProvider({ children }) {
       lpPrice,
       ConvexVaultsAPY,
       cvxFXN_sdFXN_apy,
+      connvexFxPoolsData,
       allGaugeBaseInfo,
 
       fAssetList: [],
@@ -135,6 +145,7 @@ function GlobalProvider({ children }) {
       lpPrice,
       ConvexVaultsAPY,
       cvxFXN_sdFXN_apy,
+      connvexFxPoolsData,
       allGaugeBaseInfo,
 
       signCodeProps,

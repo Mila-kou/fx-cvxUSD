@@ -92,6 +92,11 @@ import Llamas_ABI from './Llamas.json'
 import FXUSD_MarketWithFundingCost_ABI from './fxUSD/MarketWithFundingCost.json'
 import FXUSD_TreasuryWithFundingCost_ABI from './fxUSD/TreasuryWithFundingCost.json'
 
+// concentratorCompounder
+import concentrator_fxCompounder_ABI from './concentratorCompounder/AladdinFxUSDTokenCompounder.json'
+import concentrator_fxCompounder4626_ABI from './concentratorCompounder/ConcentratorFxUSDCompounder4626.json'
+import concentrator_FxCompounderHarvestFacet_ABI from './concentratorCompounder/ConcentratorFxUSDCompounderHarvestFacet.json'
+
 export default {
   erc20ABI,
   multiCallABI,
@@ -177,4 +182,9 @@ export default {
 
   FXUSD_MarketWithFundingCost_ABI,
   FXUSD_TreasuryWithFundingCost_ABI,
+
+  // concentrator_fxCompounder
+  concentrator_fxCompounder_ABI,
+  concentrator_fxCompounder4626_ABI,
+  concentrator_FxCompounderHarvestFacet_ABI,
 }

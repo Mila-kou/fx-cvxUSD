@@ -31,8 +31,6 @@ export default function GaugePage() {
   const [clearPrev, setClearPrev] = useState(false)
   const [voteData, setVoteData] = useState(null)
 
-  console.log('userVoteInfo----', userVoteInfo)
-
   const onCastVote = (item, newPower) => {
     const _powerVote = cBN(userVoteInfo.veFXNAmount)
       .multipliedBy(newPower)

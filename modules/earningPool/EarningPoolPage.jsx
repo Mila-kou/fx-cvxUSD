@@ -13,6 +13,7 @@ import { fb4 } from '@/utils/index'
 import MerkleTree from './MerkleTree'
 import ThirdPools from './components/ThirdPools'
 import useRUSDScore from './hooks/useRUSDScore'
+import ArUSDPools from '@/modules/concentratorArUSD/ArUSDPools'
 
 const Header = ({ title }) => (
   <div>
@@ -94,7 +95,10 @@ export default function EarningPoolPage() {
           <DotChartOutlined />
           Earn
         </div>
+        <ArUSDPools />
+      </div>
 
+      <div className={`${styles.content} `}>
         <Header title="Stake fxUSD" />
         <RebalancePoolCellV2
           title="fxUSD Stability Pool"
@@ -168,7 +172,7 @@ export default function EarningPoolPage() {
         />
       </div>
 
-      <div className={`${styles.content} `}>
+      <div className={`${styles.content}`}>
         <Header title="Stake rUSD" />
         <RebalancePoolCellV2
           title="rUSD Stability Pool"
@@ -307,32 +311,6 @@ export default function EarningPoolPage() {
           {...poolBData}
         />
       </div>
-
-      {/* <div className={`${styles.content} `}>
-        <Header title="Stake fCVX" />
-        <RebalancePoolCellV2
-          title="fCVX Stability Pool"
-          subTitle={
-            <p className="text-[14px]">
-              Earn aCVX
-              <br />
-              Redeem to aCVX
-            </p>
-          }
-          {...fCVX_aCVX_pool}
-        />
-        <RebalancePoolCellV2
-          title="fCVX Stability Pool"
-          subTitle={
-            <p className="text-[14px]">
-              Earn aCVX
-              <br />
-              Redeem to xCVX
-            </p>
-          }
-          {...fCVX_xCVX_pool}
-        />
-        </div> */}
 
       <div className={`${styles.content} `}>
         <Header title="Stake f(x) Curve LPs" />

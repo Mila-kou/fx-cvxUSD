@@ -59,3 +59,8 @@ export const getInviteUser = (signerAddress) =>
     .catch(() => null)
 
 export const invite = (data) => axios.post(`${_fetchUrl}/api1/invite`, data)
+
+export const getConvexFxPools = () =>
+  fetcher(`https://fx.convexfinance.com/api/fxp/pools`)
+    .then((res) => res)
+    .catch(() => ({}))

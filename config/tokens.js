@@ -39,6 +39,8 @@ export const TOKEN_ICON_MAP = {
   WBTC: '/tokens/WBTC.svg',
   btcUSD: '/tokens/btcUSD.svg',
   xWBTC: '/images/x-logo.svg',
+
+  arUSD: '/tokens/arUSD.svg',
 }
 
 export const getTokenIcon = (name) => {
@@ -582,6 +584,11 @@ export const zapTokens = {
     decimals: TOKENS_INFO.WBTC[2],
     address: TOKENS_INFO.WBTC[1],
   },
+  rUSD: {
+    symbol: 'rUSD',
+    decimals: TOKENS_INFO.rUSD[2],
+    address: TOKENS_INFO.rUSD[1],
+  },
 }
 
 const POOLS_LIST_GAUGE = {
@@ -848,7 +855,7 @@ export const ASSET_MAP = {
     descrition: '$1.00 Pegged',
     icon: '/tokens/fxusd.svg',
     isBreakdownChart: true,
-    background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
+    background: 'linear-gradient(270deg, #1a5b53 0%, #054039 100%)',
     isF: true,
     baseTokenInfos: [BASE_TOKENS_MAP.wstETH, BASE_TOKENS_MAP.sfrxETH],
     baseTokenSymbols: ['wstETH', 'sfrxETH'],
@@ -921,7 +928,7 @@ export const ASSET_MAP = {
     isF: true,
     isShow24Change: false,
     isBreakdownChart: true,
-    background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
+    background: 'linear-gradient(270deg, #1a5b53 0%, #054039 100%)',
     baseSymbol: 'weETH',
     baseTokenInfos: [BASE_TOKENS_MAP.weETH, BASE_TOKENS_MAP.ezETH],
     baseTokenSymbols: ['weETH', 'ezETH'],
@@ -964,7 +971,7 @@ export const ASSET_MAP = {
     isF: true,
     isShow24Change: false,
     isBreakdownChart: true,
-    background: 'linear-gradient(270deg, #1a6d63 0%, #075e54 100%)',
+    background: 'linear-gradient(270deg, #1a5b53 0%, #054039 100%)',
     baseSymbol: 'WBTC',
     baseTokenInfos: [BASE_TOKENS_MAP.WBTC],
     baseTokenSymbols: ['WBTC'],

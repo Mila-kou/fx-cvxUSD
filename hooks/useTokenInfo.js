@@ -3,6 +3,7 @@ import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
 import { useContract } from '@/hooks/useContracts'
 import config from '@/config/index'
+import concentratorConfig from '@/config/concentrator_token'
 
 const useTokens = (options) => {
   const { _currentAccount, web3, blockNumber, isAllReady } = useWeb3()
@@ -144,6 +145,9 @@ export const useToken = (address, contractType, lpInfo) => {
             break
           case 'btcUSD':
             _contractAddress = config.tokens.btcUSD
+            break
+          case 'wrapArUSD':
+            _contractAddress = concentratorConfig.contracts.arUSDWrap
             break
           default:
             _contractAddress = contractType
