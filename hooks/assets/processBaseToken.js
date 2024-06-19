@@ -81,15 +81,10 @@ const getIsFXBouns = (baseToken, isCRLow130) => {
   return false
 }
 
-const getPrices = ({
-  baseTokenType,
-  twapPriceRes,
-  priceRateRes,
-  decimals = 18,
-}) => {
+const getPrices = ({ baseTokenType, twapPriceRes, priceRateRes }) => {
   const safePrice = twapPriceRes._safePrice / 1e18 ?? 0
   const safePrice_num = (twapPriceRes._safePrice / 1e18).toFixed(2) ?? 0
-  const priceRate = priceRateRes / 10 ** decimals ?? 0
+  const priceRate = priceRateRes / 10 ** 18 ?? 0
 
   // ETH 与 stETH/frxETH
   const maxPrice = twapPriceRes._maxUnsafePrice / 1e18 ?? 0
