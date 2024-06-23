@@ -45,6 +45,7 @@ import FX_RebalanceWithBonusTokenABI from './fx/RebalanceWithBonusToken.json'
 import wstETHABI from './wstETH.json'
 import sfrxETHABI from './sfrxETH.json'
 import stETHABI from './stETH.json'
+import weETHABI from './weETH.json'
 import curveSwapABI from './common/curveSwap.json'
 
 // vesting
@@ -135,6 +136,7 @@ export default {
   wstETHABI,
   sfrxETHABI,
   stETHABI,
+  weETHABI,
   Fx_Gateway,
   Fx_ReservePool,
   Fx_FxETHTwapOracle,

@@ -171,6 +171,18 @@ export const useStETH = () => {
   )
 }
 
+export const useWeETH = () => {
+  const address = config.tokens.weETH
+  const { getContract } = useContract()
+  return useMemo(
+    () => ({
+      contract: getContract(address, abi.weETHABI),
+      address,
+    }),
+    [getContract]
+  )
+}
+
 ////////////////////////////////////////
 
 export const useFXN = () => {

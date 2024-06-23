@@ -9,6 +9,7 @@ import {
   useErc20Token,
   useWstETH,
   useSfrxETH,
+  useWeETH,
 } from '@/hooks/useContracts'
 import useWeb3 from '@/hooks/useWeb3'
 import { useMutiCallV2 } from '@/hooks/useMutiCalls'
@@ -26,6 +27,7 @@ const useData = (refreshTrigger) => {
   const { contract: wstETHContract, address: wstETHAddress } = useWstETH()
   const { contract: votingEscrowBoostContract } = useVotingEscrowBoost()
   const { contract: sfrxETHContract, address: sfrxETHAddress } = useSfrxETH()
+  const { contract: weETHContract, address: weETHAddress } = useWeETH()
 
   const multiCallsV2 = useMutiCallV2()
 
@@ -88,6 +90,10 @@ const useData = (refreshTrigger) => {
         wstETHContract.methods.balanceOf(
           config.contracts.PlatformFeeBurnerAddress
         ),
+        weETHContract.methods.balanceOf(config.contracts.fx_PlatformFeeSpliter),
+        weETHContract.methods.balanceOf(
+          config.contracts.PlatformFeeBurnerAddress
+        ),
         wstETHContract.methods.balanceOf(config.contracts.fx_ve_FeeDistributor),
         veFXNFeeContract.methods.token_last_balance(),
         veFXNFeeContract.methods.claim(_currentAccount),
@@ -96,6 +102,7 @@ const useData = (refreshTrigger) => {
         veFXNFeeContract.methods.claim(_currentAccount),
         veFXNFeeContract.methods.claim(_currentAccount),
         wstETHContract.methods.stEthPerToken(),
+        weETHContract.methods.getRate(),
       ]
       const [
         { amount, end },
@@ -107,6 +114,8 @@ const useData = (refreshTrigger) => {
         PlatformFeeBurnerSfrxETH,
         platformFeeSpliterwstETH,
         PlatformFeeBurnerwstETH,
+        platformFeeSpliterweETH,
+        PlatformFeeBurnerweETH,
         feeBalance,
         veFXNFeeTokenLastBalance,
         userVeRewards,
@@ -115,6 +124,7 @@ const useData = (refreshTrigger) => {
         userVeRewards3,
         userVeRewards4,
         stETHTowstETHRate,
+        weETHToeETHRate,
       ] = await multiCallsV2(tokensInfoList)
       // console.log(
       //   'timestamp---tokensThisWeek--tokensPerWeek--platformFeeSpliterStETH--platformFeeSpliterSfrxETH--platformFeeSpliterwstETH--feeBalance--veFXNFeeTokenLastBalance--userVeRewards--',
@@ -127,6 +137,8 @@ const useData = (refreshTrigger) => {
       //   PlatformFeeBurnerSfrxETH,
       //   platformFeeSpliterwstETH,
       //   PlatformFeeBurnerwstETH,
+      //   platformFeeSpliterweETH,
+      //   PlatformFeeBurnerweETH,
       //   feeBalance,
       //   veFXNFeeTokenLastBalance,
       //   userVeRewards,
@@ -162,8 +174,11 @@ const useData = (refreshTrigger) => {
           PlatformFeeBurnerSfrxETH,
           platformFeeSpliterwstETH,
           PlatformFeeBurnerwstETH,
+          platformFeeSpliterweETH,
+          PlatformFeeBurnerweETH,
           veFXNFeeTokenLastBalance,
           stETHTowstETHRate,
+          weETHToeETHRate,
         }
       })
     } catch (error) {

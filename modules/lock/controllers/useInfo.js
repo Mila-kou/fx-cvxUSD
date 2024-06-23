@@ -93,8 +93,11 @@ const useInfo = (refreshTrigger) => {
       PlatformFeeBurnerSfrxETH,
       platformFeeSpliterwstETH,
       PlatformFeeBurnerwstETH,
+      platformFeeSpliterweETH,
+      PlatformFeeBurnerweETH,
       veFXNFeeTokenLastBalance,
       stETHTowstETHRate,
+      weETHToeETHRate,
     } = info
     const _tokensPerWeek = tokensPerWeek
     // const ___tokensPerWeek = cBN(3.207).times(1e18).toFixed(0)
@@ -141,6 +144,46 @@ const useInfo = (refreshTrigger) => {
     //   '_PlatformFeeSfrxETHToWstETHNum---',
     //   _PlatformFeeSfrxETHToWstETHNum.toString(10)
     // )
+    const _weekAmount = cBN(tokensThisWeek)
+      .plus(
+        cBN(platformFeeSpliterStETH)
+          .times(platformFeeSpliterStETH_rewardRate)
+          .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
+      )
+      .plus(
+        cBN(PlatformFeeBurnerStETH)
+          .times(platformFeeSpliterStETH_rewardRate)
+          .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
+      )
+      .plus(
+        cBN(_PlatformFeeSfrxETHToWstETHNum).times(
+          platformFeeSpliterStETH_rewardRate
+        )
+      )
+      .plus(
+        cBN(PlatformFeeBurnerSfrxETH).times(platformFeeSpliterStETH_rewardRate)
+      )
+      .plus(
+        cBN(platformFeeSpliterwstETH).times(platformFeeSpliterStETH_rewardRate)
+      )
+      .plus(
+        cBN(PlatformFeeBurnerwstETH).times(platformFeeSpliterStETH_rewardRate)
+      )
+      .plus(
+        cBN(platformFeeSpliterweETH)
+          .times(weETHToeETHRate)
+          .div(1e18)
+          .times(platformFeeSpliterStETH_rewardRate)
+      )
+      .plus(
+        cBN(PlatformFeeBurnerweETH)
+          .times(weETHToeETHRate)
+          .div(1e18)
+          .times(platformFeeSpliterStETH_rewardRate)
+      )
+      .minus(veFXNFeeTokenLastBalance)
+      .plus(feeBalance)
+
     setPageData((prev) => ({
       ...prev,
       overview: [
@@ -164,74 +207,8 @@ const useInfo = (refreshTrigger) => {
       status,
       contractInfo: info,
       weekReabte: {
-        weekAmount: cBN(tokensThisWeek)
-          .plus(
-            cBN(platformFeeSpliterStETH)
-              .times(platformFeeSpliterStETH_rewardRate)
-              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
-          )
-          .plus(
-            cBN(PlatformFeeBurnerStETH)
-              .times(platformFeeSpliterStETH_rewardRate)
-              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
-          )
-          .plus(
-            cBN(_PlatformFeeSfrxETHToWstETHNum).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .plus(
-            cBN(PlatformFeeBurnerSfrxETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .plus(
-            cBN(platformFeeSpliterwstETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .plus(
-            cBN(PlatformFeeBurnerwstETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .minus(veFXNFeeTokenLastBalance)
-          .plus(feeBalance),
-        weekVal: cBN(tokensThisWeek)
-          .plus(
-            cBN(platformFeeSpliterStETH)
-              .times(platformFeeSpliterStETH_rewardRate)
-              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
-          )
-          .plus(
-            cBN(PlatformFeeBurnerStETH)
-              .times(platformFeeSpliterStETH_rewardRate)
-              .div(cBN(stETHTowstETHRate).div(1e18)) // to wstETH
-          )
-          .plus(
-            cBN(_PlatformFeeSfrxETHToWstETHNum).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .plus(
-            cBN(PlatformFeeBurnerSfrxETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .plus(
-            cBN(platformFeeSpliterwstETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .plus(
-            cBN(PlatformFeeBurnerwstETH).times(
-              platformFeeSpliterStETH_rewardRate
-            )
-          )
-          .minus(veFXNFeeTokenLastBalance)
-          .plus(feeBalance)
-
-          .multipliedBy(wstETHPrice),
+        weekAmount: _weekAmount,
+        weekVal: _weekAmount.multipliedBy(wstETHPrice),
         untilTime: moment(
           calc4(current, true) * 1000 + (86400 * 7 - 1) * 1000
         ).format('lll'),
