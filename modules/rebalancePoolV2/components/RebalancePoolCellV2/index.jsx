@@ -7,7 +7,7 @@ import DepositModal from '../DepositModal'
 import FETHWithdrawModal from '../WithdrawModal/fETH'
 import FxUSDWithdrawModal from '../WithdrawModal/fxUSD'
 import styles from './styles.module.scss'
-import { checkNotZoroNum } from '@/utils/index'
+import { cBN, checkNotZoroNum, checkNotZoroNumOption, fb4 } from '@/utils/index'
 import { TOKEN_ICON_MAP, BASE_TOKENS_MAP, ASSET_MAP } from '@/config/tokens'
 import { useFxUSD_Type_Treasury_contract } from '@/hooks/useFXUSDContract'
 import { useContract } from '@/hooks/useContracts'
@@ -219,8 +219,17 @@ export default function RebalancePoolCellV2({
           `FXN APR: ${fxnApy_current_min_text} % -> ${fxnApy_current_max_text} %`,
         ]
       }
-
-      const baseText = `${baseSymbol} APR: ${rewardsData[baseSymbol].currentApy_text}`
+      let _currentApy_text = rewardsData[baseSymbol].currentApy_text
+      if (baseSymbol == 'WBTC') {
+        const _currentApy = cBN(rewardsData[baseSymbol].currentApy).plus(
+          rewardsData.aladdinWBTC.currentApy
+        )
+        _currentApy_text = checkNotZoroNumOption(
+          _currentApy,
+          `${fb4(_currentApy, false, 0, 2)} %`
+        )
+      }
+      const baseText = `${baseSymbol} APR: ${_currentApy_text}`
       _apyList.push(baseText)
       _apyList_current.push(baseText)
 

@@ -37,6 +37,7 @@ export const TOKEN_ICON_MAP = {
   FRAXBP: '/tokens/FRAXBP.svg',
 
   WBTC: '/tokens/WBTC.svg',
+  aladdinWBTC: '/tokens/WBTC.svg',
   btcUSD: '/tokens/btcUSD.svg',
   xWBTC: '/images/x-logo.svg',
 
@@ -300,6 +301,7 @@ export const contracts = {
   btcUSD_RebalancePoolSplitter: '0x054fAC7aA44F85A59FD41c33006336EC8b03E916',
   btcUSD_LeveragedTokenWrapper_WBTC_xWBTC:
     '0x1A17Ccf198E03858227c27205f15a4b388235DB7',
+  aladdinWBTC: '0xAe34EE329Ee91ddBFbe50443df9DEdb076477f55',
 }
 
 const gaugeTokenList = {
@@ -405,6 +407,7 @@ export const tokens = {
 
   btcUSD: contracts.btcUSD,
   xWBTC: contracts.btcUSD_WBTC_LeveragedToken,
+  aladdinWBTC: contracts.aladdinWBTC,
 }
 
 export const TOKENS_INFO = {
@@ -446,6 +449,13 @@ export const TOKENS_INFO = {
   fxUSD: ['fxUSD', tokens.fxUSD, 18, 'fxUSD', 'fxUSD'],
   btcUSD: ['btcUSD', tokens.btcUSD, 18, 'btcUSD', 'btcUSD'],
   rUSD: ['rUSD', tokens.rUSD, 18, 'rUSD', 'rUSD'],
+  aladdinWBTC: [
+    'aladdinWBTC',
+    tokens.aladdinWBTC,
+    18,
+    'aladdinWBTC',
+    'aladdinWBTC',
+  ],
 }
 
 export const zapTokens = {
@@ -583,11 +593,6 @@ export const zapTokens = {
     symbol: 'WBTC',
     decimals: TOKENS_INFO.WBTC[2],
     address: TOKENS_INFO.WBTC[1],
-  },
-  rUSD: {
-    symbol: 'rUSD',
-    decimals: TOKENS_INFO.rUSD[2],
-    address: TOKENS_INFO.rUSD[1],
   },
 }
 

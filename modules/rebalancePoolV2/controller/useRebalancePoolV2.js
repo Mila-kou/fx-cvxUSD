@@ -72,7 +72,9 @@ const useRebalancePoolV2 = (infoKey, baseToken) => {
         rewardsRes.forEach(({ symbol, reward }) => {
           const { finishAt, rate } = reward
 
-          const _price = getTokenPrice(symbol)
+          const _price = getTokenPrice(
+            symbol == 'aladdinWBTC' ? 'WBTC' : symbol
+          )
 
           let currentApy = cBN(0)
           if (_currentTime < finishAt) {
@@ -122,7 +124,10 @@ const useRebalancePoolV2 = (infoKey, baseToken) => {
         const fxnApy_max_text = fb4(_fxnApy, false, 0, 2)
         const fxnApy_current_max_text = fb4(_fxnCurrentApy, false, 0, 2)
 
-        const baseApy = rewardsData[baseSymbol].currentApy
+        let baseApy = rewardsData[baseSymbol].currentApy
+        if (baseSymbol == 'WBTC') {
+          baseApy = cBN(baseApy).plus(rewardsData.aladdinWBTC.currentApy)
+        }
 
         const minApy = baseApy.plus(_fxnApy_min)
         const min_current_Apy = baseApy.plus(_fxnApy_current_min)

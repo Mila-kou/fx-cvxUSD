@@ -9,6 +9,7 @@ export const REWARD_TOKENS = [
   'weETH',
   'ezETH',
   'WBTC',
+  'aladdinWBTC',
 ]
 
 export const POOLS_LIST = [
@@ -1049,7 +1050,7 @@ export const REBALANCE_POOLS_LIST = [
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_btcUSD_WBTC',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: ['FXN', 'WBTC'],
+    rebalanceRewards: ['FXN', 'aladdinWBTC'],
     zapTokens: [
       {
         symbol: 'btcUSD',
@@ -1073,7 +1074,7 @@ export const REBALANCE_POOLS_LIST = [
     rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
     infoKey: 'rebalancePoolV2_info_btcUSD_xWBTC',
     gaugeRewards: [config.TOKENS_INFO.fxn],
-    rebalanceRewards: ['FXN', 'WBTC', 'xWBTC'],
+    rebalanceRewards: ['FXN', 'aladdinWBTC', 'xWBTC'],
     zapTokens: [
       {
         symbol: 'btcUSD',
