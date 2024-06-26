@@ -392,6 +392,41 @@ export const POOLS_LIST = [
   },
   {
     icons: [
+      { icon: '/tokens/0x99d8a9c45b2eca8864373a26d1459e3dff1e17f3.png' },
+      {
+        icon: '/tokens/fxusd.svg',
+      },
+    ],
+    id: 13,
+    name: 'MIM+fxUSD',
+    nameShow: ['MIM+fxUSD Curve', ' Pool'],
+    platform: 'FX',
+    fromPlatformIcon: `${cryptoIcons}#crv`,
+    fromPlatform: 'Curve',
+    platformUrl:
+      'https://curve.fi/#/ethereum/pools/factory-stable-ng-141/deposit',
+    gaugeType: 0,
+    gaugeTypeName: 'Liquidity Gauge',
+    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
+    lpAddress: config.POOLS_LIST_GAUGE.MIM_fxUSD.token,
+    lpGaugeAddress: config.POOLS_LIST_GAUGE.MIM_fxUSD.gauge,
+    manageConvexGaugeAddress:
+      config.POOLS_LIST_GAUGE.MIM_fxUSD.manageConvexGauge,
+    baseRewardToken: config.TOKENS_INFO.fxn,
+    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
+    isCloseManageConvex: true,
+    zapTokens: [
+      {
+        symbol: 'curve_MIM_fxUSD',
+        icon: 'cvx',
+        address: config.POOLS_LIST_GAUGE.MIM_fxUSD.token,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    icons: [
       { icon: '/tokens/default-crypto.png' },
       {
         icon: '/tokens/fxusd.svg',
@@ -522,41 +557,6 @@ export const POOLS_LIST = [
         symbol: 'curve_GRAI_fxUSD',
         icon: 'cvx',
         address: config.POOLS_LIST_GAUGE.GRAI_fxUSD.token,
-        needZap: false,
-        isLp: true,
-      },
-    ],
-  },
-  {
-    icons: [
-      { icon: '/tokens/0x99d8a9c45b2eca8864373a26d1459e3dff1e17f3.png' },
-      {
-        icon: '/tokens/fxusd.svg',
-      },
-    ],
-    id: 13,
-    name: 'MIM+fxUSD',
-    nameShow: ['MIM+fxUSD Curve', ' Pool'],
-    platform: 'FX',
-    fromPlatformIcon: `${cryptoIcons}#crv`,
-    fromPlatform: 'Curve',
-    platformUrl:
-      'https://curve.fi/#/ethereum/pools/factory-stable-ng-141/deposit',
-    gaugeType: 0,
-    gaugeTypeName: 'Liquidity Gauge',
-    // lpPoolToken: config.POOLS_LIST_GAUGE.crvUSD_fETH.lpPoolCurveToken,
-    lpAddress: config.POOLS_LIST_GAUGE.MIM_fxUSD.token,
-    lpGaugeAddress: config.POOLS_LIST_GAUGE.MIM_fxUSD.gauge,
-    manageConvexGaugeAddress:
-      config.POOLS_LIST_GAUGE.MIM_fxUSD.manageConvexGauge,
-    baseRewardToken: config.TOKENS_INFO.fxn,
-    rewardTokens: [config.TOKENS_INFO.crv, config.TOKENS_INFO.cvx],
-    isCloseManageConvex: true,
-    zapTokens: [
-      {
-        symbol: 'curve_MIM_fxUSD',
-        icon: 'cvx',
-        address: config.POOLS_LIST_GAUGE.MIM_fxUSD.token,
         needZap: false,
         isLp: true,
       },
