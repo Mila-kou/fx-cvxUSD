@@ -27,7 +27,7 @@ export default function useFxUSDNavs() {
     queryKey: ['fx-assets'],
     queryFn: async () =>
       request(
-        'https://api.thegraph.com/subgraphs/name/aladdindaogroup/fx-assets',
+        'https://api.studio.thegraph.com/query/43247/fx-assets/version/latest',
         query
       ).then((res) => res.navs.reverse()),
   })

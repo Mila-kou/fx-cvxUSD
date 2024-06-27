@@ -21,8 +21,7 @@ export default function useFxNavs() {
     queryKey: ['navs'],
     queryFn: async () =>
       request(
-        // 'https://api.thegraph.com/subgraphs/id/QmckR8W3VhH15gEmG8phgXg6dDVTNdgBe8LAPPxFzS9X7Z',
-        'https://api.thegraph.com/subgraphs/name/aladdindaogroup/fx-navs',
+        'https://api.studio.thegraph.com/query/43247/fx-navs/version/latest',
         query
       ).then((res) => res.navs.reverse()),
   })
