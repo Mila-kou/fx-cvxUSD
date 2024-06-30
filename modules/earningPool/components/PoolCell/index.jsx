@@ -120,17 +120,17 @@ export default function PoolCell({ cellData }) {
       }
       let _convexTypeApy = 0
       if (type == 'project') {
-        _convexTypeApy = convexLpApy.apy.project
+        _convexTypeApy = convexLpApy.apy?.project
       } else {
-        _convexTypeApy = convexLpApy.apy.current
+        _convexTypeApy = convexLpApy.apy?.current
       }
       _typeApy.convexLpApy = _apyInfo.convexLpApy
-      _typeApy._allApy_min = cBN(_convexTypeApy)
-      _typeApy._allApy_max = cBN(_convexTypeApy)
+      _typeApy._allApy_min = cBN(_convexTypeApy || 0)
+      _typeApy._allApy_max = cBN(_convexTypeApy || 0)
 
       if (_apyInfo?.fxnApy?.otherApy) {
         _typeApy._min_FXN_Apy = _apyInfo?.fxnApy?.otherApy
-        _typeApy._max_FXN_Apy = _apyInfo?.fxnApy?.otherApy        
+        _typeApy._max_FXN_Apy = _apyInfo?.fxnApy?.otherApy
       } else {
         _typeApy._min_FXN_Apy = cBN(fxnApy._thisWeek_apy)
           .times(boostInfo[3])
@@ -139,8 +139,12 @@ export default function PoolCell({ cellData }) {
           .times(boostInfo[3])
           .times(2.5)
           .toFixed(2)
-        _typeApy._allApy_min = cBN(_convexTypeApy).plus(_typeApy._min_FXN_Apy)
-        _typeApy._allApy_max = cBN(_convexTypeApy).plus(_typeApy._max_FXN_Apy)
+        _typeApy._allApy_min = cBN(
+          checkNotZoroNum(_convexTypeApy) ? _convexTypeApy : 0
+        ).plus(_typeApy._min_FXN_Apy)
+        _typeApy._allApy_max = cBN(
+          checkNotZoroNum(_convexTypeApy) ? _convexTypeApy : 0
+        ).plus(_typeApy._max_FXN_Apy)
       }
       const boostLever = boostInfo[2]
       if (cBN(boostLever).gt(1)) {
@@ -219,15 +223,27 @@ export default function PoolCell({ cellData }) {
           <p>Convex APR</p>
           <p>
             &nbsp;&nbsp; base APR :{' '}
-            {cBN(_projectApy.convexLpApy.projectApys.baseApy).toFixed(2)} %
+            {checkNotZoroNumOption(
+              _projectApy.convexLpApy.projectApys.baseApy,
+              cBN(_projectApy.convexLpApy.projectApys.baseApy).toFixed(2)
+            )}{' '}
+            %
           </p>
           <p>
             &nbsp;&nbsp; CRV :{' '}
-            {cBN(_projectApy.convexLpApy.projectApys.crvApy1).toFixed(2)} %
+            {checkNotZoroNumOption(
+              _projectApy.convexLpApy.projectApys.crvApy1,
+              cBN(_projectApy.convexLpApy.projectApys.crvApy1).toFixed(2)
+            )}{' '}
+            %
           </p>
           <p>
             &nbsp;&nbsp; CVX :{' '}
-            {cBN(_projectApy.convexLpApy.projectApys.cvxApy).toFixed(2)} %
+            {checkNotZoroNumOption(
+              _projectApy.convexLpApy.projectApys.cvxApy,
+              cBN(_projectApy.convexLpApy.projectApys.cvxApy).toFixed(2)
+            )}{' '}
+            %
           </p>
           <p>FXN APR</p>
           <p>&nbsp;&nbsp; Min APR : {_projectApy._min_FXN_Apy} %</p>
