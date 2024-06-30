@@ -120,9 +120,13 @@ export default function PoolCell({ cellData }) {
       }
       let _convexTypeApy = 0
       if (type == 'project') {
-        _convexTypeApy = convexLpApy.apy?.project
+        _convexTypeApy = checkNotZoroNum(convexLpApy.apy?.project)
+          ? convexLpApy.apy?.project
+          : 0
       } else {
-        _convexTypeApy = convexLpApy.apy?.current
+        _convexTypeApy = checkNotZoroNum(convexLpApy.apy?.current)
+          ? convexLpApy.apy?.current
+          : 0
       }
       _typeApy.convexLpApy = _apyInfo.convexLpApy
       _typeApy._allApy_min = cBN(_convexTypeApy || 0)
