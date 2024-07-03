@@ -338,6 +338,12 @@ const gaugeTokenList = {
   ConvexCurveManager_eUSD_fxUSD: '0xeb5ed0ff89F3709902aaaD5Af1d9d5933f7c3c9a',
   rgUSD_fxUSD: '0x4CA79F4FE25BCD329445CDBE7E065427ACa98380',
   ConvexCurveManager_rgUSD_fxUSD: '0xFb922EF4CD9C68f197Dc35D7fcc204CC03Ccb038',
+  zunUSD_fxUSD: '0x9516c367952430371A733E5eBb587E01eE082F99',
+  ConvexCurveManager_zunUSD_fxUSD: '0xD4e96D498AF2B1E647cf2cbA0564c241F814F57b',
+  USDC_fxUSD: '0xf1E141C804BA39b4a031fDF46e8c08dBa7a0df60',
+  ConvexCurveManager_USDC_fxUSD: '0xD4e96D498AF2B1E647cf2cbA0564c241F814F57b', // todo chanage
+  USD0_fxUSD: '0x0B700C60de435D522081cC5eB12B63875FE7e65a',
+  ConvexCurveManager_USD0_fxUSD: '0xD4e96D498AF2B1E647cf2cbA0564c241F814F57b', // todo chanage
 }
 
 export const tokens = {
@@ -692,6 +698,24 @@ const POOLS_LIST_GAUGE = {
     token: '0x6fc7ea6ca8cd2759803eb78159c931a8ff5e0557',
     manageConvexGauge: gaugeTokenList.ConvexCurveManager_rgUSD_fxUSD,
     gauge: gaugeTokenList.rgUSD_fxUSD,
+  },
+  zunUSD_fxUSD: {
+    lpPoolCurveToken: '0x13ea95ce68185e334d3747539845a3b7643a8cab',
+    token: '0x13ea95ce68185e334d3747539845a3b7643a8cab',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_zunUSD_fxUSD,
+    gauge: gaugeTokenList.zunUSD_fxUSD,
+  },
+  USDC_fxUSD: {
+    lpPoolCurveToken: '0x5018be882dcce5e3f2f3b0913ae2096b9b3fb61f',
+    token: '0x5018be882dcce5e3f2f3b0913ae2096b9b3fb61f',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_USDC_fxUSD,
+    gauge: gaugeTokenList.USDC_fxUSD,
+  },
+  USD0_fxUSD: {
+    lpPoolCurveToken: '0x74c204520c9e88aa3eb9d61788aba11be1e0193f',
+    token: '0x74c204520c9e88aa3eb9d61788aba11be1e0193f',
+    manageConvexGauge: gaugeTokenList.ConvexCurveManager_USD0_fxUSD,
+    gauge: gaugeTokenList.USD0_fxUSD,
   },
 }
 

@@ -22,7 +22,7 @@ const chainInfo = {
   token: 'ETH',
   label: 'arUSD-online-06152216',
   rpcUrl:
-    'https://rpc.phalcon.blocksec.com/rpc_8d18240cdcc9455d8e5a6b4ddc3bc04b',
+    'https://rpc.phalcon.blocksec.com/rpc_314ba81bf9bf437b80b784ab7d58e632',
 }
 
 const contracts = {
