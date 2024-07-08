@@ -38,8 +38,8 @@ function Web3ContextProvider({ children }) {
   const currentAccount = useMemo(() => {
     if (wallet?.accounts?.length) {
       window.localStorage.setItem('selectedWallet', wallet.label)
-      return wallet.accounts[0].address
-      // return '0x8560293f8d0583118cc1386133d307ace5acc8b6'
+      return wallet.accounts[0].address?.toLowerCase()
+      // return '0x84b6e0b3c91f98c1f0b015af21a68e067f3882a4'
       // return '0x11E91BB6d1334585AA37D8F4fde3932C7960B938'
     }
     return ''

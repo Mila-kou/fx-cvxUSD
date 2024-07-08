@@ -15,7 +15,11 @@ const tokenMap = {
   FXS: config.tokens.fxs,
 }
 
-const MerkleTree = ({ title = 'Bonus Farming:', tokenName = 'FXN' }) => {
+const MerkleTree = ({
+  title = 'Bonus Farming:',
+  tokenName = 'FXN',
+  alwaysShow,
+}) => {
   const { currentAccount, sendTransaction } = useWeb3()
 
   const [data, setData] = useState({})
@@ -96,7 +100,7 @@ const MerkleTree = ({ title = 'Bonus Farming:', tokenName = 'FXN' }) => {
     CheckClaim()
   }, [currentAccount, claiming])
 
-  if (!checkNotZoroNum(data.amount)) {
+  if (!checkNotZoroNum(data.amount) && !alwaysShow) {
     return null
   }
 
@@ -105,7 +109,10 @@ const MerkleTree = ({ title = 'Bonus Farming:', tokenName = 'FXN' }) => {
       <div className="flex justify-between items-center">
         <p className="text-[18px]">{title}</p>
         <div className="flex justify-center gap-[32px] items-center">
-          <div className={styles.check}>
+          <div className="flex-1 flex gap-[6px]">
+            {tokenName === 'FXN' && (
+              <img src="/images/FXN.svg" className="w-[20px]" />
+            )}
             <p>
               {data.amount
                 ? `${fb4(data.amount)} ${tokenName}`
@@ -113,7 +120,7 @@ const MerkleTree = ({ title = 'Bonus Farming:', tokenName = 'FXN' }) => {
             </p>
           </div>
           <Button
-            disabled={data.isClaimed}
+            disabled={data.isClaimed || !checkNotZoroNum(data.amount)}
             className={styles.action}
             size="small"
             type="red"

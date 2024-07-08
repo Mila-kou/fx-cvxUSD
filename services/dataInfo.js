@@ -35,14 +35,6 @@ export const getFxThirdList = () =>
     .then((res) => res.data)
     .catch(() => ({}))
 
-export const getRUSDUserScore = (type) =>
-  fetcher({
-    url: `${_fetchUrl}/api1/get_rUSD_userScore`,
-    params: { type },
-  })
-    .then((res) => res.Result)
-    .catch(() => ({}))
-
 export const getCodeList = () =>
   fetcher(`${_fetchUrl}/api1/get_inviteCode`)
     .then((res) => res.data)
@@ -63,4 +55,26 @@ export const invite = (data) => axios.post(`${_fetchUrl}/api1/invite`, data)
 export const getConvexFxPools = () =>
   fetcher(`https://fx.convexfinance.com/api/fxp/pools`)
     .then((res) => res)
+    .catch(() => ({}))
+
+export const getRUSDUserScore = (type) =>
+  fetcher({
+    url: `${_fetchUrl}/api1/get_rUSD_userScore`,
+    params: { type },
+  })
+    .then((res) => res.Result)
+    .catch(() => ({}))
+
+export const getARUSDUserScore = () =>
+  fetcher({
+    url: `${_fetchUrl}/api2/get_referral_arUSD`,
+  })
+    .then((res) => res.data)
+    .catch(() => ({}))
+
+export const getARUSDUserRound1Score = () =>
+  fetcher({
+    url: `${_fetchUrl}/api2/get_referral_arUSD_round1`,
+  })
+    .then((res) => res.data)
     .catch(() => ({}))

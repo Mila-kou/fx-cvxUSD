@@ -1,23 +1,28 @@
 import { useMemo } from 'react'
 import { useQueries } from '@tanstack/react-query'
 import useWeb3 from '@/hooks/useWeb3'
-import { getRUSDUserScore } from '@/services/dataInfo'
+import { getRUSDUserScore, getARUSDUserScore } from '@/services/dataInfo'
 
-const useRUSDScore = () => {
+const useScore = () => {
   const { currentAccount } = useWeb3()
 
-  const [{ data: weETHData }, { data: ezETHData }] = useQueries({
-    queries: [
-      {
-        queryKey: ['rUSDUserScore', 'weETH'],
-        queryFn: () => getRUSDUserScore('weETH'),
-      },
-      {
-        queryKey: ['rUSDUserScore', 'ezETH'],
-        queryFn: () => getRUSDUserScore('ezETH'),
-      },
-    ],
-  })
+  const [{ data: weETHData }, { data: ezETHData }, { data: arUSDData }] =
+    useQueries({
+      queries: [
+        {
+          queryKey: ['rUSDUserScore', 'weETH'],
+          queryFn: () => getRUSDUserScore('weETH'),
+        },
+        {
+          queryKey: ['rUSDUserScore', 'ezETH'],
+          queryFn: () => getRUSDUserScore('ezETH'),
+        },
+        {
+          queryKey: ['arUSDUserScore'],
+          queryFn: () => getARUSDUserScore(),
+        },
+      ],
+    })
 
   const rUSDUserScore = useMemo(() => {
     const data = {
@@ -29,6 +34,7 @@ const useRUSDScore = () => {
         renzo: 0,
         eigenlayer: 0,
       },
+      arUSD: 0,
     }
     if (weETHData && weETHData.eigenlayer) {
       const eigenlayer = weETHData.eigenlayer.earnPoint.find(
@@ -61,10 +67,19 @@ const useRUSDScore = () => {
         data.ezETH.renzo = renzo.earnPoint
       }
     }
+
+    if (arUSDData) {
+      const points = arUSDData.find(
+        (item) => item.address.toLowerCase() == currentAccount.toLowerCase()
+      )
+      if (points) {
+        data.arUSD = points.arUSDScore
+      }
+    }
     return data
-  }, [currentAccount, weETHData, ezETHData])
+  }, [currentAccount, weETHData, ezETHData, arUSDData])
 
   return rUSDUserScore
 }
 
-export default useRUSDScore
+export default useScore

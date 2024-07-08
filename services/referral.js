@@ -68,3 +68,10 @@ export const getReferralStakedao = (address) =>
   })
     .then((res) => res.data)
     .catch(() => {})
+
+export const getReferralSocreRound1Score = () =>
+  fetcher({
+    url: `${_fetchUrl}/api2/get_referral_socre_round1`,
+  })
+    .then((res) => res.data)
+    .catch(() => ({}))

@@ -1,7 +1,8 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import { useQueries } from '@tanstack/react-query'
-import { notification } from 'antd'
-import { UserAddOutlined } from '@ant-design/icons'
+import { notification, Tooltip } from 'antd'
+import cn from 'classnames'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import useGlobal from '@/hooks/useGlobal'
 import useWeb3 from '@/hooks/useWeb3'
 import Button from '@/components/Button'
@@ -10,10 +11,13 @@ import {
   getReferralUserInfo,
   getReferralConvex,
   getReferralStakedao,
+  getReferralSocreRound1Score,
 } from '@/services/referral'
 import CreateModal from './components/CreateModal'
 import BindModal from './components/BindModal'
 import PointsPerToken from './components/PointsPerToken'
+import MerkleTree from '@/modules/earningPool/MerkleTree'
+import { convexAddresses, stakeDaoAddresses } from './helper/isRound1Address'
 import styles from './styles.module.scss'
 
 export default function BoosterAccountPage() {
@@ -26,6 +30,7 @@ export default function BoosterAccountPage() {
     { data: referralUserInfo },
     { data: referralConvex },
     { data: referralStakedao },
+    { data: referralSocreRound1Score },
   ] = useQueries({
     queries: [
       {
@@ -56,6 +61,13 @@ export default function BoosterAccountPage() {
         refetchInterval: 30000,
         initialData: {},
       },
+      {
+        queryKey: ['referralSocreRound1Score'],
+        queryFn: () => getReferralSocreRound1Score(),
+        enabled: !!currentAccount,
+        refetchInterval: 30000,
+        initialData: {},
+      },
     ],
   })
 
@@ -76,6 +88,18 @@ export default function BoosterAccountPage() {
     })
   }
 
+  const [referralConvexUsd, referralStakedaoUsd] = useMemo(() => {
+    let c = Number(referralConvex?.usd || '0').toFixed(4)
+    let s = Number(referralStakedao?.usd || '0').toFixed(4)
+    if (convexAddresses.includes(currentAccount)) {
+      c = '0.0000'
+    }
+    if (stakeDaoAddresses.includes(currentAccount)) {
+      s = '0.0000'
+    }
+    return [c, s]
+  }, [currentAccount, referralConvex, referralStakedao])
+
   return (
     <div className={styles.container}>
       {/* <h2 className="flex gap-[6px] mb-[32px]">fx Boost 1st Round 4/1-5/1</h2> */}
@@ -83,8 +107,8 @@ export default function BoosterAccountPage() {
       <div className={styles.header}>
         <div className="flex justify-between mb-[24px]">
           <p className="flex gap-[6px] mb-[16px]">
-            <UserAddOutlined />
-            f(x) Referral Program 1st Epoch
+            {/* <UserAddOutlined /> */}
+            f(x) Referral Program 2nd Epoch
           </p>
         </div>
         <div className={styles.items}>
@@ -96,17 +120,31 @@ export default function BoosterAccountPage() {
           </div>
           <div className={styles.item}>
             <p>My Convex Point Airdrop</p>
-            <h2 className="text-[22px] text-blue">
-              {Number(referralConvex?.usd || '0').toFixed(4)}
-            </h2>
+            <h2 className="text-[22px] text-blue">{referralConvexUsd}</h2>
           </div>
           <div className={styles.item}>
             <p>My StakeDAO Point Airdrop</p>
-            <h2 className="text-[22px] text-blue">
-              {Number(referralStakedao?.usd || '0').toFixed(4)}
-            </h2>
+            <h2 className="text-[22px] text-blue">{referralStakedaoUsd}</h2>
           </div>
         </div>
+      </div>
+
+      <div className={cn(styles.header, 'mt-[24px]')}>
+        <div className="flex justify-between mb-[8px]">
+          <p className="flex gap-[6px] mb-[16px]">
+            {/* <UserAddOutlined /> */}
+            1st Epoch Rewards
+          </p>
+        </div>
+        <div className="flex justify-between mb-[8px]">
+          <p>FX Points:</p>
+          <p className="text-second mb-[6px]">
+            {referralSocreRound1Score?.[currentAccount]?.score || '-'}
+          </p>
+        </div>
+        <p>Congratulations, the rewards you won in the last round</p>
+
+        <MerkleTree title="" alwaysShow />
       </div>
 
       <div className={styles.content}>

@@ -12,7 +12,7 @@ import usePoolV2 from '@/modules/rebalancePoolV2/controller/usePoolV2'
 import { fb4 } from '@/utils/index'
 import MerkleTree from './MerkleTree'
 import ThirdPools from './components/ThirdPools'
-import useRUSDScore from './hooks/useRUSDScore'
+import useScore from './hooks/useScore'
 import ArUSDPools from '@/modules/concentratorArUSD/ArUSDPools'
 
 const Header = ({ title }) => (
@@ -31,7 +31,7 @@ const Header = ({ title }) => (
 
 export default function EarningPoolPage() {
   const { pageData, ...pageOthers } = useGaugeController()
-  const rUSDUserScore = useRUSDScore()
+  const userScore = useScore()
 
   const poolAData = usePool({
     infoKey: 'rebalancePoolV2_info_A',
@@ -96,6 +96,22 @@ export default function EarningPoolPage() {
           Earn
         </div>
         <ArUSDPools />
+        <div className="flex justify-end gap-[32px] pr-[46px] my-[20px]">
+          <div className="flex items-center gap-[6px]">
+            {/* <img src="/tokens/etherfiPoint.svg" className="w-[16px]" /> */}
+            <p className="text-[16px]">
+              {/*<Tooltip
+                title="The points below are only estimates. Please refer to the etherfi for actual details."
+                arrow
+                color="#000"
+                overlayInnerStyle={{ width: '300px' }}
+              >
+                <InfoCircleOutlined className="mx-[6px]" />
+              </Tooltip> */}
+              3x FX Points (arUSD): {fb4(userScore.arUSD, false, 0)}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className={`${styles.content} `}>
@@ -217,14 +233,13 @@ export default function EarningPoolPage() {
               >
                 <InfoCircleOutlined className="mx-[6px]" />
               </Tooltip>
-              : {fb4(rUSDUserScore.weETH.etherfi, false, 0)}
+              : {fb4(userScore.weETH.etherfi, false, 0)}
             </p>
           </div>
           <div className="flex items-center gap-[6px]">
             <img src="/tokens/eigenLayer.svg" className="w-[16px]" />
             <p className="text-[16px]">
-              Eigen Layer Points:{' '}
-              {fb4(rUSDUserScore.weETH.eigenlayer, false, 0)}
+              Eigen Layer Points: {fb4(userScore.weETH.eigenlayer, false, 0)}
             </p>
           </div>
         </div>
@@ -272,14 +287,13 @@ export default function EarningPoolPage() {
               >
                 <InfoCircleOutlined className="mx-[6px]" />
               </Tooltip>
-              : {fb4(rUSDUserScore.ezETH.renzo, false, 0)}
+              : {fb4(userScore.ezETH.renzo, false, 0)}
             </p>
           </div>
           <div className="flex items-center gap-[6px]">
             <img src="/tokens/eigenLayer.svg" className="w-[16px]" />
             <p className="text-[16px]">
-              Eigen Layer Points:{' '}
-              {fb4(rUSDUserScore.ezETH.eigenlayer, false, 0)}
+              Eigen Layer Points: {fb4(userScore.ezETH.eigenlayer, false, 0)}
             </p>
           </div>
         </div>
