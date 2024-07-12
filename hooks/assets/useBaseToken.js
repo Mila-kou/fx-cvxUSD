@@ -165,7 +165,11 @@ const useBaseToken = () => {
       dispatch(updateDataList(list))
       return list
     } catch (error) {
-      console.log('baseTokenData----error', error)
+      console.log(
+        'baseTokenData----error',
+        arr.map((item) => item.baseSymbol),
+        error
+      )
       return {}
     }
   }

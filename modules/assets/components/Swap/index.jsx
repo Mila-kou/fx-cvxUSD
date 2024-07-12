@@ -35,12 +35,8 @@ export default function Swap({ isValidPrice, assetInfo }) {
       return [Mint, Redeem]
     }
 
-    if (['fxUSD', 'rUSD', 'btcUSD'].includes(assetInfo.symbol)) {
+    if (['fxUSD', 'rUSD', 'btcUSD', 'cvxUSD'].includes(assetInfo.symbol)) {
       return [FxUSDMint, FxUSDRedeem]
-    }
-
-    if (['fCVX'].includes(assetInfo.symbol)) {
-      return [MintF, RedeemF]
     }
 
     return [MintX, RedeemX]

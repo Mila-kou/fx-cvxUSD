@@ -8,27 +8,29 @@ const configs = [
   {
     symbol: 'stETH',
     fxnNum: 100,
-    total: 10000,
+    usdNum: 10000,
   },
   {
     symbol: 'frxETH',
     fxnNum: 100,
-    total: 10000,
+    usdNum: 10000,
   },
   {
     symbol: 'eETH',
-    fxnNum: 0,
-    total: 10000,
+    usdNum: 10000,
   },
   {
     symbol: 'ezETH',
-    fxnNum: 0,
-    total: 10000,
+    usdNum: 10000,
   },
   {
     symbol: 'WBTC',
-    fxnNum: 0,
-    total: 15000,
+    usdNum: 15000,
+  },
+  {
+    symbol: 'CVX',
+    fxnNum: 35,
+    cvxNum: 1000,
   },
 ]
 
@@ -57,9 +59,10 @@ const useGenesis_c = () => {
 
   const dataPage = useMemo(() => {
     const _fxnPrice = getTokenPrice('FXN')
+    const _cvxPrice = getTokenPrice('CVX')
 
     const data = {}
-    configs.forEach(({ symbol, fxnNum, total }) => {
+    configs.forEach(({ symbol, fxnNum = 0, usdNum = 0, cvxNum = 0 }) => {
       try {
         const { totalShare } = genesis[symbol]
         if (!totalShare) {
@@ -75,9 +78,14 @@ const useGenesis_c = () => {
           .div(_tvl)
           .times(_times)
           .times(100)
-        const _symbol_apy = cBN(total).div(_tvl).times(_times).times(100)
+        const _symbol_apy = cBN(usdNum).div(_tvl).times(_times).times(100)
+        const _symbol_cvx_apy = cBN(cvxNum)
+          .times(_cvxPrice)
+          .div(_tvl)
+          .times(_times)
+          .times(100)
 
-        let apy = _symbol_fxn_apy.plus(_symbol_apy)
+        let apy = _symbol_fxn_apy.plus(_symbol_apy).plus(_symbol_cvx_apy)
         apy = checkNotZoroNumOption(
           apy,
           apy.gt(1000) ? '1000% +' : `${fb4(apy, false, 0, 2)}%`

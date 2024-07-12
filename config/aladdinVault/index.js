@@ -1,4 +1,5 @@
 import config from '@/config/index'
+import { TOKEN_ICON_MAP } from '@/config/tokens'
 
 const cryptoIcons = '/assets/crypto-icons-stack.svg'
 
@@ -10,6 +11,8 @@ export const REWARD_TOKENS = [
   'ezETH',
   'WBTC',
   'aladdinWBTC',
+  'aCVX',
+  'xCVX',
 ]
 
 export const POOLS_LIST = [
@@ -845,6 +848,36 @@ export const REBALANCE_GAUGE_LIST = [
     gaugeRewards: [config.TOKENS_INFO.fxn],
     rewardTokens: [],
   },
+  {
+    icon: TOKEN_ICON_MAP.cvxUSD,
+    subIcon: TOKEN_ICON_MAP.CVX,
+    icons: [
+      {
+        icon: TOKEN_ICON_MAP.cvxUSD,
+        subIcon: TOKEN_ICON_MAP.CVX,
+      },
+    ],
+    id: 7,
+    name: 'cvxUSD - aCVX',
+    platform: 'FX',
+    fromPlatform: 'Fx',
+    poolType: 'cvxUSD',
+    baseSymbol: 'aCVX',
+    platformUrl: 'https://fx.aladdin.club/staking',
+    nameShow: 'cvxUSD aCVX Rebalance Pool',
+    gaugeType: 1,
+    gaugeTypeName: 'Stability Pool Gauge',
+    actionRebalancePool: [
+      config.contracts.cvxUSD_ShareableRebalancePool_aCVX,
+      config.contracts.cvxUSD_ShareableRebalancePool_xCVX,
+    ],
+    lpAddress:
+      config.contracts.cvxUSD_ShareableRebalancePool_aCVX_FundraiseGauge,
+    lpGaugeAddress:
+      config.contracts.cvxUSD_ShareableRebalancePool_aCVX_FundraiseGauge,
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rewardTokens: [],
+  },
 ]
 
 export const REBALANCE_POOLS_LIST = [
@@ -1094,52 +1127,54 @@ export const REBALANCE_POOLS_LIST = [
       },
     ],
   },
-  // {
-  //   id: 11,
-  //   icon: '/images/f-logo.svg',
-  //   subIcon: '/tokens/crypto-icons-stack.svg#cvx',
-  //   baseSymbol: 'aCVX',
-  //   gaugeType: 'boostRebalance',
-  //   nameShow: 'fCVX Stability Pool Redeem to aCVX',
-  //   poolType: 'fCVX',
-  //   withdrawDefaultToken: 'fCVX',
-  //   rebalancePoolAddress: config.contracts.ShareableRebalancePool_aCVX,
-  //   rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
-  //   infoKey: 'rebalancePoolV2_info_fCVX_aCVX',
-  //   gaugeRewards: [config.TOKENS_INFO.fxn],
-  //   rebalanceRewards: ['FXN', 'aCVX'],
-  //   zapTokens: [
-  //     {
-  //       symbol: 'aCVX',
-  //       address: config.tokens.aCVX,
-  //       needZap: false,
-  //       isLp: true,
-  //     },
-  //   ],
-  // },
-  // {
-  //   id: 12,
-  //   icon: '/images/f-logo.svg',
-  //   subIcon: '/tokens/crypto-icons-stack.svg#cvx',
-  //   baseSymbol: 'aCVX',
-  //   gaugeType: 'boostRebalance',
-  //   nameShow: 'fCVX Stability Pool Redeem to xCVX',
-  //   poolType: 'fCVX',
-  //   withdrawDefaultToken: 'fCVX',
-  //   rebalancePoolAddress: config.contracts.ShareableRebalancePool_xCVX,
-  //   rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
-  //   infoKey: 'rebalancePoolV2_info_fCVX_xCVX',
-  //   gaugeRewards: [config.TOKENS_INFO.fxn],
-  //   rebalanceRewards: ['FXN', 'aCVX', 'xCVX'],
-  //   zapTokens: [
-  //     {
-  //       symbol: 'aCVX',
-  //       address: config.tokens.aCVX,
-  //       needZap: false,
-  //       isLp: true,
-  //     },
-  //   ],
-  // },
+  {
+    id: 11,
+    icon: TOKEN_ICON_MAP.cvxUSD,
+    subIcon: TOKEN_ICON_MAP.CVX,
+    baseSymbol: 'aCVX',
+    gaugeType: 'boostRebalance',
+    nameShow: 'cvxUSD Stability Pool Redeem to aCVX',
+    poolType: 'cvxUSD',
+    withdrawDefaultToken: 'cvxUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
+    rebalancePoolAddress: config.contracts.cvxUSD_ShareableRebalancePool_aCVX,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_cvxUSD_aCVX',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'aCVX'],
+    zapTokens: [
+      {
+        symbol: 'cvxUSD',
+        address: config.tokens.cvxUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
+  {
+    id: 12,
+    icon: TOKEN_ICON_MAP.cvxUSD,
+    subIcon: TOKEN_ICON_MAP.CVX,
+    baseSymbol: 'aCVX',
+    gaugeType: 'boostRebalance',
+    nameShow: 'cvxUSD Stability Pool Redeem to xCVX',
+    poolType: 'cvxUSD',
+    withdrawDefaultToken: 'cvxUSD',
+    gaugeClaimer: config.contracts.feETH_Claimer,
+    rebalancePoolAddress: config.contracts.cvxUSD_ShareableRebalancePool_xCVX,
+    rebalanceWithBonusTokenAddress: config.contracts.FxUSD_Rebalancer,
+    infoKey: 'rebalancePoolV2_info_cvxUSD_xCVX',
+    gaugeRewards: [config.TOKENS_INFO.fxn],
+    rebalanceRewards: ['FXN', 'aCVX', 'xCVX'],
+    zapTokens: [
+      {
+        symbol: 'cvxUSD',
+        address: config.tokens.cvxUSD,
+        needZap: false,
+        isLp: true,
+      },
+    ],
+  },
   {
     id: 13,
     icon: '/tokens/btcUSD.svg',

@@ -20,6 +20,7 @@ import useFxETH from '@/hooks/assets/useFxETH'
 import useFxUSD from '@/hooks/assets/useFxUSD'
 import useRUSD from '@/hooks/assets/useRUSD'
 import useBtcUSD from '@/hooks/assets/useBtcUSD'
+import useCvxUSD from '@/hooks/assets/useCvxUSD'
 import useTokenData from '@/hooks/useTokenData'
 import useV2Assets from '@/hooks/assets/useV2Assets'
 import useBaseToken from '@/hooks/assets/useBaseToken'
@@ -41,21 +42,19 @@ function GlobalProvider({ children }) {
   useFxUSD()
   useRUSD()
   useBtcUSD()
+  useCvxUSD()
 
   fetchBaseTokensData(ASSET_MAP.fxUSD.baseTokenInfos)
   fetchBaseTokensData([BASE_TOKENS_MAP.weETH])
   fetchBaseTokensData([BASE_TOKENS_MAP.ezETH])
   fetchBaseTokensData(ASSET_MAP.btcUSD.baseTokenInfos)
+  fetchBaseTokensData(ASSET_MAP.cvxUSD.baseTokenInfos)
 
   useV2Assets([ASSET_MAP.xstETH, ASSET_MAP.xfrxETH])
   useV2Assets([ASSET_MAP.xeETH])
-
-  useV2Assets([
-    ASSET_MAP.xezETH,
-    // ASSET_MAP.fCVX,
-    // ASSET_MAP.xCVX,
-  ])
+  useV2Assets([ASSET_MAP.xezETH])
   useV2Assets([ASSET_MAP.xWBTC])
+  useV2Assets([ASSET_MAP.xCVX])
 
   useTokenData()
 

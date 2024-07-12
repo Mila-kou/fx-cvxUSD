@@ -25,10 +25,10 @@ const routers = [
   ['Earn', '/earn'],
   ['Gauge Vote', '/gauge'],
   // ['Farming', '/farming'],
-  // ['btcUSD Genesis', '/genesis/btcUSD_WBTC', 'New Launch!'],
   // ['Vesting', '/vesting'],
   // ['Vesting V2', '/vestingV2'],
-  ['Referral', '/account', 'New Launch!'],
+  ['Referral', '/account'],
+  ['cvxUSD Genesis', '/genesis/cvxUSD_aCVX', 'New Launch!'],
   ['Lock', '/lock'],
   // ['Offering', '/offering'],
 ]

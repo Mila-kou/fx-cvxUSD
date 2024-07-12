@@ -145,6 +145,8 @@ export const useToken = (address, contractType, lpInfo) => {
             break
           case 'btcUSD':
             _contractAddress = config.tokens.btcUSD
+          case 'cvxUSD':
+            _contractAddress = config.tokens.cvxUSD
             break
           case 'wrapArUSD':
             _contractAddress = concentratorConfig.contracts.arUSDWrap

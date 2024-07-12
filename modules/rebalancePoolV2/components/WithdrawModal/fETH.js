@@ -8,7 +8,8 @@ import { cBN, formatBalance, checkNotZoroNum, fb4 } from '@/utils/index'
 import styles from './styles.module.scss'
 
 export default function WithdrawModal(props) {
-  const { onCancel, poolData, FX_RebalancePoolContract } = props
+  const { onCancel, poolData, info, FX_RebalancePoolContract } = props
+  const { withdrawDefaultToken } = info
   const { currentAccount, isAllReady, sendTransaction } = useWeb3()
   const [withdrawAmount, setWithdrawAmount] = useState()
   const [withdrawing, setWithdrawing] = useState(false)
@@ -65,10 +66,10 @@ export default function WithdrawModal(props) {
   return (
     <Modal visible centered onCancel={onCancel} footer={null} width={500}>
       <div className={styles.content}>
-        <h2 className="mb-[16px]">Withdraw fETH </h2>
+        <h2 className="mb-[16px]">Withdraw {withdrawDefaultToken} </h2>
         <BalanceInput
           placeholder="0"
-          symbol="fETH"
+          symbol={withdrawDefaultToken}
           balance={fb4(userInfo.BoostableRebalancePoolBalanceOfRes, false)}
           maxAmount={userInfo.BoostableRebalancePoolBalanceOfRes}
           onChange={handleInputChange}

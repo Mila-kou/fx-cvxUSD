@@ -57,6 +57,14 @@ const REDEEM_OPTIONS = {
     // ['USDC', config.tokens.usdc],
     ['WBTC', config.tokens.WBTC],
   ],
+  cvxUSD: [
+    ['aCVX', config.tokens.aCVX],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
+    ['WETH', config.tokens.weth],
+    ['wstETH', config.tokens.wstETH],
+  ],
 }
 
 export default function FxUSDRedeem({ slippage, assetInfo }) {

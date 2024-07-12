@@ -116,6 +116,19 @@ export default function GaugePage() {
           )
         )}
 
+        <Header title="cvxUSD Pools" />
+        {REBALANCE_GAUGE_LIST.filter((item) => item.poolType === 'cvxUSD').map(
+          (item) => (
+            <PoolCell
+              cellData={item}
+              userVoteInfo={userVoteInfo}
+              voteData={poolVoteInfo[item.lpGaugeAddress]}
+              remaining={userVoteInfo.remaining}
+              onCastVote={(newPower) => onCastVote(item, newPower)}
+            />
+          )
+        )}
+
         <Header title="fETH Pools" />
         {REBALANCE_GAUGE_LIST.filter((item) => item.poolType === 'fETH').map(
           (item) => (

@@ -17,8 +17,6 @@ import MockTwapOracleABI from '@/config/abi/common/MockTwapOracle'
 export default function AssetsPage() {
   const { theme } = useGlobal()
   const { _currentAccount, sendTransaction } = useWeb3()
-  // const { fETH, xETH, fxUSD, xstETH, xfrxETH, rUSD, xeETH, fCVX, xCVX } =
-  //   useSelector((state) => state.asset)
   const {
     fETH,
     xETH,
@@ -30,8 +28,10 @@ export default function AssetsPage() {
     xezETH,
     btcUSD,
     xWBTC,
+    cvxUSD,
+    xCVX,
   } = useSelector((state) => state.asset)
-  const { wstETH, sfrxETH, weETH, ezETH, WBTC } = useSelector(
+  const { wstETH, sfrxETH, weETH, ezETH, WBTC, aCVX } = useSelector(
     (state) => state.baseToken
   )
 
@@ -150,6 +150,10 @@ export default function AssetsPage() {
       title: 'rUSD Reserve Asset Value',
       value: getTotalBaseTokenUSD([weETH, ezETH]) || '-',
     },
+    {
+      title: 'cvxUSD Reserve Asset Value',
+      value: getTotalBaseTokenUSD([aCVX]) || '-',
+    },
     { title: 'fETH Reserve Asset Value', value: fETH.totalBaseTokenUSD_text },
   ]
 
@@ -168,6 +172,7 @@ export default function AssetsPage() {
                   weETH,
                   ezETH,
                   WBTC,
+                  aCVX,
                   { data: fETH },
                 ]) || '-'}
               </span>
@@ -272,6 +277,45 @@ export default function AssetsPage() {
             [
               'Mint and Redeem Leveraged Tokens',
               [xeETH, xezETH],
+              true,
+              `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+          ].map(([name, list, isX, icon]) => (
+            <div className={`${styles.header} min-w-[556px]`} key={name}>
+              <div className={styles.headerTitle}>
+                <img src={icon} />
+                {name}
+              </div>
+
+              <div className="px-[16px] mt-[16px] flex justify-between">
+                <div className="w-[200px]" />
+                <div className="w-[120px] text-[14px]">
+                  {isX ? 'Leverage' : 'TVL'}
+                </div>
+                <div className="w-[60px] text-[14px]">Nav</div>
+                <div className="w-[72px] text-[14px]">24h Change</div>
+              </div>
+
+              {list.map((item) => (
+                <Link href={`assets/${item.symbol}`}>
+                  <AssetCell info={item} />
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.wrap}>
+          {[
+            [
+              'Mint & Redeem cvxUSD (LSD Backed)',
+              [cvxUSD],
+              false,
+              `/assets/stable${theme === 'red' ? '' : '-white'}.svg`,
+            ],
+            [
+              'Mint and Redeem Leveraged xCVX',
+              [xCVX],
               true,
               `/assets/leverage${theme === 'red' ? '' : '-white'}.svg`,
             ],

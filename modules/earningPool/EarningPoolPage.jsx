@@ -80,13 +80,13 @@ export default function EarningPoolPage() {
     infoKey: 'rebalancePoolV2_info_btcUSD_xWBTC',
   })
 
-  // const fCVX_aCVX_pool = usePoolV2({
-  //   infoKey: 'rebalancePoolV2_info_fCVX_aCVX',
-  // })
+  const cvxUSD_aCVX_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_cvxUSD_aCVX',
+  })
 
-  // const fCVX_xCVX_pool = usePoolV2({
-  //   infoKey: 'rebalancePoolV2_info_fCVX_xCVX',
-  // })
+  const cvxUSD_xCVX_pool = usePoolV2({
+    infoKey: 'rebalancePoolV2_info_cvxUSD_xCVX',
+  })
 
   return (
     <div className={styles.container}>
@@ -297,6 +297,32 @@ export default function EarningPoolPage() {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className={`${styles.content} `}>
+        <Header title="Stake cvxUSD" />
+        <RebalancePoolCellV2
+          title="cvxUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn aCVX
+              <br />
+              Redeem to aCVX
+            </p>
+          }
+          {...cvxUSD_aCVX_pool}
+        />
+        <RebalancePoolCellV2
+          title="cvxUSD Stability Pool"
+          subTitle={
+            <p className="text-[14px]">
+              Earn aCVX
+              <br />
+              Redeem to xCVX
+            </p>
+          }
+          {...cvxUSD_xCVX_pool}
+        />
       </div>
 
       <div className={`${styles.content} `}>

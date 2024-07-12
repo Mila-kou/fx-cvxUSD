@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useRef, useEffect, useMemo, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { useSelector } from 'react-redux'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
@@ -34,6 +34,11 @@ export default function RedeemF({ slippage, assetInfo }) {
   const baseToken = useSelector((state) => state.baseToken)
   const [clearTrigger, clearInput] = useClearInput()
   const getMarketContract = useV2MarketContract()
+  const timerRef = useRef(null)
+
+  const { updateOutAmount, resetOutAmount, minOutAmount, getMinOutBySlippage } =
+    useOutAmount(slippage)
+
   const {
     symbol: fromSymbol,
     nav_text,
@@ -55,7 +60,7 @@ export default function RedeemF({ slippage, assetInfo }) {
 
   const MarketContract = getMarketContract(contracts.market).contract
 
-  const isSwap = useMemo(() => ['xstETH', 'xfrxETH'].includes(symbol), [symbol])
+  const isSwap = false
 
   const [pausedError, setPausedError] = useState(false)
   const [showManaged, setShowManaged] = useState(false)
@@ -94,9 +99,6 @@ export default function RedeemF({ slippage, assetInfo }) {
 
   const [fromAmount, setFromAmount] = useState(0)
   const [priceLoading, setPriceLoading] = useState(false)
-
-  const { updateOutAmount, resetOutAmount, minOutAmount, getMinOutBySlippage } =
-    useOutAmount(slippage)
 
   const [selectTokenAddress, tokenAmount] = useMemo(() => {
     let _tokenAmount = 0
@@ -156,6 +158,12 @@ export default function RedeemF({ slippage, assetInfo }) {
     approveAddress: selectTokenInfo.contractAddress,
   })
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.curent)
+    }
+  }, [])
+
   const _account = useMemo(() => {
     const isInsufficient = cBN(tokenAmount).isGreaterThan(
       tokens[fromSymbol].balance
@@ -184,19 +192,19 @@ export default function RedeemF({ slippage, assetInfo }) {
       return true
     }
 
-    if (isSwap) {
-      // mint
-      if (symbol === 'fETH') {
-        _fTokenMintPausedInStabilityMode =
-          fTokenMintPausedInStabilityMode && isCRLow130
-      }
-      if (mintPaused || _fTokenMintPausedInStabilityMode) {
-        setPausedError(
-          `f(x) governance decision to temporarily disable ${symbol} minting.`
-        )
-        return true
-      }
-    }
+    // if (isSwap) {
+    //   // mint
+    //   if (symbol === 'fETH') {
+    //     _fTokenMintPausedInStabilityMode =
+    //       fTokenMintPausedInStabilityMode && isCRLow130
+    //   }
+    //   if (mintPaused || _fTokenMintPausedInStabilityMode) {
+    //     setPausedError(
+    //       `f(x) governance decision to temporarily disable ${symbol} minting.`
+    //     )
+    //     return true
+    //   }
+    // }
     setPausedError('')
     return false
   }
@@ -211,7 +219,9 @@ export default function RedeemF({ slippage, assetInfo }) {
       _enableETH &&
       cBN(tokenAmount).isLessThanOrEqualTo(tokens[fromSymbol].balance)
 
-    return _enableETH && (needApprove || minOutAmount.minout_ETH)
+    if (needApprove && _enableETH) return true
+
+    return _enableETH && minOutAmount.minout
   }, [
     tokenAmount,
     redeemPaused,
@@ -247,6 +257,11 @@ export default function RedeemF({ slippage, assetInfo }) {
   }, [symbol])
 
   const getMinAmount = async (needLoading) => {
+    clearTimeout(timerRef.curent)
+    timerRef.curent = setTimeout(() => {
+      getMinAmount(true)
+    }, 30000)
+
     setShowManaged(false)
     if (needLoading) {
       setPriceLoading(true)
@@ -319,12 +334,12 @@ export default function RedeemF({ slippage, assetInfo }) {
       resetOutAmount()
       setBonus(0)
       setPriceLoading(false)
-      // if (
-      //   error?.message &&
-      //   error.message.includes('burn amount exceeds balance')
-      // ) {
-      //   setShowManaged(true)
-      // }
+      if (
+        error?.message &&
+        error.message.includes('burn amount exceeds balance')
+      ) {
+        setShowManaged(true)
+      }
       return 0
     }
   }
@@ -428,7 +443,7 @@ export default function RedeemF({ slippage, assetInfo }) {
 
       <BalanceInput
         symbol={symbol}
-        placeholder={minOutAmount.minout_ETH}
+        placeholder={minOutAmount.minout}
         decimals={config.zapTokens[symbol].decimals}
         usd={toUsd}
         disabled

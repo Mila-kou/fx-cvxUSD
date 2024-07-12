@@ -223,6 +223,16 @@ const fxUSD_ROUTER = {
           '0x4bd7d6e5d89150b5caa781bc12012fe06ea8578ad008',
         ],
       ],
+      [config.tokens.wstETH]: [
+        'wstETH',
+        config.tokens.wstETH,
+        [
+          '0x2c240eadc29d19fb95d581d2cc6b222baee3eddde09',
+          '0x26d5d9247c79b9798bc763c9818bba08ad02c3835008',
+          '0x2b9eae5948378e863978446d7aaac254c4b5ffa110a',
+          '0x1fce71607d656d4f172c66f42cfe369b24d78b2810a',
+        ],
+      ],
       [config.tokens.eth]: [
         'ETH',
         config.tokens.eth_0,

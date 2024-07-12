@@ -115,15 +115,9 @@ const useInfo = () => {
       // const bonusRatioRes = 1e18
       console.log(
         'BaseInfo11111',
-        // fETHTotalSupplyRes, xETHTotalSupplyRes, CurrentNavRes, collateralRatioRes, totalBaseTokenRes,
-        // fTokenMintFeeRatioRes, fTokenRedeemFeeRatioRes, xTokenMintFeeRatioRes, xTokenRedeemFeeRatioRes,
-        //  betaRes,
         lastPermissionedPriceRes,
         marketConfigRes,
         incentiveConfigRes,
-        // mintPausedRes, redeemPausedRes,
-        // fTokenMintInSystemStabilityModePausedRes,
-        // xTokenRedeemInSystemStabilityModePausedRes,
         fNav0Res,
         baseTokenCapRes,
         reservePoolBalancesRes,
@@ -206,16 +200,16 @@ const useInfo = () => {
         maxMintableXTokenWithIncentiveRes,
         maxLiquidatableRes,
       ] = await multiCallsV2(apiCalls)
-      console.log(
-        'maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--',
-        _stabilityRatio,
-        maxMintableFTokenRes,
-        maxMintableXTokenRes,
-        maxRedeemableFTokenRes,
-        maxRedeemableXTokenRes,
-        maxMintableXTokenWithIncentiveRes,
-        maxLiquidatableRes
-      )
+      // console.log(
+      //   'maxMintableFTokenRes, maxMintableXTokenRes, maxRedeemableFTokenRes, maxRedeemableXTokenRes--',
+      //   _stabilityRatio,
+      //   maxMintableFTokenRes,
+      //   maxMintableXTokenRes,
+      //   maxRedeemableFTokenRes,
+      //   maxRedeemableXTokenRes,
+      //   maxMintableXTokenWithIncentiveRes,
+      //   maxLiquidatableRes
+      // )
       setMaxAbleFToken((pre) => {
         return {
           ...pre,

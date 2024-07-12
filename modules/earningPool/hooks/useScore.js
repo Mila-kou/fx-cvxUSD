@@ -69,7 +69,7 @@ const useScore = () => {
     }
 
     if (arUSDData) {
-      const points = arUSDData.find(
+      const points = arUSDData?.find(
         (item) => item.address.toLowerCase() == currentAccount.toLowerCase()
       )
       if (points) {

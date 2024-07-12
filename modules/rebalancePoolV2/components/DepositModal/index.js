@@ -60,7 +60,7 @@ export default function DepositModal(props) {
     try {
       let apiCall
       let to
-      if (symbol === 'fETH') {
+      if (['fETH'].includes(symbol)) {
         to = FX_RebalancePoolContract._address
         apiCall = FX_RebalancePoolContract.methods.deposit(
           depositAmountInWei,
@@ -141,7 +141,7 @@ export default function DepositModal(props) {
       ) : null}
 
       <div className="mt-[30px]">
-        {symbol === 'fETH' ? (
+        {['fETH'].includes(symbol) ? (
           <BtnWapper
             width="100%"
             loading={depositing}

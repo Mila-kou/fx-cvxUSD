@@ -66,6 +66,13 @@ const TOKEN_OPTIONS = {
     // ['crvUSD', config.tokens.crvUSD],
   ],
   WBTC: [['WBTC', config.tokens.WBTC]],
+  CVX: [
+    ['aCVX', config.tokens.aCVX],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
+    ['WETH', config.tokens.weth],
+  ],
 }
 
 export default function GenesisPage() {
@@ -88,6 +95,7 @@ export default function GenesisPage() {
     rUSD_eETH: STAGE.FULL_LAUNCHED,
     rUSD_ezETH: STAGE.FULL_LAUNCHED,
     btcUSD_WBTC: STAGE.FULL_LAUNCHED,
+    cvxUSD_CVX: STAGE.LAUNCHING,
   }[_assetSymbol]
 
   // const [stage, setStage] = useState(
@@ -123,6 +131,7 @@ export default function GenesisPage() {
     eETH: false,
     ezETH: false,
     WBTC: false,
+    CVX: false,
   })
   const [isWithdrawBaseTokening, setIsWithdrawBaseTokening] = useState({
     stETH: false,
@@ -130,9 +139,10 @@ export default function GenesisPage() {
     eETH: false,
     ezETH: false,
     WBTC: false,
+    CVX: false,
   })
 
-  const _baseTokenInfos = ['rUSD', 'btcUSD'].includes(assetSymbol)
+  const _baseTokenInfos = ['rUSD'].includes(assetSymbol)
     ? [BASE_TOKENS_MAP[_baseSymbol]]
     : baseTokenInfos
 

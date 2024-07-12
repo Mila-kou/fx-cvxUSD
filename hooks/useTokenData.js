@@ -12,8 +12,6 @@ import { getTokenListPrice, getLpPrice } from '@/services/dataInfo'
 const useTokenData = () => {
   const { web3, blockNumber } = useWeb3()
   const dispatch = useDispatch()
-  // const { fETH, xETH, fxUSD, rUSD, xstETH, xfrxETH, xeETH, fCVX, xCVX } =
-  //   useSelector((state) => state.asset)
   const {
     fETH,
     xETH,
@@ -25,6 +23,8 @@ const useTokenData = () => {
     xezETH,
     btcUSD,
     xWBTC,
+    cvxUSD,
+    xCVX,
   } = useSelector((state) => state.asset)
 
   const ethToken = useToken(config.tokens.eth)
@@ -53,9 +53,9 @@ const useTokenData = () => {
   const ezETHToken = useTokenBalance(config.tokens.ezETH)
   const xezETHToken = useTokenBalance(config.tokens.xezETH)
 
-  // const aCVXToken = useTokenBalance(config.tokens.aCVX)
-  // const xCVXToken = useTokenBalance(config.tokens.xCVX)
-  // const fCVXToken = useTokenBalance(config.tokens.fCVX)
+  const aCVXToken = useTokenBalance(config.tokens.aCVX)
+  const xCVXToken = useTokenBalance(config.tokens.xCVX)
+  const cvxUSDToken = useTokenBalance(config.tokens.cvxUSD)
 
   const btcUSDToken = useTokenBalance(config.tokens.btcUSD)
   const WBTCToken = useTokenBalance(config.tokens.WBTC)
@@ -184,18 +184,18 @@ const useTokenData = () => {
           balance: xWBTCToken.balance,
           price: fb4(cBN(xWBTC.nav) || 0, false),
         },
-        // aCVX: {
-        //   balance: aCVXToken.balance,
-        //   price: tokenPrice?.CVX?.usd?.toFixed(4) ?? 0,
-        // },
-        // xCVX: {
-        //   balance: xCVXToken.balance,
-        //   price: fb4(cBN(xCVX.nav) || 0, false),
-        // },
-        // fCVX: {
-        //   balance: fCVXToken.balance,
-        //   price: fb4(cBN(fCVX.nav) || 0, false),
-        // },
+        aCVX: {
+          balance: aCVXToken.balance,
+          price: tokenPrice?.CVX?.usd?.toFixed(4) ?? 0,
+        },
+        xCVX: {
+          balance: xCVXToken.balance,
+          price: fb4(cBN(xCVX.nav) || 0, false),
+        },
+        cvxUSD: {
+          balance: cvxUSDToken.balance,
+          price: fb4(cBN(cvxUSD.nav) || 0, false),
+        },
       }
 
       dispatch(updateTokens(data))
@@ -221,9 +221,9 @@ const useTokenData = () => {
     weETHToken,
     ezETHToken,
     xezETHToken,
-    // aCVXToken,
-    // xCVXToken,
-    // fCVXToken,
+    aCVXToken,
+    xCVXToken,
+    cvxUSDToken,
     WBTCToken,
     xWBTCToken,
     fETH,
@@ -236,6 +236,8 @@ const useTokenData = () => {
     xezETH,
     btcUSD,
     xWBTC,
+    cvxUSD,
+    xCVX,
   ])
 }
 

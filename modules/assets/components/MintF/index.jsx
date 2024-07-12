@@ -1,5 +1,5 @@
 /* eslint-disable no-lonely-if */
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useRef, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { DownOutlined } from '@ant-design/icons'
 import BalanceInput, { useClearInput } from '@/components/BalanceInput'
@@ -17,10 +17,13 @@ import {
   useFxUSD_GatewayRouter_contract,
   useV2MarketContract,
 } from '@/hooks/useFXUSDContract'
+import useGlobal from '@/hooks/useGlobal'
 import useOutAmount from '../../hooks/useOutAmount'
+import RouteCard from '../RouteCard'
+import useRouteList from '../RouteCard/useRouteList'
 
 const MINT_OPTIONS = {
-  fCVX: [
+  cvxUSD: [
     ['ETH', config.tokens.eth],
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
@@ -30,13 +33,17 @@ const MINT_OPTIONS = {
 }
 
 export default function MintF({ slippage, assetInfo, children }) {
+  const { showRouteCard } = useGlobal()
   const { _currentAccount, sendTransaction } = useWeb3()
   const { tokens } = useSelector((state) => state.token)
   const baseToken = useSelector((state) => state.baseToken)
   const [clearTrigger, clearInput] = useClearInput()
   const getMarketContract = useV2MarketContract()
-
   const { getZapInParams } = useZapIn()
+  const timerRef = useRef(null)
+
+  const { updateOutAmount, resetOutAmount, minOutAmount } =
+    useOutAmount(slippage)
 
   const {
     isF,
@@ -47,14 +54,15 @@ export default function MintF({ slippage, assetInfo, children }) {
     baseList,
   } = assetInfo
 
+  const { baseSymbol, contracts } = baseTokenInfo
+
   const OPTIONS = MINT_OPTIONS[toSymbol]
 
   const [pausedError, setPausedError] = useState(false)
-  const [symbol, setSymbol] = useState('ETH')
+  const [showCapReachedError, setShowCapReachedError] = useState(false)
+  const [symbol, setSymbol] = useState(baseSymbol)
   const { contract: fxUSD_GatewayRouterContract } =
     useFxUSD_GatewayRouter_contract()
-
-  const { baseSymbol, contracts } = baseTokenInfo
 
   const MarketContract = getMarketContract(contracts.market).contract
 
@@ -65,9 +73,6 @@ export default function MintF({ slippage, assetInfo, children }) {
 
   const minGas = 234854
   const [fromAmount, setFromAmount] = useState(0)
-
-  const { updateOutAmount, resetOutAmount, minOutAmount } =
-    useOutAmount(slippage)
 
   const [priceLoading, setPriceLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
@@ -101,6 +106,9 @@ export default function MintF({ slippage, assetInfo, children }) {
   const selectTokenAddress = useMemo(() => {
     return OPTIONS.find((item) => item[0] === symbol)[1]
   }, [symbol])
+
+  const routeTypeRef = useRef(null)
+  const { routeList, refreshRouteList } = useRouteList()
 
   useEffect(() => {
     initPage()
@@ -179,18 +187,34 @@ export default function MintF({ slippage, assetInfo, children }) {
     setFromAmount(v.toString(10))
   }
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerRef.curent)
+    }
+  }, [])
+
   const initPage = () => {
     clearInput()
     setFromAmount('0')
+    routeTypeRef.current = ''
   }
 
   const getMinAmount = async (needLoading) => {
+    clearTimeout(timerRef.curent)
+    timerRef.curent = setTimeout(() => {
+      getMinAmount(true)
+    }, 30000)
+
     if (needLoading) {
       setPriceLoading(true)
+      routeTypeRef.current = ''
     }
 
     let _mockAmount = fromAmount
     let _mockRatio = 1
+
+    setShowCapReachedError(false)
+
     // 默认比例 0.01
     if (_account !== _currentAccount) {
       _mockAmount = cBN(0.01)
@@ -205,15 +229,18 @@ export default function MintF({ slippage, assetInfo, children }) {
     try {
       let minout_ETH
       if (checkNotZoroNum(fromAmount)) {
-        let _ETHtAmountAndGas = _mockAmount
-        let resData
-
         if (symbol === baseSymbol) {
-          resData = await MarketContract.methods
-            .mintFToken(_ETHtAmountAndGas, _account, 0)
-            .call({
-              from: _account,
-            })
+          if (cBN(fromAmount).isGreaterThan(baseTokenData.restBaseTokenRes)) {
+            setShowCapReachedError(true)
+            minout_ETH = 0
+            setMintXBouns(0)
+          } else {
+            resData = await MarketContract.methods
+              .mintFToken(_mockAmount, _account, 0)
+              .call({
+                from: _account,
+              })
+          }
         } else {
           if (symbol === 'ETH') {
             const getGasPrice = await getGas()
@@ -225,35 +252,65 @@ export default function MintF({ slippage, assetInfo, children }) {
               _account === _currentAccount &&
               cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
             ) {
-              _ETHtAmountAndGas = cBN(tokens.ETH.balance)
-                .minus(gasFee)
-                .toFixed(0, 1)
+              _mockAmount = cBN(tokens.ETH.balance).minus(gasFee).toFixed(0, 1)
             }
           }
 
-          const [convertParams] = await getZapInParams({
-            from: symbol,
-            to: baseSymbol,
-            amount: _ETHtAmountAndGas,
-            slippage,
-          })
+          let list
+          if (_routeType && routeList.length) {
+            list = routeList
+            routeTypeRef.current = _routeType
+          } else {
+            list = await refreshRouteList(
+              {
+                from: symbol,
+                to: baseSymbol,
+                amount: isBTCMock ? fromAmount : _mockAmount,
+                slippage,
+                symbol: toSymbol,
+                price: nav_text,
+              },
+              async ([convertParams]) => {
+                let res
+                // const call =
+                //   await fxUSD_GatewayRouterContract.methods.fxMintXTokenV2(
+                //     convertParams,
+                //     contracts.market,
+                //     0
+                //   )
+                // console.log(
+                //   'fxMintXTokenV2-----',
+                //   fxUSD_GatewayRouterContract._address,
+                //   call.encodeABI()
+                // )
+                res = await fxUSD_GatewayRouterContract.methods
+                  .fxMintFTokenV2(convertParams, contracts.market, 0)
+                  .call({
+                    from: _account,
+                    value: symbol == 'ETH' ? _mockAmount : 0,
+                  })
 
-          console.log(
-            'convertParams----',
-            JSON.stringify(convertParams),
-            baseSymbol,
-            symbol
-          )
-          resData = await fxUSD_GatewayRouterContract.methods
-            .fxMintFTokenV2(convertParams, contracts.market, 0)
-            .call({
-              from: _account,
-              value: symbol == 'ETH' ? _ETHtAmountAndGas : 0,
-            })
-          console.log('fxMintFTokenV2--resData-', resData)
+                // 比例计算
+                return {
+                  outAmount: res._fTokenMinted * _mockRatio,
+                  result: res,
+                }
+              }
+            )
+          }
+
+          const { amount, result } =
+            list.find((item) => item.routeType === routeTypeRef.current) ||
+            list[0]
+
+          console.log('fxMintFTokenV2--resData----', result)
+
+          if (!routeTypeRef.current) {
+            routeTypeRef.current = list[0].routeType
+          }
+
+          minout_ETH = amount
         }
-
-        minout_ETH = resData
       } else {
         minout_ETH = 0
       }
@@ -267,6 +324,11 @@ export default function MintF({ slippage, assetInfo, children }) {
       return _minOut
     } catch (error) {
       console.log('fxMintFxUSD--finnal--error--', _account, error)
+
+      if (error?.message.includes('0x2cbf45d6')) {
+        setShowCapReachedError(true)
+      }
+
       resetOutAmount()
       setPriceLoading(false)
       return [0]
@@ -470,6 +532,12 @@ export default function MintF({ slippage, assetInfo, children }) {
 
       {pausedError ? <NoticeCard content={[pausedError]} /> : null}
 
+      {showCapReachedError ||
+      routeList.find((item) => item.routeType === routeTypeRef.current)
+        ?.isCapReached ? (
+        <NoticeCard content={[`${baseSymbol} cap has been reached.`]} />
+      ) : null}
+
       {prices?.isShowErrorMaxMinPrice && (
         <NoticeMaxMinPrice
           maxPrice={prices.maxPrice}
@@ -490,6 +558,18 @@ export default function MintF({ slippage, assetInfo, children }) {
           {`Mint ${toSymbol}`}
         </BtnWapper>
       </div>
+
+      {showRouteCard && symbol !== baseSymbol && (
+        <RouteCard
+          onRefresh={getMinAmount}
+          options={routeList}
+          routeType={routeTypeRef.current}
+          onSelect={(_routeType) => {
+            getMinAmount(false, _routeType)
+          }}
+          loading={priceLoading || !checkNotZoroNum(fromAmount)}
+        />
+      )}
     </div>
   )
 }

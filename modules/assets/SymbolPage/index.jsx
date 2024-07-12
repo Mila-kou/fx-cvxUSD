@@ -15,24 +15,30 @@ export default function SymbolPage() {
   const { symbol } = query
 
   const baseTokens = useMemo(() => {
-    if (symbol === 'fxUSD') return [baseToken.wstETH, baseToken.sfrxETH]
-
-    if (symbol === 'xstETH') return [baseToken.wstETH]
-
-    if (symbol === 'xfrxETH') return [baseToken.sfrxETH]
-
-    if (symbol === 'rUSD') return [baseToken.weETH, baseToken.ezETH]
-
-    if (symbol === 'xeETH') return [baseToken.weETH]
-
-    if (symbol === 'xezETH') return [baseToken.ezETH]
-
-    if (['xCVX', 'fCVX'].includes(symbol)) return [baseToken.aCVX]
-
-    if (symbol === 'btcUSD') return [baseToken.WBTC]
-
-    if (symbol === 'xWBTC') return [baseToken.WBTC]
-
+    switch (symbol) {
+      case 'fxUSD':
+        return [baseToken.wstETH, baseToken.sfrxETH]
+      case 'xstETH':
+        return [baseToken.wstETH]
+      case 'xfrxETH':
+        return [baseToken.sfrxETH]
+      case 'rUSD':
+        return [baseToken.weETH, baseToken.ezETH]
+      case 'xeETH':
+        return [baseToken.weETH]
+      case 'xezETH':
+        return [baseToken.ezETH]
+      case 'btcUSD':
+        return [baseToken.WBTC]
+      case 'xWBTC':
+        return [baseToken.WBTC]
+      case 'cvxUSD':
+        return [baseToken.aCVX]
+      case 'xCVX':
+        return [baseToken.aCVX]
+      default:
+        break
+    }
     return []
   }, [symbol, baseToken])
 

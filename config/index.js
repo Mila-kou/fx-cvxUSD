@@ -19,12 +19,12 @@ import sepolia from './network/sepolia'
 //       [sepolia.chainInfo.id]: sepolia,
 //       [mainnetFork.chainInfo.id]: mainnetFork,
 //     }
-const mainnetFork = mainnetFork_outer
+const mainnetFork = mainnetFork_inner
 // const mainnetFork = mainnetFork_inner_fork3
 const chainMap = {
   // [sepolia.chainInfo.id]: sepolia,
-  [ethereum.chainInfo.id]: ethereum,
-  // [mainnetFork.chainInfo.id]: mainnetFork,
+  // [ethereum.chainInfo.id]: ethereum,
+  [mainnetFork.chainInfo.id]: mainnetFork,
 }
 
 const allowChains = Object.values(chainMap).map((item) => item.chainInfo)

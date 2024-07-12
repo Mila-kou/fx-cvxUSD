@@ -51,10 +51,11 @@ const MINT_OPTIONS = {
   ],
   xCVX: [
     ['aCVX', config.tokens.aCVX],
-    ['ETH', config.tokens.eth],
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
     ['crvUSD', config.tokens.crvUSD],
+    ['WETH', config.tokens.weth],
+    ['wstETH', config.tokens.wstETH],
   ],
   xWBTC: [
     // ['USDT', config.tokens.usdt],

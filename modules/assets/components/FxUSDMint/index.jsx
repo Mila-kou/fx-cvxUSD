@@ -53,6 +53,13 @@ const MINT_OPTIONS = {
     ['USDC', config.tokens.usdc],
     ['WBTC', config.tokens.WBTC],
   ],
+  cvxUSD: [
+    ['aCVX', config.tokens.aCVX],
+    ['USDT', config.tokens.usdt],
+    ['USDC', config.tokens.usdc],
+    ['crvUSD', config.tokens.crvUSD],
+    ['WETH', config.tokens.weth],
+  ],
 }
 
 export default function FxUSDMint({ slippage, assetInfo, children }) {
@@ -213,6 +220,10 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
 
     if (toSymbol === 'btcUSD') {
       setBaseSymbol('WBTC')
+    }
+
+    if (toSymbol === 'cvxUSD') {
+      setBaseSymbol('aCVX')
     }
   }, [baseToken, symbol, markets, setBaseSymbol, toSymbol])
 
@@ -425,15 +436,15 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
                   })
                   res = cBN(res).toString()
                 } else {
-                  console.log(
-                    'fxUSD_GatewayRouterContract--传参--',
-                    JSON.stringify([
-                      convertParams,
-                      address,
-                      config.tokens[baseSymbol],
-                      0,
-                    ])
-                  )
+                  // console.log(
+                  //   'fxUSD_GatewayRouterContract--传参--',
+                  //   JSON.stringify([
+                  //     convertParams,
+                  //     address,
+                  //     config.tokens[baseSymbol],
+                  //     0,
+                  //   ])
+                  // )
                   if (isBTCMock) {
                     const { decimals } = config.zapTokens[baseSymbol]
                     resData = await FXUSD_contract.methods
@@ -450,6 +461,19 @@ export default function FxUSDMint({ slippage, assetInfo, children }) {
                       resData *
                       cBN(baseOutAmount).div(cBN(0.01).shiftedBy(decimals))
                   } else {
+                    const call =
+                      await fxUSD_GatewayRouterContract.methods.fxMintFxUSD(
+                        convertParams,
+                        address,
+                        config.tokens[baseSymbol],
+                        0
+                      )
+                    console.log(
+                      'fxUSD Mint-----',
+                      fxUSD_GatewayRouterContract._address,
+                      call.encodeABI()
+                    )
+
                     res = await fxUSD_GatewayRouterContract.methods
                       .fxMintFxUSD(
                         convertParams,

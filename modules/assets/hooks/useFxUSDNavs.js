@@ -38,12 +38,14 @@ export default function useFxUSDNavs() {
         fxUSD: [],
         rUSD: [],
         btcUSD: [],
+        // cvxUSD: [],
 
         xstETH: [],
         xfrxETH: [],
         xeETH: [],
         xezETH: [],
         xWBTC: [],
+        // xCVX: [],
       },
       totalBaseTokenList: {
         wstETH: [],
@@ -51,6 +53,7 @@ export default function useFxUSDNavs() {
         weETH: [],
         ezETH: [],
         WBTC: [],
+        // aCVX: [],
       },
       lastDayPrice: {
         xstETH: '',
@@ -58,6 +61,7 @@ export default function useFxUSDNavs() {
         xeETH: '',
         xezETH: '',
         xWBTC: '',
+        // xCVX: '',
       },
       dateList: [],
     }

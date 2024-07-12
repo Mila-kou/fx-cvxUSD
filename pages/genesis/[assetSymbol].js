@@ -14,11 +14,15 @@ export default function Genesis() {
 }
 
 export async function getStaticPaths() {
-  const paths = ['fxUSD', 'rUSD_weETH', 'rUSD_ezETH', 'btcUSD_WBTC'].map(
-    (assetSymbol) => ({
-      params: { assetSymbol },
-    })
-  )
+  const paths = [
+    'fxUSD',
+    'rUSD_weETH',
+    'rUSD_ezETH',
+    'btcUSD_WBTC',
+    'cvxUSD_aCVX',
+  ].map((assetSymbol) => ({
+    params: { assetSymbol },
+  }))
 
   return {
     paths,

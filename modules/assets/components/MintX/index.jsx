@@ -64,10 +64,10 @@ const MINT_OPTIONS = {
   ],
   xCVX: [
     ['aCVX', config.tokens.aCVX],
-    ['ETH', config.tokens.eth],
     ['USDT', config.tokens.usdt],
     ['USDC', config.tokens.usdc],
     ['crvUSD', config.tokens.crvUSD],
+    ['WETH', config.tokens.weth],
   ],
   xWBTC: [
     ['ETH', config.tokens.eth],
@@ -309,6 +309,20 @@ export default function MintX({ slippage, assetInfo, children }) {
             console.log('fxMintXTokenV2--resData----', resData)
           }
         } else {
+          if (symbol === 'ETH') {
+            const getGasPrice = await getGas()
+            const gasFee = cBN(minGas)
+              .times(1e9)
+              .times(getGasPrice)
+              .toFixed(0, 1)
+            if (
+              _account === _currentAccount &&
+              cBN(fromAmount).plus(gasFee).isGreaterThan(tokens.ETH.balance)
+            ) {
+              _mockAmount = cBN(tokens.ETH.balance).minus(gasFee).toFixed(0, 1)
+            }
+          }
+
           let list
           if (_routeType && routeList.length) {
             list = routeList
@@ -345,17 +359,17 @@ export default function MintX({ slippage, assetInfo, children }) {
                       cBN(baseOutAmount).div(cBN(0.01).shiftedBy(decimals)),
                   }
                 } else {
-                  // const call =
-                  //   await fxUSD_GatewayRouterContract.methods.fxMintXTokenV2(
-                  //     convertParams,
-                  //     contracts.market,
-                  //     0
-                  //   )
-                  // console.log(
-                  //   'fxMintXTokenV2-----',
-                  //   fxUSD_GatewayRouterContract._address,
-                  //   call.encodeABI()
-                  // )
+                  const call =
+                    await fxUSD_GatewayRouterContract.methods.fxMintXTokenV2(
+                      convertParams,
+                      contracts.market,
+                      0
+                    )
+                  console.log(
+                    'fxMintXTokenV2-----',
+                    fxUSD_GatewayRouterContract._address,
+                    call.encodeABI()
+                  )
 
                   res = await fxUSD_GatewayRouterContract.methods
                     .fxMintXTokenV2(convertParams, contracts.market, 0)

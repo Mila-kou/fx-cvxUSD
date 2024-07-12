@@ -150,7 +150,9 @@ export default function RebalancePoolCellV2({
 
   const WithdrawModal = useMemo(
     () =>
-      ['fxUSD', 'rUSD', 'btcUSD'].includes(_poolConfig.withdrawDefaultToken)
+      ['fxUSD', 'rUSD', 'btcUSD', 'cvxUSD'].includes(
+        _poolConfig.withdrawDefaultToken
+      )
         ? FxUSDWithdrawModal
         : FETHWithdrawModal,
     [_poolConfig, FxUSDWithdrawModal, FETHWithdrawModal]
@@ -344,7 +346,9 @@ export default function RebalancePoolCellV2({
       <div
         className={styles.card}
         style={{
-          background: ['fxUSD', 'rUSD', 'btcUSD'].includes(_poolConfig.poolType)
+          background: ['fxUSD', 'rUSD', 'btcUSD', 'cvxUSD'].includes(
+            _poolConfig.poolType
+          )
             ? 'var(--deep-green-color)'
             : 'var(--f-bg-color)',
         }}

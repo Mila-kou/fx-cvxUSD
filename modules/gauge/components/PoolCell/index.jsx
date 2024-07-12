@@ -22,7 +22,7 @@ export default function PoolCell({
   voteData,
   onCastVote,
   remaining,
-  userVoteInfo
+  userVoteInfo,
 }) {
   const { isAllReady, currentAccount } = useWeb3()
   const [openPanel, setOpenPanel] = useState(false)
@@ -62,9 +62,9 @@ export default function PoolCell({
       <div
         className={styles.card}
         style={{
-          background: ['fxUSD', 'rUSD'].includes(cellData.poolType)
+          background: ['fxUSD', 'rUSD', 'cvxUSD'].includes(cellData.poolType)
             ? 'var(--deep-green-color)'
-            : cellData.poolType == 'fETH'
+            : ['fETH'].includes(cellData.poolType)
             ? 'var(--f-bg-color)'
             : '',
         }}

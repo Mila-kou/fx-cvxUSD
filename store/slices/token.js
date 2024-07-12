@@ -29,7 +29,7 @@ const list = [
 
   'CVX',
   'aCVX',
-  'fCVX',
+  'cvxUSD',
   'xCVX',
 
   'btcUSD',
